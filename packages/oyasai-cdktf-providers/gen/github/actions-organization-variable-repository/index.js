@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_organization_variable_repository
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ActionsOrganizationVariableRepository = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_organization_variable_repository github_actions_organization_variable_repository}
 */
-var ActionsOrganizationVariableRepository = /** @class */ (function (_super) {
-    __extends(ActionsOrganizationVariableRepository, _super);
+export class ActionsOrganizationVariableRepository extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_actions_organization_variable_repository";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ActionsOrganizationVariableRepository resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ActionsOrganizationVariableRepository to import
+    * @param importFromId The id of the existing ActionsOrganizationVariableRepository that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_organization_variable_repository#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ActionsOrganizationVariableRepository to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_actions_organization_variable_repository", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ActionsOrganizationVariableRepository = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ActionsOrganizationVariableRepositoryConfig
     */
-    function ActionsOrganizationVariableRepository(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_actions_organization_variable_repository',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,94 +46,65 @@ var ActionsOrganizationVariableRepository = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        _this._repositoryId = config.repositoryId;
-        _this._variableName = config.variableName;
-        return _this;
+        });
+        this._id = config.id;
+        this._repositoryId = config.repositoryId;
+        this._variableName = config.variableName;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ActionsOrganizationVariableRepository resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ActionsOrganizationVariableRepository to import
-    * @param importFromId The id of the existing ActionsOrganizationVariableRepository that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_organization_variable_repository#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ActionsOrganizationVariableRepository to import is found
-    */
-    ActionsOrganizationVariableRepository.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_actions_organization_variable_repository", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ActionsOrganizationVariableRepository.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsOrganizationVariableRepository.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(ActionsOrganizationVariableRepository.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationVariableRepository.prototype, "repositoryId", {
-        get: function () {
-            return this.getNumberAttribute('repository_id');
-        },
-        set: function (value) {
-            this._repositoryId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationVariableRepository.prototype, "repositoryIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repositoryId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationVariableRepository.prototype, "variableName", {
-        get: function () {
-            return this.getStringAttribute('variable_name');
-        },
-        set: function (value) {
-            this._variableName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsOrganizationVariableRepository.prototype, "variableNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._variableName;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // repository_id - computed: false, optional: false, required: true
+    _repositoryId;
+    get repositoryId() {
+        return this.getNumberAttribute('repository_id');
+    }
+    set repositoryId(value) {
+        this._repositoryId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryIdInput() {
+        return this._repositoryId;
+    }
+    // variable_name - computed: false, optional: false, required: true
+    _variableName;
+    get variableName() {
+        return this.getStringAttribute('variable_name');
+    }
+    set variableName(value) {
+        this._variableName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get variableNameInput() {
+        return this._variableName;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ActionsOrganizationVariableRepository.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             repository_id: cdktf.numberToTerraform(this._repositoryId),
             variable_name: cdktf.stringToTerraform(this._variableName),
         };
-    };
-    ActionsOrganizationVariableRepository.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -156,15 +125,6 @@ var ActionsOrganizationVariableRepository = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ActionsOrganizationVariableRepository.tfResourceType = "github_actions_organization_variable_repository";
-    return ActionsOrganizationVariableRepository;
-}(cdktf.TerraformResource));
-exports.ActionsOrganizationVariableRepository = ActionsOrganizationVariableRepository;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,35 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_gateway
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AiGateway = exports.AiGatewayStripeOutputReference = exports.AiGatewayStripeUsageEventsList = exports.AiGatewayStripeUsageEventsOutputReference = exports.AiGatewayOtelList = exports.AiGatewayOtelOutputReference = exports.AiGatewayDlpOutputReference = exports.AiGatewayDlpPoliciesList = exports.AiGatewayDlpPoliciesOutputReference = void 0;
-exports.aiGatewayDlpPoliciesToTerraform = aiGatewayDlpPoliciesToTerraform;
-exports.aiGatewayDlpPoliciesToHclTerraform = aiGatewayDlpPoliciesToHclTerraform;
-exports.aiGatewayDlpToTerraform = aiGatewayDlpToTerraform;
-exports.aiGatewayDlpToHclTerraform = aiGatewayDlpToHclTerraform;
-exports.aiGatewayOtelToTerraform = aiGatewayOtelToTerraform;
-exports.aiGatewayOtelToHclTerraform = aiGatewayOtelToHclTerraform;
-exports.aiGatewayStripeUsageEventsToTerraform = aiGatewayStripeUsageEventsToTerraform;
-exports.aiGatewayStripeUsageEventsToHclTerraform = aiGatewayStripeUsageEventsToHclTerraform;
-exports.aiGatewayStripeToTerraform = aiGatewayStripeToTerraform;
-exports.aiGatewayStripeToHclTerraform = aiGatewayStripeToHclTerraform;
-var cdktf = require("cdktf");
-function aiGatewayDlpPoliciesToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function aiGatewayDlpPoliciesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -44,14 +16,14 @@ function aiGatewayDlpPoliciesToTerraform(struct) {
         profiles: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.profiles),
     };
 }
-function aiGatewayDlpPoliciesToHclTerraform(struct) {
+export function aiGatewayDlpPoliciesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         action: {
             value: cdktf.stringToHclTerraform(struct.action),
             isBlock: false,
@@ -84,197 +56,157 @@ function aiGatewayDlpPoliciesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiGatewayDlpPoliciesOutputReference = /** @class */ (function (_super) {
-    __extends(AiGatewayDlpPoliciesOutputReference, _super);
+export class AiGatewayDlpPoliciesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiGatewayDlpPoliciesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._action !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.action = this._action;
-            }
-            if (this._check !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.check = this._check;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._profiles !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.profiles = this._profiles;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._action = undefined;
-                this._check = undefined;
-                this._enabled = undefined;
-                this._id = undefined;
-                this._profiles = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._action = value.action;
-                this._check = value.check;
-                this._enabled = value.enabled;
-                this._id = value.id;
-                this._profiles = value.profiles;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "action", {
-        get: function () {
-            return this.getStringAttribute('action');
-        },
-        set: function (value) {
-            this._action = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "actionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._action;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "check", {
-        get: function () {
-            return this.getListAttribute('check');
-        },
-        set: function (value) {
-            this._check = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "checkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._check;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "profiles", {
-        get: function () {
-            return this.getListAttribute('profiles');
-        },
-        set: function (value) {
-            this._profiles = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpPoliciesOutputReference.prototype, "profilesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._profiles;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiGatewayDlpPoliciesOutputReference;
-}(cdktf.ComplexObject));
-exports.AiGatewayDlpPoliciesOutputReference = AiGatewayDlpPoliciesOutputReference;
-var AiGatewayDlpPoliciesList = /** @class */ (function (_super) {
-    __extends(AiGatewayDlpPoliciesList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._action !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.action = this._action;
+        }
+        if (this._check !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.check = this._check;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._profiles !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.profiles = this._profiles;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._action = undefined;
+            this._check = undefined;
+            this._enabled = undefined;
+            this._id = undefined;
+            this._profiles = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._action = value.action;
+            this._check = value.check;
+            this._enabled = value.enabled;
+            this._id = value.id;
+            this._profiles = value.profiles;
+        }
+    }
+    // action - computed: false, optional: false, required: true
+    _action;
+    get action() {
+        return this.getStringAttribute('action');
+    }
+    set action(value) {
+        this._action = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get actionInput() {
+        return this._action;
+    }
+    // check - computed: false, optional: false, required: true
+    _check;
+    get check() {
+        return this.getListAttribute('check');
+    }
+    set check(value) {
+        this._check = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get checkInput() {
+        return this._check;
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // profiles - computed: false, optional: false, required: true
+    _profiles;
+    get profiles() {
+        return this.getListAttribute('profiles');
+    }
+    set profiles(value) {
+        this._profiles = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get profilesInput() {
+        return this._profiles;
+    }
+}
+export class AiGatewayDlpPoliciesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiGatewayDlpPoliciesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    AiGatewayDlpPoliciesList.prototype.get = function (index) {
+    get(index) {
         return new AiGatewayDlpPoliciesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return AiGatewayDlpPoliciesList;
-}(cdktf.ComplexList));
-exports.AiGatewayDlpPoliciesList = AiGatewayDlpPoliciesList;
-function aiGatewayDlpToTerraform(struct) {
+    }
+}
+export function aiGatewayDlpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -288,14 +220,14 @@ function aiGatewayDlpToTerraform(struct) {
         profiles: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.profiles),
     };
 }
-function aiGatewayDlpToHclTerraform(struct) {
+export function aiGatewayDlpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         action: {
             value: cdktf.stringToHclTerraform(struct.action),
             isBlock: false,
@@ -322,160 +254,123 @@ function aiGatewayDlpToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiGatewayDlpOutputReference = /** @class */ (function (_super) {
-    __extends(AiGatewayDlpOutputReference, _super);
+export class AiGatewayDlpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiGatewayDlpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // policies - computed: false, optional: true, required: false
-        _this._policies = new AiGatewayDlpPoliciesList(_this, "policies", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiGatewayDlpOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._action !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.action = this._action;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (((_a = this._policies) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.policies = (_b = this._policies) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._profiles !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.profiles = this._profiles;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._action = undefined;
-                this._enabled = undefined;
-                this._policies.internalValue = undefined;
-                this._profiles = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._action = value.action;
-                this._enabled = value.enabled;
-                this._policies.internalValue = value.policies;
-                this._profiles = value.profiles;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpOutputReference.prototype, "action", {
-        get: function () {
-            return this.getStringAttribute('action');
-        },
-        set: function (value) {
-            this._action = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGatewayDlpOutputReference.prototype.resetAction = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._action !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.action = this._action;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._policies?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.policies = this._policies?.internalValue;
+        }
+        if (this._profiles !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.profiles = this._profiles;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._action = undefined;
+            this._enabled = undefined;
+            this._policies.internalValue = undefined;
+            this._profiles = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._action = value.action;
+            this._enabled = value.enabled;
+            this._policies.internalValue = value.policies;
+            this._profiles = value.profiles;
+        }
+    }
+    // action - computed: false, optional: true, required: false
+    _action;
+    get action() {
+        return this.getStringAttribute('action');
+    }
+    set action(value) {
+        this._action = value;
+    }
+    resetAction() {
         this._action = undefined;
-    };
-    Object.defineProperty(AiGatewayDlpOutputReference.prototype, "actionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._action;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpOutputReference.prototype, "policies", {
-        get: function () {
-            return this._policies;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGatewayDlpOutputReference.prototype.putPolicies = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get actionInput() {
+        return this._action;
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // policies - computed: false, optional: true, required: false
+    _policies = new AiGatewayDlpPoliciesList(this, "policies", false);
+    get policies() {
+        return this._policies;
+    }
+    putPolicies(value) {
         this._policies.internalValue = value;
-    };
-    AiGatewayDlpOutputReference.prototype.resetPolicies = function () {
+    }
+    resetPolicies() {
         this._policies.internalValue = undefined;
-    };
-    Object.defineProperty(AiGatewayDlpOutputReference.prototype, "policiesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._policies.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayDlpOutputReference.prototype, "profiles", {
-        get: function () {
-            return this.getListAttribute('profiles');
-        },
-        set: function (value) {
-            this._profiles = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGatewayDlpOutputReference.prototype.resetProfiles = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get policiesInput() {
+        return this._policies.internalValue;
+    }
+    // profiles - computed: false, optional: true, required: false
+    _profiles;
+    get profiles() {
+        return this.getListAttribute('profiles');
+    }
+    set profiles(value) {
+        this._profiles = value;
+    }
+    resetProfiles() {
         this._profiles = undefined;
-    };
-    Object.defineProperty(AiGatewayDlpOutputReference.prototype, "profilesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._profiles;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiGatewayDlpOutputReference;
-}(cdktf.ComplexObject));
-exports.AiGatewayDlpOutputReference = AiGatewayDlpOutputReference;
-function aiGatewayOtelToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get profilesInput() {
+        return this._profiles;
+    }
+}
+export function aiGatewayOtelToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -489,14 +384,14 @@ function aiGatewayOtelToTerraform(struct) {
         url: cdktf.stringToTerraform(struct.url),
     };
 }
-function aiGatewayOtelToHclTerraform(struct) {
+export function aiGatewayOtelToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         authorization: {
             value: cdktf.stringToHclTerraform(struct.authorization),
             isBlock: false,
@@ -523,176 +418,142 @@ function aiGatewayOtelToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiGatewayOtelOutputReference = /** @class */ (function (_super) {
-    __extends(AiGatewayOtelOutputReference, _super);
+export class AiGatewayOtelOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiGatewayOtelOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(AiGatewayOtelOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._authorization !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authorization = this._authorization;
-            }
-            if (this._contentType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contentType = this._contentType;
-            }
-            if (this._headers !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.headers = this._headers;
-            }
-            if (this._url !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.url = this._url;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._authorization = undefined;
-                this._contentType = undefined;
-                this._headers = undefined;
-                this._url = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._authorization = value.authorization;
-                this._contentType = value.contentType;
-                this._headers = value.headers;
-                this._url = value.url;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayOtelOutputReference.prototype, "authorization", {
-        get: function () {
-            return this.getStringAttribute('authorization');
-        },
-        set: function (value) {
-            this._authorization = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayOtelOutputReference.prototype, "authorizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authorization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayOtelOutputReference.prototype, "contentType", {
-        get: function () {
-            return this.getStringAttribute('content_type');
-        },
-        set: function (value) {
-            this._contentType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGatewayOtelOutputReference.prototype.resetContentType = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._authorization !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authorization = this._authorization;
+        }
+        if (this._contentType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contentType = this._contentType;
+        }
+        if (this._headers !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.headers = this._headers;
+        }
+        if (this._url !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.url = this._url;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._authorization = undefined;
+            this._contentType = undefined;
+            this._headers = undefined;
+            this._url = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._authorization = value.authorization;
+            this._contentType = value.contentType;
+            this._headers = value.headers;
+            this._url = value.url;
+        }
+    }
+    // authorization - computed: true, optional: false, required: true
+    _authorization;
+    get authorization() {
+        return this.getStringAttribute('authorization');
+    }
+    set authorization(value) {
+        this._authorization = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get authorizationInput() {
+        return this._authorization;
+    }
+    // content_type - computed: true, optional: true, required: false
+    _contentType;
+    get contentType() {
+        return this.getStringAttribute('content_type');
+    }
+    set contentType(value) {
+        this._contentType = value;
+    }
+    resetContentType() {
         this._contentType = undefined;
-    };
-    Object.defineProperty(AiGatewayOtelOutputReference.prototype, "contentTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayOtelOutputReference.prototype, "headers", {
-        get: function () {
-            return this.getStringMapAttribute('headers');
-        },
-        set: function (value) {
-            this._headers = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayOtelOutputReference.prototype, "headersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._headers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayOtelOutputReference.prototype, "url", {
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        set: function (value) {
-            this._url = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayOtelOutputReference.prototype, "urlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._url;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiGatewayOtelOutputReference;
-}(cdktf.ComplexObject));
-exports.AiGatewayOtelOutputReference = AiGatewayOtelOutputReference;
-var AiGatewayOtelList = /** @class */ (function (_super) {
-    __extends(AiGatewayOtelList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentTypeInput() {
+        return this._contentType;
+    }
+    // headers - computed: true, optional: false, required: true
+    _headers;
+    get headers() {
+        return this.getStringMapAttribute('headers');
+    }
+    set headers(value) {
+        this._headers = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get headersInput() {
+        return this._headers;
+    }
+    // url - computed: true, optional: false, required: true
+    _url;
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    set url(value) {
+        this._url = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get urlInput() {
+        return this._url;
+    }
+}
+export class AiGatewayOtelList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiGatewayOtelList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    AiGatewayOtelList.prototype.get = function (index) {
+    get(index) {
         return new AiGatewayOtelOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return AiGatewayOtelList;
-}(cdktf.ComplexList));
-exports.AiGatewayOtelList = AiGatewayOtelList;
-function aiGatewayStripeUsageEventsToTerraform(struct) {
+    }
+}
+export function aiGatewayStripeUsageEventsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -703,14 +564,14 @@ function aiGatewayStripeUsageEventsToTerraform(struct) {
         payload: cdktf.stringToTerraform(struct.payload),
     };
 }
-function aiGatewayStripeUsageEventsToHclTerraform(struct) {
+export function aiGatewayStripeUsageEventsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         payload: {
             value: cdktf.stringToHclTerraform(struct.payload),
             isBlock: false,
@@ -719,101 +580,85 @@ function aiGatewayStripeUsageEventsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiGatewayStripeUsageEventsOutputReference = /** @class */ (function (_super) {
-    __extends(AiGatewayStripeUsageEventsOutputReference, _super);
+export class AiGatewayStripeUsageEventsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiGatewayStripeUsageEventsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(AiGatewayStripeUsageEventsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._payload !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.payload = this._payload;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._payload = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._payload = value.payload;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayStripeUsageEventsOutputReference.prototype, "payload", {
-        get: function () {
-            return this.getStringAttribute('payload');
-        },
-        set: function (value) {
-            this._payload = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayStripeUsageEventsOutputReference.prototype, "payloadInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._payload;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiGatewayStripeUsageEventsOutputReference;
-}(cdktf.ComplexObject));
-exports.AiGatewayStripeUsageEventsOutputReference = AiGatewayStripeUsageEventsOutputReference;
-var AiGatewayStripeUsageEventsList = /** @class */ (function (_super) {
-    __extends(AiGatewayStripeUsageEventsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._payload !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.payload = this._payload;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._payload = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._payload = value.payload;
+        }
+    }
+    // payload - computed: false, optional: false, required: true
+    _payload;
+    get payload() {
+        return this.getStringAttribute('payload');
+    }
+    set payload(value) {
+        this._payload = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get payloadInput() {
+        return this._payload;
+    }
+}
+export class AiGatewayStripeUsageEventsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiGatewayStripeUsageEventsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    AiGatewayStripeUsageEventsList.prototype.get = function (index) {
+    get(index) {
         return new AiGatewayStripeUsageEventsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return AiGatewayStripeUsageEventsList;
-}(cdktf.ComplexList));
-exports.AiGatewayStripeUsageEventsList = AiGatewayStripeUsageEventsList;
-function aiGatewayStripeToTerraform(struct) {
+    }
+}
+export function aiGatewayStripeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -825,14 +670,14 @@ function aiGatewayStripeToTerraform(struct) {
         usage_events: cdktf.listMapper(aiGatewayStripeUsageEventsToTerraform, false)(struct.usageEvents),
     };
 }
-function aiGatewayStripeToHclTerraform(struct) {
+export function aiGatewayStripeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         authorization: {
             value: cdktf.stringToHclTerraform(struct.authorization),
             isBlock: false,
@@ -847,107 +692,98 @@ function aiGatewayStripeToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiGatewayStripeOutputReference = /** @class */ (function (_super) {
-    __extends(AiGatewayStripeOutputReference, _super);
+export class AiGatewayStripeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiGatewayStripeOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // usage_events - computed: false, optional: false, required: true
-        _this._usageEvents = new AiGatewayStripeUsageEventsList(_this, "usage_events", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiGatewayStripeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._authorization !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authorization = this._authorization;
-            }
-            if (((_a = this._usageEvents) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.usageEvents = (_b = this._usageEvents) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._authorization = undefined;
-                this._usageEvents.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._authorization = value.authorization;
-                this._usageEvents.internalValue = value.usageEvents;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayStripeOutputReference.prototype, "authorization", {
-        get: function () {
-            return this.getStringAttribute('authorization');
-        },
-        set: function (value) {
-            this._authorization = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayStripeOutputReference.prototype, "authorizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authorization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGatewayStripeOutputReference.prototype, "usageEvents", {
-        get: function () {
-            return this._usageEvents;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGatewayStripeOutputReference.prototype.putUsageEvents = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._authorization !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authorization = this._authorization;
+        }
+        if (this._usageEvents?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.usageEvents = this._usageEvents?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._authorization = undefined;
+            this._usageEvents.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._authorization = value.authorization;
+            this._usageEvents.internalValue = value.usageEvents;
+        }
+    }
+    // authorization - computed: false, optional: false, required: true
+    _authorization;
+    get authorization() {
+        return this.getStringAttribute('authorization');
+    }
+    set authorization(value) {
+        this._authorization = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get authorizationInput() {
+        return this._authorization;
+    }
+    // usage_events - computed: false, optional: false, required: true
+    _usageEvents = new AiGatewayStripeUsageEventsList(this, "usage_events", false);
+    get usageEvents() {
+        return this._usageEvents;
+    }
+    putUsageEvents(value) {
         this._usageEvents.internalValue = value;
-    };
-    Object.defineProperty(AiGatewayStripeOutputReference.prototype, "usageEventsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._usageEvents.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiGatewayStripeOutputReference;
-}(cdktf.ComplexObject));
-exports.AiGatewayStripeOutputReference = AiGatewayStripeOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get usageEventsInput() {
+        return this._usageEvents.internalValue;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_gateway cloudflare_ai_gateway}
 */
-var AiGateway = /** @class */ (function (_super) {
-    __extends(AiGateway, _super);
+export class AiGateway extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_ai_gateway";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a AiGateway resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the AiGateway to import
+    * @param importFromId The id of the existing AiGateway that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_gateway#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the AiGateway to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_ai_gateway", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -958,8 +794,8 @@ var AiGateway = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options AiGatewayConfig
     */
-    function AiGateway(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_ai_gateway',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -972,522 +808,361 @@ var AiGateway = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // dlp - computed: false, optional: true, required: false
-        _this._dlp = new AiGatewayDlpOutputReference(_this, "dlp");
-        // otel - computed: true, optional: true, required: false
-        _this._otel = new AiGatewayOtelList(_this, "otel", false);
-        // stripe - computed: false, optional: true, required: false
-        _this._stripe = new AiGatewayStripeOutputReference(_this, "stripe");
-        _this._accountId = config.accountId;
-        _this._authentication = config.authentication;
-        _this._cacheInvalidateOnUpdate = config.cacheInvalidateOnUpdate;
-        _this._cacheTtl = config.cacheTtl;
-        _this._collectLogs = config.collectLogs;
-        _this._dlp.internalValue = config.dlp;
-        _this._id = config.id;
-        _this._logManagement = config.logManagement;
-        _this._logManagementStrategy = config.logManagementStrategy;
-        _this._logpush = config.logpush;
-        _this._logpushPublicKey = config.logpushPublicKey;
-        _this._otel.internalValue = config.otel;
-        _this._rateLimitingInterval = config.rateLimitingInterval;
-        _this._rateLimitingLimit = config.rateLimitingLimit;
-        _this._rateLimitingTechnique = config.rateLimitingTechnique;
-        _this._retryBackoff = config.retryBackoff;
-        _this._retryDelay = config.retryDelay;
-        _this._retryMaxAttempts = config.retryMaxAttempts;
-        _this._storeId = config.storeId;
-        _this._stripe.internalValue = config.stripe;
-        _this._workersAiBillingMode = config.workersAiBillingMode;
-        _this._zdr = config.zdr;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._authentication = config.authentication;
+        this._cacheInvalidateOnUpdate = config.cacheInvalidateOnUpdate;
+        this._cacheTtl = config.cacheTtl;
+        this._collectLogs = config.collectLogs;
+        this._dlp.internalValue = config.dlp;
+        this._id = config.id;
+        this._logManagement = config.logManagement;
+        this._logManagementStrategy = config.logManagementStrategy;
+        this._logpush = config.logpush;
+        this._logpushPublicKey = config.logpushPublicKey;
+        this._otel.internalValue = config.otel;
+        this._rateLimitingInterval = config.rateLimitingInterval;
+        this._rateLimitingLimit = config.rateLimitingLimit;
+        this._rateLimitingTechnique = config.rateLimitingTechnique;
+        this._retryBackoff = config.retryBackoff;
+        this._retryDelay = config.retryDelay;
+        this._retryMaxAttempts = config.retryMaxAttempts;
+        this._storeId = config.storeId;
+        this._stripe.internalValue = config.stripe;
+        this._workersAiBillingMode = config.workersAiBillingMode;
+        this._zdr = config.zdr;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a AiGateway resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the AiGateway to import
-    * @param importFromId The id of the existing AiGateway that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_gateway#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the AiGateway to import is found
-    */
-    AiGateway.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_ai_gateway", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(AiGateway.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "authentication", {
-        get: function () {
-            return this.getBooleanAttribute('authentication');
-        },
-        set: function (value) {
-            this._authentication = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetAuthentication = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // authentication - computed: false, optional: true, required: false
+    _authentication;
+    get authentication() {
+        return this.getBooleanAttribute('authentication');
+    }
+    set authentication(value) {
+        this._authentication = value;
+    }
+    resetAuthentication() {
         this._authentication = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "authenticationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authentication;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "cacheInvalidateOnUpdate", {
-        get: function () {
-            return this.getBooleanAttribute('cache_invalidate_on_update');
-        },
-        set: function (value) {
-            this._cacheInvalidateOnUpdate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "cacheInvalidateOnUpdateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cacheInvalidateOnUpdate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "cacheTtl", {
-        get: function () {
-            return this.getNumberAttribute('cache_ttl');
-        },
-        set: function (value) {
-            this._cacheTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "cacheTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cacheTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "collectLogs", {
-        get: function () {
-            return this.getBooleanAttribute('collect_logs');
-        },
-        set: function (value) {
-            this._collectLogs = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "collectLogsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._collectLogs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "dlp", {
-        get: function () {
-            return this._dlp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.putDlp = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authenticationInput() {
+        return this._authentication;
+    }
+    // cache_invalidate_on_update - computed: false, optional: false, required: true
+    _cacheInvalidateOnUpdate;
+    get cacheInvalidateOnUpdate() {
+        return this.getBooleanAttribute('cache_invalidate_on_update');
+    }
+    set cacheInvalidateOnUpdate(value) {
+        this._cacheInvalidateOnUpdate = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheInvalidateOnUpdateInput() {
+        return this._cacheInvalidateOnUpdate;
+    }
+    // cache_ttl - computed: false, optional: false, required: true
+    _cacheTtl;
+    get cacheTtl() {
+        return this.getNumberAttribute('cache_ttl');
+    }
+    set cacheTtl(value) {
+        this._cacheTtl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheTtlInput() {
+        return this._cacheTtl;
+    }
+    // collect_logs - computed: false, optional: false, required: true
+    _collectLogs;
+    get collectLogs() {
+        return this.getBooleanAttribute('collect_logs');
+    }
+    set collectLogs(value) {
+        this._collectLogs = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get collectLogsInput() {
+        return this._collectLogs;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // dlp - computed: false, optional: true, required: false
+    _dlp = new AiGatewayDlpOutputReference(this, "dlp");
+    get dlp() {
+        return this._dlp;
+    }
+    putDlp(value) {
         this._dlp.internalValue = value;
-    };
-    AiGateway.prototype.resetDlp = function () {
+    }
+    resetDlp() {
         this._dlp.internalValue = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "dlpInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dlp.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "isDefault", {
-        // is_default - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_default');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "logManagement", {
-        get: function () {
-            return this.getNumberAttribute('log_management');
-        },
-        set: function (value) {
-            this._logManagement = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetLogManagement = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dlpInput() {
+        return this._dlp.internalValue;
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // is_default - computed: true, optional: false, required: false
+    get isDefault() {
+        return this.getBooleanAttribute('is_default');
+    }
+    // log_management - computed: false, optional: true, required: false
+    _logManagement;
+    get logManagement() {
+        return this.getNumberAttribute('log_management');
+    }
+    set logManagement(value) {
+        this._logManagement = value;
+    }
+    resetLogManagement() {
         this._logManagement = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "logManagementInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logManagement;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "logManagementStrategy", {
-        get: function () {
-            return this.getStringAttribute('log_management_strategy');
-        },
-        set: function (value) {
-            this._logManagementStrategy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetLogManagementStrategy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logManagementInput() {
+        return this._logManagement;
+    }
+    // log_management_strategy - computed: false, optional: true, required: false
+    _logManagementStrategy;
+    get logManagementStrategy() {
+        return this.getStringAttribute('log_management_strategy');
+    }
+    set logManagementStrategy(value) {
+        this._logManagementStrategy = value;
+    }
+    resetLogManagementStrategy() {
         this._logManagementStrategy = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "logManagementStrategyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logManagementStrategy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "logpush", {
-        get: function () {
-            return this.getBooleanAttribute('logpush');
-        },
-        set: function (value) {
-            this._logpush = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetLogpush = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logManagementStrategyInput() {
+        return this._logManagementStrategy;
+    }
+    // logpush - computed: false, optional: true, required: false
+    _logpush;
+    get logpush() {
+        return this.getBooleanAttribute('logpush');
+    }
+    set logpush(value) {
+        this._logpush = value;
+    }
+    resetLogpush() {
         this._logpush = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "logpushInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logpush;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "logpushPublicKey", {
-        get: function () {
-            return this.getStringAttribute('logpush_public_key');
-        },
-        set: function (value) {
-            this._logpushPublicKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetLogpushPublicKey = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logpushInput() {
+        return this._logpush;
+    }
+    // logpush_public_key - computed: false, optional: true, required: false
+    _logpushPublicKey;
+    get logpushPublicKey() {
+        return this.getStringAttribute('logpush_public_key');
+    }
+    set logpushPublicKey(value) {
+        this._logpushPublicKey = value;
+    }
+    resetLogpushPublicKey() {
         this._logpushPublicKey = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "logpushPublicKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logpushPublicKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "modifiedAt", {
-        // modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "otel", {
-        get: function () {
-            return this._otel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.putOtel = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logpushPublicKeyInput() {
+        return this._logpushPublicKey;
+    }
+    // modified_at - computed: true, optional: false, required: false
+    get modifiedAt() {
+        return this.getStringAttribute('modified_at');
+    }
+    // otel - computed: true, optional: true, required: false
+    _otel = new AiGatewayOtelList(this, "otel", false);
+    get otel() {
+        return this._otel;
+    }
+    putOtel(value) {
         this._otel.internalValue = value;
-    };
-    AiGateway.prototype.resetOtel = function () {
+    }
+    resetOtel() {
         this._otel.internalValue = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "otelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._otel.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "rateLimitingInterval", {
-        get: function () {
-            return this.getNumberAttribute('rate_limiting_interval');
-        },
-        set: function (value) {
-            this._rateLimitingInterval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "rateLimitingIntervalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rateLimitingInterval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "rateLimitingLimit", {
-        get: function () {
-            return this.getNumberAttribute('rate_limiting_limit');
-        },
-        set: function (value) {
-            this._rateLimitingLimit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "rateLimitingLimitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rateLimitingLimit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "rateLimitingTechnique", {
-        get: function () {
-            return this.getStringAttribute('rate_limiting_technique');
-        },
-        set: function (value) {
-            this._rateLimitingTechnique = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetRateLimitingTechnique = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get otelInput() {
+        return this._otel.internalValue;
+    }
+    // rate_limiting_interval - computed: false, optional: false, required: true
+    _rateLimitingInterval;
+    get rateLimitingInterval() {
+        return this.getNumberAttribute('rate_limiting_interval');
+    }
+    set rateLimitingInterval(value) {
+        this._rateLimitingInterval = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateLimitingIntervalInput() {
+        return this._rateLimitingInterval;
+    }
+    // rate_limiting_limit - computed: false, optional: false, required: true
+    _rateLimitingLimit;
+    get rateLimitingLimit() {
+        return this.getNumberAttribute('rate_limiting_limit');
+    }
+    set rateLimitingLimit(value) {
+        this._rateLimitingLimit = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateLimitingLimitInput() {
+        return this._rateLimitingLimit;
+    }
+    // rate_limiting_technique - computed: false, optional: true, required: false
+    _rateLimitingTechnique;
+    get rateLimitingTechnique() {
+        return this.getStringAttribute('rate_limiting_technique');
+    }
+    set rateLimitingTechnique(value) {
+        this._rateLimitingTechnique = value;
+    }
+    resetRateLimitingTechnique() {
         this._rateLimitingTechnique = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "rateLimitingTechniqueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rateLimitingTechnique;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "retryBackoff", {
-        get: function () {
-            return this.getStringAttribute('retry_backoff');
-        },
-        set: function (value) {
-            this._retryBackoff = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetRetryBackoff = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateLimitingTechniqueInput() {
+        return this._rateLimitingTechnique;
+    }
+    // retry_backoff - computed: false, optional: true, required: false
+    _retryBackoff;
+    get retryBackoff() {
+        return this.getStringAttribute('retry_backoff');
+    }
+    set retryBackoff(value) {
+        this._retryBackoff = value;
+    }
+    resetRetryBackoff() {
         this._retryBackoff = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "retryBackoffInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._retryBackoff;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "retryDelay", {
-        get: function () {
-            return this.getNumberAttribute('retry_delay');
-        },
-        set: function (value) {
-            this._retryDelay = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetRetryDelay = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get retryBackoffInput() {
+        return this._retryBackoff;
+    }
+    // retry_delay - computed: false, optional: true, required: false
+    _retryDelay;
+    get retryDelay() {
+        return this.getNumberAttribute('retry_delay');
+    }
+    set retryDelay(value) {
+        this._retryDelay = value;
+    }
+    resetRetryDelay() {
         this._retryDelay = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "retryDelayInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._retryDelay;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "retryMaxAttempts", {
-        get: function () {
-            return this.getNumberAttribute('retry_max_attempts');
-        },
-        set: function (value) {
-            this._retryMaxAttempts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetRetryMaxAttempts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get retryDelayInput() {
+        return this._retryDelay;
+    }
+    // retry_max_attempts - computed: false, optional: true, required: false
+    _retryMaxAttempts;
+    get retryMaxAttempts() {
+        return this.getNumberAttribute('retry_max_attempts');
+    }
+    set retryMaxAttempts(value) {
+        this._retryMaxAttempts = value;
+    }
+    resetRetryMaxAttempts() {
         this._retryMaxAttempts = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "retryMaxAttemptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._retryMaxAttempts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "storeId", {
-        get: function () {
-            return this.getStringAttribute('store_id');
-        },
-        set: function (value) {
-            this._storeId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetStoreId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get retryMaxAttemptsInput() {
+        return this._retryMaxAttempts;
+    }
+    // store_id - computed: false, optional: true, required: false
+    _storeId;
+    get storeId() {
+        return this.getStringAttribute('store_id');
+    }
+    set storeId(value) {
+        this._storeId = value;
+    }
+    resetStoreId() {
         this._storeId = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "storeIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._storeId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "stripe", {
-        get: function () {
-            return this._stripe;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.putStripe = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get storeIdInput() {
+        return this._storeId;
+    }
+    // stripe - computed: false, optional: true, required: false
+    _stripe = new AiGatewayStripeOutputReference(this, "stripe");
+    get stripe() {
+        return this._stripe;
+    }
+    putStripe(value) {
         this._stripe.internalValue = value;
-    };
-    AiGateway.prototype.resetStripe = function () {
+    }
+    resetStripe() {
         this._stripe.internalValue = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "stripeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._stripe.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "workersAiBillingMode", {
-        get: function () {
-            return this.getStringAttribute('workers_ai_billing_mode');
-        },
-        set: function (value) {
-            this._workersAiBillingMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetWorkersAiBillingMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get stripeInput() {
+        return this._stripe.internalValue;
+    }
+    // workers_ai_billing_mode - computed: true, optional: true, required: false
+    _workersAiBillingMode;
+    get workersAiBillingMode() {
+        return this.getStringAttribute('workers_ai_billing_mode');
+    }
+    set workersAiBillingMode(value) {
+        this._workersAiBillingMode = value;
+    }
+    resetWorkersAiBillingMode() {
         this._workersAiBillingMode = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "workersAiBillingModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._workersAiBillingMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiGateway.prototype, "zdr", {
-        get: function () {
-            return this.getBooleanAttribute('zdr');
-        },
-        set: function (value) {
-            this._zdr = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiGateway.prototype.resetZdr = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get workersAiBillingModeInput() {
+        return this._workersAiBillingMode;
+    }
+    // zdr - computed: false, optional: true, required: false
+    _zdr;
+    get zdr() {
+        return this.getBooleanAttribute('zdr');
+    }
+    set zdr(value) {
+        this._zdr = value;
+    }
+    resetZdr() {
         this._zdr = undefined;
-    };
-    Object.defineProperty(AiGateway.prototype, "zdrInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zdr;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zdrInput() {
+        return this._zdr;
+    }
     // =========
     // SYNTHESIS
     // =========
-    AiGateway.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             authentication: cdktf.booleanToTerraform(this._authentication),
@@ -1512,9 +1187,9 @@ var AiGateway = /** @class */ (function (_super) {
             workers_ai_billing_mode: cdktf.stringToTerraform(this._workersAiBillingMode),
             zdr: cdktf.booleanToTerraform(this._zdr),
         };
-    };
-    AiGateway.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1649,15 +1324,6 @@ var AiGateway = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    AiGateway.tfResourceType = "cloudflare_ai_gateway";
-    return AiGateway;
-}(cdktf.TerraformResource));
-exports.AiGateway = AiGateway;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

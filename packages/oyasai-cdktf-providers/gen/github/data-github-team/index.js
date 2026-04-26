@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/team
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataGithubTeam = exports.DataGithubTeamRepositoriesDetailedList = exports.DataGithubTeamRepositoriesDetailedOutputReference = void 0;
-exports.dataGithubTeamRepositoriesDetailedToTerraform = dataGithubTeamRepositoriesDetailedToTerraform;
-exports.dataGithubTeamRepositoriesDetailedToHclTerraform = dataGithubTeamRepositoriesDetailedToHclTerraform;
-var cdktf = require("cdktf");
-function dataGithubTeamRepositoriesDetailedToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataGithubTeamRepositoriesDetailedToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,101 +10,96 @@ function dataGithubTeamRepositoriesDetailedToTerraform(struct) {
     }
     return {};
 }
-function dataGithubTeamRepositoriesDetailedToHclTerraform(struct) {
+export function dataGithubTeamRepositoriesDetailedToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataGithubTeamRepositoriesDetailedOutputReference = /** @class */ (function (_super) {
-    __extends(DataGithubTeamRepositoriesDetailedOutputReference, _super);
+export class DataGithubTeamRepositoriesDetailedOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataGithubTeamRepositoriesDetailedOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataGithubTeamRepositoriesDetailedOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeamRepositoriesDetailedOutputReference.prototype, "repoId", {
-        // repo_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('repo_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeamRepositoriesDetailedOutputReference.prototype, "repoName", {
-        // repo_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('repo_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeamRepositoriesDetailedOutputReference.prototype, "roleName", {
-        // role_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('role_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataGithubTeamRepositoriesDetailedOutputReference;
-}(cdktf.ComplexObject));
-exports.DataGithubTeamRepositoriesDetailedOutputReference = DataGithubTeamRepositoriesDetailedOutputReference;
-var DataGithubTeamRepositoriesDetailedList = /** @class */ (function (_super) {
-    __extends(DataGithubTeamRepositoriesDetailedList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // repo_id - computed: true, optional: false, required: false
+    get repoId() {
+        return this.getNumberAttribute('repo_id');
+    }
+    // repo_name - computed: true, optional: false, required: false
+    get repoName() {
+        return this.getStringAttribute('repo_name');
+    }
+    // role_name - computed: true, optional: false, required: false
+    get roleName() {
+        return this.getStringAttribute('role_name');
+    }
+}
+export class DataGithubTeamRepositoriesDetailedList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataGithubTeamRepositoriesDetailedList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataGithubTeamRepositoriesDetailedList.prototype.get = function (index) {
+    get(index) {
         return new DataGithubTeamRepositoriesDetailedOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataGithubTeamRepositoriesDetailedList;
-}(cdktf.ComplexList));
-exports.DataGithubTeamRepositoriesDetailedList = DataGithubTeamRepositoriesDetailedList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/team github_team}
 */
-var DataGithubTeam = /** @class */ (function (_super) {
-    __extends(DataGithubTeam, _super);
+export class DataGithubTeam extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_team";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataGithubTeam resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataGithubTeam to import
+    * @param importFromId The id of the existing DataGithubTeam that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/team#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataGithubTeam to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_team", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -135,8 +110,8 @@ var DataGithubTeam = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataGithubTeamConfig
     */
-    function DataGithubTeam(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_team',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -149,209 +124,129 @@ var DataGithubTeam = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // repositories_detailed - computed: true, optional: false, required: false
-        _this._repositoriesDetailed = new DataGithubTeamRepositoriesDetailedList(_this, "repositories_detailed", false);
-        _this._id = config.id;
-        _this._membershipType = config.membershipType;
-        _this._resultsPerPage = config.resultsPerPage;
-        _this._slug = config.slug;
-        _this._summaryOnly = config.summaryOnly;
-        return _this;
+        });
+        this._id = config.id;
+        this._membershipType = config.membershipType;
+        this._resultsPerPage = config.resultsPerPage;
+        this._slug = config.slug;
+        this._summaryOnly = config.summaryOnly;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataGithubTeam resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataGithubTeam to import
-    * @param importFromId The id of the existing DataGithubTeam that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/team#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataGithubTeam to import is found
-    */
-    DataGithubTeam.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_team", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataGithubTeam.prototype, "description", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubTeam.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataGithubTeam.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "members", {
-        // members - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('members');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "membershipType", {
-        get: function () {
-            return this.getStringAttribute('membership_type');
-        },
-        set: function (value) {
-            this._membershipType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubTeam.prototype.resetMembershipType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // members - computed: true, optional: false, required: false
+    get members() {
+        return this.getListAttribute('members');
+    }
+    // membership_type - computed: false, optional: true, required: false
+    _membershipType;
+    get membershipType() {
+        return this.getStringAttribute('membership_type');
+    }
+    set membershipType(value) {
+        this._membershipType = value;
+    }
+    resetMembershipType() {
         this._membershipType = undefined;
-    };
-    Object.defineProperty(DataGithubTeam.prototype, "membershipTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._membershipType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "nodeId", {
-        // node_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('node_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "notificationSetting", {
-        // notification_setting - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('notification_setting');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "permission", {
-        // permission - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('permission');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "privacy", {
-        // privacy - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('privacy');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "repositories", {
-        // repositories - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('repositories');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "repositoriesDetailed", {
-        get: function () {
-            return this._repositoriesDetailed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "resultsPerPage", {
-        get: function () {
-            return this.getNumberAttribute('results_per_page');
-        },
-        set: function (value) {
-            this._resultsPerPage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubTeam.prototype.resetResultsPerPage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get membershipTypeInput() {
+        return this._membershipType;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // node_id - computed: true, optional: false, required: false
+    get nodeId() {
+        return this.getStringAttribute('node_id');
+    }
+    // notification_setting - computed: true, optional: false, required: false
+    get notificationSetting() {
+        return this.getStringAttribute('notification_setting');
+    }
+    // permission - computed: true, optional: false, required: false
+    get permission() {
+        return this.getStringAttribute('permission');
+    }
+    // privacy - computed: true, optional: false, required: false
+    get privacy() {
+        return this.getStringAttribute('privacy');
+    }
+    // repositories - computed: true, optional: false, required: false
+    get repositories() {
+        return this.getListAttribute('repositories');
+    }
+    // repositories_detailed - computed: true, optional: false, required: false
+    _repositoriesDetailed = new DataGithubTeamRepositoriesDetailedList(this, "repositories_detailed", false);
+    get repositoriesDetailed() {
+        return this._repositoriesDetailed;
+    }
+    // results_per_page - computed: false, optional: true, required: false
+    _resultsPerPage;
+    get resultsPerPage() {
+        return this.getNumberAttribute('results_per_page');
+    }
+    set resultsPerPage(value) {
+        this._resultsPerPage = value;
+    }
+    resetResultsPerPage() {
         this._resultsPerPage = undefined;
-    };
-    Object.defineProperty(DataGithubTeam.prototype, "resultsPerPageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._resultsPerPage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "slug", {
-        get: function () {
-            return this.getStringAttribute('slug');
-        },
-        set: function (value) {
-            this._slug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "slugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._slug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubTeam.prototype, "summaryOnly", {
-        get: function () {
-            return this.getBooleanAttribute('summary_only');
-        },
-        set: function (value) {
-            this._summaryOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubTeam.prototype.resetSummaryOnly = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get resultsPerPageInput() {
+        return this._resultsPerPage;
+    }
+    // slug - computed: false, optional: false, required: true
+    _slug;
+    get slug() {
+        return this.getStringAttribute('slug');
+    }
+    set slug(value) {
+        this._slug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get slugInput() {
+        return this._slug;
+    }
+    // summary_only - computed: false, optional: true, required: false
+    _summaryOnly;
+    get summaryOnly() {
+        return this.getBooleanAttribute('summary_only');
+    }
+    set summaryOnly(value) {
+        this._summaryOnly = value;
+    }
+    resetSummaryOnly() {
         this._summaryOnly = undefined;
-    };
-    Object.defineProperty(DataGithubTeam.prototype, "summaryOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._summaryOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get summaryOnlyInput() {
+        return this._summaryOnly;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataGithubTeam.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             membership_type: cdktf.stringToTerraform(this._membershipType),
@@ -359,9 +254,9 @@ var DataGithubTeam = /** @class */ (function (_super) {
             slug: cdktf.stringToTerraform(this._slug),
             summary_only: cdktf.booleanToTerraform(this._summaryOnly),
         };
-    };
-    DataGithubTeam.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -394,15 +289,6 @@ var DataGithubTeam = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataGithubTeam.tfResourceType = "github_team";
-    return DataGithubTeam;
-}(cdktf.TerraformDataSource));
-exports.DataGithubTeam = DataGithubTeam;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

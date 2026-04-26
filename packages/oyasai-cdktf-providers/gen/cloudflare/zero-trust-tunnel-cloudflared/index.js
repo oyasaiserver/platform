@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_cloudflared
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustTunnelCloudflared = exports.ZeroTrustTunnelCloudflaredConnectionsList = exports.ZeroTrustTunnelCloudflaredConnectionsOutputReference = void 0;
-exports.zeroTrustTunnelCloudflaredConnectionsToTerraform = zeroTrustTunnelCloudflaredConnectionsToTerraform;
-exports.zeroTrustTunnelCloudflaredConnectionsToHclTerraform = zeroTrustTunnelCloudflaredConnectionsToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustTunnelCloudflaredConnectionsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustTunnelCloudflaredConnectionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,141 +10,116 @@ function zeroTrustTunnelCloudflaredConnectionsToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustTunnelCloudflaredConnectionsToHclTerraform(struct) {
+export function zeroTrustTunnelCloudflaredConnectionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustTunnelCloudflaredConnectionsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustTunnelCloudflaredConnectionsOutputReference, _super);
+export class ZeroTrustTunnelCloudflaredConnectionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustTunnelCloudflaredConnectionsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustTunnelCloudflaredConnectionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredConnectionsOutputReference.prototype, "clientId", {
-        // client_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('client_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredConnectionsOutputReference.prototype, "clientVersion", {
-        // client_version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('client_version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredConnectionsOutputReference.prototype, "coloName", {
-        // colo_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('colo_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredConnectionsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredConnectionsOutputReference.prototype, "isPendingReconnect", {
-        // is_pending_reconnect - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_pending_reconnect');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredConnectionsOutputReference.prototype, "openedAt", {
-        // opened_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('opened_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredConnectionsOutputReference.prototype, "originIp", {
-        // origin_ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('origin_ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredConnectionsOutputReference.prototype, "uuid", {
-        // uuid - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uuid');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustTunnelCloudflaredConnectionsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustTunnelCloudflaredConnectionsOutputReference = ZeroTrustTunnelCloudflaredConnectionsOutputReference;
-var ZeroTrustTunnelCloudflaredConnectionsList = /** @class */ (function (_super) {
-    __extends(ZeroTrustTunnelCloudflaredConnectionsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // client_id - computed: true, optional: false, required: false
+    get clientId() {
+        return this.getStringAttribute('client_id');
+    }
+    // client_version - computed: true, optional: false, required: false
+    get clientVersion() {
+        return this.getStringAttribute('client_version');
+    }
+    // colo_name - computed: true, optional: false, required: false
+    get coloName() {
+        return this.getStringAttribute('colo_name');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // is_pending_reconnect - computed: true, optional: false, required: false
+    get isPendingReconnect() {
+        return this.getBooleanAttribute('is_pending_reconnect');
+    }
+    // opened_at - computed: true, optional: false, required: false
+    get openedAt() {
+        return this.getStringAttribute('opened_at');
+    }
+    // origin_ip - computed: true, optional: false, required: false
+    get originIp() {
+        return this.getStringAttribute('origin_ip');
+    }
+    // uuid - computed: true, optional: false, required: false
+    get uuid() {
+        return this.getStringAttribute('uuid');
+    }
+}
+export class ZeroTrustTunnelCloudflaredConnectionsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustTunnelCloudflaredConnectionsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustTunnelCloudflaredConnectionsList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustTunnelCloudflaredConnectionsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustTunnelCloudflaredConnectionsList;
-}(cdktf.ComplexList));
-exports.ZeroTrustTunnelCloudflaredConnectionsList = ZeroTrustTunnelCloudflaredConnectionsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_cloudflared cloudflare_zero_trust_tunnel_cloudflared}
 */
-var ZeroTrustTunnelCloudflared = /** @class */ (function (_super) {
-    __extends(ZeroTrustTunnelCloudflared, _super);
+export class ZeroTrustTunnelCloudflared extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_tunnel_cloudflared";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustTunnelCloudflared resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustTunnelCloudflared to import
+    * @param importFromId The id of the existing ZeroTrustTunnelCloudflared that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_cloudflared#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustTunnelCloudflared to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_tunnel_cloudflared", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -175,8 +130,8 @@ var ZeroTrustTunnelCloudflared = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustTunnelCloudflaredConfig
     */
-    function ZeroTrustTunnelCloudflared(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_tunnel_cloudflared',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -189,209 +144,130 @@ var ZeroTrustTunnelCloudflared = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // connections - computed: true, optional: false, required: false
-        _this._connections = new ZeroTrustTunnelCloudflaredConnectionsList(_this, "connections", false);
-        _this._accountId = config.accountId;
-        _this._configSrc = config.configSrc;
-        _this._name = config.name;
-        _this._tunnelSecret = config.tunnelSecret;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._configSrc = config.configSrc;
+        this._name = config.name;
+        this._tunnelSecret = config.tunnelSecret;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustTunnelCloudflared resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustTunnelCloudflared to import
-    * @param importFromId The id of the existing ZeroTrustTunnelCloudflared that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_cloudflared#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustTunnelCloudflared to import is found
-    */
-    ZeroTrustTunnelCloudflared.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_tunnel_cloudflared", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustTunnelCloudflared.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "accountTag", {
-        // account_tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "configSrc", {
-        get: function () {
-            return this.getStringAttribute('config_src');
-        },
-        set: function (value) {
-            this._configSrc = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustTunnelCloudflared.prototype.resetConfigSrc = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // account_tag - computed: true, optional: false, required: false
+    get accountTag() {
+        return this.getStringAttribute('account_tag');
+    }
+    // config_src - computed: true, optional: true, required: false
+    _configSrc;
+    get configSrc() {
+        return this.getStringAttribute('config_src');
+    }
+    set configSrc(value) {
+        this._configSrc = value;
+    }
+    resetConfigSrc() {
         this._configSrc = undefined;
-    };
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "configSrcInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configSrc;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "connections", {
-        get: function () {
-            return this._connections;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "connsActiveAt", {
-        // conns_active_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('conns_active_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "connsInactiveAt", {
-        // conns_inactive_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('conns_inactive_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "deletedAt", {
-        // deleted_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('deleted_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "metadata", {
-        // metadata - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('metadata');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "remoteConfig", {
-        // remote_config - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('remote_config');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "tunType", {
-        // tun_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('tun_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "tunnelSecret", {
-        get: function () {
-            return this.getStringAttribute('tunnel_secret');
-        },
-        set: function (value) {
-            this._tunnelSecret = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustTunnelCloudflared.prototype.resetTunnelSecret = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configSrcInput() {
+        return this._configSrc;
+    }
+    // connections - computed: true, optional: false, required: false
+    _connections = new ZeroTrustTunnelCloudflaredConnectionsList(this, "connections", false);
+    get connections() {
+        return this._connections;
+    }
+    // conns_active_at - computed: true, optional: false, required: false
+    get connsActiveAt() {
+        return this.getStringAttribute('conns_active_at');
+    }
+    // conns_inactive_at - computed: true, optional: false, required: false
+    get connsInactiveAt() {
+        return this.getStringAttribute('conns_inactive_at');
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // deleted_at - computed: true, optional: false, required: false
+    get deletedAt() {
+        return this.getStringAttribute('deleted_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // metadata - computed: true, optional: false, required: false
+    get metadata() {
+        return this.getStringAttribute('metadata');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // remote_config - computed: true, optional: false, required: false
+    get remoteConfig() {
+        return this.getBooleanAttribute('remote_config');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // tun_type - computed: true, optional: false, required: false
+    get tunType() {
+        return this.getStringAttribute('tun_type');
+    }
+    // tunnel_secret - computed: false, optional: true, required: false
+    _tunnelSecret;
+    get tunnelSecret() {
+        return this.getStringAttribute('tunnel_secret');
+    }
+    set tunnelSecret(value) {
+        this._tunnelSecret = value;
+    }
+    resetTunnelSecret() {
         this._tunnelSecret = undefined;
-    };
-    Object.defineProperty(ZeroTrustTunnelCloudflared.prototype, "tunnelSecretInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tunnelSecret;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get tunnelSecretInput() {
+        return this._tunnelSecret;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustTunnelCloudflared.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             config_src: cdktf.stringToTerraform(this._configSrc),
             name: cdktf.stringToTerraform(this._name),
             tunnel_secret: cdktf.stringToTerraform(this._tunnelSecret),
         };
-    };
-    ZeroTrustTunnelCloudflared.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -418,15 +294,6 @@ var ZeroTrustTunnelCloudflared = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustTunnelCloudflared.tfResourceType = "cloudflare_zero_trust_tunnel_cloudflared";
-    return ZeroTrustTunnelCloudflared;
-}(cdktf.TerraformResource));
-exports.ZeroTrustTunnelCloudflared = ZeroTrustTunnelCloudflared;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

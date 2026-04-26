@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_external_ca_adcs
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CertManagerExternalCaAdcs = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_external_ca_adcs infisical_cert_manager_external_ca_adcs}
 */
-var CertManagerExternalCaAdcs = /** @class */ (function (_super) {
-    __extends(CertManagerExternalCaAdcs, _super);
+export class CertManagerExternalCaAdcs extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_cert_manager_external_ca_adcs";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a CertManagerExternalCaAdcs resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the CertManagerExternalCaAdcs to import
+    * @param importFromId The id of the existing CertManagerExternalCaAdcs that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_external_ca_adcs#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the CertManagerExternalCaAdcs to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_external_ca_adcs", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var CertManagerExternalCaAdcs = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options CertManagerExternalCaAdcsConfig
     */
-    function CertManagerExternalCaAdcs(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_cert_manager_external_ca_adcs',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -48,122 +46,83 @@ var CertManagerExternalCaAdcs = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._azureAdcsConnectionId = config.azureAdcsConnectionId;
-        _this._name = config.name;
-        _this._projectSlug = config.projectSlug;
-        _this._status = config.status;
-        return _this;
+        });
+        this._azureAdcsConnectionId = config.azureAdcsConnectionId;
+        this._name = config.name;
+        this._projectSlug = config.projectSlug;
+        this._status = config.status;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a CertManagerExternalCaAdcs resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the CertManagerExternalCaAdcs to import
-    * @param importFromId The id of the existing CertManagerExternalCaAdcs that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_external_ca_adcs#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the CertManagerExternalCaAdcs to import is found
-    */
-    CertManagerExternalCaAdcs.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_external_ca_adcs", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(CertManagerExternalCaAdcs.prototype, "azureAdcsConnectionId", {
-        get: function () {
-            return this.getStringAttribute('azure_adcs_connection_id');
-        },
-        set: function (value) {
-            this._azureAdcsConnectionId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAdcs.prototype, "azureAdcsConnectionIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._azureAdcsConnectionId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAdcs.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAdcs.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAdcs.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAdcs.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAdcs.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerExternalCaAdcs.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerExternalCaAdcs.prototype.resetStatus = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // azure_adcs_connection_id - computed: false, optional: false, required: true
+    _azureAdcsConnectionId;
+    get azureAdcsConnectionId() {
+        return this.getStringAttribute('azure_adcs_connection_id');
+    }
+    set azureAdcsConnectionId(value) {
+        this._azureAdcsConnectionId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get azureAdcsConnectionIdInput() {
+        return this._azureAdcsConnectionId;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // status - computed: true, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(CertManagerExternalCaAdcs.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
     // =========
     // SYNTHESIS
     // =========
-    CertManagerExternalCaAdcs.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             azure_adcs_connection_id: cdktf.stringToTerraform(this._azureAdcsConnectionId),
             name: cdktf.stringToTerraform(this._name),
             project_slug: cdktf.stringToTerraform(this._projectSlug),
             status: cdktf.stringToTerraform(this._status),
         };
-    };
-    CertManagerExternalCaAdcs.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             azure_adcs_connection_id: {
                 value: cdktf.stringToHclTerraform(this._azureAdcsConnectionId),
                 isBlock: false,
@@ -190,15 +149,6 @@ var CertManagerExternalCaAdcs = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    CertManagerExternalCaAdcs.tfResourceType = "infisical_cert_manager_external_ca_adcs";
-    return CertManagerExternalCaAdcs;
-}(cdktf.TerraformResource));
-exports.CertManagerExternalCaAdcs = CertManagerExternalCaAdcs;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

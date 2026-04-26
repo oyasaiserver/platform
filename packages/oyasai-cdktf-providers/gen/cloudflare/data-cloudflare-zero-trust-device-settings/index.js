@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_device_settings
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareZeroTrustDeviceSettings = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_device_settings cloudflare_zero_trust_device_settings}
 */
-var DataCloudflareZeroTrustDeviceSettings = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDeviceSettings, _super);
+export class DataCloudflareZeroTrustDeviceSettings extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_device_settings";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareZeroTrustDeviceSettings resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDeviceSettings to import
+    * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_device_settings#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDeviceSettings to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_settings", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,9 +32,8 @@ var DataCloudflareZeroTrustDeviceSettings = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareZeroTrustDeviceSettingsConfig = {}
     */
-    function DataCloudflareZeroTrustDeviceSettings(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_device_settings',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -49,126 +46,73 @@ var DataCloudflareZeroTrustDeviceSettings = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        return _this;
+        });
+        this._accountId = config.accountId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareZeroTrustDeviceSettings resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDeviceSettings to import
-    * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_device_settings#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDeviceSettings to import is found
-    */
-    DataCloudflareZeroTrustDeviceSettings.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_settings", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustDeviceSettings.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "disableForTime", {
-        // disable_for_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('disable_for_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "externalEmergencySignalEnabled", {
-        // external_emergency_signal_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('external_emergency_signal_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "externalEmergencySignalFingerprint", {
-        // external_emergency_signal_fingerprint - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('external_emergency_signal_fingerprint');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "externalEmergencySignalInterval", {
-        // external_emergency_signal_interval - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('external_emergency_signal_interval');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "externalEmergencySignalUrl", {
-        // external_emergency_signal_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('external_emergency_signal_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "gatewayProxyEnabled", {
-        // gateway_proxy_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('gateway_proxy_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "gatewayUdpProxyEnabled", {
-        // gateway_udp_proxy_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('gateway_udp_proxy_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "rootCertificateInstallationEnabled", {
-        // root_certificate_installation_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('root_certificate_installation_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDeviceSettings.prototype, "useZtVirtualIp", {
-        // use_zt_virtual_ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('use_zt_virtual_ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // disable_for_time - computed: true, optional: false, required: false
+    get disableForTime() {
+        return this.getNumberAttribute('disable_for_time');
+    }
+    // external_emergency_signal_enabled - computed: true, optional: false, required: false
+    get externalEmergencySignalEnabled() {
+        return this.getBooleanAttribute('external_emergency_signal_enabled');
+    }
+    // external_emergency_signal_fingerprint - computed: true, optional: false, required: false
+    get externalEmergencySignalFingerprint() {
+        return this.getStringAttribute('external_emergency_signal_fingerprint');
+    }
+    // external_emergency_signal_interval - computed: true, optional: false, required: false
+    get externalEmergencySignalInterval() {
+        return this.getStringAttribute('external_emergency_signal_interval');
+    }
+    // external_emergency_signal_url - computed: true, optional: false, required: false
+    get externalEmergencySignalUrl() {
+        return this.getStringAttribute('external_emergency_signal_url');
+    }
+    // gateway_proxy_enabled - computed: true, optional: false, required: false
+    get gatewayProxyEnabled() {
+        return this.getBooleanAttribute('gateway_proxy_enabled');
+    }
+    // gateway_udp_proxy_enabled - computed: true, optional: false, required: false
+    get gatewayUdpProxyEnabled() {
+        return this.getBooleanAttribute('gateway_udp_proxy_enabled');
+    }
+    // root_certificate_installation_enabled - computed: true, optional: false, required: false
+    get rootCertificateInstallationEnabled() {
+        return this.getBooleanAttribute('root_certificate_installation_enabled');
+    }
+    // use_zt_virtual_ip - computed: true, optional: false, required: false
+    get useZtVirtualIp() {
+        return this.getBooleanAttribute('use_zt_virtual_ip');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareZeroTrustDeviceSettings.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
         };
-    };
-    DataCloudflareZeroTrustDeviceSettings.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -177,15 +121,6 @@ var DataCloudflareZeroTrustDeviceSettings = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareZeroTrustDeviceSettings.tfResourceType = "cloudflare_zero_trust_device_settings";
-    return DataCloudflareZeroTrustDeviceSettings;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareZeroTrustDeviceSettings = DataCloudflareZeroTrustDeviceSettings;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

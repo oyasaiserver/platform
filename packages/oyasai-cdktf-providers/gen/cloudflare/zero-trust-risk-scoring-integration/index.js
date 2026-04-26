@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_risk_scoring_integration
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustRiskScoringIntegration = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_risk_scoring_integration cloudflare_zero_trust_risk_scoring_integration}
 */
-var ZeroTrustRiskScoringIntegration = /** @class */ (function (_super) {
-    __extends(ZeroTrustRiskScoringIntegration, _super);
+export class ZeroTrustRiskScoringIntegration extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_risk_scoring_integration";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustRiskScoringIntegration resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustRiskScoringIntegration to import
+    * @param importFromId The id of the existing ZeroTrustRiskScoringIntegration that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_risk_scoring_integration#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustRiskScoringIntegration to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_risk_scoring_integration", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ZeroTrustRiskScoringIntegration = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustRiskScoringIntegrationConfig
     */
-    function ZeroTrustRiskScoringIntegration(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_risk_scoring_integration',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,162 +46,105 @@ var ZeroTrustRiskScoringIntegration = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._active = config.active;
-        _this._integrationType = config.integrationType;
-        _this._referenceId = config.referenceId;
-        _this._tenantUrl = config.tenantUrl;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._active = config.active;
+        this._integrationType = config.integrationType;
+        this._referenceId = config.referenceId;
+        this._tenantUrl = config.tenantUrl;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustRiskScoringIntegration resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustRiskScoringIntegration to import
-    * @param importFromId The id of the existing ZeroTrustRiskScoringIntegration that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_risk_scoring_integration#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustRiskScoringIntegration to import is found
-    */
-    ZeroTrustRiskScoringIntegration.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_risk_scoring_integration", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustRiskScoringIntegration.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "accountTag", {
-        // account_tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('account_tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "active", {
-        get: function () {
-            return this.getBooleanAttribute('active');
-        },
-        set: function (value) {
-            this._active = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustRiskScoringIntegration.prototype.resetActive = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // account_tag - computed: true, optional: false, required: false
+    get accountTag() {
+        return this.getStringAttribute('account_tag');
+    }
+    // active - computed: false, optional: true, required: false
+    _active;
+    get active() {
+        return this.getBooleanAttribute('active');
+    }
+    set active(value) {
+        this._active = value;
+    }
+    resetActive() {
         this._active = undefined;
-    };
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "activeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._active;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "integrationType", {
-        get: function () {
-            return this.getStringAttribute('integration_type');
-        },
-        set: function (value) {
-            this._integrationType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "integrationTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._integrationType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "referenceId", {
-        get: function () {
-            return this.getStringAttribute('reference_id');
-        },
-        set: function (value) {
-            this._referenceId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustRiskScoringIntegration.prototype.resetReferenceId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get activeInput() {
+        return this._active;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // integration_type - computed: false, optional: false, required: true
+    _integrationType;
+    get integrationType() {
+        return this.getStringAttribute('integration_type');
+    }
+    set integrationType(value) {
+        this._integrationType = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get integrationTypeInput() {
+        return this._integrationType;
+    }
+    // reference_id - computed: false, optional: true, required: false
+    _referenceId;
+    get referenceId() {
+        return this.getStringAttribute('reference_id');
+    }
+    set referenceId(value) {
+        this._referenceId = value;
+    }
+    resetReferenceId() {
         this._referenceId = undefined;
-    };
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "referenceIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._referenceId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "tenantUrl", {
-        get: function () {
-            return this.getStringAttribute('tenant_url');
-        },
-        set: function (value) {
-            this._tenantUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "tenantUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tenantUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustRiskScoringIntegration.prototype, "wellKnownUrl", {
-        // well_known_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('well_known_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get referenceIdInput() {
+        return this._referenceId;
+    }
+    // tenant_url - computed: false, optional: false, required: true
+    _tenantUrl;
+    get tenantUrl() {
+        return this.getStringAttribute('tenant_url');
+    }
+    set tenantUrl(value) {
+        this._tenantUrl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get tenantUrlInput() {
+        return this._tenantUrl;
+    }
+    // well_known_url - computed: true, optional: false, required: false
+    get wellKnownUrl() {
+        return this.getStringAttribute('well_known_url');
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustRiskScoringIntegration.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             active: cdktf.booleanToTerraform(this._active),
@@ -211,9 +152,9 @@ var ZeroTrustRiskScoringIntegration = /** @class */ (function (_super) {
             reference_id: cdktf.stringToTerraform(this._referenceId),
             tenant_url: cdktf.stringToTerraform(this._tenantUrl),
         };
-    };
-    ZeroTrustRiskScoringIntegration.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -246,15 +187,6 @@ var ZeroTrustRiskScoringIntegration = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustRiskScoringIntegration.tfResourceType = "cloudflare_zero_trust_risk_scoring_integration";
-    return ZeroTrustRiskScoringIntegration;
-}(cdktf.TerraformResource));
-exports.ZeroTrustRiskScoringIntegration = ZeroTrustRiskScoringIntegration;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

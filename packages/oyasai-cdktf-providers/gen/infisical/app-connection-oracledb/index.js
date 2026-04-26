@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/app_connection_oracledb
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppConnectionOracledb = exports.AppConnectionOracledbCredentialsOutputReference = void 0;
-exports.appConnectionOracledbCredentialsToTerraform = appConnectionOracledbCredentialsToTerraform;
-exports.appConnectionOracledbCredentialsToHclTerraform = appConnectionOracledbCredentialsToHclTerraform;
-var cdktf = require("cdktf");
-function appConnectionOracledbCredentialsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function appConnectionOracledbCredentialsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -39,14 +19,14 @@ function appConnectionOracledbCredentialsToTerraform(struct) {
         username: cdktf.stringToTerraform(struct.username),
     };
 }
-function appConnectionOracledbCredentialsToHclTerraform(struct) {
+export function appConnectionOracledbCredentialsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         database: {
             value: cdktf.stringToHclTerraform(struct.database),
             isBlock: false,
@@ -97,260 +77,218 @@ function appConnectionOracledbCredentialsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AppConnectionOracledbCredentialsOutputReference = /** @class */ (function (_super) {
-    __extends(AppConnectionOracledbCredentialsOutputReference, _super);
+export class AppConnectionOracledbCredentialsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AppConnectionOracledbCredentialsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._database !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.database = this._database;
-            }
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            if (this._password !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.password = this._password;
-            }
-            if (this._port !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.port = this._port;
-            }
-            if (this._sslCertificate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sslCertificate = this._sslCertificate;
-            }
-            if (this._sslEnabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sslEnabled = this._sslEnabled;
-            }
-            if (this._sslRejectUnauthorized !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sslRejectUnauthorized = this._sslRejectUnauthorized;
-            }
-            if (this._username !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.username = this._username;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._database = undefined;
-                this._host = undefined;
-                this._password = undefined;
-                this._port = undefined;
-                this._sslCertificate = undefined;
-                this._sslEnabled = undefined;
-                this._sslRejectUnauthorized = undefined;
-                this._username = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._database = value.database;
-                this._host = value.host;
-                this._password = value.password;
-                this._port = value.port;
-                this._sslCertificate = value.sslCertificate;
-                this._sslEnabled = value.sslEnabled;
-                this._sslRejectUnauthorized = value.sslRejectUnauthorized;
-                this._username = value.username;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "database", {
-        get: function () {
-            return this.getStringAttribute('database');
-        },
-        set: function (value) {
-            this._database = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "databaseInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._database;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "password", {
-        get: function () {
-            return this.getStringAttribute('password');
-        },
-        set: function (value) {
-            this._password = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "passwordInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._password;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "port", {
-        get: function () {
-            return this.getNumberAttribute('port');
-        },
-        set: function (value) {
-            this._port = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AppConnectionOracledbCredentialsOutputReference.prototype.resetPort = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._database !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.database = this._database;
+        }
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        if (this._password !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.password = this._password;
+        }
+        if (this._port !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.port = this._port;
+        }
+        if (this._sslCertificate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sslCertificate = this._sslCertificate;
+        }
+        if (this._sslEnabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sslEnabled = this._sslEnabled;
+        }
+        if (this._sslRejectUnauthorized !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sslRejectUnauthorized = this._sslRejectUnauthorized;
+        }
+        if (this._username !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.username = this._username;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._database = undefined;
+            this._host = undefined;
+            this._password = undefined;
+            this._port = undefined;
+            this._sslCertificate = undefined;
+            this._sslEnabled = undefined;
+            this._sslRejectUnauthorized = undefined;
+            this._username = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._database = value.database;
+            this._host = value.host;
+            this._password = value.password;
+            this._port = value.port;
+            this._sslCertificate = value.sslCertificate;
+            this._sslEnabled = value.sslEnabled;
+            this._sslRejectUnauthorized = value.sslRejectUnauthorized;
+            this._username = value.username;
+        }
+    }
+    // database - computed: false, optional: false, required: true
+    _database;
+    get database() {
+        return this.getStringAttribute('database');
+    }
+    set database(value) {
+        this._database = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get databaseInput() {
+        return this._database;
+    }
+    // host - computed: false, optional: false, required: true
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // password - computed: false, optional: false, required: true
+    _password;
+    get password() {
+        return this.getStringAttribute('password');
+    }
+    set password(value) {
+        this._password = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get passwordInput() {
+        return this._password;
+    }
+    // port - computed: true, optional: true, required: false
+    _port;
+    get port() {
+        return this.getNumberAttribute('port');
+    }
+    set port(value) {
+        this._port = value;
+    }
+    resetPort() {
         this._port = undefined;
-    };
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "portInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._port;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "sslCertificate", {
-        get: function () {
-            return this.getStringAttribute('ssl_certificate');
-        },
-        set: function (value) {
-            this._sslCertificate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AppConnectionOracledbCredentialsOutputReference.prototype.resetSslCertificate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get portInput() {
+        return this._port;
+    }
+    // ssl_certificate - computed: false, optional: true, required: false
+    _sslCertificate;
+    get sslCertificate() {
+        return this.getStringAttribute('ssl_certificate');
+    }
+    set sslCertificate(value) {
+        this._sslCertificate = value;
+    }
+    resetSslCertificate() {
         this._sslCertificate = undefined;
-    };
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "sslCertificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sslCertificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "sslEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('ssl_enabled');
-        },
-        set: function (value) {
-            this._sslEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AppConnectionOracledbCredentialsOutputReference.prototype.resetSslEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sslCertificateInput() {
+        return this._sslCertificate;
+    }
+    // ssl_enabled - computed: true, optional: true, required: false
+    _sslEnabled;
+    get sslEnabled() {
+        return this.getBooleanAttribute('ssl_enabled');
+    }
+    set sslEnabled(value) {
+        this._sslEnabled = value;
+    }
+    resetSslEnabled() {
         this._sslEnabled = undefined;
-    };
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "sslEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sslEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "sslRejectUnauthorized", {
-        get: function () {
-            return this.getBooleanAttribute('ssl_reject_unauthorized');
-        },
-        set: function (value) {
-            this._sslRejectUnauthorized = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AppConnectionOracledbCredentialsOutputReference.prototype.resetSslRejectUnauthorized = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sslEnabledInput() {
+        return this._sslEnabled;
+    }
+    // ssl_reject_unauthorized - computed: true, optional: true, required: false
+    _sslRejectUnauthorized;
+    get sslRejectUnauthorized() {
+        return this.getBooleanAttribute('ssl_reject_unauthorized');
+    }
+    set sslRejectUnauthorized(value) {
+        this._sslRejectUnauthorized = value;
+    }
+    resetSslRejectUnauthorized() {
         this._sslRejectUnauthorized = undefined;
-    };
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "sslRejectUnauthorizedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sslRejectUnauthorized;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "username", {
-        get: function () {
-            return this.getStringAttribute('username');
-        },
-        set: function (value) {
-            this._username = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledbCredentialsOutputReference.prototype, "usernameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._username;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AppConnectionOracledbCredentialsOutputReference;
-}(cdktf.ComplexObject));
-exports.AppConnectionOracledbCredentialsOutputReference = AppConnectionOracledbCredentialsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get sslRejectUnauthorizedInput() {
+        return this._sslRejectUnauthorized;
+    }
+    // username - computed: false, optional: false, required: true
+    _username;
+    get username() {
+        return this.getStringAttribute('username');
+    }
+    set username(value) {
+        this._username = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameInput() {
+        return this._username;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/app_connection_oracledb infisical_app_connection_oracledb}
 */
-var AppConnectionOracledb = /** @class */ (function (_super) {
-    __extends(AppConnectionOracledb, _super);
+export class AppConnectionOracledb extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_app_connection_oracledb";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a AppConnectionOracledb resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the AppConnectionOracledb to import
+    * @param importFromId The id of the existing AppConnectionOracledb that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/app_connection_oracledb#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the AppConnectionOracledb to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_app_connection_oracledb", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -361,8 +299,8 @@ var AppConnectionOracledb = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options AppConnectionOracledbConfig
     */
-    function AppConnectionOracledb(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_app_connection_oracledb',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -375,148 +313,94 @@ var AppConnectionOracledb = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // credentials - computed: false, optional: false, required: true
-        _this._credentials = new AppConnectionOracledbCredentialsOutputReference(_this, "credentials");
-        _this._credentials.internalValue = config.credentials;
-        _this._description = config.description;
-        _this._method = config.method;
-        _this._name = config.name;
-        _this._projectId = config.projectId;
-        return _this;
+        });
+        this._credentials.internalValue = config.credentials;
+        this._description = config.description;
+        this._method = config.method;
+        this._name = config.name;
+        this._projectId = config.projectId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a AppConnectionOracledb resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the AppConnectionOracledb to import
-    * @param importFromId The id of the existing AppConnectionOracledb that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/app_connection_oracledb#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the AppConnectionOracledb to import is found
-    */
-    AppConnectionOracledb.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_app_connection_oracledb", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(AppConnectionOracledb.prototype, "credentials", {
-        get: function () {
-            return this._credentials;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AppConnectionOracledb.prototype.putCredentials = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // credentials - computed: false, optional: false, required: true
+    _credentials = new AppConnectionOracledbCredentialsOutputReference(this, "credentials");
+    get credentials() {
+        return this._credentials;
+    }
+    putCredentials(value) {
         this._credentials.internalValue = value;
-    };
-    Object.defineProperty(AppConnectionOracledb.prototype, "credentialsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._credentials.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledb.prototype, "credentialsHash", {
-        // credentials_hash - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('credentials_hash');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledb.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AppConnectionOracledb.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get credentialsInput() {
+        return this._credentials.internalValue;
+    }
+    // credentials_hash - computed: true, optional: false, required: false
+    get credentialsHash() {
+        return this.getStringAttribute('credentials_hash');
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(AppConnectionOracledb.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledb.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledb.prototype, "method", {
-        get: function () {
-            return this.getStringAttribute('method');
-        },
-        set: function (value) {
-            this._method = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledb.prototype, "methodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._method;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledb.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledb.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AppConnectionOracledb.prototype, "projectId", {
-        get: function () {
-            return this.getStringAttribute('project_id');
-        },
-        set: function (value) {
-            this._projectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AppConnectionOracledb.prototype.resetProjectId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // method - computed: false, optional: false, required: true
+    _method;
+    get method() {
+        return this.getStringAttribute('method');
+    }
+    set method(value) {
+        this._method = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get methodInput() {
+        return this._method;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // project_id - computed: false, optional: true, required: false
+    _projectId;
+    get projectId() {
+        return this.getStringAttribute('project_id');
+    }
+    set projectId(value) {
+        this._projectId = value;
+    }
+    resetProjectId() {
         this._projectId = undefined;
-    };
-    Object.defineProperty(AppConnectionOracledb.prototype, "projectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectIdInput() {
+        return this._projectId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    AppConnectionOracledb.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             credentials: appConnectionOracledbCredentialsToTerraform(this._credentials.internalValue),
             description: cdktf.stringToTerraform(this._description),
@@ -524,9 +408,9 @@ var AppConnectionOracledb = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             project_id: cdktf.stringToTerraform(this._projectId),
         };
-    };
-    AppConnectionOracledb.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             credentials: {
                 value: appConnectionOracledbCredentialsToHclTerraform(this._credentials.internalValue),
                 isBlock: true,
@@ -559,15 +443,6 @@ var AppConnectionOracledb = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    AppConnectionOracledb.tfResourceType = "infisical_app_connection_oracledb";
-    return AppConnectionOracledb;
-}(cdktf.TerraformResource));
-exports.AppConnectionOracledb = AppConnectionOracledb;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

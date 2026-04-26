@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_subnet
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustDeviceSubnet = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_subnet cloudflare_zero_trust_device_subnet}
 */
-var ZeroTrustDeviceSubnet = /** @class */ (function (_super) {
-    __extends(ZeroTrustDeviceSubnet, _super);
+export class ZeroTrustDeviceSubnet extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_device_subnet";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustDeviceSubnet resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustDeviceSubnet to import
+    * @param importFromId The id of the existing ZeroTrustDeviceSubnet that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_subnet#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustDeviceSubnet to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_subnet", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ZeroTrustDeviceSubnet = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustDeviceSubnetConfig
     */
-    function ZeroTrustDeviceSubnet(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_device_subnet',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,162 +46,105 @@ var ZeroTrustDeviceSubnet = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._comment = config.comment;
-        _this._isDefaultNetwork = config.isDefaultNetwork;
-        _this._name = config.name;
-        _this._network = config.network;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._comment = config.comment;
+        this._isDefaultNetwork = config.isDefaultNetwork;
+        this._name = config.name;
+        this._network = config.network;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustDeviceSubnet resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustDeviceSubnet to import
-    * @param importFromId The id of the existing ZeroTrustDeviceSubnet that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_subnet#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustDeviceSubnet to import is found
-    */
-    ZeroTrustDeviceSubnet.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_subnet", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSubnet.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "comment", {
-        get: function () {
-            return this.getStringAttribute('comment');
-        },
-        set: function (value) {
-            this._comment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSubnet.prototype.resetComment = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // comment - computed: true, optional: true, required: false
+    _comment;
+    get comment() {
+        return this.getStringAttribute('comment');
+    }
+    set comment(value) {
+        this._comment = value;
+    }
+    resetComment() {
         this._comment = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "commentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._comment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "deletedAt", {
-        // deleted_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('deleted_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "isDefaultNetwork", {
-        get: function () {
-            return this.getBooleanAttribute('is_default_network');
-        },
-        set: function (value) {
-            this._isDefaultNetwork = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSubnet.prototype.resetIsDefaultNetwork = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commentInput() {
+        return this._comment;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // deleted_at - computed: true, optional: false, required: false
+    get deletedAt() {
+        return this.getStringAttribute('deleted_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // is_default_network - computed: true, optional: true, required: false
+    _isDefaultNetwork;
+    get isDefaultNetwork() {
+        return this.getBooleanAttribute('is_default_network');
+    }
+    set isDefaultNetwork(value) {
+        this._isDefaultNetwork = value;
+    }
+    resetIsDefaultNetwork() {
         this._isDefaultNetwork = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "isDefaultNetworkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isDefaultNetwork;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "network", {
-        get: function () {
-            return this.getStringAttribute('network');
-        },
-        set: function (value) {
-            this._network = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "networkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._network;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSubnet.prototype, "subnetType", {
-        // subnet_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('subnet_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get isDefaultNetworkInput() {
+        return this._isDefaultNetwork;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // network - computed: false, optional: false, required: true
+    _network;
+    get network() {
+        return this.getStringAttribute('network');
+    }
+    set network(value) {
+        this._network = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get networkInput() {
+        return this._network;
+    }
+    // subnet_type - computed: true, optional: false, required: false
+    get subnetType() {
+        return this.getStringAttribute('subnet_type');
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustDeviceSubnet.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             comment: cdktf.stringToTerraform(this._comment),
@@ -211,9 +152,9 @@ var ZeroTrustDeviceSubnet = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             network: cdktf.stringToTerraform(this._network),
         };
-    };
-    ZeroTrustDeviceSubnet.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -246,15 +187,6 @@ var ZeroTrustDeviceSubnet = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustDeviceSubnet.tfResourceType = "cloudflare_zero_trust_device_subnet";
-    return ZeroTrustDeviceSubnet;
-}(cdktf.TerraformResource));
-exports.ZeroTrustDeviceSubnet = ZeroTrustDeviceSubnet;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/cloudforce_one_requests
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareCloudforceOneRequests = exports.DataCloudflareCloudforceOneRequestsResultList = exports.DataCloudflareCloudforceOneRequestsResultOutputReference = void 0;
-exports.dataCloudflareCloudforceOneRequestsResultToTerraform = dataCloudflareCloudforceOneRequestsResultToTerraform;
-exports.dataCloudflareCloudforceOneRequestsResultToHclTerraform = dataCloudflareCloudforceOneRequestsResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareCloudforceOneRequestsResultToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareCloudforceOneRequestsResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,173 +10,132 @@ function dataCloudflareCloudforceOneRequestsResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareCloudforceOneRequestsResultToHclTerraform(struct) {
+export function dataCloudflareCloudforceOneRequestsResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareCloudforceOneRequestsResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCloudforceOneRequestsResultOutputReference, _super);
+export class DataCloudflareCloudforceOneRequestsResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareCloudforceOneRequestsResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "completed", {
-        // completed - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('completed');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "created", {
-        // created - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "messageTokens", {
-        // message_tokens - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('message_tokens');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "priority", {
-        // priority - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('priority');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "readableId", {
-        // readable_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('readable_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "request", {
-        // request - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('request');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "summary", {
-        // summary - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('summary');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "tlp", {
-        // tlp - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('tlp');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "tokens", {
-        // tokens - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('tokens');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequestsResultOutputReference.prototype, "updated", {
-        // updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCloudforceOneRequestsResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCloudforceOneRequestsResultOutputReference = DataCloudflareCloudforceOneRequestsResultOutputReference;
-var DataCloudflareCloudforceOneRequestsResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareCloudforceOneRequestsResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // completed - computed: true, optional: false, required: false
+    get completed() {
+        return this.getStringAttribute('completed');
+    }
+    // created - computed: true, optional: false, required: false
+    get created() {
+        return this.getStringAttribute('created');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // message_tokens - computed: true, optional: false, required: false
+    get messageTokens() {
+        return this.getNumberAttribute('message_tokens');
+    }
+    // priority - computed: true, optional: false, required: false
+    get priority() {
+        return this.getStringAttribute('priority');
+    }
+    // readable_id - computed: true, optional: false, required: false
+    get readableId() {
+        return this.getStringAttribute('readable_id');
+    }
+    // request - computed: true, optional: false, required: false
+    get request() {
+        return this.getStringAttribute('request');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // summary - computed: true, optional: false, required: false
+    get summary() {
+        return this.getStringAttribute('summary');
+    }
+    // tlp - computed: true, optional: false, required: false
+    get tlp() {
+        return this.getStringAttribute('tlp');
+    }
+    // tokens - computed: true, optional: false, required: false
+    get tokens() {
+        return this.getNumberAttribute('tokens');
+    }
+    // updated - computed: true, optional: false, required: false
+    get updated() {
+        return this.getStringAttribute('updated');
+    }
+}
+export class DataCloudflareCloudforceOneRequestsResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareCloudforceOneRequestsResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareCloudforceOneRequestsResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareCloudforceOneRequestsResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareCloudforceOneRequestsResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareCloudforceOneRequestsResultList = DataCloudflareCloudforceOneRequestsResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/cloudforce_one_requests cloudflare_cloudforce_one_requests}
 */
-var DataCloudflareCloudforceOneRequests = /** @class */ (function (_super) {
-    __extends(DataCloudflareCloudforceOneRequests, _super);
+export class DataCloudflareCloudforceOneRequests extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_cloudforce_one_requests";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareCloudforceOneRequests resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareCloudforceOneRequests to import
+    * @param importFromId The id of the existing DataCloudflareCloudforceOneRequests that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/cloudforce_one_requests#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareCloudforceOneRequests to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_cloudforce_one_requests", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -207,8 +146,8 @@ var DataCloudflareCloudforceOneRequests = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareCloudforceOneRequestsConfig
     */
-    function DataCloudflareCloudforceOneRequests(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_cloudforce_one_requests',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -221,293 +160,206 @@ var DataCloudflareCloudforceOneRequests = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareCloudforceOneRequestsResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._completedAfter = config.completedAfter;
-        _this._completedBefore = config.completedBefore;
-        _this._createdAfter = config.createdAfter;
-        _this._createdBefore = config.createdBefore;
-        _this._maxItems = config.maxItems;
-        _this._page = config.page;
-        _this._perPage = config.perPage;
-        _this._requestType = config.requestType;
-        _this._sortBy = config.sortBy;
-        _this._sortOrder = config.sortOrder;
-        _this._status = config.status;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._completedAfter = config.completedAfter;
+        this._completedBefore = config.completedBefore;
+        this._createdAfter = config.createdAfter;
+        this._createdBefore = config.createdBefore;
+        this._maxItems = config.maxItems;
+        this._page = config.page;
+        this._perPage = config.perPage;
+        this._requestType = config.requestType;
+        this._sortBy = config.sortBy;
+        this._sortOrder = config.sortOrder;
+        this._status = config.status;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareCloudforceOneRequests resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareCloudforceOneRequests to import
-    * @param importFromId The id of the existing DataCloudflareCloudforceOneRequests that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/cloudforce_one_requests#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareCloudforceOneRequests to import is found
-    */
-    DataCloudflareCloudforceOneRequests.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_cloudforce_one_requests", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "completedAfter", {
-        get: function () {
-            return this.getStringAttribute('completed_after');
-        },
-        set: function (value) {
-            this._completedAfter = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetCompletedAfter = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // completed_after - computed: false, optional: true, required: false
+    _completedAfter;
+    get completedAfter() {
+        return this.getStringAttribute('completed_after');
+    }
+    set completedAfter(value) {
+        this._completedAfter = value;
+    }
+    resetCompletedAfter() {
         this._completedAfter = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "completedAfterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._completedAfter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "completedBefore", {
-        get: function () {
-            return this.getStringAttribute('completed_before');
-        },
-        set: function (value) {
-            this._completedBefore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetCompletedBefore = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get completedAfterInput() {
+        return this._completedAfter;
+    }
+    // completed_before - computed: false, optional: true, required: false
+    _completedBefore;
+    get completedBefore() {
+        return this.getStringAttribute('completed_before');
+    }
+    set completedBefore(value) {
+        this._completedBefore = value;
+    }
+    resetCompletedBefore() {
         this._completedBefore = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "completedBeforeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._completedBefore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "createdAfter", {
-        get: function () {
-            return this.getStringAttribute('created_after');
-        },
-        set: function (value) {
-            this._createdAfter = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetCreatedAfter = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get completedBeforeInput() {
+        return this._completedBefore;
+    }
+    // created_after - computed: false, optional: true, required: false
+    _createdAfter;
+    get createdAfter() {
+        return this.getStringAttribute('created_after');
+    }
+    set createdAfter(value) {
+        this._createdAfter = value;
+    }
+    resetCreatedAfter() {
         this._createdAfter = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "createdAfterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._createdAfter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "createdBefore", {
-        get: function () {
-            return this.getStringAttribute('created_before');
-        },
-        set: function (value) {
-            this._createdBefore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetCreatedBefore = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get createdAfterInput() {
+        return this._createdAfter;
+    }
+    // created_before - computed: false, optional: true, required: false
+    _createdBefore;
+    get createdBefore() {
+        return this.getStringAttribute('created_before');
+    }
+    set createdBefore(value) {
+        this._createdBefore = value;
+    }
+    resetCreatedBefore() {
         this._createdBefore = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "createdBeforeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._createdBefore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get createdBeforeInput() {
+        return this._createdBefore;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "page", {
-        get: function () {
-            return this.getNumberAttribute('page');
-        },
-        set: function (value) {
-            this._page = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "pageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._page;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "perPage", {
-        get: function () {
-            return this.getNumberAttribute('per_page');
-        },
-        set: function (value) {
-            this._perPage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "perPageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._perPage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "requestType", {
-        get: function () {
-            return this.getStringAttribute('request_type');
-        },
-        set: function (value) {
-            this._requestType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetRequestType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // page - computed: false, optional: false, required: true
+    _page;
+    get page() {
+        return this.getNumberAttribute('page');
+    }
+    set page(value) {
+        this._page = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pageInput() {
+        return this._page;
+    }
+    // per_page - computed: false, optional: false, required: true
+    _perPage;
+    get perPage() {
+        return this.getNumberAttribute('per_page');
+    }
+    set perPage(value) {
+        this._perPage = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get perPageInput() {
+        return this._perPage;
+    }
+    // request_type - computed: false, optional: true, required: false
+    _requestType;
+    get requestType() {
+        return this.getStringAttribute('request_type');
+    }
+    set requestType(value) {
+        this._requestType = value;
+    }
+    resetRequestType() {
         this._requestType = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "requestTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requestType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "sortBy", {
-        get: function () {
-            return this.getStringAttribute('sort_by');
-        },
-        set: function (value) {
-            this._sortBy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetSortBy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requestTypeInput() {
+        return this._requestType;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareCloudforceOneRequestsResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
+    // sort_by - computed: false, optional: true, required: false
+    _sortBy;
+    get sortBy() {
+        return this.getStringAttribute('sort_by');
+    }
+    set sortBy(value) {
+        this._sortBy = value;
+    }
+    resetSortBy() {
         this._sortBy = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "sortByInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sortBy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "sortOrder", {
-        get: function () {
-            return this.getStringAttribute('sort_order');
-        },
-        set: function (value) {
-            this._sortOrder = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetSortOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sortByInput() {
+        return this._sortBy;
+    }
+    // sort_order - computed: false, optional: true, required: false
+    _sortOrder;
+    get sortOrder() {
+        return this.getStringAttribute('sort_order');
+    }
+    set sortOrder(value) {
+        this._sortOrder = value;
+    }
+    resetSortOrder() {
         this._sortOrder = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "sortOrderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sortOrder;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCloudforceOneRequests.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sortOrderInput() {
+        return this._sortOrder;
+    }
+    // status - computed: false, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(DataCloudflareCloudforceOneRequests.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareCloudforceOneRequests.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             completed_after: cdktf.stringToTerraform(this._completedAfter),
@@ -522,9 +374,9 @@ var DataCloudflareCloudforceOneRequests = /** @class */ (function (_super) {
             sort_order: cdktf.stringToTerraform(this._sortOrder),
             status: cdktf.stringToTerraform(this._status),
         };
-    };
-    DataCloudflareCloudforceOneRequests.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -599,15 +451,6 @@ var DataCloudflareCloudforceOneRequests = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareCloudforceOneRequests.tfResourceType = "cloudflare_cloudforce_one_requests";
-    return DataCloudflareCloudforceOneRequests;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareCloudforceOneRequests = DataCloudflareCloudforceOneRequests;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

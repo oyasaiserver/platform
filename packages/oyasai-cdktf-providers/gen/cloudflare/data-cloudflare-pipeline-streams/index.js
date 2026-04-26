@@ -1,41 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/pipeline_streams
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflarePipelineStreams = exports.DataCloudflarePipelineStreamsResultList = exports.DataCloudflarePipelineStreamsResultOutputReference = exports.DataCloudflarePipelineStreamsResultWorkerBindingOutputReference = exports.DataCloudflarePipelineStreamsResultSchemaOutputReference = exports.DataCloudflarePipelineStreamsResultSchemaFormatOutputReference = exports.DataCloudflarePipelineStreamsResultSchemaFieldsList = exports.DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference = exports.DataCloudflarePipelineStreamsResultHttpOutputReference = exports.DataCloudflarePipelineStreamsResultHttpCorsOutputReference = exports.DataCloudflarePipelineStreamsResultFormatOutputReference = void 0;
-exports.dataCloudflarePipelineStreamsResultFormatToTerraform = dataCloudflarePipelineStreamsResultFormatToTerraform;
-exports.dataCloudflarePipelineStreamsResultFormatToHclTerraform = dataCloudflarePipelineStreamsResultFormatToHclTerraform;
-exports.dataCloudflarePipelineStreamsResultHttpCorsToTerraform = dataCloudflarePipelineStreamsResultHttpCorsToTerraform;
-exports.dataCloudflarePipelineStreamsResultHttpCorsToHclTerraform = dataCloudflarePipelineStreamsResultHttpCorsToHclTerraform;
-exports.dataCloudflarePipelineStreamsResultHttpToTerraform = dataCloudflarePipelineStreamsResultHttpToTerraform;
-exports.dataCloudflarePipelineStreamsResultHttpToHclTerraform = dataCloudflarePipelineStreamsResultHttpToHclTerraform;
-exports.dataCloudflarePipelineStreamsResultSchemaFieldsToTerraform = dataCloudflarePipelineStreamsResultSchemaFieldsToTerraform;
-exports.dataCloudflarePipelineStreamsResultSchemaFieldsToHclTerraform = dataCloudflarePipelineStreamsResultSchemaFieldsToHclTerraform;
-exports.dataCloudflarePipelineStreamsResultSchemaFormatToTerraform = dataCloudflarePipelineStreamsResultSchemaFormatToTerraform;
-exports.dataCloudflarePipelineStreamsResultSchemaFormatToHclTerraform = dataCloudflarePipelineStreamsResultSchemaFormatToHclTerraform;
-exports.dataCloudflarePipelineStreamsResultSchemaToTerraform = dataCloudflarePipelineStreamsResultSchemaToTerraform;
-exports.dataCloudflarePipelineStreamsResultSchemaToHclTerraform = dataCloudflarePipelineStreamsResultSchemaToHclTerraform;
-exports.dataCloudflarePipelineStreamsResultWorkerBindingToTerraform = dataCloudflarePipelineStreamsResultWorkerBindingToTerraform;
-exports.dataCloudflarePipelineStreamsResultWorkerBindingToHclTerraform = dataCloudflarePipelineStreamsResultWorkerBindingToHclTerraform;
-exports.dataCloudflarePipelineStreamsResultToTerraform = dataCloudflarePipelineStreamsResultToTerraform;
-exports.dataCloudflarePipelineStreamsResultToHclTerraform = dataCloudflarePipelineStreamsResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflarePipelineStreamsResultFormatToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflarePipelineStreamsResultFormatToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -44,96 +10,64 @@ function dataCloudflarePipelineStreamsResultFormatToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflarePipelineStreamsResultFormatToHclTerraform(struct) {
+export function dataCloudflarePipelineStreamsResultFormatToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflarePipelineStreamsResultFormatOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultFormatOutputReference, _super);
+export class DataCloudflarePipelineStreamsResultFormatOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflarePipelineStreamsResultFormatOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflarePipelineStreamsResultFormatOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultFormatOutputReference.prototype, "compression", {
-        // compression - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('compression');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultFormatOutputReference.prototype, "decimalEncoding", {
-        // decimal_encoding - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('decimal_encoding');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultFormatOutputReference.prototype, "rowGroupBytes", {
-        // row_group_bytes - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('row_group_bytes');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultFormatOutputReference.prototype, "timestampFormat", {
-        // timestamp_format - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('timestamp_format');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultFormatOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultFormatOutputReference.prototype, "unstructured", {
-        // unstructured - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('unstructured');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflarePipelineStreamsResultFormatOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflarePipelineStreamsResultFormatOutputReference = DataCloudflarePipelineStreamsResultFormatOutputReference;
-function dataCloudflarePipelineStreamsResultHttpCorsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // compression - computed: true, optional: false, required: false
+    get compression() {
+        return this.getStringAttribute('compression');
+    }
+    // decimal_encoding - computed: true, optional: false, required: false
+    get decimalEncoding() {
+        return this.getStringAttribute('decimal_encoding');
+    }
+    // row_group_bytes - computed: true, optional: false, required: false
+    get rowGroupBytes() {
+        return this.getNumberAttribute('row_group_bytes');
+    }
+    // timestamp_format - computed: true, optional: false, required: false
+    get timestampFormat() {
+        return this.getStringAttribute('timestamp_format');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // unstructured - computed: true, optional: false, required: false
+    get unstructured() {
+        return this.getBooleanAttribute('unstructured');
+    }
+}
+export function dataCloudflarePipelineStreamsResultHttpCorsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -142,56 +76,44 @@ function dataCloudflarePipelineStreamsResultHttpCorsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflarePipelineStreamsResultHttpCorsToHclTerraform(struct) {
+export function dataCloudflarePipelineStreamsResultHttpCorsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflarePipelineStreamsResultHttpCorsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultHttpCorsOutputReference, _super);
+export class DataCloudflarePipelineStreamsResultHttpCorsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflarePipelineStreamsResultHttpCorsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflarePipelineStreamsResultHttpCorsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultHttpCorsOutputReference.prototype, "origins", {
-        // origins - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('origins');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflarePipelineStreamsResultHttpCorsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflarePipelineStreamsResultHttpCorsOutputReference = DataCloudflarePipelineStreamsResultHttpCorsOutputReference;
-function dataCloudflarePipelineStreamsResultHttpToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // origins - computed: true, optional: false, required: false
+    get origins() {
+        return this.getListAttribute('origins');
+    }
+}
+export function dataCloudflarePipelineStreamsResultHttpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -200,73 +122,53 @@ function dataCloudflarePipelineStreamsResultHttpToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflarePipelineStreamsResultHttpToHclTerraform(struct) {
+export function dataCloudflarePipelineStreamsResultHttpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflarePipelineStreamsResultHttpOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultHttpOutputReference, _super);
+export class DataCloudflarePipelineStreamsResultHttpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflarePipelineStreamsResultHttpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // cors - computed: true, optional: false, required: false
-        _this._cors = new DataCloudflarePipelineStreamsResultHttpCorsOutputReference(_this, "cors");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflarePipelineStreamsResultHttpOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultHttpOutputReference.prototype, "authentication", {
-        // authentication - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('authentication');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultHttpOutputReference.prototype, "cors", {
-        get: function () {
-            return this._cors;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultHttpOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflarePipelineStreamsResultHttpOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflarePipelineStreamsResultHttpOutputReference = DataCloudflarePipelineStreamsResultHttpOutputReference;
-function dataCloudflarePipelineStreamsResultSchemaFieldsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // authentication - computed: true, optional: false, required: false
+    get authentication() {
+        return this.getBooleanAttribute('authentication');
+    }
+    // cors - computed: true, optional: false, required: false
+    _cors = new DataCloudflarePipelineStreamsResultHttpCorsOutputReference(this, "cors");
+    get cors() {
+        return this._cors;
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+}
+export function dataCloudflarePipelineStreamsResultSchemaFieldsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -275,121 +177,88 @@ function dataCloudflarePipelineStreamsResultSchemaFieldsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflarePipelineStreamsResultSchemaFieldsToHclTerraform(struct) {
+export function dataCloudflarePipelineStreamsResultSchemaFieldsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference, _super);
+export class DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference.prototype, "metadataKey", {
-        // metadata_key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('metadata_key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference.prototype, "required", {
-        // required - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('required');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference.prototype, "sqlName", {
-        // sql_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('sql_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference.prototype, "unit", {
-        // unit - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('unit');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference = DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference;
-var DataCloudflarePipelineStreamsResultSchemaFieldsList = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultSchemaFieldsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // metadata_key - computed: true, optional: false, required: false
+    get metadataKey() {
+        return this.getStringAttribute('metadata_key');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // required - computed: true, optional: false, required: false
+    get required() {
+        return this.getBooleanAttribute('required');
+    }
+    // sql_name - computed: true, optional: false, required: false
+    get sqlName() {
+        return this.getStringAttribute('sql_name');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // unit - computed: true, optional: false, required: false
+    get unit() {
+        return this.getStringAttribute('unit');
+    }
+}
+export class DataCloudflarePipelineStreamsResultSchemaFieldsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflarePipelineStreamsResultSchemaFieldsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflarePipelineStreamsResultSchemaFieldsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflarePipelineStreamsResultSchemaFieldsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflarePipelineStreamsResultSchemaFieldsList;
-}(cdktf.ComplexList));
-exports.DataCloudflarePipelineStreamsResultSchemaFieldsList = DataCloudflarePipelineStreamsResultSchemaFieldsList;
-function dataCloudflarePipelineStreamsResultSchemaFormatToTerraform(struct) {
+    }
+}
+export function dataCloudflarePipelineStreamsResultSchemaFormatToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -398,96 +267,64 @@ function dataCloudflarePipelineStreamsResultSchemaFormatToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflarePipelineStreamsResultSchemaFormatToHclTerraform(struct) {
+export function dataCloudflarePipelineStreamsResultSchemaFormatToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflarePipelineStreamsResultSchemaFormatOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultSchemaFormatOutputReference, _super);
+export class DataCloudflarePipelineStreamsResultSchemaFormatOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflarePipelineStreamsResultSchemaFormatOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFormatOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFormatOutputReference.prototype, "compression", {
-        // compression - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('compression');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFormatOutputReference.prototype, "decimalEncoding", {
-        // decimal_encoding - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('decimal_encoding');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFormatOutputReference.prototype, "rowGroupBytes", {
-        // row_group_bytes - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('row_group_bytes');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFormatOutputReference.prototype, "timestampFormat", {
-        // timestamp_format - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('timestamp_format');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFormatOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaFormatOutputReference.prototype, "unstructured", {
-        // unstructured - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('unstructured');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflarePipelineStreamsResultSchemaFormatOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflarePipelineStreamsResultSchemaFormatOutputReference = DataCloudflarePipelineStreamsResultSchemaFormatOutputReference;
-function dataCloudflarePipelineStreamsResultSchemaToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // compression - computed: true, optional: false, required: false
+    get compression() {
+        return this.getStringAttribute('compression');
+    }
+    // decimal_encoding - computed: true, optional: false, required: false
+    get decimalEncoding() {
+        return this.getStringAttribute('decimal_encoding');
+    }
+    // row_group_bytes - computed: true, optional: false, required: false
+    get rowGroupBytes() {
+        return this.getNumberAttribute('row_group_bytes');
+    }
+    // timestamp_format - computed: true, optional: false, required: false
+    get timestampFormat() {
+        return this.getStringAttribute('timestamp_format');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // unstructured - computed: true, optional: false, required: false
+    get unstructured() {
+        return this.getBooleanAttribute('unstructured');
+    }
+}
+export function dataCloudflarePipelineStreamsResultSchemaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -496,74 +333,54 @@ function dataCloudflarePipelineStreamsResultSchemaToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflarePipelineStreamsResultSchemaToHclTerraform(struct) {
+export function dataCloudflarePipelineStreamsResultSchemaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflarePipelineStreamsResultSchemaOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultSchemaOutputReference, _super);
+export class DataCloudflarePipelineStreamsResultSchemaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflarePipelineStreamsResultSchemaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // fields - computed: true, optional: false, required: false
-        _this._fields = new DataCloudflarePipelineStreamsResultSchemaFieldsList(_this, "fields", false);
-        // format - computed: true, optional: false, required: false
-        _this._format = new DataCloudflarePipelineStreamsResultSchemaFormatOutputReference(_this, "format");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaOutputReference.prototype, "fields", {
-        get: function () {
-            return this._fields;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaOutputReference.prototype, "format", {
-        get: function () {
-            return this._format;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultSchemaOutputReference.prototype, "inferred", {
-        // inferred - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('inferred');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflarePipelineStreamsResultSchemaOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflarePipelineStreamsResultSchemaOutputReference = DataCloudflarePipelineStreamsResultSchemaOutputReference;
-function dataCloudflarePipelineStreamsResultWorkerBindingToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // fields - computed: true, optional: false, required: false
+    _fields = new DataCloudflarePipelineStreamsResultSchemaFieldsList(this, "fields", false);
+    get fields() {
+        return this._fields;
+    }
+    // format - computed: true, optional: false, required: false
+    _format = new DataCloudflarePipelineStreamsResultSchemaFormatOutputReference(this, "format");
+    get format() {
+        return this._format;
+    }
+    // inferred - computed: true, optional: false, required: false
+    get inferred() {
+        return this.getBooleanAttribute('inferred');
+    }
+}
+export function dataCloudflarePipelineStreamsResultWorkerBindingToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -572,56 +389,44 @@ function dataCloudflarePipelineStreamsResultWorkerBindingToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflarePipelineStreamsResultWorkerBindingToHclTerraform(struct) {
+export function dataCloudflarePipelineStreamsResultWorkerBindingToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflarePipelineStreamsResultWorkerBindingOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultWorkerBindingOutputReference, _super);
+export class DataCloudflarePipelineStreamsResultWorkerBindingOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflarePipelineStreamsResultWorkerBindingOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflarePipelineStreamsResultWorkerBindingOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultWorkerBindingOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflarePipelineStreamsResultWorkerBindingOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflarePipelineStreamsResultWorkerBindingOutputReference = DataCloudflarePipelineStreamsResultWorkerBindingOutputReference;
-function dataCloudflarePipelineStreamsResultToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+}
+export function dataCloudflarePipelineStreamsResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -630,161 +435,128 @@ function dataCloudflarePipelineStreamsResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflarePipelineStreamsResultToHclTerraform(struct) {
+export function dataCloudflarePipelineStreamsResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflarePipelineStreamsResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultOutputReference, _super);
+export class DataCloudflarePipelineStreamsResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflarePipelineStreamsResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // format - computed: true, optional: false, required: false
-        _this._format = new DataCloudflarePipelineStreamsResultFormatOutputReference(_this, "format");
-        // http - computed: true, optional: false, required: false
-        _this._http = new DataCloudflarePipelineStreamsResultHttpOutputReference(_this, "http");
-        // schema - computed: true, optional: false, required: false
-        _this._schema = new DataCloudflarePipelineStreamsResultSchemaOutputReference(_this, "schema");
-        // worker_binding - computed: true, optional: false, required: false
-        _this._workerBinding = new DataCloudflarePipelineStreamsResultWorkerBindingOutputReference(_this, "worker_binding");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "endpoint", {
-        // endpoint - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('endpoint');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "format", {
-        get: function () {
-            return this._format;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "http", {
-        get: function () {
-            return this._http;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "modifiedAt", {
-        // modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "schema", {
-        get: function () {
-            return this._schema;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "version", {
-        // version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreamsResultOutputReference.prototype, "workerBinding", {
-        get: function () {
-            return this._workerBinding;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflarePipelineStreamsResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflarePipelineStreamsResultOutputReference = DataCloudflarePipelineStreamsResultOutputReference;
-var DataCloudflarePipelineStreamsResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreamsResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // endpoint - computed: true, optional: false, required: false
+    get endpoint() {
+        return this.getStringAttribute('endpoint');
+    }
+    // format - computed: true, optional: false, required: false
+    _format = new DataCloudflarePipelineStreamsResultFormatOutputReference(this, "format");
+    get format() {
+        return this._format;
+    }
+    // http - computed: true, optional: false, required: false
+    _http = new DataCloudflarePipelineStreamsResultHttpOutputReference(this, "http");
+    get http() {
+        return this._http;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_at - computed: true, optional: false, required: false
+    get modifiedAt() {
+        return this.getStringAttribute('modified_at');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // schema - computed: true, optional: false, required: false
+    _schema = new DataCloudflarePipelineStreamsResultSchemaOutputReference(this, "schema");
+    get schema() {
+        return this._schema;
+    }
+    // version - computed: true, optional: false, required: false
+    get version() {
+        return this.getNumberAttribute('version');
+    }
+    // worker_binding - computed: true, optional: false, required: false
+    _workerBinding = new DataCloudflarePipelineStreamsResultWorkerBindingOutputReference(this, "worker_binding");
+    get workerBinding() {
+        return this._workerBinding;
+    }
+}
+export class DataCloudflarePipelineStreamsResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflarePipelineStreamsResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflarePipelineStreamsResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflarePipelineStreamsResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflarePipelineStreamsResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflarePipelineStreamsResultList = DataCloudflarePipelineStreamsResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/pipeline_streams cloudflare_pipeline_streams}
 */
-var DataCloudflarePipelineStreams = /** @class */ (function (_super) {
-    __extends(DataCloudflarePipelineStreams, _super);
+export class DataCloudflarePipelineStreams extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_pipeline_streams";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflarePipelineStreams resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflarePipelineStreams to import
+    * @param importFromId The id of the existing DataCloudflarePipelineStreams that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/pipeline_streams#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflarePipelineStreams to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_pipeline_streams", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -795,9 +567,8 @@ var DataCloudflarePipelineStreams = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflarePipelineStreamsConfig = {}
     */
-    function DataCloudflarePipelineStreams(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_pipeline_streams',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -810,109 +581,76 @@ var DataCloudflarePipelineStreams = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflarePipelineStreamsResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._maxItems = config.maxItems;
-        _this._pipelineId = config.pipelineId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._maxItems = config.maxItems;
+        this._pipelineId = config.pipelineId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflarePipelineStreams resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflarePipelineStreams to import
-    * @param importFromId The id of the existing DataCloudflarePipelineStreams that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/pipeline_streams#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflarePipelineStreams to import is found
-    */
-    DataCloudflarePipelineStreams.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_pipeline_streams", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflarePipelineStreams.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePipelineStreams.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflarePipelineStreams.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreams.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePipelineStreams.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflarePipelineStreams.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreams.prototype, "pipelineId", {
-        get: function () {
-            return this.getStringAttribute('pipeline_id');
-        },
-        set: function (value) {
-            this._pipelineId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePipelineStreams.prototype.resetPipelineId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // pipeline_id - computed: false, optional: true, required: false
+    _pipelineId;
+    get pipelineId() {
+        return this.getStringAttribute('pipeline_id');
+    }
+    set pipelineId(value) {
+        this._pipelineId = value;
+    }
+    resetPipelineId() {
         this._pipelineId = undefined;
-    };
-    Object.defineProperty(DataCloudflarePipelineStreams.prototype, "pipelineIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pipelineId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePipelineStreams.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get pipelineIdInput() {
+        return this._pipelineId;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflarePipelineStreamsResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflarePipelineStreams.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             max_items: cdktf.numberToTerraform(this._maxItems),
             pipeline_id: cdktf.stringToTerraform(this._pipelineId),
         };
-    };
-    DataCloudflarePipelineStreams.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -933,15 +671,6 @@ var DataCloudflarePipelineStreams = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflarePipelineStreams.tfResourceType = "cloudflare_pipeline_streams";
-    return DataCloudflarePipelineStreams;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflarePipelineStreams = DataCloudflarePipelineStreams;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

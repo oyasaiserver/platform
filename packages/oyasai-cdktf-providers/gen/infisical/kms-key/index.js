@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/kms_key
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.KmsKey = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/kms_key infisical_kms_key}
 */
-var KmsKey = /** @class */ (function (_super) {
-    __extends(KmsKey, _super);
+export class KmsKey extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_kms_key";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a KmsKey resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the KmsKey to import
+    * @param importFromId The id of the existing KmsKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/kms_key#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the KmsKey to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_kms_key", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var KmsKey = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options KmsKeyConfig
     */
-    function KmsKey(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_kms_key',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -48,195 +46,125 @@ var KmsKey = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._description = config.description;
-        _this._encryptionAlgorithm = config.encryptionAlgorithm;
-        _this._isDisabled = config.isDisabled;
-        _this._keyUsage = config.keyUsage;
-        _this._name = config.name;
-        _this._projectId = config.projectId;
-        return _this;
+        });
+        this._description = config.description;
+        this._encryptionAlgorithm = config.encryptionAlgorithm;
+        this._isDisabled = config.isDisabled;
+        this._keyUsage = config.keyUsage;
+        this._name = config.name;
+        this._projectId = config.projectId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a KmsKey resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the KmsKey to import
-    * @param importFromId The id of the existing KmsKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/kms_key#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the KmsKey to import is found
-    */
-    KmsKey.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_kms_key", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(KmsKey.prototype, "createdAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KmsKey.prototype.resetDescription = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(KmsKey.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "encryptionAlgorithm", {
-        get: function () {
-            return this.getStringAttribute('encryption_algorithm');
-        },
-        set: function (value) {
-            this._encryptionAlgorithm = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KmsKey.prototype.resetEncryptionAlgorithm = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // encryption_algorithm - computed: true, optional: true, required: false
+    _encryptionAlgorithm;
+    get encryptionAlgorithm() {
+        return this.getStringAttribute('encryption_algorithm');
+    }
+    set encryptionAlgorithm(value) {
+        this._encryptionAlgorithm = value;
+    }
+    resetEncryptionAlgorithm() {
         this._encryptionAlgorithm = undefined;
-    };
-    Object.defineProperty(KmsKey.prototype, "encryptionAlgorithmInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._encryptionAlgorithm;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "isDisabled", {
-        get: function () {
-            return this.getBooleanAttribute('is_disabled');
-        },
-        set: function (value) {
-            this._isDisabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KmsKey.prototype.resetIsDisabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get encryptionAlgorithmInput() {
+        return this._encryptionAlgorithm;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // is_disabled - computed: true, optional: true, required: false
+    _isDisabled;
+    get isDisabled() {
+        return this.getBooleanAttribute('is_disabled');
+    }
+    set isDisabled(value) {
+        this._isDisabled = value;
+    }
+    resetIsDisabled() {
         this._isDisabled = undefined;
-    };
-    Object.defineProperty(KmsKey.prototype, "isDisabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isDisabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "keyUsage", {
-        get: function () {
-            return this.getStringAttribute('key_usage');
-        },
-        set: function (value) {
-            this._keyUsage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KmsKey.prototype.resetKeyUsage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isDisabledInput() {
+        return this._isDisabled;
+    }
+    // key_usage - computed: true, optional: true, required: false
+    _keyUsage;
+    get keyUsage() {
+        return this.getStringAttribute('key_usage');
+    }
+    set keyUsage(value) {
+        this._keyUsage = value;
+    }
+    resetKeyUsage() {
         this._keyUsage = undefined;
-    };
-    Object.defineProperty(KmsKey.prototype, "keyUsageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyUsage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "orgId", {
-        // org_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('org_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "projectId", {
-        get: function () {
-            return this.getStringAttribute('project_id');
-        },
-        set: function (value) {
-            this._projectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "projectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KmsKey.prototype, "version", {
-        // version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('version');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyUsageInput() {
+        return this._keyUsage;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // org_id - computed: true, optional: false, required: false
+    get orgId() {
+        return this.getStringAttribute('org_id');
+    }
+    // project_id - computed: false, optional: false, required: true
+    _projectId;
+    get projectId() {
+        return this.getStringAttribute('project_id');
+    }
+    set projectId(value) {
+        this._projectId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectIdInput() {
+        return this._projectId;
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // version - computed: true, optional: false, required: false
+    get version() {
+        return this.getNumberAttribute('version');
+    }
     // =========
     // SYNTHESIS
     // =========
-    KmsKey.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             description: cdktf.stringToTerraform(this._description),
             encryption_algorithm: cdktf.stringToTerraform(this._encryptionAlgorithm),
@@ -245,9 +173,9 @@ var KmsKey = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             project_id: cdktf.stringToTerraform(this._projectId),
         };
-    };
-    KmsKey.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             description: {
                 value: cdktf.stringToHclTerraform(this._description),
                 isBlock: false,
@@ -286,15 +214,6 @@ var KmsKey = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    KmsKey.tfResourceType = "infisical_kms_key";
-    return KmsKey;
-}(cdktf.TerraformResource));
-exports.KmsKey = KmsKey;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/team
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Team = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/team github_team}
 */
-var Team = /** @class */ (function (_super) {
-    __extends(Team, _super);
+export class Team extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_team";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Team resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Team to import
+    * @param importFromId The id of the existing Team that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/team#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Team to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_team", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var Team = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options TeamConfig
     */
-    function Team(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_team',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,275 +46,188 @@ var Team = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._createDefaultMaintainer = config.createDefaultMaintainer;
-        _this._description = config.description;
-        _this._id = config.id;
-        _this._ldapDn = config.ldapDn;
-        _this._name = config.name;
-        _this._notificationSetting = config.notificationSetting;
-        _this._parentTeamId = config.parentTeamId;
-        _this._parentTeamReadId = config.parentTeamReadId;
-        _this._parentTeamReadSlug = config.parentTeamReadSlug;
-        _this._privacy = config.privacy;
-        return _this;
+        });
+        this._createDefaultMaintainer = config.createDefaultMaintainer;
+        this._description = config.description;
+        this._id = config.id;
+        this._ldapDn = config.ldapDn;
+        this._name = config.name;
+        this._notificationSetting = config.notificationSetting;
+        this._parentTeamId = config.parentTeamId;
+        this._parentTeamReadId = config.parentTeamReadId;
+        this._parentTeamReadSlug = config.parentTeamReadSlug;
+        this._privacy = config.privacy;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Team resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Team to import
-    * @param importFromId The id of the existing Team that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/team#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Team to import is found
-    */
-    Team.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_team", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Team.prototype, "createDefaultMaintainer", {
-        get: function () {
-            return this.getBooleanAttribute('create_default_maintainer');
-        },
-        set: function (value) {
-            this._createDefaultMaintainer = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Team.prototype.resetCreateDefaultMaintainer = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // create_default_maintainer - computed: false, optional: true, required: false
+    _createDefaultMaintainer;
+    get createDefaultMaintainer() {
+        return this.getBooleanAttribute('create_default_maintainer');
+    }
+    set createDefaultMaintainer(value) {
+        this._createDefaultMaintainer = value;
+    }
+    resetCreateDefaultMaintainer() {
         this._createDefaultMaintainer = undefined;
-    };
-    Object.defineProperty(Team.prototype, "createDefaultMaintainerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._createDefaultMaintainer;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Team.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get createDefaultMaintainerInput() {
+        return this._createDefaultMaintainer;
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(Team.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "etag", {
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Team.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(Team.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "ldapDn", {
-        get: function () {
-            return this.getStringAttribute('ldap_dn');
-        },
-        set: function (value) {
-            this._ldapDn = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Team.prototype.resetLdapDn = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // ldap_dn - computed: false, optional: true, required: false
+    _ldapDn;
+    get ldapDn() {
+        return this.getStringAttribute('ldap_dn');
+    }
+    set ldapDn(value) {
+        this._ldapDn = value;
+    }
+    resetLdapDn() {
         this._ldapDn = undefined;
-    };
-    Object.defineProperty(Team.prototype, "ldapDnInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ldapDn;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "membersCount", {
-        // members_count - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('members_count');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "nodeId", {
-        // node_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('node_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "notificationSetting", {
-        get: function () {
-            return this.getStringAttribute('notification_setting');
-        },
-        set: function (value) {
-            this._notificationSetting = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Team.prototype.resetNotificationSetting = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ldapDnInput() {
+        return this._ldapDn;
+    }
+    // members_count - computed: true, optional: false, required: false
+    get membersCount() {
+        return this.getNumberAttribute('members_count');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // node_id - computed: true, optional: false, required: false
+    get nodeId() {
+        return this.getStringAttribute('node_id');
+    }
+    // notification_setting - computed: false, optional: true, required: false
+    _notificationSetting;
+    get notificationSetting() {
+        return this.getStringAttribute('notification_setting');
+    }
+    set notificationSetting(value) {
+        this._notificationSetting = value;
+    }
+    resetNotificationSetting() {
         this._notificationSetting = undefined;
-    };
-    Object.defineProperty(Team.prototype, "notificationSettingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._notificationSetting;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "parentTeamId", {
-        get: function () {
-            return this.getStringAttribute('parent_team_id');
-        },
-        set: function (value) {
-            this._parentTeamId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Team.prototype.resetParentTeamId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get notificationSettingInput() {
+        return this._notificationSetting;
+    }
+    // parent_team_id - computed: false, optional: true, required: false
+    _parentTeamId;
+    get parentTeamId() {
+        return this.getStringAttribute('parent_team_id');
+    }
+    set parentTeamId(value) {
+        this._parentTeamId = value;
+    }
+    resetParentTeamId() {
         this._parentTeamId = undefined;
-    };
-    Object.defineProperty(Team.prototype, "parentTeamIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parentTeamId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "parentTeamReadId", {
-        get: function () {
-            return this.getStringAttribute('parent_team_read_id');
-        },
-        set: function (value) {
-            this._parentTeamReadId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Team.prototype.resetParentTeamReadId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get parentTeamIdInput() {
+        return this._parentTeamId;
+    }
+    // parent_team_read_id - computed: true, optional: true, required: false
+    _parentTeamReadId;
+    get parentTeamReadId() {
+        return this.getStringAttribute('parent_team_read_id');
+    }
+    set parentTeamReadId(value) {
+        this._parentTeamReadId = value;
+    }
+    resetParentTeamReadId() {
         this._parentTeamReadId = undefined;
-    };
-    Object.defineProperty(Team.prototype, "parentTeamReadIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parentTeamReadId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "parentTeamReadSlug", {
-        get: function () {
-            return this.getStringAttribute('parent_team_read_slug');
-        },
-        set: function (value) {
-            this._parentTeamReadSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Team.prototype.resetParentTeamReadSlug = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get parentTeamReadIdInput() {
+        return this._parentTeamReadId;
+    }
+    // parent_team_read_slug - computed: true, optional: true, required: false
+    _parentTeamReadSlug;
+    get parentTeamReadSlug() {
+        return this.getStringAttribute('parent_team_read_slug');
+    }
+    set parentTeamReadSlug(value) {
+        this._parentTeamReadSlug = value;
+    }
+    resetParentTeamReadSlug() {
         this._parentTeamReadSlug = undefined;
-    };
-    Object.defineProperty(Team.prototype, "parentTeamReadSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parentTeamReadSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "privacy", {
-        get: function () {
-            return this.getStringAttribute('privacy');
-        },
-        set: function (value) {
-            this._privacy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Team.prototype.resetPrivacy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get parentTeamReadSlugInput() {
+        return this._parentTeamReadSlug;
+    }
+    // privacy - computed: false, optional: true, required: false
+    _privacy;
+    get privacy() {
+        return this.getStringAttribute('privacy');
+    }
+    set privacy(value) {
+        this._privacy = value;
+    }
+    resetPrivacy() {
         this._privacy = undefined;
-    };
-    Object.defineProperty(Team.prototype, "privacyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._privacy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Team.prototype, "slug", {
-        // slug - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('slug');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get privacyInput() {
+        return this._privacy;
+    }
+    // slug - computed: true, optional: false, required: false
+    get slug() {
+        return this.getStringAttribute('slug');
+    }
     // =========
     // SYNTHESIS
     // =========
-    Team.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             create_default_maintainer: cdktf.booleanToTerraform(this._createDefaultMaintainer),
             description: cdktf.stringToTerraform(this._description),
@@ -329,9 +240,9 @@ var Team = /** @class */ (function (_super) {
             parent_team_read_slug: cdktf.stringToTerraform(this._parentTeamReadSlug),
             privacy: cdktf.stringToTerraform(this._privacy),
         };
-    };
-    Team.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             create_default_maintainer: {
                 value: cdktf.booleanToHclTerraform(this._createDefaultMaintainer),
                 isBlock: false,
@@ -394,15 +305,6 @@ var Team = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Team.tfResourceType = "github_team";
-    return Team;
-}(cdktf.TerraformResource));
-exports.Team = Team;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

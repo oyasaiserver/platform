@@ -1,39 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/observatory_scheduled_test
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ObservatoryScheduledTest = exports.ObservatoryScheduledTestTestOutputReference = exports.ObservatoryScheduledTestTestRegionOutputReference = exports.ObservatoryScheduledTestTestMobileReportOutputReference = exports.ObservatoryScheduledTestTestMobileReportErrorOutputReference = exports.ObservatoryScheduledTestTestDesktopReportOutputReference = exports.ObservatoryScheduledTestTestDesktopReportErrorOutputReference = exports.ObservatoryScheduledTestScheduleOutputReference = void 0;
-exports.observatoryScheduledTestScheduleToTerraform = observatoryScheduledTestScheduleToTerraform;
-exports.observatoryScheduledTestScheduleToHclTerraform = observatoryScheduledTestScheduleToHclTerraform;
-exports.observatoryScheduledTestTestDesktopReportErrorToTerraform = observatoryScheduledTestTestDesktopReportErrorToTerraform;
-exports.observatoryScheduledTestTestDesktopReportErrorToHclTerraform = observatoryScheduledTestTestDesktopReportErrorToHclTerraform;
-exports.observatoryScheduledTestTestDesktopReportToTerraform = observatoryScheduledTestTestDesktopReportToTerraform;
-exports.observatoryScheduledTestTestDesktopReportToHclTerraform = observatoryScheduledTestTestDesktopReportToHclTerraform;
-exports.observatoryScheduledTestTestMobileReportErrorToTerraform = observatoryScheduledTestTestMobileReportErrorToTerraform;
-exports.observatoryScheduledTestTestMobileReportErrorToHclTerraform = observatoryScheduledTestTestMobileReportErrorToHclTerraform;
-exports.observatoryScheduledTestTestMobileReportToTerraform = observatoryScheduledTestTestMobileReportToTerraform;
-exports.observatoryScheduledTestTestMobileReportToHclTerraform = observatoryScheduledTestTestMobileReportToHclTerraform;
-exports.observatoryScheduledTestTestRegionToTerraform = observatoryScheduledTestTestRegionToTerraform;
-exports.observatoryScheduledTestTestRegionToHclTerraform = observatoryScheduledTestTestRegionToHclTerraform;
-exports.observatoryScheduledTestTestToTerraform = observatoryScheduledTestTestToTerraform;
-exports.observatoryScheduledTestTestToHclTerraform = observatoryScheduledTestTestToHclTerraform;
-var cdktf = require("cdktf");
-function observatoryScheduledTestScheduleToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function observatoryScheduledTestScheduleToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -42,72 +10,52 @@ function observatoryScheduledTestScheduleToTerraform(struct) {
     }
     return {};
 }
-function observatoryScheduledTestScheduleToHclTerraform(struct) {
+export function observatoryScheduledTestScheduleToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ObservatoryScheduledTestScheduleOutputReference = /** @class */ (function (_super) {
-    __extends(ObservatoryScheduledTestScheduleOutputReference, _super);
+export class ObservatoryScheduledTestScheduleOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ObservatoryScheduledTestScheduleOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ObservatoryScheduledTestScheduleOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestScheduleOutputReference.prototype, "frequency", {
-        // frequency - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('frequency');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestScheduleOutputReference.prototype, "region", {
-        // region - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('region');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestScheduleOutputReference.prototype, "url", {
-        // url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ObservatoryScheduledTestScheduleOutputReference;
-}(cdktf.ComplexObject));
-exports.ObservatoryScheduledTestScheduleOutputReference = ObservatoryScheduledTestScheduleOutputReference;
-function observatoryScheduledTestTestDesktopReportErrorToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // frequency - computed: true, optional: false, required: false
+    get frequency() {
+        return this.getStringAttribute('frequency');
+    }
+    // region - computed: true, optional: false, required: false
+    get region() {
+        return this.getStringAttribute('region');
+    }
+    // url - computed: true, optional: false, required: false
+    get url() {
+        return this.getStringAttribute('url');
+    }
+}
+export function observatoryScheduledTestTestDesktopReportErrorToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -116,72 +64,52 @@ function observatoryScheduledTestTestDesktopReportErrorToTerraform(struct) {
     }
     return {};
 }
-function observatoryScheduledTestTestDesktopReportErrorToHclTerraform(struct) {
+export function observatoryScheduledTestTestDesktopReportErrorToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ObservatoryScheduledTestTestDesktopReportErrorOutputReference = /** @class */ (function (_super) {
-    __extends(ObservatoryScheduledTestTestDesktopReportErrorOutputReference, _super);
+export class ObservatoryScheduledTestTestDesktopReportErrorOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ObservatoryScheduledTestTestDesktopReportErrorOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportErrorOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportErrorOutputReference.prototype, "code", {
-        // code - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('code');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportErrorOutputReference.prototype, "detail", {
-        // detail - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('detail');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportErrorOutputReference.prototype, "finalDisplayedUrl", {
-        // final_displayed_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('final_displayed_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ObservatoryScheduledTestTestDesktopReportErrorOutputReference;
-}(cdktf.ComplexObject));
-exports.ObservatoryScheduledTestTestDesktopReportErrorOutputReference = ObservatoryScheduledTestTestDesktopReportErrorOutputReference;
-function observatoryScheduledTestTestDesktopReportToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // code - computed: true, optional: false, required: false
+    get code() {
+        return this.getStringAttribute('code');
+    }
+    // detail - computed: true, optional: false, required: false
+    get detail() {
+        return this.getStringAttribute('detail');
+    }
+    // final_displayed_url - computed: true, optional: false, required: false
+    get finalDisplayedUrl() {
+        return this.getStringAttribute('final_displayed_url');
+    }
+}
+export function observatoryScheduledTestTestDesktopReportToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -190,145 +118,89 @@ function observatoryScheduledTestTestDesktopReportToTerraform(struct) {
     }
     return {};
 }
-function observatoryScheduledTestTestDesktopReportToHclTerraform(struct) {
+export function observatoryScheduledTestTestDesktopReportToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ObservatoryScheduledTestTestDesktopReportOutputReference = /** @class */ (function (_super) {
-    __extends(ObservatoryScheduledTestTestDesktopReportOutputReference, _super);
+export class ObservatoryScheduledTestTestDesktopReportOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ObservatoryScheduledTestTestDesktopReportOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // error - computed: true, optional: false, required: false
-        _this._error = new ObservatoryScheduledTestTestDesktopReportErrorOutputReference(_this, "error");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "cls", {
-        // cls - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('cls');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "deviceType", {
-        // device_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('device_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "error", {
-        get: function () {
-            return this._error;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "fcp", {
-        // fcp - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('fcp');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "jsonReportUrl", {
-        // json_report_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('json_report_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "lcp", {
-        // lcp - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('lcp');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "performanceScore", {
-        // performance_score - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('performance_score');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "si", {
-        // si - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('si');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "tbt", {
-        // tbt - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('tbt');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "ttfb", {
-        // ttfb - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('ttfb');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestDesktopReportOutputReference.prototype, "tti", {
-        // tti - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('tti');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ObservatoryScheduledTestTestDesktopReportOutputReference;
-}(cdktf.ComplexObject));
-exports.ObservatoryScheduledTestTestDesktopReportOutputReference = ObservatoryScheduledTestTestDesktopReportOutputReference;
-function observatoryScheduledTestTestMobileReportErrorToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // cls - computed: true, optional: false, required: false
+    get cls() {
+        return this.getNumberAttribute('cls');
+    }
+    // device_type - computed: true, optional: false, required: false
+    get deviceType() {
+        return this.getStringAttribute('device_type');
+    }
+    // error - computed: true, optional: false, required: false
+    _error = new ObservatoryScheduledTestTestDesktopReportErrorOutputReference(this, "error");
+    get error() {
+        return this._error;
+    }
+    // fcp - computed: true, optional: false, required: false
+    get fcp() {
+        return this.getNumberAttribute('fcp');
+    }
+    // json_report_url - computed: true, optional: false, required: false
+    get jsonReportUrl() {
+        return this.getStringAttribute('json_report_url');
+    }
+    // lcp - computed: true, optional: false, required: false
+    get lcp() {
+        return this.getNumberAttribute('lcp');
+    }
+    // performance_score - computed: true, optional: false, required: false
+    get performanceScore() {
+        return this.getNumberAttribute('performance_score');
+    }
+    // si - computed: true, optional: false, required: false
+    get si() {
+        return this.getNumberAttribute('si');
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    // tbt - computed: true, optional: false, required: false
+    get tbt() {
+        return this.getNumberAttribute('tbt');
+    }
+    // ttfb - computed: true, optional: false, required: false
+    get ttfb() {
+        return this.getNumberAttribute('ttfb');
+    }
+    // tti - computed: true, optional: false, required: false
+    get tti() {
+        return this.getNumberAttribute('tti');
+    }
+}
+export function observatoryScheduledTestTestMobileReportErrorToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -337,72 +209,52 @@ function observatoryScheduledTestTestMobileReportErrorToTerraform(struct) {
     }
     return {};
 }
-function observatoryScheduledTestTestMobileReportErrorToHclTerraform(struct) {
+export function observatoryScheduledTestTestMobileReportErrorToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ObservatoryScheduledTestTestMobileReportErrorOutputReference = /** @class */ (function (_super) {
-    __extends(ObservatoryScheduledTestTestMobileReportErrorOutputReference, _super);
+export class ObservatoryScheduledTestTestMobileReportErrorOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ObservatoryScheduledTestTestMobileReportErrorOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportErrorOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportErrorOutputReference.prototype, "code", {
-        // code - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('code');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportErrorOutputReference.prototype, "detail", {
-        // detail - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('detail');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportErrorOutputReference.prototype, "finalDisplayedUrl", {
-        // final_displayed_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('final_displayed_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ObservatoryScheduledTestTestMobileReportErrorOutputReference;
-}(cdktf.ComplexObject));
-exports.ObservatoryScheduledTestTestMobileReportErrorOutputReference = ObservatoryScheduledTestTestMobileReportErrorOutputReference;
-function observatoryScheduledTestTestMobileReportToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // code - computed: true, optional: false, required: false
+    get code() {
+        return this.getStringAttribute('code');
+    }
+    // detail - computed: true, optional: false, required: false
+    get detail() {
+        return this.getStringAttribute('detail');
+    }
+    // final_displayed_url - computed: true, optional: false, required: false
+    get finalDisplayedUrl() {
+        return this.getStringAttribute('final_displayed_url');
+    }
+}
+export function observatoryScheduledTestTestMobileReportToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -411,145 +263,89 @@ function observatoryScheduledTestTestMobileReportToTerraform(struct) {
     }
     return {};
 }
-function observatoryScheduledTestTestMobileReportToHclTerraform(struct) {
+export function observatoryScheduledTestTestMobileReportToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ObservatoryScheduledTestTestMobileReportOutputReference = /** @class */ (function (_super) {
-    __extends(ObservatoryScheduledTestTestMobileReportOutputReference, _super);
+export class ObservatoryScheduledTestTestMobileReportOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ObservatoryScheduledTestTestMobileReportOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // error - computed: true, optional: false, required: false
-        _this._error = new ObservatoryScheduledTestTestMobileReportErrorOutputReference(_this, "error");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "cls", {
-        // cls - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('cls');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "deviceType", {
-        // device_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('device_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "error", {
-        get: function () {
-            return this._error;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "fcp", {
-        // fcp - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('fcp');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "jsonReportUrl", {
-        // json_report_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('json_report_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "lcp", {
-        // lcp - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('lcp');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "performanceScore", {
-        // performance_score - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('performance_score');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "si", {
-        // si - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('si');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "tbt", {
-        // tbt - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('tbt');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "ttfb", {
-        // ttfb - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('ttfb');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestMobileReportOutputReference.prototype, "tti", {
-        // tti - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('tti');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ObservatoryScheduledTestTestMobileReportOutputReference;
-}(cdktf.ComplexObject));
-exports.ObservatoryScheduledTestTestMobileReportOutputReference = ObservatoryScheduledTestTestMobileReportOutputReference;
-function observatoryScheduledTestTestRegionToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // cls - computed: true, optional: false, required: false
+    get cls() {
+        return this.getNumberAttribute('cls');
+    }
+    // device_type - computed: true, optional: false, required: false
+    get deviceType() {
+        return this.getStringAttribute('device_type');
+    }
+    // error - computed: true, optional: false, required: false
+    _error = new ObservatoryScheduledTestTestMobileReportErrorOutputReference(this, "error");
+    get error() {
+        return this._error;
+    }
+    // fcp - computed: true, optional: false, required: false
+    get fcp() {
+        return this.getNumberAttribute('fcp');
+    }
+    // json_report_url - computed: true, optional: false, required: false
+    get jsonReportUrl() {
+        return this.getStringAttribute('json_report_url');
+    }
+    // lcp - computed: true, optional: false, required: false
+    get lcp() {
+        return this.getNumberAttribute('lcp');
+    }
+    // performance_score - computed: true, optional: false, required: false
+    get performanceScore() {
+        return this.getNumberAttribute('performance_score');
+    }
+    // si - computed: true, optional: false, required: false
+    get si() {
+        return this.getNumberAttribute('si');
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    // tbt - computed: true, optional: false, required: false
+    get tbt() {
+        return this.getNumberAttribute('tbt');
+    }
+    // ttfb - computed: true, optional: false, required: false
+    get ttfb() {
+        return this.getNumberAttribute('ttfb');
+    }
+    // tti - computed: true, optional: false, required: false
+    get tti() {
+        return this.getNumberAttribute('tti');
+    }
+}
+export function observatoryScheduledTestTestRegionToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -558,64 +354,48 @@ function observatoryScheduledTestTestRegionToTerraform(struct) {
     }
     return {};
 }
-function observatoryScheduledTestTestRegionToHclTerraform(struct) {
+export function observatoryScheduledTestTestRegionToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ObservatoryScheduledTestTestRegionOutputReference = /** @class */ (function (_super) {
-    __extends(ObservatoryScheduledTestTestRegionOutputReference, _super);
+export class ObservatoryScheduledTestTestRegionOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ObservatoryScheduledTestTestRegionOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ObservatoryScheduledTestTestRegionOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestRegionOutputReference.prototype, "label", {
-        // label - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestRegionOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ObservatoryScheduledTestTestRegionOutputReference;
-}(cdktf.ComplexObject));
-exports.ObservatoryScheduledTestTestRegionOutputReference = ObservatoryScheduledTestTestRegionOutputReference;
-function observatoryScheduledTestTestToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // label - computed: true, optional: false, required: false
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export function observatoryScheduledTestTestToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -624,111 +404,91 @@ function observatoryScheduledTestTestToTerraform(struct) {
     }
     return {};
 }
-function observatoryScheduledTestTestToHclTerraform(struct) {
+export function observatoryScheduledTestTestToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ObservatoryScheduledTestTestOutputReference = /** @class */ (function (_super) {
-    __extends(ObservatoryScheduledTestTestOutputReference, _super);
+export class ObservatoryScheduledTestTestOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ObservatoryScheduledTestTestOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // desktop_report - computed: true, optional: false, required: false
-        _this._desktopReport = new ObservatoryScheduledTestTestDesktopReportOutputReference(_this, "desktop_report");
-        // mobile_report - computed: true, optional: false, required: false
-        _this._mobileReport = new ObservatoryScheduledTestTestMobileReportOutputReference(_this, "mobile_report");
-        // region - computed: true, optional: false, required: false
-        _this._region = new ObservatoryScheduledTestTestRegionOutputReference(_this, "region");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ObservatoryScheduledTestTestOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestOutputReference.prototype, "date", {
-        // date - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('date');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestOutputReference.prototype, "desktopReport", {
-        get: function () {
-            return this._desktopReport;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestOutputReference.prototype, "mobileReport", {
-        get: function () {
-            return this._mobileReport;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestOutputReference.prototype, "region", {
-        get: function () {
-            return this._region;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestOutputReference.prototype, "scheduleFrequency", {
-        // schedule_frequency - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('schedule_frequency');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTestTestOutputReference.prototype, "url", {
-        // url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ObservatoryScheduledTestTestOutputReference;
-}(cdktf.ComplexObject));
-exports.ObservatoryScheduledTestTestOutputReference = ObservatoryScheduledTestTestOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // date - computed: true, optional: false, required: false
+    get date() {
+        return this.getStringAttribute('date');
+    }
+    // desktop_report - computed: true, optional: false, required: false
+    _desktopReport = new ObservatoryScheduledTestTestDesktopReportOutputReference(this, "desktop_report");
+    get desktopReport() {
+        return this._desktopReport;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // mobile_report - computed: true, optional: false, required: false
+    _mobileReport = new ObservatoryScheduledTestTestMobileReportOutputReference(this, "mobile_report");
+    get mobileReport() {
+        return this._mobileReport;
+    }
+    // region - computed: true, optional: false, required: false
+    _region = new ObservatoryScheduledTestTestRegionOutputReference(this, "region");
+    get region() {
+        return this._region;
+    }
+    // schedule_frequency - computed: true, optional: false, required: false
+    get scheduleFrequency() {
+        return this.getStringAttribute('schedule_frequency');
+    }
+    // url - computed: true, optional: false, required: false
+    get url() {
+        return this.getStringAttribute('url');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/observatory_scheduled_test cloudflare_observatory_scheduled_test}
 */
-var ObservatoryScheduledTest = /** @class */ (function (_super) {
-    __extends(ObservatoryScheduledTest, _super);
+export class ObservatoryScheduledTest extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_observatory_scheduled_test";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ObservatoryScheduledTest resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ObservatoryScheduledTest to import
+    * @param importFromId The id of the existing ObservatoryScheduledTest that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/observatory_scheduled_test#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ObservatoryScheduledTest to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_observatory_scheduled_test", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -739,8 +499,8 @@ var ObservatoryScheduledTest = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ObservatoryScheduledTestConfig
     */
-    function ObservatoryScheduledTest(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_observatory_scheduled_test',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -753,146 +513,99 @@ var ObservatoryScheduledTest = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // schedule - computed: true, optional: false, required: false
-        _this._schedule = new ObservatoryScheduledTestScheduleOutputReference(_this, "schedule");
-        // test - computed: true, optional: false, required: false
-        _this._test = new ObservatoryScheduledTestTestOutputReference(_this, "test");
-        _this._frequency = config.frequency;
-        _this._region = config.region;
-        _this._url = config.url;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._frequency = config.frequency;
+        this._region = config.region;
+        this._url = config.url;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ObservatoryScheduledTest resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ObservatoryScheduledTest to import
-    * @param importFromId The id of the existing ObservatoryScheduledTest that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/observatory_scheduled_test#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ObservatoryScheduledTest to import is found
-    */
-    ObservatoryScheduledTest.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_observatory_scheduled_test", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "frequency", {
-        get: function () {
-            return this.getStringAttribute('frequency');
-        },
-        set: function (value) {
-            this._frequency = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ObservatoryScheduledTest.prototype.resetFrequency = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // frequency - computed: true, optional: true, required: false
+    _frequency;
+    get frequency() {
+        return this.getStringAttribute('frequency');
+    }
+    set frequency(value) {
+        this._frequency = value;
+    }
+    resetFrequency() {
         this._frequency = undefined;
-    };
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "frequencyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._frequency;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "region", {
-        get: function () {
-            return this.getStringAttribute('region');
-        },
-        set: function (value) {
-            this._region = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ObservatoryScheduledTest.prototype.resetRegion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get frequencyInput() {
+        return this._frequency;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // region - computed: true, optional: true, required: false
+    _region;
+    get region() {
+        return this.getStringAttribute('region');
+    }
+    set region(value) {
+        this._region = value;
+    }
+    resetRegion() {
         this._region = undefined;
-    };
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "regionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._region;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "schedule", {
-        get: function () {
-            return this._schedule;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "test", {
-        get: function () {
-            return this._test;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "url", {
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        set: function (value) {
-            this._url = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "urlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._url;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ObservatoryScheduledTest.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get regionInput() {
+        return this._region;
+    }
+    // schedule - computed: true, optional: false, required: false
+    _schedule = new ObservatoryScheduledTestScheduleOutputReference(this, "schedule");
+    get schedule() {
+        return this._schedule;
+    }
+    // test - computed: true, optional: false, required: false
+    _test = new ObservatoryScheduledTestTestOutputReference(this, "test");
+    get test() {
+        return this._test;
+    }
+    // url - computed: false, optional: false, required: true
+    _url;
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    set url(value) {
+        this._url = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get urlInput() {
+        return this._url;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ObservatoryScheduledTest.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ObservatoryScheduledTest.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             frequency: cdktf.stringToTerraform(this._frequency),
             region: cdktf.stringToTerraform(this._region),
             url: cdktf.stringToTerraform(this._url),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ObservatoryScheduledTest.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             frequency: {
                 value: cdktf.stringToHclTerraform(this._frequency),
                 isBlock: false,
@@ -919,15 +632,6 @@ var ObservatoryScheduledTest = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ObservatoryScheduledTest.tfResourceType = "cloudflare_observatory_scheduled_test";
-    return ObservatoryScheduledTest;
-}(cdktf.TerraformResource));
-exports.ObservatoryScheduledTest = ObservatoryScheduledTest;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

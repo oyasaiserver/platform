@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/d1_database
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.D1Database = exports.D1DatabaseReadReplicationOutputReference = void 0;
-exports.d1DatabaseReadReplicationToTerraform = d1DatabaseReadReplicationToTerraform;
-exports.d1DatabaseReadReplicationToHclTerraform = d1DatabaseReadReplicationToHclTerraform;
-var cdktf = require("cdktf");
-function d1DatabaseReadReplicationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function d1DatabaseReadReplicationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,14 +12,14 @@ function d1DatabaseReadReplicationToTerraform(struct) {
         mode: cdktf.stringToTerraform(struct.mode),
     };
 }
-function d1DatabaseReadReplicationToHclTerraform(struct) {
+export function d1DatabaseReadReplicationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         mode: {
             value: cdktf.stringToHclTerraform(struct.mode),
             isBlock: false,
@@ -48,80 +28,80 @@ function d1DatabaseReadReplicationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var D1DatabaseReadReplicationOutputReference = /** @class */ (function (_super) {
-    __extends(D1DatabaseReadReplicationOutputReference, _super);
+export class D1DatabaseReadReplicationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function D1DatabaseReadReplicationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(D1DatabaseReadReplicationOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._mode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mode = this._mode;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._mode = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._mode = value.mode;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1DatabaseReadReplicationOutputReference.prototype, "mode", {
-        get: function () {
-            return this.getStringAttribute('mode');
-        },
-        set: function (value) {
-            this._mode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1DatabaseReadReplicationOutputReference.prototype, "modeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return D1DatabaseReadReplicationOutputReference;
-}(cdktf.ComplexObject));
-exports.D1DatabaseReadReplicationOutputReference = D1DatabaseReadReplicationOutputReference;
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._mode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mode = this._mode;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._mode = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._mode = value.mode;
+        }
+    }
+    // mode - computed: false, optional: false, required: true
+    _mode;
+    get mode() {
+        return this.getStringAttribute('mode');
+    }
+    set mode(value) {
+        this._mode = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get modeInput() {
+        return this._mode;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/d1_database cloudflare_d1_database}
 */
-var D1Database = /** @class */ (function (_super) {
-    __extends(D1Database, _super);
+export class D1Database extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_d1_database";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a D1Database resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the D1Database to import
+    * @param importFromId The id of the existing D1Database that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/d1_database#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the D1Database to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_d1_database", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -132,8 +112,8 @@ var D1Database = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options D1DatabaseConfig
     */
-    function D1Database(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_d1_database',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -146,183 +126,116 @@ var D1Database = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // read_replication - computed: false, optional: true, required: false
-        _this._readReplication = new D1DatabaseReadReplicationOutputReference(_this, "read_replication");
-        _this._accountId = config.accountId;
-        _this._jurisdiction = config.jurisdiction;
-        _this._name = config.name;
-        _this._primaryLocationHint = config.primaryLocationHint;
-        _this._readReplication.internalValue = config.readReplication;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._jurisdiction = config.jurisdiction;
+        this._name = config.name;
+        this._primaryLocationHint = config.primaryLocationHint;
+        this._readReplication.internalValue = config.readReplication;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a D1Database resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the D1Database to import
-    * @param importFromId The id of the existing D1Database that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/d1_database#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the D1Database to import is found
-    */
-    D1Database.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_d1_database", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(D1Database.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    D1Database.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(D1Database.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "fileSize", {
-        // file_size - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('file_size');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "jurisdiction", {
-        get: function () {
-            return this.getStringAttribute('jurisdiction');
-        },
-        set: function (value) {
-            this._jurisdiction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    D1Database.prototype.resetJurisdiction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // file_size - computed: true, optional: false, required: false
+    get fileSize() {
+        return this.getNumberAttribute('file_size');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // jurisdiction - computed: false, optional: true, required: false
+    _jurisdiction;
+    get jurisdiction() {
+        return this.getStringAttribute('jurisdiction');
+    }
+    set jurisdiction(value) {
+        this._jurisdiction = value;
+    }
+    resetJurisdiction() {
         this._jurisdiction = undefined;
-    };
-    Object.defineProperty(D1Database.prototype, "jurisdictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._jurisdiction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "numTables", {
-        // num_tables - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('num_tables');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "primaryLocationHint", {
-        get: function () {
-            return this.getStringAttribute('primary_location_hint');
-        },
-        set: function (value) {
-            this._primaryLocationHint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    D1Database.prototype.resetPrimaryLocationHint = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get jurisdictionInput() {
+        return this._jurisdiction;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // num_tables - computed: true, optional: false, required: false
+    get numTables() {
+        return this.getNumberAttribute('num_tables');
+    }
+    // primary_location_hint - computed: false, optional: true, required: false
+    _primaryLocationHint;
+    get primaryLocationHint() {
+        return this.getStringAttribute('primary_location_hint');
+    }
+    set primaryLocationHint(value) {
+        this._primaryLocationHint = value;
+    }
+    resetPrimaryLocationHint() {
         this._primaryLocationHint = undefined;
-    };
-    Object.defineProperty(D1Database.prototype, "primaryLocationHintInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._primaryLocationHint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "readReplication", {
-        get: function () {
-            return this._readReplication;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    D1Database.prototype.putReadReplication = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get primaryLocationHintInput() {
+        return this._primaryLocationHint;
+    }
+    // read_replication - computed: false, optional: true, required: false
+    _readReplication = new D1DatabaseReadReplicationOutputReference(this, "read_replication");
+    get readReplication() {
+        return this._readReplication;
+    }
+    putReadReplication(value) {
         this._readReplication.internalValue = value;
-    };
-    D1Database.prototype.resetReadReplication = function () {
+    }
+    resetReadReplication() {
         this._readReplication.internalValue = undefined;
-    };
-    Object.defineProperty(D1Database.prototype, "readReplicationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._readReplication.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "uuid", {
-        // uuid - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uuid');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(D1Database.prototype, "version", {
-        // version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('version');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get readReplicationInput() {
+        return this._readReplication.internalValue;
+    }
+    // uuid - computed: true, optional: false, required: false
+    get uuid() {
+        return this.getStringAttribute('uuid');
+    }
+    // version - computed: true, optional: false, required: false
+    get version() {
+        return this.getStringAttribute('version');
+    }
     // =========
     // SYNTHESIS
     // =========
-    D1Database.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             jurisdiction: cdktf.stringToTerraform(this._jurisdiction),
@@ -330,9 +243,9 @@ var D1Database = /** @class */ (function (_super) {
             primary_location_hint: cdktf.stringToTerraform(this._primaryLocationHint),
             read_replication: d1DatabaseReadReplicationToTerraform(this._readReplication.internalValue),
         };
-    };
-    D1Database.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -365,15 +278,6 @@ var D1Database = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    D1Database.tfResourceType = "cloudflare_d1_database";
-    return D1Database;
-}(cdktf.TerraformResource));
-exports.D1Database = D1Database;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_folder
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SecretFolder = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_folder infisical_secret_folder}
 */
-var SecretFolder = /** @class */ (function (_super) {
-    __extends(SecretFolder, _super);
+export class SecretFolder extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_secret_folder";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a SecretFolder resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the SecretFolder to import
+    * @param importFromId The id of the existing SecretFolder that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_folder#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the SecretFolder to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_secret_folder", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var SecretFolder = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options SecretFolderConfig
     */
-    function SecretFolder(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_secret_folder',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -48,151 +46,95 @@ var SecretFolder = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._environmentSlug = config.environmentSlug;
-        _this._folderPath = config.folderPath;
-        _this._forceDelete = config.forceDelete;
-        _this._name = config.name;
-        _this._projectId = config.projectId;
-        return _this;
+        });
+        this._environmentSlug = config.environmentSlug;
+        this._folderPath = config.folderPath;
+        this._forceDelete = config.forceDelete;
+        this._name = config.name;
+        this._projectId = config.projectId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a SecretFolder resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the SecretFolder to import
-    * @param importFromId The id of the existing SecretFolder that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_folder#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the SecretFolder to import is found
-    */
-    SecretFolder.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_secret_folder", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(SecretFolder.prototype, "environmentId", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // environment_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('environment_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "environmentSlug", {
-        get: function () {
-            return this.getStringAttribute('environment_slug');
-        },
-        set: function (value) {
-            this._environmentSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "environmentSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environmentSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "folderPath", {
-        get: function () {
-            return this.getStringAttribute('folder_path');
-        },
-        set: function (value) {
-            this._folderPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "folderPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._folderPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "forceDelete", {
-        get: function () {
-            return this.getBooleanAttribute('force_delete');
-        },
-        set: function (value) {
-            this._forceDelete = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SecretFolder.prototype.resetForceDelete = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // environment_id - computed: true, optional: false, required: false
+    get environmentId() {
+        return this.getStringAttribute('environment_id');
+    }
+    // environment_slug - computed: false, optional: false, required: true
+    _environmentSlug;
+    get environmentSlug() {
+        return this.getStringAttribute('environment_slug');
+    }
+    set environmentSlug(value) {
+        this._environmentSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentSlugInput() {
+        return this._environmentSlug;
+    }
+    // folder_path - computed: false, optional: false, required: true
+    _folderPath;
+    get folderPath() {
+        return this.getStringAttribute('folder_path');
+    }
+    set folderPath(value) {
+        this._folderPath = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get folderPathInput() {
+        return this._folderPath;
+    }
+    // force_delete - computed: true, optional: true, required: false
+    _forceDelete;
+    get forceDelete() {
+        return this.getBooleanAttribute('force_delete');
+    }
+    set forceDelete(value) {
+        this._forceDelete = value;
+    }
+    resetForceDelete() {
         this._forceDelete = undefined;
-    };
-    Object.defineProperty(SecretFolder.prototype, "forceDeleteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._forceDelete;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "path", {
-        // path - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "projectId", {
-        get: function () {
-            return this.getStringAttribute('project_id');
-        },
-        set: function (value) {
-            this._projectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SecretFolder.prototype, "projectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get forceDeleteInput() {
+        return this._forceDelete;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // path - computed: true, optional: false, required: false
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    // project_id - computed: false, optional: false, required: true
+    _projectId;
+    get projectId() {
+        return this.getStringAttribute('project_id');
+    }
+    set projectId(value) {
+        this._projectId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectIdInput() {
+        return this._projectId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    SecretFolder.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             environment_slug: cdktf.stringToTerraform(this._environmentSlug),
             folder_path: cdktf.stringToTerraform(this._folderPath),
@@ -200,9 +142,9 @@ var SecretFolder = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             project_id: cdktf.stringToTerraform(this._projectId),
         };
-    };
-    SecretFolder.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             environment_slug: {
                 value: cdktf.stringToHclTerraform(this._environmentSlug),
                 isBlock: false,
@@ -235,15 +177,6 @@ var SecretFolder = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    SecretFolder.tfResourceType = "infisical_secret_folder";
-    return SecretFolder;
-}(cdktf.TerraformResource));
-exports.SecretFolder = SecretFolder;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/rulesets
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareRulesets = exports.DataCloudflareRulesetsRulesetsList = exports.DataCloudflareRulesetsRulesetsOutputReference = exports.DataCloudflareRulesetsResultList = exports.DataCloudflareRulesetsResultOutputReference = void 0;
-exports.dataCloudflareRulesetsResultToTerraform = dataCloudflareRulesetsResultToTerraform;
-exports.dataCloudflareRulesetsResultToHclTerraform = dataCloudflareRulesetsResultToHclTerraform;
-exports.dataCloudflareRulesetsRulesetsToTerraform = dataCloudflareRulesetsRulesetsToTerraform;
-exports.dataCloudflareRulesetsRulesetsToHclTerraform = dataCloudflareRulesetsRulesetsToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareRulesetsResultToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareRulesetsResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,129 +10,92 @@ function dataCloudflareRulesetsResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareRulesetsResultToHclTerraform(struct) {
+export function dataCloudflareRulesetsResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareRulesetsResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareRulesetsResultOutputReference, _super);
+export class DataCloudflareRulesetsResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareRulesetsResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareRulesetsResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsResultOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsResultOutputReference.prototype, "kind", {
-        // kind - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('kind');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsResultOutputReference.prototype, "lastUpdated", {
-        // last_updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsResultOutputReference.prototype, "phase", {
-        // phase - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('phase');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsResultOutputReference.prototype, "version", {
-        // version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareRulesetsResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareRulesetsResultOutputReference = DataCloudflareRulesetsResultOutputReference;
-var DataCloudflareRulesetsResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareRulesetsResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // kind - computed: true, optional: false, required: false
+    get kind() {
+        return this.getStringAttribute('kind');
+    }
+    // last_updated - computed: true, optional: false, required: false
+    get lastUpdated() {
+        return this.getStringAttribute('last_updated');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // phase - computed: true, optional: false, required: false
+    get phase() {
+        return this.getStringAttribute('phase');
+    }
+    // version - computed: true, optional: false, required: false
+    get version() {
+        return this.getStringAttribute('version');
+    }
+}
+export class DataCloudflareRulesetsResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareRulesetsResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareRulesetsResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareRulesetsResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareRulesetsResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareRulesetsResultList = DataCloudflareRulesetsResultList;
-function dataCloudflareRulesetsRulesetsToTerraform(struct) {
+    }
+}
+export function dataCloudflareRulesetsRulesetsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -163,133 +104,112 @@ function dataCloudflareRulesetsRulesetsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareRulesetsRulesetsToHclTerraform(struct) {
+export function dataCloudflareRulesetsRulesetsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareRulesetsRulesetsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareRulesetsRulesetsOutputReference, _super);
+export class DataCloudflareRulesetsRulesetsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareRulesetsRulesetsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareRulesetsRulesetsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsRulesetsOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsRulesetsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsRulesetsOutputReference.prototype, "kind", {
-        // kind - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('kind');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsRulesetsOutputReference.prototype, "lastUpdated", {
-        // last_updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsRulesetsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsRulesetsOutputReference.prototype, "phase", {
-        // phase - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('phase');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesetsRulesetsOutputReference.prototype, "version", {
-        // version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareRulesetsRulesetsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareRulesetsRulesetsOutputReference = DataCloudflareRulesetsRulesetsOutputReference;
-var DataCloudflareRulesetsRulesetsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareRulesetsRulesetsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // kind - computed: true, optional: false, required: false
+    get kind() {
+        return this.getStringAttribute('kind');
+    }
+    // last_updated - computed: true, optional: false, required: false
+    get lastUpdated() {
+        return this.getStringAttribute('last_updated');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // phase - computed: true, optional: false, required: false
+    get phase() {
+        return this.getStringAttribute('phase');
+    }
+    // version - computed: true, optional: false, required: false
+    get version() {
+        return this.getStringAttribute('version');
+    }
+}
+export class DataCloudflareRulesetsRulesetsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareRulesetsRulesetsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareRulesetsRulesetsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareRulesetsRulesetsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareRulesetsRulesetsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareRulesetsRulesetsList = DataCloudflareRulesetsRulesetsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/rulesets cloudflare_rulesets}
 */
-var DataCloudflareRulesets = /** @class */ (function (_super) {
-    __extends(DataCloudflareRulesets, _super);
+export class DataCloudflareRulesets extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_rulesets";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareRulesets resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareRulesets to import
+    * @param importFromId The id of the existing DataCloudflareRulesets that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/rulesets#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareRulesets to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_rulesets", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -300,9 +220,8 @@ var DataCloudflareRulesets = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareRulesetsConfig = {}
     */
-    function DataCloudflareRulesets(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_rulesets',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -315,118 +234,81 @@ var DataCloudflareRulesets = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareRulesetsResultList(_this, "result", true);
-        // rulesets - computed: true, optional: false, required: false
-        _this._rulesets = new DataCloudflareRulesetsRulesetsList(_this, "rulesets", true);
-        _this._accountId = config.accountId;
-        _this._maxItems = config.maxItems;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._maxItems = config.maxItems;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareRulesets resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareRulesets to import
-    * @param importFromId The id of the existing DataCloudflareRulesets that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/rulesets#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareRulesets to import is found
-    */
-    DataCloudflareRulesets.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_rulesets", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareRulesets.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareRulesets.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareRulesets.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesets.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareRulesets.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareRulesets.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesets.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesets.prototype, "rulesets", {
-        get: function () {
-            return this._rulesets;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareRulesets.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareRulesets.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareRulesetsResultList(this, "result", true);
+    get result() {
+        return this._result;
+    }
+    // rulesets - computed: true, optional: false, required: false
+    _rulesets = new DataCloudflareRulesetsRulesetsList(this, "rulesets", true);
+    get rulesets() {
+        return this._rulesets;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareRulesets.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareRulesets.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             max_items: cdktf.numberToTerraform(this._maxItems),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareRulesets.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -447,15 +329,6 @@ var DataCloudflareRulesets = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareRulesets.tfResourceType = "cloudflare_rulesets";
-    return DataCloudflareRulesets;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareRulesets = DataCloudflareRulesets;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

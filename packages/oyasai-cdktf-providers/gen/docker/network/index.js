@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/network
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Network = exports.NetworkLabelsList = exports.NetworkLabelsOutputReference = exports.NetworkIpamConfigList = exports.NetworkIpamConfigOutputReference = void 0;
-exports.networkIpamConfigToTerraform = networkIpamConfigToTerraform;
-exports.networkIpamConfigToHclTerraform = networkIpamConfigToHclTerraform;
-exports.networkLabelsToTerraform = networkLabelsToTerraform;
-exports.networkLabelsToHclTerraform = networkLabelsToHclTerraform;
-var cdktf = require("cdktf");
-function networkIpamConfigToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function networkIpamConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -37,14 +15,14 @@ function networkIpamConfigToTerraform(struct) {
         subnet: cdktf.stringToTerraform(struct.subnet),
     };
 }
-function networkIpamConfigToHclTerraform(struct) {
+export function networkIpamConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         aux_address: {
             value: cdktf.hashMapperHcl(cdktf.stringToHclTerraform)(struct.auxAddress),
             isBlock: false,
@@ -71,185 +49,151 @@ function networkIpamConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var NetworkIpamConfigOutputReference = /** @class */ (function (_super) {
-    __extends(NetworkIpamConfigOutputReference, _super);
+export class NetworkIpamConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NetworkIpamConfigOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(NetworkIpamConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._auxAddress !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.auxAddress = this._auxAddress;
-            }
-            if (this._gateway !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.gateway = this._gateway;
-            }
-            if (this._ipRange !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipRange = this._ipRange;
-            }
-            if (this._subnet !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.subnet = this._subnet;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._auxAddress = undefined;
-                this._gateway = undefined;
-                this._ipRange = undefined;
-                this._subnet = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._auxAddress = value.auxAddress;
-                this._gateway = value.gateway;
-                this._ipRange = value.ipRange;
-                this._subnet = value.subnet;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NetworkIpamConfigOutputReference.prototype, "auxAddress", {
-        get: function () {
-            return this.getStringMapAttribute('aux_address');
-        },
-        set: function (value) {
-            this._auxAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NetworkIpamConfigOutputReference.prototype.resetAuxAddress = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._auxAddress !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.auxAddress = this._auxAddress;
+        }
+        if (this._gateway !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.gateway = this._gateway;
+        }
+        if (this._ipRange !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipRange = this._ipRange;
+        }
+        if (this._subnet !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.subnet = this._subnet;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._auxAddress = undefined;
+            this._gateway = undefined;
+            this._ipRange = undefined;
+            this._subnet = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._auxAddress = value.auxAddress;
+            this._gateway = value.gateway;
+            this._ipRange = value.ipRange;
+            this._subnet = value.subnet;
+        }
+    }
+    // aux_address - computed: false, optional: true, required: false
+    _auxAddress;
+    get auxAddress() {
+        return this.getStringMapAttribute('aux_address');
+    }
+    set auxAddress(value) {
+        this._auxAddress = value;
+    }
+    resetAuxAddress() {
         this._auxAddress = undefined;
-    };
-    Object.defineProperty(NetworkIpamConfigOutputReference.prototype, "auxAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._auxAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NetworkIpamConfigOutputReference.prototype, "gateway", {
-        get: function () {
-            return this.getStringAttribute('gateway');
-        },
-        set: function (value) {
-            this._gateway = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NetworkIpamConfigOutputReference.prototype.resetGateway = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get auxAddressInput() {
+        return this._auxAddress;
+    }
+    // gateway - computed: false, optional: true, required: false
+    _gateway;
+    get gateway() {
+        return this.getStringAttribute('gateway');
+    }
+    set gateway(value) {
+        this._gateway = value;
+    }
+    resetGateway() {
         this._gateway = undefined;
-    };
-    Object.defineProperty(NetworkIpamConfigOutputReference.prototype, "gatewayInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gateway;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NetworkIpamConfigOutputReference.prototype, "ipRange", {
-        get: function () {
-            return this.getStringAttribute('ip_range');
-        },
-        set: function (value) {
-            this._ipRange = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NetworkIpamConfigOutputReference.prototype.resetIpRange = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gatewayInput() {
+        return this._gateway;
+    }
+    // ip_range - computed: false, optional: true, required: false
+    _ipRange;
+    get ipRange() {
+        return this.getStringAttribute('ip_range');
+    }
+    set ipRange(value) {
+        this._ipRange = value;
+    }
+    resetIpRange() {
         this._ipRange = undefined;
-    };
-    Object.defineProperty(NetworkIpamConfigOutputReference.prototype, "ipRangeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipRange;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NetworkIpamConfigOutputReference.prototype, "subnet", {
-        get: function () {
-            return this.getStringAttribute('subnet');
-        },
-        set: function (value) {
-            this._subnet = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    NetworkIpamConfigOutputReference.prototype.resetSubnet = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipRangeInput() {
+        return this._ipRange;
+    }
+    // subnet - computed: false, optional: true, required: false
+    _subnet;
+    get subnet() {
+        return this.getStringAttribute('subnet');
+    }
+    set subnet(value) {
+        this._subnet = value;
+    }
+    resetSubnet() {
         this._subnet = undefined;
-    };
-    Object.defineProperty(NetworkIpamConfigOutputReference.prototype, "subnetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._subnet;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return NetworkIpamConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.NetworkIpamConfigOutputReference = NetworkIpamConfigOutputReference;
-var NetworkIpamConfigList = /** @class */ (function (_super) {
-    __extends(NetworkIpamConfigList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get subnetInput() {
+        return this._subnet;
+    }
+}
+export class NetworkIpamConfigList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NetworkIpamConfigList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    NetworkIpamConfigList.prototype.get = function (index) {
+    get(index) {
         return new NetworkIpamConfigOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return NetworkIpamConfigList;
-}(cdktf.ComplexList));
-exports.NetworkIpamConfigList = NetworkIpamConfigList;
-function networkLabelsToTerraform(struct) {
+    }
+}
+export function networkLabelsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -261,14 +205,14 @@ function networkLabelsToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function networkLabelsToHclTerraform(struct) {
+export function networkLabelsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         label: {
             value: cdktf.stringToHclTerraform(struct.label),
             isBlock: false,
@@ -283,129 +227,123 @@ function networkLabelsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var NetworkLabelsOutputReference = /** @class */ (function (_super) {
-    __extends(NetworkLabelsOutputReference, _super);
+export class NetworkLabelsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NetworkLabelsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(NetworkLabelsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._label !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.label = this._label;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._label = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._label = value.label;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NetworkLabelsOutputReference.prototype, "label", {
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        set: function (value) {
-            this._label = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NetworkLabelsOutputReference.prototype, "labelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._label;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NetworkLabelsOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(NetworkLabelsOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return NetworkLabelsOutputReference;
-}(cdktf.ComplexObject));
-exports.NetworkLabelsOutputReference = NetworkLabelsOutputReference;
-var NetworkLabelsList = /** @class */ (function (_super) {
-    __extends(NetworkLabelsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._label !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.label = this._label;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._label = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._label = value.label;
+            this._value = value.value;
+        }
+    }
+    // label - computed: false, optional: false, required: true
+    _label;
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    set label(value) {
+        this._label = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelInput() {
+        return this._label;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class NetworkLabelsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function NetworkLabelsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    NetworkLabelsList.prototype.get = function (index) {
+    get(index) {
         return new NetworkLabelsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return NetworkLabelsList;
-}(cdktf.ComplexList));
-exports.NetworkLabelsList = NetworkLabelsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/network docker_network}
 */
-var Network = /** @class */ (function (_super) {
-    __extends(Network, _super);
+export class Network extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "docker_network";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Network resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Network to import
+    * @param importFromId The id of the existing Network that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/network#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Network to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_network", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -416,8 +354,8 @@ var Network = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options NetworkConfig
     */
-    function Network(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'docker_network',
             terraformGeneratorMetadata: {
                 providerName: 'docker',
@@ -430,299 +368,208 @@ var Network = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ipam_config - computed: false, optional: true, required: false
-        _this._ipamConfig = new NetworkIpamConfigList(_this, "ipam_config", true);
-        // labels - computed: false, optional: true, required: false
-        _this._labels = new NetworkLabelsList(_this, "labels", true);
-        _this._attachable = config.attachable;
-        _this._driver = config.driver;
-        _this._id = config.id;
-        _this._ingress = config.ingress;
-        _this._internal = config.internal;
-        _this._ipamDriver = config.ipamDriver;
-        _this._ipamOptions = config.ipamOptions;
-        _this._ipv6 = config.ipv6;
-        _this._name = config.name;
-        _this._options = config.options;
-        _this._ipamConfig.internalValue = config.ipamConfig;
-        _this._labels.internalValue = config.labels;
-        return _this;
+        });
+        this._attachable = config.attachable;
+        this._driver = config.driver;
+        this._id = config.id;
+        this._ingress = config.ingress;
+        this._internal = config.internal;
+        this._ipamDriver = config.ipamDriver;
+        this._ipamOptions = config.ipamOptions;
+        this._ipv6 = config.ipv6;
+        this._name = config.name;
+        this._options = config.options;
+        this._ipamConfig.internalValue = config.ipamConfig;
+        this._labels.internalValue = config.labels;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Network resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Network to import
-    * @param importFromId The id of the existing Network that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/network#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Network to import is found
-    */
-    Network.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_network", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Network.prototype, "attachable", {
-        get: function () {
-            return this.getBooleanAttribute('attachable');
-        },
-        set: function (value) {
-            this._attachable = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.resetAttachable = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // attachable - computed: false, optional: true, required: false
+    _attachable;
+    get attachable() {
+        return this.getBooleanAttribute('attachable');
+    }
+    set attachable(value) {
+        this._attachable = value;
+    }
+    resetAttachable() {
         this._attachable = undefined;
-    };
-    Object.defineProperty(Network.prototype, "attachableInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._attachable;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "driver", {
-        get: function () {
-            return this.getStringAttribute('driver');
-        },
-        set: function (value) {
-            this._driver = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.resetDriver = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get attachableInput() {
+        return this._attachable;
+    }
+    // driver - computed: true, optional: true, required: false
+    _driver;
+    get driver() {
+        return this.getStringAttribute('driver');
+    }
+    set driver(value) {
+        this._driver = value;
+    }
+    resetDriver() {
         this._driver = undefined;
-    };
-    Object.defineProperty(Network.prototype, "driverInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._driver;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get driverInput() {
+        return this._driver;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(Network.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "ingress", {
-        get: function () {
-            return this.getBooleanAttribute('ingress');
-        },
-        set: function (value) {
-            this._ingress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.resetIngress = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // ingress - computed: false, optional: true, required: false
+    _ingress;
+    get ingress() {
+        return this.getBooleanAttribute('ingress');
+    }
+    set ingress(value) {
+        this._ingress = value;
+    }
+    resetIngress() {
         this._ingress = undefined;
-    };
-    Object.defineProperty(Network.prototype, "ingressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ingress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "internal", {
-        get: function () {
-            return this.getBooleanAttribute('internal');
-        },
-        set: function (value) {
-            this._internal = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.resetInternal = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ingressInput() {
+        return this._ingress;
+    }
+    // internal - computed: true, optional: true, required: false
+    _internal;
+    get internal() {
+        return this.getBooleanAttribute('internal');
+    }
+    set internal(value) {
+        this._internal = value;
+    }
+    resetInternal() {
         this._internal = undefined;
-    };
-    Object.defineProperty(Network.prototype, "internalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._internal;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "ipamDriver", {
-        get: function () {
-            return this.getStringAttribute('ipam_driver');
-        },
-        set: function (value) {
-            this._ipamDriver = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.resetIpamDriver = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get internalInput() {
+        return this._internal;
+    }
+    // ipam_driver - computed: false, optional: true, required: false
+    _ipamDriver;
+    get ipamDriver() {
+        return this.getStringAttribute('ipam_driver');
+    }
+    set ipamDriver(value) {
+        this._ipamDriver = value;
+    }
+    resetIpamDriver() {
         this._ipamDriver = undefined;
-    };
-    Object.defineProperty(Network.prototype, "ipamDriverInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipamDriver;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "ipamOptions", {
-        get: function () {
-            return this.getStringMapAttribute('ipam_options');
-        },
-        set: function (value) {
-            this._ipamOptions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.resetIpamOptions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipamDriverInput() {
+        return this._ipamDriver;
+    }
+    // ipam_options - computed: false, optional: true, required: false
+    _ipamOptions;
+    get ipamOptions() {
+        return this.getStringMapAttribute('ipam_options');
+    }
+    set ipamOptions(value) {
+        this._ipamOptions = value;
+    }
+    resetIpamOptions() {
         this._ipamOptions = undefined;
-    };
-    Object.defineProperty(Network.prototype, "ipamOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipamOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "ipv6", {
-        get: function () {
-            return this.getBooleanAttribute('ipv6');
-        },
-        set: function (value) {
-            this._ipv6 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.resetIpv6 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipamOptionsInput() {
+        return this._ipamOptions;
+    }
+    // ipv6 - computed: false, optional: true, required: false
+    _ipv6;
+    get ipv6() {
+        return this.getBooleanAttribute('ipv6');
+    }
+    set ipv6(value) {
+        this._ipv6 = value;
+    }
+    resetIpv6() {
         this._ipv6 = undefined;
-    };
-    Object.defineProperty(Network.prototype, "ipv6Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipv6;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "options", {
-        get: function () {
-            return this.getStringMapAttribute('options');
-        },
-        set: function (value) {
-            this._options = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.resetOptions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipv6Input() {
+        return this._ipv6;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // options - computed: true, optional: true, required: false
+    _options;
+    get options() {
+        return this.getStringMapAttribute('options');
+    }
+    set options(value) {
+        this._options = value;
+    }
+    resetOptions() {
         this._options = undefined;
-    };
-    Object.defineProperty(Network.prototype, "optionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._options;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "scope", {
-        // scope - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('scope');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "ipamConfig", {
-        get: function () {
-            return this._ipamConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.putIpamConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get optionsInput() {
+        return this._options;
+    }
+    // scope - computed: true, optional: false, required: false
+    get scope() {
+        return this.getStringAttribute('scope');
+    }
+    // ipam_config - computed: false, optional: true, required: false
+    _ipamConfig = new NetworkIpamConfigList(this, "ipam_config", true);
+    get ipamConfig() {
+        return this._ipamConfig;
+    }
+    putIpamConfig(value) {
         this._ipamConfig.internalValue = value;
-    };
-    Network.prototype.resetIpamConfig = function () {
+    }
+    resetIpamConfig() {
         this._ipamConfig.internalValue = undefined;
-    };
-    Object.defineProperty(Network.prototype, "ipamConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipamConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "labels", {
-        get: function () {
-            return this._labels;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Network.prototype.putLabels = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipamConfigInput() {
+        return this._ipamConfig.internalValue;
+    }
+    // labels - computed: false, optional: true, required: false
+    _labels = new NetworkLabelsList(this, "labels", true);
+    get labels() {
+        return this._labels;
+    }
+    putLabels(value) {
         this._labels.internalValue = value;
-    };
-    Network.prototype.resetLabels = function () {
+    }
+    resetLabels() {
         this._labels.internalValue = undefined;
-    };
-    Object.defineProperty(Network.prototype, "labelsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._labels.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelsInput() {
+        return this._labels.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Network.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             attachable: cdktf.booleanToTerraform(this._attachable),
             driver: cdktf.stringToTerraform(this._driver),
@@ -737,9 +584,9 @@ var Network = /** @class */ (function (_super) {
             ipam_config: cdktf.listMapper(networkIpamConfigToTerraform, true)(this._ipamConfig.internalValue),
             labels: cdktf.listMapper(networkLabelsToTerraform, true)(this._labels.internalValue),
         };
-    };
-    Network.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             attachable: {
                 value: cdktf.booleanToHclTerraform(this._attachable),
                 isBlock: false,
@@ -814,15 +661,6 @@ var Network = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Network.tfResourceType = "docker_network";
-    return Network;
-}(cdktf.TerraformResource));
-exports.Network = Network;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

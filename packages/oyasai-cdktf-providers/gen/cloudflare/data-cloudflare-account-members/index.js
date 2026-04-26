@@ -1,71 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/account_members
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareAccountMembers = exports.DataCloudflareAccountMembersResultList = exports.DataCloudflareAccountMembersResultOutputReference = exports.DataCloudflareAccountMembersResultUserOutputReference = exports.DataCloudflareAccountMembersResultRolesList = exports.DataCloudflareAccountMembersResultRolesOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference = exports.DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference = exports.DataCloudflareAccountMembersResultPoliciesList = exports.DataCloudflareAccountMembersResultPoliciesOutputReference = exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsList = exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference = exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList = exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference = exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList = exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference = exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference = exports.DataCloudflareAccountMembersResultPoliciesPermissionGroupsList = exports.DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference = exports.DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference = void 0;
-exports.dataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaToTerraform = dataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaToTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaToHclTerraform = dataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaToHclTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesPermissionGroupsToTerraform = dataCloudflareAccountMembersResultPoliciesPermissionGroupsToTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesPermissionGroupsToHclTerraform = dataCloudflareAccountMembersResultPoliciesPermissionGroupsToHclTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesResourceGroupsMetaToTerraform = dataCloudflareAccountMembersResultPoliciesResourceGroupsMetaToTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesResourceGroupsMetaToHclTerraform = dataCloudflareAccountMembersResultPoliciesResourceGroupsMetaToHclTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsToTerraform = dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsToTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsToHclTerraform = dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsToHclTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeToTerraform = dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeToTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeToHclTerraform = dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeToHclTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesResourceGroupsToTerraform = dataCloudflareAccountMembersResultPoliciesResourceGroupsToTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesResourceGroupsToHclTerraform = dataCloudflareAccountMembersResultPoliciesResourceGroupsToHclTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesToTerraform = dataCloudflareAccountMembersResultPoliciesToTerraform;
-exports.dataCloudflareAccountMembersResultPoliciesToHclTerraform = dataCloudflareAccountMembersResultPoliciesToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsAnalyticsToTerraform = dataCloudflareAccountMembersResultRolesPermissionsAnalyticsToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsAnalyticsToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsAnalyticsToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsBillingToTerraform = dataCloudflareAccountMembersResultRolesPermissionsBillingToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsBillingToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsBillingToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsCachePurgeToTerraform = dataCloudflareAccountMembersResultRolesPermissionsCachePurgeToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsCachePurgeToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsCachePurgeToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsDnsToTerraform = dataCloudflareAccountMembersResultRolesPermissionsDnsToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsDnsToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsDnsToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsDnsRecordsToTerraform = dataCloudflareAccountMembersResultRolesPermissionsDnsRecordsToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsDnsRecordsToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsDnsRecordsToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsLbToTerraform = dataCloudflareAccountMembersResultRolesPermissionsLbToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsLbToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsLbToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsLogsToTerraform = dataCloudflareAccountMembersResultRolesPermissionsLogsToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsLogsToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsLogsToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsOrganizationToTerraform = dataCloudflareAccountMembersResultRolesPermissionsOrganizationToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsOrganizationToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsOrganizationToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsSslToTerraform = dataCloudflareAccountMembersResultRolesPermissionsSslToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsSslToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsSslToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsWafToTerraform = dataCloudflareAccountMembersResultRolesPermissionsWafToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsWafToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsWafToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsZoneSettingsToTerraform = dataCloudflareAccountMembersResultRolesPermissionsZoneSettingsToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsZoneSettingsToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsZoneSettingsToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsZonesToTerraform = dataCloudflareAccountMembersResultRolesPermissionsZonesToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsZonesToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsZonesToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsToTerraform = dataCloudflareAccountMembersResultRolesPermissionsToTerraform;
-exports.dataCloudflareAccountMembersResultRolesPermissionsToHclTerraform = dataCloudflareAccountMembersResultRolesPermissionsToHclTerraform;
-exports.dataCloudflareAccountMembersResultRolesToTerraform = dataCloudflareAccountMembersResultRolesToTerraform;
-exports.dataCloudflareAccountMembersResultRolesToHclTerraform = dataCloudflareAccountMembersResultRolesToHclTerraform;
-exports.dataCloudflareAccountMembersResultUserToTerraform = dataCloudflareAccountMembersResultUserToTerraform;
-exports.dataCloudflareAccountMembersResultUserToHclTerraform = dataCloudflareAccountMembersResultUserToHclTerraform;
-exports.dataCloudflareAccountMembersResultToTerraform = dataCloudflareAccountMembersResultToTerraform;
-exports.dataCloudflareAccountMembersResultToHclTerraform = dataCloudflareAccountMembersResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -74,64 +10,48 @@ function dataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaToTerrafo
     }
     return {};
 }
-function dataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference, _super);
+export class DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference = DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference;
-function dataCloudflareAccountMembersResultPoliciesPermissionGroupsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export function dataCloudflareAccountMembersResultPoliciesPermissionGroupsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -140,98 +60,77 @@ function dataCloudflareAccountMembersResultPoliciesPermissionGroupsToTerraform(s
     }
     return {};
 }
-function dataCloudflareAccountMembersResultPoliciesPermissionGroupsToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultPoliciesPermissionGroupsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference, _super);
+export class DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // meta - computed: true, optional: false, required: false
-        _this._meta = new DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference(_this, "meta");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference.prototype, "meta", {
-        get: function () {
-            return this._meta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference = DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference;
-var DataCloudflareAccountMembersResultPoliciesPermissionGroupsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesPermissionGroupsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // meta - computed: true, optional: false, required: false
+    _meta = new DataCloudflareAccountMembersResultPoliciesPermissionGroupsMetaOutputReference(this, "meta");
+    get meta() {
+        return this._meta;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export class DataCloudflareAccountMembersResultPoliciesPermissionGroupsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesPermissionGroupsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAccountMembersResultPoliciesPermissionGroupsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAccountMembersResultPoliciesPermissionGroupsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAccountMembersResultPoliciesPermissionGroupsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAccountMembersResultPoliciesPermissionGroupsList = DataCloudflareAccountMembersResultPoliciesPermissionGroupsList;
-function dataCloudflareAccountMembersResultPoliciesResourceGroupsMetaToTerraform(struct) {
+    }
+}
+export function dataCloudflareAccountMembersResultPoliciesResourceGroupsMetaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -240,64 +139,48 @@ function dataCloudflareAccountMembersResultPoliciesResourceGroupsMetaToTerraform
     }
     return {};
 }
-function dataCloudflareAccountMembersResultPoliciesResourceGroupsMetaToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultPoliciesResourceGroupsMetaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference, _super);
+export class DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference = DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference;
-function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -306,81 +189,68 @@ function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsToT
     }
     return {};
 }
-function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference, _super);
+export class DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference = DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference;
-var DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+}
+export class DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList = DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList;
-function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeToTerraform(struct) {
+    }
+}
+export function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -389,90 +259,73 @@ function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeToTerrafor
     }
     return {};
 }
-function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultPoliciesResourceGroupsScopeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference, _super);
+export class DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // objects - computed: true, optional: false, required: false
-        _this._objects = new DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList(_this, "objects", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference.prototype, "objects", {
-        get: function () {
-            return this._objects;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference = DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference;
-var DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    // objects - computed: true, optional: false, required: false
+    _objects = new DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeObjectsList(this, "objects", false);
+    get objects() {
+        return this._objects;
+    }
+}
+export class DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList = DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList;
-function dataCloudflareAccountMembersResultPoliciesResourceGroupsToTerraform(struct) {
+    }
+}
+export function dataCloudflareAccountMembersResultPoliciesResourceGroupsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -481,107 +334,82 @@ function dataCloudflareAccountMembersResultPoliciesResourceGroupsToTerraform(str
     }
     return {};
 }
-function dataCloudflareAccountMembersResultPoliciesResourceGroupsToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultPoliciesResourceGroupsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference, _super);
+export class DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // meta - computed: true, optional: false, required: false
-        _this._meta = new DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference(_this, "meta");
-        // scope - computed: true, optional: false, required: false
-        _this._scope = new DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList(_this, "scope", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference.prototype, "meta", {
-        get: function () {
-            return this._meta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference.prototype, "scope", {
-        get: function () {
-            return this._scope;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference = DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference;
-var DataCloudflareAccountMembersResultPoliciesResourceGroupsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesResourceGroupsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // meta - computed: true, optional: false, required: false
+    _meta = new DataCloudflareAccountMembersResultPoliciesResourceGroupsMetaOutputReference(this, "meta");
+    get meta() {
+        return this._meta;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // scope - computed: true, optional: false, required: false
+    _scope = new DataCloudflareAccountMembersResultPoliciesResourceGroupsScopeList(this, "scope", false);
+    get scope() {
+        return this._scope;
+    }
+}
+export class DataCloudflareAccountMembersResultPoliciesResourceGroupsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesResourceGroupsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAccountMembersResultPoliciesResourceGroupsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAccountMembersResultPoliciesResourceGroupsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAccountMembersResultPoliciesResourceGroupsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAccountMembersResultPoliciesResourceGroupsList = DataCloudflareAccountMembersResultPoliciesResourceGroupsList;
-function dataCloudflareAccountMembersResultPoliciesToTerraform(struct) {
+    }
+}
+export function dataCloudflareAccountMembersResultPoliciesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -590,107 +418,82 @@ function dataCloudflareAccountMembersResultPoliciesToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAccountMembersResultPoliciesToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultPoliciesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultPoliciesOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesOutputReference, _super);
+export class DataCloudflareAccountMembersResultPoliciesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // permission_groups - computed: true, optional: false, required: false
-        _this._permissionGroups = new DataCloudflareAccountMembersResultPoliciesPermissionGroupsList(_this, "permission_groups", false);
-        // resource_groups - computed: true, optional: false, required: false
-        _this._resourceGroups = new DataCloudflareAccountMembersResultPoliciesResourceGroupsList(_this, "resource_groups", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesOutputReference.prototype, "access", {
-        // access - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('access');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesOutputReference.prototype, "permissionGroups", {
-        get: function () {
-            return this._permissionGroups;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultPoliciesOutputReference.prototype, "resourceGroups", {
-        get: function () {
-            return this._resourceGroups;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultPoliciesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultPoliciesOutputReference = DataCloudflareAccountMembersResultPoliciesOutputReference;
-var DataCloudflareAccountMembersResultPoliciesList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultPoliciesList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // access - computed: true, optional: false, required: false
+    get access() {
+        return this.getStringAttribute('access');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // permission_groups - computed: true, optional: false, required: false
+    _permissionGroups = new DataCloudflareAccountMembersResultPoliciesPermissionGroupsList(this, "permission_groups", false);
+    get permissionGroups() {
+        return this._permissionGroups;
+    }
+    // resource_groups - computed: true, optional: false, required: false
+    _resourceGroups = new DataCloudflareAccountMembersResultPoliciesResourceGroupsList(this, "resource_groups", false);
+    get resourceGroups() {
+        return this._resourceGroups;
+    }
+}
+export class DataCloudflareAccountMembersResultPoliciesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultPoliciesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAccountMembersResultPoliciesList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAccountMembersResultPoliciesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAccountMembersResultPoliciesList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAccountMembersResultPoliciesList = DataCloudflareAccountMembersResultPoliciesList;
-function dataCloudflareAccountMembersResultRolesPermissionsAnalyticsToTerraform(struct) {
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsAnalyticsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -699,64 +502,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsAnalyticsToTerraform(
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsAnalyticsToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsAnalyticsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference = DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsBillingToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsBillingToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -765,64 +552,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsBillingToTerraform(st
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsBillingToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsBillingToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference = DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsCachePurgeToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsCachePurgeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -831,64 +602,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsCachePurgeToTerraform
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsCachePurgeToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsCachePurgeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference = DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsDnsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsDnsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -897,64 +652,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsDnsToTerraform(struct
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsDnsToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsDnsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference = DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsDnsRecordsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsDnsRecordsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -963,64 +702,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsDnsRecordsToTerraform
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsDnsRecordsToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsDnsRecordsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference = DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsLbToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsLbToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1029,64 +752,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsLbToTerraform(struct)
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsLbToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsLbToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference = DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsLogsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsLogsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1095,64 +802,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsLogsToTerraform(struc
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsLogsToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsLogsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference = DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsOrganizationToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsOrganizationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1161,64 +852,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsOrganizationToTerrafo
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsOrganizationToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsOrganizationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference = DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsSslToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsSslToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1227,64 +902,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsSslToTerraform(struct
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsSslToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsSslToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference = DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsWafToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsWafToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1293,64 +952,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsWafToTerraform(struct
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsWafToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsWafToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference = DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsZoneSettingsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsZoneSettingsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1359,64 +1002,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsZoneSettingsToTerrafo
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsZoneSettingsToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsZoneSettingsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference = DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsZonesToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsZonesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1425,64 +1052,48 @@ function dataCloudflareAccountMembersResultRolesPermissionsZonesToTerraform(stru
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsZonesToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsZonesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference.prototype, "read", {
-        // read - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('read');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference.prototype, "write", {
-        // write - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('write');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference = DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference;
-function dataCloudflareAccountMembersResultRolesPermissionsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // read - computed: true, optional: false, required: false
+    get read() {
+        return this.getBooleanAttribute('read');
+    }
+    // write - computed: true, optional: false, required: false
+    get write() {
+        return this.getBooleanAttribute('write');
+    }
+}
+export function dataCloudflareAccountMembersResultRolesPermissionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1491,156 +1102,100 @@ function dataCloudflareAccountMembersResultRolesPermissionsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesPermissionsToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesPermissionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesPermissionsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesPermissionsOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesPermissionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultRolesPermissionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // analytics - computed: true, optional: false, required: false
-        _this._analytics = new DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference(_this, "analytics");
-        // billing - computed: true, optional: false, required: false
-        _this._billing = new DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference(_this, "billing");
-        // cache_purge - computed: true, optional: false, required: false
-        _this._cachePurge = new DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference(_this, "cache_purge");
-        // dns - computed: true, optional: false, required: false
-        _this._dns = new DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference(_this, "dns");
-        // dns_records - computed: true, optional: false, required: false
-        _this._dnsRecords = new DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference(_this, "dns_records");
-        // lb - computed: true, optional: false, required: false
-        _this._lb = new DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference(_this, "lb");
-        // logs - computed: true, optional: false, required: false
-        _this._logs = new DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference(_this, "logs");
-        // organization - computed: true, optional: false, required: false
-        _this._organization = new DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference(_this, "organization");
-        // ssl - computed: true, optional: false, required: false
-        _this._ssl = new DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference(_this, "ssl");
-        // waf - computed: true, optional: false, required: false
-        _this._waf = new DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference(_this, "waf");
-        // zone_settings - computed: true, optional: false, required: false
-        _this._zoneSettings = new DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference(_this, "zone_settings");
-        // zones - computed: true, optional: false, required: false
-        _this._zones = new DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference(_this, "zones");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "analytics", {
-        get: function () {
-            return this._analytics;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "billing", {
-        get: function () {
-            return this._billing;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "cachePurge", {
-        get: function () {
-            return this._cachePurge;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "dns", {
-        get: function () {
-            return this._dns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "dnsRecords", {
-        get: function () {
-            return this._dnsRecords;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "lb", {
-        get: function () {
-            return this._lb;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "logs", {
-        get: function () {
-            return this._logs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "organization", {
-        get: function () {
-            return this._organization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "ssl", {
-        get: function () {
-            return this._ssl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "waf", {
-        get: function () {
-            return this._waf;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "zoneSettings", {
-        get: function () {
-            return this._zoneSettings;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesPermissionsOutputReference.prototype, "zones", {
-        get: function () {
-            return this._zones;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesPermissionsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesPermissionsOutputReference = DataCloudflareAccountMembersResultRolesPermissionsOutputReference;
-function dataCloudflareAccountMembersResultRolesToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // analytics - computed: true, optional: false, required: false
+    _analytics = new DataCloudflareAccountMembersResultRolesPermissionsAnalyticsOutputReference(this, "analytics");
+    get analytics() {
+        return this._analytics;
+    }
+    // billing - computed: true, optional: false, required: false
+    _billing = new DataCloudflareAccountMembersResultRolesPermissionsBillingOutputReference(this, "billing");
+    get billing() {
+        return this._billing;
+    }
+    // cache_purge - computed: true, optional: false, required: false
+    _cachePurge = new DataCloudflareAccountMembersResultRolesPermissionsCachePurgeOutputReference(this, "cache_purge");
+    get cachePurge() {
+        return this._cachePurge;
+    }
+    // dns - computed: true, optional: false, required: false
+    _dns = new DataCloudflareAccountMembersResultRolesPermissionsDnsOutputReference(this, "dns");
+    get dns() {
+        return this._dns;
+    }
+    // dns_records - computed: true, optional: false, required: false
+    _dnsRecords = new DataCloudflareAccountMembersResultRolesPermissionsDnsRecordsOutputReference(this, "dns_records");
+    get dnsRecords() {
+        return this._dnsRecords;
+    }
+    // lb - computed: true, optional: false, required: false
+    _lb = new DataCloudflareAccountMembersResultRolesPermissionsLbOutputReference(this, "lb");
+    get lb() {
+        return this._lb;
+    }
+    // logs - computed: true, optional: false, required: false
+    _logs = new DataCloudflareAccountMembersResultRolesPermissionsLogsOutputReference(this, "logs");
+    get logs() {
+        return this._logs;
+    }
+    // organization - computed: true, optional: false, required: false
+    _organization = new DataCloudflareAccountMembersResultRolesPermissionsOrganizationOutputReference(this, "organization");
+    get organization() {
+        return this._organization;
+    }
+    // ssl - computed: true, optional: false, required: false
+    _ssl = new DataCloudflareAccountMembersResultRolesPermissionsSslOutputReference(this, "ssl");
+    get ssl() {
+        return this._ssl;
+    }
+    // waf - computed: true, optional: false, required: false
+    _waf = new DataCloudflareAccountMembersResultRolesPermissionsWafOutputReference(this, "waf");
+    get waf() {
+        return this._waf;
+    }
+    // zone_settings - computed: true, optional: false, required: false
+    _zoneSettings = new DataCloudflareAccountMembersResultRolesPermissionsZoneSettingsOutputReference(this, "zone_settings");
+    get zoneSettings() {
+        return this._zoneSettings;
+    }
+    // zones - computed: true, optional: false, required: false
+    _zones = new DataCloudflareAccountMembersResultRolesPermissionsZonesOutputReference(this, "zones");
+    get zones() {
+        return this._zones;
+    }
+}
+export function dataCloudflareAccountMembersResultRolesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1649,106 +1204,81 @@ function dataCloudflareAccountMembersResultRolesToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAccountMembersResultRolesToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultRolesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultRolesOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesOutputReference, _super);
+export class DataCloudflareAccountMembersResultRolesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultRolesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // permissions - computed: true, optional: false, required: false
-        _this._permissions = new DataCloudflareAccountMembersResultRolesPermissionsOutputReference(_this, "permissions");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultRolesOutputReference.prototype, "permissions", {
-        get: function () {
-            return this._permissions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultRolesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultRolesOutputReference = DataCloudflareAccountMembersResultRolesOutputReference;
-var DataCloudflareAccountMembersResultRolesList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultRolesList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // permissions - computed: true, optional: false, required: false
+    _permissions = new DataCloudflareAccountMembersResultRolesPermissionsOutputReference(this, "permissions");
+    get permissions() {
+        return this._permissions;
+    }
+}
+export class DataCloudflareAccountMembersResultRolesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultRolesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAccountMembersResultRolesList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAccountMembersResultRolesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAccountMembersResultRolesList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAccountMembersResultRolesList = DataCloudflareAccountMembersResultRolesList;
-function dataCloudflareAccountMembersResultUserToTerraform(struct) {
+    }
+}
+export function dataCloudflareAccountMembersResultUserToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1757,88 +1287,60 @@ function dataCloudflareAccountMembersResultUserToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAccountMembersResultUserToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultUserToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultUserOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultUserOutputReference, _super);
+export class DataCloudflareAccountMembersResultUserOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareAccountMembersResultUserOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultUserOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultUserOutputReference.prototype, "email", {
-        // email - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultUserOutputReference.prototype, "firstName", {
-        // first_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('first_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultUserOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultUserOutputReference.prototype, "lastName", {
-        // last_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultUserOutputReference.prototype, "twoFactorAuthenticationEnabled", {
-        // two_factor_authentication_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('two_factor_authentication_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultUserOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultUserOutputReference = DataCloudflareAccountMembersResultUserOutputReference;
-function dataCloudflareAccountMembersResultToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // email - computed: true, optional: false, required: false
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    // first_name - computed: true, optional: false, required: false
+    get firstName() {
+        return this.getStringAttribute('first_name');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // last_name - computed: true, optional: false, required: false
+    get lastName() {
+        return this.getStringAttribute('last_name');
+    }
+    // two_factor_authentication_enabled - computed: true, optional: false, required: false
+    get twoFactorAuthenticationEnabled() {
+        return this.getBooleanAttribute('two_factor_authentication_enabled');
+    }
+}
+export function dataCloudflareAccountMembersResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1847,128 +1349,111 @@ function dataCloudflareAccountMembersResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareAccountMembersResultToHclTerraform(struct) {
+export function dataCloudflareAccountMembersResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAccountMembersResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultOutputReference, _super);
+export class DataCloudflareAccountMembersResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // policies - computed: true, optional: false, required: false
-        _this._policies = new DataCloudflareAccountMembersResultPoliciesList(_this, "policies", false);
-        // roles - computed: true, optional: false, required: false
-        _this._roles = new DataCloudflareAccountMembersResultRolesList(_this, "roles", false);
-        // user - computed: true, optional: false, required: false
-        _this._user = new DataCloudflareAccountMembersResultUserOutputReference(_this, "user");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAccountMembersResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultOutputReference.prototype, "email", {
-        // email - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('email');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultOutputReference.prototype, "policies", {
-        get: function () {
-            return this._policies;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultOutputReference.prototype, "roles", {
-        get: function () {
-            return this._roles;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembersResultOutputReference.prototype, "user", {
-        get: function () {
-            return this._user;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAccountMembersResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAccountMembersResultOutputReference = DataCloudflareAccountMembersResultOutputReference;
-var DataCloudflareAccountMembersResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembersResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // email - computed: true, optional: false, required: false
+    get email() {
+        return this.getStringAttribute('email');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // policies - computed: true, optional: false, required: false
+    _policies = new DataCloudflareAccountMembersResultPoliciesList(this, "policies", false);
+    get policies() {
+        return this._policies;
+    }
+    // roles - computed: true, optional: false, required: false
+    _roles = new DataCloudflareAccountMembersResultRolesList(this, "roles", false);
+    get roles() {
+        return this._roles;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // user - computed: true, optional: false, required: false
+    _user = new DataCloudflareAccountMembersResultUserOutputReference(this, "user");
+    get user() {
+        return this._user;
+    }
+}
+export class DataCloudflareAccountMembersResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAccountMembersResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAccountMembersResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAccountMembersResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAccountMembersResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAccountMembersResultList = DataCloudflareAccountMembersResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/account_members cloudflare_account_members}
 */
-var DataCloudflareAccountMembers = /** @class */ (function (_super) {
-    __extends(DataCloudflareAccountMembers, _super);
+export class DataCloudflareAccountMembers extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_account_members";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareAccountMembers resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareAccountMembers to import
+    * @param importFromId The id of the existing DataCloudflareAccountMembers that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/account_members#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareAccountMembers to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_members", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1979,9 +1464,8 @@ var DataCloudflareAccountMembers = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareAccountMembersConfig = {}
     */
-    function DataCloudflareAccountMembers(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_account_members',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1994,145 +1478,100 @@ var DataCloudflareAccountMembers = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareAccountMembersResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._direction = config.direction;
-        _this._maxItems = config.maxItems;
-        _this._order = config.order;
-        _this._status = config.status;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._direction = config.direction;
+        this._maxItems = config.maxItems;
+        this._order = config.order;
+        this._status = config.status;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareAccountMembers resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareAccountMembers to import
-    * @param importFromId The id of the existing DataCloudflareAccountMembers that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/account_members#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareAccountMembers to import is found
-    */
-    DataCloudflareAccountMembers.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_members", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountMembers.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountMembers.prototype.resetDirection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // direction - computed: false, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountMembers.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountMembers.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // order - computed: false, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAccountMembers.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareAccountMembersResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
+    // status - computed: false, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(DataCloudflareAccountMembers.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareAccountMembers.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             direction: cdktf.stringToTerraform(this._direction),
@@ -2140,9 +1579,9 @@ var DataCloudflareAccountMembers = /** @class */ (function (_super) {
             order: cdktf.stringToTerraform(this._order),
             status: cdktf.stringToTerraform(this._status),
         };
-    };
-    DataCloudflareAccountMembers.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -2175,15 +1614,6 @@ var DataCloudflareAccountMembers = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareAccountMembers.tfResourceType = "cloudflare_account_members";
-    return DataCloudflareAccountMembers;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareAccountMembers = DataCloudflareAccountMembers;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

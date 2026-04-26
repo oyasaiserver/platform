@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_mtls_certificate
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustAccessMtlsCertificate = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_mtls_certificate cloudflare_zero_trust_access_mtls_certificate}
 */
-var ZeroTrustAccessMtlsCertificate = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessMtlsCertificate, _super);
+export class ZeroTrustAccessMtlsCertificate extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_access_mtls_certificate";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustAccessMtlsCertificate resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustAccessMtlsCertificate to import
+    * @param importFromId The id of the existing ZeroTrustAccessMtlsCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_mtls_certificate#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustAccessMtlsCertificate to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_mtls_certificate", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ZeroTrustAccessMtlsCertificate = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustAccessMtlsCertificateConfig
     */
-    function ZeroTrustAccessMtlsCertificate(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_access_mtls_certificate',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,154 +46,101 @@ var ZeroTrustAccessMtlsCertificate = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._associatedHostnames = config.associatedHostnames;
-        _this._certificate = config.certificate;
-        _this._name = config.name;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._associatedHostnames = config.associatedHostnames;
+        this._certificate = config.certificate;
+        this._name = config.name;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustAccessMtlsCertificate resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustAccessMtlsCertificate to import
-    * @param importFromId The id of the existing ZeroTrustAccessMtlsCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_mtls_certificate#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustAccessMtlsCertificate to import is found
-    */
-    ZeroTrustAccessMtlsCertificate.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_mtls_certificate", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessMtlsCertificate.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "associatedHostnames", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('associated_hostnames'));
-        },
-        set: function (value) {
-            this._associatedHostnames = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessMtlsCertificate.prototype.resetAssociatedHostnames = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // associated_hostnames - computed: true, optional: true, required: false
+    _associatedHostnames;
+    get associatedHostnames() {
+        return cdktf.Fn.tolist(this.getListAttribute('associated_hostnames'));
+    }
+    set associatedHostnames(value) {
+        this._associatedHostnames = value;
+    }
+    resetAssociatedHostnames() {
         this._associatedHostnames = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "associatedHostnamesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._associatedHostnames;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "certificate", {
-        get: function () {
-            return this.getStringAttribute('certificate');
-        },
-        set: function (value) {
-            this._certificate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "certificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "expiresOn", {
-        // expires_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "fingerprint", {
-        // fingerprint - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('fingerprint');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessMtlsCertificate.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get associatedHostnamesInput() {
+        return this._associatedHostnames;
+    }
+    // certificate - computed: false, optional: false, required: true
+    _certificate;
+    get certificate() {
+        return this.getStringAttribute('certificate');
+    }
+    set certificate(value) {
+        this._certificate = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateInput() {
+        return this._certificate;
+    }
+    // expires_on - computed: true, optional: false, required: false
+    get expiresOn() {
+        return this.getStringAttribute('expires_on');
+    }
+    // fingerprint - computed: true, optional: false, required: false
+    get fingerprint() {
+        return this.getStringAttribute('fingerprint');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessMtlsCertificate.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustAccessMtlsCertificate.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             associated_hostnames: cdktf.listMapper(cdktf.stringToTerraform, false)(this._associatedHostnames),
@@ -203,9 +148,9 @@ var ZeroTrustAccessMtlsCertificate = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ZeroTrustAccessMtlsCertificate.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -238,15 +183,6 @@ var ZeroTrustAccessMtlsCertificate = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustAccessMtlsCertificate.tfResourceType = "cloudflare_zero_trust_access_mtls_certificate";
-    return ZeroTrustAccessMtlsCertificate;
-}(cdktf.TerraformResource));
-exports.ZeroTrustAccessMtlsCertificate = ZeroTrustAccessMtlsCertificate;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

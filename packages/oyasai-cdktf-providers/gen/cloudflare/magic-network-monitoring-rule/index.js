@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_network_monitoring_rule
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MagicNetworkMonitoringRule = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_network_monitoring_rule cloudflare_magic_network_monitoring_rule}
 */
-var MagicNetworkMonitoringRule = /** @class */ (function (_super) {
-    __extends(MagicNetworkMonitoringRule, _super);
+export class MagicNetworkMonitoringRule extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_magic_network_monitoring_rule";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a MagicNetworkMonitoringRule resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the MagicNetworkMonitoringRule to import
+    * @param importFromId The id of the existing MagicNetworkMonitoringRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_network_monitoring_rule#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the MagicNetworkMonitoringRule to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_network_monitoring_rule", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var MagicNetworkMonitoringRule = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options MagicNetworkMonitoringRuleConfig
     */
-    function MagicNetworkMonitoringRule(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_magic_network_monitoring_rule',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,264 +46,183 @@ var MagicNetworkMonitoringRule = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._automaticAdvertisement = config.automaticAdvertisement;
-        _this._bandwidthThreshold = config.bandwidthThreshold;
-        _this._duration = config.duration;
-        _this._name = config.name;
-        _this._packetThreshold = config.packetThreshold;
-        _this._prefixMatch = config.prefixMatch;
-        _this._prefixes = config.prefixes;
-        _this._type = config.type;
-        _this._zscoreSensitivity = config.zscoreSensitivity;
-        _this._zscoreTarget = config.zscoreTarget;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._automaticAdvertisement = config.automaticAdvertisement;
+        this._bandwidthThreshold = config.bandwidthThreshold;
+        this._duration = config.duration;
+        this._name = config.name;
+        this._packetThreshold = config.packetThreshold;
+        this._prefixMatch = config.prefixMatch;
+        this._prefixes = config.prefixes;
+        this._type = config.type;
+        this._zscoreSensitivity = config.zscoreSensitivity;
+        this._zscoreTarget = config.zscoreTarget;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a MagicNetworkMonitoringRule resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the MagicNetworkMonitoringRule to import
-    * @param importFromId The id of the existing MagicNetworkMonitoringRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_network_monitoring_rule#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the MagicNetworkMonitoringRule to import is found
-    */
-    MagicNetworkMonitoringRule.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_network_monitoring_rule", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicNetworkMonitoringRule.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "automaticAdvertisement", {
-        get: function () {
-            return this.getBooleanAttribute('automatic_advertisement');
-        },
-        set: function (value) {
-            this._automaticAdvertisement = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "automaticAdvertisementInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._automaticAdvertisement;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "bandwidthThreshold", {
-        get: function () {
-            return this.getNumberAttribute('bandwidth_threshold');
-        },
-        set: function (value) {
-            this._bandwidthThreshold = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicNetworkMonitoringRule.prototype.resetBandwidthThreshold = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // automatic_advertisement - computed: false, optional: false, required: true
+    _automaticAdvertisement;
+    get automaticAdvertisement() {
+        return this.getBooleanAttribute('automatic_advertisement');
+    }
+    set automaticAdvertisement(value) {
+        this._automaticAdvertisement = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get automaticAdvertisementInput() {
+        return this._automaticAdvertisement;
+    }
+    // bandwidth_threshold - computed: false, optional: true, required: false
+    _bandwidthThreshold;
+    get bandwidthThreshold() {
+        return this.getNumberAttribute('bandwidth_threshold');
+    }
+    set bandwidthThreshold(value) {
+        this._bandwidthThreshold = value;
+    }
+    resetBandwidthThreshold() {
         this._bandwidthThreshold = undefined;
-    };
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "bandwidthThresholdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bandwidthThreshold;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "duration", {
-        get: function () {
-            return this.getStringAttribute('duration');
-        },
-        set: function (value) {
-            this._duration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicNetworkMonitoringRule.prototype.resetDuration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bandwidthThresholdInput() {
+        return this._bandwidthThreshold;
+    }
+    // duration - computed: true, optional: true, required: false
+    _duration;
+    get duration() {
+        return this.getStringAttribute('duration');
+    }
+    set duration(value) {
+        this._duration = value;
+    }
+    resetDuration() {
         this._duration = undefined;
-    };
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "durationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._duration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "packetThreshold", {
-        get: function () {
-            return this.getNumberAttribute('packet_threshold');
-        },
-        set: function (value) {
-            this._packetThreshold = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicNetworkMonitoringRule.prototype.resetPacketThreshold = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get durationInput() {
+        return this._duration;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // packet_threshold - computed: false, optional: true, required: false
+    _packetThreshold;
+    get packetThreshold() {
+        return this.getNumberAttribute('packet_threshold');
+    }
+    set packetThreshold(value) {
+        this._packetThreshold = value;
+    }
+    resetPacketThreshold() {
         this._packetThreshold = undefined;
-    };
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "packetThresholdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._packetThreshold;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "prefixMatch", {
-        get: function () {
-            return this.getStringAttribute('prefix_match');
-        },
-        set: function (value) {
-            this._prefixMatch = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicNetworkMonitoringRule.prototype.resetPrefixMatch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get packetThresholdInput() {
+        return this._packetThreshold;
+    }
+    // prefix_match - computed: false, optional: true, required: false
+    _prefixMatch;
+    get prefixMatch() {
+        return this.getStringAttribute('prefix_match');
+    }
+    set prefixMatch(value) {
+        this._prefixMatch = value;
+    }
+    resetPrefixMatch() {
         this._prefixMatch = undefined;
-    };
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "prefixMatchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._prefixMatch;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "prefixes", {
-        get: function () {
-            return this.getListAttribute('prefixes');
-        },
-        set: function (value) {
-            this._prefixes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "prefixesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._prefixes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "zscoreSensitivity", {
-        get: function () {
-            return this.getStringAttribute('zscore_sensitivity');
-        },
-        set: function (value) {
-            this._zscoreSensitivity = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicNetworkMonitoringRule.prototype.resetZscoreSensitivity = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get prefixMatchInput() {
+        return this._prefixMatch;
+    }
+    // prefixes - computed: false, optional: false, required: true
+    _prefixes;
+    get prefixes() {
+        return this.getListAttribute('prefixes');
+    }
+    set prefixes(value) {
+        this._prefixes = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get prefixesInput() {
+        return this._prefixes;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // zscore_sensitivity - computed: false, optional: true, required: false
+    _zscoreSensitivity;
+    get zscoreSensitivity() {
+        return this.getStringAttribute('zscore_sensitivity');
+    }
+    set zscoreSensitivity(value) {
+        this._zscoreSensitivity = value;
+    }
+    resetZscoreSensitivity() {
         this._zscoreSensitivity = undefined;
-    };
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "zscoreSensitivityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zscoreSensitivity;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "zscoreTarget", {
-        get: function () {
-            return this.getStringAttribute('zscore_target');
-        },
-        set: function (value) {
-            this._zscoreTarget = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicNetworkMonitoringRule.prototype.resetZscoreTarget = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get zscoreSensitivityInput() {
+        return this._zscoreSensitivity;
+    }
+    // zscore_target - computed: false, optional: true, required: false
+    _zscoreTarget;
+    get zscoreTarget() {
+        return this.getStringAttribute('zscore_target');
+    }
+    set zscoreTarget(value) {
+        this._zscoreTarget = value;
+    }
+    resetZscoreTarget() {
         this._zscoreTarget = undefined;
-    };
-    Object.defineProperty(MagicNetworkMonitoringRule.prototype, "zscoreTargetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zscoreTarget;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zscoreTargetInput() {
+        return this._zscoreTarget;
+    }
     // =========
     // SYNTHESIS
     // =========
-    MagicNetworkMonitoringRule.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             automatic_advertisement: cdktf.booleanToTerraform(this._automaticAdvertisement),
@@ -319,9 +236,9 @@ var MagicNetworkMonitoringRule = /** @class */ (function (_super) {
             zscore_sensitivity: cdktf.stringToTerraform(this._zscoreSensitivity),
             zscore_target: cdktf.stringToTerraform(this._zscoreTarget),
         };
-    };
-    MagicNetworkMonitoringRule.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -390,15 +307,6 @@ var MagicNetworkMonitoringRule = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    MagicNetworkMonitoringRule.tfResourceType = "cloudflare_magic_network_monitoring_rule";
-    return MagicNetworkMonitoringRule;
-}(cdktf.TerraformResource));
-exports.MagicNetworkMonitoringRule = MagicNetworkMonitoringRule;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

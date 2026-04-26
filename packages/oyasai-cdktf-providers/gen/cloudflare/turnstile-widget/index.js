@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/turnstile_widget
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TurnstileWidget = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/turnstile_widget cloudflare_turnstile_widget}
 */
-var TurnstileWidget = /** @class */ (function (_super) {
-    __extends(TurnstileWidget, _super);
+export class TurnstileWidget extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_turnstile_widget";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a TurnstileWidget resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the TurnstileWidget to import
+    * @param importFromId The id of the existing TurnstileWidget that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/turnstile_widget#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the TurnstileWidget to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_turnstile_widget", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var TurnstileWidget = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options TurnstileWidgetConfig
     */
-    function TurnstileWidget(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_turnstile_widget',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,255 +46,170 @@ var TurnstileWidget = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._botFightMode = config.botFightMode;
-        _this._clearanceLevel = config.clearanceLevel;
-        _this._domains = config.domains;
-        _this._ephemeralId = config.ephemeralId;
-        _this._mode = config.mode;
-        _this._name = config.name;
-        _this._offlabel = config.offlabel;
-        _this._region = config.region;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._botFightMode = config.botFightMode;
+        this._clearanceLevel = config.clearanceLevel;
+        this._domains = config.domains;
+        this._ephemeralId = config.ephemeralId;
+        this._mode = config.mode;
+        this._name = config.name;
+        this._offlabel = config.offlabel;
+        this._region = config.region;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a TurnstileWidget resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the TurnstileWidget to import
-    * @param importFromId The id of the existing TurnstileWidget that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/turnstile_widget#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the TurnstileWidget to import is found
-    */
-    TurnstileWidget.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_turnstile_widget", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(TurnstileWidget.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TurnstileWidget.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(TurnstileWidget.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "botFightMode", {
-        get: function () {
-            return this.getBooleanAttribute('bot_fight_mode');
-        },
-        set: function (value) {
-            this._botFightMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TurnstileWidget.prototype.resetBotFightMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // bot_fight_mode - computed: true, optional: true, required: false
+    _botFightMode;
+    get botFightMode() {
+        return this.getBooleanAttribute('bot_fight_mode');
+    }
+    set botFightMode(value) {
+        this._botFightMode = value;
+    }
+    resetBotFightMode() {
         this._botFightMode = undefined;
-    };
-    Object.defineProperty(TurnstileWidget.prototype, "botFightModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._botFightMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "clearanceLevel", {
-        get: function () {
-            return this.getStringAttribute('clearance_level');
-        },
-        set: function (value) {
-            this._clearanceLevel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TurnstileWidget.prototype.resetClearanceLevel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get botFightModeInput() {
+        return this._botFightMode;
+    }
+    // clearance_level - computed: true, optional: true, required: false
+    _clearanceLevel;
+    get clearanceLevel() {
+        return this.getStringAttribute('clearance_level');
+    }
+    set clearanceLevel(value) {
+        this._clearanceLevel = value;
+    }
+    resetClearanceLevel() {
         this._clearanceLevel = undefined;
-    };
-    Object.defineProperty(TurnstileWidget.prototype, "clearanceLevelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._clearanceLevel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "domains", {
-        get: function () {
-            return this.getListAttribute('domains');
-        },
-        set: function (value) {
-            this._domains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "domainsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._domains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "ephemeralId", {
-        get: function () {
-            return this.getBooleanAttribute('ephemeral_id');
-        },
-        set: function (value) {
-            this._ephemeralId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TurnstileWidget.prototype.resetEphemeralId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get clearanceLevelInput() {
+        return this._clearanceLevel;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // domains - computed: false, optional: false, required: true
+    _domains;
+    get domains() {
+        return this.getListAttribute('domains');
+    }
+    set domains(value) {
+        this._domains = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get domainsInput() {
+        return this._domains;
+    }
+    // ephemeral_id - computed: true, optional: true, required: false
+    _ephemeralId;
+    get ephemeralId() {
+        return this.getBooleanAttribute('ephemeral_id');
+    }
+    set ephemeralId(value) {
+        this._ephemeralId = value;
+    }
+    resetEphemeralId() {
         this._ephemeralId = undefined;
-    };
-    Object.defineProperty(TurnstileWidget.prototype, "ephemeralIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ephemeralId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "mode", {
-        get: function () {
-            return this.getStringAttribute('mode');
-        },
-        set: function (value) {
-            this._mode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "modeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "offlabel", {
-        get: function () {
-            return this.getBooleanAttribute('offlabel');
-        },
-        set: function (value) {
-            this._offlabel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TurnstileWidget.prototype.resetOfflabel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ephemeralIdInput() {
+        return this._ephemeralId;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // mode - computed: false, optional: false, required: true
+    _mode;
+    get mode() {
+        return this.getStringAttribute('mode');
+    }
+    set mode(value) {
+        this._mode = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get modeInput() {
+        return this._mode;
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // offlabel - computed: true, optional: true, required: false
+    _offlabel;
+    get offlabel() {
+        return this.getBooleanAttribute('offlabel');
+    }
+    set offlabel(value) {
+        this._offlabel = value;
+    }
+    resetOfflabel() {
         this._offlabel = undefined;
-    };
-    Object.defineProperty(TurnstileWidget.prototype, "offlabelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._offlabel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "region", {
-        get: function () {
-            return this.getStringAttribute('region');
-        },
-        set: function (value) {
-            this._region = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TurnstileWidget.prototype.resetRegion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get offlabelInput() {
+        return this._offlabel;
+    }
+    // region - computed: true, optional: true, required: false
+    _region;
+    get region() {
+        return this.getStringAttribute('region');
+    }
+    set region(value) {
+        this._region = value;
+    }
+    resetRegion() {
         this._region = undefined;
-    };
-    Object.defineProperty(TurnstileWidget.prototype, "regionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._region;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "secret", {
-        // secret - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('secret');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TurnstileWidget.prototype, "sitekey", {
-        // sitekey - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('sitekey');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get regionInput() {
+        return this._region;
+    }
+    // secret - computed: true, optional: false, required: false
+    get secret() {
+        return this.getStringAttribute('secret');
+    }
+    // sitekey - computed: true, optional: false, required: false
+    get sitekey() {
+        return this.getStringAttribute('sitekey');
+    }
     // =========
     // SYNTHESIS
     // =========
-    TurnstileWidget.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             bot_fight_mode: cdktf.booleanToTerraform(this._botFightMode),
@@ -308,9 +221,9 @@ var TurnstileWidget = /** @class */ (function (_super) {
             offlabel: cdktf.booleanToTerraform(this._offlabel),
             region: cdktf.stringToTerraform(this._region),
         };
-    };
-    TurnstileWidget.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -367,15 +280,6 @@ var TurnstileWidget = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    TurnstileWidget.tfResourceType = "cloudflare_turnstile_widget";
-    return TurnstileWidget;
-}(cdktf.TerraformResource));
-exports.TurnstileWidget = TurnstileWidget;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

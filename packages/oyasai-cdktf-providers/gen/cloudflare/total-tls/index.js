@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/total_tls
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TotalTls = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/total_tls cloudflare_total_tls}
 */
-var TotalTls = /** @class */ (function (_super) {
-    __extends(TotalTls, _super);
+export class TotalTls extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_total_tls";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a TotalTls resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the TotalTls to import
+    * @param importFromId The id of the existing TotalTls that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/total_tls#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the TotalTls to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_total_tls", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var TotalTls = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options TotalTlsConfig
     */
-    function TotalTls(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_total_tls',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,110 +46,73 @@ var TotalTls = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._certificateAuthority = config.certificateAuthority;
-        _this._enabled = config.enabled;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._certificateAuthority = config.certificateAuthority;
+        this._enabled = config.enabled;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a TotalTls resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the TotalTls to import
-    * @param importFromId The id of the existing TotalTls that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/total_tls#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the TotalTls to import is found
-    */
-    TotalTls.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_total_tls", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(TotalTls.prototype, "certificateAuthority", {
-        get: function () {
-            return this.getStringAttribute('certificate_authority');
-        },
-        set: function (value) {
-            this._certificateAuthority = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TotalTls.prototype.resetCertificateAuthority = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // certificate_authority - computed: false, optional: true, required: false
+    _certificateAuthority;
+    get certificateAuthority() {
+        return this.getStringAttribute('certificate_authority');
+    }
+    set certificateAuthority(value) {
+        this._certificateAuthority = value;
+    }
+    resetCertificateAuthority() {
         this._certificateAuthority = undefined;
-    };
-    Object.defineProperty(TotalTls.prototype, "certificateAuthorityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificateAuthority;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TotalTls.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TotalTls.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TotalTls.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TotalTls.prototype, "validityPeriod", {
-        // validity_period - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('validity_period');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TotalTls.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TotalTls.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateAuthorityInput() {
+        return this._certificateAuthority;
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // validity_period - computed: true, optional: false, required: false
+    get validityPeriod() {
+        return this.getNumberAttribute('validity_period');
+    }
+    // zone_id - computed: false, optional: false, required: true
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    TotalTls.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             certificate_authority: cdktf.stringToTerraform(this._certificateAuthority),
             enabled: cdktf.booleanToTerraform(this._enabled),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    TotalTls.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             certificate_authority: {
                 value: cdktf.stringToHclTerraform(this._certificateAuthority),
                 isBlock: false,
@@ -172,15 +133,6 @@ var TotalTls = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    TotalTls.tfResourceType = "cloudflare_total_tls";
-    return TotalTls;
-}(cdktf.TerraformResource));
-exports.TotalTls = TotalTls;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

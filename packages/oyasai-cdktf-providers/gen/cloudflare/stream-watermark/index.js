@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream_watermark
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.StreamWatermarkA = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream_watermark cloudflare_stream_watermark}
 */
-var StreamWatermarkA = /** @class */ (function (_super) {
-    __extends(StreamWatermarkA, _super);
+export class StreamWatermarkA extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_stream_watermark";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a StreamWatermarkA resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the StreamWatermarkA to import
+    * @param importFromId The id of the existing StreamWatermarkA that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream_watermark#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the StreamWatermarkA to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_stream_watermark", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,9 +32,8 @@ var StreamWatermarkA = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options StreamWatermarkAConfig = {}
     */
-    function StreamWatermarkA(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_stream_watermark',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -49,250 +46,167 @@ var StreamWatermarkA = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._identifier = config.identifier;
-        _this._name = config.name;
-        _this._opacity = config.opacity;
-        _this._padding = config.padding;
-        _this._position = config.position;
-        _this._scale = config.scale;
-        _this._url = config.url;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._identifier = config.identifier;
+        this._name = config.name;
+        this._opacity = config.opacity;
+        this._padding = config.padding;
+        this._position = config.position;
+        this._scale = config.scale;
+        this._url = config.url;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a StreamWatermarkA resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the StreamWatermarkA to import
-    * @param importFromId The id of the existing StreamWatermarkA that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream_watermark#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the StreamWatermarkA to import is found
-    */
-    StreamWatermarkA.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_stream_watermark", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(StreamWatermarkA.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamWatermarkA.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(StreamWatermarkA.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "created", {
-        // created - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "downloadedFrom", {
-        // downloaded_from - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('downloaded_from');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "height", {
-        // height - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('height');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "identifier", {
-        get: function () {
-            return this.getStringAttribute('identifier');
-        },
-        set: function (value) {
-            this._identifier = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamWatermarkA.prototype.resetIdentifier = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // created - computed: true, optional: false, required: false
+    get created() {
+        return this.getStringAttribute('created');
+    }
+    // downloaded_from - computed: true, optional: false, required: false
+    get downloadedFrom() {
+        return this.getStringAttribute('downloaded_from');
+    }
+    // height - computed: true, optional: false, required: false
+    get height() {
+        return this.getNumberAttribute('height');
+    }
+    // identifier - computed: false, optional: true, required: false
+    _identifier;
+    get identifier() {
+        return this.getStringAttribute('identifier');
+    }
+    set identifier(value) {
+        this._identifier = value;
+    }
+    resetIdentifier() {
         this._identifier = undefined;
-    };
-    Object.defineProperty(StreamWatermarkA.prototype, "identifierInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identifier;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamWatermarkA.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get identifierInput() {
+        return this._identifier;
+    }
+    // name - computed: true, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(StreamWatermarkA.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "opacity", {
-        get: function () {
-            return this.getNumberAttribute('opacity');
-        },
-        set: function (value) {
-            this._opacity = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamWatermarkA.prototype.resetOpacity = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // opacity - computed: true, optional: true, required: false
+    _opacity;
+    get opacity() {
+        return this.getNumberAttribute('opacity');
+    }
+    set opacity(value) {
+        this._opacity = value;
+    }
+    resetOpacity() {
         this._opacity = undefined;
-    };
-    Object.defineProperty(StreamWatermarkA.prototype, "opacityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._opacity;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "padding", {
-        get: function () {
-            return this.getNumberAttribute('padding');
-        },
-        set: function (value) {
-            this._padding = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamWatermarkA.prototype.resetPadding = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get opacityInput() {
+        return this._opacity;
+    }
+    // padding - computed: true, optional: true, required: false
+    _padding;
+    get padding() {
+        return this.getNumberAttribute('padding');
+    }
+    set padding(value) {
+        this._padding = value;
+    }
+    resetPadding() {
         this._padding = undefined;
-    };
-    Object.defineProperty(StreamWatermarkA.prototype, "paddingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._padding;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "position", {
-        get: function () {
-            return this.getStringAttribute('position');
-        },
-        set: function (value) {
-            this._position = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamWatermarkA.prototype.resetPosition = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get paddingInput() {
+        return this._padding;
+    }
+    // position - computed: true, optional: true, required: false
+    _position;
+    get position() {
+        return this.getStringAttribute('position');
+    }
+    set position(value) {
+        this._position = value;
+    }
+    resetPosition() {
         this._position = undefined;
-    };
-    Object.defineProperty(StreamWatermarkA.prototype, "positionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._position;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "scale", {
-        get: function () {
-            return this.getNumberAttribute('scale');
-        },
-        set: function (value) {
-            this._scale = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamWatermarkA.prototype.resetScale = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get positionInput() {
+        return this._position;
+    }
+    // scale - computed: true, optional: true, required: false
+    _scale;
+    get scale() {
+        return this.getNumberAttribute('scale');
+    }
+    set scale(value) {
+        this._scale = value;
+    }
+    resetScale() {
         this._scale = undefined;
-    };
-    Object.defineProperty(StreamWatermarkA.prototype, "scaleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scale;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "size", {
-        // size - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('size');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "uid", {
-        // uid - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uid');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "url", {
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        set: function (value) {
-            this._url = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamWatermarkA.prototype.resetUrl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get scaleInput() {
+        return this._scale;
+    }
+    // size - computed: true, optional: false, required: false
+    get size() {
+        return this.getNumberAttribute('size');
+    }
+    // uid - computed: true, optional: false, required: false
+    get uid() {
+        return this.getStringAttribute('uid');
+    }
+    // url - computed: false, optional: true, required: false
+    _url;
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    set url(value) {
+        this._url = value;
+    }
+    resetUrl() {
         this._url = undefined;
-    };
-    Object.defineProperty(StreamWatermarkA.prototype, "urlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._url;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamWatermarkA.prototype, "width", {
-        // width - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('width');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get urlInput() {
+        return this._url;
+    }
+    // width - computed: true, optional: false, required: false
+    get width() {
+        return this.getNumberAttribute('width');
+    }
     // =========
     // SYNTHESIS
     // =========
-    StreamWatermarkA.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             identifier: cdktf.stringToTerraform(this._identifier),
@@ -303,9 +217,9 @@ var StreamWatermarkA = /** @class */ (function (_super) {
             scale: cdktf.numberToTerraform(this._scale),
             url: cdktf.stringToTerraform(this._url),
         };
-    };
-    StreamWatermarkA.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -356,15 +270,6 @@ var StreamWatermarkA = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    StreamWatermarkA.tfResourceType = "cloudflare_stream_watermark";
-    return StreamWatermarkA;
-}(cdktf.TerraformResource));
-exports.StreamWatermarkA = StreamWatermarkA;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

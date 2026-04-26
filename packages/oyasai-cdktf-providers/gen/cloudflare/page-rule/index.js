@@ -1,41 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_rule
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PageRule = exports.PageRuleActionsOutputReference = exports.PageRuleActionsForwardingUrlOutputReference = exports.PageRuleActionsCacheKeyFieldsOutputReference = exports.PageRuleActionsCacheKeyFieldsUserOutputReference = exports.PageRuleActionsCacheKeyFieldsQueryStringOutputReference = exports.PageRuleActionsCacheKeyFieldsHostOutputReference = exports.PageRuleActionsCacheKeyFieldsHeaderOutputReference = exports.PageRuleActionsCacheKeyFieldsCookieOutputReference = void 0;
-exports.pageRuleActionsCacheKeyFieldsCookieToTerraform = pageRuleActionsCacheKeyFieldsCookieToTerraform;
-exports.pageRuleActionsCacheKeyFieldsCookieToHclTerraform = pageRuleActionsCacheKeyFieldsCookieToHclTerraform;
-exports.pageRuleActionsCacheKeyFieldsHeaderToTerraform = pageRuleActionsCacheKeyFieldsHeaderToTerraform;
-exports.pageRuleActionsCacheKeyFieldsHeaderToHclTerraform = pageRuleActionsCacheKeyFieldsHeaderToHclTerraform;
-exports.pageRuleActionsCacheKeyFieldsHostToTerraform = pageRuleActionsCacheKeyFieldsHostToTerraform;
-exports.pageRuleActionsCacheKeyFieldsHostToHclTerraform = pageRuleActionsCacheKeyFieldsHostToHclTerraform;
-exports.pageRuleActionsCacheKeyFieldsQueryStringToTerraform = pageRuleActionsCacheKeyFieldsQueryStringToTerraform;
-exports.pageRuleActionsCacheKeyFieldsQueryStringToHclTerraform = pageRuleActionsCacheKeyFieldsQueryStringToHclTerraform;
-exports.pageRuleActionsCacheKeyFieldsUserToTerraform = pageRuleActionsCacheKeyFieldsUserToTerraform;
-exports.pageRuleActionsCacheKeyFieldsUserToHclTerraform = pageRuleActionsCacheKeyFieldsUserToHclTerraform;
-exports.pageRuleActionsCacheKeyFieldsToTerraform = pageRuleActionsCacheKeyFieldsToTerraform;
-exports.pageRuleActionsCacheKeyFieldsToHclTerraform = pageRuleActionsCacheKeyFieldsToHclTerraform;
-exports.pageRuleActionsForwardingUrlToTerraform = pageRuleActionsForwardingUrlToTerraform;
-exports.pageRuleActionsForwardingUrlToHclTerraform = pageRuleActionsForwardingUrlToHclTerraform;
-exports.pageRuleActionsToTerraform = pageRuleActionsToTerraform;
-exports.pageRuleActionsToHclTerraform = pageRuleActionsToHclTerraform;
-var cdktf = require("cdktf");
-function pageRuleActionsCacheKeyFieldsCookieToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function pageRuleActionsCacheKeyFieldsCookieToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -47,14 +13,14 @@ function pageRuleActionsCacheKeyFieldsCookieToTerraform(struct) {
         include: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.include),
     };
 }
-function pageRuleActionsCacheKeyFieldsCookieToHclTerraform(struct) {
+export function pageRuleActionsCacheKeyFieldsCookieToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         check_presence: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.checkPresence),
             isBlock: false,
@@ -69,106 +35,84 @@ function pageRuleActionsCacheKeyFieldsCookieToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PageRuleActionsCacheKeyFieldsCookieOutputReference = /** @class */ (function (_super) {
-    __extends(PageRuleActionsCacheKeyFieldsCookieOutputReference, _super);
+export class PageRuleActionsCacheKeyFieldsCookieOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PageRuleActionsCacheKeyFieldsCookieOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsCookieOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._checkPresence !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.checkPresence = this._checkPresence;
-            }
-            if (this._include !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.include = this._include;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._checkPresence = undefined;
-                this._include = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._checkPresence = value.checkPresence;
-                this._include = value.include;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsCookieOutputReference.prototype, "checkPresence", {
-        get: function () {
-            return this.getListAttribute('check_presence');
-        },
-        set: function (value) {
-            this._checkPresence = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsCookieOutputReference.prototype.resetCheckPresence = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._checkPresence !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.checkPresence = this._checkPresence;
+        }
+        if (this._include !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.include = this._include;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._checkPresence = undefined;
+            this._include = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._checkPresence = value.checkPresence;
+            this._include = value.include;
+        }
+    }
+    // check_presence - computed: true, optional: true, required: false
+    _checkPresence;
+    get checkPresence() {
+        return this.getListAttribute('check_presence');
+    }
+    set checkPresence(value) {
+        this._checkPresence = value;
+    }
+    resetCheckPresence() {
         this._checkPresence = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsCookieOutputReference.prototype, "checkPresenceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._checkPresence;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsCookieOutputReference.prototype, "include", {
-        get: function () {
-            return this.getListAttribute('include');
-        },
-        set: function (value) {
-            this._include = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsCookieOutputReference.prototype.resetInclude = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get checkPresenceInput() {
+        return this._checkPresence;
+    }
+    // include - computed: true, optional: true, required: false
+    _include;
+    get include() {
+        return this.getListAttribute('include');
+    }
+    set include(value) {
+        this._include = value;
+    }
+    resetInclude() {
         this._include = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsCookieOutputReference.prototype, "includeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._include;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PageRuleActionsCacheKeyFieldsCookieOutputReference;
-}(cdktf.ComplexObject));
-exports.PageRuleActionsCacheKeyFieldsCookieOutputReference = PageRuleActionsCacheKeyFieldsCookieOutputReference;
-function pageRuleActionsCacheKeyFieldsHeaderToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeInput() {
+        return this._include;
+    }
+}
+export function pageRuleActionsCacheKeyFieldsHeaderToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -181,14 +125,14 @@ function pageRuleActionsCacheKeyFieldsHeaderToTerraform(struct) {
         include: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.include),
     };
 }
-function pageRuleActionsCacheKeyFieldsHeaderToHclTerraform(struct) {
+export function pageRuleActionsCacheKeyFieldsHeaderToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         check_presence: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.checkPresence),
             isBlock: false,
@@ -209,133 +153,105 @@ function pageRuleActionsCacheKeyFieldsHeaderToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PageRuleActionsCacheKeyFieldsHeaderOutputReference = /** @class */ (function (_super) {
-    __extends(PageRuleActionsCacheKeyFieldsHeaderOutputReference, _super);
+export class PageRuleActionsCacheKeyFieldsHeaderOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PageRuleActionsCacheKeyFieldsHeaderOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._checkPresence !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.checkPresence = this._checkPresence;
-            }
-            if (this._exclude !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exclude = this._exclude;
-            }
-            if (this._include !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.include = this._include;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._checkPresence = undefined;
-                this._exclude = undefined;
-                this._include = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._checkPresence = value.checkPresence;
-                this._exclude = value.exclude;
-                this._include = value.include;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype, "checkPresence", {
-        get: function () {
-            return this.getListAttribute('check_presence');
-        },
-        set: function (value) {
-            this._checkPresence = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype.resetCheckPresence = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._checkPresence !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.checkPresence = this._checkPresence;
+        }
+        if (this._exclude !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exclude = this._exclude;
+        }
+        if (this._include !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.include = this._include;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._checkPresence = undefined;
+            this._exclude = undefined;
+            this._include = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._checkPresence = value.checkPresence;
+            this._exclude = value.exclude;
+            this._include = value.include;
+        }
+    }
+    // check_presence - computed: true, optional: true, required: false
+    _checkPresence;
+    get checkPresence() {
+        return this.getListAttribute('check_presence');
+    }
+    set checkPresence(value) {
+        this._checkPresence = value;
+    }
+    resetCheckPresence() {
         this._checkPresence = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype, "checkPresenceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._checkPresence;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype, "exclude", {
-        get: function () {
-            return this.getListAttribute('exclude');
-        },
-        set: function (value) {
-            this._exclude = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype.resetExclude = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get checkPresenceInput() {
+        return this._checkPresence;
+    }
+    // exclude - computed: true, optional: true, required: false
+    _exclude;
+    get exclude() {
+        return this.getListAttribute('exclude');
+    }
+    set exclude(value) {
+        this._exclude = value;
+    }
+    resetExclude() {
         this._exclude = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype, "excludeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exclude;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype, "include", {
-        get: function () {
-            return this.getListAttribute('include');
-        },
-        set: function (value) {
-            this._include = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype.resetInclude = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludeInput() {
+        return this._exclude;
+    }
+    // include - computed: true, optional: true, required: false
+    _include;
+    get include() {
+        return this.getListAttribute('include');
+    }
+    set include(value) {
+        this._include = value;
+    }
+    resetInclude() {
         this._include = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHeaderOutputReference.prototype, "includeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._include;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PageRuleActionsCacheKeyFieldsHeaderOutputReference;
-}(cdktf.ComplexObject));
-exports.PageRuleActionsCacheKeyFieldsHeaderOutputReference = PageRuleActionsCacheKeyFieldsHeaderOutputReference;
-function pageRuleActionsCacheKeyFieldsHostToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeInput() {
+        return this._include;
+    }
+}
+export function pageRuleActionsCacheKeyFieldsHostToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -346,14 +262,14 @@ function pageRuleActionsCacheKeyFieldsHostToTerraform(struct) {
         resolved: cdktf.booleanToTerraform(struct.resolved),
     };
 }
-function pageRuleActionsCacheKeyFieldsHostToHclTerraform(struct) {
+export function pageRuleActionsCacheKeyFieldsHostToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         resolved: {
             value: cdktf.booleanToHclTerraform(struct.resolved),
             isBlock: false,
@@ -362,79 +278,63 @@ function pageRuleActionsCacheKeyFieldsHostToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PageRuleActionsCacheKeyFieldsHostOutputReference = /** @class */ (function (_super) {
-    __extends(PageRuleActionsCacheKeyFieldsHostOutputReference, _super);
+export class PageRuleActionsCacheKeyFieldsHostOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PageRuleActionsCacheKeyFieldsHostOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHostOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._resolved !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.resolved = this._resolved;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._resolved = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._resolved = value.resolved;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHostOutputReference.prototype, "resolved", {
-        get: function () {
-            return this.getBooleanAttribute('resolved');
-        },
-        set: function (value) {
-            this._resolved = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsHostOutputReference.prototype.resetResolved = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._resolved !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.resolved = this._resolved;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._resolved = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._resolved = value.resolved;
+        }
+    }
+    // resolved - computed: true, optional: true, required: false
+    _resolved;
+    get resolved() {
+        return this.getBooleanAttribute('resolved');
+    }
+    set resolved(value) {
+        this._resolved = value;
+    }
+    resetResolved() {
         this._resolved = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsHostOutputReference.prototype, "resolvedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._resolved;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PageRuleActionsCacheKeyFieldsHostOutputReference;
-}(cdktf.ComplexObject));
-exports.PageRuleActionsCacheKeyFieldsHostOutputReference = PageRuleActionsCacheKeyFieldsHostOutputReference;
-function pageRuleActionsCacheKeyFieldsQueryStringToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get resolvedInput() {
+        return this._resolved;
+    }
+}
+export function pageRuleActionsCacheKeyFieldsQueryStringToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -446,14 +346,14 @@ function pageRuleActionsCacheKeyFieldsQueryStringToTerraform(struct) {
         include: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.include),
     };
 }
-function pageRuleActionsCacheKeyFieldsQueryStringToHclTerraform(struct) {
+export function pageRuleActionsCacheKeyFieldsQueryStringToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         exclude: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.exclude),
             isBlock: false,
@@ -468,106 +368,84 @@ function pageRuleActionsCacheKeyFieldsQueryStringToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PageRuleActionsCacheKeyFieldsQueryStringOutputReference = /** @class */ (function (_super) {
-    __extends(PageRuleActionsCacheKeyFieldsQueryStringOutputReference, _super);
+export class PageRuleActionsCacheKeyFieldsQueryStringOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PageRuleActionsCacheKeyFieldsQueryStringOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsQueryStringOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._exclude !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exclude = this._exclude;
-            }
-            if (this._include !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.include = this._include;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._exclude = undefined;
-                this._include = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._exclude = value.exclude;
-                this._include = value.include;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsQueryStringOutputReference.prototype, "exclude", {
-        get: function () {
-            return this.getListAttribute('exclude');
-        },
-        set: function (value) {
-            this._exclude = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsQueryStringOutputReference.prototype.resetExclude = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._exclude !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exclude = this._exclude;
+        }
+        if (this._include !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.include = this._include;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._exclude = undefined;
+            this._include = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._exclude = value.exclude;
+            this._include = value.include;
+        }
+    }
+    // exclude - computed: true, optional: true, required: false
+    _exclude;
+    get exclude() {
+        return this.getListAttribute('exclude');
+    }
+    set exclude(value) {
+        this._exclude = value;
+    }
+    resetExclude() {
         this._exclude = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsQueryStringOutputReference.prototype, "excludeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exclude;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsQueryStringOutputReference.prototype, "include", {
-        get: function () {
-            return this.getListAttribute('include');
-        },
-        set: function (value) {
-            this._include = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsQueryStringOutputReference.prototype.resetInclude = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludeInput() {
+        return this._exclude;
+    }
+    // include - computed: true, optional: true, required: false
+    _include;
+    get include() {
+        return this.getListAttribute('include');
+    }
+    set include(value) {
+        this._include = value;
+    }
+    resetInclude() {
         this._include = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsQueryStringOutputReference.prototype, "includeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._include;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PageRuleActionsCacheKeyFieldsQueryStringOutputReference;
-}(cdktf.ComplexObject));
-exports.PageRuleActionsCacheKeyFieldsQueryStringOutputReference = PageRuleActionsCacheKeyFieldsQueryStringOutputReference;
-function pageRuleActionsCacheKeyFieldsUserToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeInput() {
+        return this._include;
+    }
+}
+export function pageRuleActionsCacheKeyFieldsUserToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -580,14 +458,14 @@ function pageRuleActionsCacheKeyFieldsUserToTerraform(struct) {
         lang: cdktf.booleanToTerraform(struct.lang),
     };
 }
-function pageRuleActionsCacheKeyFieldsUserToHclTerraform(struct) {
+export function pageRuleActionsCacheKeyFieldsUserToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         device_type: {
             value: cdktf.booleanToHclTerraform(struct.deviceType),
             isBlock: false,
@@ -608,133 +486,105 @@ function pageRuleActionsCacheKeyFieldsUserToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PageRuleActionsCacheKeyFieldsUserOutputReference = /** @class */ (function (_super) {
-    __extends(PageRuleActionsCacheKeyFieldsUserOutputReference, _super);
+export class PageRuleActionsCacheKeyFieldsUserOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PageRuleActionsCacheKeyFieldsUserOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsUserOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._deviceType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.deviceType = this._deviceType;
-            }
-            if (this._geo !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.geo = this._geo;
-            }
-            if (this._lang !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.lang = this._lang;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._deviceType = undefined;
-                this._geo = undefined;
-                this._lang = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._deviceType = value.deviceType;
-                this._geo = value.geo;
-                this._lang = value.lang;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsUserOutputReference.prototype, "deviceType", {
-        get: function () {
-            return this.getBooleanAttribute('device_type');
-        },
-        set: function (value) {
-            this._deviceType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsUserOutputReference.prototype.resetDeviceType = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._deviceType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.deviceType = this._deviceType;
+        }
+        if (this._geo !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.geo = this._geo;
+        }
+        if (this._lang !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.lang = this._lang;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._deviceType = undefined;
+            this._geo = undefined;
+            this._lang = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._deviceType = value.deviceType;
+            this._geo = value.geo;
+            this._lang = value.lang;
+        }
+    }
+    // device_type - computed: true, optional: true, required: false
+    _deviceType;
+    get deviceType() {
+        return this.getBooleanAttribute('device_type');
+    }
+    set deviceType(value) {
+        this._deviceType = value;
+    }
+    resetDeviceType() {
         this._deviceType = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsUserOutputReference.prototype, "deviceTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deviceType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsUserOutputReference.prototype, "geo", {
-        get: function () {
-            return this.getBooleanAttribute('geo');
-        },
-        set: function (value) {
-            this._geo = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsUserOutputReference.prototype.resetGeo = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deviceTypeInput() {
+        return this._deviceType;
+    }
+    // geo - computed: true, optional: true, required: false
+    _geo;
+    get geo() {
+        return this.getBooleanAttribute('geo');
+    }
+    set geo(value) {
+        this._geo = value;
+    }
+    resetGeo() {
         this._geo = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsUserOutputReference.prototype, "geoInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._geo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsUserOutputReference.prototype, "lang", {
-        get: function () {
-            return this.getBooleanAttribute('lang');
-        },
-        set: function (value) {
-            this._lang = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsUserOutputReference.prototype.resetLang = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get geoInput() {
+        return this._geo;
+    }
+    // lang - computed: true, optional: true, required: false
+    _lang;
+    get lang() {
+        return this.getBooleanAttribute('lang');
+    }
+    set lang(value) {
+        this._lang = value;
+    }
+    resetLang() {
         this._lang = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsUserOutputReference.prototype, "langInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._lang;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PageRuleActionsCacheKeyFieldsUserOutputReference;
-}(cdktf.ComplexObject));
-exports.PageRuleActionsCacheKeyFieldsUserOutputReference = PageRuleActionsCacheKeyFieldsUserOutputReference;
-function pageRuleActionsCacheKeyFieldsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get langInput() {
+        return this._lang;
+    }
+}
+export function pageRuleActionsCacheKeyFieldsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -749,14 +599,14 @@ function pageRuleActionsCacheKeyFieldsToTerraform(struct) {
         user: pageRuleActionsCacheKeyFieldsUserToTerraform(struct.user),
     };
 }
-function pageRuleActionsCacheKeyFieldsToHclTerraform(struct) {
+export function pageRuleActionsCacheKeyFieldsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         cookie: {
             value: pageRuleActionsCacheKeyFieldsCookieToHclTerraform(struct.cookie),
             isBlock: true,
@@ -789,198 +639,147 @@ function pageRuleActionsCacheKeyFieldsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PageRuleActionsCacheKeyFieldsOutputReference = /** @class */ (function (_super) {
-    __extends(PageRuleActionsCacheKeyFieldsOutputReference, _super);
+export class PageRuleActionsCacheKeyFieldsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PageRuleActionsCacheKeyFieldsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // cookie - computed: false, optional: true, required: false
-        _this._cookie = new PageRuleActionsCacheKeyFieldsCookieOutputReference(_this, "cookie");
-        // header - computed: false, optional: true, required: false
-        _this._header = new PageRuleActionsCacheKeyFieldsHeaderOutputReference(_this, "header");
-        // host - computed: true, optional: true, required: false
-        _this._host = new PageRuleActionsCacheKeyFieldsHostOutputReference(_this, "host");
-        // query_string - computed: false, optional: true, required: false
-        _this._queryString = new PageRuleActionsCacheKeyFieldsQueryStringOutputReference(_this, "query_string");
-        // user - computed: true, optional: true, required: false
-        _this._user = new PageRuleActionsCacheKeyFieldsUserOutputReference(_this, "user");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._cookie) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cookie = (_b = this._cookie) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._header) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.header = (_d = this._header) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._host) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = (_f = this._host) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._queryString) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.queryString = (_h = this._queryString) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (((_j = this._user) === null || _j === void 0 ? void 0 : _j.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.user = (_k = this._user) === null || _k === void 0 ? void 0 : _k.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._cookie.internalValue = undefined;
-                this._header.internalValue = undefined;
-                this._host.internalValue = undefined;
-                this._queryString.internalValue = undefined;
-                this._user.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._cookie.internalValue = value.cookie;
-                this._header.internalValue = value.header;
-                this._host.internalValue = value.host;
-                this._queryString.internalValue = value.queryString;
-                this._user.internalValue = value.user;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "cookie", {
-        get: function () {
-            return this._cookie;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.putCookie = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._cookie?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cookie = this._cookie?.internalValue;
+        }
+        if (this._header?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.header = this._header?.internalValue;
+        }
+        if (this._host?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host?.internalValue;
+        }
+        if (this._queryString?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.queryString = this._queryString?.internalValue;
+        }
+        if (this._user?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.user = this._user?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._cookie.internalValue = undefined;
+            this._header.internalValue = undefined;
+            this._host.internalValue = undefined;
+            this._queryString.internalValue = undefined;
+            this._user.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._cookie.internalValue = value.cookie;
+            this._header.internalValue = value.header;
+            this._host.internalValue = value.host;
+            this._queryString.internalValue = value.queryString;
+            this._user.internalValue = value.user;
+        }
+    }
+    // cookie - computed: false, optional: true, required: false
+    _cookie = new PageRuleActionsCacheKeyFieldsCookieOutputReference(this, "cookie");
+    get cookie() {
+        return this._cookie;
+    }
+    putCookie(value) {
         this._cookie.internalValue = value;
-    };
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.resetCookie = function () {
+    }
+    resetCookie() {
         this._cookie.internalValue = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "cookieInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cookie.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "header", {
-        get: function () {
-            return this._header;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.putHeader = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cookieInput() {
+        return this._cookie.internalValue;
+    }
+    // header - computed: false, optional: true, required: false
+    _header = new PageRuleActionsCacheKeyFieldsHeaderOutputReference(this, "header");
+    get header() {
+        return this._header;
+    }
+    putHeader(value) {
         this._header.internalValue = value;
-    };
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.resetHeader = function () {
+    }
+    resetHeader() {
         this._header.internalValue = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "headerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._header.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "host", {
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.putHost = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get headerInput() {
+        return this._header.internalValue;
+    }
+    // host - computed: true, optional: true, required: false
+    _host = new PageRuleActionsCacheKeyFieldsHostOutputReference(this, "host");
+    get host() {
+        return this._host;
+    }
+    putHost(value) {
         this._host.internalValue = value;
-    };
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.resetHost = function () {
+    }
+    resetHost() {
         this._host.internalValue = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "queryString", {
-        get: function () {
-            return this._queryString;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.putQueryString = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host.internalValue;
+    }
+    // query_string - computed: false, optional: true, required: false
+    _queryString = new PageRuleActionsCacheKeyFieldsQueryStringOutputReference(this, "query_string");
+    get queryString() {
+        return this._queryString;
+    }
+    putQueryString(value) {
         this._queryString.internalValue = value;
-    };
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.resetQueryString = function () {
+    }
+    resetQueryString() {
         this._queryString.internalValue = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "queryStringInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._queryString.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "user", {
-        get: function () {
-            return this._user;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.putUser = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get queryStringInput() {
+        return this._queryString.internalValue;
+    }
+    // user - computed: true, optional: true, required: false
+    _user = new PageRuleActionsCacheKeyFieldsUserOutputReference(this, "user");
+    get user() {
+        return this._user;
+    }
+    putUser(value) {
         this._user.internalValue = value;
-    };
-    PageRuleActionsCacheKeyFieldsOutputReference.prototype.resetUser = function () {
+    }
+    resetUser() {
         this._user.internalValue = undefined;
-    };
-    Object.defineProperty(PageRuleActionsCacheKeyFieldsOutputReference.prototype, "userInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._user.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PageRuleActionsCacheKeyFieldsOutputReference;
-}(cdktf.ComplexObject));
-exports.PageRuleActionsCacheKeyFieldsOutputReference = PageRuleActionsCacheKeyFieldsOutputReference;
-function pageRuleActionsForwardingUrlToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get userInput() {
+        return this._user.internalValue;
+    }
+}
+export function pageRuleActionsForwardingUrlToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -992,14 +791,14 @@ function pageRuleActionsForwardingUrlToTerraform(struct) {
         url: cdktf.stringToTerraform(struct.url),
     };
 }
-function pageRuleActionsForwardingUrlToHclTerraform(struct) {
+export function pageRuleActionsForwardingUrlToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         status_code: {
             value: cdktf.numberToHclTerraform(struct.statusCode),
             isBlock: false,
@@ -1014,100 +813,78 @@ function pageRuleActionsForwardingUrlToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PageRuleActionsForwardingUrlOutputReference = /** @class */ (function (_super) {
-    __extends(PageRuleActionsForwardingUrlOutputReference, _super);
+export class PageRuleActionsForwardingUrlOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PageRuleActionsForwardingUrlOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PageRuleActionsForwardingUrlOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._statusCode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.statusCode = this._statusCode;
-            }
-            if (this._url !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.url = this._url;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._statusCode = undefined;
-                this._url = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._statusCode = value.statusCode;
-                this._url = value.url;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsForwardingUrlOutputReference.prototype, "statusCode", {
-        get: function () {
-            return this.getNumberAttribute('status_code');
-        },
-        set: function (value) {
-            this._statusCode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsForwardingUrlOutputReference.prototype, "statusCodeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._statusCode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsForwardingUrlOutputReference.prototype, "url", {
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        set: function (value) {
-            this._url = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsForwardingUrlOutputReference.prototype, "urlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._url;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PageRuleActionsForwardingUrlOutputReference;
-}(cdktf.ComplexObject));
-exports.PageRuleActionsForwardingUrlOutputReference = PageRuleActionsForwardingUrlOutputReference;
-function pageRuleActionsToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._statusCode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.statusCode = this._statusCode;
+        }
+        if (this._url !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.url = this._url;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._statusCode = undefined;
+            this._url = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._statusCode = value.statusCode;
+            this._url = value.url;
+        }
+    }
+    // status_code - computed: false, optional: false, required: true
+    _statusCode;
+    get statusCode() {
+        return this.getNumberAttribute('status_code');
+    }
+    set statusCode(value) {
+        this._statusCode = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusCodeInput() {
+        return this._statusCode;
+    }
+    // url - computed: false, optional: false, required: true
+    _url;
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    set url(value) {
+        this._url = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get urlInput() {
+        return this._url;
+    }
+}
+export function pageRuleActionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1151,14 +928,14 @@ function pageRuleActionsToTerraform(struct) {
         waf: cdktf.stringToTerraform(struct.waf),
     };
 }
-function pageRuleActionsToHclTerraform(struct) {
+export function pageRuleActionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         always_use_https: {
             value: cdktf.booleanToHclTerraform(struct.alwaysUseHttps),
             isBlock: false,
@@ -1365,979 +1142,776 @@ function pageRuleActionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PageRuleActionsOutputReference = /** @class */ (function (_super) {
-    __extends(PageRuleActionsOutputReference, _super);
+export class PageRuleActionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PageRuleActionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // cache_key_fields - computed: false, optional: true, required: false
-        _this._cacheKeyFields = new PageRuleActionsCacheKeyFieldsOutputReference(_this, "cache_key_fields");
-        // forwarding_url - computed: false, optional: true, required: false
-        _this._forwardingUrl = new PageRuleActionsForwardingUrlOutputReference(_this, "forwarding_url");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._alwaysUseHttps !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.alwaysUseHttps = this._alwaysUseHttps;
-            }
-            if (this._automaticHttpsRewrites !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.automaticHttpsRewrites = this._automaticHttpsRewrites;
-            }
-            if (this._browserCacheTtl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.browserCacheTtl = this._browserCacheTtl;
-            }
-            if (this._browserCheck !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.browserCheck = this._browserCheck;
-            }
-            if (this._bypassCacheOnCookie !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.bypassCacheOnCookie = this._bypassCacheOnCookie;
-            }
-            if (this._cacheByDeviceType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cacheByDeviceType = this._cacheByDeviceType;
-            }
-            if (this._cacheDeceptionArmor !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cacheDeceptionArmor = this._cacheDeceptionArmor;
-            }
-            if (((_a = this._cacheKeyFields) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cacheKeyFields = (_b = this._cacheKeyFields) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._cacheLevel !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cacheLevel = this._cacheLevel;
-            }
-            if (this._cacheOnCookie !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cacheOnCookie = this._cacheOnCookie;
-            }
-            if (this._cacheTtlByStatus !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cacheTtlByStatus = this._cacheTtlByStatus;
-            }
-            if (this._disableApps !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disableApps = this._disableApps;
-            }
-            if (this._disablePerformance !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disablePerformance = this._disablePerformance;
-            }
-            if (this._disableSecurity !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disableSecurity = this._disableSecurity;
-            }
-            if (this._disableZaraz !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disableZaraz = this._disableZaraz;
-            }
-            if (this._edgeCacheTtl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.edgeCacheTtl = this._edgeCacheTtl;
-            }
-            if (this._emailObfuscation !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.emailObfuscation = this._emailObfuscation;
-            }
-            if (this._explicitCacheControl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.explicitCacheControl = this._explicitCacheControl;
-            }
-            if (((_c = this._forwardingUrl) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.forwardingUrl = (_d = this._forwardingUrl) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (this._hostHeaderOverride !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hostHeaderOverride = this._hostHeaderOverride;
-            }
-            if (this._ipGeolocation !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipGeolocation = this._ipGeolocation;
-            }
-            if (this._mirage !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mirage = this._mirage;
-            }
-            if (this._opportunisticEncryption !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.opportunisticEncryption = this._opportunisticEncryption;
-            }
-            if (this._originErrorPagePassThru !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.originErrorPagePassThru = this._originErrorPagePassThru;
-            }
-            if (this._polish !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.polish = this._polish;
-            }
-            if (this._resolveOverride !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.resolveOverride = this._resolveOverride;
-            }
-            if (this._respectStrongEtag !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.respectStrongEtag = this._respectStrongEtag;
-            }
-            if (this._responseBuffering !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.responseBuffering = this._responseBuffering;
-            }
-            if (this._rocketLoader !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rocketLoader = this._rocketLoader;
-            }
-            if (this._securityLevel !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.securityLevel = this._securityLevel;
-            }
-            if (this._sortQueryStringForCache !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sortQueryStringForCache = this._sortQueryStringForCache;
-            }
-            if (this._ssl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ssl = this._ssl;
-            }
-            if (this._trueClientIpHeader !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.trueClientIpHeader = this._trueClientIpHeader;
-            }
-            if (this._waf !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.waf = this._waf;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._alwaysUseHttps = undefined;
-                this._automaticHttpsRewrites = undefined;
-                this._browserCacheTtl = undefined;
-                this._browserCheck = undefined;
-                this._bypassCacheOnCookie = undefined;
-                this._cacheByDeviceType = undefined;
-                this._cacheDeceptionArmor = undefined;
-                this._cacheKeyFields.internalValue = undefined;
-                this._cacheLevel = undefined;
-                this._cacheOnCookie = undefined;
-                this._cacheTtlByStatus = undefined;
-                this._disableApps = undefined;
-                this._disablePerformance = undefined;
-                this._disableSecurity = undefined;
-                this._disableZaraz = undefined;
-                this._edgeCacheTtl = undefined;
-                this._emailObfuscation = undefined;
-                this._explicitCacheControl = undefined;
-                this._forwardingUrl.internalValue = undefined;
-                this._hostHeaderOverride = undefined;
-                this._ipGeolocation = undefined;
-                this._mirage = undefined;
-                this._opportunisticEncryption = undefined;
-                this._originErrorPagePassThru = undefined;
-                this._polish = undefined;
-                this._resolveOverride = undefined;
-                this._respectStrongEtag = undefined;
-                this._responseBuffering = undefined;
-                this._rocketLoader = undefined;
-                this._securityLevel = undefined;
-                this._sortQueryStringForCache = undefined;
-                this._ssl = undefined;
-                this._trueClientIpHeader = undefined;
-                this._waf = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._alwaysUseHttps = value.alwaysUseHttps;
-                this._automaticHttpsRewrites = value.automaticHttpsRewrites;
-                this._browserCacheTtl = value.browserCacheTtl;
-                this._browserCheck = value.browserCheck;
-                this._bypassCacheOnCookie = value.bypassCacheOnCookie;
-                this._cacheByDeviceType = value.cacheByDeviceType;
-                this._cacheDeceptionArmor = value.cacheDeceptionArmor;
-                this._cacheKeyFields.internalValue = value.cacheKeyFields;
-                this._cacheLevel = value.cacheLevel;
-                this._cacheOnCookie = value.cacheOnCookie;
-                this._cacheTtlByStatus = value.cacheTtlByStatus;
-                this._disableApps = value.disableApps;
-                this._disablePerformance = value.disablePerformance;
-                this._disableSecurity = value.disableSecurity;
-                this._disableZaraz = value.disableZaraz;
-                this._edgeCacheTtl = value.edgeCacheTtl;
-                this._emailObfuscation = value.emailObfuscation;
-                this._explicitCacheControl = value.explicitCacheControl;
-                this._forwardingUrl.internalValue = value.forwardingUrl;
-                this._hostHeaderOverride = value.hostHeaderOverride;
-                this._ipGeolocation = value.ipGeolocation;
-                this._mirage = value.mirage;
-                this._opportunisticEncryption = value.opportunisticEncryption;
-                this._originErrorPagePassThru = value.originErrorPagePassThru;
-                this._polish = value.polish;
-                this._resolveOverride = value.resolveOverride;
-                this._respectStrongEtag = value.respectStrongEtag;
-                this._responseBuffering = value.responseBuffering;
-                this._rocketLoader = value.rocketLoader;
-                this._securityLevel = value.securityLevel;
-                this._sortQueryStringForCache = value.sortQueryStringForCache;
-                this._ssl = value.ssl;
-                this._trueClientIpHeader = value.trueClientIpHeader;
-                this._waf = value.waf;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "alwaysUseHttps", {
-        get: function () {
-            return this.getBooleanAttribute('always_use_https');
-        },
-        set: function (value) {
-            this._alwaysUseHttps = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetAlwaysUseHttps = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._alwaysUseHttps !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.alwaysUseHttps = this._alwaysUseHttps;
+        }
+        if (this._automaticHttpsRewrites !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.automaticHttpsRewrites = this._automaticHttpsRewrites;
+        }
+        if (this._browserCacheTtl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.browserCacheTtl = this._browserCacheTtl;
+        }
+        if (this._browserCheck !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.browserCheck = this._browserCheck;
+        }
+        if (this._bypassCacheOnCookie !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.bypassCacheOnCookie = this._bypassCacheOnCookie;
+        }
+        if (this._cacheByDeviceType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cacheByDeviceType = this._cacheByDeviceType;
+        }
+        if (this._cacheDeceptionArmor !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cacheDeceptionArmor = this._cacheDeceptionArmor;
+        }
+        if (this._cacheKeyFields?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cacheKeyFields = this._cacheKeyFields?.internalValue;
+        }
+        if (this._cacheLevel !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cacheLevel = this._cacheLevel;
+        }
+        if (this._cacheOnCookie !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cacheOnCookie = this._cacheOnCookie;
+        }
+        if (this._cacheTtlByStatus !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cacheTtlByStatus = this._cacheTtlByStatus;
+        }
+        if (this._disableApps !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disableApps = this._disableApps;
+        }
+        if (this._disablePerformance !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disablePerformance = this._disablePerformance;
+        }
+        if (this._disableSecurity !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disableSecurity = this._disableSecurity;
+        }
+        if (this._disableZaraz !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disableZaraz = this._disableZaraz;
+        }
+        if (this._edgeCacheTtl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.edgeCacheTtl = this._edgeCacheTtl;
+        }
+        if (this._emailObfuscation !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.emailObfuscation = this._emailObfuscation;
+        }
+        if (this._explicitCacheControl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.explicitCacheControl = this._explicitCacheControl;
+        }
+        if (this._forwardingUrl?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.forwardingUrl = this._forwardingUrl?.internalValue;
+        }
+        if (this._hostHeaderOverride !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hostHeaderOverride = this._hostHeaderOverride;
+        }
+        if (this._ipGeolocation !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipGeolocation = this._ipGeolocation;
+        }
+        if (this._mirage !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mirage = this._mirage;
+        }
+        if (this._opportunisticEncryption !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.opportunisticEncryption = this._opportunisticEncryption;
+        }
+        if (this._originErrorPagePassThru !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.originErrorPagePassThru = this._originErrorPagePassThru;
+        }
+        if (this._polish !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.polish = this._polish;
+        }
+        if (this._resolveOverride !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.resolveOverride = this._resolveOverride;
+        }
+        if (this._respectStrongEtag !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.respectStrongEtag = this._respectStrongEtag;
+        }
+        if (this._responseBuffering !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.responseBuffering = this._responseBuffering;
+        }
+        if (this._rocketLoader !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rocketLoader = this._rocketLoader;
+        }
+        if (this._securityLevel !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.securityLevel = this._securityLevel;
+        }
+        if (this._sortQueryStringForCache !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sortQueryStringForCache = this._sortQueryStringForCache;
+        }
+        if (this._ssl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ssl = this._ssl;
+        }
+        if (this._trueClientIpHeader !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.trueClientIpHeader = this._trueClientIpHeader;
+        }
+        if (this._waf !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.waf = this._waf;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._alwaysUseHttps = undefined;
+            this._automaticHttpsRewrites = undefined;
+            this._browserCacheTtl = undefined;
+            this._browserCheck = undefined;
+            this._bypassCacheOnCookie = undefined;
+            this._cacheByDeviceType = undefined;
+            this._cacheDeceptionArmor = undefined;
+            this._cacheKeyFields.internalValue = undefined;
+            this._cacheLevel = undefined;
+            this._cacheOnCookie = undefined;
+            this._cacheTtlByStatus = undefined;
+            this._disableApps = undefined;
+            this._disablePerformance = undefined;
+            this._disableSecurity = undefined;
+            this._disableZaraz = undefined;
+            this._edgeCacheTtl = undefined;
+            this._emailObfuscation = undefined;
+            this._explicitCacheControl = undefined;
+            this._forwardingUrl.internalValue = undefined;
+            this._hostHeaderOverride = undefined;
+            this._ipGeolocation = undefined;
+            this._mirage = undefined;
+            this._opportunisticEncryption = undefined;
+            this._originErrorPagePassThru = undefined;
+            this._polish = undefined;
+            this._resolveOverride = undefined;
+            this._respectStrongEtag = undefined;
+            this._responseBuffering = undefined;
+            this._rocketLoader = undefined;
+            this._securityLevel = undefined;
+            this._sortQueryStringForCache = undefined;
+            this._ssl = undefined;
+            this._trueClientIpHeader = undefined;
+            this._waf = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._alwaysUseHttps = value.alwaysUseHttps;
+            this._automaticHttpsRewrites = value.automaticHttpsRewrites;
+            this._browserCacheTtl = value.browserCacheTtl;
+            this._browserCheck = value.browserCheck;
+            this._bypassCacheOnCookie = value.bypassCacheOnCookie;
+            this._cacheByDeviceType = value.cacheByDeviceType;
+            this._cacheDeceptionArmor = value.cacheDeceptionArmor;
+            this._cacheKeyFields.internalValue = value.cacheKeyFields;
+            this._cacheLevel = value.cacheLevel;
+            this._cacheOnCookie = value.cacheOnCookie;
+            this._cacheTtlByStatus = value.cacheTtlByStatus;
+            this._disableApps = value.disableApps;
+            this._disablePerformance = value.disablePerformance;
+            this._disableSecurity = value.disableSecurity;
+            this._disableZaraz = value.disableZaraz;
+            this._edgeCacheTtl = value.edgeCacheTtl;
+            this._emailObfuscation = value.emailObfuscation;
+            this._explicitCacheControl = value.explicitCacheControl;
+            this._forwardingUrl.internalValue = value.forwardingUrl;
+            this._hostHeaderOverride = value.hostHeaderOverride;
+            this._ipGeolocation = value.ipGeolocation;
+            this._mirage = value.mirage;
+            this._opportunisticEncryption = value.opportunisticEncryption;
+            this._originErrorPagePassThru = value.originErrorPagePassThru;
+            this._polish = value.polish;
+            this._resolveOverride = value.resolveOverride;
+            this._respectStrongEtag = value.respectStrongEtag;
+            this._responseBuffering = value.responseBuffering;
+            this._rocketLoader = value.rocketLoader;
+            this._securityLevel = value.securityLevel;
+            this._sortQueryStringForCache = value.sortQueryStringForCache;
+            this._ssl = value.ssl;
+            this._trueClientIpHeader = value.trueClientIpHeader;
+            this._waf = value.waf;
+        }
+    }
+    // always_use_https - computed: false, optional: true, required: false
+    _alwaysUseHttps;
+    get alwaysUseHttps() {
+        return this.getBooleanAttribute('always_use_https');
+    }
+    set alwaysUseHttps(value) {
+        this._alwaysUseHttps = value;
+    }
+    resetAlwaysUseHttps() {
         this._alwaysUseHttps = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "alwaysUseHttpsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alwaysUseHttps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "automaticHttpsRewrites", {
-        get: function () {
-            return this.getStringAttribute('automatic_https_rewrites');
-        },
-        set: function (value) {
-            this._automaticHttpsRewrites = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetAutomaticHttpsRewrites = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get alwaysUseHttpsInput() {
+        return this._alwaysUseHttps;
+    }
+    // automatic_https_rewrites - computed: false, optional: true, required: false
+    _automaticHttpsRewrites;
+    get automaticHttpsRewrites() {
+        return this.getStringAttribute('automatic_https_rewrites');
+    }
+    set automaticHttpsRewrites(value) {
+        this._automaticHttpsRewrites = value;
+    }
+    resetAutomaticHttpsRewrites() {
         this._automaticHttpsRewrites = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "automaticHttpsRewritesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._automaticHttpsRewrites;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "browserCacheTtl", {
-        get: function () {
-            return this.getNumberAttribute('browser_cache_ttl');
-        },
-        set: function (value) {
-            this._browserCacheTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetBrowserCacheTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get automaticHttpsRewritesInput() {
+        return this._automaticHttpsRewrites;
+    }
+    // browser_cache_ttl - computed: false, optional: true, required: false
+    _browserCacheTtl;
+    get browserCacheTtl() {
+        return this.getNumberAttribute('browser_cache_ttl');
+    }
+    set browserCacheTtl(value) {
+        this._browserCacheTtl = value;
+    }
+    resetBrowserCacheTtl() {
         this._browserCacheTtl = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "browserCacheTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._browserCacheTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "browserCheck", {
-        get: function () {
-            return this.getStringAttribute('browser_check');
-        },
-        set: function (value) {
-            this._browserCheck = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetBrowserCheck = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get browserCacheTtlInput() {
+        return this._browserCacheTtl;
+    }
+    // browser_check - computed: false, optional: true, required: false
+    _browserCheck;
+    get browserCheck() {
+        return this.getStringAttribute('browser_check');
+    }
+    set browserCheck(value) {
+        this._browserCheck = value;
+    }
+    resetBrowserCheck() {
         this._browserCheck = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "browserCheckInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._browserCheck;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "bypassCacheOnCookie", {
-        get: function () {
-            return this.getStringAttribute('bypass_cache_on_cookie');
-        },
-        set: function (value) {
-            this._bypassCacheOnCookie = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetBypassCacheOnCookie = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get browserCheckInput() {
+        return this._browserCheck;
+    }
+    // bypass_cache_on_cookie - computed: false, optional: true, required: false
+    _bypassCacheOnCookie;
+    get bypassCacheOnCookie() {
+        return this.getStringAttribute('bypass_cache_on_cookie');
+    }
+    set bypassCacheOnCookie(value) {
+        this._bypassCacheOnCookie = value;
+    }
+    resetBypassCacheOnCookie() {
         this._bypassCacheOnCookie = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "bypassCacheOnCookieInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bypassCacheOnCookie;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheByDeviceType", {
-        get: function () {
-            return this.getStringAttribute('cache_by_device_type');
-        },
-        set: function (value) {
-            this._cacheByDeviceType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetCacheByDeviceType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bypassCacheOnCookieInput() {
+        return this._bypassCacheOnCookie;
+    }
+    // cache_by_device_type - computed: false, optional: true, required: false
+    _cacheByDeviceType;
+    get cacheByDeviceType() {
+        return this.getStringAttribute('cache_by_device_type');
+    }
+    set cacheByDeviceType(value) {
+        this._cacheByDeviceType = value;
+    }
+    resetCacheByDeviceType() {
         this._cacheByDeviceType = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheByDeviceTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cacheByDeviceType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheDeceptionArmor", {
-        get: function () {
-            return this.getStringAttribute('cache_deception_armor');
-        },
-        set: function (value) {
-            this._cacheDeceptionArmor = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetCacheDeceptionArmor = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheByDeviceTypeInput() {
+        return this._cacheByDeviceType;
+    }
+    // cache_deception_armor - computed: false, optional: true, required: false
+    _cacheDeceptionArmor;
+    get cacheDeceptionArmor() {
+        return this.getStringAttribute('cache_deception_armor');
+    }
+    set cacheDeceptionArmor(value) {
+        this._cacheDeceptionArmor = value;
+    }
+    resetCacheDeceptionArmor() {
         this._cacheDeceptionArmor = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheDeceptionArmorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cacheDeceptionArmor;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheKeyFields", {
-        get: function () {
-            return this._cacheKeyFields;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.putCacheKeyFields = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheDeceptionArmorInput() {
+        return this._cacheDeceptionArmor;
+    }
+    // cache_key_fields - computed: false, optional: true, required: false
+    _cacheKeyFields = new PageRuleActionsCacheKeyFieldsOutputReference(this, "cache_key_fields");
+    get cacheKeyFields() {
+        return this._cacheKeyFields;
+    }
+    putCacheKeyFields(value) {
         this._cacheKeyFields.internalValue = value;
-    };
-    PageRuleActionsOutputReference.prototype.resetCacheKeyFields = function () {
+    }
+    resetCacheKeyFields() {
         this._cacheKeyFields.internalValue = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheKeyFieldsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cacheKeyFields.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheLevel", {
-        get: function () {
-            return this.getStringAttribute('cache_level');
-        },
-        set: function (value) {
-            this._cacheLevel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetCacheLevel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheKeyFieldsInput() {
+        return this._cacheKeyFields.internalValue;
+    }
+    // cache_level - computed: false, optional: true, required: false
+    _cacheLevel;
+    get cacheLevel() {
+        return this.getStringAttribute('cache_level');
+    }
+    set cacheLevel(value) {
+        this._cacheLevel = value;
+    }
+    resetCacheLevel() {
         this._cacheLevel = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheLevelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cacheLevel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheOnCookie", {
-        get: function () {
-            return this.getStringAttribute('cache_on_cookie');
-        },
-        set: function (value) {
-            this._cacheOnCookie = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetCacheOnCookie = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheLevelInput() {
+        return this._cacheLevel;
+    }
+    // cache_on_cookie - computed: false, optional: true, required: false
+    _cacheOnCookie;
+    get cacheOnCookie() {
+        return this.getStringAttribute('cache_on_cookie');
+    }
+    set cacheOnCookie(value) {
+        this._cacheOnCookie = value;
+    }
+    resetCacheOnCookie() {
         this._cacheOnCookie = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheOnCookieInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cacheOnCookie;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheTtlByStatus", {
-        get: function () {
-            return this.getStringMapAttribute('cache_ttl_by_status');
-        },
-        set: function (value) {
-            this._cacheTtlByStatus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetCacheTtlByStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheOnCookieInput() {
+        return this._cacheOnCookie;
+    }
+    // cache_ttl_by_status - computed: false, optional: true, required: false
+    _cacheTtlByStatus;
+    get cacheTtlByStatus() {
+        return this.getStringMapAttribute('cache_ttl_by_status');
+    }
+    set cacheTtlByStatus(value) {
+        this._cacheTtlByStatus = value;
+    }
+    resetCacheTtlByStatus() {
         this._cacheTtlByStatus = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "cacheTtlByStatusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cacheTtlByStatus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "disableApps", {
-        get: function () {
-            return this.getBooleanAttribute('disable_apps');
-        },
-        set: function (value) {
-            this._disableApps = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetDisableApps = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheTtlByStatusInput() {
+        return this._cacheTtlByStatus;
+    }
+    // disable_apps - computed: false, optional: true, required: false
+    _disableApps;
+    get disableApps() {
+        return this.getBooleanAttribute('disable_apps');
+    }
+    set disableApps(value) {
+        this._disableApps = value;
+    }
+    resetDisableApps() {
         this._disableApps = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "disableAppsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disableApps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "disablePerformance", {
-        get: function () {
-            return this.getBooleanAttribute('disable_performance');
-        },
-        set: function (value) {
-            this._disablePerformance = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetDisablePerformance = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableAppsInput() {
+        return this._disableApps;
+    }
+    // disable_performance - computed: false, optional: true, required: false
+    _disablePerformance;
+    get disablePerformance() {
+        return this.getBooleanAttribute('disable_performance');
+    }
+    set disablePerformance(value) {
+        this._disablePerformance = value;
+    }
+    resetDisablePerformance() {
         this._disablePerformance = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "disablePerformanceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disablePerformance;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "disableSecurity", {
-        get: function () {
-            return this.getBooleanAttribute('disable_security');
-        },
-        set: function (value) {
-            this._disableSecurity = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetDisableSecurity = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disablePerformanceInput() {
+        return this._disablePerformance;
+    }
+    // disable_security - computed: false, optional: true, required: false
+    _disableSecurity;
+    get disableSecurity() {
+        return this.getBooleanAttribute('disable_security');
+    }
+    set disableSecurity(value) {
+        this._disableSecurity = value;
+    }
+    resetDisableSecurity() {
         this._disableSecurity = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "disableSecurityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disableSecurity;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "disableZaraz", {
-        get: function () {
-            return this.getBooleanAttribute('disable_zaraz');
-        },
-        set: function (value) {
-            this._disableZaraz = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetDisableZaraz = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableSecurityInput() {
+        return this._disableSecurity;
+    }
+    // disable_zaraz - computed: false, optional: true, required: false
+    _disableZaraz;
+    get disableZaraz() {
+        return this.getBooleanAttribute('disable_zaraz');
+    }
+    set disableZaraz(value) {
+        this._disableZaraz = value;
+    }
+    resetDisableZaraz() {
         this._disableZaraz = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "disableZarazInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disableZaraz;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "edgeCacheTtl", {
-        get: function () {
-            return this.getNumberAttribute('edge_cache_ttl');
-        },
-        set: function (value) {
-            this._edgeCacheTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetEdgeCacheTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableZarazInput() {
+        return this._disableZaraz;
+    }
+    // edge_cache_ttl - computed: false, optional: true, required: false
+    _edgeCacheTtl;
+    get edgeCacheTtl() {
+        return this.getNumberAttribute('edge_cache_ttl');
+    }
+    set edgeCacheTtl(value) {
+        this._edgeCacheTtl = value;
+    }
+    resetEdgeCacheTtl() {
         this._edgeCacheTtl = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "edgeCacheTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._edgeCacheTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "emailObfuscation", {
-        get: function () {
-            return this.getStringAttribute('email_obfuscation');
-        },
-        set: function (value) {
-            this._emailObfuscation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetEmailObfuscation = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get edgeCacheTtlInput() {
+        return this._edgeCacheTtl;
+    }
+    // email_obfuscation - computed: false, optional: true, required: false
+    _emailObfuscation;
+    get emailObfuscation() {
+        return this.getStringAttribute('email_obfuscation');
+    }
+    set emailObfuscation(value) {
+        this._emailObfuscation = value;
+    }
+    resetEmailObfuscation() {
         this._emailObfuscation = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "emailObfuscationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._emailObfuscation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "explicitCacheControl", {
-        get: function () {
-            return this.getStringAttribute('explicit_cache_control');
-        },
-        set: function (value) {
-            this._explicitCacheControl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetExplicitCacheControl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailObfuscationInput() {
+        return this._emailObfuscation;
+    }
+    // explicit_cache_control - computed: false, optional: true, required: false
+    _explicitCacheControl;
+    get explicitCacheControl() {
+        return this.getStringAttribute('explicit_cache_control');
+    }
+    set explicitCacheControl(value) {
+        this._explicitCacheControl = value;
+    }
+    resetExplicitCacheControl() {
         this._explicitCacheControl = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "explicitCacheControlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._explicitCacheControl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "forwardingUrl", {
-        get: function () {
-            return this._forwardingUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.putForwardingUrl = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get explicitCacheControlInput() {
+        return this._explicitCacheControl;
+    }
+    // forwarding_url - computed: false, optional: true, required: false
+    _forwardingUrl = new PageRuleActionsForwardingUrlOutputReference(this, "forwarding_url");
+    get forwardingUrl() {
+        return this._forwardingUrl;
+    }
+    putForwardingUrl(value) {
         this._forwardingUrl.internalValue = value;
-    };
-    PageRuleActionsOutputReference.prototype.resetForwardingUrl = function () {
+    }
+    resetForwardingUrl() {
         this._forwardingUrl.internalValue = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "forwardingUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._forwardingUrl.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "hostHeaderOverride", {
-        get: function () {
-            return this.getStringAttribute('host_header_override');
-        },
-        set: function (value) {
-            this._hostHeaderOverride = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetHostHeaderOverride = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get forwardingUrlInput() {
+        return this._forwardingUrl.internalValue;
+    }
+    // host_header_override - computed: false, optional: true, required: false
+    _hostHeaderOverride;
+    get hostHeaderOverride() {
+        return this.getStringAttribute('host_header_override');
+    }
+    set hostHeaderOverride(value) {
+        this._hostHeaderOverride = value;
+    }
+    resetHostHeaderOverride() {
         this._hostHeaderOverride = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "hostHeaderOverrideInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostHeaderOverride;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "ipGeolocation", {
-        get: function () {
-            return this.getStringAttribute('ip_geolocation');
-        },
-        set: function (value) {
-            this._ipGeolocation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetIpGeolocation = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostHeaderOverrideInput() {
+        return this._hostHeaderOverride;
+    }
+    // ip_geolocation - computed: false, optional: true, required: false
+    _ipGeolocation;
+    get ipGeolocation() {
+        return this.getStringAttribute('ip_geolocation');
+    }
+    set ipGeolocation(value) {
+        this._ipGeolocation = value;
+    }
+    resetIpGeolocation() {
         this._ipGeolocation = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "ipGeolocationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipGeolocation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "mirage", {
-        get: function () {
-            return this.getStringAttribute('mirage');
-        },
-        set: function (value) {
-            this._mirage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetMirage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipGeolocationInput() {
+        return this._ipGeolocation;
+    }
+    // mirage - computed: false, optional: true, required: false
+    _mirage;
+    get mirage() {
+        return this.getStringAttribute('mirage');
+    }
+    set mirage(value) {
+        this._mirage = value;
+    }
+    resetMirage() {
         this._mirage = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "mirageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mirage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "opportunisticEncryption", {
-        get: function () {
-            return this.getStringAttribute('opportunistic_encryption');
-        },
-        set: function (value) {
-            this._opportunisticEncryption = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetOpportunisticEncryption = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mirageInput() {
+        return this._mirage;
+    }
+    // opportunistic_encryption - computed: false, optional: true, required: false
+    _opportunisticEncryption;
+    get opportunisticEncryption() {
+        return this.getStringAttribute('opportunistic_encryption');
+    }
+    set opportunisticEncryption(value) {
+        this._opportunisticEncryption = value;
+    }
+    resetOpportunisticEncryption() {
         this._opportunisticEncryption = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "opportunisticEncryptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._opportunisticEncryption;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "originErrorPagePassThru", {
-        get: function () {
-            return this.getStringAttribute('origin_error_page_pass_thru');
-        },
-        set: function (value) {
-            this._originErrorPagePassThru = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetOriginErrorPagePassThru = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get opportunisticEncryptionInput() {
+        return this._opportunisticEncryption;
+    }
+    // origin_error_page_pass_thru - computed: false, optional: true, required: false
+    _originErrorPagePassThru;
+    get originErrorPagePassThru() {
+        return this.getStringAttribute('origin_error_page_pass_thru');
+    }
+    set originErrorPagePassThru(value) {
+        this._originErrorPagePassThru = value;
+    }
+    resetOriginErrorPagePassThru() {
         this._originErrorPagePassThru = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "originErrorPagePassThruInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._originErrorPagePassThru;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "polish", {
-        get: function () {
-            return this.getStringAttribute('polish');
-        },
-        set: function (value) {
-            this._polish = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetPolish = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get originErrorPagePassThruInput() {
+        return this._originErrorPagePassThru;
+    }
+    // polish - computed: false, optional: true, required: false
+    _polish;
+    get polish() {
+        return this.getStringAttribute('polish');
+    }
+    set polish(value) {
+        this._polish = value;
+    }
+    resetPolish() {
         this._polish = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "polishInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._polish;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "resolveOverride", {
-        get: function () {
-            return this.getStringAttribute('resolve_override');
-        },
-        set: function (value) {
-            this._resolveOverride = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetResolveOverride = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get polishInput() {
+        return this._polish;
+    }
+    // resolve_override - computed: false, optional: true, required: false
+    _resolveOverride;
+    get resolveOverride() {
+        return this.getStringAttribute('resolve_override');
+    }
+    set resolveOverride(value) {
+        this._resolveOverride = value;
+    }
+    resetResolveOverride() {
         this._resolveOverride = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "resolveOverrideInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._resolveOverride;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "respectStrongEtag", {
-        get: function () {
-            return this.getStringAttribute('respect_strong_etag');
-        },
-        set: function (value) {
-            this._respectStrongEtag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetRespectStrongEtag = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get resolveOverrideInput() {
+        return this._resolveOverride;
+    }
+    // respect_strong_etag - computed: false, optional: true, required: false
+    _respectStrongEtag;
+    get respectStrongEtag() {
+        return this.getStringAttribute('respect_strong_etag');
+    }
+    set respectStrongEtag(value) {
+        this._respectStrongEtag = value;
+    }
+    resetRespectStrongEtag() {
         this._respectStrongEtag = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "respectStrongEtagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._respectStrongEtag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "responseBuffering", {
-        get: function () {
-            return this.getStringAttribute('response_buffering');
-        },
-        set: function (value) {
-            this._responseBuffering = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetResponseBuffering = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get respectStrongEtagInput() {
+        return this._respectStrongEtag;
+    }
+    // response_buffering - computed: false, optional: true, required: false
+    _responseBuffering;
+    get responseBuffering() {
+        return this.getStringAttribute('response_buffering');
+    }
+    set responseBuffering(value) {
+        this._responseBuffering = value;
+    }
+    resetResponseBuffering() {
         this._responseBuffering = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "responseBufferingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._responseBuffering;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "rocketLoader", {
-        get: function () {
-            return this.getStringAttribute('rocket_loader');
-        },
-        set: function (value) {
-            this._rocketLoader = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetRocketLoader = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get responseBufferingInput() {
+        return this._responseBuffering;
+    }
+    // rocket_loader - computed: false, optional: true, required: false
+    _rocketLoader;
+    get rocketLoader() {
+        return this.getStringAttribute('rocket_loader');
+    }
+    set rocketLoader(value) {
+        this._rocketLoader = value;
+    }
+    resetRocketLoader() {
         this._rocketLoader = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "rocketLoaderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rocketLoader;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "securityLevel", {
-        get: function () {
-            return this.getStringAttribute('security_level');
-        },
-        set: function (value) {
-            this._securityLevel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetSecurityLevel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rocketLoaderInput() {
+        return this._rocketLoader;
+    }
+    // security_level - computed: false, optional: true, required: false
+    _securityLevel;
+    get securityLevel() {
+        return this.getStringAttribute('security_level');
+    }
+    set securityLevel(value) {
+        this._securityLevel = value;
+    }
+    resetSecurityLevel() {
         this._securityLevel = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "securityLevelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._securityLevel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "sortQueryStringForCache", {
-        get: function () {
-            return this.getStringAttribute('sort_query_string_for_cache');
-        },
-        set: function (value) {
-            this._sortQueryStringForCache = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetSortQueryStringForCache = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get securityLevelInput() {
+        return this._securityLevel;
+    }
+    // sort_query_string_for_cache - computed: false, optional: true, required: false
+    _sortQueryStringForCache;
+    get sortQueryStringForCache() {
+        return this.getStringAttribute('sort_query_string_for_cache');
+    }
+    set sortQueryStringForCache(value) {
+        this._sortQueryStringForCache = value;
+    }
+    resetSortQueryStringForCache() {
         this._sortQueryStringForCache = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "sortQueryStringForCacheInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sortQueryStringForCache;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "ssl", {
-        get: function () {
-            return this.getStringAttribute('ssl');
-        },
-        set: function (value) {
-            this._ssl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetSsl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sortQueryStringForCacheInput() {
+        return this._sortQueryStringForCache;
+    }
+    // ssl - computed: false, optional: true, required: false
+    _ssl;
+    get ssl() {
+        return this.getStringAttribute('ssl');
+    }
+    set ssl(value) {
+        this._ssl = value;
+    }
+    resetSsl() {
         this._ssl = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "sslInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ssl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "trueClientIpHeader", {
-        get: function () {
-            return this.getStringAttribute('true_client_ip_header');
-        },
-        set: function (value) {
-            this._trueClientIpHeader = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetTrueClientIpHeader = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sslInput() {
+        return this._ssl;
+    }
+    // true_client_ip_header - computed: false, optional: true, required: false
+    _trueClientIpHeader;
+    get trueClientIpHeader() {
+        return this.getStringAttribute('true_client_ip_header');
+    }
+    set trueClientIpHeader(value) {
+        this._trueClientIpHeader = value;
+    }
+    resetTrueClientIpHeader() {
         this._trueClientIpHeader = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "trueClientIpHeaderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._trueClientIpHeader;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "waf", {
-        get: function () {
-            return this.getStringAttribute('waf');
-        },
-        set: function (value) {
-            this._waf = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRuleActionsOutputReference.prototype.resetWaf = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get trueClientIpHeaderInput() {
+        return this._trueClientIpHeader;
+    }
+    // waf - computed: false, optional: true, required: false
+    _waf;
+    get waf() {
+        return this.getStringAttribute('waf');
+    }
+    set waf(value) {
+        this._waf = value;
+    }
+    resetWaf() {
         this._waf = undefined;
-    };
-    Object.defineProperty(PageRuleActionsOutputReference.prototype, "wafInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._waf;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PageRuleActionsOutputReference;
-}(cdktf.ComplexObject));
-exports.PageRuleActionsOutputReference = PageRuleActionsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get wafInput() {
+        return this._waf;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_rule cloudflare_page_rule}
 */
-var PageRule = /** @class */ (function (_super) {
-    __extends(PageRule, _super);
+export class PageRule extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_page_rule";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a PageRule resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the PageRule to import
+    * @param importFromId The id of the existing PageRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_rule#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the PageRule to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_page_rule", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -2348,8 +1922,8 @@ var PageRule = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options PageRuleConfig
     */
-    function PageRule(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_page_rule',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -2362,159 +1936,101 @@ var PageRule = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // actions - computed: false, optional: false, required: true
-        _this._actions = new PageRuleActionsOutputReference(_this, "actions");
-        _this._actions.internalValue = config.actions;
-        _this._priority = config.priority;
-        _this._status = config.status;
-        _this._target = config.target;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._actions.internalValue = config.actions;
+        this._priority = config.priority;
+        this._status = config.status;
+        this._target = config.target;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a PageRule resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the PageRule to import
-    * @param importFromId The id of the existing PageRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_rule#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the PageRule to import is found
-    */
-    PageRule.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_page_rule", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(PageRule.prototype, "actions", {
-        get: function () {
-            return this._actions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRule.prototype.putActions = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // actions - computed: false, optional: false, required: true
+    _actions = new PageRuleActionsOutputReference(this, "actions");
+    get actions() {
+        return this._actions;
+    }
+    putActions(value) {
         this._actions.internalValue = value;
-    };
-    Object.defineProperty(PageRule.prototype, "actionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._actions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRule.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRule.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRule.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRule.prototype, "priority", {
-        get: function () {
-            return this.getNumberAttribute('priority');
-        },
-        set: function (value) {
-            this._priority = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRule.prototype.resetPriority = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get actionsInput() {
+        return this._actions.internalValue;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // priority - computed: true, optional: true, required: false
+    _priority;
+    get priority() {
+        return this.getNumberAttribute('priority');
+    }
+    set priority(value) {
+        this._priority = value;
+    }
+    resetPriority() {
         this._priority = undefined;
-    };
-    Object.defineProperty(PageRule.prototype, "priorityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._priority;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRule.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRule.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get priorityInput() {
+        return this._priority;
+    }
+    // status - computed: true, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(PageRule.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRule.prototype, "target", {
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        set: function (value) {
-            this._target = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRule.prototype, "targetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PageRule.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PageRule.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+    // target - computed: false, optional: false, required: true
+    _target;
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    set target(value) {
+        this._target = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetInput() {
+        return this._target;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(PageRule.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    PageRule.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             actions: pageRuleActionsToTerraform(this._actions.internalValue),
             priority: cdktf.numberToTerraform(this._priority),
@@ -2522,9 +2038,9 @@ var PageRule = /** @class */ (function (_super) {
             target: cdktf.stringToTerraform(this._target),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    PageRule.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             actions: {
                 value: pageRuleActionsToHclTerraform(this._actions.internalValue),
                 isBlock: true,
@@ -2557,15 +2073,6 @@ var PageRule = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    PageRule.tfResourceType = "cloudflare_page_rule";
-    return PageRule;
-}(cdktf.TerraformResource));
-exports.PageRule = PageRule;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

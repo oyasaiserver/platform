@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/project_card
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProjectCard = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/project_card github_project_card}
 */
-var ProjectCard = /** @class */ (function (_super) {
-    __extends(ProjectCard, _super);
+export class ProjectCard extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_project_card";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ProjectCard resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ProjectCard to import
+    * @param importFromId The id of the existing ProjectCard that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/project_card#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ProjectCard to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_project_card", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ProjectCard = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ProjectCardConfig
     */
-    function ProjectCard(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_project_card',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,152 +46,100 @@ var ProjectCard = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._columnId = config.columnId;
-        _this._contentId = config.contentId;
-        _this._contentType = config.contentType;
-        _this._id = config.id;
-        _this._note = config.note;
-        return _this;
+        });
+        this._columnId = config.columnId;
+        this._contentId = config.contentId;
+        this._contentType = config.contentType;
+        this._id = config.id;
+        this._note = config.note;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ProjectCard resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ProjectCard to import
-    * @param importFromId The id of the existing ProjectCard that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/project_card#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ProjectCard to import is found
-    */
-    ProjectCard.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_project_card", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ProjectCard.prototype, "cardId", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // card_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('card_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectCard.prototype, "columnId", {
-        get: function () {
-            return this.getStringAttribute('column_id');
-        },
-        set: function (value) {
-            this._columnId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectCard.prototype, "columnIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._columnId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectCard.prototype, "contentId", {
-        get: function () {
-            return this.getNumberAttribute('content_id');
-        },
-        set: function (value) {
-            this._contentId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectCard.prototype.resetContentId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // card_id - computed: true, optional: false, required: false
+    get cardId() {
+        return this.getNumberAttribute('card_id');
+    }
+    // column_id - computed: false, optional: false, required: true
+    _columnId;
+    get columnId() {
+        return this.getStringAttribute('column_id');
+    }
+    set columnId(value) {
+        this._columnId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get columnIdInput() {
+        return this._columnId;
+    }
+    // content_id - computed: false, optional: true, required: false
+    _contentId;
+    get contentId() {
+        return this.getNumberAttribute('content_id');
+    }
+    set contentId(value) {
+        this._contentId = value;
+    }
+    resetContentId() {
         this._contentId = undefined;
-    };
-    Object.defineProperty(ProjectCard.prototype, "contentIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectCard.prototype, "contentType", {
-        get: function () {
-            return this.getStringAttribute('content_type');
-        },
-        set: function (value) {
-            this._contentType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectCard.prototype.resetContentType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentIdInput() {
+        return this._contentId;
+    }
+    // content_type - computed: false, optional: true, required: false
+    _contentType;
+    get contentType() {
+        return this.getStringAttribute('content_type');
+    }
+    set contentType(value) {
+        this._contentType = value;
+    }
+    resetContentType() {
         this._contentType = undefined;
-    };
-    Object.defineProperty(ProjectCard.prototype, "contentTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectCard.prototype, "etag", {
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectCard.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectCard.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentTypeInput() {
+        return this._contentType;
+    }
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(ProjectCard.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ProjectCard.prototype, "note", {
-        get: function () {
-            return this.getStringAttribute('note');
-        },
-        set: function (value) {
-            this._note = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ProjectCard.prototype.resetNote = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // note - computed: false, optional: true, required: false
+    _note;
+    get note() {
+        return this.getStringAttribute('note');
+    }
+    set note(value) {
+        this._note = value;
+    }
+    resetNote() {
         this._note = undefined;
-    };
-    Object.defineProperty(ProjectCard.prototype, "noteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._note;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get noteInput() {
+        return this._note;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ProjectCard.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             column_id: cdktf.stringToTerraform(this._columnId),
             content_id: cdktf.numberToTerraform(this._contentId),
@@ -201,9 +147,9 @@ var ProjectCard = /** @class */ (function (_super) {
             id: cdktf.stringToTerraform(this._id),
             note: cdktf.stringToTerraform(this._note),
         };
-    };
-    ProjectCard.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             column_id: {
                 value: cdktf.stringToHclTerraform(this._columnId),
                 isBlock: false,
@@ -236,15 +182,6 @@ var ProjectCard = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ProjectCard.tfResourceType = "github_project_card";
-    return ProjectCard;
-}(cdktf.TerraformResource));
-exports.ProjectCard = ProjectCard;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

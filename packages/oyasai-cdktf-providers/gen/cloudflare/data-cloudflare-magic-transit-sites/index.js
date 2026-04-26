@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_sites
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareMagicTransitSites = exports.DataCloudflareMagicTransitSitesResultList = exports.DataCloudflareMagicTransitSitesResultOutputReference = exports.DataCloudflareMagicTransitSitesResultLocationOutputReference = void 0;
-exports.dataCloudflareMagicTransitSitesResultLocationToTerraform = dataCloudflareMagicTransitSitesResultLocationToTerraform;
-exports.dataCloudflareMagicTransitSitesResultLocationToHclTerraform = dataCloudflareMagicTransitSitesResultLocationToHclTerraform;
-exports.dataCloudflareMagicTransitSitesResultToTerraform = dataCloudflareMagicTransitSitesResultToTerraform;
-exports.dataCloudflareMagicTransitSitesResultToHclTerraform = dataCloudflareMagicTransitSitesResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareMagicTransitSitesResultLocationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareMagicTransitSitesResultLocationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,64 +10,48 @@ function dataCloudflareMagicTransitSitesResultLocationToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareMagicTransitSitesResultLocationToHclTerraform(struct) {
+export function dataCloudflareMagicTransitSitesResultLocationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareMagicTransitSitesResultLocationOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareMagicTransitSitesResultLocationOutputReference, _super);
+export class DataCloudflareMagicTransitSitesResultLocationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareMagicTransitSitesResultLocationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultLocationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultLocationOutputReference.prototype, "lat", {
-        // lat - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('lat');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultLocationOutputReference.prototype, "lon", {
-        // lon - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('lon');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareMagicTransitSitesResultLocationOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareMagicTransitSitesResultLocationOutputReference = DataCloudflareMagicTransitSitesResultLocationOutputReference;
-function dataCloudflareMagicTransitSitesResultToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // lat - computed: true, optional: false, required: false
+    get lat() {
+        return this.getStringAttribute('lat');
+    }
+    // lon - computed: true, optional: false, required: false
+    get lon() {
+        return this.getStringAttribute('lon');
+    }
+}
+export function dataCloudflareMagicTransitSitesResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -98,134 +60,113 @@ function dataCloudflareMagicTransitSitesResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareMagicTransitSitesResultToHclTerraform(struct) {
+export function dataCloudflareMagicTransitSitesResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareMagicTransitSitesResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareMagicTransitSitesResultOutputReference, _super);
+export class DataCloudflareMagicTransitSitesResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareMagicTransitSitesResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // location - computed: true, optional: false, required: false
-        _this._location = new DataCloudflareMagicTransitSitesResultLocationOutputReference(_this, "location");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultOutputReference.prototype, "connectorId", {
-        // connector_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('connector_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultOutputReference.prototype, "haMode", {
-        // ha_mode - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('ha_mode');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultOutputReference.prototype, "location", {
-        get: function () {
-            return this._location;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSitesResultOutputReference.prototype, "secondaryConnectorId", {
-        // secondary_connector_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('secondary_connector_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareMagicTransitSitesResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareMagicTransitSitesResultOutputReference = DataCloudflareMagicTransitSitesResultOutputReference;
-var DataCloudflareMagicTransitSitesResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareMagicTransitSitesResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // connector_id - computed: true, optional: false, required: false
+    get connectorId() {
+        return this.getStringAttribute('connector_id');
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // ha_mode - computed: true, optional: false, required: false
+    get haMode() {
+        return this.getBooleanAttribute('ha_mode');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // location - computed: true, optional: false, required: false
+    _location = new DataCloudflareMagicTransitSitesResultLocationOutputReference(this, "location");
+    get location() {
+        return this._location;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // secondary_connector_id - computed: true, optional: false, required: false
+    get secondaryConnectorId() {
+        return this.getStringAttribute('secondary_connector_id');
+    }
+}
+export class DataCloudflareMagicTransitSitesResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareMagicTransitSitesResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareMagicTransitSitesResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareMagicTransitSitesResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareMagicTransitSitesResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareMagicTransitSitesResultList = DataCloudflareMagicTransitSitesResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_sites cloudflare_magic_transit_sites}
 */
-var DataCloudflareMagicTransitSites = /** @class */ (function (_super) {
-    __extends(DataCloudflareMagicTransitSites, _super);
+export class DataCloudflareMagicTransitSites extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_magic_transit_sites";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareMagicTransitSites resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareMagicTransitSites to import
+    * @param importFromId The id of the existing DataCloudflareMagicTransitSites that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_sites#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareMagicTransitSites to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_transit_sites", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -236,9 +177,8 @@ var DataCloudflareMagicTransitSites = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareMagicTransitSitesConfig = {}
     */
-    function DataCloudflareMagicTransitSites(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_magic_transit_sites',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -251,109 +191,76 @@ var DataCloudflareMagicTransitSites = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareMagicTransitSitesResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._connectorid = config.connectorid;
-        _this._maxItems = config.maxItems;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._connectorid = config.connectorid;
+        this._maxItems = config.maxItems;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareMagicTransitSites resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareMagicTransitSites to import
-    * @param importFromId The id of the existing DataCloudflareMagicTransitSites that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_sites#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareMagicTransitSites to import is found
-    */
-    DataCloudflareMagicTransitSites.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_transit_sites", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareMagicTransitSites.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareMagicTransitSites.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareMagicTransitSites.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSites.prototype, "connectorid", {
-        get: function () {
-            return this.getStringAttribute('connectorid');
-        },
-        set: function (value) {
-            this._connectorid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareMagicTransitSites.prototype.resetConnectorid = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // connectorid - computed: false, optional: true, required: false
+    _connectorid;
+    get connectorid() {
+        return this.getStringAttribute('connectorid');
+    }
+    set connectorid(value) {
+        this._connectorid = value;
+    }
+    resetConnectorid() {
         this._connectorid = undefined;
-    };
-    Object.defineProperty(DataCloudflareMagicTransitSites.prototype, "connectoridInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._connectorid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSites.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareMagicTransitSites.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get connectoridInput() {
+        return this._connectorid;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareMagicTransitSites.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicTransitSites.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareMagicTransitSitesResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareMagicTransitSites.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             connectorid: cdktf.stringToTerraform(this._connectorid),
             max_items: cdktf.numberToTerraform(this._maxItems),
         };
-    };
-    DataCloudflareMagicTransitSites.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -374,15 +281,6 @@ var DataCloudflareMagicTransitSites = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareMagicTransitSites.tfResourceType = "cloudflare_magic_transit_sites";
-    return DataCloudflareMagicTransitSites;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareMagicTransitSites = DataCloudflareMagicTransitSites;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

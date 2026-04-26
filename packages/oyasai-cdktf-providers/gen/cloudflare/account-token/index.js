@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_token
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AccountToken = exports.AccountTokenPoliciesList = exports.AccountTokenPoliciesOutputReference = exports.AccountTokenPoliciesPermissionGroupsList = exports.AccountTokenPoliciesPermissionGroupsOutputReference = exports.AccountTokenConditionOutputReference = exports.AccountTokenConditionRequestIpOutputReference = void 0;
-exports.accountTokenConditionRequestIpToTerraform = accountTokenConditionRequestIpToTerraform;
-exports.accountTokenConditionRequestIpToHclTerraform = accountTokenConditionRequestIpToHclTerraform;
-exports.accountTokenConditionToTerraform = accountTokenConditionToTerraform;
-exports.accountTokenConditionToHclTerraform = accountTokenConditionToHclTerraform;
-exports.accountTokenPoliciesPermissionGroupsToTerraform = accountTokenPoliciesPermissionGroupsToTerraform;
-exports.accountTokenPoliciesPermissionGroupsToHclTerraform = accountTokenPoliciesPermissionGroupsToHclTerraform;
-exports.accountTokenPoliciesToTerraform = accountTokenPoliciesToTerraform;
-exports.accountTokenPoliciesToHclTerraform = accountTokenPoliciesToHclTerraform;
-var cdktf = require("cdktf");
-function accountTokenConditionRequestIpToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function accountTokenConditionRequestIpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -39,14 +13,14 @@ function accountTokenConditionRequestIpToTerraform(struct) {
         not_in: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.notIn),
     };
 }
-function accountTokenConditionRequestIpToHclTerraform(struct) {
+export function accountTokenConditionRequestIpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         in: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.in),
             isBlock: false,
@@ -61,106 +35,84 @@ function accountTokenConditionRequestIpToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountTokenConditionRequestIpOutputReference = /** @class */ (function (_super) {
-    __extends(AccountTokenConditionRequestIpOutputReference, _super);
+export class AccountTokenConditionRequestIpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AccountTokenConditionRequestIpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AccountTokenConditionRequestIpOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._in !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.in = this._in;
-            }
-            if (this._notIn !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.notIn = this._notIn;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._in = undefined;
-                this._notIn = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._in = value.in;
-                this._notIn = value.notIn;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenConditionRequestIpOutputReference.prototype, "in", {
-        get: function () {
-            return this.getListAttribute('in');
-        },
-        set: function (value) {
-            this._in = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountTokenConditionRequestIpOutputReference.prototype.resetIn = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._in !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.in = this._in;
+        }
+        if (this._notIn !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.notIn = this._notIn;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._in = undefined;
+            this._notIn = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._in = value.in;
+            this._notIn = value.notIn;
+        }
+    }
+    // in - computed: false, optional: true, required: false
+    _in;
+    get in() {
+        return this.getListAttribute('in');
+    }
+    set in(value) {
+        this._in = value;
+    }
+    resetIn() {
         this._in = undefined;
-    };
-    Object.defineProperty(AccountTokenConditionRequestIpOutputReference.prototype, "inInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._in;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenConditionRequestIpOutputReference.prototype, "notIn", {
-        get: function () {
-            return this.getListAttribute('not_in');
-        },
-        set: function (value) {
-            this._notIn = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountTokenConditionRequestIpOutputReference.prototype.resetNotIn = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get inInput() {
+        return this._in;
+    }
+    // not_in - computed: false, optional: true, required: false
+    _notIn;
+    get notIn() {
+        return this.getListAttribute('not_in');
+    }
+    set notIn(value) {
+        this._notIn = value;
+    }
+    resetNotIn() {
         this._notIn = undefined;
-    };
-    Object.defineProperty(AccountTokenConditionRequestIpOutputReference.prototype, "notInInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._notIn;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountTokenConditionRequestIpOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountTokenConditionRequestIpOutputReference = AccountTokenConditionRequestIpOutputReference;
-function accountTokenConditionToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get notInInput() {
+        return this._notIn;
+    }
+}
+export function accountTokenConditionToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -171,14 +123,14 @@ function accountTokenConditionToTerraform(struct) {
         request_ip: accountTokenConditionRequestIpToTerraform(struct.requestIp),
     };
 }
-function accountTokenConditionToHclTerraform(struct) {
+export function accountTokenConditionToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         request_ip: {
             value: accountTokenConditionRequestIpToHclTerraform(struct.requestIp),
             isBlock: true,
@@ -187,82 +139,63 @@ function accountTokenConditionToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountTokenConditionOutputReference = /** @class */ (function (_super) {
-    __extends(AccountTokenConditionOutputReference, _super);
+export class AccountTokenConditionOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AccountTokenConditionOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // request_ip - computed: false, optional: true, required: false
-        _this._requestIp = new AccountTokenConditionRequestIpOutputReference(_this, "request_ip");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AccountTokenConditionOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._requestIp) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requestIp = (_b = this._requestIp) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._requestIp.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._requestIp.internalValue = value.requestIp;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenConditionOutputReference.prototype, "requestIp", {
-        get: function () {
-            return this._requestIp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountTokenConditionOutputReference.prototype.putRequestIp = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._requestIp?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requestIp = this._requestIp?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._requestIp.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._requestIp.internalValue = value.requestIp;
+        }
+    }
+    // request_ip - computed: false, optional: true, required: false
+    _requestIp = new AccountTokenConditionRequestIpOutputReference(this, "request_ip");
+    get requestIp() {
+        return this._requestIp;
+    }
+    putRequestIp(value) {
         this._requestIp.internalValue = value;
-    };
-    AccountTokenConditionOutputReference.prototype.resetRequestIp = function () {
+    }
+    resetRequestIp() {
         this._requestIp.internalValue = undefined;
-    };
-    Object.defineProperty(AccountTokenConditionOutputReference.prototype, "requestIpInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requestIp.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountTokenConditionOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountTokenConditionOutputReference = AccountTokenConditionOutputReference;
-function accountTokenPoliciesPermissionGroupsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requestIpInput() {
+        return this._requestIp.internalValue;
+    }
+}
+export function accountTokenPoliciesPermissionGroupsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -273,14 +206,14 @@ function accountTokenPoliciesPermissionGroupsToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function accountTokenPoliciesPermissionGroupsToHclTerraform(struct) {
+export function accountTokenPoliciesPermissionGroupsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -289,101 +222,85 @@ function accountTokenPoliciesPermissionGroupsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountTokenPoliciesPermissionGroupsOutputReference = /** @class */ (function (_super) {
-    __extends(AccountTokenPoliciesPermissionGroupsOutputReference, _super);
+export class AccountTokenPoliciesPermissionGroupsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AccountTokenPoliciesPermissionGroupsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(AccountTokenPoliciesPermissionGroupsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenPoliciesPermissionGroupsOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenPoliciesPermissionGroupsOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountTokenPoliciesPermissionGroupsOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountTokenPoliciesPermissionGroupsOutputReference = AccountTokenPoliciesPermissionGroupsOutputReference;
-var AccountTokenPoliciesPermissionGroupsList = /** @class */ (function (_super) {
-    __extends(AccountTokenPoliciesPermissionGroupsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
+export class AccountTokenPoliciesPermissionGroupsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AccountTokenPoliciesPermissionGroupsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    AccountTokenPoliciesPermissionGroupsList.prototype.get = function (index) {
+    get(index) {
         return new AccountTokenPoliciesPermissionGroupsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return AccountTokenPoliciesPermissionGroupsList;
-}(cdktf.ComplexList));
-exports.AccountTokenPoliciesPermissionGroupsList = AccountTokenPoliciesPermissionGroupsList;
-function accountTokenPoliciesToTerraform(struct) {
+    }
+}
+export function accountTokenPoliciesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -396,14 +313,14 @@ function accountTokenPoliciesToTerraform(struct) {
         resources: cdktf.stringToTerraform(struct.resources),
     };
 }
-function accountTokenPoliciesToHclTerraform(struct) {
+export function accountTokenPoliciesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         effect: {
             value: cdktf.stringToHclTerraform(struct.effect),
             isBlock: false,
@@ -424,156 +341,141 @@ function accountTokenPoliciesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountTokenPoliciesOutputReference = /** @class */ (function (_super) {
-    __extends(AccountTokenPoliciesOutputReference, _super);
+export class AccountTokenPoliciesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AccountTokenPoliciesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // permission_groups - computed: false, optional: false, required: true
-        _this._permissionGroups = new AccountTokenPoliciesPermissionGroupsList(_this, "permission_groups", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(AccountTokenPoliciesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._effect !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.effect = this._effect;
-            }
-            if (((_a = this._permissionGroups) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.permissionGroups = (_b = this._permissionGroups) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._resources !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.resources = this._resources;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._effect = undefined;
-                this._permissionGroups.internalValue = undefined;
-                this._resources = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._effect = value.effect;
-                this._permissionGroups.internalValue = value.permissionGroups;
-                this._resources = value.resources;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenPoliciesOutputReference.prototype, "effect", {
-        get: function () {
-            return this.getStringAttribute('effect');
-        },
-        set: function (value) {
-            this._effect = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenPoliciesOutputReference.prototype, "effectInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._effect;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenPoliciesOutputReference.prototype, "permissionGroups", {
-        get: function () {
-            return this._permissionGroups;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountTokenPoliciesOutputReference.prototype.putPermissionGroups = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._effect !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.effect = this._effect;
+        }
+        if (this._permissionGroups?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.permissionGroups = this._permissionGroups?.internalValue;
+        }
+        if (this._resources !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.resources = this._resources;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._effect = undefined;
+            this._permissionGroups.internalValue = undefined;
+            this._resources = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._effect = value.effect;
+            this._permissionGroups.internalValue = value.permissionGroups;
+            this._resources = value.resources;
+        }
+    }
+    // effect - computed: false, optional: false, required: true
+    _effect;
+    get effect() {
+        return this.getStringAttribute('effect');
+    }
+    set effect(value) {
+        this._effect = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get effectInput() {
+        return this._effect;
+    }
+    // permission_groups - computed: false, optional: false, required: true
+    _permissionGroups = new AccountTokenPoliciesPermissionGroupsList(this, "permission_groups", false);
+    get permissionGroups() {
+        return this._permissionGroups;
+    }
+    putPermissionGroups(value) {
         this._permissionGroups.internalValue = value;
-    };
-    Object.defineProperty(AccountTokenPoliciesOutputReference.prototype, "permissionGroupsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._permissionGroups.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenPoliciesOutputReference.prototype, "resources", {
-        get: function () {
-            return this.getStringAttribute('resources');
-        },
-        set: function (value) {
-            this._resources = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountTokenPoliciesOutputReference.prototype, "resourcesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._resources;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountTokenPoliciesOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountTokenPoliciesOutputReference = AccountTokenPoliciesOutputReference;
-var AccountTokenPoliciesList = /** @class */ (function (_super) {
-    __extends(AccountTokenPoliciesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get permissionGroupsInput() {
+        return this._permissionGroups.internalValue;
+    }
+    // resources - computed: false, optional: false, required: true
+    _resources;
+    get resources() {
+        return this.getStringAttribute('resources');
+    }
+    set resources(value) {
+        this._resources = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get resourcesInput() {
+        return this._resources;
+    }
+}
+export class AccountTokenPoliciesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AccountTokenPoliciesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    AccountTokenPoliciesList.prototype.get = function (index) {
+    get(index) {
         return new AccountTokenPoliciesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return AccountTokenPoliciesList;
-}(cdktf.ComplexList));
-exports.AccountTokenPoliciesList = AccountTokenPoliciesList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_token cloudflare_account_token}
 */
-var AccountToken = /** @class */ (function (_super) {
-    __extends(AccountToken, _super);
+export class AccountToken extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_account_token";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a AccountToken resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the AccountToken to import
+    * @param importFromId The id of the existing AccountToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_token#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the AccountToken to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_token", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -584,8 +486,8 @@ var AccountToken = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options AccountTokenConfig
     */
-    function AccountToken(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_account_token',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -598,215 +500,138 @@ var AccountToken = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // condition - computed: false, optional: true, required: false
-        _this._condition = new AccountTokenConditionOutputReference(_this, "condition");
-        // policies - computed: false, optional: false, required: true
-        _this._policies = new AccountTokenPoliciesList(_this, "policies", false);
-        _this._accountId = config.accountId;
-        _this._condition.internalValue = config.condition;
-        _this._expiresOn = config.expiresOn;
-        _this._name = config.name;
-        _this._notBefore = config.notBefore;
-        _this._policies.internalValue = config.policies;
-        _this._status = config.status;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._condition.internalValue = config.condition;
+        this._expiresOn = config.expiresOn;
+        this._name = config.name;
+        this._notBefore = config.notBefore;
+        this._policies.internalValue = config.policies;
+        this._status = config.status;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a AccountToken resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the AccountToken to import
-    * @param importFromId The id of the existing AccountToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_token#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the AccountToken to import is found
-    */
-    AccountToken.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_token", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(AccountToken.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "condition", {
-        get: function () {
-            return this._condition;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountToken.prototype.putCondition = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: false, required: true
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // condition - computed: false, optional: true, required: false
+    _condition = new AccountTokenConditionOutputReference(this, "condition");
+    get condition() {
+        return this._condition;
+    }
+    putCondition(value) {
         this._condition.internalValue = value;
-    };
-    AccountToken.prototype.resetCondition = function () {
+    }
+    resetCondition() {
         this._condition.internalValue = undefined;
-    };
-    Object.defineProperty(AccountToken.prototype, "conditionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._condition.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "expiresOn", {
-        get: function () {
-            return this.getStringAttribute('expires_on');
-        },
-        set: function (value) {
-            this._expiresOn = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountToken.prototype.resetExpiresOn = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get conditionInput() {
+        return this._condition.internalValue;
+    }
+    // expires_on - computed: false, optional: true, required: false
+    _expiresOn;
+    get expiresOn() {
+        return this.getStringAttribute('expires_on');
+    }
+    set expiresOn(value) {
+        this._expiresOn = value;
+    }
+    resetExpiresOn() {
         this._expiresOn = undefined;
-    };
-    Object.defineProperty(AccountToken.prototype, "expiresOnInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._expiresOn;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "issuedOn", {
-        // issued_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('issued_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "lastUsedOn", {
-        // last_used_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_used_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "notBefore", {
-        get: function () {
-            return this.getStringAttribute('not_before');
-        },
-        set: function (value) {
-            this._notBefore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountToken.prototype.resetNotBefore = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get expiresOnInput() {
+        return this._expiresOn;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // issued_on - computed: true, optional: false, required: false
+    get issuedOn() {
+        return this.getStringAttribute('issued_on');
+    }
+    // last_used_on - computed: true, optional: false, required: false
+    get lastUsedOn() {
+        return this.getStringAttribute('last_used_on');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // not_before - computed: false, optional: true, required: false
+    _notBefore;
+    get notBefore() {
+        return this.getStringAttribute('not_before');
+    }
+    set notBefore(value) {
+        this._notBefore = value;
+    }
+    resetNotBefore() {
         this._notBefore = undefined;
-    };
-    Object.defineProperty(AccountToken.prototype, "notBeforeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._notBefore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "policies", {
-        get: function () {
-            return this._policies;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountToken.prototype.putPolicies = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get notBeforeInput() {
+        return this._notBefore;
+    }
+    // policies - computed: false, optional: false, required: true
+    _policies = new AccountTokenPoliciesList(this, "policies", false);
+    get policies() {
+        return this._policies;
+    }
+    putPolicies(value) {
         this._policies.internalValue = value;
-    };
-    Object.defineProperty(AccountToken.prototype, "policiesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._policies.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountToken.prototype.resetStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get policiesInput() {
+        return this._policies.internalValue;
+    }
+    // status - computed: true, optional: true, required: false
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    resetStatus() {
         this._status = undefined;
-    };
-    Object.defineProperty(AccountToken.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountToken.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
     // =========
     // SYNTHESIS
     // =========
-    AccountToken.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             condition: accountTokenConditionToTerraform(this._condition.internalValue),
@@ -816,9 +641,9 @@ var AccountToken = /** @class */ (function (_super) {
             policies: cdktf.listMapper(accountTokenPoliciesToTerraform, false)(this._policies.internalValue),
             status: cdktf.stringToTerraform(this._status),
         };
-    };
-    AccountToken.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -863,15 +688,6 @@ var AccountToken = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    AccountToken.tfResourceType = "cloudflare_account_token";
-    return AccountToken;
-}(cdktf.TerraformResource));
-exports.AccountToken = AccountToken;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_operation_schema_validation_settings
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ApiShieldOperationSchemaValidationSettings = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_operation_schema_validation_settings cloudflare_api_shield_operation_schema_validation_settings}
 */
-var ApiShieldOperationSchemaValidationSettings = /** @class */ (function (_super) {
-    __extends(ApiShieldOperationSchemaValidationSettings, _super);
+export class ApiShieldOperationSchemaValidationSettings extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_api_shield_operation_schema_validation_settings";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ApiShieldOperationSchemaValidationSettings resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ApiShieldOperationSchemaValidationSettings to import
+    * @param importFromId The id of the existing ApiShieldOperationSchemaValidationSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_operation_schema_validation_settings#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ApiShieldOperationSchemaValidationSettings to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_api_shield_operation_schema_validation_settings", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ApiShieldOperationSchemaValidationSettings = /** @class */ (function (_super
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ApiShieldOperationSchemaValidationSettingsConfig
     */
-    function ApiShieldOperationSchemaValidationSettings(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_api_shield_operation_schema_validation_settings',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,108 +46,72 @@ var ApiShieldOperationSchemaValidationSettings = /** @class */ (function (_super
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._mitigationAction = config.mitigationAction;
-        _this._operationId = config.operationId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._mitigationAction = config.mitigationAction;
+        this._operationId = config.operationId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ApiShieldOperationSchemaValidationSettings resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ApiShieldOperationSchemaValidationSettings to import
-    * @param importFromId The id of the existing ApiShieldOperationSchemaValidationSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_operation_schema_validation_settings#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ApiShieldOperationSchemaValidationSettings to import is found
-    */
-    ApiShieldOperationSchemaValidationSettings.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_api_shield_operation_schema_validation_settings", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ApiShieldOperationSchemaValidationSettings.prototype, "id", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationSchemaValidationSettings.prototype, "mitigationAction", {
-        get: function () {
-            return this.getStringAttribute('mitigation_action');
-        },
-        set: function (value) {
-            this._mitigationAction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ApiShieldOperationSchemaValidationSettings.prototype.resetMitigationAction = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // mitigation_action - computed: false, optional: true, required: false
+    _mitigationAction;
+    get mitigationAction() {
+        return this.getStringAttribute('mitigation_action');
+    }
+    set mitigationAction(value) {
+        this._mitigationAction = value;
+    }
+    resetMitigationAction() {
         this._mitigationAction = undefined;
-    };
-    Object.defineProperty(ApiShieldOperationSchemaValidationSettings.prototype, "mitigationActionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mitigationAction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationSchemaValidationSettings.prototype, "operationId", {
-        get: function () {
-            return this.getStringAttribute('operation_id');
-        },
-        set: function (value) {
-            this._operationId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationSchemaValidationSettings.prototype, "operationIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operationId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldOperationSchemaValidationSettings.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ApiShieldOperationSchemaValidationSettings.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mitigationActionInput() {
+        return this._mitigationAction;
+    }
+    // operation_id - computed: false, optional: false, required: true
+    _operationId;
+    get operationId() {
+        return this.getStringAttribute('operation_id');
+    }
+    set operationId(value) {
+        this._operationId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get operationIdInput() {
+        return this._operationId;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ApiShieldOperationSchemaValidationSettings.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ApiShieldOperationSchemaValidationSettings.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             mitigation_action: cdktf.stringToTerraform(this._mitigationAction),
             operation_id: cdktf.stringToTerraform(this._operationId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ApiShieldOperationSchemaValidationSettings.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             mitigation_action: {
                 value: cdktf.stringToHclTerraform(this._mitigationAction),
                 isBlock: false,
@@ -170,15 +132,6 @@ var ApiShieldOperationSchemaValidationSettings = /** @class */ (function (_super
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ApiShieldOperationSchemaValidationSettings.tfResourceType = "cloudflare_api_shield_operation_schema_validation_settings";
-    return ApiShieldOperationSchemaValidationSettings;
-}(cdktf.TerraformResource));
-exports.ApiShieldOperationSchemaValidationSettings = ApiShieldOperationSchemaValidationSettings;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

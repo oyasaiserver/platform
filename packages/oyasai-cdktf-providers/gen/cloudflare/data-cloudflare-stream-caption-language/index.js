@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/stream_caption_language
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareStreamCaptionLanguage = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/stream_caption_language cloudflare_stream_caption_language}
 */
-var DataCloudflareStreamCaptionLanguage = /** @class */ (function (_super) {
-    __extends(DataCloudflareStreamCaptionLanguage, _super);
+export class DataCloudflareStreamCaptionLanguage extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_stream_caption_language";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareStreamCaptionLanguage resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareStreamCaptionLanguage to import
+    * @param importFromId The id of the existing DataCloudflareStreamCaptionLanguage that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/stream_caption_language#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareStreamCaptionLanguage to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_stream_caption_language", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataCloudflareStreamCaptionLanguage = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareStreamCaptionLanguageConfig
     */
-    function DataCloudflareStreamCaptionLanguage(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_stream_caption_language',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,118 +46,77 @@ var DataCloudflareStreamCaptionLanguage = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._identifier = config.identifier;
-        _this._language = config.language;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._identifier = config.identifier;
+        this._language = config.language;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareStreamCaptionLanguage resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareStreamCaptionLanguage to import
-    * @param importFromId The id of the existing DataCloudflareStreamCaptionLanguage that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/stream_caption_language#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareStreamCaptionLanguage to import is found
-    */
-    DataCloudflareStreamCaptionLanguage.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_stream_caption_language", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareStreamCaptionLanguage.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareStreamCaptionLanguage.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareStreamCaptionLanguage.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareStreamCaptionLanguage.prototype, "generated", {
-        // generated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('generated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareStreamCaptionLanguage.prototype, "identifier", {
-        get: function () {
-            return this.getStringAttribute('identifier');
-        },
-        set: function (value) {
-            this._identifier = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareStreamCaptionLanguage.prototype, "identifierInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identifier;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareStreamCaptionLanguage.prototype, "label", {
-        // label - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareStreamCaptionLanguage.prototype, "language", {
-        get: function () {
-            return this.getStringAttribute('language');
-        },
-        set: function (value) {
-            this._language = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareStreamCaptionLanguage.prototype, "languageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._language;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareStreamCaptionLanguage.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // generated - computed: true, optional: false, required: false
+    get generated() {
+        return this.getBooleanAttribute('generated');
+    }
+    // identifier - computed: false, optional: false, required: true
+    _identifier;
+    get identifier() {
+        return this.getStringAttribute('identifier');
+    }
+    set identifier(value) {
+        this._identifier = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identifierInput() {
+        return this._identifier;
+    }
+    // label - computed: true, optional: false, required: false
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    // language - computed: false, optional: false, required: true
+    _language;
+    get language() {
+        return this.getStringAttribute('language');
+    }
+    set language(value) {
+        this._language = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get languageInput() {
+        return this._language;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareStreamCaptionLanguage.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             identifier: cdktf.stringToTerraform(this._identifier),
             language: cdktf.stringToTerraform(this._language),
         };
-    };
-    DataCloudflareStreamCaptionLanguage.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -180,15 +137,6 @@ var DataCloudflareStreamCaptionLanguage = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareStreamCaptionLanguage.tfResourceType = "cloudflare_stream_caption_language";
-    return DataCloudflareStreamCaptionLanguage;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareStreamCaptionLanguage = DataCloudflareStreamCaptionLanguage;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

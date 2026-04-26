@@ -1,93 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/service
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Service = exports.ServiceUpdateConfigOutputReference = exports.ServiceTaskSpecOutputReference = exports.ServiceTaskSpecRestartPolicyOutputReference = exports.ServiceTaskSpecResourcesOutputReference = exports.ServiceTaskSpecResourcesReservationOutputReference = exports.ServiceTaskSpecResourcesReservationGenericResourcesOutputReference = exports.ServiceTaskSpecResourcesLimitsOutputReference = exports.ServiceTaskSpecPlacementOutputReference = exports.ServiceTaskSpecPlacementPlatformsList = exports.ServiceTaskSpecPlacementPlatformsOutputReference = exports.ServiceTaskSpecNetworksAdvancedList = exports.ServiceTaskSpecNetworksAdvancedOutputReference = exports.ServiceTaskSpecLogDriverOutputReference = exports.ServiceTaskSpecContainerSpecOutputReference = exports.ServiceTaskSpecContainerSpecSecretsList = exports.ServiceTaskSpecContainerSpecSecretsOutputReference = exports.ServiceTaskSpecContainerSpecPrivilegesOutputReference = exports.ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference = exports.ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference = exports.ServiceTaskSpecContainerSpecMountsList = exports.ServiceTaskSpecContainerSpecMountsOutputReference = exports.ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference = exports.ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList = exports.ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference = exports.ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference = exports.ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference = exports.ServiceTaskSpecContainerSpecLabelsList = exports.ServiceTaskSpecContainerSpecLabelsOutputReference = exports.ServiceTaskSpecContainerSpecHostsList = exports.ServiceTaskSpecContainerSpecHostsOutputReference = exports.ServiceTaskSpecContainerSpecHealthcheckOutputReference = exports.ServiceTaskSpecContainerSpecDnsConfigOutputReference = exports.ServiceTaskSpecContainerSpecConfigsList = exports.ServiceTaskSpecContainerSpecConfigsOutputReference = exports.ServiceRollbackConfigOutputReference = exports.ServiceModeOutputReference = exports.ServiceModeReplicatedOutputReference = exports.ServiceLabelsList = exports.ServiceLabelsOutputReference = exports.ServiceEndpointSpecOutputReference = exports.ServiceEndpointSpecPortsList = exports.ServiceEndpointSpecPortsOutputReference = exports.ServiceConvergeConfigOutputReference = exports.ServiceAuthOutputReference = void 0;
-exports.serviceAuthToTerraform = serviceAuthToTerraform;
-exports.serviceAuthToHclTerraform = serviceAuthToHclTerraform;
-exports.serviceConvergeConfigToTerraform = serviceConvergeConfigToTerraform;
-exports.serviceConvergeConfigToHclTerraform = serviceConvergeConfigToHclTerraform;
-exports.serviceEndpointSpecPortsToTerraform = serviceEndpointSpecPortsToTerraform;
-exports.serviceEndpointSpecPortsToHclTerraform = serviceEndpointSpecPortsToHclTerraform;
-exports.serviceEndpointSpecToTerraform = serviceEndpointSpecToTerraform;
-exports.serviceEndpointSpecToHclTerraform = serviceEndpointSpecToHclTerraform;
-exports.serviceLabelsToTerraform = serviceLabelsToTerraform;
-exports.serviceLabelsToHclTerraform = serviceLabelsToHclTerraform;
-exports.serviceModeReplicatedToTerraform = serviceModeReplicatedToTerraform;
-exports.serviceModeReplicatedToHclTerraform = serviceModeReplicatedToHclTerraform;
-exports.serviceModeToTerraform = serviceModeToTerraform;
-exports.serviceModeToHclTerraform = serviceModeToHclTerraform;
-exports.serviceRollbackConfigToTerraform = serviceRollbackConfigToTerraform;
-exports.serviceRollbackConfigToHclTerraform = serviceRollbackConfigToHclTerraform;
-exports.serviceTaskSpecContainerSpecConfigsToTerraform = serviceTaskSpecContainerSpecConfigsToTerraform;
-exports.serviceTaskSpecContainerSpecConfigsToHclTerraform = serviceTaskSpecContainerSpecConfigsToHclTerraform;
-exports.serviceTaskSpecContainerSpecDnsConfigToTerraform = serviceTaskSpecContainerSpecDnsConfigToTerraform;
-exports.serviceTaskSpecContainerSpecDnsConfigToHclTerraform = serviceTaskSpecContainerSpecDnsConfigToHclTerraform;
-exports.serviceTaskSpecContainerSpecHealthcheckToTerraform = serviceTaskSpecContainerSpecHealthcheckToTerraform;
-exports.serviceTaskSpecContainerSpecHealthcheckToHclTerraform = serviceTaskSpecContainerSpecHealthcheckToHclTerraform;
-exports.serviceTaskSpecContainerSpecHostsToTerraform = serviceTaskSpecContainerSpecHostsToTerraform;
-exports.serviceTaskSpecContainerSpecHostsToHclTerraform = serviceTaskSpecContainerSpecHostsToHclTerraform;
-exports.serviceTaskSpecContainerSpecLabelsToTerraform = serviceTaskSpecContainerSpecLabelsToTerraform;
-exports.serviceTaskSpecContainerSpecLabelsToHclTerraform = serviceTaskSpecContainerSpecLabelsToHclTerraform;
-exports.serviceTaskSpecContainerSpecMountsBindOptionsToTerraform = serviceTaskSpecContainerSpecMountsBindOptionsToTerraform;
-exports.serviceTaskSpecContainerSpecMountsBindOptionsToHclTerraform = serviceTaskSpecContainerSpecMountsBindOptionsToHclTerraform;
-exports.serviceTaskSpecContainerSpecMountsTmpfsOptionsToTerraform = serviceTaskSpecContainerSpecMountsTmpfsOptionsToTerraform;
-exports.serviceTaskSpecContainerSpecMountsTmpfsOptionsToHclTerraform = serviceTaskSpecContainerSpecMountsTmpfsOptionsToHclTerraform;
-exports.serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToTerraform = serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToTerraform;
-exports.serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToHclTerraform = serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToHclTerraform;
-exports.serviceTaskSpecContainerSpecMountsVolumeOptionsToTerraform = serviceTaskSpecContainerSpecMountsVolumeOptionsToTerraform;
-exports.serviceTaskSpecContainerSpecMountsVolumeOptionsToHclTerraform = serviceTaskSpecContainerSpecMountsVolumeOptionsToHclTerraform;
-exports.serviceTaskSpecContainerSpecMountsToTerraform = serviceTaskSpecContainerSpecMountsToTerraform;
-exports.serviceTaskSpecContainerSpecMountsToHclTerraform = serviceTaskSpecContainerSpecMountsToHclTerraform;
-exports.serviceTaskSpecContainerSpecPrivilegesCredentialSpecToTerraform = serviceTaskSpecContainerSpecPrivilegesCredentialSpecToTerraform;
-exports.serviceTaskSpecContainerSpecPrivilegesCredentialSpecToHclTerraform = serviceTaskSpecContainerSpecPrivilegesCredentialSpecToHclTerraform;
-exports.serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToTerraform = serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToTerraform;
-exports.serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToHclTerraform = serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToHclTerraform;
-exports.serviceTaskSpecContainerSpecPrivilegesToTerraform = serviceTaskSpecContainerSpecPrivilegesToTerraform;
-exports.serviceTaskSpecContainerSpecPrivilegesToHclTerraform = serviceTaskSpecContainerSpecPrivilegesToHclTerraform;
-exports.serviceTaskSpecContainerSpecSecretsToTerraform = serviceTaskSpecContainerSpecSecretsToTerraform;
-exports.serviceTaskSpecContainerSpecSecretsToHclTerraform = serviceTaskSpecContainerSpecSecretsToHclTerraform;
-exports.serviceTaskSpecContainerSpecToTerraform = serviceTaskSpecContainerSpecToTerraform;
-exports.serviceTaskSpecContainerSpecToHclTerraform = serviceTaskSpecContainerSpecToHclTerraform;
-exports.serviceTaskSpecLogDriverToTerraform = serviceTaskSpecLogDriverToTerraform;
-exports.serviceTaskSpecLogDriverToHclTerraform = serviceTaskSpecLogDriverToHclTerraform;
-exports.serviceTaskSpecNetworksAdvancedToTerraform = serviceTaskSpecNetworksAdvancedToTerraform;
-exports.serviceTaskSpecNetworksAdvancedToHclTerraform = serviceTaskSpecNetworksAdvancedToHclTerraform;
-exports.serviceTaskSpecPlacementPlatformsToTerraform = serviceTaskSpecPlacementPlatformsToTerraform;
-exports.serviceTaskSpecPlacementPlatformsToHclTerraform = serviceTaskSpecPlacementPlatformsToHclTerraform;
-exports.serviceTaskSpecPlacementToTerraform = serviceTaskSpecPlacementToTerraform;
-exports.serviceTaskSpecPlacementToHclTerraform = serviceTaskSpecPlacementToHclTerraform;
-exports.serviceTaskSpecResourcesLimitsToTerraform = serviceTaskSpecResourcesLimitsToTerraform;
-exports.serviceTaskSpecResourcesLimitsToHclTerraform = serviceTaskSpecResourcesLimitsToHclTerraform;
-exports.serviceTaskSpecResourcesReservationGenericResourcesToTerraform = serviceTaskSpecResourcesReservationGenericResourcesToTerraform;
-exports.serviceTaskSpecResourcesReservationGenericResourcesToHclTerraform = serviceTaskSpecResourcesReservationGenericResourcesToHclTerraform;
-exports.serviceTaskSpecResourcesReservationToTerraform = serviceTaskSpecResourcesReservationToTerraform;
-exports.serviceTaskSpecResourcesReservationToHclTerraform = serviceTaskSpecResourcesReservationToHclTerraform;
-exports.serviceTaskSpecResourcesToTerraform = serviceTaskSpecResourcesToTerraform;
-exports.serviceTaskSpecResourcesToHclTerraform = serviceTaskSpecResourcesToHclTerraform;
-exports.serviceTaskSpecRestartPolicyToTerraform = serviceTaskSpecRestartPolicyToTerraform;
-exports.serviceTaskSpecRestartPolicyToHclTerraform = serviceTaskSpecRestartPolicyToHclTerraform;
-exports.serviceTaskSpecToTerraform = serviceTaskSpecToTerraform;
-exports.serviceTaskSpecToHclTerraform = serviceTaskSpecToHclTerraform;
-exports.serviceUpdateConfigToTerraform = serviceUpdateConfigToTerraform;
-exports.serviceUpdateConfigToHclTerraform = serviceUpdateConfigToHclTerraform;
-var cdktf = require("cdktf");
-function serviceAuthToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function serviceAuthToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -100,14 +14,14 @@ function serviceAuthToTerraform(struct) {
         username: cdktf.stringToTerraform(struct.username),
     };
 }
-function serviceAuthToHclTerraform(struct) {
+export function serviceAuthToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         password: {
             value: cdktf.stringToHclTerraform(struct.password),
             isBlock: false,
@@ -128,121 +42,92 @@ function serviceAuthToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceAuthOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceAuthOutputReference, _super);
+export class ServiceAuthOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceAuthOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceAuthOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._password !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.password = this._password;
-            }
-            if (this._serverAddress !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serverAddress = this._serverAddress;
-            }
-            if (this._username !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.username = this._username;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._password = undefined;
-                this._serverAddress = undefined;
-                this._username = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._password = value.password;
-                this._serverAddress = value.serverAddress;
-                this._username = value.username;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceAuthOutputReference.prototype, "password", {
-        get: function () {
-            return this.getStringAttribute('password');
-        },
-        set: function (value) {
-            this._password = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceAuthOutputReference.prototype.resetPassword = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._password !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.password = this._password;
+        }
+        if (this._serverAddress !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serverAddress = this._serverAddress;
+        }
+        if (this._username !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.username = this._username;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._password = undefined;
+            this._serverAddress = undefined;
+            this._username = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._password = value.password;
+            this._serverAddress = value.serverAddress;
+            this._username = value.username;
+        }
+    }
+    // password - computed: false, optional: true, required: false
+    _password;
+    get password() {
+        return this.getStringAttribute('password');
+    }
+    set password(value) {
+        this._password = value;
+    }
+    resetPassword() {
         this._password = undefined;
-    };
-    Object.defineProperty(ServiceAuthOutputReference.prototype, "passwordInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._password;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceAuthOutputReference.prototype, "serverAddress", {
-        get: function () {
-            return this.getStringAttribute('server_address');
-        },
-        set: function (value) {
-            this._serverAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceAuthOutputReference.prototype, "serverAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serverAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceAuthOutputReference.prototype, "username", {
-        get: function () {
-            return this.getStringAttribute('username');
-        },
-        set: function (value) {
-            this._username = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceAuthOutputReference.prototype.resetUsername = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get passwordInput() {
+        return this._password;
+    }
+    // server_address - computed: false, optional: false, required: true
+    _serverAddress;
+    get serverAddress() {
+        return this.getStringAttribute('server_address');
+    }
+    set serverAddress(value) {
+        this._serverAddress = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get serverAddressInput() {
+        return this._serverAddress;
+    }
+    // username - computed: false, optional: true, required: false
+    _username;
+    get username() {
+        return this.getStringAttribute('username');
+    }
+    set username(value) {
+        this._username = value;
+    }
+    resetUsername() {
         this._username = undefined;
-    };
-    Object.defineProperty(ServiceAuthOutputReference.prototype, "usernameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._username;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceAuthOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceAuthOutputReference = ServiceAuthOutputReference;
-function serviceConvergeConfigToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameInput() {
+        return this._username;
+    }
+}
+export function serviceConvergeConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -254,14 +139,14 @@ function serviceConvergeConfigToTerraform(struct) {
         timeout: cdktf.stringToTerraform(struct.timeout),
     };
 }
-function serviceConvergeConfigToHclTerraform(struct) {
+export function serviceConvergeConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         delay: {
             value: cdktf.stringToHclTerraform(struct.delay),
             isBlock: false,
@@ -276,97 +161,74 @@ function serviceConvergeConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceConvergeConfigOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceConvergeConfigOutputReference, _super);
+export class ServiceConvergeConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceConvergeConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceConvergeConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._delay !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.delay = this._delay;
-            }
-            if (this._timeout !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.timeout = this._timeout;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._delay = undefined;
-                this._timeout = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._delay = value.delay;
-                this._timeout = value.timeout;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceConvergeConfigOutputReference.prototype, "delay", {
-        get: function () {
-            return this.getStringAttribute('delay');
-        },
-        set: function (value) {
-            this._delay = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceConvergeConfigOutputReference.prototype.resetDelay = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._delay !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.delay = this._delay;
+        }
+        if (this._timeout !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.timeout = this._timeout;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._delay = undefined;
+            this._timeout = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._delay = value.delay;
+            this._timeout = value.timeout;
+        }
+    }
+    // delay - computed: false, optional: true, required: false
+    _delay;
+    get delay() {
+        return this.getStringAttribute('delay');
+    }
+    set delay(value) {
+        this._delay = value;
+    }
+    resetDelay() {
         this._delay = undefined;
-    };
-    Object.defineProperty(ServiceConvergeConfigOutputReference.prototype, "delayInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._delay;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceConvergeConfigOutputReference.prototype, "timeout", {
-        get: function () {
-            return this.getStringAttribute('timeout');
-        },
-        set: function (value) {
-            this._timeout = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceConvergeConfigOutputReference.prototype.resetTimeout = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get delayInput() {
+        return this._delay;
+    }
+    // timeout - computed: false, optional: true, required: false
+    _timeout;
+    get timeout() {
+        return this.getStringAttribute('timeout');
+    }
+    set timeout(value) {
+        this._timeout = value;
+    }
+    resetTimeout() {
         this._timeout = undefined;
-    };
-    Object.defineProperty(ServiceConvergeConfigOutputReference.prototype, "timeoutInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timeout;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceConvergeConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceConvergeConfigOutputReference = ServiceConvergeConfigOutputReference;
-function serviceEndpointSpecPortsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get timeoutInput() {
+        return this._timeout;
+    }
+}
+export function serviceEndpointSpecPortsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -381,14 +243,14 @@ function serviceEndpointSpecPortsToTerraform(struct) {
         target_port: cdktf.numberToTerraform(struct.targetPort),
     };
 }
-function serviceEndpointSpecPortsToHclTerraform(struct) {
+export function serviceEndpointSpecPortsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -421,209 +283,169 @@ function serviceEndpointSpecPortsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceEndpointSpecPortsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceEndpointSpecPortsOutputReference, _super);
+export class ServiceEndpointSpecPortsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceEndpointSpecPortsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._protocol !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.protocol = this._protocol;
-            }
-            if (this._publishMode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.publishMode = this._publishMode;
-            }
-            if (this._publishedPort !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.publishedPort = this._publishedPort;
-            }
-            if (this._targetPort !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.targetPort = this._targetPort;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._name = undefined;
-                this._protocol = undefined;
-                this._publishMode = undefined;
-                this._publishedPort = undefined;
-                this._targetPort = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._name = value.name;
-                this._protocol = value.protocol;
-                this._publishMode = value.publishMode;
-                this._publishedPort = value.publishedPort;
-                this._targetPort = value.targetPort;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceEndpointSpecPortsOutputReference.prototype.resetName = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._protocol !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.protocol = this._protocol;
+        }
+        if (this._publishMode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.publishMode = this._publishMode;
+        }
+        if (this._publishedPort !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.publishedPort = this._publishedPort;
+        }
+        if (this._targetPort !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.targetPort = this._targetPort;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._name = undefined;
+            this._protocol = undefined;
+            this._publishMode = undefined;
+            this._publishedPort = undefined;
+            this._targetPort = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._name = value.name;
+            this._protocol = value.protocol;
+            this._publishMode = value.publishMode;
+            this._publishedPort = value.publishedPort;
+            this._targetPort = value.targetPort;
+        }
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "protocol", {
-        get: function () {
-            return this.getStringAttribute('protocol');
-        },
-        set: function (value) {
-            this._protocol = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceEndpointSpecPortsOutputReference.prototype.resetProtocol = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // protocol - computed: false, optional: true, required: false
+    _protocol;
+    get protocol() {
+        return this.getStringAttribute('protocol');
+    }
+    set protocol(value) {
+        this._protocol = value;
+    }
+    resetProtocol() {
         this._protocol = undefined;
-    };
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "protocolInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._protocol;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "publishMode", {
-        get: function () {
-            return this.getStringAttribute('publish_mode');
-        },
-        set: function (value) {
-            this._publishMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceEndpointSpecPortsOutputReference.prototype.resetPublishMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get protocolInput() {
+        return this._protocol;
+    }
+    // publish_mode - computed: false, optional: true, required: false
+    _publishMode;
+    get publishMode() {
+        return this.getStringAttribute('publish_mode');
+    }
+    set publishMode(value) {
+        this._publishMode = value;
+    }
+    resetPublishMode() {
         this._publishMode = undefined;
-    };
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "publishModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._publishMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "publishedPort", {
-        get: function () {
-            return this.getNumberAttribute('published_port');
-        },
-        set: function (value) {
-            this._publishedPort = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceEndpointSpecPortsOutputReference.prototype.resetPublishedPort = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get publishModeInput() {
+        return this._publishMode;
+    }
+    // published_port - computed: true, optional: true, required: false
+    _publishedPort;
+    get publishedPort() {
+        return this.getNumberAttribute('published_port');
+    }
+    set publishedPort(value) {
+        this._publishedPort = value;
+    }
+    resetPublishedPort() {
         this._publishedPort = undefined;
-    };
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "publishedPortInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._publishedPort;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "targetPort", {
-        get: function () {
-            return this.getNumberAttribute('target_port');
-        },
-        set: function (value) {
-            this._targetPort = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceEndpointSpecPortsOutputReference.prototype, "targetPortInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._targetPort;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceEndpointSpecPortsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceEndpointSpecPortsOutputReference = ServiceEndpointSpecPortsOutputReference;
-var ServiceEndpointSpecPortsList = /** @class */ (function (_super) {
-    __extends(ServiceEndpointSpecPortsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get publishedPortInput() {
+        return this._publishedPort;
+    }
+    // target_port - computed: false, optional: false, required: true
+    _targetPort;
+    get targetPort() {
+        return this.getNumberAttribute('target_port');
+    }
+    set targetPort(value) {
+        this._targetPort = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetPortInput() {
+        return this._targetPort;
+    }
+}
+export class ServiceEndpointSpecPortsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceEndpointSpecPortsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceEndpointSpecPortsList.prototype.get = function (index) {
+    get(index) {
         return new ServiceEndpointSpecPortsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceEndpointSpecPortsList;
-}(cdktf.ComplexList));
-exports.ServiceEndpointSpecPortsList = ServiceEndpointSpecPortsList;
-function serviceEndpointSpecToTerraform(struct) {
+    }
+}
+export function serviceEndpointSpecToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -635,14 +457,14 @@ function serviceEndpointSpecToTerraform(struct) {
         ports: cdktf.listMapper(serviceEndpointSpecPortsToTerraform, true)(struct.ports),
     };
 }
-function serviceEndpointSpecToHclTerraform(struct) {
+export function serviceEndpointSpecToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         mode: {
             value: cdktf.stringToHclTerraform(struct.mode),
             isBlock: false,
@@ -657,100 +479,74 @@ function serviceEndpointSpecToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceEndpointSpecOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceEndpointSpecOutputReference, _super);
+export class ServiceEndpointSpecOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceEndpointSpecOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // ports - computed: false, optional: true, required: false
-        _this._ports = new ServiceEndpointSpecPortsList(_this, "ports", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceEndpointSpecOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._mode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mode = this._mode;
-            }
-            if (((_a = this._ports) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ports = (_b = this._ports) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._mode = undefined;
-                this._ports.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._mode = value.mode;
-                this._ports.internalValue = value.ports;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceEndpointSpecOutputReference.prototype, "mode", {
-        get: function () {
-            return this.getStringAttribute('mode');
-        },
-        set: function (value) {
-            this._mode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceEndpointSpecOutputReference.prototype.resetMode = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._mode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mode = this._mode;
+        }
+        if (this._ports?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ports = this._ports?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._mode = undefined;
+            this._ports.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._mode = value.mode;
+            this._ports.internalValue = value.ports;
+        }
+    }
+    // mode - computed: true, optional: true, required: false
+    _mode;
+    get mode() {
+        return this.getStringAttribute('mode');
+    }
+    set mode(value) {
+        this._mode = value;
+    }
+    resetMode() {
         this._mode = undefined;
-    };
-    Object.defineProperty(ServiceEndpointSpecOutputReference.prototype, "modeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceEndpointSpecOutputReference.prototype, "ports", {
-        get: function () {
-            return this._ports;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceEndpointSpecOutputReference.prototype.putPorts = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get modeInput() {
+        return this._mode;
+    }
+    // ports - computed: false, optional: true, required: false
+    _ports = new ServiceEndpointSpecPortsList(this, "ports", false);
+    get ports() {
+        return this._ports;
+    }
+    putPorts(value) {
         this._ports.internalValue = value;
-    };
-    ServiceEndpointSpecOutputReference.prototype.resetPorts = function () {
+    }
+    resetPorts() {
         this._ports.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceEndpointSpecOutputReference.prototype, "portsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ports.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceEndpointSpecOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceEndpointSpecOutputReference = ServiceEndpointSpecOutputReference;
-function serviceLabelsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get portsInput() {
+        return this._ports.internalValue;
+    }
+}
+export function serviceLabelsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -762,14 +558,14 @@ function serviceLabelsToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function serviceLabelsToHclTerraform(struct) {
+export function serviceLabelsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         label: {
             value: cdktf.stringToHclTerraform(struct.label),
             isBlock: false,
@@ -784,125 +580,103 @@ function serviceLabelsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceLabelsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceLabelsOutputReference, _super);
+export class ServiceLabelsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceLabelsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceLabelsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._label !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.label = this._label;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._label = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._label = value.label;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceLabelsOutputReference.prototype, "label", {
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        set: function (value) {
-            this._label = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceLabelsOutputReference.prototype, "labelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._label;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceLabelsOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceLabelsOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceLabelsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceLabelsOutputReference = ServiceLabelsOutputReference;
-var ServiceLabelsList = /** @class */ (function (_super) {
-    __extends(ServiceLabelsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._label !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.label = this._label;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._label = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._label = value.label;
+            this._value = value.value;
+        }
+    }
+    // label - computed: false, optional: false, required: true
+    _label;
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    set label(value) {
+        this._label = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelInput() {
+        return this._label;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class ServiceLabelsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceLabelsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceLabelsList.prototype.get = function (index) {
+    get(index) {
         return new ServiceLabelsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceLabelsList;
-}(cdktf.ComplexList));
-exports.ServiceLabelsList = ServiceLabelsList;
-function serviceModeReplicatedToTerraform(struct) {
+    }
+}
+export function serviceModeReplicatedToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -913,14 +687,14 @@ function serviceModeReplicatedToTerraform(struct) {
         replicas: cdktf.numberToTerraform(struct.replicas),
     };
 }
-function serviceModeReplicatedToHclTerraform(struct) {
+export function serviceModeReplicatedToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         replicas: {
             value: cdktf.numberToHclTerraform(struct.replicas),
             isBlock: false,
@@ -929,70 +703,53 @@ function serviceModeReplicatedToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceModeReplicatedOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceModeReplicatedOutputReference, _super);
+export class ServiceModeReplicatedOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceModeReplicatedOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceModeReplicatedOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._replicas !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.replicas = this._replicas;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._replicas = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._replicas = value.replicas;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceModeReplicatedOutputReference.prototype, "replicas", {
-        get: function () {
-            return this.getNumberAttribute('replicas');
-        },
-        set: function (value) {
-            this._replicas = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceModeReplicatedOutputReference.prototype.resetReplicas = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._replicas !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.replicas = this._replicas;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._replicas = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._replicas = value.replicas;
+        }
+    }
+    // replicas - computed: false, optional: true, required: false
+    _replicas;
+    get replicas() {
+        return this.getNumberAttribute('replicas');
+    }
+    set replicas(value) {
+        this._replicas = value;
+    }
+    resetReplicas() {
         this._replicas = undefined;
-    };
-    Object.defineProperty(ServiceModeReplicatedOutputReference.prototype, "replicasInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._replicas;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceModeReplicatedOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceModeReplicatedOutputReference = ServiceModeReplicatedOutputReference;
-function serviceModeToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get replicasInput() {
+        return this._replicas;
+    }
+}
+export function serviceModeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1004,14 +761,14 @@ function serviceModeToTerraform(struct) {
         replicated: serviceModeReplicatedToTerraform(struct.replicated),
     };
 }
-function serviceModeToHclTerraform(struct) {
+export function serviceModeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         global: {
             value: cdktf.booleanToHclTerraform(struct.global),
             isBlock: false,
@@ -1026,100 +783,74 @@ function serviceModeToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceModeOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceModeOutputReference, _super);
+export class ServiceModeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceModeOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // replicated - computed: false, optional: true, required: false
-        _this._replicated = new ServiceModeReplicatedOutputReference(_this, "replicated");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceModeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._global !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.global = this._global;
-            }
-            if (((_a = this._replicated) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.replicated = (_b = this._replicated) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._global = undefined;
-                this._replicated.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._global = value.global;
-                this._replicated.internalValue = value.replicated;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceModeOutputReference.prototype, "global", {
-        get: function () {
-            return this.getBooleanAttribute('global');
-        },
-        set: function (value) {
-            this._global = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceModeOutputReference.prototype.resetGlobal = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._global !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.global = this._global;
+        }
+        if (this._replicated?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.replicated = this._replicated?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._global = undefined;
+            this._replicated.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._global = value.global;
+            this._replicated.internalValue = value.replicated;
+        }
+    }
+    // global - computed: false, optional: true, required: false
+    _global;
+    get global() {
+        return this.getBooleanAttribute('global');
+    }
+    set global(value) {
+        this._global = value;
+    }
+    resetGlobal() {
         this._global = undefined;
-    };
-    Object.defineProperty(ServiceModeOutputReference.prototype, "globalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._global;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceModeOutputReference.prototype, "replicated", {
-        get: function () {
-            return this._replicated;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceModeOutputReference.prototype.putReplicated = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get globalInput() {
+        return this._global;
+    }
+    // replicated - computed: false, optional: true, required: false
+    _replicated = new ServiceModeReplicatedOutputReference(this, "replicated");
+    get replicated() {
+        return this._replicated;
+    }
+    putReplicated(value) {
         this._replicated.internalValue = value;
-    };
-    ServiceModeOutputReference.prototype.resetReplicated = function () {
+    }
+    resetReplicated() {
         this._replicated.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceModeOutputReference.prototype, "replicatedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._replicated.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceModeOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceModeOutputReference = ServiceModeOutputReference;
-function serviceRollbackConfigToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get replicatedInput() {
+        return this._replicated.internalValue;
+    }
+}
+export function serviceRollbackConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1135,14 +866,14 @@ function serviceRollbackConfigToTerraform(struct) {
         parallelism: cdktf.numberToTerraform(struct.parallelism),
     };
 }
-function serviceRollbackConfigToHclTerraform(struct) {
+export function serviceRollbackConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         delay: {
             value: cdktf.stringToHclTerraform(struct.delay),
             isBlock: false,
@@ -1181,205 +912,158 @@ function serviceRollbackConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceRollbackConfigOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceRollbackConfigOutputReference, _super);
+export class ServiceRollbackConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceRollbackConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._delay !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.delay = this._delay;
-            }
-            if (this._failureAction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.failureAction = this._failureAction;
-            }
-            if (this._maxFailureRatio !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxFailureRatio = this._maxFailureRatio;
-            }
-            if (this._monitor !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.monitor = this._monitor;
-            }
-            if (this._order !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.order = this._order;
-            }
-            if (this._parallelism !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.parallelism = this._parallelism;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._delay = undefined;
-                this._failureAction = undefined;
-                this._maxFailureRatio = undefined;
-                this._monitor = undefined;
-                this._order = undefined;
-                this._parallelism = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._delay = value.delay;
-                this._failureAction = value.failureAction;
-                this._maxFailureRatio = value.maxFailureRatio;
-                this._monitor = value.monitor;
-                this._order = value.order;
-                this._parallelism = value.parallelism;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "delay", {
-        get: function () {
-            return this.getStringAttribute('delay');
-        },
-        set: function (value) {
-            this._delay = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceRollbackConfigOutputReference.prototype.resetDelay = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._delay !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.delay = this._delay;
+        }
+        if (this._failureAction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.failureAction = this._failureAction;
+        }
+        if (this._maxFailureRatio !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxFailureRatio = this._maxFailureRatio;
+        }
+        if (this._monitor !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.monitor = this._monitor;
+        }
+        if (this._order !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.order = this._order;
+        }
+        if (this._parallelism !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.parallelism = this._parallelism;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._delay = undefined;
+            this._failureAction = undefined;
+            this._maxFailureRatio = undefined;
+            this._monitor = undefined;
+            this._order = undefined;
+            this._parallelism = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._delay = value.delay;
+            this._failureAction = value.failureAction;
+            this._maxFailureRatio = value.maxFailureRatio;
+            this._monitor = value.monitor;
+            this._order = value.order;
+            this._parallelism = value.parallelism;
+        }
+    }
+    // delay - computed: false, optional: true, required: false
+    _delay;
+    get delay() {
+        return this.getStringAttribute('delay');
+    }
+    set delay(value) {
+        this._delay = value;
+    }
+    resetDelay() {
         this._delay = undefined;
-    };
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "delayInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._delay;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "failureAction", {
-        get: function () {
-            return this.getStringAttribute('failure_action');
-        },
-        set: function (value) {
-            this._failureAction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceRollbackConfigOutputReference.prototype.resetFailureAction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get delayInput() {
+        return this._delay;
+    }
+    // failure_action - computed: false, optional: true, required: false
+    _failureAction;
+    get failureAction() {
+        return this.getStringAttribute('failure_action');
+    }
+    set failureAction(value) {
+        this._failureAction = value;
+    }
+    resetFailureAction() {
         this._failureAction = undefined;
-    };
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "failureActionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._failureAction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "maxFailureRatio", {
-        get: function () {
-            return this.getStringAttribute('max_failure_ratio');
-        },
-        set: function (value) {
-            this._maxFailureRatio = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceRollbackConfigOutputReference.prototype.resetMaxFailureRatio = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get failureActionInput() {
+        return this._failureAction;
+    }
+    // max_failure_ratio - computed: false, optional: true, required: false
+    _maxFailureRatio;
+    get maxFailureRatio() {
+        return this.getStringAttribute('max_failure_ratio');
+    }
+    set maxFailureRatio(value) {
+        this._maxFailureRatio = value;
+    }
+    resetMaxFailureRatio() {
         this._maxFailureRatio = undefined;
-    };
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "maxFailureRatioInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxFailureRatio;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "monitor", {
-        get: function () {
-            return this.getStringAttribute('monitor');
-        },
-        set: function (value) {
-            this._monitor = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceRollbackConfigOutputReference.prototype.resetMonitor = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxFailureRatioInput() {
+        return this._maxFailureRatio;
+    }
+    // monitor - computed: false, optional: true, required: false
+    _monitor;
+    get monitor() {
+        return this.getStringAttribute('monitor');
+    }
+    set monitor(value) {
+        this._monitor = value;
+    }
+    resetMonitor() {
         this._monitor = undefined;
-    };
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "monitorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._monitor;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceRollbackConfigOutputReference.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get monitorInput() {
+        return this._monitor;
+    }
+    // order - computed: false, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "parallelism", {
-        get: function () {
-            return this.getNumberAttribute('parallelism');
-        },
-        set: function (value) {
-            this._parallelism = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceRollbackConfigOutputReference.prototype.resetParallelism = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+    // parallelism - computed: false, optional: true, required: false
+    _parallelism;
+    get parallelism() {
+        return this.getNumberAttribute('parallelism');
+    }
+    set parallelism(value) {
+        this._parallelism = value;
+    }
+    resetParallelism() {
         this._parallelism = undefined;
-    };
-    Object.defineProperty(ServiceRollbackConfigOutputReference.prototype, "parallelismInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parallelism;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceRollbackConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceRollbackConfigOutputReference = ServiceRollbackConfigOutputReference;
-function serviceTaskSpecContainerSpecConfigsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get parallelismInput() {
+        return this._parallelism;
+    }
+}
+export function serviceTaskSpecContainerSpecConfigsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1395,14 +1079,14 @@ function serviceTaskSpecContainerSpecConfigsToTerraform(struct) {
         file_uid: cdktf.stringToTerraform(struct.fileUid),
     };
 }
-function serviceTaskSpecContainerSpecConfigsToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecConfigsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         config_id: {
             value: cdktf.stringToHclTerraform(struct.configId),
             isBlock: false,
@@ -1441,233 +1125,187 @@ function serviceTaskSpecContainerSpecConfigsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecConfigsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecConfigsOutputReference, _super);
+export class ServiceTaskSpecContainerSpecConfigsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecConfigsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._configId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.configId = this._configId;
-            }
-            if (this._configName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.configName = this._configName;
-            }
-            if (this._fileGid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileGid = this._fileGid;
-            }
-            if (this._fileMode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileMode = this._fileMode;
-            }
-            if (this._fileName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileName = this._fileName;
-            }
-            if (this._fileUid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileUid = this._fileUid;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._configId = undefined;
-                this._configName = undefined;
-                this._fileGid = undefined;
-                this._fileMode = undefined;
-                this._fileName = undefined;
-                this._fileUid = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._configId = value.configId;
-                this._configName = value.configName;
-                this._fileGid = value.fileGid;
-                this._fileMode = value.fileMode;
-                this._fileName = value.fileName;
-                this._fileUid = value.fileUid;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "configId", {
-        get: function () {
-            return this.getStringAttribute('config_id');
-        },
-        set: function (value) {
-            this._configId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "configIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "configName", {
-        get: function () {
-            return this.getStringAttribute('config_name');
-        },
-        set: function (value) {
-            this._configName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecConfigsOutputReference.prototype.resetConfigName = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._configId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.configId = this._configId;
+        }
+        if (this._configName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.configName = this._configName;
+        }
+        if (this._fileGid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileGid = this._fileGid;
+        }
+        if (this._fileMode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileMode = this._fileMode;
+        }
+        if (this._fileName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileName = this._fileName;
+        }
+        if (this._fileUid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileUid = this._fileUid;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._configId = undefined;
+            this._configName = undefined;
+            this._fileGid = undefined;
+            this._fileMode = undefined;
+            this._fileName = undefined;
+            this._fileUid = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._configId = value.configId;
+            this._configName = value.configName;
+            this._fileGid = value.fileGid;
+            this._fileMode = value.fileMode;
+            this._fileName = value.fileName;
+            this._fileUid = value.fileUid;
+        }
+    }
+    // config_id - computed: false, optional: false, required: true
+    _configId;
+    get configId() {
+        return this.getStringAttribute('config_id');
+    }
+    set configId(value) {
+        this._configId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get configIdInput() {
+        return this._configId;
+    }
+    // config_name - computed: false, optional: true, required: false
+    _configName;
+    get configName() {
+        return this.getStringAttribute('config_name');
+    }
+    set configName(value) {
+        this._configName = value;
+    }
+    resetConfigName() {
         this._configName = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "configNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "fileGid", {
-        get: function () {
-            return this.getStringAttribute('file_gid');
-        },
-        set: function (value) {
-            this._fileGid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecConfigsOutputReference.prototype.resetFileGid = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configNameInput() {
+        return this._configName;
+    }
+    // file_gid - computed: false, optional: true, required: false
+    _fileGid;
+    get fileGid() {
+        return this.getStringAttribute('file_gid');
+    }
+    set fileGid(value) {
+        this._fileGid = value;
+    }
+    resetFileGid() {
         this._fileGid = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "fileGidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileGid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "fileMode", {
-        get: function () {
-            return this.getNumberAttribute('file_mode');
-        },
-        set: function (value) {
-            this._fileMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecConfigsOutputReference.prototype.resetFileMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileGidInput() {
+        return this._fileGid;
+    }
+    // file_mode - computed: false, optional: true, required: false
+    _fileMode;
+    get fileMode() {
+        return this.getNumberAttribute('file_mode');
+    }
+    set fileMode(value) {
+        this._fileMode = value;
+    }
+    resetFileMode() {
         this._fileMode = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "fileModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "fileName", {
-        get: function () {
-            return this.getStringAttribute('file_name');
-        },
-        set: function (value) {
-            this._fileName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "fileNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "fileUid", {
-        get: function () {
-            return this.getStringAttribute('file_uid');
-        },
-        set: function (value) {
-            this._fileUid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecConfigsOutputReference.prototype.resetFileUid = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileModeInput() {
+        return this._fileMode;
+    }
+    // file_name - computed: false, optional: false, required: true
+    _fileName;
+    get fileName() {
+        return this.getStringAttribute('file_name');
+    }
+    set fileName(value) {
+        this._fileName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileNameInput() {
+        return this._fileName;
+    }
+    // file_uid - computed: false, optional: true, required: false
+    _fileUid;
+    get fileUid() {
+        return this.getStringAttribute('file_uid');
+    }
+    set fileUid(value) {
+        this._fileUid = value;
+    }
+    resetFileUid() {
         this._fileUid = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecConfigsOutputReference.prototype, "fileUidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileUid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecConfigsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecConfigsOutputReference = ServiceTaskSpecContainerSpecConfigsOutputReference;
-var ServiceTaskSpecContainerSpecConfigsList = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecConfigsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileUidInput() {
+        return this._fileUid;
+    }
+}
+export class ServiceTaskSpecContainerSpecConfigsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecConfigsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceTaskSpecContainerSpecConfigsList.prototype.get = function (index) {
+    get(index) {
         return new ServiceTaskSpecContainerSpecConfigsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceTaskSpecContainerSpecConfigsList;
-}(cdktf.ComplexList));
-exports.ServiceTaskSpecContainerSpecConfigsList = ServiceTaskSpecContainerSpecConfigsList;
-function serviceTaskSpecContainerSpecDnsConfigToTerraform(struct) {
+    }
+}
+export function serviceTaskSpecContainerSpecDnsConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1680,14 +1318,14 @@ function serviceTaskSpecContainerSpecDnsConfigToTerraform(struct) {
         search: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.search),
     };
 }
-function serviceTaskSpecContainerSpecDnsConfigToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecDnsConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         nameservers: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.nameservers),
             isBlock: false,
@@ -1708,121 +1346,92 @@ function serviceTaskSpecContainerSpecDnsConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecDnsConfigOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecDnsConfigOutputReference, _super);
+export class ServiceTaskSpecContainerSpecDnsConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecContainerSpecDnsConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecDnsConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._nameservers !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.nameservers = this._nameservers;
-            }
-            if (this._options !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.options = this._options;
-            }
-            if (this._search !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.search = this._search;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._nameservers = undefined;
-                this._options = undefined;
-                this._search = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._nameservers = value.nameservers;
-                this._options = value.options;
-                this._search = value.search;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecDnsConfigOutputReference.prototype, "nameservers", {
-        get: function () {
-            return this.getListAttribute('nameservers');
-        },
-        set: function (value) {
-            this._nameservers = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecDnsConfigOutputReference.prototype, "nameserversInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._nameservers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecDnsConfigOutputReference.prototype, "options", {
-        get: function () {
-            return this.getListAttribute('options');
-        },
-        set: function (value) {
-            this._options = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecDnsConfigOutputReference.prototype.resetOptions = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._nameservers !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.nameservers = this._nameservers;
+        }
+        if (this._options !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.options = this._options;
+        }
+        if (this._search !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.search = this._search;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._nameservers = undefined;
+            this._options = undefined;
+            this._search = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._nameservers = value.nameservers;
+            this._options = value.options;
+            this._search = value.search;
+        }
+    }
+    // nameservers - computed: false, optional: false, required: true
+    _nameservers;
+    get nameservers() {
+        return this.getListAttribute('nameservers');
+    }
+    set nameservers(value) {
+        this._nameservers = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameserversInput() {
+        return this._nameservers;
+    }
+    // options - computed: false, optional: true, required: false
+    _options;
+    get options() {
+        return this.getListAttribute('options');
+    }
+    set options(value) {
+        this._options = value;
+    }
+    resetOptions() {
         this._options = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecDnsConfigOutputReference.prototype, "optionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._options;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecDnsConfigOutputReference.prototype, "search", {
-        get: function () {
-            return this.getListAttribute('search');
-        },
-        set: function (value) {
-            this._search = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecDnsConfigOutputReference.prototype.resetSearch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get optionsInput() {
+        return this._options;
+    }
+    // search - computed: false, optional: true, required: false
+    _search;
+    get search() {
+        return this.getListAttribute('search');
+    }
+    set search(value) {
+        this._search = value;
+    }
+    resetSearch() {
         this._search = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecDnsConfigOutputReference.prototype, "searchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._search;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecDnsConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecDnsConfigOutputReference = ServiceTaskSpecContainerSpecDnsConfigOutputReference;
-function serviceTaskSpecContainerSpecHealthcheckToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get searchInput() {
+        return this._search;
+    }
+}
+export function serviceTaskSpecContainerSpecHealthcheckToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1837,14 +1446,14 @@ function serviceTaskSpecContainerSpecHealthcheckToTerraform(struct) {
         timeout: cdktf.stringToTerraform(struct.timeout),
     };
 }
-function serviceTaskSpecContainerSpecHealthcheckToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecHealthcheckToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         interval: {
             value: cdktf.stringToHclTerraform(struct.interval),
             isBlock: false,
@@ -1877,178 +1486,137 @@ function serviceTaskSpecContainerSpecHealthcheckToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecHealthcheckOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecHealthcheckOutputReference, _super);
+export class ServiceTaskSpecContainerSpecHealthcheckOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecContainerSpecHealthcheckOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._interval !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.interval = this._interval;
-            }
-            if (this._retries !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.retries = this._retries;
-            }
-            if (this._startPeriod !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.startPeriod = this._startPeriod;
-            }
-            if (this._test !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.test = this._test;
-            }
-            if (this._timeout !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.timeout = this._timeout;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._interval = undefined;
-                this._retries = undefined;
-                this._startPeriod = undefined;
-                this._test = undefined;
-                this._timeout = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._interval = value.interval;
-                this._retries = value.retries;
-                this._startPeriod = value.startPeriod;
-                this._test = value.test;
-                this._timeout = value.timeout;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "interval", {
-        get: function () {
-            return this.getStringAttribute('interval');
-        },
-        set: function (value) {
-            this._interval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype.resetInterval = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._interval !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.interval = this._interval;
+        }
+        if (this._retries !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.retries = this._retries;
+        }
+        if (this._startPeriod !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.startPeriod = this._startPeriod;
+        }
+        if (this._test !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.test = this._test;
+        }
+        if (this._timeout !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.timeout = this._timeout;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._interval = undefined;
+            this._retries = undefined;
+            this._startPeriod = undefined;
+            this._test = undefined;
+            this._timeout = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._interval = value.interval;
+            this._retries = value.retries;
+            this._startPeriod = value.startPeriod;
+            this._test = value.test;
+            this._timeout = value.timeout;
+        }
+    }
+    // interval - computed: false, optional: true, required: false
+    _interval;
+    get interval() {
+        return this.getStringAttribute('interval');
+    }
+    set interval(value) {
+        this._interval = value;
+    }
+    resetInterval() {
         this._interval = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "intervalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._interval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "retries", {
-        get: function () {
-            return this.getNumberAttribute('retries');
-        },
-        set: function (value) {
-            this._retries = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype.resetRetries = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get intervalInput() {
+        return this._interval;
+    }
+    // retries - computed: false, optional: true, required: false
+    _retries;
+    get retries() {
+        return this.getNumberAttribute('retries');
+    }
+    set retries(value) {
+        this._retries = value;
+    }
+    resetRetries() {
         this._retries = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "retriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._retries;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "startPeriod", {
-        get: function () {
-            return this.getStringAttribute('start_period');
-        },
-        set: function (value) {
-            this._startPeriod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype.resetStartPeriod = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get retriesInput() {
+        return this._retries;
+    }
+    // start_period - computed: false, optional: true, required: false
+    _startPeriod;
+    get startPeriod() {
+        return this.getStringAttribute('start_period');
+    }
+    set startPeriod(value) {
+        this._startPeriod = value;
+    }
+    resetStartPeriod() {
         this._startPeriod = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "startPeriodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._startPeriod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "test", {
-        get: function () {
-            return this.getListAttribute('test');
-        },
-        set: function (value) {
-            this._test = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype.resetTest = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get startPeriodInput() {
+        return this._startPeriod;
+    }
+    // test - computed: false, optional: true, required: false
+    _test;
+    get test() {
+        return this.getListAttribute('test');
+    }
+    set test(value) {
+        this._test = value;
+    }
+    resetTest() {
         this._test = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "testInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._test;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "timeout", {
-        get: function () {
-            return this.getStringAttribute('timeout');
-        },
-        set: function (value) {
-            this._timeout = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype.resetTimeout = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get testInput() {
+        return this._test;
+    }
+    // timeout - computed: false, optional: true, required: false
+    _timeout;
+    get timeout() {
+        return this.getStringAttribute('timeout');
+    }
+    set timeout(value) {
+        this._timeout = value;
+    }
+    resetTimeout() {
         this._timeout = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecHealthcheckOutputReference.prototype, "timeoutInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timeout;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecHealthcheckOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecHealthcheckOutputReference = ServiceTaskSpecContainerSpecHealthcheckOutputReference;
-function serviceTaskSpecContainerSpecHostsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get timeoutInput() {
+        return this._timeout;
+    }
+}
+export function serviceTaskSpecContainerSpecHostsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2060,14 +1628,14 @@ function serviceTaskSpecContainerSpecHostsToTerraform(struct) {
         ip: cdktf.stringToTerraform(struct.ip),
     };
 }
-function serviceTaskSpecContainerSpecHostsToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecHostsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         host: {
             value: cdktf.stringToHclTerraform(struct.host),
             isBlock: false,
@@ -2082,125 +1650,103 @@ function serviceTaskSpecContainerSpecHostsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecHostsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecHostsOutputReference, _super);
+export class ServiceTaskSpecContainerSpecHostsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecHostsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecHostsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            if (this._ip !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ip = this._ip;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._host = undefined;
-                this._ip = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._host = value.host;
-                this._ip = value.ip;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecHostsOutputReference.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecHostsOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecHostsOutputReference.prototype, "ip", {
-        get: function () {
-            return this.getStringAttribute('ip');
-        },
-        set: function (value) {
-            this._ip = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecHostsOutputReference.prototype, "ipInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecHostsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecHostsOutputReference = ServiceTaskSpecContainerSpecHostsOutputReference;
-var ServiceTaskSpecContainerSpecHostsList = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecHostsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        if (this._ip !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ip = this._ip;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._host = undefined;
+            this._ip = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._host = value.host;
+            this._ip = value.ip;
+        }
+    }
+    // host - computed: false, optional: false, required: true
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // ip - computed: false, optional: false, required: true
+    _ip;
+    get ip() {
+        return this.getStringAttribute('ip');
+    }
+    set ip(value) {
+        this._ip = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipInput() {
+        return this._ip;
+    }
+}
+export class ServiceTaskSpecContainerSpecHostsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecHostsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceTaskSpecContainerSpecHostsList.prototype.get = function (index) {
+    get(index) {
         return new ServiceTaskSpecContainerSpecHostsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceTaskSpecContainerSpecHostsList;
-}(cdktf.ComplexList));
-exports.ServiceTaskSpecContainerSpecHostsList = ServiceTaskSpecContainerSpecHostsList;
-function serviceTaskSpecContainerSpecLabelsToTerraform(struct) {
+    }
+}
+export function serviceTaskSpecContainerSpecLabelsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2212,14 +1758,14 @@ function serviceTaskSpecContainerSpecLabelsToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function serviceTaskSpecContainerSpecLabelsToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecLabelsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         label: {
             value: cdktf.stringToHclTerraform(struct.label),
             isBlock: false,
@@ -2234,125 +1780,103 @@ function serviceTaskSpecContainerSpecLabelsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecLabelsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecLabelsOutputReference, _super);
+export class ServiceTaskSpecContainerSpecLabelsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecLabelsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecLabelsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._label !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.label = this._label;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._label = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._label = value.label;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecLabelsOutputReference.prototype, "label", {
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        set: function (value) {
-            this._label = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecLabelsOutputReference.prototype, "labelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._label;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecLabelsOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecLabelsOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecLabelsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecLabelsOutputReference = ServiceTaskSpecContainerSpecLabelsOutputReference;
-var ServiceTaskSpecContainerSpecLabelsList = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecLabelsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._label !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.label = this._label;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._label = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._label = value.label;
+            this._value = value.value;
+        }
+    }
+    // label - computed: false, optional: false, required: true
+    _label;
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    set label(value) {
+        this._label = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelInput() {
+        return this._label;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class ServiceTaskSpecContainerSpecLabelsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecLabelsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceTaskSpecContainerSpecLabelsList.prototype.get = function (index) {
+    get(index) {
         return new ServiceTaskSpecContainerSpecLabelsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceTaskSpecContainerSpecLabelsList;
-}(cdktf.ComplexList));
-exports.ServiceTaskSpecContainerSpecLabelsList = ServiceTaskSpecContainerSpecLabelsList;
-function serviceTaskSpecContainerSpecMountsBindOptionsToTerraform(struct) {
+    }
+}
+export function serviceTaskSpecContainerSpecMountsBindOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2363,14 +1887,14 @@ function serviceTaskSpecContainerSpecMountsBindOptionsToTerraform(struct) {
         propagation: cdktf.stringToTerraform(struct.propagation),
     };
 }
-function serviceTaskSpecContainerSpecMountsBindOptionsToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecMountsBindOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         propagation: {
             value: cdktf.stringToHclTerraform(struct.propagation),
             isBlock: false,
@@ -2379,70 +1903,53 @@ function serviceTaskSpecContainerSpecMountsBindOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference, _super);
+export class ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._propagation !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.propagation = this._propagation;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._propagation = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._propagation = value.propagation;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference.prototype, "propagation", {
-        get: function () {
-            return this.getStringAttribute('propagation');
-        },
-        set: function (value) {
-            this._propagation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference.prototype.resetPropagation = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._propagation !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.propagation = this._propagation;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._propagation = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._propagation = value.propagation;
+        }
+    }
+    // propagation - computed: false, optional: true, required: false
+    _propagation;
+    get propagation() {
+        return this.getStringAttribute('propagation');
+    }
+    set propagation(value) {
+        this._propagation = value;
+    }
+    resetPropagation() {
         this._propagation = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference.prototype, "propagationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._propagation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference = ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference;
-function serviceTaskSpecContainerSpecMountsTmpfsOptionsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get propagationInput() {
+        return this._propagation;
+    }
+}
+export function serviceTaskSpecContainerSpecMountsTmpfsOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2454,14 +1961,14 @@ function serviceTaskSpecContainerSpecMountsTmpfsOptionsToTerraform(struct) {
         size_bytes: cdktf.numberToTerraform(struct.sizeBytes),
     };
 }
-function serviceTaskSpecContainerSpecMountsTmpfsOptionsToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecMountsTmpfsOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         mode: {
             value: cdktf.numberToHclTerraform(struct.mode),
             isBlock: false,
@@ -2476,97 +1983,74 @@ function serviceTaskSpecContainerSpecMountsTmpfsOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference, _super);
+export class ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._mode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mode = this._mode;
-            }
-            if (this._sizeBytes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sizeBytes = this._sizeBytes;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._mode = undefined;
-                this._sizeBytes = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._mode = value.mode;
-                this._sizeBytes = value.sizeBytes;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference.prototype, "mode", {
-        get: function () {
-            return this.getNumberAttribute('mode');
-        },
-        set: function (value) {
-            this._mode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference.prototype.resetMode = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._mode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mode = this._mode;
+        }
+        if (this._sizeBytes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sizeBytes = this._sizeBytes;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._mode = undefined;
+            this._sizeBytes = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._mode = value.mode;
+            this._sizeBytes = value.sizeBytes;
+        }
+    }
+    // mode - computed: false, optional: true, required: false
+    _mode;
+    get mode() {
+        return this.getNumberAttribute('mode');
+    }
+    set mode(value) {
+        this._mode = value;
+    }
+    resetMode() {
         this._mode = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference.prototype, "modeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference.prototype, "sizeBytes", {
-        get: function () {
-            return this.getNumberAttribute('size_bytes');
-        },
-        set: function (value) {
-            this._sizeBytes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference.prototype.resetSizeBytes = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get modeInput() {
+        return this._mode;
+    }
+    // size_bytes - computed: false, optional: true, required: false
+    _sizeBytes;
+    get sizeBytes() {
+        return this.getNumberAttribute('size_bytes');
+    }
+    set sizeBytes(value) {
+        this._sizeBytes = value;
+    }
+    resetSizeBytes() {
         this._sizeBytes = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference.prototype, "sizeBytesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sizeBytes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference = ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference;
-function serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sizeBytesInput() {
+        return this._sizeBytes;
+    }
+}
+export function serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2578,14 +2062,14 @@ function serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToTerraform(struct
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         label: {
             value: cdktf.stringToHclTerraform(struct.label),
             isBlock: false,
@@ -2600,125 +2084,103 @@ function serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToHclTerraform(str
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference, _super);
+export class ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._label !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.label = this._label;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._label = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._label = value.label;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference.prototype, "label", {
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        set: function (value) {
-            this._label = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference.prototype, "labelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._label;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference = ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference;
-var ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._label !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.label = this._label;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._label = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._label = value.label;
+            this._value = value.value;
+        }
+    }
+    // label - computed: false, optional: false, required: true
+    _label;
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    set label(value) {
+        this._label = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelInput() {
+        return this._label;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList.prototype.get = function (index) {
+    get(index) {
         return new ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList;
-}(cdktf.ComplexList));
-exports.ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList = ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList;
-function serviceTaskSpecContainerSpecMountsVolumeOptionsToTerraform(struct) {
+    }
+}
+export function serviceTaskSpecContainerSpecMountsVolumeOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2732,14 +2194,14 @@ function serviceTaskSpecContainerSpecMountsVolumeOptionsToTerraform(struct) {
         labels: cdktf.listMapper(serviceTaskSpecContainerSpecMountsVolumeOptionsLabelsToTerraform, true)(struct.labels),
     };
 }
-function serviceTaskSpecContainerSpecMountsVolumeOptionsToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecMountsVolumeOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         driver_name: {
             value: cdktf.stringToHclTerraform(struct.driverName),
             isBlock: false,
@@ -2766,154 +2228,116 @@ function serviceTaskSpecContainerSpecMountsVolumeOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference, _super);
+export class ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // labels - computed: false, optional: true, required: false
-        _this._labels = new ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList(_this, "labels", true);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._driverName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.driverName = this._driverName;
-            }
-            if (this._driverOptions !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.driverOptions = this._driverOptions;
-            }
-            if (this._noCopy !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.noCopy = this._noCopy;
-            }
-            if (((_a = this._labels) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.labels = (_b = this._labels) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._driverName = undefined;
-                this._driverOptions = undefined;
-                this._noCopy = undefined;
-                this._labels.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._driverName = value.driverName;
-                this._driverOptions = value.driverOptions;
-                this._noCopy = value.noCopy;
-                this._labels.internalValue = value.labels;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype, "driverName", {
-        get: function () {
-            return this.getStringAttribute('driver_name');
-        },
-        set: function (value) {
-            this._driverName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype.resetDriverName = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._driverName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.driverName = this._driverName;
+        }
+        if (this._driverOptions !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.driverOptions = this._driverOptions;
+        }
+        if (this._noCopy !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.noCopy = this._noCopy;
+        }
+        if (this._labels?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.labels = this._labels?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._driverName = undefined;
+            this._driverOptions = undefined;
+            this._noCopy = undefined;
+            this._labels.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._driverName = value.driverName;
+            this._driverOptions = value.driverOptions;
+            this._noCopy = value.noCopy;
+            this._labels.internalValue = value.labels;
+        }
+    }
+    // driver_name - computed: false, optional: true, required: false
+    _driverName;
+    get driverName() {
+        return this.getStringAttribute('driver_name');
+    }
+    set driverName(value) {
+        this._driverName = value;
+    }
+    resetDriverName() {
         this._driverName = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype, "driverNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._driverName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype, "driverOptions", {
-        get: function () {
-            return this.getStringMapAttribute('driver_options');
-        },
-        set: function (value) {
-            this._driverOptions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype.resetDriverOptions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get driverNameInput() {
+        return this._driverName;
+    }
+    // driver_options - computed: false, optional: true, required: false
+    _driverOptions;
+    get driverOptions() {
+        return this.getStringMapAttribute('driver_options');
+    }
+    set driverOptions(value) {
+        this._driverOptions = value;
+    }
+    resetDriverOptions() {
         this._driverOptions = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype, "driverOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._driverOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype, "noCopy", {
-        get: function () {
-            return this.getBooleanAttribute('no_copy');
-        },
-        set: function (value) {
-            this._noCopy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype.resetNoCopy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get driverOptionsInput() {
+        return this._driverOptions;
+    }
+    // no_copy - computed: false, optional: true, required: false
+    _noCopy;
+    get noCopy() {
+        return this.getBooleanAttribute('no_copy');
+    }
+    set noCopy(value) {
+        this._noCopy = value;
+    }
+    resetNoCopy() {
         this._noCopy = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype, "noCopyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._noCopy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype, "labels", {
-        get: function () {
-            return this._labels;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype.putLabels = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get noCopyInput() {
+        return this._noCopy;
+    }
+    // labels - computed: false, optional: true, required: false
+    _labels = new ServiceTaskSpecContainerSpecMountsVolumeOptionsLabelsList(this, "labels", true);
+    get labels() {
+        return this._labels;
+    }
+    putLabels(value) {
         this._labels.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype.resetLabels = function () {
+    }
+    resetLabels() {
         this._labels.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference.prototype, "labelsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._labels.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference = ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference;
-function serviceTaskSpecContainerSpecMountsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelsInput() {
+        return this._labels.internalValue;
+    }
+}
+export function serviceTaskSpecContainerSpecMountsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2930,14 +2354,14 @@ function serviceTaskSpecContainerSpecMountsToTerraform(struct) {
         volume_options: serviceTaskSpecContainerSpecMountsVolumeOptionsToTerraform(struct.volumeOptions),
     };
 }
-function serviceTaskSpecContainerSpecMountsToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecMountsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         read_only: {
             value: cdktf.booleanToHclTerraform(struct.readOnly),
             isBlock: false,
@@ -2982,267 +2406,208 @@ function serviceTaskSpecContainerSpecMountsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecMountsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecMountsOutputReference, _super);
+export class ServiceTaskSpecContainerSpecMountsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecMountsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // bind_options - computed: false, optional: true, required: false
-        _this._bindOptions = new ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference(_this, "bind_options");
-        // tmpfs_options - computed: false, optional: true, required: false
-        _this._tmpfsOptions = new ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference(_this, "tmpfs_options");
-        // volume_options - computed: false, optional: true, required: false
-        _this._volumeOptions = new ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference(_this, "volume_options");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._readOnly !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.readOnly = this._readOnly;
-            }
-            if (this._source !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.source = this._source;
-            }
-            if (this._target !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.target = this._target;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            if (((_a = this._bindOptions) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.bindOptions = (_b = this._bindOptions) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._tmpfsOptions) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tmpfsOptions = (_d = this._tmpfsOptions) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._volumeOptions) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.volumeOptions = (_f = this._volumeOptions) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._readOnly = undefined;
-                this._source = undefined;
-                this._target = undefined;
-                this._type = undefined;
-                this._bindOptions.internalValue = undefined;
-                this._tmpfsOptions.internalValue = undefined;
-                this._volumeOptions.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._readOnly = value.readOnly;
-                this._source = value.source;
-                this._target = value.target;
-                this._type = value.type;
-                this._bindOptions.internalValue = value.bindOptions;
-                this._tmpfsOptions.internalValue = value.tmpfsOptions;
-                this._volumeOptions.internalValue = value.volumeOptions;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "readOnly", {
-        get: function () {
-            return this.getBooleanAttribute('read_only');
-        },
-        set: function (value) {
-            this._readOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsOutputReference.prototype.resetReadOnly = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._readOnly !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.readOnly = this._readOnly;
+        }
+        if (this._source !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.source = this._source;
+        }
+        if (this._target !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.target = this._target;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        if (this._bindOptions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.bindOptions = this._bindOptions?.internalValue;
+        }
+        if (this._tmpfsOptions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tmpfsOptions = this._tmpfsOptions?.internalValue;
+        }
+        if (this._volumeOptions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.volumeOptions = this._volumeOptions?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._readOnly = undefined;
+            this._source = undefined;
+            this._target = undefined;
+            this._type = undefined;
+            this._bindOptions.internalValue = undefined;
+            this._tmpfsOptions.internalValue = undefined;
+            this._volumeOptions.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._readOnly = value.readOnly;
+            this._source = value.source;
+            this._target = value.target;
+            this._type = value.type;
+            this._bindOptions.internalValue = value.bindOptions;
+            this._tmpfsOptions.internalValue = value.tmpfsOptions;
+            this._volumeOptions.internalValue = value.volumeOptions;
+        }
+    }
+    // read_only - computed: false, optional: true, required: false
+    _readOnly;
+    get readOnly() {
+        return this.getBooleanAttribute('read_only');
+    }
+    set readOnly(value) {
+        this._readOnly = value;
+    }
+    resetReadOnly() {
         this._readOnly = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "readOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._readOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "source", {
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        set: function (value) {
-            this._source = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsOutputReference.prototype.resetSource = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get readOnlyInput() {
+        return this._readOnly;
+    }
+    // source - computed: false, optional: true, required: false
+    _source;
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    set source(value) {
+        this._source = value;
+    }
+    resetSource() {
         this._source = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "target", {
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        set: function (value) {
-            this._target = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "targetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "bindOptions", {
-        get: function () {
-            return this._bindOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsOutputReference.prototype.putBindOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source;
+    }
+    // target - computed: false, optional: false, required: true
+    _target;
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    set target(value) {
+        this._target = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetInput() {
+        return this._target;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // bind_options - computed: false, optional: true, required: false
+    _bindOptions = new ServiceTaskSpecContainerSpecMountsBindOptionsOutputReference(this, "bind_options");
+    get bindOptions() {
+        return this._bindOptions;
+    }
+    putBindOptions(value) {
         this._bindOptions.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecMountsOutputReference.prototype.resetBindOptions = function () {
+    }
+    resetBindOptions() {
         this._bindOptions.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "bindOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bindOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "tmpfsOptions", {
-        get: function () {
-            return this._tmpfsOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsOutputReference.prototype.putTmpfsOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bindOptionsInput() {
+        return this._bindOptions.internalValue;
+    }
+    // tmpfs_options - computed: false, optional: true, required: false
+    _tmpfsOptions = new ServiceTaskSpecContainerSpecMountsTmpfsOptionsOutputReference(this, "tmpfs_options");
+    get tmpfsOptions() {
+        return this._tmpfsOptions;
+    }
+    putTmpfsOptions(value) {
         this._tmpfsOptions.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecMountsOutputReference.prototype.resetTmpfsOptions = function () {
+    }
+    resetTmpfsOptions() {
         this._tmpfsOptions.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "tmpfsOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tmpfsOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "volumeOptions", {
-        get: function () {
-            return this._volumeOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecMountsOutputReference.prototype.putVolumeOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tmpfsOptionsInput() {
+        return this._tmpfsOptions.internalValue;
+    }
+    // volume_options - computed: false, optional: true, required: false
+    _volumeOptions = new ServiceTaskSpecContainerSpecMountsVolumeOptionsOutputReference(this, "volume_options");
+    get volumeOptions() {
+        return this._volumeOptions;
+    }
+    putVolumeOptions(value) {
         this._volumeOptions.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecMountsOutputReference.prototype.resetVolumeOptions = function () {
+    }
+    resetVolumeOptions() {
         this._volumeOptions.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecMountsOutputReference.prototype, "volumeOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._volumeOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecMountsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecMountsOutputReference = ServiceTaskSpecContainerSpecMountsOutputReference;
-var ServiceTaskSpecContainerSpecMountsList = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecMountsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get volumeOptionsInput() {
+        return this._volumeOptions.internalValue;
+    }
+}
+export class ServiceTaskSpecContainerSpecMountsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecMountsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceTaskSpecContainerSpecMountsList.prototype.get = function (index) {
+    get(index) {
         return new ServiceTaskSpecContainerSpecMountsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceTaskSpecContainerSpecMountsList;
-}(cdktf.ComplexList));
-exports.ServiceTaskSpecContainerSpecMountsList = ServiceTaskSpecContainerSpecMountsList;
-function serviceTaskSpecContainerSpecPrivilegesCredentialSpecToTerraform(struct) {
+    }
+}
+export function serviceTaskSpecContainerSpecPrivilegesCredentialSpecToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3254,14 +2619,14 @@ function serviceTaskSpecContainerSpecPrivilegesCredentialSpecToTerraform(struct)
         registry: cdktf.stringToTerraform(struct.registry),
     };
 }
-function serviceTaskSpecContainerSpecPrivilegesCredentialSpecToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecPrivilegesCredentialSpecToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         file: {
             value: cdktf.stringToHclTerraform(struct.file),
             isBlock: false,
@@ -3276,97 +2641,74 @@ function serviceTaskSpecContainerSpecPrivilegesCredentialSpecToHclTerraform(stru
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference, _super);
+export class ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._file !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.file = this._file;
-            }
-            if (this._registry !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.registry = this._registry;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._file = undefined;
-                this._registry = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._file = value.file;
-                this._registry = value.registry;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference.prototype, "file", {
-        get: function () {
-            return this.getStringAttribute('file');
-        },
-        set: function (value) {
-            this._file = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference.prototype.resetFile = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._file !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.file = this._file;
+        }
+        if (this._registry !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.registry = this._registry;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._file = undefined;
+            this._registry = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._file = value.file;
+            this._registry = value.registry;
+        }
+    }
+    // file - computed: false, optional: true, required: false
+    _file;
+    get file() {
+        return this.getStringAttribute('file');
+    }
+    set file(value) {
+        this._file = value;
+    }
+    resetFile() {
         this._file = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference.prototype, "fileInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._file;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference.prototype, "registry", {
-        get: function () {
-            return this.getStringAttribute('registry');
-        },
-        set: function (value) {
-            this._registry = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference.prototype.resetRegistry = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileInput() {
+        return this._file;
+    }
+    // registry - computed: false, optional: true, required: false
+    _registry;
+    get registry() {
+        return this.getStringAttribute('registry');
+    }
+    set registry(value) {
+        this._registry = value;
+    }
+    resetRegistry() {
         this._registry = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference.prototype, "registryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._registry;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference = ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference;
-function serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get registryInput() {
+        return this._registry;
+    }
+}
+export function serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3381,14 +2723,14 @@ function serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToTerraform(struct)
         user: cdktf.stringToTerraform(struct.user),
     };
 }
-function serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         disable: {
             value: cdktf.booleanToHclTerraform(struct.disable),
             isBlock: false,
@@ -3421,178 +2763,137 @@ function serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToHclTerraform(stru
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference, _super);
+export class ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._disable !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disable = this._disable;
-            }
-            if (this._level !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.level = this._level;
-            }
-            if (this._role !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.role = this._role;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            if (this._user !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.user = this._user;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._disable = undefined;
-                this._level = undefined;
-                this._role = undefined;
-                this._type = undefined;
-                this._user = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._disable = value.disable;
-                this._level = value.level;
-                this._role = value.role;
-                this._type = value.type;
-                this._user = value.user;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "disable", {
-        get: function () {
-            return this.getBooleanAttribute('disable');
-        },
-        set: function (value) {
-            this._disable = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype.resetDisable = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._disable !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disable = this._disable;
+        }
+        if (this._level !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.level = this._level;
+        }
+        if (this._role !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.role = this._role;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        if (this._user !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.user = this._user;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._disable = undefined;
+            this._level = undefined;
+            this._role = undefined;
+            this._type = undefined;
+            this._user = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._disable = value.disable;
+            this._level = value.level;
+            this._role = value.role;
+            this._type = value.type;
+            this._user = value.user;
+        }
+    }
+    // disable - computed: false, optional: true, required: false
+    _disable;
+    get disable() {
+        return this.getBooleanAttribute('disable');
+    }
+    set disable(value) {
+        this._disable = value;
+    }
+    resetDisable() {
         this._disable = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "disableInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disable;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "level", {
-        get: function () {
-            return this.getStringAttribute('level');
-        },
-        set: function (value) {
-            this._level = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype.resetLevel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableInput() {
+        return this._disable;
+    }
+    // level - computed: false, optional: true, required: false
+    _level;
+    get level() {
+        return this.getStringAttribute('level');
+    }
+    set level(value) {
+        this._level = value;
+    }
+    resetLevel() {
         this._level = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "levelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._level;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "role", {
-        get: function () {
-            return this.getStringAttribute('role');
-        },
-        set: function (value) {
-            this._role = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype.resetRole = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get levelInput() {
+        return this._level;
+    }
+    // role - computed: false, optional: true, required: false
+    _role;
+    get role() {
+        return this.getStringAttribute('role');
+    }
+    set role(value) {
+        this._role = value;
+    }
+    resetRole() {
         this._role = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "roleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._role;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get roleInput() {
+        return this._role;
+    }
+    // type - computed: false, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "user", {
-        get: function () {
-            return this.getStringAttribute('user');
-        },
-        set: function (value) {
-            this._user = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype.resetUser = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // user - computed: false, optional: true, required: false
+    _user;
+    get user() {
+        return this.getStringAttribute('user');
+    }
+    set user(value) {
+        this._user = value;
+    }
+    resetUser() {
         this._user = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference.prototype, "userInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._user;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference = ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference;
-function serviceTaskSpecContainerSpecPrivilegesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get userInput() {
+        return this._user;
+    }
+}
+export function serviceTaskSpecContainerSpecPrivilegesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3604,14 +2905,14 @@ function serviceTaskSpecContainerSpecPrivilegesToTerraform(struct) {
         se_linux_context: serviceTaskSpecContainerSpecPrivilegesSeLinuxContextToTerraform(struct.seLinuxContext),
     };
 }
-function serviceTaskSpecContainerSpecPrivilegesToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecPrivilegesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         credential_spec: {
             value: serviceTaskSpecContainerSpecPrivilegesCredentialSpecToHclTerraform(struct.credentialSpec),
             isBlock: true,
@@ -3626,102 +2927,74 @@ function serviceTaskSpecContainerSpecPrivilegesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecPrivilegesOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecPrivilegesOutputReference, _super);
+export class ServiceTaskSpecContainerSpecPrivilegesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecContainerSpecPrivilegesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // credential_spec - computed: false, optional: true, required: false
-        _this._credentialSpec = new ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference(_this, "credential_spec");
-        // se_linux_context - computed: false, optional: true, required: false
-        _this._seLinuxContext = new ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference(_this, "se_linux_context");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._credentialSpec) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.credentialSpec = (_b = this._credentialSpec) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._seLinuxContext) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.seLinuxContext = (_d = this._seLinuxContext) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._credentialSpec.internalValue = undefined;
-                this._seLinuxContext.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._credentialSpec.internalValue = value.credentialSpec;
-                this._seLinuxContext.internalValue = value.seLinuxContext;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesOutputReference.prototype, "credentialSpec", {
-        get: function () {
-            return this._credentialSpec;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecPrivilegesOutputReference.prototype.putCredentialSpec = function (value) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._credentialSpec?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.credentialSpec = this._credentialSpec?.internalValue;
+        }
+        if (this._seLinuxContext?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.seLinuxContext = this._seLinuxContext?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._credentialSpec.internalValue = undefined;
+            this._seLinuxContext.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._credentialSpec.internalValue = value.credentialSpec;
+            this._seLinuxContext.internalValue = value.seLinuxContext;
+        }
+    }
+    // credential_spec - computed: false, optional: true, required: false
+    _credentialSpec = new ServiceTaskSpecContainerSpecPrivilegesCredentialSpecOutputReference(this, "credential_spec");
+    get credentialSpec() {
+        return this._credentialSpec;
+    }
+    putCredentialSpec(value) {
         this._credentialSpec.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecPrivilegesOutputReference.prototype.resetCredentialSpec = function () {
+    }
+    resetCredentialSpec() {
         this._credentialSpec.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesOutputReference.prototype, "credentialSpecInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._credentialSpec.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesOutputReference.prototype, "seLinuxContext", {
-        get: function () {
-            return this._seLinuxContext;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecPrivilegesOutputReference.prototype.putSeLinuxContext = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get credentialSpecInput() {
+        return this._credentialSpec.internalValue;
+    }
+    // se_linux_context - computed: false, optional: true, required: false
+    _seLinuxContext = new ServiceTaskSpecContainerSpecPrivilegesSeLinuxContextOutputReference(this, "se_linux_context");
+    get seLinuxContext() {
+        return this._seLinuxContext;
+    }
+    putSeLinuxContext(value) {
         this._seLinuxContext.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecPrivilegesOutputReference.prototype.resetSeLinuxContext = function () {
+    }
+    resetSeLinuxContext() {
         this._seLinuxContext.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecPrivilegesOutputReference.prototype, "seLinuxContextInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._seLinuxContext.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecPrivilegesOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecPrivilegesOutputReference = ServiceTaskSpecContainerSpecPrivilegesOutputReference;
-function serviceTaskSpecContainerSpecSecretsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get seLinuxContextInput() {
+        return this._seLinuxContext.internalValue;
+    }
+}
+export function serviceTaskSpecContainerSpecSecretsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3737,14 +3010,14 @@ function serviceTaskSpecContainerSpecSecretsToTerraform(struct) {
         secret_name: cdktf.stringToTerraform(struct.secretName),
     };
 }
-function serviceTaskSpecContainerSpecSecretsToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecSecretsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         file_gid: {
             value: cdktf.stringToHclTerraform(struct.fileGid),
             isBlock: false,
@@ -3783,233 +3056,187 @@ function serviceTaskSpecContainerSpecSecretsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecSecretsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecSecretsOutputReference, _super);
+export class ServiceTaskSpecContainerSpecSecretsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecSecretsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._fileGid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileGid = this._fileGid;
-            }
-            if (this._fileMode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileMode = this._fileMode;
-            }
-            if (this._fileName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileName = this._fileName;
-            }
-            if (this._fileUid !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileUid = this._fileUid;
-            }
-            if (this._secretId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretId = this._secretId;
-            }
-            if (this._secretName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretName = this._secretName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._fileGid = undefined;
-                this._fileMode = undefined;
-                this._fileName = undefined;
-                this._fileUid = undefined;
-                this._secretId = undefined;
-                this._secretName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._fileGid = value.fileGid;
-                this._fileMode = value.fileMode;
-                this._fileName = value.fileName;
-                this._fileUid = value.fileUid;
-                this._secretId = value.secretId;
-                this._secretName = value.secretName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "fileGid", {
-        get: function () {
-            return this.getStringAttribute('file_gid');
-        },
-        set: function (value) {
-            this._fileGid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecSecretsOutputReference.prototype.resetFileGid = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._fileGid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileGid = this._fileGid;
+        }
+        if (this._fileMode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileMode = this._fileMode;
+        }
+        if (this._fileName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileName = this._fileName;
+        }
+        if (this._fileUid !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileUid = this._fileUid;
+        }
+        if (this._secretId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretId = this._secretId;
+        }
+        if (this._secretName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretName = this._secretName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._fileGid = undefined;
+            this._fileMode = undefined;
+            this._fileName = undefined;
+            this._fileUid = undefined;
+            this._secretId = undefined;
+            this._secretName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._fileGid = value.fileGid;
+            this._fileMode = value.fileMode;
+            this._fileName = value.fileName;
+            this._fileUid = value.fileUid;
+            this._secretId = value.secretId;
+            this._secretName = value.secretName;
+        }
+    }
+    // file_gid - computed: false, optional: true, required: false
+    _fileGid;
+    get fileGid() {
+        return this.getStringAttribute('file_gid');
+    }
+    set fileGid(value) {
+        this._fileGid = value;
+    }
+    resetFileGid() {
         this._fileGid = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "fileGidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileGid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "fileMode", {
-        get: function () {
-            return this.getNumberAttribute('file_mode');
-        },
-        set: function (value) {
-            this._fileMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecSecretsOutputReference.prototype.resetFileMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileGidInput() {
+        return this._fileGid;
+    }
+    // file_mode - computed: false, optional: true, required: false
+    _fileMode;
+    get fileMode() {
+        return this.getNumberAttribute('file_mode');
+    }
+    set fileMode(value) {
+        this._fileMode = value;
+    }
+    resetFileMode() {
         this._fileMode = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "fileModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "fileName", {
-        get: function () {
-            return this.getStringAttribute('file_name');
-        },
-        set: function (value) {
-            this._fileName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "fileNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "fileUid", {
-        get: function () {
-            return this.getStringAttribute('file_uid');
-        },
-        set: function (value) {
-            this._fileUid = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecSecretsOutputReference.prototype.resetFileUid = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileModeInput() {
+        return this._fileMode;
+    }
+    // file_name - computed: false, optional: false, required: true
+    _fileName;
+    get fileName() {
+        return this.getStringAttribute('file_name');
+    }
+    set fileName(value) {
+        this._fileName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileNameInput() {
+        return this._fileName;
+    }
+    // file_uid - computed: false, optional: true, required: false
+    _fileUid;
+    get fileUid() {
+        return this.getStringAttribute('file_uid');
+    }
+    set fileUid(value) {
+        this._fileUid = value;
+    }
+    resetFileUid() {
         this._fileUid = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "fileUidInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileUid;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "secretId", {
-        get: function () {
-            return this.getStringAttribute('secret_id');
-        },
-        set: function (value) {
-            this._secretId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "secretIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "secretName", {
-        get: function () {
-            return this.getStringAttribute('secret_name');
-        },
-        set: function (value) {
-            this._secretName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecSecretsOutputReference.prototype.resetSecretName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileUidInput() {
+        return this._fileUid;
+    }
+    // secret_id - computed: false, optional: false, required: true
+    _secretId;
+    get secretId() {
+        return this.getStringAttribute('secret_id');
+    }
+    set secretId(value) {
+        this._secretId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretIdInput() {
+        return this._secretId;
+    }
+    // secret_name - computed: false, optional: true, required: false
+    _secretName;
+    get secretName() {
+        return this.getStringAttribute('secret_name');
+    }
+    set secretName(value) {
+        this._secretName = value;
+    }
+    resetSecretName() {
         this._secretName = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecSecretsOutputReference.prototype, "secretNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecSecretsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecSecretsOutputReference = ServiceTaskSpecContainerSpecSecretsOutputReference;
-var ServiceTaskSpecContainerSpecSecretsList = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecSecretsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretNameInput() {
+        return this._secretName;
+    }
+}
+export class ServiceTaskSpecContainerSpecSecretsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecContainerSpecSecretsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceTaskSpecContainerSpecSecretsList.prototype.get = function (index) {
+    get(index) {
         return new ServiceTaskSpecContainerSpecSecretsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceTaskSpecContainerSpecSecretsList;
-}(cdktf.ComplexList));
-exports.ServiceTaskSpecContainerSpecSecretsList = ServiceTaskSpecContainerSpecSecretsList;
-function serviceTaskSpecContainerSpecToTerraform(struct) {
+    }
+}
+export function serviceTaskSpecContainerSpecToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4042,14 +3269,14 @@ function serviceTaskSpecContainerSpecToTerraform(struct) {
         secrets: cdktf.listMapper(serviceTaskSpecContainerSpecSecretsToTerraform, true)(struct.secrets),
     };
 }
-function serviceTaskSpecContainerSpecToHclTerraform(struct) {
+export function serviceTaskSpecContainerSpecToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         args: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.args),
             isBlock: false,
@@ -4190,678 +3417,512 @@ function serviceTaskSpecContainerSpecToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecContainerSpecOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecContainerSpecOutputReference, _super);
+export class ServiceTaskSpecContainerSpecOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecContainerSpecOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // configs - computed: false, optional: true, required: false
-        _this._configs = new ServiceTaskSpecContainerSpecConfigsList(_this, "configs", true);
-        // dns_config - computed: false, optional: true, required: false
-        _this._dnsConfig = new ServiceTaskSpecContainerSpecDnsConfigOutputReference(_this, "dns_config");
-        // healthcheck - computed: false, optional: true, required: false
-        _this._healthcheck = new ServiceTaskSpecContainerSpecHealthcheckOutputReference(_this, "healthcheck");
-        // hosts - computed: false, optional: true, required: false
-        _this._hosts = new ServiceTaskSpecContainerSpecHostsList(_this, "hosts", true);
-        // labels - computed: false, optional: true, required: false
-        _this._labels = new ServiceTaskSpecContainerSpecLabelsList(_this, "labels", true);
-        // mounts - computed: false, optional: true, required: false
-        _this._mounts = new ServiceTaskSpecContainerSpecMountsList(_this, "mounts", true);
-        // privileges - computed: false, optional: true, required: false
-        _this._privileges = new ServiceTaskSpecContainerSpecPrivilegesOutputReference(_this, "privileges");
-        // secrets - computed: false, optional: true, required: false
-        _this._secrets = new ServiceTaskSpecContainerSpecSecretsList(_this, "secrets", true);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._args !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.args = this._args;
-            }
-            if (this._capAdd !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.capAdd = this._capAdd;
-            }
-            if (this._capDrop !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.capDrop = this._capDrop;
-            }
-            if (this._command !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.command = this._command;
-            }
-            if (this._dir !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dir = this._dir;
-            }
-            if (this._env !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.env = this._env;
-            }
-            if (this._groups !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.groups = this._groups;
-            }
-            if (this._hostname !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hostname = this._hostname;
-            }
-            if (this._image !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.image = this._image;
-            }
-            if (this._isolation !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.isolation = this._isolation;
-            }
-            if (this._readOnly !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.readOnly = this._readOnly;
-            }
-            if (this._stopGracePeriod !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.stopGracePeriod = this._stopGracePeriod;
-            }
-            if (this._stopSignal !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.stopSignal = this._stopSignal;
-            }
-            if (this._sysctl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sysctl = this._sysctl;
-            }
-            if (this._user !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.user = this._user;
-            }
-            if (((_a = this._configs) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.configs = (_b = this._configs) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._dnsConfig) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dnsConfig = (_d = this._dnsConfig) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._healthcheck) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.healthcheck = (_f = this._healthcheck) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._hosts) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hosts = (_h = this._hosts) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (((_j = this._labels) === null || _j === void 0 ? void 0 : _j.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.labels = (_k = this._labels) === null || _k === void 0 ? void 0 : _k.internalValue;
-            }
-            if (((_l = this._mounts) === null || _l === void 0 ? void 0 : _l.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mounts = (_m = this._mounts) === null || _m === void 0 ? void 0 : _m.internalValue;
-            }
-            if (((_o = this._privileges) === null || _o === void 0 ? void 0 : _o.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.privileges = (_p = this._privileges) === null || _p === void 0 ? void 0 : _p.internalValue;
-            }
-            if (((_q = this._secrets) === null || _q === void 0 ? void 0 : _q.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secrets = (_r = this._secrets) === null || _r === void 0 ? void 0 : _r.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._args = undefined;
-                this._capAdd = undefined;
-                this._capDrop = undefined;
-                this._command = undefined;
-                this._dir = undefined;
-                this._env = undefined;
-                this._groups = undefined;
-                this._hostname = undefined;
-                this._image = undefined;
-                this._isolation = undefined;
-                this._readOnly = undefined;
-                this._stopGracePeriod = undefined;
-                this._stopSignal = undefined;
-                this._sysctl = undefined;
-                this._user = undefined;
-                this._configs.internalValue = undefined;
-                this._dnsConfig.internalValue = undefined;
-                this._healthcheck.internalValue = undefined;
-                this._hosts.internalValue = undefined;
-                this._labels.internalValue = undefined;
-                this._mounts.internalValue = undefined;
-                this._privileges.internalValue = undefined;
-                this._secrets.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._args = value.args;
-                this._capAdd = value.capAdd;
-                this._capDrop = value.capDrop;
-                this._command = value.command;
-                this._dir = value.dir;
-                this._env = value.env;
-                this._groups = value.groups;
-                this._hostname = value.hostname;
-                this._image = value.image;
-                this._isolation = value.isolation;
-                this._readOnly = value.readOnly;
-                this._stopGracePeriod = value.stopGracePeriod;
-                this._stopSignal = value.stopSignal;
-                this._sysctl = value.sysctl;
-                this._user = value.user;
-                this._configs.internalValue = value.configs;
-                this._dnsConfig.internalValue = value.dnsConfig;
-                this._healthcheck.internalValue = value.healthcheck;
-                this._hosts.internalValue = value.hosts;
-                this._labels.internalValue = value.labels;
-                this._mounts.internalValue = value.mounts;
-                this._privileges.internalValue = value.privileges;
-                this._secrets.internalValue = value.secrets;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "args", {
-        get: function () {
-            return this.getListAttribute('args');
-        },
-        set: function (value) {
-            this._args = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetArgs = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._args !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.args = this._args;
+        }
+        if (this._capAdd !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.capAdd = this._capAdd;
+        }
+        if (this._capDrop !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.capDrop = this._capDrop;
+        }
+        if (this._command !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.command = this._command;
+        }
+        if (this._dir !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dir = this._dir;
+        }
+        if (this._env !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.env = this._env;
+        }
+        if (this._groups !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.groups = this._groups;
+        }
+        if (this._hostname !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hostname = this._hostname;
+        }
+        if (this._image !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.image = this._image;
+        }
+        if (this._isolation !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.isolation = this._isolation;
+        }
+        if (this._readOnly !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.readOnly = this._readOnly;
+        }
+        if (this._stopGracePeriod !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.stopGracePeriod = this._stopGracePeriod;
+        }
+        if (this._stopSignal !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.stopSignal = this._stopSignal;
+        }
+        if (this._sysctl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sysctl = this._sysctl;
+        }
+        if (this._user !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.user = this._user;
+        }
+        if (this._configs?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.configs = this._configs?.internalValue;
+        }
+        if (this._dnsConfig?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dnsConfig = this._dnsConfig?.internalValue;
+        }
+        if (this._healthcheck?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.healthcheck = this._healthcheck?.internalValue;
+        }
+        if (this._hosts?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hosts = this._hosts?.internalValue;
+        }
+        if (this._labels?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.labels = this._labels?.internalValue;
+        }
+        if (this._mounts?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mounts = this._mounts?.internalValue;
+        }
+        if (this._privileges?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.privileges = this._privileges?.internalValue;
+        }
+        if (this._secrets?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secrets = this._secrets?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._args = undefined;
+            this._capAdd = undefined;
+            this._capDrop = undefined;
+            this._command = undefined;
+            this._dir = undefined;
+            this._env = undefined;
+            this._groups = undefined;
+            this._hostname = undefined;
+            this._image = undefined;
+            this._isolation = undefined;
+            this._readOnly = undefined;
+            this._stopGracePeriod = undefined;
+            this._stopSignal = undefined;
+            this._sysctl = undefined;
+            this._user = undefined;
+            this._configs.internalValue = undefined;
+            this._dnsConfig.internalValue = undefined;
+            this._healthcheck.internalValue = undefined;
+            this._hosts.internalValue = undefined;
+            this._labels.internalValue = undefined;
+            this._mounts.internalValue = undefined;
+            this._privileges.internalValue = undefined;
+            this._secrets.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._args = value.args;
+            this._capAdd = value.capAdd;
+            this._capDrop = value.capDrop;
+            this._command = value.command;
+            this._dir = value.dir;
+            this._env = value.env;
+            this._groups = value.groups;
+            this._hostname = value.hostname;
+            this._image = value.image;
+            this._isolation = value.isolation;
+            this._readOnly = value.readOnly;
+            this._stopGracePeriod = value.stopGracePeriod;
+            this._stopSignal = value.stopSignal;
+            this._sysctl = value.sysctl;
+            this._user = value.user;
+            this._configs.internalValue = value.configs;
+            this._dnsConfig.internalValue = value.dnsConfig;
+            this._healthcheck.internalValue = value.healthcheck;
+            this._hosts.internalValue = value.hosts;
+            this._labels.internalValue = value.labels;
+            this._mounts.internalValue = value.mounts;
+            this._privileges.internalValue = value.privileges;
+            this._secrets.internalValue = value.secrets;
+        }
+    }
+    // args - computed: false, optional: true, required: false
+    _args;
+    get args() {
+        return this.getListAttribute('args');
+    }
+    set args(value) {
+        this._args = value;
+    }
+    resetArgs() {
         this._args = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "argsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._args;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "capAdd", {
-        get: function () {
-            return this.getListAttribute('cap_add');
-        },
-        set: function (value) {
-            this._capAdd = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetCapAdd = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get argsInput() {
+        return this._args;
+    }
+    // cap_add - computed: false, optional: true, required: false
+    _capAdd;
+    get capAdd() {
+        return this.getListAttribute('cap_add');
+    }
+    set capAdd(value) {
+        this._capAdd = value;
+    }
+    resetCapAdd() {
         this._capAdd = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "capAddInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._capAdd;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "capDrop", {
-        get: function () {
-            return this.getListAttribute('cap_drop');
-        },
-        set: function (value) {
-            this._capDrop = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetCapDrop = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get capAddInput() {
+        return this._capAdd;
+    }
+    // cap_drop - computed: false, optional: true, required: false
+    _capDrop;
+    get capDrop() {
+        return this.getListAttribute('cap_drop');
+    }
+    set capDrop(value) {
+        this._capDrop = value;
+    }
+    resetCapDrop() {
         this._capDrop = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "capDropInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._capDrop;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "command", {
-        get: function () {
-            return this.getListAttribute('command');
-        },
-        set: function (value) {
-            this._command = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetCommand = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get capDropInput() {
+        return this._capDrop;
+    }
+    // command - computed: false, optional: true, required: false
+    _command;
+    get command() {
+        return this.getListAttribute('command');
+    }
+    set command(value) {
+        this._command = value;
+    }
+    resetCommand() {
         this._command = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "commandInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._command;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "dir", {
-        get: function () {
-            return this.getStringAttribute('dir');
-        },
-        set: function (value) {
-            this._dir = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetDir = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commandInput() {
+        return this._command;
+    }
+    // dir - computed: false, optional: true, required: false
+    _dir;
+    get dir() {
+        return this.getStringAttribute('dir');
+    }
+    set dir(value) {
+        this._dir = value;
+    }
+    resetDir() {
         this._dir = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "dirInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dir;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "env", {
-        get: function () {
-            return this.getStringMapAttribute('env');
-        },
-        set: function (value) {
-            this._env = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetEnv = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dirInput() {
+        return this._dir;
+    }
+    // env - computed: false, optional: true, required: false
+    _env;
+    get env() {
+        return this.getStringMapAttribute('env');
+    }
+    set env(value) {
+        this._env = value;
+    }
+    resetEnv() {
         this._env = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "envInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._env;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "groups", {
-        get: function () {
-            return this.getListAttribute('groups');
-        },
-        set: function (value) {
-            this._groups = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetGroups = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get envInput() {
+        return this._env;
+    }
+    // groups - computed: false, optional: true, required: false
+    _groups;
+    get groups() {
+        return this.getListAttribute('groups');
+    }
+    set groups(value) {
+        this._groups = value;
+    }
+    resetGroups() {
         this._groups = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "groupsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._groups;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "hostname", {
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        set: function (value) {
-            this._hostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetHostname = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupsInput() {
+        return this._groups;
+    }
+    // hostname - computed: false, optional: true, required: false
+    _hostname;
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    set hostname(value) {
+        this._hostname = value;
+    }
+    resetHostname() {
         this._hostname = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "hostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "image", {
-        get: function () {
-            return this.getStringAttribute('image');
-        },
-        set: function (value) {
-            this._image = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "imageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._image;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "isolation", {
-        get: function () {
-            return this.getStringAttribute('isolation');
-        },
-        set: function (value) {
-            this._isolation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetIsolation = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameInput() {
+        return this._hostname;
+    }
+    // image - computed: false, optional: false, required: true
+    _image;
+    get image() {
+        return this.getStringAttribute('image');
+    }
+    set image(value) {
+        this._image = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get imageInput() {
+        return this._image;
+    }
+    // isolation - computed: false, optional: true, required: false
+    _isolation;
+    get isolation() {
+        return this.getStringAttribute('isolation');
+    }
+    set isolation(value) {
+        this._isolation = value;
+    }
+    resetIsolation() {
         this._isolation = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "isolationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isolation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "readOnly", {
-        get: function () {
-            return this.getBooleanAttribute('read_only');
-        },
-        set: function (value) {
-            this._readOnly = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetReadOnly = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isolationInput() {
+        return this._isolation;
+    }
+    // read_only - computed: false, optional: true, required: false
+    _readOnly;
+    get readOnly() {
+        return this.getBooleanAttribute('read_only');
+    }
+    set readOnly(value) {
+        this._readOnly = value;
+    }
+    resetReadOnly() {
         this._readOnly = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "readOnlyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._readOnly;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "stopGracePeriod", {
-        get: function () {
-            return this.getStringAttribute('stop_grace_period');
-        },
-        set: function (value) {
-            this._stopGracePeriod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetStopGracePeriod = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get readOnlyInput() {
+        return this._readOnly;
+    }
+    // stop_grace_period - computed: true, optional: true, required: false
+    _stopGracePeriod;
+    get stopGracePeriod() {
+        return this.getStringAttribute('stop_grace_period');
+    }
+    set stopGracePeriod(value) {
+        this._stopGracePeriod = value;
+    }
+    resetStopGracePeriod() {
         this._stopGracePeriod = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "stopGracePeriodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._stopGracePeriod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "stopSignal", {
-        get: function () {
-            return this.getStringAttribute('stop_signal');
-        },
-        set: function (value) {
-            this._stopSignal = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetStopSignal = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get stopGracePeriodInput() {
+        return this._stopGracePeriod;
+    }
+    // stop_signal - computed: false, optional: true, required: false
+    _stopSignal;
+    get stopSignal() {
+        return this.getStringAttribute('stop_signal');
+    }
+    set stopSignal(value) {
+        this._stopSignal = value;
+    }
+    resetStopSignal() {
         this._stopSignal = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "stopSignalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._stopSignal;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "sysctl", {
-        get: function () {
-            return this.getStringMapAttribute('sysctl');
-        },
-        set: function (value) {
-            this._sysctl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetSysctl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get stopSignalInput() {
+        return this._stopSignal;
+    }
+    // sysctl - computed: false, optional: true, required: false
+    _sysctl;
+    get sysctl() {
+        return this.getStringMapAttribute('sysctl');
+    }
+    set sysctl(value) {
+        this._sysctl = value;
+    }
+    resetSysctl() {
         this._sysctl = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "sysctlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sysctl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "user", {
-        get: function () {
-            return this.getStringAttribute('user');
-        },
-        set: function (value) {
-            this._user = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetUser = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sysctlInput() {
+        return this._sysctl;
+    }
+    // user - computed: false, optional: true, required: false
+    _user;
+    get user() {
+        return this.getStringAttribute('user');
+    }
+    set user(value) {
+        this._user = value;
+    }
+    resetUser() {
         this._user = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "userInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._user;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "configs", {
-        get: function () {
-            return this._configs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.putConfigs = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get userInput() {
+        return this._user;
+    }
+    // configs - computed: false, optional: true, required: false
+    _configs = new ServiceTaskSpecContainerSpecConfigsList(this, "configs", true);
+    get configs() {
+        return this._configs;
+    }
+    putConfigs(value) {
         this._configs.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetConfigs = function () {
+    }
+    resetConfigs() {
         this._configs.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "configsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configs.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "dnsConfig", {
-        get: function () {
-            return this._dnsConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.putDnsConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configsInput() {
+        return this._configs.internalValue;
+    }
+    // dns_config - computed: false, optional: true, required: false
+    _dnsConfig = new ServiceTaskSpecContainerSpecDnsConfigOutputReference(this, "dns_config");
+    get dnsConfig() {
+        return this._dnsConfig;
+    }
+    putDnsConfig(value) {
         this._dnsConfig.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetDnsConfig = function () {
+    }
+    resetDnsConfig() {
         this._dnsConfig.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "dnsConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnsConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "healthcheck", {
-        get: function () {
-            return this._healthcheck;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.putHealthcheck = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnsConfigInput() {
+        return this._dnsConfig.internalValue;
+    }
+    // healthcheck - computed: false, optional: true, required: false
+    _healthcheck = new ServiceTaskSpecContainerSpecHealthcheckOutputReference(this, "healthcheck");
+    get healthcheck() {
+        return this._healthcheck;
+    }
+    putHealthcheck(value) {
         this._healthcheck.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetHealthcheck = function () {
+    }
+    resetHealthcheck() {
         this._healthcheck.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "healthcheckInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._healthcheck.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "hosts", {
-        get: function () {
-            return this._hosts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.putHosts = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get healthcheckInput() {
+        return this._healthcheck.internalValue;
+    }
+    // hosts - computed: false, optional: true, required: false
+    _hosts = new ServiceTaskSpecContainerSpecHostsList(this, "hosts", true);
+    get hosts() {
+        return this._hosts;
+    }
+    putHosts(value) {
         this._hosts.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetHosts = function () {
+    }
+    resetHosts() {
         this._hosts.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "hostsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hosts.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "labels", {
-        get: function () {
-            return this._labels;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.putLabels = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostsInput() {
+        return this._hosts.internalValue;
+    }
+    // labels - computed: false, optional: true, required: false
+    _labels = new ServiceTaskSpecContainerSpecLabelsList(this, "labels", true);
+    get labels() {
+        return this._labels;
+    }
+    putLabels(value) {
         this._labels.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetLabels = function () {
+    }
+    resetLabels() {
         this._labels.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "labelsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._labels.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "mounts", {
-        get: function () {
-            return this._mounts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.putMounts = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelsInput() {
+        return this._labels.internalValue;
+    }
+    // mounts - computed: false, optional: true, required: false
+    _mounts = new ServiceTaskSpecContainerSpecMountsList(this, "mounts", true);
+    get mounts() {
+        return this._mounts;
+    }
+    putMounts(value) {
         this._mounts.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetMounts = function () {
+    }
+    resetMounts() {
         this._mounts.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "mountsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mounts.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "privileges", {
-        get: function () {
-            return this._privileges;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.putPrivileges = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mountsInput() {
+        return this._mounts.internalValue;
+    }
+    // privileges - computed: false, optional: true, required: false
+    _privileges = new ServiceTaskSpecContainerSpecPrivilegesOutputReference(this, "privileges");
+    get privileges() {
+        return this._privileges;
+    }
+    putPrivileges(value) {
         this._privileges.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetPrivileges = function () {
+    }
+    resetPrivileges() {
         this._privileges.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "privilegesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._privileges.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "secrets", {
-        get: function () {
-            return this._secrets;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecContainerSpecOutputReference.prototype.putSecrets = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get privilegesInput() {
+        return this._privileges.internalValue;
+    }
+    // secrets - computed: false, optional: true, required: false
+    _secrets = new ServiceTaskSpecContainerSpecSecretsList(this, "secrets", true);
+    get secrets() {
+        return this._secrets;
+    }
+    putSecrets(value) {
         this._secrets.internalValue = value;
-    };
-    ServiceTaskSpecContainerSpecOutputReference.prototype.resetSecrets = function () {
+    }
+    resetSecrets() {
         this._secrets.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecContainerSpecOutputReference.prototype, "secretsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secrets.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecContainerSpecOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecContainerSpecOutputReference = ServiceTaskSpecContainerSpecOutputReference;
-function serviceTaskSpecLogDriverToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretsInput() {
+        return this._secrets.internalValue;
+    }
+}
+export function serviceTaskSpecLogDriverToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4873,14 +3934,14 @@ function serviceTaskSpecLogDriverToTerraform(struct) {
         options: cdktf.hashMapper(cdktf.stringToTerraform)(struct.options),
     };
 }
-function serviceTaskSpecLogDriverToHclTerraform(struct) {
+export function serviceTaskSpecLogDriverToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -4895,94 +3956,71 @@ function serviceTaskSpecLogDriverToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecLogDriverOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecLogDriverOutputReference, _super);
+export class ServiceTaskSpecLogDriverOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecLogDriverOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecLogDriverOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._options !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.options = this._options;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._name = undefined;
-                this._options = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._name = value.name;
-                this._options = value.options;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecLogDriverOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecLogDriverOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecLogDriverOutputReference.prototype, "options", {
-        get: function () {
-            return this.getStringMapAttribute('options');
-        },
-        set: function (value) {
-            this._options = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecLogDriverOutputReference.prototype.resetOptions = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._options !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.options = this._options;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._name = undefined;
+            this._options = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._name = value.name;
+            this._options = value.options;
+        }
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // options - computed: false, optional: true, required: false
+    _options;
+    get options() {
+        return this.getStringMapAttribute('options');
+    }
+    set options(value) {
+        this._options = value;
+    }
+    resetOptions() {
         this._options = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecLogDriverOutputReference.prototype, "optionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._options;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecLogDriverOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecLogDriverOutputReference = ServiceTaskSpecLogDriverOutputReference;
-function serviceTaskSpecNetworksAdvancedToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get optionsInput() {
+        return this._options;
+    }
+}
+export function serviceTaskSpecNetworksAdvancedToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4996,14 +4034,14 @@ function serviceTaskSpecNetworksAdvancedToTerraform(struct) {
         name: cdktf.stringToTerraform(struct.name),
     };
 }
-function serviceTaskSpecNetworksAdvancedToHclTerraform(struct) {
+export function serviceTaskSpecNetworksAdvancedToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         aliases: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.aliases),
             isBlock: false,
@@ -5030,185 +4068,151 @@ function serviceTaskSpecNetworksAdvancedToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecNetworksAdvancedOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecNetworksAdvancedOutputReference, _super);
+export class ServiceTaskSpecNetworksAdvancedOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecNetworksAdvancedOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceTaskSpecNetworksAdvancedOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._aliases !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.aliases = this._aliases;
-            }
-            if (this._driverOpts !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.driverOpts = this._driverOpts;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._aliases = undefined;
-                this._driverOpts = undefined;
-                this._id = undefined;
-                this._name = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._aliases = value.aliases;
-                this._driverOpts = value.driverOpts;
-                this._id = value.id;
-                this._name = value.name;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecNetworksAdvancedOutputReference.prototype, "aliases", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('aliases'));
-        },
-        set: function (value) {
-            this._aliases = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecNetworksAdvancedOutputReference.prototype.resetAliases = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._aliases !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.aliases = this._aliases;
+        }
+        if (this._driverOpts !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.driverOpts = this._driverOpts;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._aliases = undefined;
+            this._driverOpts = undefined;
+            this._id = undefined;
+            this._name = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._aliases = value.aliases;
+            this._driverOpts = value.driverOpts;
+            this._id = value.id;
+            this._name = value.name;
+        }
+    }
+    // aliases - computed: false, optional: true, required: false
+    _aliases;
+    get aliases() {
+        return cdktf.Fn.tolist(this.getListAttribute('aliases'));
+    }
+    set aliases(value) {
+        this._aliases = value;
+    }
+    resetAliases() {
         this._aliases = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecNetworksAdvancedOutputReference.prototype, "aliasesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._aliases;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecNetworksAdvancedOutputReference.prototype, "driverOpts", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('driver_opts'));
-        },
-        set: function (value) {
-            this._driverOpts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecNetworksAdvancedOutputReference.prototype.resetDriverOpts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aliasesInput() {
+        return this._aliases;
+    }
+    // driver_opts - computed: false, optional: true, required: false
+    _driverOpts;
+    get driverOpts() {
+        return cdktf.Fn.tolist(this.getListAttribute('driver_opts'));
+    }
+    set driverOpts(value) {
+        this._driverOpts = value;
+    }
+    resetDriverOpts() {
         this._driverOpts = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecNetworksAdvancedOutputReference.prototype, "driverOptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._driverOpts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecNetworksAdvancedOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecNetworksAdvancedOutputReference.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get driverOptsInput() {
+        return this._driverOpts;
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecNetworksAdvancedOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecNetworksAdvancedOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecNetworksAdvancedOutputReference.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecNetworksAdvancedOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecNetworksAdvancedOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecNetworksAdvancedOutputReference = ServiceTaskSpecNetworksAdvancedOutputReference;
-var ServiceTaskSpecNetworksAdvancedList = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecNetworksAdvancedList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+}
+export class ServiceTaskSpecNetworksAdvancedList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecNetworksAdvancedList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceTaskSpecNetworksAdvancedList.prototype.get = function (index) {
+    get(index) {
         return new ServiceTaskSpecNetworksAdvancedOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceTaskSpecNetworksAdvancedList;
-}(cdktf.ComplexList));
-exports.ServiceTaskSpecNetworksAdvancedList = ServiceTaskSpecNetworksAdvancedList;
-function serviceTaskSpecPlacementPlatformsToTerraform(struct) {
+    }
+}
+export function serviceTaskSpecPlacementPlatformsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5220,14 +4224,14 @@ function serviceTaskSpecPlacementPlatformsToTerraform(struct) {
         os: cdktf.stringToTerraform(struct.os),
     };
 }
-function serviceTaskSpecPlacementPlatformsToHclTerraform(struct) {
+export function serviceTaskSpecPlacementPlatformsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         architecture: {
             value: cdktf.stringToHclTerraform(struct.architecture),
             isBlock: false,
@@ -5242,125 +4246,103 @@ function serviceTaskSpecPlacementPlatformsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecPlacementPlatformsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecPlacementPlatformsOutputReference, _super);
+export class ServiceTaskSpecPlacementPlatformsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecPlacementPlatformsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ServiceTaskSpecPlacementPlatformsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._architecture !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.architecture = this._architecture;
-            }
-            if (this._os !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.os = this._os;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._architecture = undefined;
-                this._os = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._architecture = value.architecture;
-                this._os = value.os;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecPlacementPlatformsOutputReference.prototype, "architecture", {
-        get: function () {
-            return this.getStringAttribute('architecture');
-        },
-        set: function (value) {
-            this._architecture = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecPlacementPlatformsOutputReference.prototype, "architectureInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._architecture;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecPlacementPlatformsOutputReference.prototype, "os", {
-        get: function () {
-            return this.getStringAttribute('os');
-        },
-        set: function (value) {
-            this._os = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecPlacementPlatformsOutputReference.prototype, "osInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._os;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecPlacementPlatformsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecPlacementPlatformsOutputReference = ServiceTaskSpecPlacementPlatformsOutputReference;
-var ServiceTaskSpecPlacementPlatformsList = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecPlacementPlatformsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._architecture !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.architecture = this._architecture;
+        }
+        if (this._os !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.os = this._os;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._architecture = undefined;
+            this._os = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._architecture = value.architecture;
+            this._os = value.os;
+        }
+    }
+    // architecture - computed: false, optional: false, required: true
+    _architecture;
+    get architecture() {
+        return this.getStringAttribute('architecture');
+    }
+    set architecture(value) {
+        this._architecture = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get architectureInput() {
+        return this._architecture;
+    }
+    // os - computed: false, optional: false, required: true
+    _os;
+    get os() {
+        return this.getStringAttribute('os');
+    }
+    set os(value) {
+        this._os = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get osInput() {
+        return this._os;
+    }
+}
+export class ServiceTaskSpecPlacementPlatformsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ServiceTaskSpecPlacementPlatformsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ServiceTaskSpecPlacementPlatformsList.prototype.get = function (index) {
+    get(index) {
         return new ServiceTaskSpecPlacementPlatformsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ServiceTaskSpecPlacementPlatformsList;
-}(cdktf.ComplexList));
-exports.ServiceTaskSpecPlacementPlatformsList = ServiceTaskSpecPlacementPlatformsList;
-function serviceTaskSpecPlacementToTerraform(struct) {
+    }
+}
+export function serviceTaskSpecPlacementToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5374,14 +4356,14 @@ function serviceTaskSpecPlacementToTerraform(struct) {
         platforms: cdktf.listMapper(serviceTaskSpecPlacementPlatformsToTerraform, true)(struct.platforms),
     };
 }
-function serviceTaskSpecPlacementToHclTerraform(struct) {
+export function serviceTaskSpecPlacementToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         constraints: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.constraints),
             isBlock: false,
@@ -5408,154 +4390,116 @@ function serviceTaskSpecPlacementToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecPlacementOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecPlacementOutputReference, _super);
+export class ServiceTaskSpecPlacementOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecPlacementOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // platforms - computed: false, optional: true, required: false
-        _this._platforms = new ServiceTaskSpecPlacementPlatformsList(_this, "platforms", true);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecPlacementOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._constraints !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.constraints = this._constraints;
-            }
-            if (this._maxReplicas !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxReplicas = this._maxReplicas;
-            }
-            if (this._prefs !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.prefs = this._prefs;
-            }
-            if (((_a = this._platforms) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.platforms = (_b = this._platforms) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._constraints = undefined;
-                this._maxReplicas = undefined;
-                this._prefs = undefined;
-                this._platforms.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._constraints = value.constraints;
-                this._maxReplicas = value.maxReplicas;
-                this._prefs = value.prefs;
-                this._platforms.internalValue = value.platforms;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecPlacementOutputReference.prototype, "constraints", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('constraints'));
-        },
-        set: function (value) {
-            this._constraints = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecPlacementOutputReference.prototype.resetConstraints = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._constraints !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.constraints = this._constraints;
+        }
+        if (this._maxReplicas !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxReplicas = this._maxReplicas;
+        }
+        if (this._prefs !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.prefs = this._prefs;
+        }
+        if (this._platforms?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.platforms = this._platforms?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._constraints = undefined;
+            this._maxReplicas = undefined;
+            this._prefs = undefined;
+            this._platforms.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._constraints = value.constraints;
+            this._maxReplicas = value.maxReplicas;
+            this._prefs = value.prefs;
+            this._platforms.internalValue = value.platforms;
+        }
+    }
+    // constraints - computed: false, optional: true, required: false
+    _constraints;
+    get constraints() {
+        return cdktf.Fn.tolist(this.getListAttribute('constraints'));
+    }
+    set constraints(value) {
+        this._constraints = value;
+    }
+    resetConstraints() {
         this._constraints = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecPlacementOutputReference.prototype, "constraintsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._constraints;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecPlacementOutputReference.prototype, "maxReplicas", {
-        get: function () {
-            return this.getNumberAttribute('max_replicas');
-        },
-        set: function (value) {
-            this._maxReplicas = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecPlacementOutputReference.prototype.resetMaxReplicas = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get constraintsInput() {
+        return this._constraints;
+    }
+    // max_replicas - computed: false, optional: true, required: false
+    _maxReplicas;
+    get maxReplicas() {
+        return this.getNumberAttribute('max_replicas');
+    }
+    set maxReplicas(value) {
+        this._maxReplicas = value;
+    }
+    resetMaxReplicas() {
         this._maxReplicas = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecPlacementOutputReference.prototype, "maxReplicasInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxReplicas;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecPlacementOutputReference.prototype, "prefs", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('prefs'));
-        },
-        set: function (value) {
-            this._prefs = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecPlacementOutputReference.prototype.resetPrefs = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxReplicasInput() {
+        return this._maxReplicas;
+    }
+    // prefs - computed: false, optional: true, required: false
+    _prefs;
+    get prefs() {
+        return cdktf.Fn.tolist(this.getListAttribute('prefs'));
+    }
+    set prefs(value) {
+        this._prefs = value;
+    }
+    resetPrefs() {
         this._prefs = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecPlacementOutputReference.prototype, "prefsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._prefs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecPlacementOutputReference.prototype, "platforms", {
-        get: function () {
-            return this._platforms;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecPlacementOutputReference.prototype.putPlatforms = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get prefsInput() {
+        return this._prefs;
+    }
+    // platforms - computed: false, optional: true, required: false
+    _platforms = new ServiceTaskSpecPlacementPlatformsList(this, "platforms", true);
+    get platforms() {
+        return this._platforms;
+    }
+    putPlatforms(value) {
         this._platforms.internalValue = value;
-    };
-    ServiceTaskSpecPlacementOutputReference.prototype.resetPlatforms = function () {
+    }
+    resetPlatforms() {
         this._platforms.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecPlacementOutputReference.prototype, "platformsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._platforms.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecPlacementOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecPlacementOutputReference = ServiceTaskSpecPlacementOutputReference;
-function serviceTaskSpecResourcesLimitsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get platformsInput() {
+        return this._platforms.internalValue;
+    }
+}
+export function serviceTaskSpecResourcesLimitsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5567,14 +4511,14 @@ function serviceTaskSpecResourcesLimitsToTerraform(struct) {
         nano_cpus: cdktf.numberToTerraform(struct.nanoCpus),
     };
 }
-function serviceTaskSpecResourcesLimitsToHclTerraform(struct) {
+export function serviceTaskSpecResourcesLimitsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         memory_bytes: {
             value: cdktf.numberToHclTerraform(struct.memoryBytes),
             isBlock: false,
@@ -5589,97 +4533,74 @@ function serviceTaskSpecResourcesLimitsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecResourcesLimitsOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecResourcesLimitsOutputReference, _super);
+export class ServiceTaskSpecResourcesLimitsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecResourcesLimitsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecResourcesLimitsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._memoryBytes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.memoryBytes = this._memoryBytes;
-            }
-            if (this._nanoCpus !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.nanoCpus = this._nanoCpus;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._memoryBytes = undefined;
-                this._nanoCpus = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._memoryBytes = value.memoryBytes;
-                this._nanoCpus = value.nanoCpus;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecResourcesLimitsOutputReference.prototype, "memoryBytes", {
-        get: function () {
-            return this.getNumberAttribute('memory_bytes');
-        },
-        set: function (value) {
-            this._memoryBytes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecResourcesLimitsOutputReference.prototype.resetMemoryBytes = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._memoryBytes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.memoryBytes = this._memoryBytes;
+        }
+        if (this._nanoCpus !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.nanoCpus = this._nanoCpus;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._memoryBytes = undefined;
+            this._nanoCpus = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._memoryBytes = value.memoryBytes;
+            this._nanoCpus = value.nanoCpus;
+        }
+    }
+    // memory_bytes - computed: false, optional: true, required: false
+    _memoryBytes;
+    get memoryBytes() {
+        return this.getNumberAttribute('memory_bytes');
+    }
+    set memoryBytes(value) {
+        this._memoryBytes = value;
+    }
+    resetMemoryBytes() {
         this._memoryBytes = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecResourcesLimitsOutputReference.prototype, "memoryBytesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._memoryBytes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecResourcesLimitsOutputReference.prototype, "nanoCpus", {
-        get: function () {
-            return this.getNumberAttribute('nano_cpus');
-        },
-        set: function (value) {
-            this._nanoCpus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecResourcesLimitsOutputReference.prototype.resetNanoCpus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get memoryBytesInput() {
+        return this._memoryBytes;
+    }
+    // nano_cpus - computed: false, optional: true, required: false
+    _nanoCpus;
+    get nanoCpus() {
+        return this.getNumberAttribute('nano_cpus');
+    }
+    set nanoCpus(value) {
+        this._nanoCpus = value;
+    }
+    resetNanoCpus() {
         this._nanoCpus = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecResourcesLimitsOutputReference.prototype, "nanoCpusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._nanoCpus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecResourcesLimitsOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecResourcesLimitsOutputReference = ServiceTaskSpecResourcesLimitsOutputReference;
-function serviceTaskSpecResourcesReservationGenericResourcesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nanoCpusInput() {
+        return this._nanoCpus;
+    }
+}
+export function serviceTaskSpecResourcesReservationGenericResourcesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5691,14 +4612,14 @@ function serviceTaskSpecResourcesReservationGenericResourcesToTerraform(struct) 
         named_resources_spec: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.namedResourcesSpec),
     };
 }
-function serviceTaskSpecResourcesReservationGenericResourcesToHclTerraform(struct) {
+export function serviceTaskSpecResourcesReservationGenericResourcesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         discrete_resources_spec: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.discreteResourcesSpec),
             isBlock: false,
@@ -5713,97 +4634,74 @@ function serviceTaskSpecResourcesReservationGenericResourcesToHclTerraform(struc
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecResourcesReservationGenericResourcesOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecResourcesReservationGenericResourcesOutputReference, _super);
+export class ServiceTaskSpecResourcesReservationGenericResourcesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecResourcesReservationGenericResourcesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecResourcesReservationGenericResourcesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._discreteResourcesSpec !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.discreteResourcesSpec = this._discreteResourcesSpec;
-            }
-            if (this._namedResourcesSpec !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.namedResourcesSpec = this._namedResourcesSpec;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._discreteResourcesSpec = undefined;
-                this._namedResourcesSpec = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._discreteResourcesSpec = value.discreteResourcesSpec;
-                this._namedResourcesSpec = value.namedResourcesSpec;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecResourcesReservationGenericResourcesOutputReference.prototype, "discreteResourcesSpec", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('discrete_resources_spec'));
-        },
-        set: function (value) {
-            this._discreteResourcesSpec = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecResourcesReservationGenericResourcesOutputReference.prototype.resetDiscreteResourcesSpec = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._discreteResourcesSpec !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.discreteResourcesSpec = this._discreteResourcesSpec;
+        }
+        if (this._namedResourcesSpec !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.namedResourcesSpec = this._namedResourcesSpec;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._discreteResourcesSpec = undefined;
+            this._namedResourcesSpec = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._discreteResourcesSpec = value.discreteResourcesSpec;
+            this._namedResourcesSpec = value.namedResourcesSpec;
+        }
+    }
+    // discrete_resources_spec - computed: false, optional: true, required: false
+    _discreteResourcesSpec;
+    get discreteResourcesSpec() {
+        return cdktf.Fn.tolist(this.getListAttribute('discrete_resources_spec'));
+    }
+    set discreteResourcesSpec(value) {
+        this._discreteResourcesSpec = value;
+    }
+    resetDiscreteResourcesSpec() {
         this._discreteResourcesSpec = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecResourcesReservationGenericResourcesOutputReference.prototype, "discreteResourcesSpecInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._discreteResourcesSpec;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecResourcesReservationGenericResourcesOutputReference.prototype, "namedResourcesSpec", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('named_resources_spec'));
-        },
-        set: function (value) {
-            this._namedResourcesSpec = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecResourcesReservationGenericResourcesOutputReference.prototype.resetNamedResourcesSpec = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get discreteResourcesSpecInput() {
+        return this._discreteResourcesSpec;
+    }
+    // named_resources_spec - computed: false, optional: true, required: false
+    _namedResourcesSpec;
+    get namedResourcesSpec() {
+        return cdktf.Fn.tolist(this.getListAttribute('named_resources_spec'));
+    }
+    set namedResourcesSpec(value) {
+        this._namedResourcesSpec = value;
+    }
+    resetNamedResourcesSpec() {
         this._namedResourcesSpec = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecResourcesReservationGenericResourcesOutputReference.prototype, "namedResourcesSpecInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._namedResourcesSpec;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecResourcesReservationGenericResourcesOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecResourcesReservationGenericResourcesOutputReference = ServiceTaskSpecResourcesReservationGenericResourcesOutputReference;
-function serviceTaskSpecResourcesReservationToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get namedResourcesSpecInput() {
+        return this._namedResourcesSpec;
+    }
+}
+export function serviceTaskSpecResourcesReservationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5816,14 +4714,14 @@ function serviceTaskSpecResourcesReservationToTerraform(struct) {
         generic_resources: serviceTaskSpecResourcesReservationGenericResourcesToTerraform(struct.genericResources),
     };
 }
-function serviceTaskSpecResourcesReservationToHclTerraform(struct) {
+export function serviceTaskSpecResourcesReservationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         memory_bytes: {
             value: cdktf.numberToHclTerraform(struct.memoryBytes),
             isBlock: false,
@@ -5844,127 +4742,95 @@ function serviceTaskSpecResourcesReservationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecResourcesReservationOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecResourcesReservationOutputReference, _super);
+export class ServiceTaskSpecResourcesReservationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecResourcesReservationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // generic_resources - computed: false, optional: true, required: false
-        _this._genericResources = new ServiceTaskSpecResourcesReservationGenericResourcesOutputReference(_this, "generic_resources");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecResourcesReservationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._memoryBytes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.memoryBytes = this._memoryBytes;
-            }
-            if (this._nanoCpus !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.nanoCpus = this._nanoCpus;
-            }
-            if (((_a = this._genericResources) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.genericResources = (_b = this._genericResources) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._memoryBytes = undefined;
-                this._nanoCpus = undefined;
-                this._genericResources.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._memoryBytes = value.memoryBytes;
-                this._nanoCpus = value.nanoCpus;
-                this._genericResources.internalValue = value.genericResources;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecResourcesReservationOutputReference.prototype, "memoryBytes", {
-        get: function () {
-            return this.getNumberAttribute('memory_bytes');
-        },
-        set: function (value) {
-            this._memoryBytes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecResourcesReservationOutputReference.prototype.resetMemoryBytes = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._memoryBytes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.memoryBytes = this._memoryBytes;
+        }
+        if (this._nanoCpus !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.nanoCpus = this._nanoCpus;
+        }
+        if (this._genericResources?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.genericResources = this._genericResources?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._memoryBytes = undefined;
+            this._nanoCpus = undefined;
+            this._genericResources.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._memoryBytes = value.memoryBytes;
+            this._nanoCpus = value.nanoCpus;
+            this._genericResources.internalValue = value.genericResources;
+        }
+    }
+    // memory_bytes - computed: false, optional: true, required: false
+    _memoryBytes;
+    get memoryBytes() {
+        return this.getNumberAttribute('memory_bytes');
+    }
+    set memoryBytes(value) {
+        this._memoryBytes = value;
+    }
+    resetMemoryBytes() {
         this._memoryBytes = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecResourcesReservationOutputReference.prototype, "memoryBytesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._memoryBytes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecResourcesReservationOutputReference.prototype, "nanoCpus", {
-        get: function () {
-            return this.getNumberAttribute('nano_cpus');
-        },
-        set: function (value) {
-            this._nanoCpus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecResourcesReservationOutputReference.prototype.resetNanoCpus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get memoryBytesInput() {
+        return this._memoryBytes;
+    }
+    // nano_cpus - computed: false, optional: true, required: false
+    _nanoCpus;
+    get nanoCpus() {
+        return this.getNumberAttribute('nano_cpus');
+    }
+    set nanoCpus(value) {
+        this._nanoCpus = value;
+    }
+    resetNanoCpus() {
         this._nanoCpus = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecResourcesReservationOutputReference.prototype, "nanoCpusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._nanoCpus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecResourcesReservationOutputReference.prototype, "genericResources", {
-        get: function () {
-            return this._genericResources;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecResourcesReservationOutputReference.prototype.putGenericResources = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nanoCpusInput() {
+        return this._nanoCpus;
+    }
+    // generic_resources - computed: false, optional: true, required: false
+    _genericResources = new ServiceTaskSpecResourcesReservationGenericResourcesOutputReference(this, "generic_resources");
+    get genericResources() {
+        return this._genericResources;
+    }
+    putGenericResources(value) {
         this._genericResources.internalValue = value;
-    };
-    ServiceTaskSpecResourcesReservationOutputReference.prototype.resetGenericResources = function () {
+    }
+    resetGenericResources() {
         this._genericResources.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecResourcesReservationOutputReference.prototype, "genericResourcesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._genericResources.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecResourcesReservationOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecResourcesReservationOutputReference = ServiceTaskSpecResourcesReservationOutputReference;
-function serviceTaskSpecResourcesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get genericResourcesInput() {
+        return this._genericResources.internalValue;
+    }
+}
+export function serviceTaskSpecResourcesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -5976,14 +4842,14 @@ function serviceTaskSpecResourcesToTerraform(struct) {
         reservation: serviceTaskSpecResourcesReservationToTerraform(struct.reservation),
     };
 }
-function serviceTaskSpecResourcesToHclTerraform(struct) {
+export function serviceTaskSpecResourcesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         limits: {
             value: serviceTaskSpecResourcesLimitsToHclTerraform(struct.limits),
             isBlock: true,
@@ -5998,102 +4864,74 @@ function serviceTaskSpecResourcesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecResourcesOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecResourcesOutputReference, _super);
+export class ServiceTaskSpecResourcesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecResourcesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // limits - computed: false, optional: true, required: false
-        _this._limits = new ServiceTaskSpecResourcesLimitsOutputReference(_this, "limits");
-        // reservation - computed: false, optional: true, required: false
-        _this._reservation = new ServiceTaskSpecResourcesReservationOutputReference(_this, "reservation");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecResourcesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._limits) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.limits = (_b = this._limits) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._reservation) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.reservation = (_d = this._reservation) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._limits.internalValue = undefined;
-                this._reservation.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._limits.internalValue = value.limits;
-                this._reservation.internalValue = value.reservation;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecResourcesOutputReference.prototype, "limits", {
-        get: function () {
-            return this._limits;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecResourcesOutputReference.prototype.putLimits = function (value) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._limits?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.limits = this._limits?.internalValue;
+        }
+        if (this._reservation?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.reservation = this._reservation?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._limits.internalValue = undefined;
+            this._reservation.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._limits.internalValue = value.limits;
+            this._reservation.internalValue = value.reservation;
+        }
+    }
+    // limits - computed: false, optional: true, required: false
+    _limits = new ServiceTaskSpecResourcesLimitsOutputReference(this, "limits");
+    get limits() {
+        return this._limits;
+    }
+    putLimits(value) {
         this._limits.internalValue = value;
-    };
-    ServiceTaskSpecResourcesOutputReference.prototype.resetLimits = function () {
+    }
+    resetLimits() {
         this._limits.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecResourcesOutputReference.prototype, "limitsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._limits.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecResourcesOutputReference.prototype, "reservation", {
-        get: function () {
-            return this._reservation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecResourcesOutputReference.prototype.putReservation = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get limitsInput() {
+        return this._limits.internalValue;
+    }
+    // reservation - computed: false, optional: true, required: false
+    _reservation = new ServiceTaskSpecResourcesReservationOutputReference(this, "reservation");
+    get reservation() {
+        return this._reservation;
+    }
+    putReservation(value) {
         this._reservation.internalValue = value;
-    };
-    ServiceTaskSpecResourcesOutputReference.prototype.resetReservation = function () {
+    }
+    resetReservation() {
         this._reservation.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecResourcesOutputReference.prototype, "reservationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._reservation.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecResourcesOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecResourcesOutputReference = ServiceTaskSpecResourcesOutputReference;
-function serviceTaskSpecRestartPolicyToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get reservationInput() {
+        return this._reservation.internalValue;
+    }
+}
+export function serviceTaskSpecRestartPolicyToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -6107,14 +4945,14 @@ function serviceTaskSpecRestartPolicyToTerraform(struct) {
         window: cdktf.stringToTerraform(struct.window),
     };
 }
-function serviceTaskSpecRestartPolicyToHclTerraform(struct) {
+export function serviceTaskSpecRestartPolicyToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         condition: {
             value: cdktf.stringToHclTerraform(struct.condition),
             isBlock: false,
@@ -6141,151 +4979,116 @@ function serviceTaskSpecRestartPolicyToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecRestartPolicyOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecRestartPolicyOutputReference, _super);
+export class ServiceTaskSpecRestartPolicyOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecRestartPolicyOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecRestartPolicyOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._condition !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.condition = this._condition;
-            }
-            if (this._delay !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.delay = this._delay;
-            }
-            if (this._maxAttempts !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxAttempts = this._maxAttempts;
-            }
-            if (this._window !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.window = this._window;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._condition = undefined;
-                this._delay = undefined;
-                this._maxAttempts = undefined;
-                this._window = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._condition = value.condition;
-                this._delay = value.delay;
-                this._maxAttempts = value.maxAttempts;
-                this._window = value.window;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecRestartPolicyOutputReference.prototype, "condition", {
-        get: function () {
-            return this.getStringAttribute('condition');
-        },
-        set: function (value) {
-            this._condition = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecRestartPolicyOutputReference.prototype.resetCondition = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._condition !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.condition = this._condition;
+        }
+        if (this._delay !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.delay = this._delay;
+        }
+        if (this._maxAttempts !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxAttempts = this._maxAttempts;
+        }
+        if (this._window !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.window = this._window;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._condition = undefined;
+            this._delay = undefined;
+            this._maxAttempts = undefined;
+            this._window = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._condition = value.condition;
+            this._delay = value.delay;
+            this._maxAttempts = value.maxAttempts;
+            this._window = value.window;
+        }
+    }
+    // condition - computed: false, optional: true, required: false
+    _condition;
+    get condition() {
+        return this.getStringAttribute('condition');
+    }
+    set condition(value) {
+        this._condition = value;
+    }
+    resetCondition() {
         this._condition = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecRestartPolicyOutputReference.prototype, "conditionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._condition;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecRestartPolicyOutputReference.prototype, "delay", {
-        get: function () {
-            return this.getStringAttribute('delay');
-        },
-        set: function (value) {
-            this._delay = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecRestartPolicyOutputReference.prototype.resetDelay = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get conditionInput() {
+        return this._condition;
+    }
+    // delay - computed: false, optional: true, required: false
+    _delay;
+    get delay() {
+        return this.getStringAttribute('delay');
+    }
+    set delay(value) {
+        this._delay = value;
+    }
+    resetDelay() {
         this._delay = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecRestartPolicyOutputReference.prototype, "delayInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._delay;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecRestartPolicyOutputReference.prototype, "maxAttempts", {
-        get: function () {
-            return this.getNumberAttribute('max_attempts');
-        },
-        set: function (value) {
-            this._maxAttempts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecRestartPolicyOutputReference.prototype.resetMaxAttempts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get delayInput() {
+        return this._delay;
+    }
+    // max_attempts - computed: false, optional: true, required: false
+    _maxAttempts;
+    get maxAttempts() {
+        return this.getNumberAttribute('max_attempts');
+    }
+    set maxAttempts(value) {
+        this._maxAttempts = value;
+    }
+    resetMaxAttempts() {
         this._maxAttempts = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecRestartPolicyOutputReference.prototype, "maxAttemptsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxAttempts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecRestartPolicyOutputReference.prototype, "window", {
-        get: function () {
-            return this.getStringAttribute('window');
-        },
-        set: function (value) {
-            this._window = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecRestartPolicyOutputReference.prototype.resetWindow = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxAttemptsInput() {
+        return this._maxAttempts;
+    }
+    // window - computed: false, optional: true, required: false
+    _window;
+    get window() {
+        return this.getStringAttribute('window');
+    }
+    set window(value) {
+        this._window = value;
+    }
+    resetWindow() {
         this._window = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecRestartPolicyOutputReference.prototype, "windowInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._window;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecRestartPolicyOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecRestartPolicyOutputReference = ServiceTaskSpecRestartPolicyOutputReference;
-function serviceTaskSpecToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get windowInput() {
+        return this._window;
+    }
+}
+export function serviceTaskSpecToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -6303,14 +5106,14 @@ function serviceTaskSpecToTerraform(struct) {
         restart_policy: serviceTaskSpecRestartPolicyToTerraform(struct.restartPolicy),
     };
 }
-function serviceTaskSpecToHclTerraform(struct) {
+export function serviceTaskSpecToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         force_update: {
             value: cdktf.numberToHclTerraform(struct.forceUpdate),
             isBlock: false,
@@ -6361,269 +5164,197 @@ function serviceTaskSpecToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceTaskSpecOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceTaskSpecOutputReference, _super);
+export class ServiceTaskSpecOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceTaskSpecOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // container_spec - computed: false, optional: false, required: true
-        _this._containerSpec = new ServiceTaskSpecContainerSpecOutputReference(_this, "container_spec");
-        // log_driver - computed: false, optional: true, required: false
-        _this._logDriver = new ServiceTaskSpecLogDriverOutputReference(_this, "log_driver");
-        // networks_advanced - computed: false, optional: true, required: false
-        _this._networksAdvanced = new ServiceTaskSpecNetworksAdvancedList(_this, "networks_advanced", true);
-        // placement - computed: false, optional: true, required: false
-        _this._placement = new ServiceTaskSpecPlacementOutputReference(_this, "placement");
-        // resources - computed: false, optional: true, required: false
-        _this._resources = new ServiceTaskSpecResourcesOutputReference(_this, "resources");
-        // restart_policy - computed: false, optional: true, required: false
-        _this._restartPolicy = new ServiceTaskSpecRestartPolicyOutputReference(_this, "restart_policy");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._forceUpdate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.forceUpdate = this._forceUpdate;
-            }
-            if (this._runtime !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.runtime = this._runtime;
-            }
-            if (((_a = this._containerSpec) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.containerSpec = (_b = this._containerSpec) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._logDriver) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.logDriver = (_d = this._logDriver) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._networksAdvanced) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.networksAdvanced = (_f = this._networksAdvanced) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._placement) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.placement = (_h = this._placement) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (((_j = this._resources) === null || _j === void 0 ? void 0 : _j.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.resources = (_k = this._resources) === null || _k === void 0 ? void 0 : _k.internalValue;
-            }
-            if (((_l = this._restartPolicy) === null || _l === void 0 ? void 0 : _l.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.restartPolicy = (_m = this._restartPolicy) === null || _m === void 0 ? void 0 : _m.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._forceUpdate = undefined;
-                this._runtime = undefined;
-                this._containerSpec.internalValue = undefined;
-                this._logDriver.internalValue = undefined;
-                this._networksAdvanced.internalValue = undefined;
-                this._placement.internalValue = undefined;
-                this._resources.internalValue = undefined;
-                this._restartPolicy.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._forceUpdate = value.forceUpdate;
-                this._runtime = value.runtime;
-                this._containerSpec.internalValue = value.containerSpec;
-                this._logDriver.internalValue = value.logDriver;
-                this._networksAdvanced.internalValue = value.networksAdvanced;
-                this._placement.internalValue = value.placement;
-                this._resources.internalValue = value.resources;
-                this._restartPolicy.internalValue = value.restartPolicy;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "forceUpdate", {
-        get: function () {
-            return this.getNumberAttribute('force_update');
-        },
-        set: function (value) {
-            this._forceUpdate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecOutputReference.prototype.resetForceUpdate = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._forceUpdate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.forceUpdate = this._forceUpdate;
+        }
+        if (this._runtime !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.runtime = this._runtime;
+        }
+        if (this._containerSpec?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.containerSpec = this._containerSpec?.internalValue;
+        }
+        if (this._logDriver?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.logDriver = this._logDriver?.internalValue;
+        }
+        if (this._networksAdvanced?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.networksAdvanced = this._networksAdvanced?.internalValue;
+        }
+        if (this._placement?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.placement = this._placement?.internalValue;
+        }
+        if (this._resources?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.resources = this._resources?.internalValue;
+        }
+        if (this._restartPolicy?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.restartPolicy = this._restartPolicy?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._forceUpdate = undefined;
+            this._runtime = undefined;
+            this._containerSpec.internalValue = undefined;
+            this._logDriver.internalValue = undefined;
+            this._networksAdvanced.internalValue = undefined;
+            this._placement.internalValue = undefined;
+            this._resources.internalValue = undefined;
+            this._restartPolicy.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._forceUpdate = value.forceUpdate;
+            this._runtime = value.runtime;
+            this._containerSpec.internalValue = value.containerSpec;
+            this._logDriver.internalValue = value.logDriver;
+            this._networksAdvanced.internalValue = value.networksAdvanced;
+            this._placement.internalValue = value.placement;
+            this._resources.internalValue = value.resources;
+            this._restartPolicy.internalValue = value.restartPolicy;
+        }
+    }
+    // force_update - computed: true, optional: true, required: false
+    _forceUpdate;
+    get forceUpdate() {
+        return this.getNumberAttribute('force_update');
+    }
+    set forceUpdate(value) {
+        this._forceUpdate = value;
+    }
+    resetForceUpdate() {
         this._forceUpdate = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "forceUpdateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._forceUpdate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "runtime", {
-        get: function () {
-            return this.getStringAttribute('runtime');
-        },
-        set: function (value) {
-            this._runtime = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecOutputReference.prototype.resetRuntime = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get forceUpdateInput() {
+        return this._forceUpdate;
+    }
+    // runtime - computed: true, optional: true, required: false
+    _runtime;
+    get runtime() {
+        return this.getStringAttribute('runtime');
+    }
+    set runtime(value) {
+        this._runtime = value;
+    }
+    resetRuntime() {
         this._runtime = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "runtimeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._runtime;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "containerSpec", {
-        get: function () {
-            return this._containerSpec;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecOutputReference.prototype.putContainerSpec = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get runtimeInput() {
+        return this._runtime;
+    }
+    // container_spec - computed: false, optional: false, required: true
+    _containerSpec = new ServiceTaskSpecContainerSpecOutputReference(this, "container_spec");
+    get containerSpec() {
+        return this._containerSpec;
+    }
+    putContainerSpec(value) {
         this._containerSpec.internalValue = value;
-    };
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "containerSpecInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._containerSpec.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "logDriver", {
-        get: function () {
-            return this._logDriver;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecOutputReference.prototype.putLogDriver = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containerSpecInput() {
+        return this._containerSpec.internalValue;
+    }
+    // log_driver - computed: false, optional: true, required: false
+    _logDriver = new ServiceTaskSpecLogDriverOutputReference(this, "log_driver");
+    get logDriver() {
+        return this._logDriver;
+    }
+    putLogDriver(value) {
         this._logDriver.internalValue = value;
-    };
-    ServiceTaskSpecOutputReference.prototype.resetLogDriver = function () {
+    }
+    resetLogDriver() {
         this._logDriver.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "logDriverInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._logDriver.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "networksAdvanced", {
-        get: function () {
-            return this._networksAdvanced;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecOutputReference.prototype.putNetworksAdvanced = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get logDriverInput() {
+        return this._logDriver.internalValue;
+    }
+    // networks_advanced - computed: false, optional: true, required: false
+    _networksAdvanced = new ServiceTaskSpecNetworksAdvancedList(this, "networks_advanced", true);
+    get networksAdvanced() {
+        return this._networksAdvanced;
+    }
+    putNetworksAdvanced(value) {
         this._networksAdvanced.internalValue = value;
-    };
-    ServiceTaskSpecOutputReference.prototype.resetNetworksAdvanced = function () {
+    }
+    resetNetworksAdvanced() {
         this._networksAdvanced.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "networksAdvancedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._networksAdvanced.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "placement", {
-        get: function () {
-            return this._placement;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecOutputReference.prototype.putPlacement = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get networksAdvancedInput() {
+        return this._networksAdvanced.internalValue;
+    }
+    // placement - computed: false, optional: true, required: false
+    _placement = new ServiceTaskSpecPlacementOutputReference(this, "placement");
+    get placement() {
+        return this._placement;
+    }
+    putPlacement(value) {
         this._placement.internalValue = value;
-    };
-    ServiceTaskSpecOutputReference.prototype.resetPlacement = function () {
+    }
+    resetPlacement() {
         this._placement.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "placementInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._placement.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "resources", {
-        get: function () {
-            return this._resources;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecOutputReference.prototype.putResources = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get placementInput() {
+        return this._placement.internalValue;
+    }
+    // resources - computed: false, optional: true, required: false
+    _resources = new ServiceTaskSpecResourcesOutputReference(this, "resources");
+    get resources() {
+        return this._resources;
+    }
+    putResources(value) {
         this._resources.internalValue = value;
-    };
-    ServiceTaskSpecOutputReference.prototype.resetResources = function () {
+    }
+    resetResources() {
         this._resources.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "resourcesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._resources.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "restartPolicy", {
-        get: function () {
-            return this._restartPolicy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceTaskSpecOutputReference.prototype.putRestartPolicy = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get resourcesInput() {
+        return this._resources.internalValue;
+    }
+    // restart_policy - computed: false, optional: true, required: false
+    _restartPolicy = new ServiceTaskSpecRestartPolicyOutputReference(this, "restart_policy");
+    get restartPolicy() {
+        return this._restartPolicy;
+    }
+    putRestartPolicy(value) {
         this._restartPolicy.internalValue = value;
-    };
-    ServiceTaskSpecOutputReference.prototype.resetRestartPolicy = function () {
+    }
+    resetRestartPolicy() {
         this._restartPolicy.internalValue = undefined;
-    };
-    Object.defineProperty(ServiceTaskSpecOutputReference.prototype, "restartPolicyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._restartPolicy.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceTaskSpecOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceTaskSpecOutputReference = ServiceTaskSpecOutputReference;
-function serviceUpdateConfigToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get restartPolicyInput() {
+        return this._restartPolicy.internalValue;
+    }
+}
+export function serviceUpdateConfigToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -6639,14 +5370,14 @@ function serviceUpdateConfigToTerraform(struct) {
         parallelism: cdktf.numberToTerraform(struct.parallelism),
     };
 }
-function serviceUpdateConfigToHclTerraform(struct) {
+export function serviceUpdateConfigToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         delay: {
             value: cdktf.stringToHclTerraform(struct.delay),
             isBlock: false,
@@ -6685,209 +5416,178 @@ function serviceUpdateConfigToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ServiceUpdateConfigOutputReference = /** @class */ (function (_super) {
-    __extends(ServiceUpdateConfigOutputReference, _super);
+export class ServiceUpdateConfigOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ServiceUpdateConfigOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._delay !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.delay = this._delay;
-            }
-            if (this._failureAction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.failureAction = this._failureAction;
-            }
-            if (this._maxFailureRatio !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxFailureRatio = this._maxFailureRatio;
-            }
-            if (this._monitor !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.monitor = this._monitor;
-            }
-            if (this._order !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.order = this._order;
-            }
-            if (this._parallelism !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.parallelism = this._parallelism;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._delay = undefined;
-                this._failureAction = undefined;
-                this._maxFailureRatio = undefined;
-                this._monitor = undefined;
-                this._order = undefined;
-                this._parallelism = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._delay = value.delay;
-                this._failureAction = value.failureAction;
-                this._maxFailureRatio = value.maxFailureRatio;
-                this._monitor = value.monitor;
-                this._order = value.order;
-                this._parallelism = value.parallelism;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "delay", {
-        get: function () {
-            return this.getStringAttribute('delay');
-        },
-        set: function (value) {
-            this._delay = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceUpdateConfigOutputReference.prototype.resetDelay = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._delay !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.delay = this._delay;
+        }
+        if (this._failureAction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.failureAction = this._failureAction;
+        }
+        if (this._maxFailureRatio !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxFailureRatio = this._maxFailureRatio;
+        }
+        if (this._monitor !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.monitor = this._monitor;
+        }
+        if (this._order !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.order = this._order;
+        }
+        if (this._parallelism !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.parallelism = this._parallelism;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._delay = undefined;
+            this._failureAction = undefined;
+            this._maxFailureRatio = undefined;
+            this._monitor = undefined;
+            this._order = undefined;
+            this._parallelism = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._delay = value.delay;
+            this._failureAction = value.failureAction;
+            this._maxFailureRatio = value.maxFailureRatio;
+            this._monitor = value.monitor;
+            this._order = value.order;
+            this._parallelism = value.parallelism;
+        }
+    }
+    // delay - computed: false, optional: true, required: false
+    _delay;
+    get delay() {
+        return this.getStringAttribute('delay');
+    }
+    set delay(value) {
+        this._delay = value;
+    }
+    resetDelay() {
         this._delay = undefined;
-    };
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "delayInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._delay;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "failureAction", {
-        get: function () {
-            return this.getStringAttribute('failure_action');
-        },
-        set: function (value) {
-            this._failureAction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceUpdateConfigOutputReference.prototype.resetFailureAction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get delayInput() {
+        return this._delay;
+    }
+    // failure_action - computed: false, optional: true, required: false
+    _failureAction;
+    get failureAction() {
+        return this.getStringAttribute('failure_action');
+    }
+    set failureAction(value) {
+        this._failureAction = value;
+    }
+    resetFailureAction() {
         this._failureAction = undefined;
-    };
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "failureActionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._failureAction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "maxFailureRatio", {
-        get: function () {
-            return this.getStringAttribute('max_failure_ratio');
-        },
-        set: function (value) {
-            this._maxFailureRatio = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceUpdateConfigOutputReference.prototype.resetMaxFailureRatio = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get failureActionInput() {
+        return this._failureAction;
+    }
+    // max_failure_ratio - computed: false, optional: true, required: false
+    _maxFailureRatio;
+    get maxFailureRatio() {
+        return this.getStringAttribute('max_failure_ratio');
+    }
+    set maxFailureRatio(value) {
+        this._maxFailureRatio = value;
+    }
+    resetMaxFailureRatio() {
         this._maxFailureRatio = undefined;
-    };
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "maxFailureRatioInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxFailureRatio;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "monitor", {
-        get: function () {
-            return this.getStringAttribute('monitor');
-        },
-        set: function (value) {
-            this._monitor = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceUpdateConfigOutputReference.prototype.resetMonitor = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxFailureRatioInput() {
+        return this._maxFailureRatio;
+    }
+    // monitor - computed: false, optional: true, required: false
+    _monitor;
+    get monitor() {
+        return this.getStringAttribute('monitor');
+    }
+    set monitor(value) {
+        this._monitor = value;
+    }
+    resetMonitor() {
         this._monitor = undefined;
-    };
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "monitorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._monitor;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceUpdateConfigOutputReference.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get monitorInput() {
+        return this._monitor;
+    }
+    // order - computed: false, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "parallelism", {
-        get: function () {
-            return this.getNumberAttribute('parallelism');
-        },
-        set: function (value) {
-            this._parallelism = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ServiceUpdateConfigOutputReference.prototype.resetParallelism = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+    // parallelism - computed: false, optional: true, required: false
+    _parallelism;
+    get parallelism() {
+        return this.getNumberAttribute('parallelism');
+    }
+    set parallelism(value) {
+        this._parallelism = value;
+    }
+    resetParallelism() {
         this._parallelism = undefined;
-    };
-    Object.defineProperty(ServiceUpdateConfigOutputReference.prototype, "parallelismInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parallelism;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ServiceUpdateConfigOutputReference;
-}(cdktf.ComplexObject));
-exports.ServiceUpdateConfigOutputReference = ServiceUpdateConfigOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get parallelismInput() {
+        return this._parallelism;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/service docker_service}
 */
-var Service = /** @class */ (function (_super) {
-    __extends(Service, _super);
+export class Service extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "docker_service";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Service resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Service to import
+    * @param importFromId The id of the existing Service that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/service#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Service to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_service", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -6898,8 +5598,8 @@ var Service = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ServiceConfig
     */
-    function Service(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'docker_service',
             terraformGeneratorMetadata: {
                 providerName: 'docker',
@@ -6912,256 +5612,169 @@ var Service = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // auth - computed: false, optional: true, required: false
-        _this._auth = new ServiceAuthOutputReference(_this, "auth");
-        // converge_config - computed: false, optional: true, required: false
-        _this._convergeConfig = new ServiceConvergeConfigOutputReference(_this, "converge_config");
-        // endpoint_spec - computed: false, optional: true, required: false
-        _this._endpointSpec = new ServiceEndpointSpecOutputReference(_this, "endpoint_spec");
-        // labels - computed: false, optional: true, required: false
-        _this._labels = new ServiceLabelsList(_this, "labels", true);
-        // mode - computed: false, optional: true, required: false
-        _this._mode = new ServiceModeOutputReference(_this, "mode");
-        // rollback_config - computed: false, optional: true, required: false
-        _this._rollbackConfig = new ServiceRollbackConfigOutputReference(_this, "rollback_config");
-        // task_spec - computed: false, optional: false, required: true
-        _this._taskSpec = new ServiceTaskSpecOutputReference(_this, "task_spec");
-        // update_config - computed: false, optional: true, required: false
-        _this._updateConfig = new ServiceUpdateConfigOutputReference(_this, "update_config");
-        _this._id = config.id;
-        _this._name = config.name;
-        _this._auth.internalValue = config.auth;
-        _this._convergeConfig.internalValue = config.convergeConfig;
-        _this._endpointSpec.internalValue = config.endpointSpec;
-        _this._labels.internalValue = config.labels;
-        _this._mode.internalValue = config.mode;
-        _this._rollbackConfig.internalValue = config.rollbackConfig;
-        _this._taskSpec.internalValue = config.taskSpec;
-        _this._updateConfig.internalValue = config.updateConfig;
-        return _this;
+        });
+        this._id = config.id;
+        this._name = config.name;
+        this._auth.internalValue = config.auth;
+        this._convergeConfig.internalValue = config.convergeConfig;
+        this._endpointSpec.internalValue = config.endpointSpec;
+        this._labels.internalValue = config.labels;
+        this._mode.internalValue = config.mode;
+        this._rollbackConfig.internalValue = config.rollbackConfig;
+        this._taskSpec.internalValue = config.taskSpec;
+        this._updateConfig.internalValue = config.updateConfig;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Service resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Service to import
-    * @param importFromId The id of the existing Service that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/service#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Service to import is found
-    */
-    Service.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_service", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Service.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Service.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(Service.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "auth", {
-        get: function () {
-            return this._auth;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Service.prototype.putAuth = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // auth - computed: false, optional: true, required: false
+    _auth = new ServiceAuthOutputReference(this, "auth");
+    get auth() {
+        return this._auth;
+    }
+    putAuth(value) {
         this._auth.internalValue = value;
-    };
-    Service.prototype.resetAuth = function () {
+    }
+    resetAuth() {
         this._auth.internalValue = undefined;
-    };
-    Object.defineProperty(Service.prototype, "authInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._auth.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "convergeConfig", {
-        get: function () {
-            return this._convergeConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Service.prototype.putConvergeConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authInput() {
+        return this._auth.internalValue;
+    }
+    // converge_config - computed: false, optional: true, required: false
+    _convergeConfig = new ServiceConvergeConfigOutputReference(this, "converge_config");
+    get convergeConfig() {
+        return this._convergeConfig;
+    }
+    putConvergeConfig(value) {
         this._convergeConfig.internalValue = value;
-    };
-    Service.prototype.resetConvergeConfig = function () {
+    }
+    resetConvergeConfig() {
         this._convergeConfig.internalValue = undefined;
-    };
-    Object.defineProperty(Service.prototype, "convergeConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._convergeConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "endpointSpec", {
-        get: function () {
-            return this._endpointSpec;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Service.prototype.putEndpointSpec = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get convergeConfigInput() {
+        return this._convergeConfig.internalValue;
+    }
+    // endpoint_spec - computed: false, optional: true, required: false
+    _endpointSpec = new ServiceEndpointSpecOutputReference(this, "endpoint_spec");
+    get endpointSpec() {
+        return this._endpointSpec;
+    }
+    putEndpointSpec(value) {
         this._endpointSpec.internalValue = value;
-    };
-    Service.prototype.resetEndpointSpec = function () {
+    }
+    resetEndpointSpec() {
         this._endpointSpec.internalValue = undefined;
-    };
-    Object.defineProperty(Service.prototype, "endpointSpecInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._endpointSpec.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "labels", {
-        get: function () {
-            return this._labels;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Service.prototype.putLabels = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get endpointSpecInput() {
+        return this._endpointSpec.internalValue;
+    }
+    // labels - computed: false, optional: true, required: false
+    _labels = new ServiceLabelsList(this, "labels", true);
+    get labels() {
+        return this._labels;
+    }
+    putLabels(value) {
         this._labels.internalValue = value;
-    };
-    Service.prototype.resetLabels = function () {
+    }
+    resetLabels() {
         this._labels.internalValue = undefined;
-    };
-    Object.defineProperty(Service.prototype, "labelsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._labels.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "mode", {
-        get: function () {
-            return this._mode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Service.prototype.putMode = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelsInput() {
+        return this._labels.internalValue;
+    }
+    // mode - computed: false, optional: true, required: false
+    _mode = new ServiceModeOutputReference(this, "mode");
+    get mode() {
+        return this._mode;
+    }
+    putMode(value) {
         this._mode.internalValue = value;
-    };
-    Service.prototype.resetMode = function () {
+    }
+    resetMode() {
         this._mode.internalValue = undefined;
-    };
-    Object.defineProperty(Service.prototype, "modeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mode.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "rollbackConfig", {
-        get: function () {
-            return this._rollbackConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Service.prototype.putRollbackConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get modeInput() {
+        return this._mode.internalValue;
+    }
+    // rollback_config - computed: false, optional: true, required: false
+    _rollbackConfig = new ServiceRollbackConfigOutputReference(this, "rollback_config");
+    get rollbackConfig() {
+        return this._rollbackConfig;
+    }
+    putRollbackConfig(value) {
         this._rollbackConfig.internalValue = value;
-    };
-    Service.prototype.resetRollbackConfig = function () {
+    }
+    resetRollbackConfig() {
         this._rollbackConfig.internalValue = undefined;
-    };
-    Object.defineProperty(Service.prototype, "rollbackConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rollbackConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "taskSpec", {
-        get: function () {
-            return this._taskSpec;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Service.prototype.putTaskSpec = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rollbackConfigInput() {
+        return this._rollbackConfig.internalValue;
+    }
+    // task_spec - computed: false, optional: false, required: true
+    _taskSpec = new ServiceTaskSpecOutputReference(this, "task_spec");
+    get taskSpec() {
+        return this._taskSpec;
+    }
+    putTaskSpec(value) {
         this._taskSpec.internalValue = value;
-    };
-    Object.defineProperty(Service.prototype, "taskSpecInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._taskSpec.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Service.prototype, "updateConfig", {
-        get: function () {
-            return this._updateConfig;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Service.prototype.putUpdateConfig = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get taskSpecInput() {
+        return this._taskSpec.internalValue;
+    }
+    // update_config - computed: false, optional: true, required: false
+    _updateConfig = new ServiceUpdateConfigOutputReference(this, "update_config");
+    get updateConfig() {
+        return this._updateConfig;
+    }
+    putUpdateConfig(value) {
         this._updateConfig.internalValue = value;
-    };
-    Service.prototype.resetUpdateConfig = function () {
+    }
+    resetUpdateConfig() {
         this._updateConfig.internalValue = undefined;
-    };
-    Object.defineProperty(Service.prototype, "updateConfigInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._updateConfig.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get updateConfigInput() {
+        return this._updateConfig.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Service.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             name: cdktf.stringToTerraform(this._name),
@@ -7174,9 +5787,9 @@ var Service = /** @class */ (function (_super) {
             task_spec: serviceTaskSpecToTerraform(this._taskSpec.internalValue),
             update_config: serviceUpdateConfigToTerraform(this._updateConfig.internalValue),
         };
-    };
-    Service.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -7239,15 +5852,6 @@ var Service = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Service.tfResourceType = "docker_service";
-    return Service;
-}(cdktf.TerraformResource));
-exports.Service = Service;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

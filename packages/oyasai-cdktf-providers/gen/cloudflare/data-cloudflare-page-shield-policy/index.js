@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_policy
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflarePageShieldPolicy = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_policy cloudflare_page_shield_policy}
 */
-var DataCloudflarePageShieldPolicy = /** @class */ (function (_super) {
-    __extends(DataCloudflarePageShieldPolicy, _super);
+export class DataCloudflarePageShieldPolicy extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_page_shield_policy";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflarePageShieldPolicy resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflarePageShieldPolicy to import
+    * @param importFromId The id of the existing DataCloudflarePageShieldPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_policy#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflarePageShieldPolicy to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_page_shield_policy", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataCloudflarePageShieldPolicy = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflarePageShieldPolicyConfig
     */
-    function DataCloudflarePageShieldPolicy(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_page_shield_policy',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,125 +46,75 @@ var DataCloudflarePageShieldPolicy = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._policyId = config.policyId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._policyId = config.policyId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflarePageShieldPolicy resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflarePageShieldPolicy to import
-    * @param importFromId The id of the existing DataCloudflarePageShieldPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/page_shield_policy#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflarePageShieldPolicy to import is found
-    */
-    DataCloudflarePageShieldPolicy.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_page_shield_policy", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "action", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // action - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('action');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "expression", {
-        // expression - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expression');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "policyId", {
-        get: function () {
-            return this.getStringAttribute('policy_id');
-        },
-        set: function (value) {
-            this._policyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "policyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._policyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflarePageShieldPolicy.prototype.resetZoneId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // action - computed: true, optional: false, required: false
+    get action() {
+        return this.getStringAttribute('action');
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // expression - computed: true, optional: false, required: false
+    get expression() {
+        return this.getStringAttribute('expression');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // policy_id - computed: false, optional: false, required: true
+    _policyId;
+    get policyId() {
+        return this.getStringAttribute('policy_id');
+    }
+    set policyId(value) {
+        this._policyId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get policyIdInput() {
+        return this._policyId;
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflarePageShieldPolicy.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflarePageShieldPolicy.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             policy_id: cdktf.stringToTerraform(this._policyId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflarePageShieldPolicy.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             policy_id: {
                 value: cdktf.stringToHclTerraform(this._policyId),
                 isBlock: false,
@@ -181,15 +129,6 @@ var DataCloudflarePageShieldPolicy = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflarePageShieldPolicy.tfResourceType = "cloudflare_page_shield_policy";
-    return DataCloudflarePageShieldPolicy;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflarePageShieldPolicy = DataCloudflarePageShieldPolicy;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

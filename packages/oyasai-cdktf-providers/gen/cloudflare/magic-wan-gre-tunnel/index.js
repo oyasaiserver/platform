@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_wan_gre_tunnel
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MagicWanGreTunnel = exports.MagicWanGreTunnelHealthCheckOutputReference = exports.MagicWanGreTunnelHealthCheckTargetOutputReference = exports.MagicWanGreTunnelBgpStatusOutputReference = exports.MagicWanGreTunnelBgpOutputReference = void 0;
-exports.magicWanGreTunnelBgpToTerraform = magicWanGreTunnelBgpToTerraform;
-exports.magicWanGreTunnelBgpToHclTerraform = magicWanGreTunnelBgpToHclTerraform;
-exports.magicWanGreTunnelBgpStatusToTerraform = magicWanGreTunnelBgpStatusToTerraform;
-exports.magicWanGreTunnelBgpStatusToHclTerraform = magicWanGreTunnelBgpStatusToHclTerraform;
-exports.magicWanGreTunnelHealthCheckTargetToTerraform = magicWanGreTunnelHealthCheckTargetToTerraform;
-exports.magicWanGreTunnelHealthCheckTargetToHclTerraform = magicWanGreTunnelHealthCheckTargetToHclTerraform;
-exports.magicWanGreTunnelHealthCheckToTerraform = magicWanGreTunnelHealthCheckToTerraform;
-exports.magicWanGreTunnelHealthCheckToHclTerraform = magicWanGreTunnelHealthCheckToHclTerraform;
-var cdktf = require("cdktf");
-function magicWanGreTunnelBgpToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function magicWanGreTunnelBgpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -40,14 +14,14 @@ function magicWanGreTunnelBgpToTerraform(struct) {
         md5_key: cdktf.stringToTerraform(struct.md5Key),
     };
 }
-function magicWanGreTunnelBgpToHclTerraform(struct) {
+export function magicWanGreTunnelBgpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         customer_asn: {
             value: cdktf.numberToHclTerraform(struct.customerAsn),
             isBlock: false,
@@ -68,130 +42,102 @@ function magicWanGreTunnelBgpToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var MagicWanGreTunnelBgpOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanGreTunnelBgpOutputReference, _super);
+export class MagicWanGreTunnelBgpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanGreTunnelBgpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanGreTunnelBgpOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._customerAsn !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.customerAsn = this._customerAsn;
-            }
-            if (this._extraPrefixes !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.extraPrefixes = this._extraPrefixes;
-            }
-            if (this._md5Key !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.md5Key = this._md5Key;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._customerAsn = undefined;
-                this._extraPrefixes = undefined;
-                this._md5Key = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._customerAsn = value.customerAsn;
-                this._extraPrefixes = value.extraPrefixes;
-                this._md5Key = value.md5Key;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpOutputReference.prototype, "customerAsn", {
-        get: function () {
-            return this.getNumberAttribute('customer_asn');
-        },
-        set: function (value) {
-            this._customerAsn = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpOutputReference.prototype, "customerAsnInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customerAsn;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpOutputReference.prototype, "extraPrefixes", {
-        get: function () {
-            return this.getListAttribute('extra_prefixes');
-        },
-        set: function (value) {
-            this._extraPrefixes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnelBgpOutputReference.prototype.resetExtraPrefixes = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._customerAsn !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.customerAsn = this._customerAsn;
+        }
+        if (this._extraPrefixes !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.extraPrefixes = this._extraPrefixes;
+        }
+        if (this._md5Key !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.md5Key = this._md5Key;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._customerAsn = undefined;
+            this._extraPrefixes = undefined;
+            this._md5Key = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._customerAsn = value.customerAsn;
+            this._extraPrefixes = value.extraPrefixes;
+            this._md5Key = value.md5Key;
+        }
+    }
+    // customer_asn - computed: false, optional: false, required: true
+    _customerAsn;
+    get customerAsn() {
+        return this.getNumberAttribute('customer_asn');
+    }
+    set customerAsn(value) {
+        this._customerAsn = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get customerAsnInput() {
+        return this._customerAsn;
+    }
+    // extra_prefixes - computed: true, optional: true, required: false
+    _extraPrefixes;
+    get extraPrefixes() {
+        return this.getListAttribute('extra_prefixes');
+    }
+    set extraPrefixes(value) {
+        this._extraPrefixes = value;
+    }
+    resetExtraPrefixes() {
         this._extraPrefixes = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnelBgpOutputReference.prototype, "extraPrefixesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._extraPrefixes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpOutputReference.prototype, "md5Key", {
-        get: function () {
-            return this.getStringAttribute('md5_key');
-        },
-        set: function (value) {
-            this._md5Key = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnelBgpOutputReference.prototype.resetMd5Key = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get extraPrefixesInput() {
+        return this._extraPrefixes;
+    }
+    // md5_key - computed: false, optional: true, required: false
+    _md5Key;
+    get md5Key() {
+        return this.getStringAttribute('md5_key');
+    }
+    set md5Key(value) {
+        this._md5Key = value;
+    }
+    resetMd5Key() {
         this._md5Key = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnelBgpOutputReference.prototype, "md5KeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._md5Key;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanGreTunnelBgpOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanGreTunnelBgpOutputReference = MagicWanGreTunnelBgpOutputReference;
-function magicWanGreTunnelBgpStatusToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get md5KeyInput() {
+        return this._md5Key;
+    }
+}
+export function magicWanGreTunnelBgpStatusToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -200,112 +146,72 @@ function magicWanGreTunnelBgpStatusToTerraform(struct) {
     }
     return {};
 }
-function magicWanGreTunnelBgpStatusToHclTerraform(struct) {
+export function magicWanGreTunnelBgpStatusToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var MagicWanGreTunnelBgpStatusOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanGreTunnelBgpStatusOutputReference, _super);
+export class MagicWanGreTunnelBgpStatusOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanGreTunnelBgpStatusOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanGreTunnelBgpStatusOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpStatusOutputReference.prototype, "bgpState", {
-        // bgp_state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('bgp_state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpStatusOutputReference.prototype, "cfSpeakerIp", {
-        // cf_speaker_ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cf_speaker_ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpStatusOutputReference.prototype, "cfSpeakerPort", {
-        // cf_speaker_port - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('cf_speaker_port');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpStatusOutputReference.prototype, "customerSpeakerIp", {
-        // customer_speaker_ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('customer_speaker_ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpStatusOutputReference.prototype, "customerSpeakerPort", {
-        // customer_speaker_port - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('customer_speaker_port');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpStatusOutputReference.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpStatusOutputReference.prototype, "tcpEstablished", {
-        // tcp_established - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('tcp_established');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelBgpStatusOutputReference.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanGreTunnelBgpStatusOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanGreTunnelBgpStatusOutputReference = MagicWanGreTunnelBgpStatusOutputReference;
-function magicWanGreTunnelHealthCheckTargetToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // bgp_state - computed: true, optional: false, required: false
+    get bgpState() {
+        return this.getStringAttribute('bgp_state');
+    }
+    // cf_speaker_ip - computed: true, optional: false, required: false
+    get cfSpeakerIp() {
+        return this.getStringAttribute('cf_speaker_ip');
+    }
+    // cf_speaker_port - computed: true, optional: false, required: false
+    get cfSpeakerPort() {
+        return this.getNumberAttribute('cf_speaker_port');
+    }
+    // customer_speaker_ip - computed: true, optional: false, required: false
+    get customerSpeakerIp() {
+        return this.getStringAttribute('customer_speaker_ip');
+    }
+    // customer_speaker_port - computed: true, optional: false, required: false
+    get customerSpeakerPort() {
+        return this.getNumberAttribute('customer_speaker_port');
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    // tcp_established - computed: true, optional: false, required: false
+    get tcpEstablished() {
+        return this.getBooleanAttribute('tcp_established');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+}
+export function magicWanGreTunnelHealthCheckTargetToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -316,14 +222,14 @@ function magicWanGreTunnelHealthCheckTargetToTerraform(struct) {
         saved: cdktf.stringToTerraform(struct.saved),
     };
 }
-function magicWanGreTunnelHealthCheckTargetToHclTerraform(struct) {
+export function magicWanGreTunnelHealthCheckTargetToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         saved: {
             value: cdktf.stringToHclTerraform(struct.saved),
             isBlock: false,
@@ -332,87 +238,67 @@ function magicWanGreTunnelHealthCheckTargetToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var MagicWanGreTunnelHealthCheckTargetOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanGreTunnelHealthCheckTargetOutputReference, _super);
+export class MagicWanGreTunnelHealthCheckTargetOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanGreTunnelHealthCheckTargetOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanGreTunnelHealthCheckTargetOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._saved !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.saved = this._saved;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._saved = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._saved = value.saved;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelHealthCheckTargetOutputReference.prototype, "effective", {
-        // effective - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('effective');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelHealthCheckTargetOutputReference.prototype, "saved", {
-        get: function () {
-            return this.getStringAttribute('saved');
-        },
-        set: function (value) {
-            this._saved = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnelHealthCheckTargetOutputReference.prototype.resetSaved = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._saved !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.saved = this._saved;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._saved = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._saved = value.saved;
+        }
+    }
+    // effective - computed: true, optional: false, required: false
+    get effective() {
+        return this.getStringAttribute('effective');
+    }
+    // saved - computed: true, optional: true, required: false
+    _saved;
+    get saved() {
+        return this.getStringAttribute('saved');
+    }
+    set saved(value) {
+        this._saved = value;
+    }
+    resetSaved() {
         this._saved = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnelHealthCheckTargetOutputReference.prototype, "savedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._saved;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanGreTunnelHealthCheckTargetOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanGreTunnelHealthCheckTargetOutputReference = MagicWanGreTunnelHealthCheckTargetOutputReference;
-function magicWanGreTunnelHealthCheckToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get savedInput() {
+        return this._saved;
+    }
+}
+export function magicWanGreTunnelHealthCheckToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -427,14 +313,14 @@ function magicWanGreTunnelHealthCheckToTerraform(struct) {
         type: cdktf.stringToTerraform(struct.type),
     };
 }
-function magicWanGreTunnelHealthCheckToHclTerraform(struct) {
+export function magicWanGreTunnelHealthCheckToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         direction: {
             value: cdktf.stringToHclTerraform(struct.direction),
             isBlock: false,
@@ -467,194 +353,167 @@ function magicWanGreTunnelHealthCheckToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var MagicWanGreTunnelHealthCheckOutputReference = /** @class */ (function (_super) {
-    __extends(MagicWanGreTunnelHealthCheckOutputReference, _super);
+export class MagicWanGreTunnelHealthCheckOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicWanGreTunnelHealthCheckOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // target - computed: true, optional: true, required: false
-        _this._target = new MagicWanGreTunnelHealthCheckTargetOutputReference(_this, "target");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._direction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.direction = this._direction;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._rate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rate = this._rate;
-            }
-            if (((_a = this._target) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.target = (_b = this._target) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._direction = undefined;
-                this._enabled = undefined;
-                this._rate = undefined;
-                this._target.internalValue = undefined;
-                this._type = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._direction = value.direction;
-                this._enabled = value.enabled;
-                this._rate = value.rate;
-                this._target.internalValue = value.target;
-                this._type = value.type;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnelHealthCheckOutputReference.prototype.resetDirection = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._direction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.direction = this._direction;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._rate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rate = this._rate;
+        }
+        if (this._target?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.target = this._target?.internalValue;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._direction = undefined;
+            this._enabled = undefined;
+            this._rate = undefined;
+            this._target.internalValue = undefined;
+            this._type = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._direction = value.direction;
+            this._enabled = value.enabled;
+            this._rate = value.rate;
+            this._target.internalValue = value.target;
+            this._type = value.type;
+        }
+    }
+    // direction - computed: true, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnelHealthCheckOutputReference.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "rate", {
-        get: function () {
-            return this.getStringAttribute('rate');
-        },
-        set: function (value) {
-            this._rate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnelHealthCheckOutputReference.prototype.resetRate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // rate - computed: true, optional: true, required: false
+    _rate;
+    get rate() {
+        return this.getStringAttribute('rate');
+    }
+    set rate(value) {
+        this._rate = value;
+    }
+    resetRate() {
         this._rate = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "rateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "target", {
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnelHealthCheckOutputReference.prototype.putTarget = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateInput() {
+        return this._rate;
+    }
+    // target - computed: true, optional: true, required: false
+    _target = new MagicWanGreTunnelHealthCheckTargetOutputReference(this, "target");
+    get target() {
+        return this._target;
+    }
+    putTarget(value) {
         this._target.internalValue = value;
-    };
-    MagicWanGreTunnelHealthCheckOutputReference.prototype.resetTarget = function () {
+    }
+    resetTarget() {
         this._target.internalValue = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "targetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._target.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnelHealthCheckOutputReference.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetInput() {
+        return this._target.internalValue;
+    }
+    // type - computed: true, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnelHealthCheckOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicWanGreTunnelHealthCheckOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicWanGreTunnelHealthCheckOutputReference = MagicWanGreTunnelHealthCheckOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_wan_gre_tunnel cloudflare_magic_wan_gre_tunnel}
 */
-var MagicWanGreTunnel = /** @class */ (function (_super) {
-    __extends(MagicWanGreTunnel, _super);
+export class MagicWanGreTunnel extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_magic_wan_gre_tunnel";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a MagicWanGreTunnel resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the MagicWanGreTunnel to import
+    * @param importFromId The id of the existing MagicWanGreTunnel that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_wan_gre_tunnel#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the MagicWanGreTunnel to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_wan_gre_tunnel", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -665,8 +524,8 @@ var MagicWanGreTunnel = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options MagicWanGreTunnelConfig
     */
-    function MagicWanGreTunnel(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_magic_wan_gre_tunnel',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -679,312 +538,209 @@ var MagicWanGreTunnel = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // bgp - computed: false, optional: true, required: false
-        _this._bgp = new MagicWanGreTunnelBgpOutputReference(_this, "bgp");
-        // bgp_status - computed: true, optional: false, required: false
-        _this._bgpStatus = new MagicWanGreTunnelBgpStatusOutputReference(_this, "bgp_status");
-        // health_check - computed: true, optional: true, required: false
-        _this._healthCheck = new MagicWanGreTunnelHealthCheckOutputReference(_this, "health_check");
-        _this._accountId = config.accountId;
-        _this._automaticReturnRouting = config.automaticReturnRouting;
-        _this._bgp.internalValue = config.bgp;
-        _this._cloudflareGreEndpoint = config.cloudflareGreEndpoint;
-        _this._customerGreEndpoint = config.customerGreEndpoint;
-        _this._description = config.description;
-        _this._healthCheck.internalValue = config.healthCheck;
-        _this._interfaceAddress = config.interfaceAddress;
-        _this._interfaceAddress6 = config.interfaceAddress6;
-        _this._mtu = config.mtu;
-        _this._name = config.name;
-        _this._ttl = config.ttl;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._automaticReturnRouting = config.automaticReturnRouting;
+        this._bgp.internalValue = config.bgp;
+        this._cloudflareGreEndpoint = config.cloudflareGreEndpoint;
+        this._customerGreEndpoint = config.customerGreEndpoint;
+        this._description = config.description;
+        this._healthCheck.internalValue = config.healthCheck;
+        this._interfaceAddress = config.interfaceAddress;
+        this._interfaceAddress6 = config.interfaceAddress6;
+        this._mtu = config.mtu;
+        this._name = config.name;
+        this._ttl = config.ttl;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a MagicWanGreTunnel resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the MagicWanGreTunnel to import
-    * @param importFromId The id of the existing MagicWanGreTunnel that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_wan_gre_tunnel#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the MagicWanGreTunnel to import is found
-    */
-    MagicWanGreTunnel.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_wan_gre_tunnel", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(MagicWanGreTunnel.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "automaticReturnRouting", {
-        get: function () {
-            return this.getBooleanAttribute('automatic_return_routing');
-        },
-        set: function (value) {
-            this._automaticReturnRouting = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnel.prototype.resetAutomaticReturnRouting = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: false, required: true
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // automatic_return_routing - computed: true, optional: true, required: false
+    _automaticReturnRouting;
+    get automaticReturnRouting() {
+        return this.getBooleanAttribute('automatic_return_routing');
+    }
+    set automaticReturnRouting(value) {
+        this._automaticReturnRouting = value;
+    }
+    resetAutomaticReturnRouting() {
         this._automaticReturnRouting = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnel.prototype, "automaticReturnRoutingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._automaticReturnRouting;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "bgp", {
-        get: function () {
-            return this._bgp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnel.prototype.putBgp = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get automaticReturnRoutingInput() {
+        return this._automaticReturnRouting;
+    }
+    // bgp - computed: false, optional: true, required: false
+    _bgp = new MagicWanGreTunnelBgpOutputReference(this, "bgp");
+    get bgp() {
+        return this._bgp;
+    }
+    putBgp(value) {
         this._bgp.internalValue = value;
-    };
-    MagicWanGreTunnel.prototype.resetBgp = function () {
+    }
+    resetBgp() {
         this._bgp.internalValue = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnel.prototype, "bgpInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bgp.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "bgpStatus", {
-        get: function () {
-            return this._bgpStatus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "cloudflareGreEndpoint", {
-        get: function () {
-            return this.getStringAttribute('cloudflare_gre_endpoint');
-        },
-        set: function (value) {
-            this._cloudflareGreEndpoint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "cloudflareGreEndpointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cloudflareGreEndpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "customerGreEndpoint", {
-        get: function () {
-            return this.getStringAttribute('customer_gre_endpoint');
-        },
-        set: function (value) {
-            this._customerGreEndpoint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "customerGreEndpointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customerGreEndpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnel.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bgpInput() {
+        return this._bgp.internalValue;
+    }
+    // bgp_status - computed: true, optional: false, required: false
+    _bgpStatus = new MagicWanGreTunnelBgpStatusOutputReference(this, "bgp_status");
+    get bgpStatus() {
+        return this._bgpStatus;
+    }
+    // cloudflare_gre_endpoint - computed: false, optional: false, required: true
+    _cloudflareGreEndpoint;
+    get cloudflareGreEndpoint() {
+        return this.getStringAttribute('cloudflare_gre_endpoint');
+    }
+    set cloudflareGreEndpoint(value) {
+        this._cloudflareGreEndpoint = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get cloudflareGreEndpointInput() {
+        return this._cloudflareGreEndpoint;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // customer_gre_endpoint - computed: false, optional: false, required: true
+    _customerGreEndpoint;
+    get customerGreEndpoint() {
+        return this.getStringAttribute('customer_gre_endpoint');
+    }
+    set customerGreEndpoint(value) {
+        this._customerGreEndpoint = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get customerGreEndpointInput() {
+        return this._customerGreEndpoint;
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnel.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "healthCheck", {
-        get: function () {
-            return this._healthCheck;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnel.prototype.putHealthCheck = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // health_check - computed: true, optional: true, required: false
+    _healthCheck = new MagicWanGreTunnelHealthCheckOutputReference(this, "health_check");
+    get healthCheck() {
+        return this._healthCheck;
+    }
+    putHealthCheck(value) {
         this._healthCheck.internalValue = value;
-    };
-    MagicWanGreTunnel.prototype.resetHealthCheck = function () {
+    }
+    resetHealthCheck() {
         this._healthCheck.internalValue = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnel.prototype, "healthCheckInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._healthCheck.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "interfaceAddress", {
-        get: function () {
-            return this.getStringAttribute('interface_address');
-        },
-        set: function (value) {
-            this._interfaceAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "interfaceAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._interfaceAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "interfaceAddress6", {
-        get: function () {
-            return this.getStringAttribute('interface_address6');
-        },
-        set: function (value) {
-            this._interfaceAddress6 = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnel.prototype.resetInterfaceAddress6 = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get healthCheckInput() {
+        return this._healthCheck.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // interface_address - computed: false, optional: false, required: true
+    _interfaceAddress;
+    get interfaceAddress() {
+        return this.getStringAttribute('interface_address');
+    }
+    set interfaceAddress(value) {
+        this._interfaceAddress = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get interfaceAddressInput() {
+        return this._interfaceAddress;
+    }
+    // interface_address6 - computed: false, optional: true, required: false
+    _interfaceAddress6;
+    get interfaceAddress6() {
+        return this.getStringAttribute('interface_address6');
+    }
+    set interfaceAddress6(value) {
+        this._interfaceAddress6 = value;
+    }
+    resetInterfaceAddress6() {
         this._interfaceAddress6 = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnel.prototype, "interfaceAddress6Input", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._interfaceAddress6;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "mtu", {
-        get: function () {
-            return this.getNumberAttribute('mtu');
-        },
-        set: function (value) {
-            this._mtu = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnel.prototype.resetMtu = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get interfaceAddress6Input() {
+        return this._interfaceAddress6;
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // mtu - computed: true, optional: true, required: false
+    _mtu;
+    get mtu() {
+        return this.getNumberAttribute('mtu');
+    }
+    set mtu(value) {
+        this._mtu = value;
+    }
+    resetMtu() {
         this._mtu = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnel.prototype, "mtuInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mtu;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicWanGreTunnel.prototype, "ttl", {
-        get: function () {
-            return this.getNumberAttribute('ttl');
-        },
-        set: function (value) {
-            this._ttl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicWanGreTunnel.prototype.resetTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mtuInput() {
+        return this._mtu;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // ttl - computed: true, optional: true, required: false
+    _ttl;
+    get ttl() {
+        return this.getNumberAttribute('ttl');
+    }
+    set ttl(value) {
+        this._ttl = value;
+    }
+    resetTtl() {
         this._ttl = undefined;
-    };
-    Object.defineProperty(MagicWanGreTunnel.prototype, "ttlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ttl;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get ttlInput() {
+        return this._ttl;
+    }
     // =========
     // SYNTHESIS
     // =========
-    MagicWanGreTunnel.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             automatic_return_routing: cdktf.booleanToTerraform(this._automaticReturnRouting),
@@ -999,9 +755,9 @@ var MagicWanGreTunnel = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             ttl: cdktf.numberToTerraform(this._ttl),
         };
-    };
-    MagicWanGreTunnel.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1076,15 +832,6 @@ var MagicWanGreTunnel = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    MagicWanGreTunnel.tfResourceType = "cloudflare_magic_wan_gre_tunnel";
-    return MagicWanGreTunnel;
-}(cdktf.TerraformResource));
-exports.MagicWanGreTunnel = MagicWanGreTunnel;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

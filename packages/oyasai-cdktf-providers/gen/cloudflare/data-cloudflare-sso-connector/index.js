@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/sso_connector
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareSsoConnector = exports.DataCloudflareSsoConnectorVerificationOutputReference = void 0;
-exports.dataCloudflareSsoConnectorVerificationToTerraform = dataCloudflareSsoConnectorVerificationToTerraform;
-exports.dataCloudflareSsoConnectorVerificationToHclTerraform = dataCloudflareSsoConnectorVerificationToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareSsoConnectorVerificationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareSsoConnectorVerificationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,68 +10,68 @@ function dataCloudflareSsoConnectorVerificationToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareSsoConnectorVerificationToHclTerraform(struct) {
+export function dataCloudflareSsoConnectorVerificationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareSsoConnectorVerificationOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareSsoConnectorVerificationOutputReference, _super);
+export class DataCloudflareSsoConnectorVerificationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareSsoConnectorVerificationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareSsoConnectorVerificationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnectorVerificationOutputReference.prototype, "code", {
-        // code - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('code');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnectorVerificationOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareSsoConnectorVerificationOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareSsoConnectorVerificationOutputReference = DataCloudflareSsoConnectorVerificationOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // code - computed: true, optional: false, required: false
+    get code() {
+        return this.getStringAttribute('code');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/sso_connector cloudflare_sso_connector}
 */
-var DataCloudflareSsoConnector = /** @class */ (function (_super) {
-    __extends(DataCloudflareSsoConnector, _super);
+export class DataCloudflareSsoConnector extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_sso_connector";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareSsoConnector resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareSsoConnector to import
+    * @param importFromId The id of the existing DataCloudflareSsoConnector that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/sso_connector#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareSsoConnector to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_sso_connector", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -102,8 +82,8 @@ var DataCloudflareSsoConnector = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareSsoConnectorConfig
     */
-    function DataCloudflareSsoConnector(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_sso_connector',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -116,131 +96,80 @@ var DataCloudflareSsoConnector = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // verification - computed: true, optional: false, required: false
-        _this._verification = new DataCloudflareSsoConnectorVerificationOutputReference(_this, "verification");
-        _this._accountId = config.accountId;
-        _this._ssoConnectorId = config.ssoConnectorId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._ssoConnectorId = config.ssoConnectorId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareSsoConnector resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareSsoConnector to import
-    * @param importFromId The id of the existing DataCloudflareSsoConnector that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/sso_connector#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareSsoConnector to import is found
-    */
-    DataCloudflareSsoConnector.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_sso_connector", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareSsoConnector.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "emailDomain", {
-        // email_domain - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('email_domain');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "ssoConnectorId", {
-        get: function () {
-            return this.getStringAttribute('sso_connector_id');
-        },
-        set: function (value) {
-            this._ssoConnectorId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "ssoConnectorIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ssoConnectorId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "updatedOn", {
-        // updated_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "useFedrampLanguage", {
-        // use_fedramp_language - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('use_fedramp_language');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareSsoConnector.prototype, "verification", {
-        get: function () {
-            return this._verification;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // email_domain - computed: true, optional: false, required: false
+    get emailDomain() {
+        return this.getStringAttribute('email_domain');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // sso_connector_id - computed: false, optional: false, required: true
+    _ssoConnectorId;
+    get ssoConnectorId() {
+        return this.getStringAttribute('sso_connector_id');
+    }
+    set ssoConnectorId(value) {
+        this._ssoConnectorId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ssoConnectorIdInput() {
+        return this._ssoConnectorId;
+    }
+    // updated_on - computed: true, optional: false, required: false
+    get updatedOn() {
+        return this.getStringAttribute('updated_on');
+    }
+    // use_fedramp_language - computed: true, optional: false, required: false
+    get useFedrampLanguage() {
+        return this.getBooleanAttribute('use_fedramp_language');
+    }
+    // verification - computed: true, optional: false, required: false
+    _verification = new DataCloudflareSsoConnectorVerificationOutputReference(this, "verification");
+    get verification() {
+        return this._verification;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareSsoConnector.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             sso_connector_id: cdktf.stringToTerraform(this._ssoConnectorId),
         };
-    };
-    DataCloudflareSsoConnector.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -255,15 +184,6 @@ var DataCloudflareSsoConnector = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareSsoConnector.tfResourceType = "cloudflare_sso_connector";
-    return DataCloudflareSsoConnector;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareSsoConnector = DataCloudflareSsoConnector;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

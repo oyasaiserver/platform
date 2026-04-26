@@ -1,35 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.InfisicalProvider = void 0;
-exports.infisicalProviderAuthAwsIamToTerraform = infisicalProviderAuthAwsIamToTerraform;
-exports.infisicalProviderAuthAwsIamToHclTerraform = infisicalProviderAuthAwsIamToHclTerraform;
-exports.infisicalProviderAuthKubernetesToTerraform = infisicalProviderAuthKubernetesToTerraform;
-exports.infisicalProviderAuthKubernetesToHclTerraform = infisicalProviderAuthKubernetesToHclTerraform;
-exports.infisicalProviderAuthOidcToTerraform = infisicalProviderAuthOidcToTerraform;
-exports.infisicalProviderAuthOidcToHclTerraform = infisicalProviderAuthOidcToHclTerraform;
-exports.infisicalProviderAuthUniversalToTerraform = infisicalProviderAuthUniversalToTerraform;
-exports.infisicalProviderAuthUniversalToHclTerraform = infisicalProviderAuthUniversalToHclTerraform;
-exports.infisicalProviderAuthToTerraform = infisicalProviderAuthToTerraform;
-exports.infisicalProviderAuthToHclTerraform = infisicalProviderAuthToHclTerraform;
-var cdktf = require("cdktf");
-function infisicalProviderAuthAwsIamToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function infisicalProviderAuthAwsIamToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -40,14 +12,14 @@ function infisicalProviderAuthAwsIamToTerraform(struct) {
         identity_id: cdktf.stringToTerraform(struct.identityId),
     };
 }
-function infisicalProviderAuthAwsIamToHclTerraform(struct) {
+export function infisicalProviderAuthAwsIamToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         identity_id: {
             value: cdktf.stringToHclTerraform(struct.identityId),
             isBlock: false,
@@ -56,12 +28,9 @@ function infisicalProviderAuthAwsIamToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-function infisicalProviderAuthKubernetesToTerraform(struct) {
+export function infisicalProviderAuthKubernetesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -74,14 +43,14 @@ function infisicalProviderAuthKubernetesToTerraform(struct) {
         service_account_token_path: cdktf.stringToTerraform(struct.serviceAccountTokenPath),
     };
 }
-function infisicalProviderAuthKubernetesToHclTerraform(struct) {
+export function infisicalProviderAuthKubernetesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         identity_id: {
             value: cdktf.stringToHclTerraform(struct.identityId),
             isBlock: false,
@@ -102,12 +71,9 @@ function infisicalProviderAuthKubernetesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-function infisicalProviderAuthOidcToTerraform(struct) {
+export function infisicalProviderAuthOidcToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -119,14 +85,14 @@ function infisicalProviderAuthOidcToTerraform(struct) {
         token_environment_variable_name: cdktf.stringToTerraform(struct.tokenEnvironmentVariableName),
     };
 }
-function infisicalProviderAuthOidcToHclTerraform(struct) {
+export function infisicalProviderAuthOidcToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         identity_id: {
             value: cdktf.stringToHclTerraform(struct.identityId),
             isBlock: false,
@@ -141,12 +107,9 @@ function infisicalProviderAuthOidcToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-function infisicalProviderAuthUniversalToTerraform(struct) {
+export function infisicalProviderAuthUniversalToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -158,14 +121,14 @@ function infisicalProviderAuthUniversalToTerraform(struct) {
         client_secret: cdktf.stringToTerraform(struct.clientSecret),
     };
 }
-function infisicalProviderAuthUniversalToHclTerraform(struct) {
+export function infisicalProviderAuthUniversalToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         client_id: {
             value: cdktf.stringToHclTerraform(struct.clientId),
             isBlock: false,
@@ -180,12 +143,9 @@ function infisicalProviderAuthUniversalToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-function infisicalProviderAuthToTerraform(struct) {
+export function infisicalProviderAuthToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -201,14 +161,14 @@ function infisicalProviderAuthToTerraform(struct) {
         universal: infisicalProviderAuthUniversalToTerraform(struct.universal),
     };
 }
-function infisicalProviderAuthToHclTerraform(struct) {
+export function infisicalProviderAuthToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         aws_iam: {
             value: infisicalProviderAuthAwsIamToHclTerraform(struct.awsIam),
             isBlock: true,
@@ -247,44 +207,16 @@ function infisicalProviderAuthToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs infisical}
 */
-var InfisicalProvider = /** @class */ (function (_super) {
-    __extends(InfisicalProvider, _super);
-    // ===========
-    // INITIALIZER
-    // ===========
-    /**
-    * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs infisical} Resource
-    *
-    * @param scope The scope in which to define this construct
-    * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-    * @param options InfisicalProviderConfig = {}
-    */
-    function InfisicalProvider(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
-            terraformResourceType: 'infisical',
-            terraformGeneratorMetadata: {
-                providerName: 'infisical',
-                providerVersion: '0.16.18'
-            },
-            terraformProviderSource: 'infisical/infisical'
-        }) || this;
-        _this._auth = config.auth;
-        _this._clientId = config.clientId;
-        _this._clientSecret = config.clientSecret;
-        _this._host = config.host;
-        _this._serviceToken = config.serviceToken;
-        _this._alias = config.alias;
-        return _this;
-    }
+export class InfisicalProvider extends cdktf.TerraformProvider {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical";
     // ==============
     // STATIC Methods
     // ==============
@@ -295,139 +227,132 @@ var InfisicalProvider = /** @class */ (function (_super) {
     * @param importFromId The id of the existing InfisicalProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs#import import section} in the documentation of this resource for the id to use
     * @param provider? Optional instance of the provider where the InfisicalProvider to import is found
     */
-    InfisicalProvider.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(InfisicalProvider.prototype, "auth", {
-        get: function () {
-            return this._auth;
-        },
-        set: function (value) {
-            this._auth = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    InfisicalProvider.prototype.resetAuth = function () {
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical", importId: importFromId, provider });
+    }
+    // ===========
+    // INITIALIZER
+    // ===========
+    /**
+    * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs infisical} Resource
+    *
+    * @param scope The scope in which to define this construct
+    * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
+    * @param options InfisicalProviderConfig = {}
+    */
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
+            terraformResourceType: 'infisical',
+            terraformGeneratorMetadata: {
+                providerName: 'infisical',
+                providerVersion: '0.16.18'
+            },
+            terraformProviderSource: 'infisical/infisical'
+        });
+        this._auth = config.auth;
+        this._clientId = config.clientId;
+        this._clientSecret = config.clientSecret;
+        this._host = config.host;
+        this._serviceToken = config.serviceToken;
+        this._alias = config.alias;
+    }
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // auth - computed: false, optional: true, required: false
+    _auth;
+    get auth() {
+        return this._auth;
+    }
+    set auth(value) {
+        this._auth = value;
+    }
+    resetAuth() {
         this._auth = undefined;
-    };
-    Object.defineProperty(InfisicalProvider.prototype, "authInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._auth;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InfisicalProvider.prototype, "clientId", {
-        get: function () {
-            return this._clientId;
-        },
-        set: function (value) {
-            this._clientId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    InfisicalProvider.prototype.resetClientId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authInput() {
+        return this._auth;
+    }
+    // client_id - computed: false, optional: true, required: false
+    _clientId;
+    get clientId() {
+        return this._clientId;
+    }
+    set clientId(value) {
+        this._clientId = value;
+    }
+    resetClientId() {
         this._clientId = undefined;
-    };
-    Object.defineProperty(InfisicalProvider.prototype, "clientIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._clientId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InfisicalProvider.prototype, "clientSecret", {
-        get: function () {
-            return this._clientSecret;
-        },
-        set: function (value) {
-            this._clientSecret = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    InfisicalProvider.prototype.resetClientSecret = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get clientIdInput() {
+        return this._clientId;
+    }
+    // client_secret - computed: false, optional: true, required: false
+    _clientSecret;
+    get clientSecret() {
+        return this._clientSecret;
+    }
+    set clientSecret(value) {
+        this._clientSecret = value;
+    }
+    resetClientSecret() {
         this._clientSecret = undefined;
-    };
-    Object.defineProperty(InfisicalProvider.prototype, "clientSecretInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._clientSecret;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InfisicalProvider.prototype, "host", {
-        get: function () {
-            return this._host;
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    InfisicalProvider.prototype.resetHost = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get clientSecretInput() {
+        return this._clientSecret;
+    }
+    // host - computed: false, optional: true, required: false
+    _host;
+    get host() {
+        return this._host;
+    }
+    set host(value) {
+        this._host = value;
+    }
+    resetHost() {
         this._host = undefined;
-    };
-    Object.defineProperty(InfisicalProvider.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InfisicalProvider.prototype, "serviceToken", {
-        get: function () {
-            return this._serviceToken;
-        },
-        set: function (value) {
-            this._serviceToken = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    InfisicalProvider.prototype.resetServiceToken = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // service_token - computed: false, optional: true, required: false
+    _serviceToken;
+    get serviceToken() {
+        return this._serviceToken;
+    }
+    set serviceToken(value) {
+        this._serviceToken = value;
+    }
+    resetServiceToken() {
         this._serviceToken = undefined;
-    };
-    Object.defineProperty(InfisicalProvider.prototype, "serviceTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serviceToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(InfisicalProvider.prototype, "alias", {
-        get: function () {
-            return this._alias;
-        },
-        set: function (value) {
-            this._alias = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    InfisicalProvider.prototype.resetAlias = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get serviceTokenInput() {
+        return this._serviceToken;
+    }
+    // alias - computed: false, optional: true, required: false
+    _alias;
+    get alias() {
+        return this._alias;
+    }
+    set alias(value) {
+        this._alias = value;
+    }
+    resetAlias() {
         this._alias = undefined;
-    };
-    Object.defineProperty(InfisicalProvider.prototype, "aliasInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alias;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get aliasInput() {
+        return this._alias;
+    }
     // =========
     // SYNTHESIS
     // =========
-    InfisicalProvider.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             auth: infisicalProviderAuthToTerraform(this._auth),
             client_id: cdktf.stringToTerraform(this._clientId),
@@ -436,9 +361,9 @@ var InfisicalProvider = /** @class */ (function (_super) {
             service_token: cdktf.stringToTerraform(this._serviceToken),
             alias: cdktf.stringToTerraform(this._alias),
         };
-    };
-    InfisicalProvider.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             auth: {
                 value: infisicalProviderAuthToHclTerraform(this._auth),
                 isBlock: true,
@@ -477,15 +402,6 @@ var InfisicalProvider = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    InfisicalProvider.tfResourceType = "infisical";
-    return InfisicalProvider;
-}(cdktf.TerraformProvider));
-exports.InfisicalProvider = InfisicalProvider;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

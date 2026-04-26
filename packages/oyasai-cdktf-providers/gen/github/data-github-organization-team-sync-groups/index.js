@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/organization_team_sync_groups
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataGithubOrganizationTeamSyncGroups = exports.DataGithubOrganizationTeamSyncGroupsGroupsList = exports.DataGithubOrganizationTeamSyncGroupsGroupsOutputReference = void 0;
-exports.dataGithubOrganizationTeamSyncGroupsGroupsToTerraform = dataGithubOrganizationTeamSyncGroupsGroupsToTerraform;
-exports.dataGithubOrganizationTeamSyncGroupsGroupsToHclTerraform = dataGithubOrganizationTeamSyncGroupsGroupsToHclTerraform;
-var cdktf = require("cdktf");
-function dataGithubOrganizationTeamSyncGroupsGroupsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataGithubOrganizationTeamSyncGroupsGroupsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,101 +10,96 @@ function dataGithubOrganizationTeamSyncGroupsGroupsToTerraform(struct) {
     }
     return {};
 }
-function dataGithubOrganizationTeamSyncGroupsGroupsToHclTerraform(struct) {
+export function dataGithubOrganizationTeamSyncGroupsGroupsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataGithubOrganizationTeamSyncGroupsGroupsOutputReference = /** @class */ (function (_super) {
-    __extends(DataGithubOrganizationTeamSyncGroupsGroupsOutputReference, _super);
+export class DataGithubOrganizationTeamSyncGroupsGroupsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataGithubOrganizationTeamSyncGroupsGroupsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataGithubOrganizationTeamSyncGroupsGroupsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubOrganizationTeamSyncGroupsGroupsOutputReference.prototype, "groupDescription", {
-        // group_description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('group_description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubOrganizationTeamSyncGroupsGroupsOutputReference.prototype, "groupId", {
-        // group_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('group_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubOrganizationTeamSyncGroupsGroupsOutputReference.prototype, "groupName", {
-        // group_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('group_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataGithubOrganizationTeamSyncGroupsGroupsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataGithubOrganizationTeamSyncGroupsGroupsOutputReference = DataGithubOrganizationTeamSyncGroupsGroupsOutputReference;
-var DataGithubOrganizationTeamSyncGroupsGroupsList = /** @class */ (function (_super) {
-    __extends(DataGithubOrganizationTeamSyncGroupsGroupsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // group_description - computed: true, optional: false, required: false
+    get groupDescription() {
+        return this.getStringAttribute('group_description');
+    }
+    // group_id - computed: true, optional: false, required: false
+    get groupId() {
+        return this.getStringAttribute('group_id');
+    }
+    // group_name - computed: true, optional: false, required: false
+    get groupName() {
+        return this.getStringAttribute('group_name');
+    }
+}
+export class DataGithubOrganizationTeamSyncGroupsGroupsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataGithubOrganizationTeamSyncGroupsGroupsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataGithubOrganizationTeamSyncGroupsGroupsList.prototype.get = function (index) {
+    get(index) {
         return new DataGithubOrganizationTeamSyncGroupsGroupsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataGithubOrganizationTeamSyncGroupsGroupsList;
-}(cdktf.ComplexList));
-exports.DataGithubOrganizationTeamSyncGroupsGroupsList = DataGithubOrganizationTeamSyncGroupsGroupsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/organization_team_sync_groups github_organization_team_sync_groups}
 */
-var DataGithubOrganizationTeamSyncGroups = /** @class */ (function (_super) {
-    __extends(DataGithubOrganizationTeamSyncGroups, _super);
+export class DataGithubOrganizationTeamSyncGroups extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_organization_team_sync_groups";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataGithubOrganizationTeamSyncGroups resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataGithubOrganizationTeamSyncGroups to import
+    * @param importFromId The id of the existing DataGithubOrganizationTeamSyncGroups that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/organization_team_sync_groups#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataGithubOrganizationTeamSyncGroups to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_team_sync_groups", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -135,9 +110,8 @@ var DataGithubOrganizationTeamSyncGroups = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataGithubOrganizationTeamSyncGroupsConfig = {}
     */
-    function DataGithubOrganizationTeamSyncGroups(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'github_organization_team_sync_groups',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -150,66 +124,42 @@ var DataGithubOrganizationTeamSyncGroups = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // groups - computed: true, optional: false, required: false
-        _this._groups = new DataGithubOrganizationTeamSyncGroupsGroupsList(_this, "groups", false);
-        _this._id = config.id;
-        return _this;
+        });
+        this._id = config.id;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataGithubOrganizationTeamSyncGroups resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataGithubOrganizationTeamSyncGroups to import
-    * @param importFromId The id of the existing DataGithubOrganizationTeamSyncGroups that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/organization_team_sync_groups#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataGithubOrganizationTeamSyncGroups to import is found
-    */
-    DataGithubOrganizationTeamSyncGroups.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_team_sync_groups", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataGithubOrganizationTeamSyncGroups.prototype, "groups", {
-        get: function () {
-            return this._groups;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubOrganizationTeamSyncGroups.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubOrganizationTeamSyncGroups.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // groups - computed: true, optional: false, required: false
+    _groups = new DataGithubOrganizationTeamSyncGroupsGroupsList(this, "groups", false);
+    get groups() {
+        return this._groups;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataGithubOrganizationTeamSyncGroups.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataGithubOrganizationTeamSyncGroups.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
         };
-    };
-    DataGithubOrganizationTeamSyncGroups.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -218,15 +168,6 @@ var DataGithubOrganizationTeamSyncGroups = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataGithubOrganizationTeamSyncGroups.tfResourceType = "github_organization_team_sync_groups";
-    return DataGithubOrganizationTeamSyncGroups;
-}(cdktf.TerraformDataSource));
-exports.DataGithubOrganizationTeamSyncGroups = DataGithubOrganizationTeamSyncGroups;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

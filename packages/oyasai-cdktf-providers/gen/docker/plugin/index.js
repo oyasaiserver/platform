@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/plugin
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Plugin = exports.PluginGrantPermissionsList = exports.PluginGrantPermissionsOutputReference = void 0;
-exports.pluginGrantPermissionsToTerraform = pluginGrantPermissionsToTerraform;
-exports.pluginGrantPermissionsToHclTerraform = pluginGrantPermissionsToHclTerraform;
-var cdktf = require("cdktf");
-function pluginGrantPermissionsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function pluginGrantPermissionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -33,14 +13,14 @@ function pluginGrantPermissionsToTerraform(struct) {
         value: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.value),
     };
 }
-function pluginGrantPermissionsToHclTerraform(struct) {
+export function pluginGrantPermissionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -55,129 +35,123 @@ function pluginGrantPermissionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var PluginGrantPermissionsOutputReference = /** @class */ (function (_super) {
-    __extends(PluginGrantPermissionsOutputReference, _super);
+export class PluginGrantPermissionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function PluginGrantPermissionsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(PluginGrantPermissionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._name = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._name = value.name;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PluginGrantPermissionsOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PluginGrantPermissionsOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PluginGrantPermissionsOutputReference.prototype, "value", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('value'));
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PluginGrantPermissionsOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PluginGrantPermissionsOutputReference;
-}(cdktf.ComplexObject));
-exports.PluginGrantPermissionsOutputReference = PluginGrantPermissionsOutputReference;
-var PluginGrantPermissionsList = /** @class */ (function (_super) {
-    __extends(PluginGrantPermissionsList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._name = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._name = value.name;
+            this._value = value.value;
+        }
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return cdktf.Fn.tolist(this.getListAttribute('value'));
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class PluginGrantPermissionsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function PluginGrantPermissionsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    PluginGrantPermissionsList.prototype.get = function (index) {
+    get(index) {
         return new PluginGrantPermissionsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return PluginGrantPermissionsList;
-}(cdktf.ComplexList));
-exports.PluginGrantPermissionsList = PluginGrantPermissionsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/plugin docker_plugin}
 */
-var Plugin = /** @class */ (function (_super) {
-    __extends(Plugin, _super);
+export class Plugin extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "docker_plugin";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Plugin resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Plugin to import
+    * @param importFromId The id of the existing Plugin that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/plugin#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Plugin to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_plugin", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -188,8 +162,8 @@ var Plugin = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options PluginConfig
     */
-    function Plugin(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'docker_plugin',
             terraformGeneratorMetadata: {
                 providerName: 'docker',
@@ -202,253 +176,176 @@ var Plugin = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // grant_permissions - computed: false, optional: true, required: false
-        _this._grantPermissions = new PluginGrantPermissionsList(_this, "grant_permissions", true);
-        _this._alias = config.alias;
-        _this._enableTimeout = config.enableTimeout;
-        _this._enabled = config.enabled;
-        _this._env = config.env;
-        _this._forceDestroy = config.forceDestroy;
-        _this._forceDisable = config.forceDisable;
-        _this._grantAllPermissions = config.grantAllPermissions;
-        _this._id = config.id;
-        _this._name = config.name;
-        _this._grantPermissions.internalValue = config.grantPermissions;
-        return _this;
+        });
+        this._alias = config.alias;
+        this._enableTimeout = config.enableTimeout;
+        this._enabled = config.enabled;
+        this._env = config.env;
+        this._forceDestroy = config.forceDestroy;
+        this._forceDisable = config.forceDisable;
+        this._grantAllPermissions = config.grantAllPermissions;
+        this._id = config.id;
+        this._name = config.name;
+        this._grantPermissions.internalValue = config.grantPermissions;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Plugin resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Plugin to import
-    * @param importFromId The id of the existing Plugin that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/resources/plugin#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Plugin to import is found
-    */
-    Plugin.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "docker_plugin", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Plugin.prototype, "alias", {
-        get: function () {
-            return this.getStringAttribute('alias');
-        },
-        set: function (value) {
-            this._alias = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Plugin.prototype.resetAlias = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // alias - computed: true, optional: true, required: false
+    _alias;
+    get alias() {
+        return this.getStringAttribute('alias');
+    }
+    set alias(value) {
+        this._alias = value;
+    }
+    resetAlias() {
         this._alias = undefined;
-    };
-    Object.defineProperty(Plugin.prototype, "aliasInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alias;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "enableTimeout", {
-        get: function () {
-            return this.getNumberAttribute('enable_timeout');
-        },
-        set: function (value) {
-            this._enableTimeout = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Plugin.prototype.resetEnableTimeout = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aliasInput() {
+        return this._alias;
+    }
+    // enable_timeout - computed: false, optional: true, required: false
+    _enableTimeout;
+    get enableTimeout() {
+        return this.getNumberAttribute('enable_timeout');
+    }
+    set enableTimeout(value) {
+        this._enableTimeout = value;
+    }
+    resetEnableTimeout() {
         this._enableTimeout = undefined;
-    };
-    Object.defineProperty(Plugin.prototype, "enableTimeoutInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enableTimeout;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Plugin.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enableTimeoutInput() {
+        return this._enableTimeout;
+    }
+    // enabled - computed: false, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(Plugin.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "env", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('env'));
-        },
-        set: function (value) {
-            this._env = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Plugin.prototype.resetEnv = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // env - computed: true, optional: true, required: false
+    _env;
+    get env() {
+        return cdktf.Fn.tolist(this.getListAttribute('env'));
+    }
+    set env(value) {
+        this._env = value;
+    }
+    resetEnv() {
         this._env = undefined;
-    };
-    Object.defineProperty(Plugin.prototype, "envInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._env;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "forceDestroy", {
-        get: function () {
-            return this.getBooleanAttribute('force_destroy');
-        },
-        set: function (value) {
-            this._forceDestroy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Plugin.prototype.resetForceDestroy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get envInput() {
+        return this._env;
+    }
+    // force_destroy - computed: false, optional: true, required: false
+    _forceDestroy;
+    get forceDestroy() {
+        return this.getBooleanAttribute('force_destroy');
+    }
+    set forceDestroy(value) {
+        this._forceDestroy = value;
+    }
+    resetForceDestroy() {
         this._forceDestroy = undefined;
-    };
-    Object.defineProperty(Plugin.prototype, "forceDestroyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._forceDestroy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "forceDisable", {
-        get: function () {
-            return this.getBooleanAttribute('force_disable');
-        },
-        set: function (value) {
-            this._forceDisable = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Plugin.prototype.resetForceDisable = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get forceDestroyInput() {
+        return this._forceDestroy;
+    }
+    // force_disable - computed: false, optional: true, required: false
+    _forceDisable;
+    get forceDisable() {
+        return this.getBooleanAttribute('force_disable');
+    }
+    set forceDisable(value) {
+        this._forceDisable = value;
+    }
+    resetForceDisable() {
         this._forceDisable = undefined;
-    };
-    Object.defineProperty(Plugin.prototype, "forceDisableInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._forceDisable;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "grantAllPermissions", {
-        get: function () {
-            return this.getBooleanAttribute('grant_all_permissions');
-        },
-        set: function (value) {
-            this._grantAllPermissions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Plugin.prototype.resetGrantAllPermissions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get forceDisableInput() {
+        return this._forceDisable;
+    }
+    // grant_all_permissions - computed: false, optional: true, required: false
+    _grantAllPermissions;
+    get grantAllPermissions() {
+        return this.getBooleanAttribute('grant_all_permissions');
+    }
+    set grantAllPermissions(value) {
+        this._grantAllPermissions = value;
+    }
+    resetGrantAllPermissions() {
         this._grantAllPermissions = undefined;
-    };
-    Object.defineProperty(Plugin.prototype, "grantAllPermissionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._grantAllPermissions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Plugin.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get grantAllPermissionsInput() {
+        return this._grantAllPermissions;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(Plugin.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "pluginReference", {
-        // plugin_reference - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('plugin_reference');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Plugin.prototype, "grantPermissions", {
-        get: function () {
-            return this._grantPermissions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Plugin.prototype.putGrantPermissions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // plugin_reference - computed: true, optional: false, required: false
+    get pluginReference() {
+        return this.getStringAttribute('plugin_reference');
+    }
+    // grant_permissions - computed: false, optional: true, required: false
+    _grantPermissions = new PluginGrantPermissionsList(this, "grant_permissions", true);
+    get grantPermissions() {
+        return this._grantPermissions;
+    }
+    putGrantPermissions(value) {
         this._grantPermissions.internalValue = value;
-    };
-    Plugin.prototype.resetGrantPermissions = function () {
+    }
+    resetGrantPermissions() {
         this._grantPermissions.internalValue = undefined;
-    };
-    Object.defineProperty(Plugin.prototype, "grantPermissionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._grantPermissions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get grantPermissionsInput() {
+        return this._grantPermissions.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Plugin.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             alias: cdktf.stringToTerraform(this._alias),
             enable_timeout: cdktf.numberToTerraform(this._enableTimeout),
@@ -461,9 +358,9 @@ var Plugin = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             grant_permissions: cdktf.listMapper(pluginGrantPermissionsToTerraform, true)(this._grantPermissions.internalValue),
         };
-    };
-    Plugin.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             alias: {
                 value: cdktf.stringToHclTerraform(this._alias),
                 isBlock: false,
@@ -526,15 +423,6 @@ var Plugin = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Plugin.tfResourceType = "docker_plugin";
-    return Plugin;
-}(cdktf.TerraformResource));
-exports.Plugin = Plugin;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

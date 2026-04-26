@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_gateway_proxy_endpoint
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareZeroTrustGatewayProxyEndpoint = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_gateway_proxy_endpoint cloudflare_zero_trust_gateway_proxy_endpoint}
 */
-var DataCloudflareZeroTrustGatewayProxyEndpoint = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustGatewayProxyEndpoint, _super);
+export class DataCloudflareZeroTrustGatewayProxyEndpoint extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_gateway_proxy_endpoint";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareZeroTrustGatewayProxyEndpoint resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustGatewayProxyEndpoint to import
+    * @param importFromId The id of the existing DataCloudflareZeroTrustGatewayProxyEndpoint that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_gateway_proxy_endpoint#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustGatewayProxyEndpoint to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_gateway_proxy_endpoint", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataCloudflareZeroTrustGatewayProxyEndpoint = /** @class */ (function (_supe
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareZeroTrustGatewayProxyEndpointConfig
     */
-    function DataCloudflareZeroTrustGatewayProxyEndpoint(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_gateway_proxy_endpoint',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,130 +46,79 @@ var DataCloudflareZeroTrustGatewayProxyEndpoint = /** @class */ (function (_supe
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._proxyEndpointId = config.proxyEndpointId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._proxyEndpointId = config.proxyEndpointId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareZeroTrustGatewayProxyEndpoint resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustGatewayProxyEndpoint to import
-    * @param importFromId The id of the existing DataCloudflareZeroTrustGatewayProxyEndpoint that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_gateway_proxy_endpoint#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustGatewayProxyEndpoint to import is found
-    */
-    DataCloudflareZeroTrustGatewayProxyEndpoint.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_gateway_proxy_endpoint", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustGatewayProxyEndpoint.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "ips", {
-        // ips - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('ips');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "kind", {
-        // kind - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('kind');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "proxyEndpointId", {
-        get: function () {
-            return this.getStringAttribute('proxy_endpoint_id');
-        },
-        set: function (value) {
-            this._proxyEndpointId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "proxyEndpointIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._proxyEndpointId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "subdomain", {
-        // subdomain - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('subdomain');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustGatewayProxyEndpoint.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // ips - computed: true, optional: false, required: false
+    get ips() {
+        return this.getListAttribute('ips');
+    }
+    // kind - computed: true, optional: false, required: false
+    get kind() {
+        return this.getStringAttribute('kind');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // proxy_endpoint_id - computed: false, optional: false, required: true
+    _proxyEndpointId;
+    get proxyEndpointId() {
+        return this.getStringAttribute('proxy_endpoint_id');
+    }
+    set proxyEndpointId(value) {
+        this._proxyEndpointId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get proxyEndpointIdInput() {
+        return this._proxyEndpointId;
+    }
+    // subdomain - computed: true, optional: false, required: false
+    get subdomain() {
+        return this.getStringAttribute('subdomain');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareZeroTrustGatewayProxyEndpoint.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             proxy_endpoint_id: cdktf.stringToTerraform(this._proxyEndpointId),
         };
-    };
-    DataCloudflareZeroTrustGatewayProxyEndpoint.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -186,15 +133,6 @@ var DataCloudflareZeroTrustGatewayProxyEndpoint = /** @class */ (function (_supe
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareZeroTrustGatewayProxyEndpoint.tfResourceType = "cloudflare_zero_trust_gateway_proxy_endpoint";
-    return DataCloudflareZeroTrustGatewayProxyEndpoint;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareZeroTrustGatewayProxyEndpoint = DataCloudflareZeroTrustGatewayProxyEndpoint;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

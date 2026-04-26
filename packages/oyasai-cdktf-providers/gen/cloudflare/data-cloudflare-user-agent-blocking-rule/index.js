@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/user_agent_blocking_rule
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareUserAgentBlockingRule = exports.DataCloudflareUserAgentBlockingRuleFilterOutputReference = exports.DataCloudflareUserAgentBlockingRuleConfigurationOutputReference = void 0;
-exports.dataCloudflareUserAgentBlockingRuleConfigurationToTerraform = dataCloudflareUserAgentBlockingRuleConfigurationToTerraform;
-exports.dataCloudflareUserAgentBlockingRuleConfigurationToHclTerraform = dataCloudflareUserAgentBlockingRuleConfigurationToHclTerraform;
-exports.dataCloudflareUserAgentBlockingRuleFilterToTerraform = dataCloudflareUserAgentBlockingRuleFilterToTerraform;
-exports.dataCloudflareUserAgentBlockingRuleFilterToHclTerraform = dataCloudflareUserAgentBlockingRuleFilterToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareUserAgentBlockingRuleConfigurationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareUserAgentBlockingRuleConfigurationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,64 +10,48 @@ function dataCloudflareUserAgentBlockingRuleConfigurationToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareUserAgentBlockingRuleConfigurationToHclTerraform(struct) {
+export function dataCloudflareUserAgentBlockingRuleConfigurationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareUserAgentBlockingRuleConfigurationOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserAgentBlockingRuleConfigurationOutputReference, _super);
+export class DataCloudflareUserAgentBlockingRuleConfigurationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareUserAgentBlockingRuleConfigurationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleConfigurationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleConfigurationOutputReference.prototype, "target", {
-        // target - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleConfigurationOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserAgentBlockingRuleConfigurationOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserAgentBlockingRuleConfigurationOutputReference = DataCloudflareUserAgentBlockingRuleConfigurationOutputReference;
-function dataCloudflareUserAgentBlockingRuleFilterToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // target - computed: true, optional: false, required: false
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export function dataCloudflareUserAgentBlockingRuleFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -102,14 +64,14 @@ function dataCloudflareUserAgentBlockingRuleFilterToTerraform(struct) {
         user_agent: cdktf.stringToTerraform(struct.userAgent),
     };
 }
-function dataCloudflareUserAgentBlockingRuleFilterToHclTerraform(struct) {
+export function dataCloudflareUserAgentBlockingRuleFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         description: {
             value: cdktf.stringToHclTerraform(struct.description),
             isBlock: false,
@@ -130,137 +92,125 @@ function dataCloudflareUserAgentBlockingRuleFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareUserAgentBlockingRuleFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserAgentBlockingRuleFilterOutputReference, _super);
+export class DataCloudflareUserAgentBlockingRuleFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareUserAgentBlockingRuleFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._description !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.description = this._description;
-            }
-            if (this._paused !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.paused = this._paused;
-            }
-            if (this._userAgent !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.userAgent = this._userAgent;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._description = undefined;
-                this._paused = undefined;
-                this._userAgent = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._description = value.description;
-                this._paused = value.paused;
-                this._userAgent = value.userAgent;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype.resetDescription = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._description !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.description = this._description;
+        }
+        if (this._paused !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.paused = this._paused;
+        }
+        if (this._userAgent !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.userAgent = this._userAgent;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._description = undefined;
+            this._paused = undefined;
+            this._userAgent = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._description = value.description;
+            this._paused = value.paused;
+            this._userAgent = value.userAgent;
+        }
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype, "paused", {
-        get: function () {
-            return this.getBooleanAttribute('paused');
-        },
-        set: function (value) {
-            this._paused = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype.resetPaused = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // paused - computed: false, optional: true, required: false
+    _paused;
+    get paused() {
+        return this.getBooleanAttribute('paused');
+    }
+    set paused(value) {
+        this._paused = value;
+    }
+    resetPaused() {
         this._paused = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype, "pausedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._paused;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype, "userAgent", {
-        get: function () {
-            return this.getStringAttribute('user_agent');
-        },
-        set: function (value) {
-            this._userAgent = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype.resetUserAgent = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pausedInput() {
+        return this._paused;
+    }
+    // user_agent - computed: false, optional: true, required: false
+    _userAgent;
+    get userAgent() {
+        return this.getStringAttribute('user_agent');
+    }
+    set userAgent(value) {
+        this._userAgent = value;
+    }
+    resetUserAgent() {
         this._userAgent = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserAgentBlockingRuleFilterOutputReference.prototype, "userAgentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._userAgent;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserAgentBlockingRuleFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserAgentBlockingRuleFilterOutputReference = DataCloudflareUserAgentBlockingRuleFilterOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get userAgentInput() {
+        return this._userAgent;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/user_agent_blocking_rule cloudflare_user_agent_blocking_rule}
 */
-var DataCloudflareUserAgentBlockingRule = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserAgentBlockingRule, _super);
+export class DataCloudflareUserAgentBlockingRule extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_user_agent_blocking_rule";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareUserAgentBlockingRule resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareUserAgentBlockingRule to import
+    * @param importFromId The id of the existing DataCloudflareUserAgentBlockingRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/user_agent_blocking_rule#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareUserAgentBlockingRule to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_user_agent_blocking_rule", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -271,9 +221,8 @@ var DataCloudflareUserAgentBlockingRule = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareUserAgentBlockingRuleConfig = {}
     */
-    function DataCloudflareUserAgentBlockingRule(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_user_agent_blocking_rule',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -286,146 +235,92 @@ var DataCloudflareUserAgentBlockingRule = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // configuration - computed: true, optional: false, required: false
-        _this._configuration = new DataCloudflareUserAgentBlockingRuleConfigurationOutputReference(_this, "configuration");
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareUserAgentBlockingRuleFilterOutputReference(_this, "filter");
-        _this._filter.internalValue = config.filter;
-        _this._uaRuleId = config.uaRuleId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._filter.internalValue = config.filter;
+        this._uaRuleId = config.uaRuleId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareUserAgentBlockingRule resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareUserAgentBlockingRule to import
-    * @param importFromId The id of the existing DataCloudflareUserAgentBlockingRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/user_agent_blocking_rule#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareUserAgentBlockingRule to import is found
-    */
-    DataCloudflareUserAgentBlockingRule.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_user_agent_blocking_rule", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "configuration", {
-        get: function () {
-            return this._configuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserAgentBlockingRule.prototype.putFilter = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // configuration - computed: true, optional: false, required: false
+    _configuration = new DataCloudflareUserAgentBlockingRuleConfigurationOutputReference(this, "configuration");
+    get configuration() {
+        return this._configuration;
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareUserAgentBlockingRuleFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareUserAgentBlockingRule.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "mode", {
-        // mode - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('mode');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "paused", {
-        // paused - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('paused');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "uaRuleId", {
-        get: function () {
-            return this.getStringAttribute('ua_rule_id');
-        },
-        set: function (value) {
-            this._uaRuleId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserAgentBlockingRule.prototype.resetUaRuleId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // mode - computed: true, optional: false, required: false
+    get mode() {
+        return this.getStringAttribute('mode');
+    }
+    // paused - computed: true, optional: false, required: false
+    get paused() {
+        return this.getBooleanAttribute('paused');
+    }
+    // ua_rule_id - computed: false, optional: true, required: false
+    _uaRuleId;
+    get uaRuleId() {
+        return this.getStringAttribute('ua_rule_id');
+    }
+    set uaRuleId(value) {
+        this._uaRuleId = value;
+    }
+    resetUaRuleId() {
         this._uaRuleId = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "uaRuleIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._uaRuleId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserAgentBlockingRule.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get uaRuleIdInput() {
+        return this._uaRuleId;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserAgentBlockingRule.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareUserAgentBlockingRule.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             filter: dataCloudflareUserAgentBlockingRuleFilterToTerraform(this._filter.internalValue),
             ua_rule_id: cdktf.stringToTerraform(this._uaRuleId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareUserAgentBlockingRule.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             filter: {
                 value: dataCloudflareUserAgentBlockingRuleFilterToHclTerraform(this._filter.internalValue),
                 isBlock: true,
@@ -446,15 +341,6 @@ var DataCloudflareUserAgentBlockingRule = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareUserAgentBlockingRule.tfResourceType = "cloudflare_user_agent_blocking_rule";
-    return DataCloudflareUserAgentBlockingRule;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareUserAgentBlockingRule = DataCloudflareUserAgentBlockingRule;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

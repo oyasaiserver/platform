@@ -1,37 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policies
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareNotificationPolicies = exports.DataCloudflareNotificationPoliciesResultList = exports.DataCloudflareNotificationPoliciesResultOutputReference = exports.DataCloudflareNotificationPoliciesResultMechanismsOutputReference = exports.DataCloudflareNotificationPoliciesResultMechanismsWebhooksList = exports.DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference = exports.DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList = exports.DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference = exports.DataCloudflareNotificationPoliciesResultMechanismsEmailList = exports.DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference = exports.DataCloudflareNotificationPoliciesResultFiltersOutputReference = void 0;
-exports.dataCloudflareNotificationPoliciesResultFiltersToTerraform = dataCloudflareNotificationPoliciesResultFiltersToTerraform;
-exports.dataCloudflareNotificationPoliciesResultFiltersToHclTerraform = dataCloudflareNotificationPoliciesResultFiltersToHclTerraform;
-exports.dataCloudflareNotificationPoliciesResultMechanismsEmailToTerraform = dataCloudflareNotificationPoliciesResultMechanismsEmailToTerraform;
-exports.dataCloudflareNotificationPoliciesResultMechanismsEmailToHclTerraform = dataCloudflareNotificationPoliciesResultMechanismsEmailToHclTerraform;
-exports.dataCloudflareNotificationPoliciesResultMechanismsPagerdutyToTerraform = dataCloudflareNotificationPoliciesResultMechanismsPagerdutyToTerraform;
-exports.dataCloudflareNotificationPoliciesResultMechanismsPagerdutyToHclTerraform = dataCloudflareNotificationPoliciesResultMechanismsPagerdutyToHclTerraform;
-exports.dataCloudflareNotificationPoliciesResultMechanismsWebhooksToTerraform = dataCloudflareNotificationPoliciesResultMechanismsWebhooksToTerraform;
-exports.dataCloudflareNotificationPoliciesResultMechanismsWebhooksToHclTerraform = dataCloudflareNotificationPoliciesResultMechanismsWebhooksToHclTerraform;
-exports.dataCloudflareNotificationPoliciesResultMechanismsToTerraform = dataCloudflareNotificationPoliciesResultMechanismsToTerraform;
-exports.dataCloudflareNotificationPoliciesResultMechanismsToHclTerraform = dataCloudflareNotificationPoliciesResultMechanismsToHclTerraform;
-exports.dataCloudflareNotificationPoliciesResultToTerraform = dataCloudflareNotificationPoliciesResultToTerraform;
-exports.dataCloudflareNotificationPoliciesResultToHclTerraform = dataCloudflareNotificationPoliciesResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareNotificationPoliciesResultFiltersToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareNotificationPoliciesResultFiltersToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -40,392 +10,212 @@ function dataCloudflareNotificationPoliciesResultFiltersToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareNotificationPoliciesResultFiltersToHclTerraform(struct) {
+export function dataCloudflareNotificationPoliciesResultFiltersToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareNotificationPoliciesResultFiltersOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultFiltersOutputReference, _super);
+export class DataCloudflareNotificationPoliciesResultFiltersOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareNotificationPoliciesResultFiltersOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "actions", {
-        // actions - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('actions');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "affectedAsns", {
-        // affected_asns - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('affected_asns');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "affectedComponents", {
-        // affected_components - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('affected_components');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "affectedLocations", {
-        // affected_locations - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('affected_locations');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "airportCode", {
-        // airport_code - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('airport_code');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "alertTriggerPreferences", {
-        // alert_trigger_preferences - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('alert_trigger_preferences');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "alertTriggerPreferencesValue", {
-        // alert_trigger_preferences_value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('alert_trigger_preferences_value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "environment", {
-        // environment - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('environment');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "event", {
-        // event - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('event');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "eventSource", {
-        // event_source - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('event_source');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "eventType", {
-        // event_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('event_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "groupBy", {
-        // group_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('group_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "healthCheckId", {
-        // health_check_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('health_check_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "incidentImpact", {
-        // incident_impact - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('incident_impact');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "inputId", {
-        // input_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('input_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "insightClass", {
-        // insight_class - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('insight_class');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "limit", {
-        // limit - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('limit');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "logoTag", {
-        // logo_tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('logo_tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "megabitsPerSecond", {
-        // megabits_per_second - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('megabits_per_second');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "newHealth", {
-        // new_health - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('new_health');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "newStatus", {
-        // new_status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('new_status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "packetsPerSecond", {
-        // packets_per_second - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('packets_per_second');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "poolId", {
-        // pool_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('pool_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "popNames", {
-        // pop_names - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('pop_names');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "product", {
-        // product - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('product');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "projectId", {
-        // project_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('project_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "protocol", {
-        // protocol - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('protocol');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "queryTag", {
-        // query_tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('query_tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "requestsPerSecond", {
-        // requests_per_second - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('requests_per_second');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "selectors", {
-        // selectors - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('selectors');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "services", {
-        // services - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('services');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "slo", {
-        // slo - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('slo');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "targetHostname", {
-        // target_hostname - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('target_hostname');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "targetIp", {
-        // target_ip - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('target_ip');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "targetZoneName", {
-        // target_zone_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('target_zone_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "trafficExclusions", {
-        // traffic_exclusions - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('traffic_exclusions');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "tunnelId", {
-        // tunnel_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('tunnel_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "tunnelName", {
-        // tunnel_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('tunnel_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "where", {
-        // where - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('where');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultFiltersOutputReference.prototype, "zones", {
-        // zones - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('zones');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareNotificationPoliciesResultFiltersOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareNotificationPoliciesResultFiltersOutputReference = DataCloudflareNotificationPoliciesResultFiltersOutputReference;
-function dataCloudflareNotificationPoliciesResultMechanismsEmailToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // actions - computed: true, optional: false, required: false
+    get actions() {
+        return this.getListAttribute('actions');
+    }
+    // affected_asns - computed: true, optional: false, required: false
+    get affectedAsns() {
+        return this.getListAttribute('affected_asns');
+    }
+    // affected_components - computed: true, optional: false, required: false
+    get affectedComponents() {
+        return this.getListAttribute('affected_components');
+    }
+    // affected_locations - computed: true, optional: false, required: false
+    get affectedLocations() {
+        return this.getListAttribute('affected_locations');
+    }
+    // airport_code - computed: true, optional: false, required: false
+    get airportCode() {
+        return this.getListAttribute('airport_code');
+    }
+    // alert_trigger_preferences - computed: true, optional: false, required: false
+    get alertTriggerPreferences() {
+        return this.getListAttribute('alert_trigger_preferences');
+    }
+    // alert_trigger_preferences_value - computed: true, optional: false, required: false
+    get alertTriggerPreferencesValue() {
+        return this.getListAttribute('alert_trigger_preferences_value');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getListAttribute('enabled');
+    }
+    // environment - computed: true, optional: false, required: false
+    get environment() {
+        return this.getListAttribute('environment');
+    }
+    // event - computed: true, optional: false, required: false
+    get event() {
+        return this.getListAttribute('event');
+    }
+    // event_source - computed: true, optional: false, required: false
+    get eventSource() {
+        return this.getListAttribute('event_source');
+    }
+    // event_type - computed: true, optional: false, required: false
+    get eventType() {
+        return this.getListAttribute('event_type');
+    }
+    // group_by - computed: true, optional: false, required: false
+    get groupBy() {
+        return this.getListAttribute('group_by');
+    }
+    // health_check_id - computed: true, optional: false, required: false
+    get healthCheckId() {
+        return this.getListAttribute('health_check_id');
+    }
+    // incident_impact - computed: true, optional: false, required: false
+    get incidentImpact() {
+        return this.getListAttribute('incident_impact');
+    }
+    // input_id - computed: true, optional: false, required: false
+    get inputId() {
+        return this.getListAttribute('input_id');
+    }
+    // insight_class - computed: true, optional: false, required: false
+    get insightClass() {
+        return this.getListAttribute('insight_class');
+    }
+    // limit - computed: true, optional: false, required: false
+    get limit() {
+        return this.getListAttribute('limit');
+    }
+    // logo_tag - computed: true, optional: false, required: false
+    get logoTag() {
+        return this.getListAttribute('logo_tag');
+    }
+    // megabits_per_second - computed: true, optional: false, required: false
+    get megabitsPerSecond() {
+        return this.getListAttribute('megabits_per_second');
+    }
+    // new_health - computed: true, optional: false, required: false
+    get newHealth() {
+        return this.getListAttribute('new_health');
+    }
+    // new_status - computed: true, optional: false, required: false
+    get newStatus() {
+        return this.getListAttribute('new_status');
+    }
+    // packets_per_second - computed: true, optional: false, required: false
+    get packetsPerSecond() {
+        return this.getListAttribute('packets_per_second');
+    }
+    // pool_id - computed: true, optional: false, required: false
+    get poolId() {
+        return this.getListAttribute('pool_id');
+    }
+    // pop_names - computed: true, optional: false, required: false
+    get popNames() {
+        return this.getListAttribute('pop_names');
+    }
+    // product - computed: true, optional: false, required: false
+    get product() {
+        return this.getListAttribute('product');
+    }
+    // project_id - computed: true, optional: false, required: false
+    get projectId() {
+        return this.getListAttribute('project_id');
+    }
+    // protocol - computed: true, optional: false, required: false
+    get protocol() {
+        return this.getListAttribute('protocol');
+    }
+    // query_tag - computed: true, optional: false, required: false
+    get queryTag() {
+        return this.getListAttribute('query_tag');
+    }
+    // requests_per_second - computed: true, optional: false, required: false
+    get requestsPerSecond() {
+        return this.getListAttribute('requests_per_second');
+    }
+    // selectors - computed: true, optional: false, required: false
+    get selectors() {
+        return this.getListAttribute('selectors');
+    }
+    // services - computed: true, optional: false, required: false
+    get services() {
+        return this.getListAttribute('services');
+    }
+    // slo - computed: true, optional: false, required: false
+    get slo() {
+        return this.getListAttribute('slo');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getListAttribute('status');
+    }
+    // target_hostname - computed: true, optional: false, required: false
+    get targetHostname() {
+        return this.getListAttribute('target_hostname');
+    }
+    // target_ip - computed: true, optional: false, required: false
+    get targetIp() {
+        return this.getListAttribute('target_ip');
+    }
+    // target_zone_name - computed: true, optional: false, required: false
+    get targetZoneName() {
+        return this.getListAttribute('target_zone_name');
+    }
+    // traffic_exclusions - computed: true, optional: false, required: false
+    get trafficExclusions() {
+        return this.getListAttribute('traffic_exclusions');
+    }
+    // tunnel_id - computed: true, optional: false, required: false
+    get tunnelId() {
+        return this.getListAttribute('tunnel_id');
+    }
+    // tunnel_name - computed: true, optional: false, required: false
+    get tunnelName() {
+        return this.getListAttribute('tunnel_name');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getListAttribute('type');
+    }
+    // where - computed: true, optional: false, required: false
+    get where() {
+        return this.getListAttribute('where');
+    }
+    // zones - computed: true, optional: false, required: false
+    get zones() {
+        return this.getListAttribute('zones');
+    }
+}
+export function dataCloudflareNotificationPoliciesResultMechanismsEmailToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -434,81 +224,68 @@ function dataCloudflareNotificationPoliciesResultMechanismsEmailToTerraform(stru
     }
     return {};
 }
-function dataCloudflareNotificationPoliciesResultMechanismsEmailToHclTerraform(struct) {
+export function dataCloudflareNotificationPoliciesResultMechanismsEmailToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference, _super);
+export class DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference = DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference;
-var DataCloudflareNotificationPoliciesResultMechanismsEmailList = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultMechanismsEmailList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+}
+export class DataCloudflareNotificationPoliciesResultMechanismsEmailList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareNotificationPoliciesResultMechanismsEmailList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareNotificationPoliciesResultMechanismsEmailList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareNotificationPoliciesResultMechanismsEmailOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareNotificationPoliciesResultMechanismsEmailList;
-}(cdktf.ComplexList));
-exports.DataCloudflareNotificationPoliciesResultMechanismsEmailList = DataCloudflareNotificationPoliciesResultMechanismsEmailList;
-function dataCloudflareNotificationPoliciesResultMechanismsPagerdutyToTerraform(struct) {
+    }
+}
+export function dataCloudflareNotificationPoliciesResultMechanismsPagerdutyToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -517,81 +294,68 @@ function dataCloudflareNotificationPoliciesResultMechanismsPagerdutyToTerraform(
     }
     return {};
 }
-function dataCloudflareNotificationPoliciesResultMechanismsPagerdutyToHclTerraform(struct) {
+export function dataCloudflareNotificationPoliciesResultMechanismsPagerdutyToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference, _super);
+export class DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference = DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference;
-var DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+}
+export class DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareNotificationPoliciesResultMechanismsPagerdutyOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList;
-}(cdktf.ComplexList));
-exports.DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList = DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList;
-function dataCloudflareNotificationPoliciesResultMechanismsWebhooksToTerraform(struct) {
+    }
+}
+export function dataCloudflareNotificationPoliciesResultMechanismsWebhooksToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -600,81 +364,68 @@ function dataCloudflareNotificationPoliciesResultMechanismsWebhooksToTerraform(s
     }
     return {};
 }
-function dataCloudflareNotificationPoliciesResultMechanismsWebhooksToHclTerraform(struct) {
+export function dataCloudflareNotificationPoliciesResultMechanismsWebhooksToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference, _super);
+export class DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference = DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference;
-var DataCloudflareNotificationPoliciesResultMechanismsWebhooksList = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultMechanismsWebhooksList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+}
+export class DataCloudflareNotificationPoliciesResultMechanismsWebhooksList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareNotificationPoliciesResultMechanismsWebhooksList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareNotificationPoliciesResultMechanismsWebhooksList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareNotificationPoliciesResultMechanismsWebhooksOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareNotificationPoliciesResultMechanismsWebhooksList;
-}(cdktf.ComplexList));
-exports.DataCloudflareNotificationPoliciesResultMechanismsWebhooksList = DataCloudflareNotificationPoliciesResultMechanismsWebhooksList;
-function dataCloudflareNotificationPoliciesResultMechanismsToTerraform(struct) {
+    }
+}
+export function dataCloudflareNotificationPoliciesResultMechanismsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -683,75 +434,55 @@ function dataCloudflareNotificationPoliciesResultMechanismsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareNotificationPoliciesResultMechanismsToHclTerraform(struct) {
+export function dataCloudflareNotificationPoliciesResultMechanismsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareNotificationPoliciesResultMechanismsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultMechanismsOutputReference, _super);
+export class DataCloudflareNotificationPoliciesResultMechanismsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareNotificationPoliciesResultMechanismsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // email - computed: true, optional: false, required: false
-        _this._email = new DataCloudflareNotificationPoliciesResultMechanismsEmailList(_this, "email", false);
-        // pagerduty - computed: true, optional: false, required: false
-        _this._pagerduty = new DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList(_this, "pagerduty", false);
-        // webhooks - computed: true, optional: false, required: false
-        _this._webhooks = new DataCloudflareNotificationPoliciesResultMechanismsWebhooksList(_this, "webhooks", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsOutputReference.prototype, "email", {
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsOutputReference.prototype, "pagerduty", {
-        get: function () {
-            return this._pagerduty;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultMechanismsOutputReference.prototype, "webhooks", {
-        get: function () {
-            return this._webhooks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareNotificationPoliciesResultMechanismsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareNotificationPoliciesResultMechanismsOutputReference = DataCloudflareNotificationPoliciesResultMechanismsOutputReference;
-function dataCloudflareNotificationPoliciesResultToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // email - computed: true, optional: false, required: false
+    _email = new DataCloudflareNotificationPoliciesResultMechanismsEmailList(this, "email", false);
+    get email() {
+        return this._email;
+    }
+    // pagerduty - computed: true, optional: false, required: false
+    _pagerduty = new DataCloudflareNotificationPoliciesResultMechanismsPagerdutyList(this, "pagerduty", false);
+    get pagerduty() {
+        return this._pagerduty;
+    }
+    // webhooks - computed: true, optional: false, required: false
+    _webhooks = new DataCloudflareNotificationPoliciesResultMechanismsWebhooksList(this, "webhooks", false);
+    get webhooks() {
+        return this._webhooks;
+    }
+}
+export function dataCloudflareNotificationPoliciesResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -760,159 +491,126 @@ function dataCloudflareNotificationPoliciesResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareNotificationPoliciesResultToHclTerraform(struct) {
+export function dataCloudflareNotificationPoliciesResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareNotificationPoliciesResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultOutputReference, _super);
+export class DataCloudflareNotificationPoliciesResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareNotificationPoliciesResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // filters - computed: true, optional: false, required: false
-        _this._filters = new DataCloudflareNotificationPoliciesResultFiltersOutputReference(_this, "filters");
-        // mechanisms - computed: true, optional: false, required: false
-        _this._mechanisms = new DataCloudflareNotificationPoliciesResultMechanismsOutputReference(_this, "mechanisms");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "alertInterval", {
-        // alert_interval - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('alert_interval');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "alertType", {
-        // alert_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('alert_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "created", {
-        // created - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "filters", {
-        get: function () {
-            return this._filters;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "mechanisms", {
-        get: function () {
-            return this._mechanisms;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "modified", {
-        // modified - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPoliciesResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareNotificationPoliciesResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareNotificationPoliciesResultOutputReference = DataCloudflareNotificationPoliciesResultOutputReference;
-var DataCloudflareNotificationPoliciesResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPoliciesResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // alert_interval - computed: true, optional: false, required: false
+    get alertInterval() {
+        return this.getStringAttribute('alert_interval');
+    }
+    // alert_type - computed: true, optional: false, required: false
+    get alertType() {
+        return this.getStringAttribute('alert_type');
+    }
+    // created - computed: true, optional: false, required: false
+    get created() {
+        return this.getStringAttribute('created');
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // filters - computed: true, optional: false, required: false
+    _filters = new DataCloudflareNotificationPoliciesResultFiltersOutputReference(this, "filters");
+    get filters() {
+        return this._filters;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // mechanisms - computed: true, optional: false, required: false
+    _mechanisms = new DataCloudflareNotificationPoliciesResultMechanismsOutputReference(this, "mechanisms");
+    get mechanisms() {
+        return this._mechanisms;
+    }
+    // modified - computed: true, optional: false, required: false
+    get modified() {
+        return this.getStringAttribute('modified');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export class DataCloudflareNotificationPoliciesResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareNotificationPoliciesResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareNotificationPoliciesResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareNotificationPoliciesResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareNotificationPoliciesResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareNotificationPoliciesResultList = DataCloudflareNotificationPoliciesResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policies cloudflare_notification_policies}
 */
-var DataCloudflareNotificationPolicies = /** @class */ (function (_super) {
-    __extends(DataCloudflareNotificationPolicies, _super);
+export class DataCloudflareNotificationPolicies extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_notification_policies";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareNotificationPolicies resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareNotificationPolicies to import
+    * @param importFromId The id of the existing DataCloudflareNotificationPolicies that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policies#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareNotificationPolicies to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_notification_policies", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -923,9 +621,8 @@ var DataCloudflareNotificationPolicies = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareNotificationPoliciesConfig = {}
     */
-    function DataCloudflareNotificationPolicies(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_notification_policies',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -938,86 +635,59 @@ var DataCloudflareNotificationPolicies = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareNotificationPoliciesResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._maxItems = config.maxItems;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._maxItems = config.maxItems;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareNotificationPolicies resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareNotificationPolicies to import
-    * @param importFromId The id of the existing DataCloudflareNotificationPolicies that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policies#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareNotificationPolicies to import is found
-    */
-    DataCloudflareNotificationPolicies.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_notification_policies", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareNotificationPolicies.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareNotificationPolicies.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareNotificationPolicies.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPolicies.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareNotificationPolicies.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareNotificationPolicies.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareNotificationPolicies.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareNotificationPoliciesResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareNotificationPolicies.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             max_items: cdktf.numberToTerraform(this._maxItems),
         };
-    };
-    DataCloudflareNotificationPolicies.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1032,15 +702,6 @@ var DataCloudflareNotificationPolicies = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareNotificationPolicies.tfResourceType = "cloudflare_notification_policies";
-    return DataCloudflareNotificationPolicies;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareNotificationPolicies = DataCloudflareNotificationPolicies;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

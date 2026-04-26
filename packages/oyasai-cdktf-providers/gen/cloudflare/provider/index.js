@@ -1,58 +1,14 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CloudflareProvider = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs cloudflare}
 */
-var CloudflareProvider = /** @class */ (function (_super) {
-    __extends(CloudflareProvider, _super);
-    // ===========
-    // INITIALIZER
-    // ===========
-    /**
-    * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs cloudflare} Resource
-    *
-    * @param scope The scope in which to define this construct
-    * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-    * @param options CloudflareProviderConfig = {}
-    */
-    function CloudflareProvider(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
-            terraformResourceType: 'cloudflare',
-            terraformGeneratorMetadata: {
-                providerName: 'cloudflare',
-                providerVersion: '5.19.0'
-            },
-            terraformProviderSource: 'cloudflare/cloudflare'
-        }) || this;
-        _this._apiKey = config.apiKey;
-        _this._apiToken = config.apiToken;
-        _this._apiUserServiceKey = config.apiUserServiceKey;
-        _this._baseUrl = config.baseUrl;
-        _this._email = config.email;
-        _this._userAgentOperatorSuffix = config.userAgentOperatorSuffix;
-        _this._alias = config.alias;
-        return _this;
-    }
+export class CloudflareProvider extends cdktf.TerraformProvider {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare";
     // ==============
     // STATIC Methods
     // ==============
@@ -63,160 +19,148 @@ var CloudflareProvider = /** @class */ (function (_super) {
     * @param importFromId The id of the existing CloudflareProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs#import import section} in the documentation of this resource for the id to use
     * @param provider? Optional instance of the provider where the CloudflareProvider to import is found
     */
-    CloudflareProvider.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(CloudflareProvider.prototype, "apiKey", {
-        get: function () {
-            return this._apiKey;
-        },
-        set: function (value) {
-            this._apiKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CloudflareProvider.prototype.resetApiKey = function () {
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare", importId: importFromId, provider });
+    }
+    // ===========
+    // INITIALIZER
+    // ===========
+    /**
+    * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs cloudflare} Resource
+    *
+    * @param scope The scope in which to define this construct
+    * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
+    * @param options CloudflareProviderConfig = {}
+    */
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
+            terraformResourceType: 'cloudflare',
+            terraformGeneratorMetadata: {
+                providerName: 'cloudflare',
+                providerVersion: '5.19.0'
+            },
+            terraformProviderSource: 'cloudflare/cloudflare'
+        });
+        this._apiKey = config.apiKey;
+        this._apiToken = config.apiToken;
+        this._apiUserServiceKey = config.apiUserServiceKey;
+        this._baseUrl = config.baseUrl;
+        this._email = config.email;
+        this._userAgentOperatorSuffix = config.userAgentOperatorSuffix;
+        this._alias = config.alias;
+    }
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // api_key - computed: false, optional: true, required: false
+    _apiKey;
+    get apiKey() {
+        return this._apiKey;
+    }
+    set apiKey(value) {
+        this._apiKey = value;
+    }
+    resetApiKey() {
         this._apiKey = undefined;
-    };
-    Object.defineProperty(CloudflareProvider.prototype, "apiKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._apiKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CloudflareProvider.prototype, "apiToken", {
-        get: function () {
-            return this._apiToken;
-        },
-        set: function (value) {
-            this._apiToken = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CloudflareProvider.prototype.resetApiToken = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get apiKeyInput() {
+        return this._apiKey;
+    }
+    // api_token - computed: false, optional: true, required: false
+    _apiToken;
+    get apiToken() {
+        return this._apiToken;
+    }
+    set apiToken(value) {
+        this._apiToken = value;
+    }
+    resetApiToken() {
         this._apiToken = undefined;
-    };
-    Object.defineProperty(CloudflareProvider.prototype, "apiTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._apiToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CloudflareProvider.prototype, "apiUserServiceKey", {
-        get: function () {
-            return this._apiUserServiceKey;
-        },
-        set: function (value) {
-            this._apiUserServiceKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CloudflareProvider.prototype.resetApiUserServiceKey = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get apiTokenInput() {
+        return this._apiToken;
+    }
+    // api_user_service_key - computed: false, optional: true, required: false
+    _apiUserServiceKey;
+    get apiUserServiceKey() {
+        return this._apiUserServiceKey;
+    }
+    set apiUserServiceKey(value) {
+        this._apiUserServiceKey = value;
+    }
+    resetApiUserServiceKey() {
         this._apiUserServiceKey = undefined;
-    };
-    Object.defineProperty(CloudflareProvider.prototype, "apiUserServiceKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._apiUserServiceKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CloudflareProvider.prototype, "baseUrl", {
-        get: function () {
-            return this._baseUrl;
-        },
-        set: function (value) {
-            this._baseUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CloudflareProvider.prototype.resetBaseUrl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get apiUserServiceKeyInput() {
+        return this._apiUserServiceKey;
+    }
+    // base_url - computed: false, optional: true, required: false
+    _baseUrl;
+    get baseUrl() {
+        return this._baseUrl;
+    }
+    set baseUrl(value) {
+        this._baseUrl = value;
+    }
+    resetBaseUrl() {
         this._baseUrl = undefined;
-    };
-    Object.defineProperty(CloudflareProvider.prototype, "baseUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._baseUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CloudflareProvider.prototype, "email", {
-        get: function () {
-            return this._email;
-        },
-        set: function (value) {
-            this._email = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CloudflareProvider.prototype.resetEmail = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get baseUrlInput() {
+        return this._baseUrl;
+    }
+    // email - computed: false, optional: true, required: false
+    _email;
+    get email() {
+        return this._email;
+    }
+    set email(value) {
+        this._email = value;
+    }
+    resetEmail() {
         this._email = undefined;
-    };
-    Object.defineProperty(CloudflareProvider.prototype, "emailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._email;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CloudflareProvider.prototype, "userAgentOperatorSuffix", {
-        get: function () {
-            return this._userAgentOperatorSuffix;
-        },
-        set: function (value) {
-            this._userAgentOperatorSuffix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CloudflareProvider.prototype.resetUserAgentOperatorSuffix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailInput() {
+        return this._email;
+    }
+    // user_agent_operator_suffix - computed: false, optional: true, required: false
+    _userAgentOperatorSuffix;
+    get userAgentOperatorSuffix() {
+        return this._userAgentOperatorSuffix;
+    }
+    set userAgentOperatorSuffix(value) {
+        this._userAgentOperatorSuffix = value;
+    }
+    resetUserAgentOperatorSuffix() {
         this._userAgentOperatorSuffix = undefined;
-    };
-    Object.defineProperty(CloudflareProvider.prototype, "userAgentOperatorSuffixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._userAgentOperatorSuffix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CloudflareProvider.prototype, "alias", {
-        get: function () {
-            return this._alias;
-        },
-        set: function (value) {
-            this._alias = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CloudflareProvider.prototype.resetAlias = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get userAgentOperatorSuffixInput() {
+        return this._userAgentOperatorSuffix;
+    }
+    // alias - computed: false, optional: true, required: false
+    _alias;
+    get alias() {
+        return this._alias;
+    }
+    set alias(value) {
+        this._alias = value;
+    }
+    resetAlias() {
         this._alias = undefined;
-    };
-    Object.defineProperty(CloudflareProvider.prototype, "aliasInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alias;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get aliasInput() {
+        return this._alias;
+    }
     // =========
     // SYNTHESIS
     // =========
-    CloudflareProvider.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             api_key: cdktf.stringToTerraform(this._apiKey),
             api_token: cdktf.stringToTerraform(this._apiToken),
@@ -226,9 +170,9 @@ var CloudflareProvider = /** @class */ (function (_super) {
             user_agent_operator_suffix: cdktf.stringToTerraform(this._userAgentOperatorSuffix),
             alias: cdktf.stringToTerraform(this._alias),
         };
-    };
-    CloudflareProvider.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             api_key: {
                 value: cdktf.stringToHclTerraform(this._apiKey),
                 isBlock: false,
@@ -273,15 +217,6 @@ var CloudflareProvider = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    CloudflareProvider.tfResourceType = "cloudflare";
-    return CloudflareProvider;
-}(cdktf.TerraformProvider));
-exports.CloudflareProvider = CloudflareProvider;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

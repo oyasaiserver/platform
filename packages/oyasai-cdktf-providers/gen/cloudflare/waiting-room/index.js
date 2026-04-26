@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/waiting_room
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WaitingRoom = exports.WaitingRoomCookieAttributesOutputReference = exports.WaitingRoomAdditionalRoutesList = exports.WaitingRoomAdditionalRoutesOutputReference = void 0;
-exports.waitingRoomAdditionalRoutesToTerraform = waitingRoomAdditionalRoutesToTerraform;
-exports.waitingRoomAdditionalRoutesToHclTerraform = waitingRoomAdditionalRoutesToHclTerraform;
-exports.waitingRoomCookieAttributesToTerraform = waitingRoomCookieAttributesToTerraform;
-exports.waitingRoomCookieAttributesToHclTerraform = waitingRoomCookieAttributesToHclTerraform;
-var cdktf = require("cdktf");
-function waitingRoomAdditionalRoutesToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function waitingRoomAdditionalRoutesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -35,14 +13,14 @@ function waitingRoomAdditionalRoutesToTerraform(struct) {
         path: cdktf.stringToTerraform(struct.path),
     };
 }
-function waitingRoomAdditionalRoutesToHclTerraform(struct) {
+export function waitingRoomAdditionalRoutesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         host: {
             value: cdktf.stringToHclTerraform(struct.host),
             isBlock: false,
@@ -57,131 +35,109 @@ function waitingRoomAdditionalRoutesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WaitingRoomAdditionalRoutesOutputReference = /** @class */ (function (_super) {
-    __extends(WaitingRoomAdditionalRoutesOutputReference, _super);
+export class WaitingRoomAdditionalRoutesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WaitingRoomAdditionalRoutesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(WaitingRoomAdditionalRoutesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._host = undefined;
-                this._path = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._host = value.host;
-                this._path = value.path;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomAdditionalRoutesOutputReference.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomAdditionalRoutesOutputReference.prototype.resetHost = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._host = undefined;
+            this._path = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._host = value.host;
+            this._path = value.path;
+        }
+    }
+    // host - computed: true, optional: true, required: false
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    resetHost() {
         this._host = undefined;
-    };
-    Object.defineProperty(WaitingRoomAdditionalRoutesOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomAdditionalRoutesOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomAdditionalRoutesOutputReference.prototype.resetPath = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // path - computed: true, optional: true, required: false
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    resetPath() {
         this._path = undefined;
-    };
-    Object.defineProperty(WaitingRoomAdditionalRoutesOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WaitingRoomAdditionalRoutesOutputReference;
-}(cdktf.ComplexObject));
-exports.WaitingRoomAdditionalRoutesOutputReference = WaitingRoomAdditionalRoutesOutputReference;
-var WaitingRoomAdditionalRoutesList = /** @class */ (function (_super) {
-    __extends(WaitingRoomAdditionalRoutesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+}
+export class WaitingRoomAdditionalRoutesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function WaitingRoomAdditionalRoutesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    WaitingRoomAdditionalRoutesList.prototype.get = function (index) {
+    get(index) {
         return new WaitingRoomAdditionalRoutesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return WaitingRoomAdditionalRoutesList;
-}(cdktf.ComplexList));
-exports.WaitingRoomAdditionalRoutesList = WaitingRoomAdditionalRoutesList;
-function waitingRoomCookieAttributesToTerraform(struct) {
+    }
+}
+export function waitingRoomCookieAttributesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -193,14 +149,14 @@ function waitingRoomCookieAttributesToTerraform(struct) {
         secure: cdktf.stringToTerraform(struct.secure),
     };
 }
-function waitingRoomCookieAttributesToHclTerraform(struct) {
+export function waitingRoomCookieAttributesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         samesite: {
             value: cdktf.stringToHclTerraform(struct.samesite),
             isBlock: false,
@@ -215,110 +171,104 @@ function waitingRoomCookieAttributesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var WaitingRoomCookieAttributesOutputReference = /** @class */ (function (_super) {
-    __extends(WaitingRoomCookieAttributesOutputReference, _super);
+export class WaitingRoomCookieAttributesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function WaitingRoomCookieAttributesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(WaitingRoomCookieAttributesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._samesite !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.samesite = this._samesite;
-            }
-            if (this._secure !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secure = this._secure;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._samesite = undefined;
-                this._secure = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._samesite = value.samesite;
-                this._secure = value.secure;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomCookieAttributesOutputReference.prototype, "samesite", {
-        get: function () {
-            return this.getStringAttribute('samesite');
-        },
-        set: function (value) {
-            this._samesite = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomCookieAttributesOutputReference.prototype.resetSamesite = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._samesite !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.samesite = this._samesite;
+        }
+        if (this._secure !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secure = this._secure;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._samesite = undefined;
+            this._secure = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._samesite = value.samesite;
+            this._secure = value.secure;
+        }
+    }
+    // samesite - computed: true, optional: true, required: false
+    _samesite;
+    get samesite() {
+        return this.getStringAttribute('samesite');
+    }
+    set samesite(value) {
+        this._samesite = value;
+    }
+    resetSamesite() {
         this._samesite = undefined;
-    };
-    Object.defineProperty(WaitingRoomCookieAttributesOutputReference.prototype, "samesiteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._samesite;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomCookieAttributesOutputReference.prototype, "secure", {
-        get: function () {
-            return this.getStringAttribute('secure');
-        },
-        set: function (value) {
-            this._secure = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomCookieAttributesOutputReference.prototype.resetSecure = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get samesiteInput() {
+        return this._samesite;
+    }
+    // secure - computed: true, optional: true, required: false
+    _secure;
+    get secure() {
+        return this.getStringAttribute('secure');
+    }
+    set secure(value) {
+        this._secure = value;
+    }
+    resetSecure() {
         this._secure = undefined;
-    };
-    Object.defineProperty(WaitingRoomCookieAttributesOutputReference.prototype, "secureInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secure;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return WaitingRoomCookieAttributesOutputReference;
-}(cdktf.ComplexObject));
-exports.WaitingRoomCookieAttributesOutputReference = WaitingRoomCookieAttributesOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secureInput() {
+        return this._secure;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/waiting_room cloudflare_waiting_room}
 */
-var WaitingRoom = /** @class */ (function (_super) {
-    __extends(WaitingRoom, _super);
+export class WaitingRoom extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_waiting_room";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a WaitingRoom resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the WaitingRoom to import
+    * @param importFromId The id of the existing WaitingRoom that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/waiting_room#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the WaitingRoom to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_waiting_room", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -329,8 +279,8 @@ var WaitingRoom = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options WaitingRoomConfig
     */
-    function WaitingRoom(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_waiting_room',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -343,545 +293,375 @@ var WaitingRoom = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // additional_routes - computed: true, optional: true, required: false
-        _this._additionalRoutes = new WaitingRoomAdditionalRoutesList(_this, "additional_routes", false);
-        // cookie_attributes - computed: true, optional: true, required: false
-        _this._cookieAttributes = new WaitingRoomCookieAttributesOutputReference(_this, "cookie_attributes");
-        _this._additionalRoutes.internalValue = config.additionalRoutes;
-        _this._cookieAttributes.internalValue = config.cookieAttributes;
-        _this._cookieSuffix = config.cookieSuffix;
-        _this._customPageHtml = config.customPageHtml;
-        _this._defaultTemplateLanguage = config.defaultTemplateLanguage;
-        _this._description = config.description;
-        _this._disableSessionRenewal = config.disableSessionRenewal;
-        _this._enabledOriginCommands = config.enabledOriginCommands;
-        _this._host = config.host;
-        _this._jsonResponseEnabled = config.jsonResponseEnabled;
-        _this._name = config.name;
-        _this._newUsersPerMinute = config.newUsersPerMinute;
-        _this._path = config.path;
-        _this._queueAll = config.queueAll;
-        _this._queueingMethod = config.queueingMethod;
-        _this._queueingStatusCode = config.queueingStatusCode;
-        _this._sessionDuration = config.sessionDuration;
-        _this._suspended = config.suspended;
-        _this._totalActiveUsers = config.totalActiveUsers;
-        _this._turnstileAction = config.turnstileAction;
-        _this._turnstileMode = config.turnstileMode;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._additionalRoutes.internalValue = config.additionalRoutes;
+        this._cookieAttributes.internalValue = config.cookieAttributes;
+        this._cookieSuffix = config.cookieSuffix;
+        this._customPageHtml = config.customPageHtml;
+        this._defaultTemplateLanguage = config.defaultTemplateLanguage;
+        this._description = config.description;
+        this._disableSessionRenewal = config.disableSessionRenewal;
+        this._enabledOriginCommands = config.enabledOriginCommands;
+        this._host = config.host;
+        this._jsonResponseEnabled = config.jsonResponseEnabled;
+        this._name = config.name;
+        this._newUsersPerMinute = config.newUsersPerMinute;
+        this._path = config.path;
+        this._queueAll = config.queueAll;
+        this._queueingMethod = config.queueingMethod;
+        this._queueingStatusCode = config.queueingStatusCode;
+        this._sessionDuration = config.sessionDuration;
+        this._suspended = config.suspended;
+        this._totalActiveUsers = config.totalActiveUsers;
+        this._turnstileAction = config.turnstileAction;
+        this._turnstileMode = config.turnstileMode;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a WaitingRoom resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the WaitingRoom to import
-    * @param importFromId The id of the existing WaitingRoom that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/waiting_room#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the WaitingRoom to import is found
-    */
-    WaitingRoom.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_waiting_room", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(WaitingRoom.prototype, "additionalRoutes", {
-        get: function () {
-            return this._additionalRoutes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.putAdditionalRoutes = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // additional_routes - computed: true, optional: true, required: false
+    _additionalRoutes = new WaitingRoomAdditionalRoutesList(this, "additional_routes", false);
+    get additionalRoutes() {
+        return this._additionalRoutes;
+    }
+    putAdditionalRoutes(value) {
         this._additionalRoutes.internalValue = value;
-    };
-    WaitingRoom.prototype.resetAdditionalRoutes = function () {
+    }
+    resetAdditionalRoutes() {
         this._additionalRoutes.internalValue = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "additionalRoutesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._additionalRoutes.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "cookieAttributes", {
-        get: function () {
-            return this._cookieAttributes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.putCookieAttributes = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get additionalRoutesInput() {
+        return this._additionalRoutes.internalValue;
+    }
+    // cookie_attributes - computed: true, optional: true, required: false
+    _cookieAttributes = new WaitingRoomCookieAttributesOutputReference(this, "cookie_attributes");
+    get cookieAttributes() {
+        return this._cookieAttributes;
+    }
+    putCookieAttributes(value) {
         this._cookieAttributes.internalValue = value;
-    };
-    WaitingRoom.prototype.resetCookieAttributes = function () {
+    }
+    resetCookieAttributes() {
         this._cookieAttributes.internalValue = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "cookieAttributesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cookieAttributes.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "cookieSuffix", {
-        get: function () {
-            return this.getStringAttribute('cookie_suffix');
-        },
-        set: function (value) {
-            this._cookieSuffix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetCookieSuffix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cookieAttributesInput() {
+        return this._cookieAttributes.internalValue;
+    }
+    // cookie_suffix - computed: true, optional: true, required: false
+    _cookieSuffix;
+    get cookieSuffix() {
+        return this.getStringAttribute('cookie_suffix');
+    }
+    set cookieSuffix(value) {
+        this._cookieSuffix = value;
+    }
+    resetCookieSuffix() {
         this._cookieSuffix = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "cookieSuffixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cookieSuffix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "customPageHtml", {
-        get: function () {
-            return this.getStringAttribute('custom_page_html');
-        },
-        set: function (value) {
-            this._customPageHtml = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetCustomPageHtml = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cookieSuffixInput() {
+        return this._cookieSuffix;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // custom_page_html - computed: true, optional: true, required: false
+    _customPageHtml;
+    get customPageHtml() {
+        return this.getStringAttribute('custom_page_html');
+    }
+    set customPageHtml(value) {
+        this._customPageHtml = value;
+    }
+    resetCustomPageHtml() {
         this._customPageHtml = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "customPageHtmlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customPageHtml;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "defaultTemplateLanguage", {
-        get: function () {
-            return this.getStringAttribute('default_template_language');
-        },
-        set: function (value) {
-            this._defaultTemplateLanguage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetDefaultTemplateLanguage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get customPageHtmlInput() {
+        return this._customPageHtml;
+    }
+    // default_template_language - computed: true, optional: true, required: false
+    _defaultTemplateLanguage;
+    get defaultTemplateLanguage() {
+        return this.getStringAttribute('default_template_language');
+    }
+    set defaultTemplateLanguage(value) {
+        this._defaultTemplateLanguage = value;
+    }
+    resetDefaultTemplateLanguage() {
         this._defaultTemplateLanguage = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "defaultTemplateLanguageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultTemplateLanguage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultTemplateLanguageInput() {
+        return this._defaultTemplateLanguage;
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "disableSessionRenewal", {
-        get: function () {
-            return this.getBooleanAttribute('disable_session_renewal');
-        },
-        set: function (value) {
-            this._disableSessionRenewal = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetDisableSessionRenewal = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // disable_session_renewal - computed: true, optional: true, required: false
+    _disableSessionRenewal;
+    get disableSessionRenewal() {
+        return this.getBooleanAttribute('disable_session_renewal');
+    }
+    set disableSessionRenewal(value) {
+        this._disableSessionRenewal = value;
+    }
+    resetDisableSessionRenewal() {
         this._disableSessionRenewal = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "disableSessionRenewalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disableSessionRenewal;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "enabledOriginCommands", {
-        get: function () {
-            return this.getListAttribute('enabled_origin_commands');
-        },
-        set: function (value) {
-            this._enabledOriginCommands = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetEnabledOriginCommands = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableSessionRenewalInput() {
+        return this._disableSessionRenewal;
+    }
+    // enabled_origin_commands - computed: true, optional: true, required: false
+    _enabledOriginCommands;
+    get enabledOriginCommands() {
+        return this.getListAttribute('enabled_origin_commands');
+    }
+    set enabledOriginCommands(value) {
+        this._enabledOriginCommands = value;
+    }
+    resetEnabledOriginCommands() {
         this._enabledOriginCommands = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "enabledOriginCommandsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabledOriginCommands;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "jsonResponseEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('json_response_enabled');
-        },
-        set: function (value) {
-            this._jsonResponseEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetJsonResponseEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledOriginCommandsInput() {
+        return this._enabledOriginCommands;
+    }
+    // host - computed: false, optional: false, required: true
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // json_response_enabled - computed: true, optional: true, required: false
+    _jsonResponseEnabled;
+    get jsonResponseEnabled() {
+        return this.getBooleanAttribute('json_response_enabled');
+    }
+    set jsonResponseEnabled(value) {
+        this._jsonResponseEnabled = value;
+    }
+    resetJsonResponseEnabled() {
         this._jsonResponseEnabled = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "jsonResponseEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._jsonResponseEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "newUsersPerMinute", {
-        get: function () {
-            return this.getNumberAttribute('new_users_per_minute');
-        },
-        set: function (value) {
-            this._newUsersPerMinute = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "newUsersPerMinuteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._newUsersPerMinute;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "nextEventPrequeueStartTime", {
-        // next_event_prequeue_start_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('next_event_prequeue_start_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "nextEventStartTime", {
-        // next_event_start_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('next_event_start_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetPath = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get jsonResponseEnabledInput() {
+        return this._jsonResponseEnabled;
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // new_users_per_minute - computed: false, optional: false, required: true
+    _newUsersPerMinute;
+    get newUsersPerMinute() {
+        return this.getNumberAttribute('new_users_per_minute');
+    }
+    set newUsersPerMinute(value) {
+        this._newUsersPerMinute = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get newUsersPerMinuteInput() {
+        return this._newUsersPerMinute;
+    }
+    // next_event_prequeue_start_time - computed: true, optional: false, required: false
+    get nextEventPrequeueStartTime() {
+        return this.getStringAttribute('next_event_prequeue_start_time');
+    }
+    // next_event_start_time - computed: true, optional: false, required: false
+    get nextEventStartTime() {
+        return this.getStringAttribute('next_event_start_time');
+    }
+    // path - computed: true, optional: true, required: false
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    resetPath() {
         this._path = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "queueAll", {
-        get: function () {
-            return this.getBooleanAttribute('queue_all');
-        },
-        set: function (value) {
-            this._queueAll = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetQueueAll = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // queue_all - computed: true, optional: true, required: false
+    _queueAll;
+    get queueAll() {
+        return this.getBooleanAttribute('queue_all');
+    }
+    set queueAll(value) {
+        this._queueAll = value;
+    }
+    resetQueueAll() {
         this._queueAll = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "queueAllInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._queueAll;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "queueingMethod", {
-        get: function () {
-            return this.getStringAttribute('queueing_method');
-        },
-        set: function (value) {
-            this._queueingMethod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetQueueingMethod = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get queueAllInput() {
+        return this._queueAll;
+    }
+    // queueing_method - computed: true, optional: true, required: false
+    _queueingMethod;
+    get queueingMethod() {
+        return this.getStringAttribute('queueing_method');
+    }
+    set queueingMethod(value) {
+        this._queueingMethod = value;
+    }
+    resetQueueingMethod() {
         this._queueingMethod = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "queueingMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._queueingMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "queueingStatusCode", {
-        get: function () {
-            return this.getNumberAttribute('queueing_status_code');
-        },
-        set: function (value) {
-            this._queueingStatusCode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetQueueingStatusCode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get queueingMethodInput() {
+        return this._queueingMethod;
+    }
+    // queueing_status_code - computed: true, optional: true, required: false
+    _queueingStatusCode;
+    get queueingStatusCode() {
+        return this.getNumberAttribute('queueing_status_code');
+    }
+    set queueingStatusCode(value) {
+        this._queueingStatusCode = value;
+    }
+    resetQueueingStatusCode() {
         this._queueingStatusCode = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "queueingStatusCodeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._queueingStatusCode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "sessionDuration", {
-        get: function () {
-            return this.getNumberAttribute('session_duration');
-        },
-        set: function (value) {
-            this._sessionDuration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetSessionDuration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get queueingStatusCodeInput() {
+        return this._queueingStatusCode;
+    }
+    // session_duration - computed: true, optional: true, required: false
+    _sessionDuration;
+    get sessionDuration() {
+        return this.getNumberAttribute('session_duration');
+    }
+    set sessionDuration(value) {
+        this._sessionDuration = value;
+    }
+    resetSessionDuration() {
         this._sessionDuration = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "sessionDurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sessionDuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "suspended", {
-        get: function () {
-            return this.getBooleanAttribute('suspended');
-        },
-        set: function (value) {
-            this._suspended = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetSuspended = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sessionDurationInput() {
+        return this._sessionDuration;
+    }
+    // suspended - computed: true, optional: true, required: false
+    _suspended;
+    get suspended() {
+        return this.getBooleanAttribute('suspended');
+    }
+    set suspended(value) {
+        this._suspended = value;
+    }
+    resetSuspended() {
         this._suspended = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "suspendedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._suspended;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "totalActiveUsers", {
-        get: function () {
-            return this.getNumberAttribute('total_active_users');
-        },
-        set: function (value) {
-            this._totalActiveUsers = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "totalActiveUsersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._totalActiveUsers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "turnstileAction", {
-        get: function () {
-            return this.getStringAttribute('turnstile_action');
-        },
-        set: function (value) {
-            this._turnstileAction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetTurnstileAction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get suspendedInput() {
+        return this._suspended;
+    }
+    // total_active_users - computed: false, optional: false, required: true
+    _totalActiveUsers;
+    get totalActiveUsers() {
+        return this.getNumberAttribute('total_active_users');
+    }
+    set totalActiveUsers(value) {
+        this._totalActiveUsers = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get totalActiveUsersInput() {
+        return this._totalActiveUsers;
+    }
+    // turnstile_action - computed: true, optional: true, required: false
+    _turnstileAction;
+    get turnstileAction() {
+        return this.getStringAttribute('turnstile_action');
+    }
+    set turnstileAction(value) {
+        this._turnstileAction = value;
+    }
+    resetTurnstileAction() {
         this._turnstileAction = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "turnstileActionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._turnstileAction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "turnstileMode", {
-        get: function () {
-            return this.getStringAttribute('turnstile_mode');
-        },
-        set: function (value) {
-            this._turnstileMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetTurnstileMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get turnstileActionInput() {
+        return this._turnstileAction;
+    }
+    // turnstile_mode - computed: true, optional: true, required: false
+    _turnstileMode;
+    get turnstileMode() {
+        return this.getStringAttribute('turnstile_mode');
+    }
+    set turnstileMode(value) {
+        this._turnstileMode = value;
+    }
+    resetTurnstileMode() {
         this._turnstileMode = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "turnstileModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._turnstileMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoom.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoom.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get turnstileModeInput() {
+        return this._turnstileMode;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(WaitingRoom.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    WaitingRoom.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             additional_routes: cdktf.listMapper(waitingRoomAdditionalRoutesToTerraform, false)(this._additionalRoutes.internalValue),
             cookie_attributes: waitingRoomCookieAttributesToTerraform(this._cookieAttributes.internalValue),
@@ -906,9 +686,9 @@ var WaitingRoom = /** @class */ (function (_super) {
             turnstile_mode: cdktf.stringToTerraform(this._turnstileMode),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    WaitingRoom.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             additional_routes: {
                 value: cdktf.listMapperHcl(waitingRoomAdditionalRoutesToHclTerraform, false)(this._additionalRoutes.internalValue),
                 isBlock: true,
@@ -1043,15 +823,6 @@ var WaitingRoom = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    WaitingRoom.tfResourceType = "cloudflare_waiting_room";
-    return WaitingRoom;
-}(cdktf.TerraformResource));
-exports.WaitingRoom = WaitingRoom;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AiSearchToken = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token cloudflare_ai_search_token}
 */
-var AiSearchToken = /** @class */ (function (_super) {
-    __extends(AiSearchToken, _super);
+export class AiSearchToken extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_ai_search_token";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a AiSearchToken resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the AiSearchToken to import
+    * @param importFromId The id of the existing AiSearchToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the AiSearchToken to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_ai_search_token", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var AiSearchToken = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options AiSearchTokenConfig
     */
-    function AiSearchToken(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_ai_search_token',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,175 +46,110 @@ var AiSearchToken = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._cfApiId = config.cfApiId;
-        _this._cfApiKey = config.cfApiKey;
-        _this._legacy = config.legacy;
-        _this._name = config.name;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._cfApiId = config.cfApiId;
+        this._cfApiKey = config.cfApiKey;
+        this._legacy = config.legacy;
+        this._name = config.name;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a AiSearchToken resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the AiSearchToken to import
-    * @param importFromId The id of the existing AiSearchToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the AiSearchToken to import is found
-    */
-    AiSearchToken.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_ai_search_token", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(AiSearchToken.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchToken.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(AiSearchToken.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "cfApiId", {
-        get: function () {
-            return this.getStringAttribute('cf_api_id');
-        },
-        set: function (value) {
-            this._cfApiId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "cfApiIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cfApiId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "cfApiKey", {
-        get: function () {
-            return this.getStringAttribute('cf_api_key');
-        },
-        set: function (value) {
-            this._cfApiKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "cfApiKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cfApiKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "createdBy", {
-        // created_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "legacy", {
-        get: function () {
-            return this.getBooleanAttribute('legacy');
-        },
-        set: function (value) {
-            this._legacy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchToken.prototype.resetLegacy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // cf_api_id - computed: false, optional: false, required: true
+    _cfApiId;
+    get cfApiId() {
+        return this.getStringAttribute('cf_api_id');
+    }
+    set cfApiId(value) {
+        this._cfApiId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get cfApiIdInput() {
+        return this._cfApiId;
+    }
+    // cf_api_key - computed: false, optional: false, required: true
+    _cfApiKey;
+    get cfApiKey() {
+        return this.getStringAttribute('cf_api_key');
+    }
+    set cfApiKey(value) {
+        this._cfApiKey = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get cfApiKeyInput() {
+        return this._cfApiKey;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // created_by - computed: true, optional: false, required: false
+    get createdBy() {
+        return this.getStringAttribute('created_by');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // legacy - computed: true, optional: true, required: false
+    _legacy;
+    get legacy() {
+        return this.getBooleanAttribute('legacy');
+    }
+    set legacy(value) {
+        this._legacy = value;
+    }
+    resetLegacy() {
         this._legacy = undefined;
-    };
-    Object.defineProperty(AiSearchToken.prototype, "legacyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._legacy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "modifiedAt", {
-        // modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "modifiedBy", {
-        // modified_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchToken.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get legacyInput() {
+        return this._legacy;
+    }
+    // modified_at - computed: true, optional: false, required: false
+    get modifiedAt() {
+        return this.getStringAttribute('modified_at');
+    }
+    // modified_by - computed: true, optional: false, required: false
+    get modifiedBy() {
+        return this.getStringAttribute('modified_by');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
     // =========
     // SYNTHESIS
     // =========
-    AiSearchToken.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             cf_api_id: cdktf.stringToTerraform(this._cfApiId),
@@ -224,9 +157,9 @@ var AiSearchToken = /** @class */ (function (_super) {
             legacy: cdktf.booleanToTerraform(this._legacy),
             name: cdktf.stringToTerraform(this._name),
         };
-    };
-    AiSearchToken.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -259,15 +192,6 @@ var AiSearchToken = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    AiSearchToken.tfResourceType = "cloudflare_ai_search_token";
-    return AiSearchToken;
-}(cdktf.TerraformResource));
-exports.AiSearchToken = AiSearchToken;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

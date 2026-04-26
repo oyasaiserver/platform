@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_service_token
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustAccessServiceToken = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_service_token cloudflare_zero_trust_access_service_token}
 */
-var ZeroTrustAccessServiceToken = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessServiceToken, _super);
+export class ZeroTrustAccessServiceToken extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_access_service_token";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustAccessServiceToken resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustAccessServiceToken to import
+    * @param importFromId The id of the existing ZeroTrustAccessServiceToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_service_token#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustAccessServiceToken to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_service_token", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ZeroTrustAccessServiceToken = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustAccessServiceTokenConfig
     */
-    function ZeroTrustAccessServiceToken(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_access_service_token',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,187 +46,124 @@ var ZeroTrustAccessServiceToken = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._clientSecretVersion = config.clientSecretVersion;
-        _this._duration = config.duration;
-        _this._name = config.name;
-        _this._previousClientSecretExpiresAt = config.previousClientSecretExpiresAt;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._clientSecretVersion = config.clientSecretVersion;
+        this._duration = config.duration;
+        this._name = config.name;
+        this._previousClientSecretExpiresAt = config.previousClientSecretExpiresAt;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustAccessServiceToken resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustAccessServiceToken to import
-    * @param importFromId The id of the existing ZeroTrustAccessServiceToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_service_token#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustAccessServiceToken to import is found
-    */
-    ZeroTrustAccessServiceToken.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_service_token", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessServiceToken.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "clientId", {
-        // client_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('client_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "clientSecret", {
-        // client_secret - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('client_secret');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "clientSecretVersion", {
-        get: function () {
-            return this.getNumberAttribute('client_secret_version');
-        },
-        set: function (value) {
-            this._clientSecretVersion = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessServiceToken.prototype.resetClientSecretVersion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // client_id - computed: true, optional: false, required: false
+    get clientId() {
+        return this.getStringAttribute('client_id');
+    }
+    // client_secret - computed: true, optional: false, required: false
+    get clientSecret() {
+        return this.getStringAttribute('client_secret');
+    }
+    // client_secret_version - computed: true, optional: true, required: false
+    _clientSecretVersion;
+    get clientSecretVersion() {
+        return this.getNumberAttribute('client_secret_version');
+    }
+    set clientSecretVersion(value) {
+        this._clientSecretVersion = value;
+    }
+    resetClientSecretVersion() {
         this._clientSecretVersion = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "clientSecretVersionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._clientSecretVersion;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "duration", {
-        get: function () {
-            return this.getStringAttribute('duration');
-        },
-        set: function (value) {
-            this._duration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessServiceToken.prototype.resetDuration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get clientSecretVersionInput() {
+        return this._clientSecretVersion;
+    }
+    // duration - computed: true, optional: true, required: false
+    _duration;
+    get duration() {
+        return this.getStringAttribute('duration');
+    }
+    set duration(value) {
+        this._duration = value;
+    }
+    resetDuration() {
         this._duration = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "durationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._duration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "expiresAt", {
-        // expires_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "previousClientSecretExpiresAt", {
-        get: function () {
-            return this.getStringAttribute('previous_client_secret_expires_at');
-        },
-        set: function (value) {
-            this._previousClientSecretExpiresAt = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessServiceToken.prototype.resetPreviousClientSecretExpiresAt = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get durationInput() {
+        return this._duration;
+    }
+    // expires_at - computed: true, optional: false, required: false
+    get expiresAt() {
+        return this.getStringAttribute('expires_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // previous_client_secret_expires_at - computed: false, optional: true, required: false
+    _previousClientSecretExpiresAt;
+    get previousClientSecretExpiresAt() {
+        return this.getStringAttribute('previous_client_secret_expires_at');
+    }
+    set previousClientSecretExpiresAt(value) {
+        this._previousClientSecretExpiresAt = value;
+    }
+    resetPreviousClientSecretExpiresAt() {
         this._previousClientSecretExpiresAt = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "previousClientSecretExpiresAtInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._previousClientSecretExpiresAt;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessServiceToken.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get previousClientSecretExpiresAtInput() {
+        return this._previousClientSecretExpiresAt;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessServiceToken.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustAccessServiceToken.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             client_secret_version: cdktf.numberToTerraform(this._clientSecretVersion),
@@ -237,9 +172,9 @@ var ZeroTrustAccessServiceToken = /** @class */ (function (_super) {
             previous_client_secret_expires_at: cdktf.stringToTerraform(this._previousClientSecretExpiresAt),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ZeroTrustAccessServiceToken.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -278,15 +213,6 @@ var ZeroTrustAccessServiceToken = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustAccessServiceToken.tfResourceType = "cloudflare_zero_trust_access_service_token";
-    return ZeroTrustAccessServiceToken;
-}(cdktf.TerraformResource));
-exports.ZeroTrustAccessServiceToken = ZeroTrustAccessServiceToken;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

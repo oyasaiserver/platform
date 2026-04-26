@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/image
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareImage = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/image cloudflare_image}
 */
-var DataCloudflareImage = /** @class */ (function (_super) {
-    __extends(DataCloudflareImage, _super);
+export class DataCloudflareImage extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_image";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareImage resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareImage to import
+    * @param importFromId The id of the existing DataCloudflareImage that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/image#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareImage to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_image", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataCloudflareImage = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareImageConfig
     */
-    function DataCloudflareImage(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_image',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,130 +46,79 @@ var DataCloudflareImage = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._imageId = config.imageId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._imageId = config.imageId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareImage resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareImage to import
-    * @param importFromId The id of the existing DataCloudflareImage that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/image#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareImage to import is found
-    */
-    DataCloudflareImage.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_image", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareImage.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareImage.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareImage.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImage.prototype, "creator", {
-        // creator - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('creator');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImage.prototype, "filename", {
-        // filename - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('filename');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImage.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImage.prototype, "imageId", {
-        get: function () {
-            return this.getStringAttribute('image_id');
-        },
-        set: function (value) {
-            this._imageId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImage.prototype, "imageIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._imageId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImage.prototype, "meta", {
-        // meta - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('meta');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImage.prototype, "requireSignedUrls", {
-        // require_signed_urls - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('require_signed_urls');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImage.prototype, "uploaded", {
-        // uploaded - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uploaded');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareImage.prototype, "variants", {
-        // variants - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('variants');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // creator - computed: true, optional: false, required: false
+    get creator() {
+        return this.getStringAttribute('creator');
+    }
+    // filename - computed: true, optional: false, required: false
+    get filename() {
+        return this.getStringAttribute('filename');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // image_id - computed: false, optional: false, required: true
+    _imageId;
+    get imageId() {
+        return this.getStringAttribute('image_id');
+    }
+    set imageId(value) {
+        this._imageId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get imageIdInput() {
+        return this._imageId;
+    }
+    // meta - computed: true, optional: false, required: false
+    get meta() {
+        return this.getStringAttribute('meta');
+    }
+    // require_signed_urls - computed: true, optional: false, required: false
+    get requireSignedUrls() {
+        return this.getBooleanAttribute('require_signed_urls');
+    }
+    // uploaded - computed: true, optional: false, required: false
+    get uploaded() {
+        return this.getStringAttribute('uploaded');
+    }
+    // variants - computed: true, optional: false, required: false
+    get variants() {
+        return this.getListAttribute('variants');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareImage.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             image_id: cdktf.stringToTerraform(this._imageId),
         };
-    };
-    DataCloudflareImage.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -186,15 +133,6 @@ var DataCloudflareImage = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareImage.tfResourceType = "cloudflare_image";
-    return DataCloudflareImage;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareImage = DataCloudflareImage;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

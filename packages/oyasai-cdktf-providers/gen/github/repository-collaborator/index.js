@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_collaborator
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RepositoryCollaborator = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_collaborator github_repository_collaborator}
 */
-var RepositoryCollaborator = /** @class */ (function (_super) {
-    __extends(RepositoryCollaborator, _super);
+export class RepositoryCollaborator extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_repository_collaborator";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a RepositoryCollaborator resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the RepositoryCollaborator to import
+    * @param importFromId The id of the existing RepositoryCollaborator that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_collaborator#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the RepositoryCollaborator to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_collaborator", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var RepositoryCollaborator = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options RepositoryCollaboratorConfig
     */
-    function RepositoryCollaborator(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_repository_collaborator',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,138 +46,93 @@ var RepositoryCollaborator = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        _this._permission = config.permission;
-        _this._permissionDiffSuppression = config.permissionDiffSuppression;
-        _this._repository = config.repository;
-        _this._username = config.username;
-        return _this;
+        });
+        this._id = config.id;
+        this._permission = config.permission;
+        this._permissionDiffSuppression = config.permissionDiffSuppression;
+        this._repository = config.repository;
+        this._username = config.username;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a RepositoryCollaborator resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the RepositoryCollaborator to import
-    * @param importFromId The id of the existing RepositoryCollaborator that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository_collaborator#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the RepositoryCollaborator to import is found
-    */
-    RepositoryCollaborator.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository_collaborator", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(RepositoryCollaborator.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryCollaborator.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(RepositoryCollaborator.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryCollaborator.prototype, "invitationId", {
-        // invitation_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('invitation_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryCollaborator.prototype, "permission", {
-        get: function () {
-            return this.getStringAttribute('permission');
-        },
-        set: function (value) {
-            this._permission = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryCollaborator.prototype.resetPermission = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // invitation_id - computed: true, optional: false, required: false
+    get invitationId() {
+        return this.getStringAttribute('invitation_id');
+    }
+    // permission - computed: false, optional: true, required: false
+    _permission;
+    get permission() {
+        return this.getStringAttribute('permission');
+    }
+    set permission(value) {
+        this._permission = value;
+    }
+    resetPermission() {
         this._permission = undefined;
-    };
-    Object.defineProperty(RepositoryCollaborator.prototype, "permissionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._permission;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryCollaborator.prototype, "permissionDiffSuppression", {
-        get: function () {
-            return this.getBooleanAttribute('permission_diff_suppression');
-        },
-        set: function (value) {
-            this._permissionDiffSuppression = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryCollaborator.prototype.resetPermissionDiffSuppression = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get permissionInput() {
+        return this._permission;
+    }
+    // permission_diff_suppression - computed: false, optional: true, required: false
+    _permissionDiffSuppression;
+    get permissionDiffSuppression() {
+        return this.getBooleanAttribute('permission_diff_suppression');
+    }
+    set permissionDiffSuppression(value) {
+        this._permissionDiffSuppression = value;
+    }
+    resetPermissionDiffSuppression() {
         this._permissionDiffSuppression = undefined;
-    };
-    Object.defineProperty(RepositoryCollaborator.prototype, "permissionDiffSuppressionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._permissionDiffSuppression;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryCollaborator.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryCollaborator.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryCollaborator.prototype, "username", {
-        get: function () {
-            return this.getStringAttribute('username');
-        },
-        set: function (value) {
-            this._username = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryCollaborator.prototype, "usernameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._username;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get permissionDiffSuppressionInput() {
+        return this._permissionDiffSuppression;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
+    // username - computed: false, optional: false, required: true
+    _username;
+    get username() {
+        return this.getStringAttribute('username');
+    }
+    set username(value) {
+        this._username = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameInput() {
+        return this._username;
+    }
     // =========
     // SYNTHESIS
     // =========
-    RepositoryCollaborator.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             permission: cdktf.stringToTerraform(this._permission),
@@ -187,9 +140,9 @@ var RepositoryCollaborator = /** @class */ (function (_super) {
             repository: cdktf.stringToTerraform(this._repository),
             username: cdktf.stringToTerraform(this._username),
         };
-    };
-    RepositoryCollaborator.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -222,15 +175,6 @@ var RepositoryCollaborator = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    RepositoryCollaborator.tfResourceType = "github_repository_collaborator";
-    return RepositoryCollaborator;
-}(cdktf.TerraformResource));
-exports.RepositoryCollaborator = RepositoryCollaborator;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

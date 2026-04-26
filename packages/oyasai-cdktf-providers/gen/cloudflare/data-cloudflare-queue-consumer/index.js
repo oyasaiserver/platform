@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/queue_consumer
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareQueueConsumer = exports.DataCloudflareQueueConsumerSettingsOutputReference = void 0;
-exports.dataCloudflareQueueConsumerSettingsToTerraform = dataCloudflareQueueConsumerSettingsToTerraform;
-exports.dataCloudflareQueueConsumerSettingsToHclTerraform = dataCloudflareQueueConsumerSettingsToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareQueueConsumerSettingsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareQueueConsumerSettingsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,100 +10,84 @@ function dataCloudflareQueueConsumerSettingsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareQueueConsumerSettingsToHclTerraform(struct) {
+export function dataCloudflareQueueConsumerSettingsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareQueueConsumerSettingsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareQueueConsumerSettingsOutputReference, _super);
+export class DataCloudflareQueueConsumerSettingsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareQueueConsumerSettingsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareQueueConsumerSettingsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumerSettingsOutputReference.prototype, "batchSize", {
-        // batch_size - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('batch_size');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumerSettingsOutputReference.prototype, "maxConcurrency", {
-        // max_concurrency - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('max_concurrency');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumerSettingsOutputReference.prototype, "maxRetries", {
-        // max_retries - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('max_retries');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumerSettingsOutputReference.prototype, "maxWaitTimeMs", {
-        // max_wait_time_ms - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('max_wait_time_ms');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumerSettingsOutputReference.prototype, "retryDelay", {
-        // retry_delay - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('retry_delay');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumerSettingsOutputReference.prototype, "visibilityTimeoutMs", {
-        // visibility_timeout_ms - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('visibility_timeout_ms');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareQueueConsumerSettingsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareQueueConsumerSettingsOutputReference = DataCloudflareQueueConsumerSettingsOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // batch_size - computed: true, optional: false, required: false
+    get batchSize() {
+        return this.getNumberAttribute('batch_size');
+    }
+    // max_concurrency - computed: true, optional: false, required: false
+    get maxConcurrency() {
+        return this.getNumberAttribute('max_concurrency');
+    }
+    // max_retries - computed: true, optional: false, required: false
+    get maxRetries() {
+        return this.getNumberAttribute('max_retries');
+    }
+    // max_wait_time_ms - computed: true, optional: false, required: false
+    get maxWaitTimeMs() {
+        return this.getNumberAttribute('max_wait_time_ms');
+    }
+    // retry_delay - computed: true, optional: false, required: false
+    get retryDelay() {
+        return this.getNumberAttribute('retry_delay');
+    }
+    // visibility_timeout_ms - computed: true, optional: false, required: false
+    get visibilityTimeoutMs() {
+        return this.getNumberAttribute('visibility_timeout_ms');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/queue_consumer cloudflare_queue_consumer}
 */
-var DataCloudflareQueueConsumer = /** @class */ (function (_super) {
-    __extends(DataCloudflareQueueConsumer, _super);
+export class DataCloudflareQueueConsumer extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_queue_consumer";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareQueueConsumer resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareQueueConsumer to import
+    * @param importFromId The id of the existing DataCloudflareQueueConsumer that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/queue_consumer#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareQueueConsumer to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_queue_consumer", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -134,8 +98,8 @@ var DataCloudflareQueueConsumer = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareQueueConsumerConfig
     */
-    function DataCloudflareQueueConsumer(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_queue_consumer',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -148,131 +112,80 @@ var DataCloudflareQueueConsumer = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // settings - computed: true, optional: false, required: false
-        _this._settings = new DataCloudflareQueueConsumerSettingsOutputReference(_this, "settings");
-        _this._accountId = config.accountId;
-        _this._queueId = config.queueId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._queueId = config.queueId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareQueueConsumer resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareQueueConsumer to import
-    * @param importFromId The id of the existing DataCloudflareQueueConsumer that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/queue_consumer#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareQueueConsumer to import is found
-    */
-    DataCloudflareQueueConsumer.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_queue_consumer", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareQueueConsumer.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "consumerId", {
-        // consumer_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('consumer_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "deadLetterQueue", {
-        // dead_letter_queue - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('dead_letter_queue');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "queueId", {
-        get: function () {
-            return this.getStringAttribute('queue_id');
-        },
-        set: function (value) {
-            this._queueId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "queueIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._queueId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "queueName", {
-        // queue_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('queue_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "scriptName", {
-        // script_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('script_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "settings", {
-        get: function () {
-            return this._settings;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareQueueConsumer.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // consumer_id - computed: true, optional: false, required: false
+    get consumerId() {
+        return this.getStringAttribute('consumer_id');
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // dead_letter_queue - computed: true, optional: false, required: false
+    get deadLetterQueue() {
+        return this.getStringAttribute('dead_letter_queue');
+    }
+    // queue_id - computed: false, optional: false, required: true
+    _queueId;
+    get queueId() {
+        return this.getStringAttribute('queue_id');
+    }
+    set queueId(value) {
+        this._queueId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get queueIdInput() {
+        return this._queueId;
+    }
+    // queue_name - computed: true, optional: false, required: false
+    get queueName() {
+        return this.getStringAttribute('queue_name');
+    }
+    // script_name - computed: true, optional: false, required: false
+    get scriptName() {
+        return this.getStringAttribute('script_name');
+    }
+    // settings - computed: true, optional: false, required: false
+    _settings = new DataCloudflareQueueConsumerSettingsOutputReference(this, "settings");
+    get settings() {
+        return this._settings;
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareQueueConsumer.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             queue_id: cdktf.stringToTerraform(this._queueId),
         };
-    };
-    DataCloudflareQueueConsumer.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -287,15 +200,6 @@ var DataCloudflareQueueConsumer = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareQueueConsumer.tfResourceType = "cloudflare_queue_consumer";
-    return DataCloudflareQueueConsumer;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareQueueConsumer = DataCloudflareQueueConsumer;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

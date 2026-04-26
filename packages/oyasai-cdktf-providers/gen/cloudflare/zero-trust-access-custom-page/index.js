@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_custom_page
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustAccessCustomPage = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_custom_page cloudflare_zero_trust_access_custom_page}
 */
-var ZeroTrustAccessCustomPage = /** @class */ (function (_super) {
-    __extends(ZeroTrustAccessCustomPage, _super);
+export class ZeroTrustAccessCustomPage extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_access_custom_page";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustAccessCustomPage resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustAccessCustomPage to import
+    * @param importFromId The id of the existing ZeroTrustAccessCustomPage that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_custom_page#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustAccessCustomPage to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_custom_page", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ZeroTrustAccessCustomPage = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustAccessCustomPageConfig
     */
-    function ZeroTrustAccessCustomPage(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_access_custom_page',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,130 +46,87 @@ var ZeroTrustAccessCustomPage = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._customHtml = config.customHtml;
-        _this._name = config.name;
-        _this._type = config.type;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._customHtml = config.customHtml;
+        this._name = config.name;
+        this._type = config.type;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustAccessCustomPage resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustAccessCustomPage to import
-    * @param importFromId The id of the existing ZeroTrustAccessCustomPage that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_custom_page#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustAccessCustomPage to import is found
-    */
-    ZeroTrustAccessCustomPage.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_access_custom_page", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustAccessCustomPage.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "customHtml", {
-        get: function () {
-            return this.getStringAttribute('custom_html');
-        },
-        set: function (value) {
-            this._customHtml = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "customHtmlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customHtml;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustAccessCustomPage.prototype, "uid", {
-        // uid - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uid');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // custom_html - computed: false, optional: false, required: true
+    _customHtml;
+    get customHtml() {
+        return this.getStringAttribute('custom_html');
+    }
+    set customHtml(value) {
+        this._customHtml = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get customHtmlInput() {
+        return this._customHtml;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // uid - computed: true, optional: false, required: false
+    get uid() {
+        return this.getStringAttribute('uid');
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustAccessCustomPage.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             custom_html: cdktf.stringToTerraform(this._customHtml),
             name: cdktf.stringToTerraform(this._name),
             type: cdktf.stringToTerraform(this._type),
         };
-    };
-    ZeroTrustAccessCustomPage.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -198,15 +153,6 @@ var ZeroTrustAccessCustomPage = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustAccessCustomPage.tfResourceType = "cloudflare_zero_trust_access_custom_page";
-    return ZeroTrustAccessCustomPage;
-}(cdktf.TerraformResource));
-exports.ZeroTrustAccessCustomPage = ZeroTrustAccessCustomPage;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

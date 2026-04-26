@@ -1,47 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_dlp_custom_profile
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareZeroTrustDlpCustomProfile = exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList = exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList = exports.DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileEntriesList = exports.DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference = exports.DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference = void 0;
-exports.dataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipToTerraform = dataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileContextAwarenessToTerraform = dataCloudflareZeroTrustDlpCustomProfileContextAwarenessToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileContextAwarenessToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileContextAwarenessToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceToTerraform = dataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileEntriesPatternToTerraform = dataCloudflareZeroTrustDlpCustomProfileEntriesPatternToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileEntriesPatternToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileEntriesPatternToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileEntriesVariantToTerraform = dataCloudflareZeroTrustDlpCustomProfileEntriesVariantToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileEntriesVariantToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileEntriesVariantToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileEntriesToTerraform = dataCloudflareZeroTrustDlpCustomProfileEntriesToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileEntriesToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileEntriesToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsToTerraform = dataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceToTerraform = dataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternToTerraform = dataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantToTerraform = dataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantToHclTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSharedEntriesToTerraform = dataCloudflareZeroTrustDlpCustomProfileSharedEntriesToTerraform;
-exports.dataCloudflareZeroTrustDlpCustomProfileSharedEntriesToHclTerraform = dataCloudflareZeroTrustDlpCustomProfileSharedEntriesToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -50,56 +10,44 @@ function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipToTerraform(
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference.prototype, "files", {
-        // files - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('files');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference = DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference;
-function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // files - computed: true, optional: false, required: false
+    get files() {
+        return this.getBooleanAttribute('files');
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -108,65 +56,49 @@ function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessToTerraform(stru
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileContextAwarenessToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // skip - computed: true, optional: false, required: false
-        _this._skip = new DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference(_this, "skip");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference.prototype, "skip", {
-        get: function () {
-            return this._skip;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference = DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference;
-function dataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // skip - computed: true, optional: false, required: false
+    _skip = new DataCloudflareZeroTrustDlpCustomProfileContextAwarenessSkipOutputReference(this, "skip");
+    get skip() {
+        return this._skip;
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -175,64 +107,48 @@ function dataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceToTerraform(str
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference.prototype, "aiContextAvailable", {
-        // ai_context_available - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('ai_context_available');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference.prototype, "available", {
-        // available - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('available');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference = DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference;
-function dataCloudflareZeroTrustDlpCustomProfileEntriesPatternToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // ai_context_available - computed: true, optional: false, required: false
+    get aiContextAvailable() {
+        return this.getBooleanAttribute('ai_context_available');
+    }
+    // available - computed: true, optional: false, required: false
+    get available() {
+        return this.getBooleanAttribute('available');
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileEntriesPatternToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -241,64 +157,48 @@ function dataCloudflareZeroTrustDlpCustomProfileEntriesPatternToTerraform(struct
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileEntriesPatternToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileEntriesPatternToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference.prototype, "regex", {
-        // regex - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('regex');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference.prototype, "validation", {
-        // validation - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('validation');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference = DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference;
-function dataCloudflareZeroTrustDlpCustomProfileEntriesVariantToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // regex - computed: true, optional: false, required: false
+    get regex() {
+        return this.getStringAttribute('regex');
+    }
+    // validation - computed: true, optional: false, required: false
+    get validation() {
+        return this.getStringAttribute('validation');
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileEntriesVariantToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -307,72 +207,52 @@ function dataCloudflareZeroTrustDlpCustomProfileEntriesVariantToTerraform(struct
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileEntriesVariantToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileEntriesVariantToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference.prototype, "topicType", {
-        // topic_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('topic_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference = DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference;
-function dataCloudflareZeroTrustDlpCustomProfileEntriesToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // topic_type - computed: true, optional: false, required: false
+    get topicType() {
+        return this.getStringAttribute('topic_type');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileEntriesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -381,188 +261,123 @@ function dataCloudflareZeroTrustDlpCustomProfileEntriesToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileEntriesToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileEntriesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // confidence - computed: true, optional: false, required: false
-        _this._confidence = new DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference(_this, "confidence");
-        // pattern - computed: true, optional: false, required: false
-        _this._pattern = new DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference(_this, "pattern");
-        // variant - computed: true, optional: false, required: false
-        _this._variant = new DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference(_this, "variant");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "caseSensitive", {
-        // case_sensitive - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('case_sensitive');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "confidence", {
-        get: function () {
-            return this._confidence;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "pattern", {
-        get: function () {
-            return this._pattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "profileId", {
-        // profile_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('profile_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "secret", {
-        // secret - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('secret');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "variant", {
-        get: function () {
-            return this._variant;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference.prototype, "wordList", {
-        // word_list - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('word_list');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference = DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference;
-var DataCloudflareZeroTrustDlpCustomProfileEntriesList = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileEntriesList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // case_sensitive - computed: true, optional: false, required: false
+    get caseSensitive() {
+        return this.getBooleanAttribute('case_sensitive');
+    }
+    // confidence - computed: true, optional: false, required: false
+    _confidence = new DataCloudflareZeroTrustDlpCustomProfileEntriesConfidenceOutputReference(this, "confidence");
+    get confidence() {
+        return this._confidence;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // pattern - computed: true, optional: false, required: false
+    _pattern = new DataCloudflareZeroTrustDlpCustomProfileEntriesPatternOutputReference(this, "pattern");
+    get pattern() {
+        return this._pattern;
+    }
+    // profile_id - computed: true, optional: false, required: false
+    get profileId() {
+        return this.getStringAttribute('profile_id');
+    }
+    // secret - computed: true, optional: false, required: false
+    get secret() {
+        return this.getBooleanAttribute('secret');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // variant - computed: true, optional: false, required: false
+    _variant = new DataCloudflareZeroTrustDlpCustomProfileEntriesVariantOutputReference(this, "variant");
+    get variant() {
+        return this._variant;
+    }
+    // word_list - computed: true, optional: false, required: false
+    get wordList() {
+        return this.getStringAttribute('word_list');
+    }
+}
+export class DataCloudflareZeroTrustDlpCustomProfileEntriesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustDlpCustomProfileEntriesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareZeroTrustDlpCustomProfileEntriesList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareZeroTrustDlpCustomProfileEntriesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareZeroTrustDlpCustomProfileEntriesList;
-}(cdktf.ComplexList));
-exports.DataCloudflareZeroTrustDlpCustomProfileEntriesList = DataCloudflareZeroTrustDlpCustomProfileEntriesList;
-function dataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsToTerraform(struct) {
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -571,89 +386,72 @@ function dataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsToTerraform(str
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference.prototype, "groupId", {
-        // group_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('group_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference.prototype, "levelId", {
-        // level_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('level_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference = DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference;
-var DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // group_id - computed: true, optional: false, required: false
+    get groupId() {
+        return this.getStringAttribute('group_id');
+    }
+    // level_id - computed: true, optional: false, required: false
+    get levelId() {
+        return this.getStringAttribute('level_id');
+    }
+}
+export class DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList = DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList;
-function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceToTerraform(struct) {
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -662,64 +460,48 @@ function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceToTerrafo
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference.prototype, "aiContextAvailable", {
-        // ai_context_available - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('ai_context_available');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference.prototype, "available", {
-        // available - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('available');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference = DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference;
-function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // ai_context_available - computed: true, optional: false, required: false
+    get aiContextAvailable() {
+        return this.getBooleanAttribute('ai_context_available');
+    }
+    // available - computed: true, optional: false, required: false
+    get available() {
+        return this.getBooleanAttribute('available');
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -728,64 +510,48 @@ function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternToTerraform(
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference.prototype, "regex", {
-        // regex - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('regex');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference.prototype, "validation", {
-        // validation - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('validation');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference = DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference;
-function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // regex - computed: true, optional: false, required: false
+    get regex() {
+        return this.getStringAttribute('regex');
+    }
+    // validation - computed: true, optional: false, required: false
+    get validation() {
+        return this.getStringAttribute('validation');
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -794,72 +560,52 @@ function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantToTerraform(
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference.prototype, "topicType", {
-        // topic_type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('topic_type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference = DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference;
-function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // topic_type - computed: true, optional: false, required: false
+    get topicType() {
+        return this.getStringAttribute('topic_type');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+}
+export function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -868,192 +614,143 @@ function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesToTerraform(struct)
     }
     return {};
 }
-function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesToHclTerraform(struct) {
+export function dataCloudflareZeroTrustDlpCustomProfileSharedEntriesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference, _super);
+export class DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // confidence - computed: true, optional: false, required: false
-        _this._confidence = new DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference(_this, "confidence");
-        // pattern - computed: true, optional: false, required: false
-        _this._pattern = new DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference(_this, "pattern");
-        // variant - computed: true, optional: false, required: false
-        _this._variant = new DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference(_this, "variant");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "caseSensitive", {
-        // case_sensitive - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('case_sensitive');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "confidence", {
-        get: function () {
-            return this._confidence;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "pattern", {
-        get: function () {
-            return this._pattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "profileId", {
-        // profile_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('profile_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "secret", {
-        // secret - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('secret');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "variant", {
-        get: function () {
-            return this._variant;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference.prototype, "wordList", {
-        // word_list - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('word_list');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference = DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference;
-var DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // case_sensitive - computed: true, optional: false, required: false
+    get caseSensitive() {
+        return this.getBooleanAttribute('case_sensitive');
+    }
+    // confidence - computed: true, optional: false, required: false
+    _confidence = new DataCloudflareZeroTrustDlpCustomProfileSharedEntriesConfidenceOutputReference(this, "confidence");
+    get confidence() {
+        return this._confidence;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // pattern - computed: true, optional: false, required: false
+    _pattern = new DataCloudflareZeroTrustDlpCustomProfileSharedEntriesPatternOutputReference(this, "pattern");
+    get pattern() {
+        return this._pattern;
+    }
+    // profile_id - computed: true, optional: false, required: false
+    get profileId() {
+        return this.getStringAttribute('profile_id');
+    }
+    // secret - computed: true, optional: false, required: false
+    get secret() {
+        return this.getBooleanAttribute('secret');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // variant - computed: true, optional: false, required: false
+    _variant = new DataCloudflareZeroTrustDlpCustomProfileSharedEntriesVariantOutputReference(this, "variant");
+    get variant() {
+        return this._variant;
+    }
+    // word_list - computed: true, optional: false, required: false
+    get wordList() {
+        return this.getStringAttribute('word_list');
+    }
+}
+export class DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareZeroTrustDlpCustomProfileSharedEntriesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList;
-}(cdktf.ComplexList));
-exports.DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList = DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_dlp_custom_profile cloudflare_zero_trust_dlp_custom_profile}
 */
-var DataCloudflareZeroTrustDlpCustomProfile = /** @class */ (function (_super) {
-    __extends(DataCloudflareZeroTrustDlpCustomProfile, _super);
+export class DataCloudflareZeroTrustDlpCustomProfile extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_dlp_custom_profile";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareZeroTrustDlpCustomProfile resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDlpCustomProfile to import
+    * @param importFromId The id of the existing DataCloudflareZeroTrustDlpCustomProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_dlp_custom_profile#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDlpCustomProfile to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dlp_custom_profile", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1064,8 +761,8 @@ var DataCloudflareZeroTrustDlpCustomProfile = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareZeroTrustDlpCustomProfileConfig
     */
-    function DataCloudflareZeroTrustDlpCustomProfile(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_dlp_custom_profile',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1078,214 +775,123 @@ var DataCloudflareZeroTrustDlpCustomProfile = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // context_awareness - computed: true, optional: false, required: false
-        _this._contextAwareness = new DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference(_this, "context_awareness");
-        // entries - computed: true, optional: false, required: false
-        _this._entries = new DataCloudflareZeroTrustDlpCustomProfileEntriesList(_this, "entries", false);
-        // sensitivity_levels - computed: true, optional: false, required: false
-        _this._sensitivityLevels = new DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList(_this, "sensitivity_levels", false);
-        // shared_entries - computed: true, optional: false, required: false
-        _this._sharedEntries = new DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList(_this, "shared_entries", false);
-        _this._accountId = config.accountId;
-        _this._profileId = config.profileId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._profileId = config.profileId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareZeroTrustDlpCustomProfile resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDlpCustomProfile to import
-    * @param importFromId The id of the existing DataCloudflareZeroTrustDlpCustomProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_dlp_custom_profile#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDlpCustomProfile to import is found
-    */
-    DataCloudflareZeroTrustDlpCustomProfile.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dlp_custom_profile", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareZeroTrustDlpCustomProfile.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "aiContextEnabled", {
-        // ai_context_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('ai_context_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "allowedMatchCount", {
-        // allowed_match_count - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('allowed_match_count');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "confidenceThreshold", {
-        // confidence_threshold - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('confidence_threshold');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "contextAwareness", {
-        get: function () {
-            return this._contextAwareness;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "dataClasses", {
-        // data_classes - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('data_classes');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "dataTags", {
-        // data_tags - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('data_tags');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "entries", {
-        get: function () {
-            return this._entries;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "ocrEnabled", {
-        // ocr_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('ocr_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "openAccess", {
-        // open_access - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('open_access');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "profileId", {
-        get: function () {
-            return this.getStringAttribute('profile_id');
-        },
-        set: function (value) {
-            this._profileId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "profileIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._profileId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "sensitivityLevels", {
-        get: function () {
-            return this._sensitivityLevels;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "sharedEntries", {
-        get: function () {
-            return this._sharedEntries;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareZeroTrustDlpCustomProfile.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // ai_context_enabled - computed: true, optional: false, required: false
+    get aiContextEnabled() {
+        return this.getBooleanAttribute('ai_context_enabled');
+    }
+    // allowed_match_count - computed: true, optional: false, required: false
+    get allowedMatchCount() {
+        return this.getNumberAttribute('allowed_match_count');
+    }
+    // confidence_threshold - computed: true, optional: false, required: false
+    get confidenceThreshold() {
+        return this.getStringAttribute('confidence_threshold');
+    }
+    // context_awareness - computed: true, optional: false, required: false
+    _contextAwareness = new DataCloudflareZeroTrustDlpCustomProfileContextAwarenessOutputReference(this, "context_awareness");
+    get contextAwareness() {
+        return this._contextAwareness;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // data_classes - computed: true, optional: false, required: false
+    get dataClasses() {
+        return this.getListAttribute('data_classes');
+    }
+    // data_tags - computed: true, optional: false, required: false
+    get dataTags() {
+        return this.getListAttribute('data_tags');
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // entries - computed: true, optional: false, required: false
+    _entries = new DataCloudflareZeroTrustDlpCustomProfileEntriesList(this, "entries", false);
+    get entries() {
+        return this._entries;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // ocr_enabled - computed: true, optional: false, required: false
+    get ocrEnabled() {
+        return this.getBooleanAttribute('ocr_enabled');
+    }
+    // open_access - computed: true, optional: false, required: false
+    get openAccess() {
+        return this.getBooleanAttribute('open_access');
+    }
+    // profile_id - computed: false, optional: false, required: true
+    _profileId;
+    get profileId() {
+        return this.getStringAttribute('profile_id');
+    }
+    set profileId(value) {
+        this._profileId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get profileIdInput() {
+        return this._profileId;
+    }
+    // sensitivity_levels - computed: true, optional: false, required: false
+    _sensitivityLevels = new DataCloudflareZeroTrustDlpCustomProfileSensitivityLevelsList(this, "sensitivity_levels", false);
+    get sensitivityLevels() {
+        return this._sensitivityLevels;
+    }
+    // shared_entries - computed: true, optional: false, required: false
+    _sharedEntries = new DataCloudflareZeroTrustDlpCustomProfileSharedEntriesList(this, "shared_entries", false);
+    get sharedEntries() {
+        return this._sharedEntries;
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareZeroTrustDlpCustomProfile.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             profile_id: cdktf.stringToTerraform(this._profileId),
         };
-    };
-    DataCloudflareZeroTrustDlpCustomProfile.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1300,15 +906,6 @@ var DataCloudflareZeroTrustDlpCustomProfile = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareZeroTrustDlpCustomProfile.tfResourceType = "cloudflare_zero_trust_dlp_custom_profile";
-    return DataCloudflareZeroTrustDlpCustomProfile;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareZeroTrustDlpCustomProfile = DataCloudflareZeroTrustDlpCustomProfile;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/r2_bucket_cors
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareR2BucketCors = exports.DataCloudflareR2BucketCorsRulesList = exports.DataCloudflareR2BucketCorsRulesOutputReference = exports.DataCloudflareR2BucketCorsRulesAllowedOutputReference = void 0;
-exports.dataCloudflareR2BucketCorsRulesAllowedToTerraform = dataCloudflareR2BucketCorsRulesAllowedToTerraform;
-exports.dataCloudflareR2BucketCorsRulesAllowedToHclTerraform = dataCloudflareR2BucketCorsRulesAllowedToHclTerraform;
-exports.dataCloudflareR2BucketCorsRulesToTerraform = dataCloudflareR2BucketCorsRulesToTerraform;
-exports.dataCloudflareR2BucketCorsRulesToHclTerraform = dataCloudflareR2BucketCorsRulesToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareR2BucketCorsRulesAllowedToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareR2BucketCorsRulesAllowedToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,72 +10,52 @@ function dataCloudflareR2BucketCorsRulesAllowedToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareR2BucketCorsRulesAllowedToHclTerraform(struct) {
+export function dataCloudflareR2BucketCorsRulesAllowedToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareR2BucketCorsRulesAllowedOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareR2BucketCorsRulesAllowedOutputReference, _super);
+export class DataCloudflareR2BucketCorsRulesAllowedOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareR2BucketCorsRulesAllowedOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareR2BucketCorsRulesAllowedOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCorsRulesAllowedOutputReference.prototype, "headers", {
-        // headers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('headers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCorsRulesAllowedOutputReference.prototype, "methods", {
-        // methods - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('methods');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCorsRulesAllowedOutputReference.prototype, "origins", {
-        // origins - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('origins');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareR2BucketCorsRulesAllowedOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareR2BucketCorsRulesAllowedOutputReference = DataCloudflareR2BucketCorsRulesAllowedOutputReference;
-function dataCloudflareR2BucketCorsRulesToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // headers - computed: true, optional: false, required: false
+    get headers() {
+        return this.getListAttribute('headers');
+    }
+    // methods - computed: true, optional: false, required: false
+    get methods() {
+        return this.getListAttribute('methods');
+    }
+    // origins - computed: true, optional: false, required: false
+    get origins() {
+        return this.getListAttribute('origins');
+    }
+}
+export function dataCloudflareR2BucketCorsRulesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -106,110 +64,101 @@ function dataCloudflareR2BucketCorsRulesToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareR2BucketCorsRulesToHclTerraform(struct) {
+export function dataCloudflareR2BucketCorsRulesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareR2BucketCorsRulesOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareR2BucketCorsRulesOutputReference, _super);
+export class DataCloudflareR2BucketCorsRulesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareR2BucketCorsRulesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // allowed - computed: true, optional: false, required: false
-        _this._allowed = new DataCloudflareR2BucketCorsRulesAllowedOutputReference(_this, "allowed");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareR2BucketCorsRulesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCorsRulesOutputReference.prototype, "allowed", {
-        get: function () {
-            return this._allowed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCorsRulesOutputReference.prototype, "exposeHeaders", {
-        // expose_headers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('expose_headers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCorsRulesOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCorsRulesOutputReference.prototype, "maxAgeSeconds", {
-        // max_age_seconds - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('max_age_seconds');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareR2BucketCorsRulesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareR2BucketCorsRulesOutputReference = DataCloudflareR2BucketCorsRulesOutputReference;
-var DataCloudflareR2BucketCorsRulesList = /** @class */ (function (_super) {
-    __extends(DataCloudflareR2BucketCorsRulesList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // allowed - computed: true, optional: false, required: false
+    _allowed = new DataCloudflareR2BucketCorsRulesAllowedOutputReference(this, "allowed");
+    get allowed() {
+        return this._allowed;
+    }
+    // expose_headers - computed: true, optional: false, required: false
+    get exposeHeaders() {
+        return this.getListAttribute('expose_headers');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // max_age_seconds - computed: true, optional: false, required: false
+    get maxAgeSeconds() {
+        return this.getNumberAttribute('max_age_seconds');
+    }
+}
+export class DataCloudflareR2BucketCorsRulesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareR2BucketCorsRulesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareR2BucketCorsRulesList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareR2BucketCorsRulesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareR2BucketCorsRulesList;
-}(cdktf.ComplexList));
-exports.DataCloudflareR2BucketCorsRulesList = DataCloudflareR2BucketCorsRulesList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/r2_bucket_cors cloudflare_r2_bucket_cors}
 */
-var DataCloudflareR2BucketCors = /** @class */ (function (_super) {
-    __extends(DataCloudflareR2BucketCors, _super);
+export class DataCloudflareR2BucketCors extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_r2_bucket_cors";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareR2BucketCors resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareR2BucketCors to import
+    * @param importFromId The id of the existing DataCloudflareR2BucketCors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/r2_bucket_cors#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareR2BucketCors to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_bucket_cors", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -220,8 +169,8 @@ var DataCloudflareR2BucketCors = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareR2BucketCorsConfig
     */
-    function DataCloudflareR2BucketCors(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_r2_bucket_cors',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -234,83 +183,56 @@ var DataCloudflareR2BucketCors = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // rules - computed: true, optional: false, required: false
-        _this._rules = new DataCloudflareR2BucketCorsRulesList(_this, "rules", false);
-        _this._accountId = config.accountId;
-        _this._bucketName = config.bucketName;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._bucketName = config.bucketName;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareR2BucketCors resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareR2BucketCors to import
-    * @param importFromId The id of the existing DataCloudflareR2BucketCors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/r2_bucket_cors#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareR2BucketCors to import is found
-    */
-    DataCloudflareR2BucketCors.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_bucket_cors", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareR2BucketCors.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareR2BucketCors.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareR2BucketCors.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCors.prototype, "bucketName", {
-        get: function () {
-            return this.getStringAttribute('bucket_name');
-        },
-        set: function (value) {
-            this._bucketName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCors.prototype, "bucketNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bucketName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareR2BucketCors.prototype, "rules", {
-        get: function () {
-            return this._rules;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // bucket_name - computed: false, optional: false, required: true
+    _bucketName;
+    get bucketName() {
+        return this.getStringAttribute('bucket_name');
+    }
+    set bucketName(value) {
+        this._bucketName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get bucketNameInput() {
+        return this._bucketName;
+    }
+    // rules - computed: true, optional: false, required: false
+    _rules = new DataCloudflareR2BucketCorsRulesList(this, "rules", false);
+    get rules() {
+        return this._rules;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareR2BucketCors.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             bucket_name: cdktf.stringToTerraform(this._bucketName),
         };
-    };
-    DataCloudflareR2BucketCors.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -325,15 +247,6 @@ var DataCloudflareR2BucketCors = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareR2BucketCors.tfResourceType = "cloudflare_r2_bucket_cors";
-    return DataCloudflareR2BucketCors;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareR2BucketCors = DataCloudflareR2BucketCors;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_bucket_cors
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.R2BucketCors = exports.R2BucketCorsRulesList = exports.R2BucketCorsRulesOutputReference = exports.R2BucketCorsRulesAllowedOutputReference = void 0;
-exports.r2BucketCorsRulesAllowedToTerraform = r2BucketCorsRulesAllowedToTerraform;
-exports.r2BucketCorsRulesAllowedToHclTerraform = r2BucketCorsRulesAllowedToHclTerraform;
-exports.r2BucketCorsRulesToTerraform = r2BucketCorsRulesToTerraform;
-exports.r2BucketCorsRulesToHclTerraform = r2BucketCorsRulesToHclTerraform;
-var cdktf = require("cdktf");
-function r2BucketCorsRulesAllowedToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function r2BucketCorsRulesAllowedToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -36,14 +14,14 @@ function r2BucketCorsRulesAllowedToTerraform(struct) {
         origins: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.origins),
     };
 }
-function r2BucketCorsRulesAllowedToHclTerraform(struct) {
+export function r2BucketCorsRulesAllowedToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         headers: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.headers),
             isBlock: false,
@@ -64,127 +42,99 @@ function r2BucketCorsRulesAllowedToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var R2BucketCorsRulesAllowedOutputReference = /** @class */ (function (_super) {
-    __extends(R2BucketCorsRulesAllowedOutputReference, _super);
+export class R2BucketCorsRulesAllowedOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function R2BucketCorsRulesAllowedOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(R2BucketCorsRulesAllowedOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._headers !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.headers = this._headers;
-            }
-            if (this._methods !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.methods = this._methods;
-            }
-            if (this._origins !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.origins = this._origins;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._headers = undefined;
-                this._methods = undefined;
-                this._origins = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._headers = value.headers;
-                this._methods = value.methods;
-                this._origins = value.origins;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCorsRulesAllowedOutputReference.prototype, "headers", {
-        get: function () {
-            return this.getListAttribute('headers');
-        },
-        set: function (value) {
-            this._headers = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketCorsRulesAllowedOutputReference.prototype.resetHeaders = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._headers !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.headers = this._headers;
+        }
+        if (this._methods !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.methods = this._methods;
+        }
+        if (this._origins !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.origins = this._origins;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._headers = undefined;
+            this._methods = undefined;
+            this._origins = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._headers = value.headers;
+            this._methods = value.methods;
+            this._origins = value.origins;
+        }
+    }
+    // headers - computed: false, optional: true, required: false
+    _headers;
+    get headers() {
+        return this.getListAttribute('headers');
+    }
+    set headers(value) {
+        this._headers = value;
+    }
+    resetHeaders() {
         this._headers = undefined;
-    };
-    Object.defineProperty(R2BucketCorsRulesAllowedOutputReference.prototype, "headersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._headers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCorsRulesAllowedOutputReference.prototype, "methods", {
-        get: function () {
-            return this.getListAttribute('methods');
-        },
-        set: function (value) {
-            this._methods = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCorsRulesAllowedOutputReference.prototype, "methodsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._methods;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCorsRulesAllowedOutputReference.prototype, "origins", {
-        get: function () {
-            return this.getListAttribute('origins');
-        },
-        set: function (value) {
-            this._origins = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCorsRulesAllowedOutputReference.prototype, "originsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._origins;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return R2BucketCorsRulesAllowedOutputReference;
-}(cdktf.ComplexObject));
-exports.R2BucketCorsRulesAllowedOutputReference = R2BucketCorsRulesAllowedOutputReference;
-function r2BucketCorsRulesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get headersInput() {
+        return this._headers;
+    }
+    // methods - computed: false, optional: false, required: true
+    _methods;
+    get methods() {
+        return this.getListAttribute('methods');
+    }
+    set methods(value) {
+        this._methods = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get methodsInput() {
+        return this._methods;
+    }
+    // origins - computed: false, optional: false, required: true
+    _origins;
+    get origins() {
+        return this.getListAttribute('origins');
+    }
+    set origins(value) {
+        this._origins = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get originsInput() {
+        return this._origins;
+    }
+}
+export function r2BucketCorsRulesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -198,14 +148,14 @@ function r2BucketCorsRulesToTerraform(struct) {
         max_age_seconds: cdktf.numberToTerraform(struct.maxAgeSeconds),
     };
 }
-function r2BucketCorsRulesToHclTerraform(struct) {
+export function r2BucketCorsRulesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         allowed: {
             value: r2BucketCorsRulesAllowedToHclTerraform(struct.allowed),
             isBlock: true,
@@ -232,189 +182,168 @@ function r2BucketCorsRulesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var R2BucketCorsRulesOutputReference = /** @class */ (function (_super) {
-    __extends(R2BucketCorsRulesOutputReference, _super);
+export class R2BucketCorsRulesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function R2BucketCorsRulesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // allowed - computed: false, optional: false, required: true
-        _this._allowed = new R2BucketCorsRulesAllowedOutputReference(_this, "allowed");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(R2BucketCorsRulesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._allowed) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowed = (_b = this._allowed) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._exposeHeaders !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exposeHeaders = this._exposeHeaders;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._maxAgeSeconds !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxAgeSeconds = this._maxAgeSeconds;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._allowed.internalValue = undefined;
-                this._exposeHeaders = undefined;
-                this._id = undefined;
-                this._maxAgeSeconds = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._allowed.internalValue = value.allowed;
-                this._exposeHeaders = value.exposeHeaders;
-                this._id = value.id;
-                this._maxAgeSeconds = value.maxAgeSeconds;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCorsRulesOutputReference.prototype, "allowed", {
-        get: function () {
-            return this._allowed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketCorsRulesOutputReference.prototype.putAllowed = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._allowed?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowed = this._allowed?.internalValue;
+        }
+        if (this._exposeHeaders !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exposeHeaders = this._exposeHeaders;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._maxAgeSeconds !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxAgeSeconds = this._maxAgeSeconds;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._allowed.internalValue = undefined;
+            this._exposeHeaders = undefined;
+            this._id = undefined;
+            this._maxAgeSeconds = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._allowed.internalValue = value.allowed;
+            this._exposeHeaders = value.exposeHeaders;
+            this._id = value.id;
+            this._maxAgeSeconds = value.maxAgeSeconds;
+        }
+    }
+    // allowed - computed: false, optional: false, required: true
+    _allowed = new R2BucketCorsRulesAllowedOutputReference(this, "allowed");
+    get allowed() {
+        return this._allowed;
+    }
+    putAllowed(value) {
         this._allowed.internalValue = value;
-    };
-    Object.defineProperty(R2BucketCorsRulesOutputReference.prototype, "allowedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowed.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCorsRulesOutputReference.prototype, "exposeHeaders", {
-        get: function () {
-            return this.getListAttribute('expose_headers');
-        },
-        set: function (value) {
-            this._exposeHeaders = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketCorsRulesOutputReference.prototype.resetExposeHeaders = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedInput() {
+        return this._allowed.internalValue;
+    }
+    // expose_headers - computed: false, optional: true, required: false
+    _exposeHeaders;
+    get exposeHeaders() {
+        return this.getListAttribute('expose_headers');
+    }
+    set exposeHeaders(value) {
+        this._exposeHeaders = value;
+    }
+    resetExposeHeaders() {
         this._exposeHeaders = undefined;
-    };
-    Object.defineProperty(R2BucketCorsRulesOutputReference.prototype, "exposeHeadersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exposeHeaders;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCorsRulesOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketCorsRulesOutputReference.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get exposeHeadersInput() {
+        return this._exposeHeaders;
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(R2BucketCorsRulesOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCorsRulesOutputReference.prototype, "maxAgeSeconds", {
-        get: function () {
-            return this.getNumberAttribute('max_age_seconds');
-        },
-        set: function (value) {
-            this._maxAgeSeconds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketCorsRulesOutputReference.prototype.resetMaxAgeSeconds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // max_age_seconds - computed: false, optional: true, required: false
+    _maxAgeSeconds;
+    get maxAgeSeconds() {
+        return this.getNumberAttribute('max_age_seconds');
+    }
+    set maxAgeSeconds(value) {
+        this._maxAgeSeconds = value;
+    }
+    resetMaxAgeSeconds() {
         this._maxAgeSeconds = undefined;
-    };
-    Object.defineProperty(R2BucketCorsRulesOutputReference.prototype, "maxAgeSecondsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxAgeSeconds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return R2BucketCorsRulesOutputReference;
-}(cdktf.ComplexObject));
-exports.R2BucketCorsRulesOutputReference = R2BucketCorsRulesOutputReference;
-var R2BucketCorsRulesList = /** @class */ (function (_super) {
-    __extends(R2BucketCorsRulesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxAgeSecondsInput() {
+        return this._maxAgeSeconds;
+    }
+}
+export class R2BucketCorsRulesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function R2BucketCorsRulesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    R2BucketCorsRulesList.prototype.get = function (index) {
+    get(index) {
         return new R2BucketCorsRulesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return R2BucketCorsRulesList;
-}(cdktf.ComplexList));
-exports.R2BucketCorsRulesList = R2BucketCorsRulesList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_bucket_cors cloudflare_r2_bucket_cors}
 */
-var R2BucketCors = /** @class */ (function (_super) {
-    __extends(R2BucketCors, _super);
+export class R2BucketCors extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_r2_bucket_cors";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a R2BucketCors resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the R2BucketCors to import
+    * @param importFromId The id of the existing R2BucketCors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_bucket_cors#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the R2BucketCors to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_bucket_cors", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -425,8 +354,8 @@ var R2BucketCors = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options R2BucketCorsConfig
     */
-    function R2BucketCors(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_r2_bucket_cors',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -439,122 +368,85 @@ var R2BucketCors = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // rules - computed: false, optional: true, required: false
-        _this._rules = new R2BucketCorsRulesList(_this, "rules", false);
-        _this._accountId = config.accountId;
-        _this._bucketName = config.bucketName;
-        _this._jurisdiction = config.jurisdiction;
-        _this._rules.internalValue = config.rules;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._bucketName = config.bucketName;
+        this._jurisdiction = config.jurisdiction;
+        this._rules.internalValue = config.rules;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a R2BucketCors resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the R2BucketCors to import
-    * @param importFromId The id of the existing R2BucketCors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/r2_bucket_cors#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the R2BucketCors to import is found
-    */
-    R2BucketCors.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_r2_bucket_cors", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(R2BucketCors.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketCors.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(R2BucketCors.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCors.prototype, "bucketName", {
-        get: function () {
-            return this.getStringAttribute('bucket_name');
-        },
-        set: function (value) {
-            this._bucketName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCors.prototype, "bucketNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bucketName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCors.prototype, "jurisdiction", {
-        get: function () {
-            return this.getStringAttribute('jurisdiction');
-        },
-        set: function (value) {
-            this._jurisdiction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketCors.prototype.resetJurisdiction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // bucket_name - computed: false, optional: false, required: true
+    _bucketName;
+    get bucketName() {
+        return this.getStringAttribute('bucket_name');
+    }
+    set bucketName(value) {
+        this._bucketName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get bucketNameInput() {
+        return this._bucketName;
+    }
+    // jurisdiction - computed: true, optional: true, required: false
+    _jurisdiction;
+    get jurisdiction() {
+        return this.getStringAttribute('jurisdiction');
+    }
+    set jurisdiction(value) {
+        this._jurisdiction = value;
+    }
+    resetJurisdiction() {
         this._jurisdiction = undefined;
-    };
-    Object.defineProperty(R2BucketCors.prototype, "jurisdictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._jurisdiction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(R2BucketCors.prototype, "rules", {
-        get: function () {
-            return this._rules;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    R2BucketCors.prototype.putRules = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get jurisdictionInput() {
+        return this._jurisdiction;
+    }
+    // rules - computed: false, optional: true, required: false
+    _rules = new R2BucketCorsRulesList(this, "rules", false);
+    get rules() {
+        return this._rules;
+    }
+    putRules(value) {
         this._rules.internalValue = value;
-    };
-    R2BucketCors.prototype.resetRules = function () {
+    }
+    resetRules() {
         this._rules.internalValue = undefined;
-    };
-    Object.defineProperty(R2BucketCors.prototype, "rulesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rules.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get rulesInput() {
+        return this._rules.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    R2BucketCors.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             bucket_name: cdktf.stringToTerraform(this._bucketName),
             jurisdiction: cdktf.stringToTerraform(this._jurisdiction),
             rules: cdktf.listMapper(r2BucketCorsRulesToTerraform, false)(this._rules.internalValue),
         };
-    };
-    R2BucketCors.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -581,15 +473,6 @@ var R2BucketCors = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    R2BucketCors.tfResourceType = "cloudflare_r2_bucket_cors";
-    return R2BucketCors;
-}(cdktf.TerraformResource));
-exports.R2BucketCors = R2BucketCors;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/token_validation_rules
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareTokenValidationRules = exports.DataCloudflareTokenValidationRulesSelectorOutputReference = exports.DataCloudflareTokenValidationRulesSelectorIncludeList = exports.DataCloudflareTokenValidationRulesSelectorIncludeOutputReference = exports.DataCloudflareTokenValidationRulesSelectorExcludeList = exports.DataCloudflareTokenValidationRulesSelectorExcludeOutputReference = exports.DataCloudflareTokenValidationRulesFilterOutputReference = void 0;
-exports.dataCloudflareTokenValidationRulesFilterToTerraform = dataCloudflareTokenValidationRulesFilterToTerraform;
-exports.dataCloudflareTokenValidationRulesFilterToHclTerraform = dataCloudflareTokenValidationRulesFilterToHclTerraform;
-exports.dataCloudflareTokenValidationRulesSelectorExcludeToTerraform = dataCloudflareTokenValidationRulesSelectorExcludeToTerraform;
-exports.dataCloudflareTokenValidationRulesSelectorExcludeToHclTerraform = dataCloudflareTokenValidationRulesSelectorExcludeToHclTerraform;
-exports.dataCloudflareTokenValidationRulesSelectorIncludeToTerraform = dataCloudflareTokenValidationRulesSelectorIncludeToTerraform;
-exports.dataCloudflareTokenValidationRulesSelectorIncludeToHclTerraform = dataCloudflareTokenValidationRulesSelectorIncludeToHclTerraform;
-exports.dataCloudflareTokenValidationRulesSelectorToTerraform = dataCloudflareTokenValidationRulesSelectorToTerraform;
-exports.dataCloudflareTokenValidationRulesSelectorToHclTerraform = dataCloudflareTokenValidationRulesSelectorToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareTokenValidationRulesFilterToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareTokenValidationRulesFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -43,14 +17,14 @@ function dataCloudflareTokenValidationRulesFilterToTerraform(struct) {
         token_configuration: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.tokenConfiguration),
     };
 }
-function dataCloudflareTokenValidationRulesFilterToHclTerraform(struct) {
+export function dataCloudflareTokenValidationRulesFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         action: {
             value: cdktf.stringToHclTerraform(struct.action),
             isBlock: false,
@@ -89,214 +63,168 @@ function dataCloudflareTokenValidationRulesFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareTokenValidationRulesFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareTokenValidationRulesFilterOutputReference, _super);
+export class DataCloudflareTokenValidationRulesFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareTokenValidationRulesFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._action !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.action = this._action;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            if (this._hostname !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hostname = this._hostname;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._tokenConfiguration !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tokenConfiguration = this._tokenConfiguration;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._action = undefined;
-                this._enabled = undefined;
-                this._host = undefined;
-                this._hostname = undefined;
-                this._id = undefined;
-                this._tokenConfiguration = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._action = value.action;
-                this._enabled = value.enabled;
-                this._host = value.host;
-                this._hostname = value.hostname;
-                this._id = value.id;
-                this._tokenConfiguration = value.tokenConfiguration;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "action", {
-        get: function () {
-            return this.getStringAttribute('action');
-        },
-        set: function (value) {
-            this._action = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareTokenValidationRulesFilterOutputReference.prototype.resetAction = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._action !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.action = this._action;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        if (this._hostname !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hostname = this._hostname;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._tokenConfiguration !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tokenConfiguration = this._tokenConfiguration;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._action = undefined;
+            this._enabled = undefined;
+            this._host = undefined;
+            this._hostname = undefined;
+            this._id = undefined;
+            this._tokenConfiguration = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._action = value.action;
+            this._enabled = value.enabled;
+            this._host = value.host;
+            this._hostname = value.hostname;
+            this._id = value.id;
+            this._tokenConfiguration = value.tokenConfiguration;
+        }
+    }
+    // action - computed: false, optional: true, required: false
+    _action;
+    get action() {
+        return this.getStringAttribute('action');
+    }
+    set action(value) {
+        this._action = value;
+    }
+    resetAction() {
         this._action = undefined;
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "actionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._action;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareTokenValidationRulesFilterOutputReference.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get actionInput() {
+        return this._action;
+    }
+    // enabled - computed: false, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareTokenValidationRulesFilterOutputReference.prototype.resetHost = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // host - computed: false, optional: true, required: false
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    resetHost() {
         this._host = undefined;
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "hostname", {
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        set: function (value) {
-            this._hostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareTokenValidationRulesFilterOutputReference.prototype.resetHostname = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // hostname - computed: false, optional: true, required: false
+    _hostname;
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    set hostname(value) {
+        this._hostname = value;
+    }
+    resetHostname() {
         this._hostname = undefined;
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "hostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareTokenValidationRulesFilterOutputReference.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameInput() {
+        return this._hostname;
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "tokenConfiguration", {
-        get: function () {
-            return this.getListAttribute('token_configuration');
-        },
-        set: function (value) {
-            this._tokenConfiguration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareTokenValidationRulesFilterOutputReference.prototype.resetTokenConfiguration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // token_configuration - computed: false, optional: true, required: false
+    _tokenConfiguration;
+    get tokenConfiguration() {
+        return this.getListAttribute('token_configuration');
+    }
+    set tokenConfiguration(value) {
+        this._tokenConfiguration = value;
+    }
+    resetTokenConfiguration() {
         this._tokenConfiguration = undefined;
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRulesFilterOutputReference.prototype, "tokenConfigurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tokenConfiguration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareTokenValidationRulesFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareTokenValidationRulesFilterOutputReference = DataCloudflareTokenValidationRulesFilterOutputReference;
-function dataCloudflareTokenValidationRulesSelectorExcludeToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tokenConfigurationInput() {
+        return this._tokenConfiguration;
+    }
+}
+export function dataCloudflareTokenValidationRulesSelectorExcludeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -305,81 +233,68 @@ function dataCloudflareTokenValidationRulesSelectorExcludeToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareTokenValidationRulesSelectorExcludeToHclTerraform(struct) {
+export function dataCloudflareTokenValidationRulesSelectorExcludeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareTokenValidationRulesSelectorExcludeOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareTokenValidationRulesSelectorExcludeOutputReference, _super);
+export class DataCloudflareTokenValidationRulesSelectorExcludeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareTokenValidationRulesSelectorExcludeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareTokenValidationRulesSelectorExcludeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesSelectorExcludeOutputReference.prototype, "operationIds", {
-        // operation_ids - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('operation_ids');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareTokenValidationRulesSelectorExcludeOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareTokenValidationRulesSelectorExcludeOutputReference = DataCloudflareTokenValidationRulesSelectorExcludeOutputReference;
-var DataCloudflareTokenValidationRulesSelectorExcludeList = /** @class */ (function (_super) {
-    __extends(DataCloudflareTokenValidationRulesSelectorExcludeList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // operation_ids - computed: true, optional: false, required: false
+    get operationIds() {
+        return this.getListAttribute('operation_ids');
+    }
+}
+export class DataCloudflareTokenValidationRulesSelectorExcludeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareTokenValidationRulesSelectorExcludeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareTokenValidationRulesSelectorExcludeList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareTokenValidationRulesSelectorExcludeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareTokenValidationRulesSelectorExcludeList;
-}(cdktf.ComplexList));
-exports.DataCloudflareTokenValidationRulesSelectorExcludeList = DataCloudflareTokenValidationRulesSelectorExcludeList;
-function dataCloudflareTokenValidationRulesSelectorIncludeToTerraform(struct) {
+    }
+}
+export function dataCloudflareTokenValidationRulesSelectorIncludeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -388,81 +303,68 @@ function dataCloudflareTokenValidationRulesSelectorIncludeToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareTokenValidationRulesSelectorIncludeToHclTerraform(struct) {
+export function dataCloudflareTokenValidationRulesSelectorIncludeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareTokenValidationRulesSelectorIncludeOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareTokenValidationRulesSelectorIncludeOutputReference, _super);
+export class DataCloudflareTokenValidationRulesSelectorIncludeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareTokenValidationRulesSelectorIncludeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareTokenValidationRulesSelectorIncludeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesSelectorIncludeOutputReference.prototype, "host", {
-        // host - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('host');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareTokenValidationRulesSelectorIncludeOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareTokenValidationRulesSelectorIncludeOutputReference = DataCloudflareTokenValidationRulesSelectorIncludeOutputReference;
-var DataCloudflareTokenValidationRulesSelectorIncludeList = /** @class */ (function (_super) {
-    __extends(DataCloudflareTokenValidationRulesSelectorIncludeList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // host - computed: true, optional: false, required: false
+    get host() {
+        return this.getListAttribute('host');
+    }
+}
+export class DataCloudflareTokenValidationRulesSelectorIncludeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareTokenValidationRulesSelectorIncludeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareTokenValidationRulesSelectorIncludeList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareTokenValidationRulesSelectorIncludeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareTokenValidationRulesSelectorIncludeList;
-}(cdktf.ComplexList));
-exports.DataCloudflareTokenValidationRulesSelectorIncludeList = DataCloudflareTokenValidationRulesSelectorIncludeList;
-function dataCloudflareTokenValidationRulesSelectorToTerraform(struct) {
+    }
+}
+export function dataCloudflareTokenValidationRulesSelectorToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -471,70 +373,70 @@ function dataCloudflareTokenValidationRulesSelectorToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareTokenValidationRulesSelectorToHclTerraform(struct) {
+export function dataCloudflareTokenValidationRulesSelectorToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareTokenValidationRulesSelectorOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareTokenValidationRulesSelectorOutputReference, _super);
+export class DataCloudflareTokenValidationRulesSelectorOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareTokenValidationRulesSelectorOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // exclude - computed: true, optional: false, required: false
-        _this._exclude = new DataCloudflareTokenValidationRulesSelectorExcludeList(_this, "exclude", false);
-        // include - computed: true, optional: false, required: false
-        _this._include = new DataCloudflareTokenValidationRulesSelectorIncludeList(_this, "include", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareTokenValidationRulesSelectorOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesSelectorOutputReference.prototype, "exclude", {
-        get: function () {
-            return this._exclude;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRulesSelectorOutputReference.prototype, "include", {
-        get: function () {
-            return this._include;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareTokenValidationRulesSelectorOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareTokenValidationRulesSelectorOutputReference = DataCloudflareTokenValidationRulesSelectorOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // exclude - computed: true, optional: false, required: false
+    _exclude = new DataCloudflareTokenValidationRulesSelectorExcludeList(this, "exclude", false);
+    get exclude() {
+        return this._exclude;
+    }
+    // include - computed: true, optional: false, required: false
+    _include = new DataCloudflareTokenValidationRulesSelectorIncludeList(this, "include", false);
+    get include() {
+        return this._include;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/token_validation_rules cloudflare_token_validation_rules}
 */
-var DataCloudflareTokenValidationRules = /** @class */ (function (_super) {
-    __extends(DataCloudflareTokenValidationRules, _super);
+export class DataCloudflareTokenValidationRules extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_token_validation_rules";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareTokenValidationRules resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareTokenValidationRules to import
+    * @param importFromId The id of the existing DataCloudflareTokenValidationRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/token_validation_rules#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareTokenValidationRules to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_token_validation_rules", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -545,9 +447,8 @@ var DataCloudflareTokenValidationRules = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareTokenValidationRulesConfig = {}
     */
-    function DataCloudflareTokenValidationRules(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_token_validation_rules',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -560,178 +461,108 @@ var DataCloudflareTokenValidationRules = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareTokenValidationRulesFilterOutputReference(_this, "filter");
-        // selector - computed: true, optional: false, required: false
-        _this._selector = new DataCloudflareTokenValidationRulesSelectorOutputReference(_this, "selector");
-        _this._filter.internalValue = config.filter;
-        _this._ruleId = config.ruleId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._filter.internalValue = config.filter;
+        this._ruleId = config.ruleId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareTokenValidationRules resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareTokenValidationRules to import
-    * @param importFromId The id of the existing DataCloudflareTokenValidationRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/token_validation_rules#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareTokenValidationRules to import is found
-    */
-    DataCloudflareTokenValidationRules.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_token_validation_rules", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "action", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // action - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('action');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "expression", {
-        // expression - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expression');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareTokenValidationRules.prototype.putFilter = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // action - computed: true, optional: false, required: false
+    get action() {
+        return this.getStringAttribute('action');
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // expression - computed: true, optional: false, required: false
+    get expression() {
+        return this.getStringAttribute('expression');
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareTokenValidationRulesFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareTokenValidationRules.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "lastUpdated", {
-        // last_updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "ruleId", {
-        get: function () {
-            return this.getStringAttribute('rule_id');
-        },
-        set: function (value) {
-            this._ruleId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareTokenValidationRules.prototype.resetRuleId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // last_updated - computed: true, optional: false, required: false
+    get lastUpdated() {
+        return this.getStringAttribute('last_updated');
+    }
+    // rule_id - computed: false, optional: true, required: false
+    _ruleId;
+    get ruleId() {
+        return this.getStringAttribute('rule_id');
+    }
+    set ruleId(value) {
+        this._ruleId = value;
+    }
+    resetRuleId() {
         this._ruleId = undefined;
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "ruleIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ruleId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "selector", {
-        get: function () {
-            return this._selector;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "title", {
-        // title - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('title');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareTokenValidationRules.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ruleIdInput() {
+        return this._ruleId;
+    }
+    // selector - computed: true, optional: false, required: false
+    _selector = new DataCloudflareTokenValidationRulesSelectorOutputReference(this, "selector");
+    get selector() {
+        return this._selector;
+    }
+    // title - computed: true, optional: false, required: false
+    get title() {
+        return this.getStringAttribute('title');
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareTokenValidationRules.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareTokenValidationRules.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             filter: dataCloudflareTokenValidationRulesFilterToTerraform(this._filter.internalValue),
             rule_id: cdktf.stringToTerraform(this._ruleId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareTokenValidationRules.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             filter: {
                 value: dataCloudflareTokenValidationRulesFilterToHclTerraform(this._filter.internalValue),
                 isBlock: true,
@@ -752,15 +583,6 @@ var DataCloudflareTokenValidationRules = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareTokenValidationRules.tfResourceType = "cloudflare_token_validation_rules";
-    return DataCloudflareTokenValidationRules;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareTokenValidationRules = DataCloudflareTokenValidationRules;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

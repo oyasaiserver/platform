@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_hosted_runner
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ActionsHostedRunner = exports.ActionsHostedRunnerTimeoutsOutputReference = exports.ActionsHostedRunnerImageOutputReference = exports.ActionsHostedRunnerPublicIpsList = exports.ActionsHostedRunnerPublicIpsOutputReference = exports.ActionsHostedRunnerMachineSizeDetailsList = exports.ActionsHostedRunnerMachineSizeDetailsOutputReference = void 0;
-exports.actionsHostedRunnerMachineSizeDetailsToTerraform = actionsHostedRunnerMachineSizeDetailsToTerraform;
-exports.actionsHostedRunnerMachineSizeDetailsToHclTerraform = actionsHostedRunnerMachineSizeDetailsToHclTerraform;
-exports.actionsHostedRunnerPublicIpsToTerraform = actionsHostedRunnerPublicIpsToTerraform;
-exports.actionsHostedRunnerPublicIpsToHclTerraform = actionsHostedRunnerPublicIpsToHclTerraform;
-exports.actionsHostedRunnerImageToTerraform = actionsHostedRunnerImageToTerraform;
-exports.actionsHostedRunnerImageToHclTerraform = actionsHostedRunnerImageToHclTerraform;
-exports.actionsHostedRunnerTimeoutsToTerraform = actionsHostedRunnerTimeoutsToTerraform;
-exports.actionsHostedRunnerTimeoutsToHclTerraform = actionsHostedRunnerTimeoutsToHclTerraform;
-var cdktf = require("cdktf");
-function actionsHostedRunnerMachineSizeDetailsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function actionsHostedRunnerMachineSizeDetailsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -36,105 +10,80 @@ function actionsHostedRunnerMachineSizeDetailsToTerraform(struct) {
     }
     return {};
 }
-function actionsHostedRunnerMachineSizeDetailsToHclTerraform(struct) {
+export function actionsHostedRunnerMachineSizeDetailsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ActionsHostedRunnerMachineSizeDetailsOutputReference = /** @class */ (function (_super) {
-    __extends(ActionsHostedRunnerMachineSizeDetailsOutputReference, _super);
+export class ActionsHostedRunnerMachineSizeDetailsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ActionsHostedRunnerMachineSizeDetailsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ActionsHostedRunnerMachineSizeDetailsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerMachineSizeDetailsOutputReference.prototype, "cpuCores", {
-        // cpu_cores - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('cpu_cores');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerMachineSizeDetailsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerMachineSizeDetailsOutputReference.prototype, "memoryGb", {
-        // memory_gb - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('memory_gb');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerMachineSizeDetailsOutputReference.prototype, "storageGb", {
-        // storage_gb - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('storage_gb');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ActionsHostedRunnerMachineSizeDetailsOutputReference;
-}(cdktf.ComplexObject));
-exports.ActionsHostedRunnerMachineSizeDetailsOutputReference = ActionsHostedRunnerMachineSizeDetailsOutputReference;
-var ActionsHostedRunnerMachineSizeDetailsList = /** @class */ (function (_super) {
-    __extends(ActionsHostedRunnerMachineSizeDetailsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // cpu_cores - computed: true, optional: false, required: false
+    get cpuCores() {
+        return this.getNumberAttribute('cpu_cores');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // memory_gb - computed: true, optional: false, required: false
+    get memoryGb() {
+        return this.getNumberAttribute('memory_gb');
+    }
+    // storage_gb - computed: true, optional: false, required: false
+    get storageGb() {
+        return this.getNumberAttribute('storage_gb');
+    }
+}
+export class ActionsHostedRunnerMachineSizeDetailsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ActionsHostedRunnerMachineSizeDetailsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ActionsHostedRunnerMachineSizeDetailsList.prototype.get = function (index) {
+    get(index) {
         return new ActionsHostedRunnerMachineSizeDetailsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ActionsHostedRunnerMachineSizeDetailsList;
-}(cdktf.ComplexList));
-exports.ActionsHostedRunnerMachineSizeDetailsList = ActionsHostedRunnerMachineSizeDetailsList;
-function actionsHostedRunnerPublicIpsToTerraform(struct) {
+    }
+}
+export function actionsHostedRunnerPublicIpsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -143,97 +92,76 @@ function actionsHostedRunnerPublicIpsToTerraform(struct) {
     }
     return {};
 }
-function actionsHostedRunnerPublicIpsToHclTerraform(struct) {
+export function actionsHostedRunnerPublicIpsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ActionsHostedRunnerPublicIpsOutputReference = /** @class */ (function (_super) {
-    __extends(ActionsHostedRunnerPublicIpsOutputReference, _super);
+export class ActionsHostedRunnerPublicIpsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ActionsHostedRunnerPublicIpsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ActionsHostedRunnerPublicIpsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerPublicIpsOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerPublicIpsOutputReference.prototype, "length", {
-        // length - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('length');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerPublicIpsOutputReference.prototype, "prefix", {
-        // prefix - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('prefix');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ActionsHostedRunnerPublicIpsOutputReference;
-}(cdktf.ComplexObject));
-exports.ActionsHostedRunnerPublicIpsOutputReference = ActionsHostedRunnerPublicIpsOutputReference;
-var ActionsHostedRunnerPublicIpsList = /** @class */ (function (_super) {
-    __extends(ActionsHostedRunnerPublicIpsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // length - computed: true, optional: false, required: false
+    get length() {
+        return this.getNumberAttribute('length');
+    }
+    // prefix - computed: true, optional: false, required: false
+    get prefix() {
+        return this.getStringAttribute('prefix');
+    }
+}
+export class ActionsHostedRunnerPublicIpsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ActionsHostedRunnerPublicIpsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ActionsHostedRunnerPublicIpsList.prototype.get = function (index) {
+    get(index) {
         return new ActionsHostedRunnerPublicIpsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ActionsHostedRunnerPublicIpsList;
-}(cdktf.ComplexList));
-exports.ActionsHostedRunnerPublicIpsList = ActionsHostedRunnerPublicIpsList;
-function actionsHostedRunnerImageToTerraform(struct) {
+    }
+}
+export function actionsHostedRunnerImageToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -245,14 +173,14 @@ function actionsHostedRunnerImageToTerraform(struct) {
         source: cdktf.stringToTerraform(struct.source),
     };
 }
-function actionsHostedRunnerImageToHclTerraform(struct) {
+export function actionsHostedRunnerImageToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -267,102 +195,75 @@ function actionsHostedRunnerImageToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ActionsHostedRunnerImageOutputReference = /** @class */ (function (_super) {
-    __extends(ActionsHostedRunnerImageOutputReference, _super);
+export class ActionsHostedRunnerImageOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ActionsHostedRunnerImageOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(ActionsHostedRunnerImageOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._source !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.source = this._source;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._id = undefined;
-                this._source = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._id = value.id;
-                this._source = value.source;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerImageOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerImageOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerImageOutputReference.prototype, "sizeGb", {
-        // size_gb - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('size_gb');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerImageOutputReference.prototype, "source", {
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        set: function (value) {
-            this._source = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsHostedRunnerImageOutputReference.prototype.resetSource = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._source !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.source = this._source;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._id = undefined;
+            this._source = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._id = value.id;
+            this._source = value.source;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // size_gb - computed: true, optional: false, required: false
+    get sizeGb() {
+        return this.getNumberAttribute('size_gb');
+    }
+    // source - computed: false, optional: true, required: false
+    _source;
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    set source(value) {
+        this._source = value;
+    }
+    resetSource() {
         this._source = undefined;
-    };
-    Object.defineProperty(ActionsHostedRunnerImageOutputReference.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ActionsHostedRunnerImageOutputReference;
-}(cdktf.ComplexObject));
-exports.ActionsHostedRunnerImageOutputReference = ActionsHostedRunnerImageOutputReference;
-function actionsHostedRunnerTimeoutsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source;
+    }
+}
+export function actionsHostedRunnerTimeoutsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -373,14 +274,14 @@ function actionsHostedRunnerTimeoutsToTerraform(struct) {
         delete: cdktf.stringToTerraform(struct.delete),
     };
 }
-function actionsHostedRunnerTimeoutsToHclTerraform(struct) {
+export function actionsHostedRunnerTimeoutsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         delete: {
             value: cdktf.stringToHclTerraform(struct.delete),
             isBlock: false,
@@ -389,83 +290,83 @@ function actionsHostedRunnerTimeoutsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ActionsHostedRunnerTimeoutsOutputReference = /** @class */ (function (_super) {
-    __extends(ActionsHostedRunnerTimeoutsOutputReference, _super);
+export class ActionsHostedRunnerTimeoutsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ActionsHostedRunnerTimeoutsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ActionsHostedRunnerTimeoutsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._delete !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.delete = this._delete;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._delete = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._delete = value.delete;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunnerTimeoutsOutputReference.prototype, "delete", {
-        get: function () {
-            return this.getStringAttribute('delete');
-        },
-        set: function (value) {
-            this._delete = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsHostedRunnerTimeoutsOutputReference.prototype.resetDelete = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._delete !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.delete = this._delete;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._delete = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._delete = value.delete;
+        }
+    }
+    // delete - computed: false, optional: true, required: false
+    _delete;
+    get delete() {
+        return this.getStringAttribute('delete');
+    }
+    set delete(value) {
+        this._delete = value;
+    }
+    resetDelete() {
         this._delete = undefined;
-    };
-    Object.defineProperty(ActionsHostedRunnerTimeoutsOutputReference.prototype, "deleteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._delete;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ActionsHostedRunnerTimeoutsOutputReference;
-}(cdktf.ComplexObject));
-exports.ActionsHostedRunnerTimeoutsOutputReference = ActionsHostedRunnerTimeoutsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get deleteInput() {
+        return this._delete;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_hosted_runner github_actions_hosted_runner}
 */
-var ActionsHostedRunner = /** @class */ (function (_super) {
-    __extends(ActionsHostedRunner, _super);
+export class ActionsHostedRunner extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_actions_hosted_runner";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ActionsHostedRunner resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ActionsHostedRunner to import
+    * @param importFromId The id of the existing ActionsHostedRunner that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_hosted_runner#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ActionsHostedRunner to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_actions_hosted_runner", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -476,8 +377,8 @@ var ActionsHostedRunner = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ActionsHostedRunnerConfig
     */
-    function ActionsHostedRunner(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_actions_hosted_runner',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -490,269 +391,173 @@ var ActionsHostedRunner = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // machine_size_details - computed: true, optional: false, required: false
-        _this._machineSizeDetails = new ActionsHostedRunnerMachineSizeDetailsList(_this, "machine_size_details", false);
-        // public_ips - computed: true, optional: false, required: false
-        _this._publicIps = new ActionsHostedRunnerPublicIpsList(_this, "public_ips", false);
-        // image - computed: false, optional: false, required: true
-        _this._image = new ActionsHostedRunnerImageOutputReference(_this, "image");
-        // timeouts - computed: false, optional: true, required: false
-        _this._timeouts = new ActionsHostedRunnerTimeoutsOutputReference(_this, "timeouts");
-        _this._imageGen = config.imageGen;
-        _this._imageVersion = config.imageVersion;
-        _this._maximumRunners = config.maximumRunners;
-        _this._name = config.name;
-        _this._publicIpEnabled = config.publicIpEnabled;
-        _this._runnerGroupId = config.runnerGroupId;
-        _this._size = config.size;
-        _this._image.internalValue = config.image;
-        _this._timeouts.internalValue = config.timeouts;
-        return _this;
+        });
+        this._imageGen = config.imageGen;
+        this._imageVersion = config.imageVersion;
+        this._maximumRunners = config.maximumRunners;
+        this._name = config.name;
+        this._publicIpEnabled = config.publicIpEnabled;
+        this._runnerGroupId = config.runnerGroupId;
+        this._size = config.size;
+        this._image.internalValue = config.image;
+        this._timeouts.internalValue = config.timeouts;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ActionsHostedRunner resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ActionsHostedRunner to import
-    * @param importFromId The id of the existing ActionsHostedRunner that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_hosted_runner#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ActionsHostedRunner to import is found
-    */
-    ActionsHostedRunner.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_actions_hosted_runner", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ActionsHostedRunner.prototype, "id", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "imageGen", {
-        get: function () {
-            return this.getBooleanAttribute('image_gen');
-        },
-        set: function (value) {
-            this._imageGen = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsHostedRunner.prototype.resetImageGen = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // image_gen - computed: false, optional: true, required: false
+    _imageGen;
+    get imageGen() {
+        return this.getBooleanAttribute('image_gen');
+    }
+    set imageGen(value) {
+        this._imageGen = value;
+    }
+    resetImageGen() {
         this._imageGen = undefined;
-    };
-    Object.defineProperty(ActionsHostedRunner.prototype, "imageGenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._imageGen;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "imageVersion", {
-        get: function () {
-            return this.getStringAttribute('image_version');
-        },
-        set: function (value) {
-            this._imageVersion = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsHostedRunner.prototype.resetImageVersion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get imageGenInput() {
+        return this._imageGen;
+    }
+    // image_version - computed: false, optional: true, required: false
+    _imageVersion;
+    get imageVersion() {
+        return this.getStringAttribute('image_version');
+    }
+    set imageVersion(value) {
+        this._imageVersion = value;
+    }
+    resetImageVersion() {
         this._imageVersion = undefined;
-    };
-    Object.defineProperty(ActionsHostedRunner.prototype, "imageVersionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._imageVersion;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "lastActiveOn", {
-        // last_active_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_active_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "machineSizeDetails", {
-        get: function () {
-            return this._machineSizeDetails;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "maximumRunners", {
-        get: function () {
-            return this.getNumberAttribute('maximum_runners');
-        },
-        set: function (value) {
-            this._maximumRunners = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsHostedRunner.prototype.resetMaximumRunners = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get imageVersionInput() {
+        return this._imageVersion;
+    }
+    // last_active_on - computed: true, optional: false, required: false
+    get lastActiveOn() {
+        return this.getStringAttribute('last_active_on');
+    }
+    // machine_size_details - computed: true, optional: false, required: false
+    _machineSizeDetails = new ActionsHostedRunnerMachineSizeDetailsList(this, "machine_size_details", false);
+    get machineSizeDetails() {
+        return this._machineSizeDetails;
+    }
+    // maximum_runners - computed: true, optional: true, required: false
+    _maximumRunners;
+    get maximumRunners() {
+        return this.getNumberAttribute('maximum_runners');
+    }
+    set maximumRunners(value) {
+        this._maximumRunners = value;
+    }
+    resetMaximumRunners() {
         this._maximumRunners = undefined;
-    };
-    Object.defineProperty(ActionsHostedRunner.prototype, "maximumRunnersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maximumRunners;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "platform", {
-        // platform - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('platform');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "publicIpEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('public_ip_enabled');
-        },
-        set: function (value) {
-            this._publicIpEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsHostedRunner.prototype.resetPublicIpEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maximumRunnersInput() {
+        return this._maximumRunners;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // platform - computed: true, optional: false, required: false
+    get platform() {
+        return this.getStringAttribute('platform');
+    }
+    // public_ip_enabled - computed: false, optional: true, required: false
+    _publicIpEnabled;
+    get publicIpEnabled() {
+        return this.getBooleanAttribute('public_ip_enabled');
+    }
+    set publicIpEnabled(value) {
+        this._publicIpEnabled = value;
+    }
+    resetPublicIpEnabled() {
         this._publicIpEnabled = undefined;
-    };
-    Object.defineProperty(ActionsHostedRunner.prototype, "publicIpEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._publicIpEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "publicIps", {
-        get: function () {
-            return this._publicIps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "runnerGroupId", {
-        get: function () {
-            return this.getNumberAttribute('runner_group_id');
-        },
-        set: function (value) {
-            this._runnerGroupId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "runnerGroupIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._runnerGroupId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "size", {
-        get: function () {
-            return this.getStringAttribute('size');
-        },
-        set: function (value) {
-            this._size = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "sizeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._size;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "image", {
-        get: function () {
-            return this._image;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsHostedRunner.prototype.putImage = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get publicIpEnabledInput() {
+        return this._publicIpEnabled;
+    }
+    // public_ips - computed: true, optional: false, required: false
+    _publicIps = new ActionsHostedRunnerPublicIpsList(this, "public_ips", false);
+    get publicIps() {
+        return this._publicIps;
+    }
+    // runner_group_id - computed: false, optional: false, required: true
+    _runnerGroupId;
+    get runnerGroupId() {
+        return this.getNumberAttribute('runner_group_id');
+    }
+    set runnerGroupId(value) {
+        this._runnerGroupId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get runnerGroupIdInput() {
+        return this._runnerGroupId;
+    }
+    // size - computed: false, optional: false, required: true
+    _size;
+    get size() {
+        return this.getStringAttribute('size');
+    }
+    set size(value) {
+        this._size = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get sizeInput() {
+        return this._size;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // image - computed: false, optional: false, required: true
+    _image = new ActionsHostedRunnerImageOutputReference(this, "image");
+    get image() {
+        return this._image;
+    }
+    putImage(value) {
         this._image.internalValue = value;
-    };
-    Object.defineProperty(ActionsHostedRunner.prototype, "imageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._image.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsHostedRunner.prototype, "timeouts", {
-        get: function () {
-            return this._timeouts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsHostedRunner.prototype.putTimeouts = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get imageInput() {
+        return this._image.internalValue;
+    }
+    // timeouts - computed: false, optional: true, required: false
+    _timeouts = new ActionsHostedRunnerTimeoutsOutputReference(this, "timeouts");
+    get timeouts() {
+        return this._timeouts;
+    }
+    putTimeouts(value) {
         this._timeouts.internalValue = value;
-    };
-    ActionsHostedRunner.prototype.resetTimeouts = function () {
+    }
+    resetTimeouts() {
         this._timeouts.internalValue = undefined;
-    };
-    Object.defineProperty(ActionsHostedRunner.prototype, "timeoutsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timeouts.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get timeoutsInput() {
+        return this._timeouts.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ActionsHostedRunner.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             image_gen: cdktf.booleanToTerraform(this._imageGen),
             image_version: cdktf.stringToTerraform(this._imageVersion),
@@ -764,9 +569,9 @@ var ActionsHostedRunner = /** @class */ (function (_super) {
             image: actionsHostedRunnerImageToTerraform(this._image.internalValue),
             timeouts: actionsHostedRunnerTimeoutsToTerraform(this._timeouts.internalValue),
         };
-    };
-    ActionsHostedRunner.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             image_gen: {
                 value: cdktf.booleanToHclTerraform(this._imageGen),
                 isBlock: false,
@@ -823,15 +628,6 @@ var ActionsHostedRunner = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ActionsHostedRunner.tfResourceType = "github_actions_hosted_runner";
-    return ActionsHostedRunner;
-}(cdktf.TerraformResource));
-exports.ActionsHostedRunner = ActionsHostedRunner;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

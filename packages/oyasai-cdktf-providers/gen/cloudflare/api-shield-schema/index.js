@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_schema
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ApiShieldSchema = exports.ApiShieldSchemaUploadDetailsOutputReference = exports.ApiShieldSchemaUploadDetailsWarningsList = exports.ApiShieldSchemaUploadDetailsWarningsOutputReference = exports.ApiShieldSchemaSchemaOutputReference = void 0;
-exports.apiShieldSchemaSchemaToTerraform = apiShieldSchemaSchemaToTerraform;
-exports.apiShieldSchemaSchemaToHclTerraform = apiShieldSchemaSchemaToHclTerraform;
-exports.apiShieldSchemaUploadDetailsWarningsToTerraform = apiShieldSchemaUploadDetailsWarningsToTerraform;
-exports.apiShieldSchemaUploadDetailsWarningsToHclTerraform = apiShieldSchemaUploadDetailsWarningsToHclTerraform;
-exports.apiShieldSchemaUploadDetailsToTerraform = apiShieldSchemaUploadDetailsToTerraform;
-exports.apiShieldSchemaUploadDetailsToHclTerraform = apiShieldSchemaUploadDetailsToHclTerraform;
-var cdktf = require("cdktf");
-function apiShieldSchemaSchemaToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function apiShieldSchemaSchemaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -34,96 +10,64 @@ function apiShieldSchemaSchemaToTerraform(struct) {
     }
     return {};
 }
-function apiShieldSchemaSchemaToHclTerraform(struct) {
+export function apiShieldSchemaSchemaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldSchemaSchemaOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldSchemaSchemaOutputReference, _super);
+export class ApiShieldSchemaSchemaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldSchemaSchemaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldSchemaSchemaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaSchemaOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaSchemaOutputReference.prototype, "kind", {
-        // kind - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('kind');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaSchemaOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaSchemaOutputReference.prototype, "schemaId", {
-        // schema_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('schema_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaSchemaOutputReference.prototype, "source", {
-        // source - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaSchemaOutputReference.prototype, "validationEnabled", {
-        // validation_enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('validation_enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldSchemaSchemaOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldSchemaSchemaOutputReference = ApiShieldSchemaSchemaOutputReference;
-function apiShieldSchemaUploadDetailsWarningsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // kind - computed: true, optional: false, required: false
+    get kind() {
+        return this.getStringAttribute('kind');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // schema_id - computed: true, optional: false, required: false
+    get schemaId() {
+        return this.getStringAttribute('schema_id');
+    }
+    // source - computed: true, optional: false, required: false
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    // validation_enabled - computed: true, optional: false, required: false
+    get validationEnabled() {
+        return this.getBooleanAttribute('validation_enabled');
+    }
+}
+export function apiShieldSchemaUploadDetailsWarningsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -132,97 +76,76 @@ function apiShieldSchemaUploadDetailsWarningsToTerraform(struct) {
     }
     return {};
 }
-function apiShieldSchemaUploadDetailsWarningsToHclTerraform(struct) {
+export function apiShieldSchemaUploadDetailsWarningsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldSchemaUploadDetailsWarningsOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldSchemaUploadDetailsWarningsOutputReference, _super);
+export class ApiShieldSchemaUploadDetailsWarningsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ApiShieldSchemaUploadDetailsWarningsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ApiShieldSchemaUploadDetailsWarningsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaUploadDetailsWarningsOutputReference.prototype, "code", {
-        // code - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('code');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaUploadDetailsWarningsOutputReference.prototype, "locations", {
-        // locations - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('locations');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaUploadDetailsWarningsOutputReference.prototype, "message", {
-        // message - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('message');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldSchemaUploadDetailsWarningsOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldSchemaUploadDetailsWarningsOutputReference = ApiShieldSchemaUploadDetailsWarningsOutputReference;
-var ApiShieldSchemaUploadDetailsWarningsList = /** @class */ (function (_super) {
-    __extends(ApiShieldSchemaUploadDetailsWarningsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // code - computed: true, optional: false, required: false
+    get code() {
+        return this.getNumberAttribute('code');
+    }
+    // locations - computed: true, optional: false, required: false
+    get locations() {
+        return this.getListAttribute('locations');
+    }
+    // message - computed: true, optional: false, required: false
+    get message() {
+        return this.getStringAttribute('message');
+    }
+}
+export class ApiShieldSchemaUploadDetailsWarningsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ApiShieldSchemaUploadDetailsWarningsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ApiShieldSchemaUploadDetailsWarningsList.prototype.get = function (index) {
+    get(index) {
         return new ApiShieldSchemaUploadDetailsWarningsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ApiShieldSchemaUploadDetailsWarningsList;
-}(cdktf.ComplexList));
-exports.ApiShieldSchemaUploadDetailsWarningsList = ApiShieldSchemaUploadDetailsWarningsList;
-function apiShieldSchemaUploadDetailsToTerraform(struct) {
+    }
+}
+export function apiShieldSchemaUploadDetailsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -231,61 +154,65 @@ function apiShieldSchemaUploadDetailsToTerraform(struct) {
     }
     return {};
 }
-function apiShieldSchemaUploadDetailsToHclTerraform(struct) {
+export function apiShieldSchemaUploadDetailsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ApiShieldSchemaUploadDetailsOutputReference = /** @class */ (function (_super) {
-    __extends(ApiShieldSchemaUploadDetailsOutputReference, _super);
+export class ApiShieldSchemaUploadDetailsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ApiShieldSchemaUploadDetailsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // warnings - computed: true, optional: false, required: false
-        _this._warnings = new ApiShieldSchemaUploadDetailsWarningsList(_this, "warnings", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ApiShieldSchemaUploadDetailsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchemaUploadDetailsOutputReference.prototype, "warnings", {
-        get: function () {
-            return this._warnings;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ApiShieldSchemaUploadDetailsOutputReference;
-}(cdktf.ComplexObject));
-exports.ApiShieldSchemaUploadDetailsOutputReference = ApiShieldSchemaUploadDetailsOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // warnings - computed: true, optional: false, required: false
+    _warnings = new ApiShieldSchemaUploadDetailsWarningsList(this, "warnings", false);
+    get warnings() {
+        return this._warnings;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_schema cloudflare_api_shield_schema}
 */
-var ApiShieldSchema = /** @class */ (function (_super) {
-    __extends(ApiShieldSchema, _super);
+export class ApiShieldSchema extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_api_shield_schema";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ApiShieldSchema resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ApiShieldSchema to import
+    * @param importFromId The id of the existing ApiShieldSchema that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_schema#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ApiShieldSchema to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_api_shield_schema", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -296,8 +223,8 @@ var ApiShieldSchema = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ApiShieldSchemaConfig
     */
-    function ApiShieldSchema(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_api_shield_schema',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -310,189 +237,123 @@ var ApiShieldSchema = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // schema - computed: true, optional: false, required: false
-        _this._schema = new ApiShieldSchemaSchemaOutputReference(_this, "schema");
-        // upload_details - computed: true, optional: false, required: false
-        _this._uploadDetails = new ApiShieldSchemaUploadDetailsOutputReference(_this, "upload_details");
-        _this._file = config.file;
-        _this._kind = config.kind;
-        _this._name = config.name;
-        _this._schemaId = config.schemaId;
-        _this._validationEnabled = config.validationEnabled;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._file = config.file;
+        this._kind = config.kind;
+        this._name = config.name;
+        this._schemaId = config.schemaId;
+        this._validationEnabled = config.validationEnabled;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ApiShieldSchema resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ApiShieldSchema to import
-    * @param importFromId The id of the existing ApiShieldSchema that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/api_shield_schema#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ApiShieldSchema to import is found
-    */
-    ApiShieldSchema.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_api_shield_schema", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ApiShieldSchema.prototype, "createdAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "file", {
-        get: function () {
-            return this.getStringAttribute('file');
-        },
-        set: function (value) {
-            this._file = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "fileInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._file;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "kind", {
-        get: function () {
-            return this.getStringAttribute('kind');
-        },
-        set: function (value) {
-            this._kind = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "kindInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._kind;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ApiShieldSchema.prototype.resetName = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // file - computed: false, optional: false, required: true
+    _file;
+    get file() {
+        return this.getStringAttribute('file');
+    }
+    set file(value) {
+        this._file = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileInput() {
+        return this._file;
+    }
+    // kind - computed: false, optional: false, required: true
+    _kind;
+    get kind() {
+        return this.getStringAttribute('kind');
+    }
+    set kind(value) {
+        this._kind = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get kindInput() {
+        return this._kind;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(ApiShieldSchema.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "schema", {
-        get: function () {
-            return this._schema;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "schemaId", {
-        get: function () {
-            return this.getStringAttribute('schema_id');
-        },
-        set: function (value) {
-            this._schemaId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ApiShieldSchema.prototype.resetSchemaId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // schema - computed: true, optional: false, required: false
+    _schema = new ApiShieldSchemaSchemaOutputReference(this, "schema");
+    get schema() {
+        return this._schema;
+    }
+    // schema_id - computed: false, optional: true, required: false
+    _schemaId;
+    get schemaId() {
+        return this.getStringAttribute('schema_id');
+    }
+    set schemaId(value) {
+        this._schemaId = value;
+    }
+    resetSchemaId() {
         this._schemaId = undefined;
-    };
-    Object.defineProperty(ApiShieldSchema.prototype, "schemaIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._schemaId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "source", {
-        // source - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "uploadDetails", {
-        get: function () {
-            return this._uploadDetails;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "validationEnabled", {
-        get: function () {
-            return this.getStringAttribute('validation_enabled');
-        },
-        set: function (value) {
-            this._validationEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ApiShieldSchema.prototype.resetValidationEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get schemaIdInput() {
+        return this._schemaId;
+    }
+    // source - computed: true, optional: false, required: false
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    // upload_details - computed: true, optional: false, required: false
+    _uploadDetails = new ApiShieldSchemaUploadDetailsOutputReference(this, "upload_details");
+    get uploadDetails() {
+        return this._uploadDetails;
+    }
+    // validation_enabled - computed: false, optional: true, required: false
+    _validationEnabled;
+    get validationEnabled() {
+        return this.getStringAttribute('validation_enabled');
+    }
+    set validationEnabled(value) {
+        this._validationEnabled = value;
+    }
+    resetValidationEnabled() {
         this._validationEnabled = undefined;
-    };
-    Object.defineProperty(ApiShieldSchema.prototype, "validationEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._validationEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApiShieldSchema.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ApiShieldSchema.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get validationEnabledInput() {
+        return this._validationEnabled;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ApiShieldSchema.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ApiShieldSchema.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             file: cdktf.stringToTerraform(this._file),
             kind: cdktf.stringToTerraform(this._kind),
@@ -501,9 +362,9 @@ var ApiShieldSchema = /** @class */ (function (_super) {
             validation_enabled: cdktf.stringToTerraform(this._validationEnabled),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ApiShieldSchema.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             file: {
                 value: cdktf.stringToHclTerraform(this._file),
                 isBlock: false,
@@ -542,15 +403,6 @@ var ApiShieldSchema = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ApiShieldSchema.tfResourceType = "cloudflare_api_shield_schema";
-    return ApiShieldSchema;
-}(cdktf.TerraformResource));
-exports.ApiShieldSchema = ApiShieldSchema;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

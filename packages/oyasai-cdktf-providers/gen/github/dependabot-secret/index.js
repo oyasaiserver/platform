@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DependabotSecret = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret github_dependabot_secret}
 */
-var DependabotSecret = /** @class */ (function (_super) {
-    __extends(DependabotSecret, _super);
+export class DependabotSecret extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_dependabot_secret";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DependabotSecret resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DependabotSecret to import
+    * @param importFromId The id of the existing DependabotSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DependabotSecret to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_dependabot_secret", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DependabotSecret = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DependabotSecretConfig
     */
-    function DependabotSecret(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_dependabot_secret',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,231 +46,153 @@ var DependabotSecret = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._encryptedValue = config.encryptedValue;
-        _this._id = config.id;
-        _this._keyId = config.keyId;
-        _this._plaintextValue = config.plaintextValue;
-        _this._repository = config.repository;
-        _this._secretName = config.secretName;
-        _this._value = config.value;
-        _this._valueEncrypted = config.valueEncrypted;
-        return _this;
+        });
+        this._encryptedValue = config.encryptedValue;
+        this._id = config.id;
+        this._keyId = config.keyId;
+        this._plaintextValue = config.plaintextValue;
+        this._repository = config.repository;
+        this._secretName = config.secretName;
+        this._value = config.value;
+        this._valueEncrypted = config.valueEncrypted;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DependabotSecret resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DependabotSecret to import
-    * @param importFromId The id of the existing DependabotSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/dependabot_secret#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DependabotSecret to import is found
-    */
-    DependabotSecret.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_dependabot_secret", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DependabotSecret.prototype, "createdAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "encryptedValue", {
-        get: function () {
-            return this.getStringAttribute('encrypted_value');
-        },
-        set: function (value) {
-            this._encryptedValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DependabotSecret.prototype.resetEncryptedValue = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // encrypted_value - computed: false, optional: true, required: false
+    _encryptedValue;
+    get encryptedValue() {
+        return this.getStringAttribute('encrypted_value');
+    }
+    set encryptedValue(value) {
+        this._encryptedValue = value;
+    }
+    resetEncryptedValue() {
         this._encryptedValue = undefined;
-    };
-    Object.defineProperty(DependabotSecret.prototype, "encryptedValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._encryptedValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DependabotSecret.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get encryptedValueInput() {
+        return this._encryptedValue;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DependabotSecret.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "keyId", {
-        get: function () {
-            return this.getStringAttribute('key_id');
-        },
-        set: function (value) {
-            this._keyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DependabotSecret.prototype.resetKeyId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // key_id - computed: true, optional: true, required: false
+    _keyId;
+    get keyId() {
+        return this.getStringAttribute('key_id');
+    }
+    set keyId(value) {
+        this._keyId = value;
+    }
+    resetKeyId() {
         this._keyId = undefined;
-    };
-    Object.defineProperty(DependabotSecret.prototype, "keyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "plaintextValue", {
-        get: function () {
-            return this.getStringAttribute('plaintext_value');
-        },
-        set: function (value) {
-            this._plaintextValue = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DependabotSecret.prototype.resetPlaintextValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyIdInput() {
+        return this._keyId;
+    }
+    // plaintext_value - computed: false, optional: true, required: false
+    _plaintextValue;
+    get plaintextValue() {
+        return this.getStringAttribute('plaintext_value');
+    }
+    set plaintextValue(value) {
+        this._plaintextValue = value;
+    }
+    resetPlaintextValue() {
         this._plaintextValue = undefined;
-    };
-    Object.defineProperty(DependabotSecret.prototype, "plaintextValueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._plaintextValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "remoteUpdatedAt", {
-        // remote_updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('remote_updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "repositoryId", {
-        // repository_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('repository_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "secretName", {
-        get: function () {
-            return this.getStringAttribute('secret_name');
-        },
-        set: function (value) {
-            this._secretName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "secretNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DependabotSecret.prototype.resetValue = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get plaintextValueInput() {
+        return this._plaintextValue;
+    }
+    // remote_updated_at - computed: true, optional: false, required: false
+    get remoteUpdatedAt() {
+        return this.getStringAttribute('remote_updated_at');
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
+    // repository_id - computed: true, optional: false, required: false
+    get repositoryId() {
+        return this.getNumberAttribute('repository_id');
+    }
+    // secret_name - computed: false, optional: false, required: true
+    _secretName;
+    get secretName() {
+        return this.getStringAttribute('secret_name');
+    }
+    set secretName(value) {
+        this._secretName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretNameInput() {
+        return this._secretName;
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // value - computed: false, optional: true, required: false
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    resetValue() {
         this._value = undefined;
-    };
-    Object.defineProperty(DependabotSecret.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DependabotSecret.prototype, "valueEncrypted", {
-        get: function () {
-            return this.getStringAttribute('value_encrypted');
-        },
-        set: function (value) {
-            this._valueEncrypted = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DependabotSecret.prototype.resetValueEncrypted = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+    // value_encrypted - computed: false, optional: true, required: false
+    _valueEncrypted;
+    get valueEncrypted() {
+        return this.getStringAttribute('value_encrypted');
+    }
+    set valueEncrypted(value) {
+        this._valueEncrypted = value;
+    }
+    resetValueEncrypted() {
         this._valueEncrypted = undefined;
-    };
-    Object.defineProperty(DependabotSecret.prototype, "valueEncryptedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._valueEncrypted;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueEncryptedInput() {
+        return this._valueEncrypted;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DependabotSecret.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             encrypted_value: cdktf.stringToTerraform(this._encryptedValue),
             id: cdktf.stringToTerraform(this._id),
@@ -283,9 +203,9 @@ var DependabotSecret = /** @class */ (function (_super) {
             value: cdktf.stringToTerraform(this._value),
             value_encrypted: cdktf.stringToTerraform(this._valueEncrypted),
         };
-    };
-    DependabotSecret.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             encrypted_value: {
                 value: cdktf.stringToHclTerraform(this._encryptedValue),
                 isBlock: false,
@@ -336,15 +256,6 @@ var DependabotSecret = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DependabotSecret.tfResourceType = "github_dependabot_secret";
-    return DependabotSecret;
-}(cdktf.TerraformResource));
-exports.DependabotSecret = DependabotSecret;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

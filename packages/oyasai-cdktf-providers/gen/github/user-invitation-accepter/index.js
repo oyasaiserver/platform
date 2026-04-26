@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/user_invitation_accepter
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserInvitationAccepter = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/user_invitation_accepter github_user_invitation_accepter}
 */
-var UserInvitationAccepter = /** @class */ (function (_super) {
-    __extends(UserInvitationAccepter, _super);
+export class UserInvitationAccepter extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_user_invitation_accepter";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a UserInvitationAccepter resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the UserInvitationAccepter to import
+    * @param importFromId The id of the existing UserInvitationAccepter that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/user_invitation_accepter#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the UserInvitationAccepter to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_user_invitation_accepter", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,9 +32,8 @@ var UserInvitationAccepter = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options UserInvitationAccepterConfig = {}
     */
-    function UserInvitationAccepter(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'github_user_invitation_accepter',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -49,100 +46,71 @@ var UserInvitationAccepter = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._allowEmptyId = config.allowEmptyId;
-        _this._id = config.id;
-        _this._invitationId = config.invitationId;
-        return _this;
+        });
+        this._allowEmptyId = config.allowEmptyId;
+        this._id = config.id;
+        this._invitationId = config.invitationId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a UserInvitationAccepter resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the UserInvitationAccepter to import
-    * @param importFromId The id of the existing UserInvitationAccepter that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/user_invitation_accepter#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the UserInvitationAccepter to import is found
-    */
-    UserInvitationAccepter.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_user_invitation_accepter", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(UserInvitationAccepter.prototype, "allowEmptyId", {
-        get: function () {
-            return this.getBooleanAttribute('allow_empty_id');
-        },
-        set: function (value) {
-            this._allowEmptyId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    UserInvitationAccepter.prototype.resetAllowEmptyId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // allow_empty_id - computed: false, optional: true, required: false
+    _allowEmptyId;
+    get allowEmptyId() {
+        return this.getBooleanAttribute('allow_empty_id');
+    }
+    set allowEmptyId(value) {
+        this._allowEmptyId = value;
+    }
+    resetAllowEmptyId() {
         this._allowEmptyId = undefined;
-    };
-    Object.defineProperty(UserInvitationAccepter.prototype, "allowEmptyIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowEmptyId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(UserInvitationAccepter.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    UserInvitationAccepter.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowEmptyIdInput() {
+        return this._allowEmptyId;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(UserInvitationAccepter.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(UserInvitationAccepter.prototype, "invitationId", {
-        get: function () {
-            return this.getStringAttribute('invitation_id');
-        },
-        set: function (value) {
-            this._invitationId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    UserInvitationAccepter.prototype.resetInvitationId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // invitation_id - computed: false, optional: true, required: false
+    _invitationId;
+    get invitationId() {
+        return this.getStringAttribute('invitation_id');
+    }
+    set invitationId(value) {
+        this._invitationId = value;
+    }
+    resetInvitationId() {
         this._invitationId = undefined;
-    };
-    Object.defineProperty(UserInvitationAccepter.prototype, "invitationIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._invitationId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get invitationIdInput() {
+        return this._invitationId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    UserInvitationAccepter.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             allow_empty_id: cdktf.booleanToTerraform(this._allowEmptyId),
             id: cdktf.stringToTerraform(this._id),
             invitation_id: cdktf.stringToTerraform(this._invitationId),
         };
-    };
-    UserInvitationAccepter.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             allow_empty_id: {
                 value: cdktf.booleanToHclTerraform(this._allowEmptyId),
                 isBlock: false,
@@ -163,15 +131,6 @@ var UserInvitationAccepter = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    UserInvitationAccepter.tfResourceType = "github_user_invitation_accepter";
-    return UserInvitationAccepter;
-}(cdktf.TerraformResource));
-exports.UserInvitationAccepter = UserInvitationAccepter;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,61 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_instance
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AiSearchInstance = exports.AiSearchInstanceSourceParamsOutputReference = exports.AiSearchInstanceSourceParamsWebCrawlerOutputReference = exports.AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference = exports.AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference = exports.AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList = exports.AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference = exports.AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference = exports.AiSearchInstanceRetrievalOptionsOutputReference = exports.AiSearchInstanceRetrievalOptionsBoostByList = exports.AiSearchInstanceRetrievalOptionsBoostByOutputReference = exports.AiSearchInstancePublicEndpointParamsOutputReference = exports.AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference = exports.AiSearchInstancePublicEndpointParamsRateLimitOutputReference = exports.AiSearchInstancePublicEndpointParamsMcpOutputReference = exports.AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference = exports.AiSearchInstanceMetadataOutputReference = exports.AiSearchInstanceMetadataSearchForAgentsOutputReference = exports.AiSearchInstanceIndexingOptionsOutputReference = exports.AiSearchInstanceIndexMethodOutputReference = exports.AiSearchInstanceCustomMetadataList = exports.AiSearchInstanceCustomMetadataOutputReference = void 0;
-exports.aiSearchInstanceCustomMetadataToTerraform = aiSearchInstanceCustomMetadataToTerraform;
-exports.aiSearchInstanceCustomMetadataToHclTerraform = aiSearchInstanceCustomMetadataToHclTerraform;
-exports.aiSearchInstanceIndexMethodToTerraform = aiSearchInstanceIndexMethodToTerraform;
-exports.aiSearchInstanceIndexMethodToHclTerraform = aiSearchInstanceIndexMethodToHclTerraform;
-exports.aiSearchInstanceIndexingOptionsToTerraform = aiSearchInstanceIndexingOptionsToTerraform;
-exports.aiSearchInstanceIndexingOptionsToHclTerraform = aiSearchInstanceIndexingOptionsToHclTerraform;
-exports.aiSearchInstanceMetadataSearchForAgentsToTerraform = aiSearchInstanceMetadataSearchForAgentsToTerraform;
-exports.aiSearchInstanceMetadataSearchForAgentsToHclTerraform = aiSearchInstanceMetadataSearchForAgentsToHclTerraform;
-exports.aiSearchInstanceMetadataToTerraform = aiSearchInstanceMetadataToTerraform;
-exports.aiSearchInstanceMetadataToHclTerraform = aiSearchInstanceMetadataToHclTerraform;
-exports.aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToTerraform = aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToTerraform;
-exports.aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToHclTerraform = aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToHclTerraform;
-exports.aiSearchInstancePublicEndpointParamsMcpToTerraform = aiSearchInstancePublicEndpointParamsMcpToTerraform;
-exports.aiSearchInstancePublicEndpointParamsMcpToHclTerraform = aiSearchInstancePublicEndpointParamsMcpToHclTerraform;
-exports.aiSearchInstancePublicEndpointParamsRateLimitToTerraform = aiSearchInstancePublicEndpointParamsRateLimitToTerraform;
-exports.aiSearchInstancePublicEndpointParamsRateLimitToHclTerraform = aiSearchInstancePublicEndpointParamsRateLimitToHclTerraform;
-exports.aiSearchInstancePublicEndpointParamsSearchEndpointToTerraform = aiSearchInstancePublicEndpointParamsSearchEndpointToTerraform;
-exports.aiSearchInstancePublicEndpointParamsSearchEndpointToHclTerraform = aiSearchInstancePublicEndpointParamsSearchEndpointToHclTerraform;
-exports.aiSearchInstancePublicEndpointParamsToTerraform = aiSearchInstancePublicEndpointParamsToTerraform;
-exports.aiSearchInstancePublicEndpointParamsToHclTerraform = aiSearchInstancePublicEndpointParamsToHclTerraform;
-exports.aiSearchInstanceRetrievalOptionsBoostByToTerraform = aiSearchInstanceRetrievalOptionsBoostByToTerraform;
-exports.aiSearchInstanceRetrievalOptionsBoostByToHclTerraform = aiSearchInstanceRetrievalOptionsBoostByToHclTerraform;
-exports.aiSearchInstanceRetrievalOptionsToTerraform = aiSearchInstanceRetrievalOptionsToTerraform;
-exports.aiSearchInstanceRetrievalOptionsToHclTerraform = aiSearchInstanceRetrievalOptionsToHclTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerraform = aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform = aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToTerraform = aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclTerraform = aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerraform = aiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerParseOptionsToHclTerraform = aiSearchInstanceSourceParamsWebCrawlerParseOptionsToHclTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform = aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform = aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerToTerraform = aiSearchInstanceSourceParamsWebCrawlerToTerraform;
-exports.aiSearchInstanceSourceParamsWebCrawlerToHclTerraform = aiSearchInstanceSourceParamsWebCrawlerToHclTerraform;
-exports.aiSearchInstanceSourceParamsToTerraform = aiSearchInstanceSourceParamsToTerraform;
-exports.aiSearchInstanceSourceParamsToHclTerraform = aiSearchInstanceSourceParamsToHclTerraform;
-var cdktf = require("cdktf");
-function aiSearchInstanceCustomMetadataToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function aiSearchInstanceCustomMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -67,14 +13,14 @@ function aiSearchInstanceCustomMetadataToTerraform(struct) {
         field_name: cdktf.stringToTerraform(struct.fieldName),
     };
 }
-function aiSearchInstanceCustomMetadataToHclTerraform(struct) {
+export function aiSearchInstanceCustomMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         data_type: {
             value: cdktf.stringToHclTerraform(struct.dataType),
             isBlock: false,
@@ -89,125 +35,103 @@ function aiSearchInstanceCustomMetadataToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceCustomMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceCustomMetadataOutputReference, _super);
+export class AiSearchInstanceCustomMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiSearchInstanceCustomMetadataOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(AiSearchInstanceCustomMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._dataType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dataType = this._dataType;
-            }
-            if (this._fieldName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fieldName = this._fieldName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._dataType = undefined;
-                this._fieldName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._dataType = value.dataType;
-                this._fieldName = value.fieldName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceCustomMetadataOutputReference.prototype, "dataType", {
-        get: function () {
-            return this.getStringAttribute('data_type');
-        },
-        set: function (value) {
-            this._dataType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceCustomMetadataOutputReference.prototype, "dataTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dataType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceCustomMetadataOutputReference.prototype, "fieldName", {
-        get: function () {
-            return this.getStringAttribute('field_name');
-        },
-        set: function (value) {
-            this._fieldName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceCustomMetadataOutputReference.prototype, "fieldNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fieldName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceCustomMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceCustomMetadataOutputReference = AiSearchInstanceCustomMetadataOutputReference;
-var AiSearchInstanceCustomMetadataList = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceCustomMetadataList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._dataType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dataType = this._dataType;
+        }
+        if (this._fieldName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fieldName = this._fieldName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._dataType = undefined;
+            this._fieldName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._dataType = value.dataType;
+            this._fieldName = value.fieldName;
+        }
+    }
+    // data_type - computed: false, optional: false, required: true
+    _dataType;
+    get dataType() {
+        return this.getStringAttribute('data_type');
+    }
+    set dataType(value) {
+        this._dataType = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get dataTypeInput() {
+        return this._dataType;
+    }
+    // field_name - computed: false, optional: false, required: true
+    _fieldName;
+    get fieldName() {
+        return this.getStringAttribute('field_name');
+    }
+    set fieldName(value) {
+        this._fieldName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get fieldNameInput() {
+        return this._fieldName;
+    }
+}
+export class AiSearchInstanceCustomMetadataList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiSearchInstanceCustomMetadataList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    AiSearchInstanceCustomMetadataList.prototype.get = function (index) {
+    get(index) {
         return new AiSearchInstanceCustomMetadataOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return AiSearchInstanceCustomMetadataList;
-}(cdktf.ComplexList));
-exports.AiSearchInstanceCustomMetadataList = AiSearchInstanceCustomMetadataList;
-function aiSearchInstanceIndexMethodToTerraform(struct) {
+    }
+}
+export function aiSearchInstanceIndexMethodToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -219,14 +143,14 @@ function aiSearchInstanceIndexMethodToTerraform(struct) {
         vector: cdktf.booleanToTerraform(struct.vector),
     };
 }
-function aiSearchInstanceIndexMethodToHclTerraform(struct) {
+export function aiSearchInstanceIndexMethodToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         keyword: {
             value: cdktf.booleanToHclTerraform(struct.keyword),
             isBlock: false,
@@ -241,100 +165,78 @@ function aiSearchInstanceIndexMethodToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceIndexMethodOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceIndexMethodOutputReference, _super);
+export class AiSearchInstanceIndexMethodOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceIndexMethodOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceIndexMethodOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._keyword !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keyword = this._keyword;
-            }
-            if (this._vector !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.vector = this._vector;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._keyword = undefined;
-                this._vector = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._keyword = value.keyword;
-                this._vector = value.vector;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceIndexMethodOutputReference.prototype, "keyword", {
-        get: function () {
-            return this.getBooleanAttribute('keyword');
-        },
-        set: function (value) {
-            this._keyword = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceIndexMethodOutputReference.prototype, "keywordInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyword;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceIndexMethodOutputReference.prototype, "vector", {
-        get: function () {
-            return this.getBooleanAttribute('vector');
-        },
-        set: function (value) {
-            this._vector = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceIndexMethodOutputReference.prototype, "vectorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._vector;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceIndexMethodOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceIndexMethodOutputReference = AiSearchInstanceIndexMethodOutputReference;
-function aiSearchInstanceIndexingOptionsToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._keyword !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keyword = this._keyword;
+        }
+        if (this._vector !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.vector = this._vector;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._keyword = undefined;
+            this._vector = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._keyword = value.keyword;
+            this._vector = value.vector;
+        }
+    }
+    // keyword - computed: true, optional: false, required: true
+    _keyword;
+    get keyword() {
+        return this.getBooleanAttribute('keyword');
+    }
+    set keyword(value) {
+        this._keyword = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keywordInput() {
+        return this._keyword;
+    }
+    // vector - computed: true, optional: false, required: true
+    _vector;
+    get vector() {
+        return this.getBooleanAttribute('vector');
+    }
+    set vector(value) {
+        this._vector = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get vectorInput() {
+        return this._vector;
+    }
+}
+export function aiSearchInstanceIndexingOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -345,14 +247,14 @@ function aiSearchInstanceIndexingOptionsToTerraform(struct) {
         keyword_tokenizer: cdktf.stringToTerraform(struct.keywordTokenizer),
     };
 }
-function aiSearchInstanceIndexingOptionsToHclTerraform(struct) {
+export function aiSearchInstanceIndexingOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         keyword_tokenizer: {
             value: cdktf.stringToHclTerraform(struct.keywordTokenizer),
             isBlock: false,
@@ -361,79 +263,63 @@ function aiSearchInstanceIndexingOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceIndexingOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceIndexingOptionsOutputReference, _super);
+export class AiSearchInstanceIndexingOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceIndexingOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceIndexingOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._keywordTokenizer !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keywordTokenizer = this._keywordTokenizer;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._keywordTokenizer = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._keywordTokenizer = value.keywordTokenizer;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceIndexingOptionsOutputReference.prototype, "keywordTokenizer", {
-        get: function () {
-            return this.getStringAttribute('keyword_tokenizer');
-        },
-        set: function (value) {
-            this._keywordTokenizer = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceIndexingOptionsOutputReference.prototype.resetKeywordTokenizer = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._keywordTokenizer !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keywordTokenizer = this._keywordTokenizer;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._keywordTokenizer = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._keywordTokenizer = value.keywordTokenizer;
+        }
+    }
+    // keyword_tokenizer - computed: true, optional: true, required: false
+    _keywordTokenizer;
+    get keywordTokenizer() {
+        return this.getStringAttribute('keyword_tokenizer');
+    }
+    set keywordTokenizer(value) {
+        this._keywordTokenizer = value;
+    }
+    resetKeywordTokenizer() {
         this._keywordTokenizer = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceIndexingOptionsOutputReference.prototype, "keywordTokenizerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keywordTokenizer;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceIndexingOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceIndexingOptionsOutputReference = AiSearchInstanceIndexingOptionsOutputReference;
-function aiSearchInstanceMetadataSearchForAgentsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keywordTokenizerInput() {
+        return this._keywordTokenizer;
+    }
+}
+export function aiSearchInstanceMetadataSearchForAgentsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -446,14 +332,14 @@ function aiSearchInstanceMetadataSearchForAgentsToTerraform(struct) {
         zone_name: cdktf.stringToTerraform(struct.zoneName),
     };
 }
-function aiSearchInstanceMetadataSearchForAgentsToHclTerraform(struct) {
+export function aiSearchInstanceMetadataSearchForAgentsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         hostname: {
             value: cdktf.stringToHclTerraform(struct.hostname),
             isBlock: false,
@@ -474,124 +360,96 @@ function aiSearchInstanceMetadataSearchForAgentsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceMetadataSearchForAgentsOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceMetadataSearchForAgentsOutputReference, _super);
+export class AiSearchInstanceMetadataSearchForAgentsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceMetadataSearchForAgentsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._hostname !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hostname = this._hostname;
-            }
-            if (this._zoneId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.zoneId = this._zoneId;
-            }
-            if (this._zoneName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.zoneName = this._zoneName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._hostname = undefined;
-                this._zoneId = undefined;
-                this._zoneName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._hostname = value.hostname;
-                this._zoneId = value.zoneId;
-                this._zoneName = value.zoneName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "hostname", {
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        set: function (value) {
-            this._hostname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "hostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "zoneName", {
-        get: function () {
-            return this.getStringAttribute('zone_name');
-        },
-        set: function (value) {
-            this._zoneName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceMetadataSearchForAgentsOutputReference.prototype, "zoneNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceMetadataSearchForAgentsOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceMetadataSearchForAgentsOutputReference = AiSearchInstanceMetadataSearchForAgentsOutputReference;
-function aiSearchInstanceMetadataToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._hostname !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hostname = this._hostname;
+        }
+        if (this._zoneId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.zoneId = this._zoneId;
+        }
+        if (this._zoneName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.zoneName = this._zoneName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._hostname = undefined;
+            this._zoneId = undefined;
+            this._zoneName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._hostname = value.hostname;
+            this._zoneId = value.zoneId;
+            this._zoneName = value.zoneName;
+        }
+    }
+    // hostname - computed: false, optional: false, required: true
+    _hostname;
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    set hostname(value) {
+        this._hostname = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameInput() {
+        return this._hostname;
+    }
+    // zone_id - computed: false, optional: false, required: true
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
+    // zone_name - computed: false, optional: false, required: true
+    _zoneName;
+    get zoneName() {
+        return this.getStringAttribute('zone_name');
+    }
+    set zoneName(value) {
+        this._zoneName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneNameInput() {
+        return this._zoneName;
+    }
+}
+export function aiSearchInstanceMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -604,14 +462,14 @@ function aiSearchInstanceMetadataToTerraform(struct) {
         worker_domain: cdktf.stringToTerraform(struct.workerDomain),
     };
 }
-function aiSearchInstanceMetadataToHclTerraform(struct) {
+export function aiSearchInstanceMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         created_from_aisearch_wizard: {
             value: cdktf.booleanToHclTerraform(struct.createdFromAisearchWizard),
             isBlock: false,
@@ -632,136 +490,105 @@ function aiSearchInstanceMetadataToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceMetadataOutputReference, _super);
+export class AiSearchInstanceMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceMetadataOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // search_for_agents - computed: false, optional: true, required: false
-        _this._searchForAgents = new AiSearchInstanceMetadataSearchForAgentsOutputReference(_this, "search_for_agents");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._createdFromAisearchWizard !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.createdFromAisearchWizard = this._createdFromAisearchWizard;
-            }
-            if (((_a = this._searchForAgents) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.searchForAgents = (_b = this._searchForAgents) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._workerDomain !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.workerDomain = this._workerDomain;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._createdFromAisearchWizard = undefined;
-                this._searchForAgents.internalValue = undefined;
-                this._workerDomain = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._createdFromAisearchWizard = value.createdFromAisearchWizard;
-                this._searchForAgents.internalValue = value.searchForAgents;
-                this._workerDomain = value.workerDomain;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceMetadataOutputReference.prototype, "createdFromAisearchWizard", {
-        get: function () {
-            return this.getBooleanAttribute('created_from_aisearch_wizard');
-        },
-        set: function (value) {
-            this._createdFromAisearchWizard = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceMetadataOutputReference.prototype.resetCreatedFromAisearchWizard = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._createdFromAisearchWizard !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.createdFromAisearchWizard = this._createdFromAisearchWizard;
+        }
+        if (this._searchForAgents?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.searchForAgents = this._searchForAgents?.internalValue;
+        }
+        if (this._workerDomain !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.workerDomain = this._workerDomain;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._createdFromAisearchWizard = undefined;
+            this._searchForAgents.internalValue = undefined;
+            this._workerDomain = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._createdFromAisearchWizard = value.createdFromAisearchWizard;
+            this._searchForAgents.internalValue = value.searchForAgents;
+            this._workerDomain = value.workerDomain;
+        }
+    }
+    // created_from_aisearch_wizard - computed: false, optional: true, required: false
+    _createdFromAisearchWizard;
+    get createdFromAisearchWizard() {
+        return this.getBooleanAttribute('created_from_aisearch_wizard');
+    }
+    set createdFromAisearchWizard(value) {
+        this._createdFromAisearchWizard = value;
+    }
+    resetCreatedFromAisearchWizard() {
         this._createdFromAisearchWizard = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceMetadataOutputReference.prototype, "createdFromAisearchWizardInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._createdFromAisearchWizard;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceMetadataOutputReference.prototype, "searchForAgents", {
-        get: function () {
-            return this._searchForAgents;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceMetadataOutputReference.prototype.putSearchForAgents = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get createdFromAisearchWizardInput() {
+        return this._createdFromAisearchWizard;
+    }
+    // search_for_agents - computed: false, optional: true, required: false
+    _searchForAgents = new AiSearchInstanceMetadataSearchForAgentsOutputReference(this, "search_for_agents");
+    get searchForAgents() {
+        return this._searchForAgents;
+    }
+    putSearchForAgents(value) {
         this._searchForAgents.internalValue = value;
-    };
-    AiSearchInstanceMetadataOutputReference.prototype.resetSearchForAgents = function () {
+    }
+    resetSearchForAgents() {
         this._searchForAgents.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceMetadataOutputReference.prototype, "searchForAgentsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._searchForAgents.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceMetadataOutputReference.prototype, "workerDomain", {
-        get: function () {
-            return this.getStringAttribute('worker_domain');
-        },
-        set: function (value) {
-            this._workerDomain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceMetadataOutputReference.prototype.resetWorkerDomain = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get searchForAgentsInput() {
+        return this._searchForAgents.internalValue;
+    }
+    // worker_domain - computed: false, optional: true, required: false
+    _workerDomain;
+    get workerDomain() {
+        return this.getStringAttribute('worker_domain');
+    }
+    set workerDomain(value) {
+        this._workerDomain = value;
+    }
+    resetWorkerDomain() {
         this._workerDomain = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceMetadataOutputReference.prototype, "workerDomainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._workerDomain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceMetadataOutputReference = AiSearchInstanceMetadataOutputReference;
-function aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get workerDomainInput() {
+        return this._workerDomain;
+    }
+}
+export function aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -772,14 +599,14 @@ function aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToTerraform(
         disabled: cdktf.booleanToTerraform(struct.disabled),
     };
 }
-function aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToHclTerraform(struct) {
+export function aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         disabled: {
             value: cdktf.booleanToHclTerraform(struct.disabled),
             isBlock: false,
@@ -788,79 +615,63 @@ function aiSearchInstancePublicEndpointParamsChatCompletionsEndpointToHclTerrafo
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference, _super);
+export class AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._disabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disabled = this._disabled;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._disabled = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._disabled = value.disabled;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference.prototype, "disabled", {
-        get: function () {
-            return this.getBooleanAttribute('disabled');
-        },
-        set: function (value) {
-            this._disabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference.prototype.resetDisabled = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._disabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disabled = this._disabled;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._disabled = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._disabled = value.disabled;
+        }
+    }
+    // disabled - computed: true, optional: true, required: false
+    _disabled;
+    get disabled() {
+        return this.getBooleanAttribute('disabled');
+    }
+    set disabled(value) {
+        this._disabled = value;
+    }
+    resetDisabled() {
         this._disabled = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference.prototype, "disabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference = AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference;
-function aiSearchInstancePublicEndpointParamsMcpToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disabledInput() {
+        return this._disabled;
+    }
+}
+export function aiSearchInstancePublicEndpointParamsMcpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -872,14 +683,14 @@ function aiSearchInstancePublicEndpointParamsMcpToTerraform(struct) {
         disabled: cdktf.booleanToTerraform(struct.disabled),
     };
 }
-function aiSearchInstancePublicEndpointParamsMcpToHclTerraform(struct) {
+export function aiSearchInstancePublicEndpointParamsMcpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         description: {
             value: cdktf.stringToHclTerraform(struct.description),
             isBlock: false,
@@ -894,106 +705,84 @@ function aiSearchInstancePublicEndpointParamsMcpToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstancePublicEndpointParamsMcpOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstancePublicEndpointParamsMcpOutputReference, _super);
+export class AiSearchInstancePublicEndpointParamsMcpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstancePublicEndpointParamsMcpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsMcpOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._description !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.description = this._description;
-            }
-            if (this._disabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disabled = this._disabled;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._description = undefined;
-                this._disabled = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._description = value.description;
-                this._disabled = value.disabled;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsMcpOutputReference.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsMcpOutputReference.prototype.resetDescription = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._description !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.description = this._description;
+        }
+        if (this._disabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disabled = this._disabled;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._description = undefined;
+            this._disabled = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._description = value.description;
+            this._disabled = value.disabled;
+        }
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsMcpOutputReference.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsMcpOutputReference.prototype, "disabled", {
-        get: function () {
-            return this.getBooleanAttribute('disabled');
-        },
-        set: function (value) {
-            this._disabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsMcpOutputReference.prototype.resetDisabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // disabled - computed: true, optional: true, required: false
+    _disabled;
+    get disabled() {
+        return this.getBooleanAttribute('disabled');
+    }
+    set disabled(value) {
+        this._disabled = value;
+    }
+    resetDisabled() {
         this._disabled = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsMcpOutputReference.prototype, "disabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstancePublicEndpointParamsMcpOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstancePublicEndpointParamsMcpOutputReference = AiSearchInstancePublicEndpointParamsMcpOutputReference;
-function aiSearchInstancePublicEndpointParamsRateLimitToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disabledInput() {
+        return this._disabled;
+    }
+}
+export function aiSearchInstancePublicEndpointParamsRateLimitToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1006,14 +795,14 @@ function aiSearchInstancePublicEndpointParamsRateLimitToTerraform(struct) {
         technique: cdktf.stringToTerraform(struct.technique),
     };
 }
-function aiSearchInstancePublicEndpointParamsRateLimitToHclTerraform(struct) {
+export function aiSearchInstancePublicEndpointParamsRateLimitToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         period_ms: {
             value: cdktf.numberToHclTerraform(struct.periodMs),
             isBlock: false,
@@ -1034,133 +823,105 @@ function aiSearchInstancePublicEndpointParamsRateLimitToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstancePublicEndpointParamsRateLimitOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstancePublicEndpointParamsRateLimitOutputReference, _super);
+export class AiSearchInstancePublicEndpointParamsRateLimitOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstancePublicEndpointParamsRateLimitOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._periodMs !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.periodMs = this._periodMs;
-            }
-            if (this._requests !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requests = this._requests;
-            }
-            if (this._technique !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.technique = this._technique;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._periodMs = undefined;
-                this._requests = undefined;
-                this._technique = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._periodMs = value.periodMs;
-                this._requests = value.requests;
-                this._technique = value.technique;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "periodMs", {
-        get: function () {
-            return this.getNumberAttribute('period_ms');
-        },
-        set: function (value) {
-            this._periodMs = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype.resetPeriodMs = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._periodMs !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.periodMs = this._periodMs;
+        }
+        if (this._requests !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requests = this._requests;
+        }
+        if (this._technique !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.technique = this._technique;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._periodMs = undefined;
+            this._requests = undefined;
+            this._technique = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._periodMs = value.periodMs;
+            this._requests = value.requests;
+            this._technique = value.technique;
+        }
+    }
+    // period_ms - computed: true, optional: true, required: false
+    _periodMs;
+    get periodMs() {
+        return this.getNumberAttribute('period_ms');
+    }
+    set periodMs(value) {
+        this._periodMs = value;
+    }
+    resetPeriodMs() {
         this._periodMs = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "periodMsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._periodMs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "requests", {
-        get: function () {
-            return this.getNumberAttribute('requests');
-        },
-        set: function (value) {
-            this._requests = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype.resetRequests = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get periodMsInput() {
+        return this._periodMs;
+    }
+    // requests - computed: true, optional: true, required: false
+    _requests;
+    get requests() {
+        return this.getNumberAttribute('requests');
+    }
+    set requests(value) {
+        this._requests = value;
+    }
+    resetRequests() {
         this._requests = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "requestsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requests;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "technique", {
-        get: function () {
-            return this.getStringAttribute('technique');
-        },
-        set: function (value) {
-            this._technique = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype.resetTechnique = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requestsInput() {
+        return this._requests;
+    }
+    // technique - computed: true, optional: true, required: false
+    _technique;
+    get technique() {
+        return this.getStringAttribute('technique');
+    }
+    set technique(value) {
+        this._technique = value;
+    }
+    resetTechnique() {
         this._technique = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsRateLimitOutputReference.prototype, "techniqueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._technique;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstancePublicEndpointParamsRateLimitOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstancePublicEndpointParamsRateLimitOutputReference = AiSearchInstancePublicEndpointParamsRateLimitOutputReference;
-function aiSearchInstancePublicEndpointParamsSearchEndpointToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get techniqueInput() {
+        return this._technique;
+    }
+}
+export function aiSearchInstancePublicEndpointParamsSearchEndpointToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1171,14 +932,14 @@ function aiSearchInstancePublicEndpointParamsSearchEndpointToTerraform(struct) {
         disabled: cdktf.booleanToTerraform(struct.disabled),
     };
 }
-function aiSearchInstancePublicEndpointParamsSearchEndpointToHclTerraform(struct) {
+export function aiSearchInstancePublicEndpointParamsSearchEndpointToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         disabled: {
             value: cdktf.booleanToHclTerraform(struct.disabled),
             isBlock: false,
@@ -1187,79 +948,63 @@ function aiSearchInstancePublicEndpointParamsSearchEndpointToHclTerraform(struct
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference, _super);
+export class AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._disabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.disabled = this._disabled;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._disabled = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._disabled = value.disabled;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference.prototype, "disabled", {
-        get: function () {
-            return this.getBooleanAttribute('disabled');
-        },
-        set: function (value) {
-            this._disabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference.prototype.resetDisabled = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._disabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.disabled = this._disabled;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._disabled = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._disabled = value.disabled;
+        }
+    }
+    // disabled - computed: true, optional: true, required: false
+    _disabled;
+    get disabled() {
+        return this.getBooleanAttribute('disabled');
+    }
+    set disabled(value) {
+        this._disabled = value;
+    }
+    resetDisabled() {
         this._disabled = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference.prototype, "disabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference = AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference;
-function aiSearchInstancePublicEndpointParamsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disabledInput() {
+        return this._disabled;
+    }
+}
+export function aiSearchInstancePublicEndpointParamsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1275,14 +1020,14 @@ function aiSearchInstancePublicEndpointParamsToTerraform(struct) {
         search_endpoint: aiSearchInstancePublicEndpointParamsSearchEndpointToTerraform(struct.searchEndpoint),
     };
 }
-function aiSearchInstancePublicEndpointParamsToHclTerraform(struct) {
+export function aiSearchInstancePublicEndpointParamsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         authorized_hosts: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.authorizedHosts),
             isBlock: false,
@@ -1321,223 +1066,168 @@ function aiSearchInstancePublicEndpointParamsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstancePublicEndpointParamsOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstancePublicEndpointParamsOutputReference, _super);
+export class AiSearchInstancePublicEndpointParamsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstancePublicEndpointParamsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // chat_completions_endpoint - computed: true, optional: true, required: false
-        _this._chatCompletionsEndpoint = new AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference(_this, "chat_completions_endpoint");
-        // mcp - computed: true, optional: true, required: false
-        _this._mcp = new AiSearchInstancePublicEndpointParamsMcpOutputReference(_this, "mcp");
-        // rate_limit - computed: true, optional: true, required: false
-        _this._rateLimit = new AiSearchInstancePublicEndpointParamsRateLimitOutputReference(_this, "rate_limit");
-        // search_endpoint - computed: true, optional: true, required: false
-        _this._searchEndpoint = new AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference(_this, "search_endpoint");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._authorizedHosts !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.authorizedHosts = this._authorizedHosts;
-            }
-            if (((_a = this._chatCompletionsEndpoint) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.chatCompletionsEndpoint = (_b = this._chatCompletionsEndpoint) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._enabled !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enabled = this._enabled;
-            }
-            if (((_c = this._mcp) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.mcp = (_d = this._mcp) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._rateLimit) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.rateLimit = (_f = this._rateLimit) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._searchEndpoint) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.searchEndpoint = (_h = this._searchEndpoint) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._authorizedHosts = undefined;
-                this._chatCompletionsEndpoint.internalValue = undefined;
-                this._enabled = undefined;
-                this._mcp.internalValue = undefined;
-                this._rateLimit.internalValue = undefined;
-                this._searchEndpoint.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._authorizedHosts = value.authorizedHosts;
-                this._chatCompletionsEndpoint.internalValue = value.chatCompletionsEndpoint;
-                this._enabled = value.enabled;
-                this._mcp.internalValue = value.mcp;
-                this._rateLimit.internalValue = value.rateLimit;
-                this._searchEndpoint.internalValue = value.searchEndpoint;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "authorizedHosts", {
-        get: function () {
-            return this.getListAttribute('authorized_hosts');
-        },
-        set: function (value) {
-            this._authorizedHosts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.resetAuthorizedHosts = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._authorizedHosts !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.authorizedHosts = this._authorizedHosts;
+        }
+        if (this._chatCompletionsEndpoint?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.chatCompletionsEndpoint = this._chatCompletionsEndpoint?.internalValue;
+        }
+        if (this._enabled !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enabled = this._enabled;
+        }
+        if (this._mcp?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.mcp = this._mcp?.internalValue;
+        }
+        if (this._rateLimit?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.rateLimit = this._rateLimit?.internalValue;
+        }
+        if (this._searchEndpoint?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.searchEndpoint = this._searchEndpoint?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._authorizedHosts = undefined;
+            this._chatCompletionsEndpoint.internalValue = undefined;
+            this._enabled = undefined;
+            this._mcp.internalValue = undefined;
+            this._rateLimit.internalValue = undefined;
+            this._searchEndpoint.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._authorizedHosts = value.authorizedHosts;
+            this._chatCompletionsEndpoint.internalValue = value.chatCompletionsEndpoint;
+            this._enabled = value.enabled;
+            this._mcp.internalValue = value.mcp;
+            this._rateLimit.internalValue = value.rateLimit;
+            this._searchEndpoint.internalValue = value.searchEndpoint;
+        }
+    }
+    // authorized_hosts - computed: true, optional: true, required: false
+    _authorizedHosts;
+    get authorizedHosts() {
+        return this.getListAttribute('authorized_hosts');
+    }
+    set authorizedHosts(value) {
+        this._authorizedHosts = value;
+    }
+    resetAuthorizedHosts() {
         this._authorizedHosts = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "authorizedHostsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._authorizedHosts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "chatCompletionsEndpoint", {
-        get: function () {
-            return this._chatCompletionsEndpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.putChatCompletionsEndpoint = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get authorizedHostsInput() {
+        return this._authorizedHosts;
+    }
+    // chat_completions_endpoint - computed: true, optional: true, required: false
+    _chatCompletionsEndpoint = new AiSearchInstancePublicEndpointParamsChatCompletionsEndpointOutputReference(this, "chat_completions_endpoint");
+    get chatCompletionsEndpoint() {
+        return this._chatCompletionsEndpoint;
+    }
+    putChatCompletionsEndpoint(value) {
         this._chatCompletionsEndpoint.internalValue = value;
-    };
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.resetChatCompletionsEndpoint = function () {
+    }
+    resetChatCompletionsEndpoint() {
         this._chatCompletionsEndpoint.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "chatCompletionsEndpointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._chatCompletionsEndpoint.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get chatCompletionsEndpointInput() {
+        return this._chatCompletionsEndpoint.internalValue;
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "mcp", {
-        get: function () {
-            return this._mcp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.putMcp = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // mcp - computed: true, optional: true, required: false
+    _mcp = new AiSearchInstancePublicEndpointParamsMcpOutputReference(this, "mcp");
+    get mcp() {
+        return this._mcp;
+    }
+    putMcp(value) {
         this._mcp.internalValue = value;
-    };
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.resetMcp = function () {
+    }
+    resetMcp() {
         this._mcp.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "mcpInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mcp.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "rateLimit", {
-        get: function () {
-            return this._rateLimit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.putRateLimit = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mcpInput() {
+        return this._mcp.internalValue;
+    }
+    // rate_limit - computed: true, optional: true, required: false
+    _rateLimit = new AiSearchInstancePublicEndpointParamsRateLimitOutputReference(this, "rate_limit");
+    get rateLimit() {
+        return this._rateLimit;
+    }
+    putRateLimit(value) {
         this._rateLimit.internalValue = value;
-    };
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.resetRateLimit = function () {
+    }
+    resetRateLimit() {
         this._rateLimit.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "rateLimitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rateLimit.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "searchEndpoint", {
-        get: function () {
-            return this._searchEndpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.putSearchEndpoint = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rateLimitInput() {
+        return this._rateLimit.internalValue;
+    }
+    // search_endpoint - computed: true, optional: true, required: false
+    _searchEndpoint = new AiSearchInstancePublicEndpointParamsSearchEndpointOutputReference(this, "search_endpoint");
+    get searchEndpoint() {
+        return this._searchEndpoint;
+    }
+    putSearchEndpoint(value) {
         this._searchEndpoint.internalValue = value;
-    };
-    AiSearchInstancePublicEndpointParamsOutputReference.prototype.resetSearchEndpoint = function () {
+    }
+    resetSearchEndpoint() {
         this._searchEndpoint.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstancePublicEndpointParamsOutputReference.prototype, "searchEndpointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._searchEndpoint.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstancePublicEndpointParamsOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstancePublicEndpointParamsOutputReference = AiSearchInstancePublicEndpointParamsOutputReference;
-function aiSearchInstanceRetrievalOptionsBoostByToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get searchEndpointInput() {
+        return this._searchEndpoint.internalValue;
+    }
+}
+export function aiSearchInstanceRetrievalOptionsBoostByToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1549,14 +1239,14 @@ function aiSearchInstanceRetrievalOptionsBoostByToTerraform(struct) {
         field: cdktf.stringToTerraform(struct.field),
     };
 }
-function aiSearchInstanceRetrievalOptionsBoostByToHclTerraform(struct) {
+export function aiSearchInstanceRetrievalOptionsBoostByToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         direction: {
             value: cdktf.stringToHclTerraform(struct.direction),
             isBlock: false,
@@ -1571,128 +1261,106 @@ function aiSearchInstanceRetrievalOptionsBoostByToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceRetrievalOptionsBoostByOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceRetrievalOptionsBoostByOutputReference, _super);
+export class AiSearchInstanceRetrievalOptionsBoostByOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiSearchInstanceRetrievalOptionsBoostByOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsBoostByOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._direction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.direction = this._direction;
-            }
-            if (this._field !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.field = this._field;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._direction = undefined;
-                this._field = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._direction = value.direction;
-                this._field = value.field;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsBoostByOutputReference.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceRetrievalOptionsBoostByOutputReference.prototype.resetDirection = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._direction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.direction = this._direction;
+        }
+        if (this._field !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.field = this._field;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._direction = undefined;
+            this._field = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._direction = value.direction;
+            this._field = value.field;
+        }
+    }
+    // direction - computed: true, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsBoostByOutputReference.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsBoostByOutputReference.prototype, "field", {
-        get: function () {
-            return this.getStringAttribute('field');
-        },
-        set: function (value) {
-            this._field = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsBoostByOutputReference.prototype, "fieldInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._field;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceRetrievalOptionsBoostByOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceRetrievalOptionsBoostByOutputReference = AiSearchInstanceRetrievalOptionsBoostByOutputReference;
-var AiSearchInstanceRetrievalOptionsBoostByList = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceRetrievalOptionsBoostByList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // field - computed: true, optional: false, required: true
+    _field;
+    get field() {
+        return this.getStringAttribute('field');
+    }
+    set field(value) {
+        this._field = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get fieldInput() {
+        return this._field;
+    }
+}
+export class AiSearchInstanceRetrievalOptionsBoostByList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiSearchInstanceRetrievalOptionsBoostByList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    AiSearchInstanceRetrievalOptionsBoostByList.prototype.get = function (index) {
+    get(index) {
         return new AiSearchInstanceRetrievalOptionsBoostByOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return AiSearchInstanceRetrievalOptionsBoostByList;
-}(cdktf.ComplexList));
-exports.AiSearchInstanceRetrievalOptionsBoostByList = AiSearchInstanceRetrievalOptionsBoostByList;
-function aiSearchInstanceRetrievalOptionsToTerraform(struct) {
+    }
+}
+export function aiSearchInstanceRetrievalOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1704,14 +1372,14 @@ function aiSearchInstanceRetrievalOptionsToTerraform(struct) {
         keyword_match_mode: cdktf.stringToTerraform(struct.keywordMatchMode),
     };
 }
-function aiSearchInstanceRetrievalOptionsToHclTerraform(struct) {
+export function aiSearchInstanceRetrievalOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         boost_by: {
             value: cdktf.listMapperHcl(aiSearchInstanceRetrievalOptionsBoostByToHclTerraform, false)(struct.boostBy),
             isBlock: true,
@@ -1726,109 +1394,84 @@ function aiSearchInstanceRetrievalOptionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceRetrievalOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceRetrievalOptionsOutputReference, _super);
+export class AiSearchInstanceRetrievalOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceRetrievalOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // boost_by - computed: true, optional: true, required: false
-        _this._boostBy = new AiSearchInstanceRetrievalOptionsBoostByList(_this, "boost_by", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._boostBy) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.boostBy = (_b = this._boostBy) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._keywordMatchMode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keywordMatchMode = this._keywordMatchMode;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._boostBy.internalValue = undefined;
-                this._keywordMatchMode = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._boostBy.internalValue = value.boostBy;
-                this._keywordMatchMode = value.keywordMatchMode;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsOutputReference.prototype, "boostBy", {
-        get: function () {
-            return this._boostBy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceRetrievalOptionsOutputReference.prototype.putBoostBy = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._boostBy?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.boostBy = this._boostBy?.internalValue;
+        }
+        if (this._keywordMatchMode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keywordMatchMode = this._keywordMatchMode;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._boostBy.internalValue = undefined;
+            this._keywordMatchMode = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._boostBy.internalValue = value.boostBy;
+            this._keywordMatchMode = value.keywordMatchMode;
+        }
+    }
+    // boost_by - computed: true, optional: true, required: false
+    _boostBy = new AiSearchInstanceRetrievalOptionsBoostByList(this, "boost_by", false);
+    get boostBy() {
+        return this._boostBy;
+    }
+    putBoostBy(value) {
         this._boostBy.internalValue = value;
-    };
-    AiSearchInstanceRetrievalOptionsOutputReference.prototype.resetBoostBy = function () {
+    }
+    resetBoostBy() {
         this._boostBy.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsOutputReference.prototype, "boostByInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._boostBy.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsOutputReference.prototype, "keywordMatchMode", {
-        get: function () {
-            return this.getStringAttribute('keyword_match_mode');
-        },
-        set: function (value) {
-            this._keywordMatchMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceRetrievalOptionsOutputReference.prototype.resetKeywordMatchMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get boostByInput() {
+        return this._boostBy.internalValue;
+    }
+    // keyword_match_mode - computed: true, optional: true, required: false
+    _keywordMatchMode;
+    get keywordMatchMode() {
+        return this.getStringAttribute('keyword_match_mode');
+    }
+    set keywordMatchMode(value) {
+        this._keywordMatchMode = value;
+    }
+    resetKeywordMatchMode() {
         this._keywordMatchMode = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceRetrievalOptionsOutputReference.prototype, "keywordMatchModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keywordMatchMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceRetrievalOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceRetrievalOptionsOutputReference = AiSearchInstanceRetrievalOptionsOutputReference;
-function aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keywordMatchModeInput() {
+        return this._keywordMatchMode;
+    }
+}
+export function aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1843,14 +1486,14 @@ function aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToTerraform(struct) {
         source: cdktf.stringToTerraform(struct.source),
     };
 }
-function aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform(struct) {
+export function aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         depth: {
             value: cdktf.numberToHclTerraform(struct.depth),
             isBlock: false,
@@ -1883,187 +1526,147 @@ function aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform(struct
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference, _super);
+export class AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._depth !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.depth = this._depth;
-            }
-            if (this._includeExternalLinks !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.includeExternalLinks = this._includeExternalLinks;
-            }
-            if (this._includeSubdomains !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.includeSubdomains = this._includeSubdomains;
-            }
-            if (this._maxAge !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxAge = this._maxAge;
-            }
-            if (this._source !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.source = this._source;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._depth = undefined;
-                this._includeExternalLinks = undefined;
-                this._includeSubdomains = undefined;
-                this._maxAge = undefined;
-                this._source = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._depth = value.depth;
-                this._includeExternalLinks = value.includeExternalLinks;
-                this._includeSubdomains = value.includeSubdomains;
-                this._maxAge = value.maxAge;
-                this._source = value.source;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "depth", {
-        get: function () {
-            return this.getNumberAttribute('depth');
-        },
-        set: function (value) {
-            this._depth = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype.resetDepth = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._depth !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.depth = this._depth;
+        }
+        if (this._includeExternalLinks !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.includeExternalLinks = this._includeExternalLinks;
+        }
+        if (this._includeSubdomains !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.includeSubdomains = this._includeSubdomains;
+        }
+        if (this._maxAge !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxAge = this._maxAge;
+        }
+        if (this._source !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.source = this._source;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._depth = undefined;
+            this._includeExternalLinks = undefined;
+            this._includeSubdomains = undefined;
+            this._maxAge = undefined;
+            this._source = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._depth = value.depth;
+            this._includeExternalLinks = value.includeExternalLinks;
+            this._includeSubdomains = value.includeSubdomains;
+            this._maxAge = value.maxAge;
+            this._source = value.source;
+        }
+    }
+    // depth - computed: true, optional: true, required: false
+    _depth;
+    get depth() {
+        return this.getNumberAttribute('depth');
+    }
+    set depth(value) {
+        this._depth = value;
+    }
+    resetDepth() {
         this._depth = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "depthInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._depth;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "includeExternalLinks", {
-        get: function () {
-            return this.getBooleanAttribute('include_external_links');
-        },
-        set: function (value) {
-            this._includeExternalLinks = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype.resetIncludeExternalLinks = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get depthInput() {
+        return this._depth;
+    }
+    // include_external_links - computed: true, optional: true, required: false
+    _includeExternalLinks;
+    get includeExternalLinks() {
+        return this.getBooleanAttribute('include_external_links');
+    }
+    set includeExternalLinks(value) {
+        this._includeExternalLinks = value;
+    }
+    resetIncludeExternalLinks() {
         this._includeExternalLinks = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "includeExternalLinksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeExternalLinks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "includeSubdomains", {
-        get: function () {
-            return this.getBooleanAttribute('include_subdomains');
-        },
-        set: function (value) {
-            this._includeSubdomains = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype.resetIncludeSubdomains = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeExternalLinksInput() {
+        return this._includeExternalLinks;
+    }
+    // include_subdomains - computed: true, optional: true, required: false
+    _includeSubdomains;
+    get includeSubdomains() {
+        return this.getBooleanAttribute('include_subdomains');
+    }
+    set includeSubdomains(value) {
+        this._includeSubdomains = value;
+    }
+    resetIncludeSubdomains() {
         this._includeSubdomains = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "includeSubdomainsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeSubdomains;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "maxAge", {
-        get: function () {
-            return this.getNumberAttribute('max_age');
-        },
-        set: function (value) {
-            this._maxAge = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype.resetMaxAge = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeSubdomainsInput() {
+        return this._includeSubdomains;
+    }
+    // max_age - computed: true, optional: true, required: false
+    _maxAge;
+    get maxAge() {
+        return this.getNumberAttribute('max_age');
+    }
+    set maxAge(value) {
+        this._maxAge = value;
+    }
+    resetMaxAge() {
         this._maxAge = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "maxAgeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxAge;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "source", {
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        set: function (value) {
-            this._source = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype.resetSource = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxAgeInput() {
+        return this._maxAge;
+    }
+    // source - computed: true, optional: true, required: false
+    _source;
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    set source(value) {
+        this._source = value;
+    }
+    resetSource() {
         this._source = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference = AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference;
-function aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source;
+    }
+}
+export function aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2075,14 +1678,14 @@ function aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToTerr
         selector: cdktf.stringToTerraform(struct.selector),
     };
 }
-function aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclTerraform(struct) {
+export function aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         path: {
             value: cdktf.stringToHclTerraform(struct.path),
             isBlock: false,
@@ -2097,125 +1700,103 @@ function aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclT
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference, _super);
+export class AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            if (this._selector !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.selector = this._selector;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._path = undefined;
-                this._selector = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._path = value.path;
-                this._selector = value.selector;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference.prototype, "selector", {
-        get: function () {
-            return this.getStringAttribute('selector');
-        },
-        set: function (value) {
-            this._selector = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference.prototype, "selectorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._selector;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference = AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference;
-var AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        if (this._selector !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.selector = this._selector;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._path = undefined;
+            this._selector = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._path = value.path;
+            this._selector = value.selector;
+        }
+    }
+    // path - computed: true, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // selector - computed: true, optional: false, required: true
+    _selector;
+    get selector() {
+        return this.getStringAttribute('selector');
+    }
+    set selector(value) {
+        this._selector = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get selectorInput() {
+        return this._selector;
+    }
+}
+export class AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList.prototype.get = function (index) {
+    get(index) {
         return new AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList;
-}(cdktf.ComplexList));
-exports.AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList = AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList;
-function aiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerraform(struct) {
+    }
+}
+export function aiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2230,14 +1811,14 @@ function aiSearchInstanceSourceParamsWebCrawlerParseOptionsToTerraform(struct) {
         use_browser_rendering: cdktf.booleanToTerraform(struct.useBrowserRendering),
     };
 }
-function aiSearchInstanceSourceParamsWebCrawlerParseOptionsToHclTerraform(struct) {
+export function aiSearchInstanceSourceParamsWebCrawlerParseOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         content_selector: {
             value: cdktf.listMapperHcl(aiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorToHclTerraform, false)(struct.contentSelector),
             isBlock: true,
@@ -2270,190 +1851,147 @@ function aiSearchInstanceSourceParamsWebCrawlerParseOptionsToHclTerraform(struct
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference, _super);
+export class AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // content_selector - computed: true, optional: true, required: false
-        _this._contentSelector = new AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList(_this, "content_selector", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._contentSelector) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contentSelector = (_b = this._contentSelector) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._includeHeaders !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.includeHeaders = this._includeHeaders;
-            }
-            if (this._includeImages !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.includeImages = this._includeImages;
-            }
-            if (this._specificSitemaps !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.specificSitemaps = this._specificSitemaps;
-            }
-            if (this._useBrowserRendering !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.useBrowserRendering = this._useBrowserRendering;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._contentSelector.internalValue = undefined;
-                this._includeHeaders = undefined;
-                this._includeImages = undefined;
-                this._specificSitemaps = undefined;
-                this._useBrowserRendering = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._contentSelector.internalValue = value.contentSelector;
-                this._includeHeaders = value.includeHeaders;
-                this._includeImages = value.includeImages;
-                this._specificSitemaps = value.specificSitemaps;
-                this._useBrowserRendering = value.useBrowserRendering;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "contentSelector", {
-        get: function () {
-            return this._contentSelector;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype.putContentSelector = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._contentSelector?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contentSelector = this._contentSelector?.internalValue;
+        }
+        if (this._includeHeaders !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.includeHeaders = this._includeHeaders;
+        }
+        if (this._includeImages !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.includeImages = this._includeImages;
+        }
+        if (this._specificSitemaps !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.specificSitemaps = this._specificSitemaps;
+        }
+        if (this._useBrowserRendering !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.useBrowserRendering = this._useBrowserRendering;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._contentSelector.internalValue = undefined;
+            this._includeHeaders = undefined;
+            this._includeImages = undefined;
+            this._specificSitemaps = undefined;
+            this._useBrowserRendering = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._contentSelector.internalValue = value.contentSelector;
+            this._includeHeaders = value.includeHeaders;
+            this._includeImages = value.includeImages;
+            this._specificSitemaps = value.specificSitemaps;
+            this._useBrowserRendering = value.useBrowserRendering;
+        }
+    }
+    // content_selector - computed: true, optional: true, required: false
+    _contentSelector = new AiSearchInstanceSourceParamsWebCrawlerParseOptionsContentSelectorList(this, "content_selector", false);
+    get contentSelector() {
+        return this._contentSelector;
+    }
+    putContentSelector(value) {
         this._contentSelector.internalValue = value;
-    };
-    AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype.resetContentSelector = function () {
+    }
+    resetContentSelector() {
         this._contentSelector.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "contentSelectorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentSelector.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "includeHeaders", {
-        get: function () {
-            return this.getStringMapAttribute('include_headers');
-        },
-        set: function (value) {
-            this._includeHeaders = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype.resetIncludeHeaders = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentSelectorInput() {
+        return this._contentSelector.internalValue;
+    }
+    // include_headers - computed: true, optional: true, required: false
+    _includeHeaders;
+    get includeHeaders() {
+        return this.getStringMapAttribute('include_headers');
+    }
+    set includeHeaders(value) {
+        this._includeHeaders = value;
+    }
+    resetIncludeHeaders() {
         this._includeHeaders = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "includeHeadersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeHeaders;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "includeImages", {
-        get: function () {
-            return this.getBooleanAttribute('include_images');
-        },
-        set: function (value) {
-            this._includeImages = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype.resetIncludeImages = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeHeadersInput() {
+        return this._includeHeaders;
+    }
+    // include_images - computed: true, optional: true, required: false
+    _includeImages;
+    get includeImages() {
+        return this.getBooleanAttribute('include_images');
+    }
+    set includeImages(value) {
+        this._includeImages = value;
+    }
+    resetIncludeImages() {
         this._includeImages = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "includeImagesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeImages;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "specificSitemaps", {
-        get: function () {
-            return this.getListAttribute('specific_sitemaps');
-        },
-        set: function (value) {
-            this._specificSitemaps = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype.resetSpecificSitemaps = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeImagesInput() {
+        return this._includeImages;
+    }
+    // specific_sitemaps - computed: true, optional: true, required: false
+    _specificSitemaps;
+    get specificSitemaps() {
+        return this.getListAttribute('specific_sitemaps');
+    }
+    set specificSitemaps(value) {
+        this._specificSitemaps = value;
+    }
+    resetSpecificSitemaps() {
         this._specificSitemaps = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "specificSitemapsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._specificSitemaps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "useBrowserRendering", {
-        get: function () {
-            return this.getBooleanAttribute('use_browser_rendering');
-        },
-        set: function (value) {
-            this._useBrowserRendering = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype.resetUseBrowserRendering = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get specificSitemapsInput() {
+        return this._specificSitemaps;
+    }
+    // use_browser_rendering - computed: true, optional: true, required: false
+    _useBrowserRendering;
+    get useBrowserRendering() {
+        return this.getBooleanAttribute('use_browser_rendering');
+    }
+    set useBrowserRendering(value) {
+        this._useBrowserRendering = value;
+    }
+    resetUseBrowserRendering() {
         this._useBrowserRendering = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference.prototype, "useBrowserRenderingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._useBrowserRendering;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference = AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference;
-function aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get useBrowserRenderingInput() {
+        return this._useBrowserRendering;
+    }
+}
+export function aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2466,14 +2004,14 @@ function aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform(struct) {
         storage_type: cdktf.stringToTerraform(struct.storageType),
     };
 }
-function aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform(struct) {
+export function aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         r2_jurisdiction: {
             value: cdktf.stringToHclTerraform(struct.r2Jurisdiction),
             isBlock: false,
@@ -2494,130 +2032,102 @@ function aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToHclTerraform(struct
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference, _super);
+export class AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._r2Jurisdiction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.r2Jurisdiction = this._r2Jurisdiction;
-            }
-            if (this._storageId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.storageId = this._storageId;
-            }
-            if (this._storageType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.storageType = this._storageType;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._r2Jurisdiction = undefined;
-                this._storageId = undefined;
-                this._storageType = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._r2Jurisdiction = value.r2Jurisdiction;
-                this._storageId = value.storageId;
-                this._storageType = value.storageType;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "r2Jurisdiction", {
-        get: function () {
-            return this.getStringAttribute('r2_jurisdiction');
-        },
-        set: function (value) {
-            this._r2Jurisdiction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype.resetR2Jurisdiction = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._r2Jurisdiction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.r2Jurisdiction = this._r2Jurisdiction;
+        }
+        if (this._storageId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.storageId = this._storageId;
+        }
+        if (this._storageType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.storageType = this._storageType;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._r2Jurisdiction = undefined;
+            this._storageId = undefined;
+            this._storageType = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._r2Jurisdiction = value.r2Jurisdiction;
+            this._storageId = value.storageId;
+            this._storageType = value.storageType;
+        }
+    }
+    // r2_jurisdiction - computed: true, optional: true, required: false
+    _r2Jurisdiction;
+    get r2Jurisdiction() {
+        return this.getStringAttribute('r2_jurisdiction');
+    }
+    set r2Jurisdiction(value) {
+        this._r2Jurisdiction = value;
+    }
+    resetR2Jurisdiction() {
         this._r2Jurisdiction = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "r2JurisdictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._r2Jurisdiction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "storageId", {
-        get: function () {
-            return this.getStringAttribute('storage_id');
-        },
-        set: function (value) {
-            this._storageId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "storageIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._storageId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "storageType", {
-        get: function () {
-            return this.getStringAttribute('storage_type');
-        },
-        set: function (value) {
-            this._storageType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype.resetStorageType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get r2JurisdictionInput() {
+        return this._r2Jurisdiction;
+    }
+    // storage_id - computed: true, optional: false, required: true
+    _storageId;
+    get storageId() {
+        return this.getStringAttribute('storage_id');
+    }
+    set storageId(value) {
+        this._storageId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get storageIdInput() {
+        return this._storageId;
+    }
+    // storage_type - computed: true, optional: true, required: false
+    _storageType;
+    get storageType() {
+        return this.getStringAttribute('storage_type');
+    }
+    set storageType(value) {
+        this._storageType = value;
+    }
+    resetStorageType() {
         this._storageType = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference.prototype, "storageTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._storageType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference = AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference;
-function aiSearchInstanceSourceParamsWebCrawlerToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get storageTypeInput() {
+        return this._storageType;
+    }
+}
+export function aiSearchInstanceSourceParamsWebCrawlerToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2631,14 +2141,14 @@ function aiSearchInstanceSourceParamsWebCrawlerToTerraform(struct) {
         store_options: aiSearchInstanceSourceParamsWebCrawlerStoreOptionsToTerraform(struct.storeOptions),
     };
 }
-function aiSearchInstanceSourceParamsWebCrawlerToHclTerraform(struct) {
+export function aiSearchInstanceSourceParamsWebCrawlerToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         crawl_options: {
             value: aiSearchInstanceSourceParamsWebCrawlerCrawlOptionsToHclTerraform(struct.crawlOptions),
             isBlock: true,
@@ -2665,167 +2175,126 @@ function aiSearchInstanceSourceParamsWebCrawlerToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceSourceParamsWebCrawlerOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceSourceParamsWebCrawlerOutputReference, _super);
+export class AiSearchInstanceSourceParamsWebCrawlerOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceSourceParamsWebCrawlerOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // crawl_options - computed: true, optional: true, required: false
-        _this._crawlOptions = new AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference(_this, "crawl_options");
-        // parse_options - computed: true, optional: true, required: false
-        _this._parseOptions = new AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference(_this, "parse_options");
-        // store_options - computed: true, optional: true, required: false
-        _this._storeOptions = new AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference(_this, "store_options");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._crawlOptions) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.crawlOptions = (_b = this._crawlOptions) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._parseOptions) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.parseOptions = (_d = this._parseOptions) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (this._parseType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.parseType = this._parseType;
-            }
-            if (((_e = this._storeOptions) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.storeOptions = (_f = this._storeOptions) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._crawlOptions.internalValue = undefined;
-                this._parseOptions.internalValue = undefined;
-                this._parseType = undefined;
-                this._storeOptions.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._crawlOptions.internalValue = value.crawlOptions;
-                this._parseOptions.internalValue = value.parseOptions;
-                this._parseType = value.parseType;
-                this._storeOptions.internalValue = value.storeOptions;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "crawlOptions", {
-        get: function () {
-            return this._crawlOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype.putCrawlOptions = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._crawlOptions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.crawlOptions = this._crawlOptions?.internalValue;
+        }
+        if (this._parseOptions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.parseOptions = this._parseOptions?.internalValue;
+        }
+        if (this._parseType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.parseType = this._parseType;
+        }
+        if (this._storeOptions?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.storeOptions = this._storeOptions?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._crawlOptions.internalValue = undefined;
+            this._parseOptions.internalValue = undefined;
+            this._parseType = undefined;
+            this._storeOptions.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._crawlOptions.internalValue = value.crawlOptions;
+            this._parseOptions.internalValue = value.parseOptions;
+            this._parseType = value.parseType;
+            this._storeOptions.internalValue = value.storeOptions;
+        }
+    }
+    // crawl_options - computed: true, optional: true, required: false
+    _crawlOptions = new AiSearchInstanceSourceParamsWebCrawlerCrawlOptionsOutputReference(this, "crawl_options");
+    get crawlOptions() {
+        return this._crawlOptions;
+    }
+    putCrawlOptions(value) {
         this._crawlOptions.internalValue = value;
-    };
-    AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype.resetCrawlOptions = function () {
+    }
+    resetCrawlOptions() {
         this._crawlOptions.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "crawlOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._crawlOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "parseOptions", {
-        get: function () {
-            return this._parseOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype.putParseOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get crawlOptionsInput() {
+        return this._crawlOptions.internalValue;
+    }
+    // parse_options - computed: true, optional: true, required: false
+    _parseOptions = new AiSearchInstanceSourceParamsWebCrawlerParseOptionsOutputReference(this, "parse_options");
+    get parseOptions() {
+        return this._parseOptions;
+    }
+    putParseOptions(value) {
         this._parseOptions.internalValue = value;
-    };
-    AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype.resetParseOptions = function () {
+    }
+    resetParseOptions() {
         this._parseOptions.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "parseOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parseOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "parseType", {
-        get: function () {
-            return this.getStringAttribute('parse_type');
-        },
-        set: function (value) {
-            this._parseType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype.resetParseType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get parseOptionsInput() {
+        return this._parseOptions.internalValue;
+    }
+    // parse_type - computed: true, optional: true, required: false
+    _parseType;
+    get parseType() {
+        return this.getStringAttribute('parse_type');
+    }
+    set parseType(value) {
+        this._parseType = value;
+    }
+    resetParseType() {
         this._parseType = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "parseTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parseType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "storeOptions", {
-        get: function () {
-            return this._storeOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype.putStoreOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get parseTypeInput() {
+        return this._parseType;
+    }
+    // store_options - computed: true, optional: true, required: false
+    _storeOptions = new AiSearchInstanceSourceParamsWebCrawlerStoreOptionsOutputReference(this, "store_options");
+    get storeOptions() {
+        return this._storeOptions;
+    }
+    putStoreOptions(value) {
         this._storeOptions.internalValue = value;
-    };
-    AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype.resetStoreOptions = function () {
+    }
+    resetStoreOptions() {
         this._storeOptions.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsWebCrawlerOutputReference.prototype, "storeOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._storeOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceSourceParamsWebCrawlerOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceSourceParamsWebCrawlerOutputReference = AiSearchInstanceSourceParamsWebCrawlerOutputReference;
-function aiSearchInstanceSourceParamsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get storeOptionsInput() {
+        return this._storeOptions.internalValue;
+    }
+}
+export function aiSearchInstanceSourceParamsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2840,14 +2309,14 @@ function aiSearchInstanceSourceParamsToTerraform(struct) {
         web_crawler: aiSearchInstanceSourceParamsWebCrawlerToTerraform(struct.webCrawler),
     };
 }
-function aiSearchInstanceSourceParamsToHclTerraform(struct) {
+export function aiSearchInstanceSourceParamsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         exclude_items: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.excludeItems),
             isBlock: false,
@@ -2880,194 +2349,167 @@ function aiSearchInstanceSourceParamsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AiSearchInstanceSourceParamsOutputReference = /** @class */ (function (_super) {
-    __extends(AiSearchInstanceSourceParamsOutputReference, _super);
+export class AiSearchInstanceSourceParamsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AiSearchInstanceSourceParamsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // web_crawler - computed: true, optional: true, required: false
-        _this._webCrawler = new AiSearchInstanceSourceParamsWebCrawlerOutputReference(_this, "web_crawler");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._excludeItems !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.excludeItems = this._excludeItems;
-            }
-            if (this._includeItems !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.includeItems = this._includeItems;
-            }
-            if (this._prefix !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.prefix = this._prefix;
-            }
-            if (this._r2Jurisdiction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.r2Jurisdiction = this._r2Jurisdiction;
-            }
-            if (((_a = this._webCrawler) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.webCrawler = (_b = this._webCrawler) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._excludeItems = undefined;
-                this._includeItems = undefined;
-                this._prefix = undefined;
-                this._r2Jurisdiction = undefined;
-                this._webCrawler.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._excludeItems = value.excludeItems;
-                this._includeItems = value.includeItems;
-                this._prefix = value.prefix;
-                this._r2Jurisdiction = value.r2Jurisdiction;
-                this._webCrawler.internalValue = value.webCrawler;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "excludeItems", {
-        get: function () {
-            return this.getListAttribute('exclude_items');
-        },
-        set: function (value) {
-            this._excludeItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsOutputReference.prototype.resetExcludeItems = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._excludeItems !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.excludeItems = this._excludeItems;
+        }
+        if (this._includeItems !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.includeItems = this._includeItems;
+        }
+        if (this._prefix !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.prefix = this._prefix;
+        }
+        if (this._r2Jurisdiction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.r2Jurisdiction = this._r2Jurisdiction;
+        }
+        if (this._webCrawler?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.webCrawler = this._webCrawler?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._excludeItems = undefined;
+            this._includeItems = undefined;
+            this._prefix = undefined;
+            this._r2Jurisdiction = undefined;
+            this._webCrawler.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._excludeItems = value.excludeItems;
+            this._includeItems = value.includeItems;
+            this._prefix = value.prefix;
+            this._r2Jurisdiction = value.r2Jurisdiction;
+            this._webCrawler.internalValue = value.webCrawler;
+        }
+    }
+    // exclude_items - computed: true, optional: true, required: false
+    _excludeItems;
+    get excludeItems() {
+        return this.getListAttribute('exclude_items');
+    }
+    set excludeItems(value) {
+        this._excludeItems = value;
+    }
+    resetExcludeItems() {
         this._excludeItems = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "excludeItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._excludeItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "includeItems", {
-        get: function () {
-            return this.getListAttribute('include_items');
-        },
-        set: function (value) {
-            this._includeItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsOutputReference.prototype.resetIncludeItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludeItemsInput() {
+        return this._excludeItems;
+    }
+    // include_items - computed: true, optional: true, required: false
+    _includeItems;
+    get includeItems() {
+        return this.getListAttribute('include_items');
+    }
+    set includeItems(value) {
+        this._includeItems = value;
+    }
+    resetIncludeItems() {
         this._includeItems = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "includeItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "prefix", {
-        get: function () {
-            return this.getStringAttribute('prefix');
-        },
-        set: function (value) {
-            this._prefix = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsOutputReference.prototype.resetPrefix = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeItemsInput() {
+        return this._includeItems;
+    }
+    // prefix - computed: true, optional: true, required: false
+    _prefix;
+    get prefix() {
+        return this.getStringAttribute('prefix');
+    }
+    set prefix(value) {
+        this._prefix = value;
+    }
+    resetPrefix() {
         this._prefix = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "prefixInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._prefix;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "r2Jurisdiction", {
-        get: function () {
-            return this.getStringAttribute('r2_jurisdiction');
-        },
-        set: function (value) {
-            this._r2Jurisdiction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsOutputReference.prototype.resetR2Jurisdiction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get prefixInput() {
+        return this._prefix;
+    }
+    // r2_jurisdiction - computed: true, optional: true, required: false
+    _r2Jurisdiction;
+    get r2Jurisdiction() {
+        return this.getStringAttribute('r2_jurisdiction');
+    }
+    set r2Jurisdiction(value) {
+        this._r2Jurisdiction = value;
+    }
+    resetR2Jurisdiction() {
         this._r2Jurisdiction = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "r2JurisdictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._r2Jurisdiction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "webCrawler", {
-        get: function () {
-            return this._webCrawler;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstanceSourceParamsOutputReference.prototype.putWebCrawler = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get r2JurisdictionInput() {
+        return this._r2Jurisdiction;
+    }
+    // web_crawler - computed: true, optional: true, required: false
+    _webCrawler = new AiSearchInstanceSourceParamsWebCrawlerOutputReference(this, "web_crawler");
+    get webCrawler() {
+        return this._webCrawler;
+    }
+    putWebCrawler(value) {
         this._webCrawler.internalValue = value;
-    };
-    AiSearchInstanceSourceParamsOutputReference.prototype.resetWebCrawler = function () {
+    }
+    resetWebCrawler() {
         this._webCrawler.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstanceSourceParamsOutputReference.prototype, "webCrawlerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._webCrawler.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AiSearchInstanceSourceParamsOutputReference;
-}(cdktf.ComplexObject));
-exports.AiSearchInstanceSourceParamsOutputReference = AiSearchInstanceSourceParamsOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get webCrawlerInput() {
+        return this._webCrawler.internalValue;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_instance cloudflare_ai_search_instance}
 */
-var AiSearchInstance = /** @class */ (function (_super) {
-    __extends(AiSearchInstance, _super);
+export class AiSearchInstance extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_ai_search_instance";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a AiSearchInstance resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the AiSearchInstance to import
+    * @param importFromId The id of the existing AiSearchInstance that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_instance#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the AiSearchInstance to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_ai_search_instance", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -3078,8 +2520,8 @@ var AiSearchInstance = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options AiSearchInstanceConfig
     */
-    function AiSearchInstance(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_ai_search_instance',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -3092,892 +2534,613 @@ var AiSearchInstance = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // custom_metadata - computed: false, optional: true, required: false
-        _this._customMetadata = new AiSearchInstanceCustomMetadataList(_this, "custom_metadata", false);
-        // index_method - computed: true, optional: true, required: false
-        _this._indexMethod = new AiSearchInstanceIndexMethodOutputReference(_this, "index_method");
-        // indexing_options - computed: true, optional: true, required: false
-        _this._indexingOptions = new AiSearchInstanceIndexingOptionsOutputReference(_this, "indexing_options");
-        // metadata - computed: false, optional: true, required: false
-        _this._metadata = new AiSearchInstanceMetadataOutputReference(_this, "metadata");
-        // public_endpoint_params - computed: true, optional: true, required: false
-        _this._publicEndpointParams = new AiSearchInstancePublicEndpointParamsOutputReference(_this, "public_endpoint_params");
-        // retrieval_options - computed: true, optional: true, required: false
-        _this._retrievalOptions = new AiSearchInstanceRetrievalOptionsOutputReference(_this, "retrieval_options");
-        // source_params - computed: true, optional: true, required: false
-        _this._sourceParams = new AiSearchInstanceSourceParamsOutputReference(_this, "source_params");
-        _this._accountId = config.accountId;
-        _this._aiGatewayId = config.aiGatewayId;
-        _this._aisearchModel = config.aisearchModel;
-        _this._cache = config.cache;
-        _this._cacheThreshold = config.cacheThreshold;
-        _this._chunk = config.chunk;
-        _this._chunkOverlap = config.chunkOverlap;
-        _this._chunkSize = config.chunkSize;
-        _this._customMetadata.internalValue = config.customMetadata;
-        _this._embeddingModel = config.embeddingModel;
-        _this._fusionMethod = config.fusionMethod;
-        _this._hybridSearchEnabled = config.hybridSearchEnabled;
-        _this._id = config.id;
-        _this._indexMethod.internalValue = config.indexMethod;
-        _this._indexingOptions.internalValue = config.indexingOptions;
-        _this._maxNumResults = config.maxNumResults;
-        _this._metadata.internalValue = config.metadata;
-        _this._paused = config.paused;
-        _this._publicEndpointParams.internalValue = config.publicEndpointParams;
-        _this._reranking = config.reranking;
-        _this._rerankingModel = config.rerankingModel;
-        _this._retrievalOptions.internalValue = config.retrievalOptions;
-        _this._rewriteModel = config.rewriteModel;
-        _this._rewriteQuery = config.rewriteQuery;
-        _this._scoreThreshold = config.scoreThreshold;
-        _this._source = config.source;
-        _this._sourceParams.internalValue = config.sourceParams;
-        _this._summarization = config.summarization;
-        _this._summarizationModel = config.summarizationModel;
-        _this._syncInterval = config.syncInterval;
-        _this._systemPromptAisearch = config.systemPromptAisearch;
-        _this._systemPromptIndexSummarization = config.systemPromptIndexSummarization;
-        _this._systemPromptRewriteQuery = config.systemPromptRewriteQuery;
-        _this._tokenId = config.tokenId;
-        _this._type = config.type;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._aiGatewayId = config.aiGatewayId;
+        this._aisearchModel = config.aisearchModel;
+        this._cache = config.cache;
+        this._cacheThreshold = config.cacheThreshold;
+        this._chunk = config.chunk;
+        this._chunkOverlap = config.chunkOverlap;
+        this._chunkSize = config.chunkSize;
+        this._customMetadata.internalValue = config.customMetadata;
+        this._embeddingModel = config.embeddingModel;
+        this._fusionMethod = config.fusionMethod;
+        this._hybridSearchEnabled = config.hybridSearchEnabled;
+        this._id = config.id;
+        this._indexMethod.internalValue = config.indexMethod;
+        this._indexingOptions.internalValue = config.indexingOptions;
+        this._maxNumResults = config.maxNumResults;
+        this._metadata.internalValue = config.metadata;
+        this._paused = config.paused;
+        this._publicEndpointParams.internalValue = config.publicEndpointParams;
+        this._reranking = config.reranking;
+        this._rerankingModel = config.rerankingModel;
+        this._retrievalOptions.internalValue = config.retrievalOptions;
+        this._rewriteModel = config.rewriteModel;
+        this._rewriteQuery = config.rewriteQuery;
+        this._scoreThreshold = config.scoreThreshold;
+        this._source = config.source;
+        this._sourceParams.internalValue = config.sourceParams;
+        this._summarization = config.summarization;
+        this._summarizationModel = config.summarizationModel;
+        this._syncInterval = config.syncInterval;
+        this._systemPromptAisearch = config.systemPromptAisearch;
+        this._systemPromptIndexSummarization = config.systemPromptIndexSummarization;
+        this._systemPromptRewriteQuery = config.systemPromptRewriteQuery;
+        this._tokenId = config.tokenId;
+        this._type = config.type;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a AiSearchInstance resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the AiSearchInstance to import
-    * @param importFromId The id of the existing AiSearchInstance that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_instance#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the AiSearchInstance to import is found
-    */
-    AiSearchInstance.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_ai_search_instance", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "aiGatewayId", {
-        get: function () {
-            return this.getStringAttribute('ai_gateway_id');
-        },
-        set: function (value) {
-            this._aiGatewayId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetAiGatewayId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: false, required: true
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // ai_gateway_id - computed: true, optional: true, required: false
+    _aiGatewayId;
+    get aiGatewayId() {
+        return this.getStringAttribute('ai_gateway_id');
+    }
+    set aiGatewayId(value) {
+        this._aiGatewayId = value;
+    }
+    resetAiGatewayId() {
         this._aiGatewayId = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "aiGatewayIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._aiGatewayId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "aisearchModel", {
-        get: function () {
-            return this.getStringAttribute('aisearch_model');
-        },
-        set: function (value) {
-            this._aisearchModel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetAisearchModel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aiGatewayIdInput() {
+        return this._aiGatewayId;
+    }
+    // aisearch_model - computed: true, optional: true, required: false
+    _aisearchModel;
+    get aisearchModel() {
+        return this.getStringAttribute('aisearch_model');
+    }
+    set aisearchModel(value) {
+        this._aisearchModel = value;
+    }
+    resetAisearchModel() {
         this._aisearchModel = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "aisearchModelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._aisearchModel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "cache", {
-        get: function () {
-            return this.getBooleanAttribute('cache');
-        },
-        set: function (value) {
-            this._cache = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetCache = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aisearchModelInput() {
+        return this._aisearchModel;
+    }
+    // cache - computed: true, optional: true, required: false
+    _cache;
+    get cache() {
+        return this.getBooleanAttribute('cache');
+    }
+    set cache(value) {
+        this._cache = value;
+    }
+    resetCache() {
         this._cache = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "cacheInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cache;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "cacheThreshold", {
-        get: function () {
-            return this.getStringAttribute('cache_threshold');
-        },
-        set: function (value) {
-            this._cacheThreshold = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetCacheThreshold = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheInput() {
+        return this._cache;
+    }
+    // cache_threshold - computed: true, optional: true, required: false
+    _cacheThreshold;
+    get cacheThreshold() {
+        return this.getStringAttribute('cache_threshold');
+    }
+    set cacheThreshold(value) {
+        this._cacheThreshold = value;
+    }
+    resetCacheThreshold() {
         this._cacheThreshold = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "cacheThresholdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cacheThreshold;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "chunk", {
-        get: function () {
-            return this.getBooleanAttribute('chunk');
-        },
-        set: function (value) {
-            this._chunk = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetChunk = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cacheThresholdInput() {
+        return this._cacheThreshold;
+    }
+    // chunk - computed: true, optional: true, required: false
+    _chunk;
+    get chunk() {
+        return this.getBooleanAttribute('chunk');
+    }
+    set chunk(value) {
+        this._chunk = value;
+    }
+    resetChunk() {
         this._chunk = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "chunkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._chunk;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "chunkOverlap", {
-        get: function () {
-            return this.getNumberAttribute('chunk_overlap');
-        },
-        set: function (value) {
-            this._chunkOverlap = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetChunkOverlap = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get chunkInput() {
+        return this._chunk;
+    }
+    // chunk_overlap - computed: true, optional: true, required: false
+    _chunkOverlap;
+    get chunkOverlap() {
+        return this.getNumberAttribute('chunk_overlap');
+    }
+    set chunkOverlap(value) {
+        this._chunkOverlap = value;
+    }
+    resetChunkOverlap() {
         this._chunkOverlap = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "chunkOverlapInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._chunkOverlap;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "chunkSize", {
-        get: function () {
-            return this.getNumberAttribute('chunk_size');
-        },
-        set: function (value) {
-            this._chunkSize = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetChunkSize = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get chunkOverlapInput() {
+        return this._chunkOverlap;
+    }
+    // chunk_size - computed: true, optional: true, required: false
+    _chunkSize;
+    get chunkSize() {
+        return this.getNumberAttribute('chunk_size');
+    }
+    set chunkSize(value) {
+        this._chunkSize = value;
+    }
+    resetChunkSize() {
         this._chunkSize = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "chunkSizeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._chunkSize;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "createdBy", {
-        // created_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "customMetadata", {
-        get: function () {
-            return this._customMetadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.putCustomMetadata = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get chunkSizeInput() {
+        return this._chunkSize;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // created_by - computed: true, optional: false, required: false
+    get createdBy() {
+        return this.getStringAttribute('created_by');
+    }
+    // custom_metadata - computed: false, optional: true, required: false
+    _customMetadata = new AiSearchInstanceCustomMetadataList(this, "custom_metadata", false);
+    get customMetadata() {
+        return this._customMetadata;
+    }
+    putCustomMetadata(value) {
         this._customMetadata.internalValue = value;
-    };
-    AiSearchInstance.prototype.resetCustomMetadata = function () {
+    }
+    resetCustomMetadata() {
         this._customMetadata.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "customMetadataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customMetadata.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "embeddingModel", {
-        get: function () {
-            return this.getStringAttribute('embedding_model');
-        },
-        set: function (value) {
-            this._embeddingModel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetEmbeddingModel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get customMetadataInput() {
+        return this._customMetadata.internalValue;
+    }
+    // embedding_model - computed: true, optional: true, required: false
+    _embeddingModel;
+    get embeddingModel() {
+        return this.getStringAttribute('embedding_model');
+    }
+    set embeddingModel(value) {
+        this._embeddingModel = value;
+    }
+    resetEmbeddingModel() {
         this._embeddingModel = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "embeddingModelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._embeddingModel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "enable", {
-        // enable - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enable');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "engineVersion", {
-        // engine_version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('engine_version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "fusionMethod", {
-        get: function () {
-            return this.getStringAttribute('fusion_method');
-        },
-        set: function (value) {
-            this._fusionMethod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetFusionMethod = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get embeddingModelInput() {
+        return this._embeddingModel;
+    }
+    // enable - computed: true, optional: false, required: false
+    get enable() {
+        return this.getBooleanAttribute('enable');
+    }
+    // engine_version - computed: true, optional: false, required: false
+    get engineVersion() {
+        return this.getNumberAttribute('engine_version');
+    }
+    // fusion_method - computed: true, optional: true, required: false
+    _fusionMethod;
+    get fusionMethod() {
+        return this.getStringAttribute('fusion_method');
+    }
+    set fusionMethod(value) {
+        this._fusionMethod = value;
+    }
+    resetFusionMethod() {
         this._fusionMethod = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "fusionMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fusionMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "hybridSearchEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('hybrid_search_enabled');
-        },
-        set: function (value) {
-            this._hybridSearchEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetHybridSearchEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fusionMethodInput() {
+        return this._fusionMethod;
+    }
+    // hybrid_search_enabled - computed: true, optional: true, required: false
+    _hybridSearchEnabled;
+    get hybridSearchEnabled() {
+        return this.getBooleanAttribute('hybrid_search_enabled');
+    }
+    set hybridSearchEnabled(value) {
+        this._hybridSearchEnabled = value;
+    }
+    resetHybridSearchEnabled() {
         this._hybridSearchEnabled = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "hybridSearchEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hybridSearchEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "indexMethod", {
-        get: function () {
-            return this._indexMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.putIndexMethod = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hybridSearchEnabledInput() {
+        return this._hybridSearchEnabled;
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // index_method - computed: true, optional: true, required: false
+    _indexMethod = new AiSearchInstanceIndexMethodOutputReference(this, "index_method");
+    get indexMethod() {
+        return this._indexMethod;
+    }
+    putIndexMethod(value) {
         this._indexMethod.internalValue = value;
-    };
-    AiSearchInstance.prototype.resetIndexMethod = function () {
+    }
+    resetIndexMethod() {
         this._indexMethod.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "indexMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._indexMethod.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "indexingOptions", {
-        get: function () {
-            return this._indexingOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.putIndexingOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get indexMethodInput() {
+        return this._indexMethod.internalValue;
+    }
+    // indexing_options - computed: true, optional: true, required: false
+    _indexingOptions = new AiSearchInstanceIndexingOptionsOutputReference(this, "indexing_options");
+    get indexingOptions() {
+        return this._indexingOptions;
+    }
+    putIndexingOptions(value) {
         this._indexingOptions.internalValue = value;
-    };
-    AiSearchInstance.prototype.resetIndexingOptions = function () {
+    }
+    resetIndexingOptions() {
         this._indexingOptions.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "indexingOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._indexingOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "lastActivity", {
-        // last_activity - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_activity');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "maxNumResults", {
-        get: function () {
-            return this.getNumberAttribute('max_num_results');
-        },
-        set: function (value) {
-            this._maxNumResults = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetMaxNumResults = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get indexingOptionsInput() {
+        return this._indexingOptions.internalValue;
+    }
+    // last_activity - computed: true, optional: false, required: false
+    get lastActivity() {
+        return this.getStringAttribute('last_activity');
+    }
+    // max_num_results - computed: true, optional: true, required: false
+    _maxNumResults;
+    get maxNumResults() {
+        return this.getNumberAttribute('max_num_results');
+    }
+    set maxNumResults(value) {
+        this._maxNumResults = value;
+    }
+    resetMaxNumResults() {
         this._maxNumResults = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "maxNumResultsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxNumResults;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "metadata", {
-        get: function () {
-            return this._metadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.putMetadata = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxNumResultsInput() {
+        return this._maxNumResults;
+    }
+    // metadata - computed: false, optional: true, required: false
+    _metadata = new AiSearchInstanceMetadataOutputReference(this, "metadata");
+    get metadata() {
+        return this._metadata;
+    }
+    putMetadata(value) {
         this._metadata.internalValue = value;
-    };
-    AiSearchInstance.prototype.resetMetadata = function () {
+    }
+    resetMetadata() {
         this._metadata.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "metadataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._metadata.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "modifiedAt", {
-        // modified_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "modifiedBy", {
-        // modified_by - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_by');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "namespace", {
-        // namespace - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('namespace');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "paused", {
-        get: function () {
-            return this.getBooleanAttribute('paused');
-        },
-        set: function (value) {
-            this._paused = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetPaused = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get metadataInput() {
+        return this._metadata.internalValue;
+    }
+    // modified_at - computed: true, optional: false, required: false
+    get modifiedAt() {
+        return this.getStringAttribute('modified_at');
+    }
+    // modified_by - computed: true, optional: false, required: false
+    get modifiedBy() {
+        return this.getStringAttribute('modified_by');
+    }
+    // namespace - computed: true, optional: false, required: false
+    get namespace() {
+        return this.getStringAttribute('namespace');
+    }
+    // paused - computed: true, optional: true, required: false
+    _paused;
+    get paused() {
+        return this.getBooleanAttribute('paused');
+    }
+    set paused(value) {
+        this._paused = value;
+    }
+    resetPaused() {
         this._paused = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "pausedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._paused;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "publicEndpointId", {
-        // public_endpoint_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('public_endpoint_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "publicEndpointParams", {
-        get: function () {
-            return this._publicEndpointParams;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.putPublicEndpointParams = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pausedInput() {
+        return this._paused;
+    }
+    // public_endpoint_id - computed: true, optional: false, required: false
+    get publicEndpointId() {
+        return this.getStringAttribute('public_endpoint_id');
+    }
+    // public_endpoint_params - computed: true, optional: true, required: false
+    _publicEndpointParams = new AiSearchInstancePublicEndpointParamsOutputReference(this, "public_endpoint_params");
+    get publicEndpointParams() {
+        return this._publicEndpointParams;
+    }
+    putPublicEndpointParams(value) {
         this._publicEndpointParams.internalValue = value;
-    };
-    AiSearchInstance.prototype.resetPublicEndpointParams = function () {
+    }
+    resetPublicEndpointParams() {
         this._publicEndpointParams.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "publicEndpointParamsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._publicEndpointParams.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "reranking", {
-        get: function () {
-            return this.getBooleanAttribute('reranking');
-        },
-        set: function (value) {
-            this._reranking = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetReranking = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get publicEndpointParamsInput() {
+        return this._publicEndpointParams.internalValue;
+    }
+    // reranking - computed: true, optional: true, required: false
+    _reranking;
+    get reranking() {
+        return this.getBooleanAttribute('reranking');
+    }
+    set reranking(value) {
+        this._reranking = value;
+    }
+    resetReranking() {
         this._reranking = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "rerankingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._reranking;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "rerankingModel", {
-        get: function () {
-            return this.getStringAttribute('reranking_model');
-        },
-        set: function (value) {
-            this._rerankingModel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetRerankingModel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rerankingInput() {
+        return this._reranking;
+    }
+    // reranking_model - computed: true, optional: true, required: false
+    _rerankingModel;
+    get rerankingModel() {
+        return this.getStringAttribute('reranking_model');
+    }
+    set rerankingModel(value) {
+        this._rerankingModel = value;
+    }
+    resetRerankingModel() {
         this._rerankingModel = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "rerankingModelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rerankingModel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "retrievalOptions", {
-        get: function () {
-            return this._retrievalOptions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.putRetrievalOptions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rerankingModelInput() {
+        return this._rerankingModel;
+    }
+    // retrieval_options - computed: true, optional: true, required: false
+    _retrievalOptions = new AiSearchInstanceRetrievalOptionsOutputReference(this, "retrieval_options");
+    get retrievalOptions() {
+        return this._retrievalOptions;
+    }
+    putRetrievalOptions(value) {
         this._retrievalOptions.internalValue = value;
-    };
-    AiSearchInstance.prototype.resetRetrievalOptions = function () {
+    }
+    resetRetrievalOptions() {
         this._retrievalOptions.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "retrievalOptionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._retrievalOptions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "rewriteModel", {
-        get: function () {
-            return this.getStringAttribute('rewrite_model');
-        },
-        set: function (value) {
-            this._rewriteModel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetRewriteModel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get retrievalOptionsInput() {
+        return this._retrievalOptions.internalValue;
+    }
+    // rewrite_model - computed: true, optional: true, required: false
+    _rewriteModel;
+    get rewriteModel() {
+        return this.getStringAttribute('rewrite_model');
+    }
+    set rewriteModel(value) {
+        this._rewriteModel = value;
+    }
+    resetRewriteModel() {
         this._rewriteModel = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "rewriteModelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rewriteModel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "rewriteQuery", {
-        get: function () {
-            return this.getBooleanAttribute('rewrite_query');
-        },
-        set: function (value) {
-            this._rewriteQuery = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetRewriteQuery = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rewriteModelInput() {
+        return this._rewriteModel;
+    }
+    // rewrite_query - computed: true, optional: true, required: false
+    _rewriteQuery;
+    get rewriteQuery() {
+        return this.getBooleanAttribute('rewrite_query');
+    }
+    set rewriteQuery(value) {
+        this._rewriteQuery = value;
+    }
+    resetRewriteQuery() {
         this._rewriteQuery = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "rewriteQueryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rewriteQuery;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "scoreThreshold", {
-        get: function () {
-            return this.getNumberAttribute('score_threshold');
-        },
-        set: function (value) {
-            this._scoreThreshold = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetScoreThreshold = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rewriteQueryInput() {
+        return this._rewriteQuery;
+    }
+    // score_threshold - computed: true, optional: true, required: false
+    _scoreThreshold;
+    get scoreThreshold() {
+        return this.getNumberAttribute('score_threshold');
+    }
+    set scoreThreshold(value) {
+        this._scoreThreshold = value;
+    }
+    resetScoreThreshold() {
         this._scoreThreshold = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "scoreThresholdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scoreThreshold;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "source", {
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        set: function (value) {
-            this._source = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetSource = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get scoreThresholdInput() {
+        return this._scoreThreshold;
+    }
+    // source - computed: false, optional: true, required: false
+    _source;
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    set source(value) {
+        this._source = value;
+    }
+    resetSource() {
         this._source = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "sourceParams", {
-        get: function () {
-            return this._sourceParams;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.putSourceParams = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source;
+    }
+    // source_params - computed: true, optional: true, required: false
+    _sourceParams = new AiSearchInstanceSourceParamsOutputReference(this, "source_params");
+    get sourceParams() {
+        return this._sourceParams;
+    }
+    putSourceParams(value) {
         this._sourceParams.internalValue = value;
-    };
-    AiSearchInstance.prototype.resetSourceParams = function () {
+    }
+    resetSourceParams() {
         this._sourceParams.internalValue = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "sourceParamsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sourceParams.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "summarization", {
-        get: function () {
-            return this.getBooleanAttribute('summarization');
-        },
-        set: function (value) {
-            this._summarization = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetSummarization = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceParamsInput() {
+        return this._sourceParams.internalValue;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // summarization - computed: true, optional: true, required: false
+    _summarization;
+    get summarization() {
+        return this.getBooleanAttribute('summarization');
+    }
+    set summarization(value) {
+        this._summarization = value;
+    }
+    resetSummarization() {
         this._summarization = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "summarizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._summarization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "summarizationModel", {
-        get: function () {
-            return this.getStringAttribute('summarization_model');
-        },
-        set: function (value) {
-            this._summarizationModel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetSummarizationModel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get summarizationInput() {
+        return this._summarization;
+    }
+    // summarization_model - computed: false, optional: true, required: false
+    _summarizationModel;
+    get summarizationModel() {
+        return this.getStringAttribute('summarization_model');
+    }
+    set summarizationModel(value) {
+        this._summarizationModel = value;
+    }
+    resetSummarizationModel() {
         this._summarizationModel = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "summarizationModelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._summarizationModel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "syncInterval", {
-        get: function () {
-            return this.getNumberAttribute('sync_interval');
-        },
-        set: function (value) {
-            this._syncInterval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetSyncInterval = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get summarizationModelInput() {
+        return this._summarizationModel;
+    }
+    // sync_interval - computed: true, optional: true, required: false
+    _syncInterval;
+    get syncInterval() {
+        return this.getNumberAttribute('sync_interval');
+    }
+    set syncInterval(value) {
+        this._syncInterval = value;
+    }
+    resetSyncInterval() {
         this._syncInterval = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "syncIntervalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._syncInterval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "systemPromptAisearch", {
-        get: function () {
-            return this.getStringAttribute('system_prompt_aisearch');
-        },
-        set: function (value) {
-            this._systemPromptAisearch = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetSystemPromptAisearch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get syncIntervalInput() {
+        return this._syncInterval;
+    }
+    // system_prompt_aisearch - computed: false, optional: true, required: false
+    _systemPromptAisearch;
+    get systemPromptAisearch() {
+        return this.getStringAttribute('system_prompt_aisearch');
+    }
+    set systemPromptAisearch(value) {
+        this._systemPromptAisearch = value;
+    }
+    resetSystemPromptAisearch() {
         this._systemPromptAisearch = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "systemPromptAisearchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._systemPromptAisearch;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "systemPromptIndexSummarization", {
-        get: function () {
-            return this.getStringAttribute('system_prompt_index_summarization');
-        },
-        set: function (value) {
-            this._systemPromptIndexSummarization = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetSystemPromptIndexSummarization = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get systemPromptAisearchInput() {
+        return this._systemPromptAisearch;
+    }
+    // system_prompt_index_summarization - computed: false, optional: true, required: false
+    _systemPromptIndexSummarization;
+    get systemPromptIndexSummarization() {
+        return this.getStringAttribute('system_prompt_index_summarization');
+    }
+    set systemPromptIndexSummarization(value) {
+        this._systemPromptIndexSummarization = value;
+    }
+    resetSystemPromptIndexSummarization() {
         this._systemPromptIndexSummarization = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "systemPromptIndexSummarizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._systemPromptIndexSummarization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "systemPromptRewriteQuery", {
-        get: function () {
-            return this.getStringAttribute('system_prompt_rewrite_query');
-        },
-        set: function (value) {
-            this._systemPromptRewriteQuery = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetSystemPromptRewriteQuery = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get systemPromptIndexSummarizationInput() {
+        return this._systemPromptIndexSummarization;
+    }
+    // system_prompt_rewrite_query - computed: false, optional: true, required: false
+    _systemPromptRewriteQuery;
+    get systemPromptRewriteQuery() {
+        return this.getStringAttribute('system_prompt_rewrite_query');
+    }
+    set systemPromptRewriteQuery(value) {
+        this._systemPromptRewriteQuery = value;
+    }
+    resetSystemPromptRewriteQuery() {
         this._systemPromptRewriteQuery = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "systemPromptRewriteQueryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._systemPromptRewriteQuery;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "tokenId", {
-        get: function () {
-            return this.getStringAttribute('token_id');
-        },
-        set: function (value) {
-            this._tokenId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetTokenId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get systemPromptRewriteQueryInput() {
+        return this._systemPromptRewriteQuery;
+    }
+    // token_id - computed: false, optional: true, required: false
+    _tokenId;
+    get tokenId() {
+        return this.getStringAttribute('token_id');
+    }
+    set tokenId(value) {
+        this._tokenId = value;
+    }
+    resetTokenId() {
         this._tokenId = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "tokenIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tokenId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AiSearchInstance.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tokenIdInput() {
+        return this._tokenId;
+    }
+    // type - computed: false, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(AiSearchInstance.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AiSearchInstance.prototype, "vectorizeName", {
-        // vectorize_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('vectorize_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // vectorize_name - computed: true, optional: false, required: false
+    get vectorizeName() {
+        return this.getStringAttribute('vectorize_name');
+    }
     // =========
     // SYNTHESIS
     // =========
-    AiSearchInstance.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             ai_gateway_id: cdktf.stringToTerraform(this._aiGatewayId),
@@ -4015,9 +3178,9 @@ var AiSearchInstance = /** @class */ (function (_super) {
             token_id: cdktf.stringToTerraform(this._tokenId),
             type: cdktf.stringToTerraform(this._type),
         };
-    };
-    AiSearchInstance.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -4230,15 +3393,6 @@ var AiSearchInstance = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    AiSearchInstance.tfResourceType = "cloudflare_ai_search_instance";
-    return AiSearchInstance;
-}(cdktf.TerraformResource));
-exports.AiSearchInstance = AiSearchInstance;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

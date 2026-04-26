@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/web_analytics_rule
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WebAnalyticsRule = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/web_analytics_rule cloudflare_web_analytics_rule}
 */
-var WebAnalyticsRule = /** @class */ (function (_super) {
-    __extends(WebAnalyticsRule, _super);
+export class WebAnalyticsRule extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_web_analytics_rule";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a WebAnalyticsRule resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the WebAnalyticsRule to import
+    * @param importFromId The id of the existing WebAnalyticsRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/web_analytics_rule#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the WebAnalyticsRule to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_web_analytics_rule", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var WebAnalyticsRule = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options WebAnalyticsRuleConfig
     */
-    function WebAnalyticsRule(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_web_analytics_rule',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,179 +46,120 @@ var WebAnalyticsRule = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._host = config.host;
-        _this._inclusive = config.inclusive;
-        _this._isPaused = config.isPaused;
-        _this._paths = config.paths;
-        _this._rulesetId = config.rulesetId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._host = config.host;
+        this._inclusive = config.inclusive;
+        this._isPaused = config.isPaused;
+        this._paths = config.paths;
+        this._rulesetId = config.rulesetId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a WebAnalyticsRule resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the WebAnalyticsRule to import
-    * @param importFromId The id of the existing WebAnalyticsRule that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/web_analytics_rule#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the WebAnalyticsRule to import is found
-    */
-    WebAnalyticsRule.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_web_analytics_rule", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(WebAnalyticsRule.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WebAnalyticsRule.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(WebAnalyticsRule.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WebAnalyticsRule.prototype, "created", {
-        // created - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WebAnalyticsRule.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WebAnalyticsRule.prototype.resetHost = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // created - computed: true, optional: false, required: false
+    get created() {
+        return this.getStringAttribute('created');
+    }
+    // host - computed: false, optional: true, required: false
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    resetHost() {
         this._host = undefined;
-    };
-    Object.defineProperty(WebAnalyticsRule.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WebAnalyticsRule.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WebAnalyticsRule.prototype, "inclusive", {
-        get: function () {
-            return this.getBooleanAttribute('inclusive');
-        },
-        set: function (value) {
-            this._inclusive = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WebAnalyticsRule.prototype.resetInclusive = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // inclusive - computed: false, optional: true, required: false
+    _inclusive;
+    get inclusive() {
+        return this.getBooleanAttribute('inclusive');
+    }
+    set inclusive(value) {
+        this._inclusive = value;
+    }
+    resetInclusive() {
         this._inclusive = undefined;
-    };
-    Object.defineProperty(WebAnalyticsRule.prototype, "inclusiveInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._inclusive;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WebAnalyticsRule.prototype, "isPaused", {
-        get: function () {
-            return this.getBooleanAttribute('is_paused');
-        },
-        set: function (value) {
-            this._isPaused = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WebAnalyticsRule.prototype.resetIsPaused = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get inclusiveInput() {
+        return this._inclusive;
+    }
+    // is_paused - computed: false, optional: true, required: false
+    _isPaused;
+    get isPaused() {
+        return this.getBooleanAttribute('is_paused');
+    }
+    set isPaused(value) {
+        this._isPaused = value;
+    }
+    resetIsPaused() {
         this._isPaused = undefined;
-    };
-    Object.defineProperty(WebAnalyticsRule.prototype, "isPausedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isPaused;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WebAnalyticsRule.prototype, "paths", {
-        get: function () {
-            return this.getListAttribute('paths');
-        },
-        set: function (value) {
-            this._paths = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WebAnalyticsRule.prototype.resetPaths = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isPausedInput() {
+        return this._isPaused;
+    }
+    // paths - computed: false, optional: true, required: false
+    _paths;
+    get paths() {
+        return this.getListAttribute('paths');
+    }
+    set paths(value) {
+        this._paths = value;
+    }
+    resetPaths() {
         this._paths = undefined;
-    };
-    Object.defineProperty(WebAnalyticsRule.prototype, "pathsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._paths;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WebAnalyticsRule.prototype, "priority", {
-        // priority - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('priority');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WebAnalyticsRule.prototype, "rulesetId", {
-        get: function () {
-            return this.getStringAttribute('ruleset_id');
-        },
-        set: function (value) {
-            this._rulesetId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WebAnalyticsRule.prototype, "rulesetIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rulesetId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathsInput() {
+        return this._paths;
+    }
+    // priority - computed: true, optional: false, required: false
+    get priority() {
+        return this.getNumberAttribute('priority');
+    }
+    // ruleset_id - computed: false, optional: false, required: true
+    _rulesetId;
+    get rulesetId() {
+        return this.getStringAttribute('ruleset_id');
+    }
+    set rulesetId(value) {
+        this._rulesetId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get rulesetIdInput() {
+        return this._rulesetId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    WebAnalyticsRule.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             host: cdktf.stringToTerraform(this._host),
@@ -229,9 +168,9 @@ var WebAnalyticsRule = /** @class */ (function (_super) {
             paths: cdktf.listMapper(cdktf.stringToTerraform, false)(this._paths),
             ruleset_id: cdktf.stringToTerraform(this._rulesetId),
         };
-    };
-    WebAnalyticsRule.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -270,15 +209,6 @@ var WebAnalyticsRule = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    WebAnalyticsRule.tfResourceType = "cloudflare_web_analytics_rule";
-    return WebAnalyticsRule;
-}(cdktf.TerraformResource));
-exports.WebAnalyticsRule = WebAnalyticsRule;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

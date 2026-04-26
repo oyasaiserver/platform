@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/integration_circleci
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IntegrationCircleci = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/integration_circleci infisical_integration_circleci}
 */
-var IntegrationCircleci = /** @class */ (function (_super) {
-    __extends(IntegrationCircleci, _super);
+export class IntegrationCircleci extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_integration_circleci";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a IntegrationCircleci resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the IntegrationCircleci to import
+    * @param importFromId The id of the existing IntegrationCircleci that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/integration_circleci#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the IntegrationCircleci to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_integration_circleci", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var IntegrationCircleci = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options IntegrationCircleciConfig
     */
-    function IntegrationCircleci(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_integration_circleci',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -48,156 +46,101 @@ var IntegrationCircleci = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._circleciOrgSlug = config.circleciOrgSlug;
-        _this._circleciProjectId = config.circleciProjectId;
-        _this._circleciToken = config.circleciToken;
-        _this._environment = config.environment;
-        _this._projectId = config.projectId;
-        _this._secretPath = config.secretPath;
-        return _this;
+        });
+        this._circleciOrgSlug = config.circleciOrgSlug;
+        this._circleciProjectId = config.circleciProjectId;
+        this._circleciToken = config.circleciToken;
+        this._environment = config.environment;
+        this._projectId = config.projectId;
+        this._secretPath = config.secretPath;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a IntegrationCircleci resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the IntegrationCircleci to import
-    * @param importFromId The id of the existing IntegrationCircleci that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/integration_circleci#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the IntegrationCircleci to import is found
-    */
-    IntegrationCircleci.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_integration_circleci", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(IntegrationCircleci.prototype, "circleciOrgSlug", {
-        get: function () {
-            return this.getStringAttribute('circleci_org_slug');
-        },
-        set: function (value) {
-            this._circleciOrgSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "circleciOrgSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._circleciOrgSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "circleciProjectId", {
-        get: function () {
-            return this.getStringAttribute('circleci_project_id');
-        },
-        set: function (value) {
-            this._circleciProjectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "circleciProjectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._circleciProjectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "circleciToken", {
-        get: function () {
-            return this.getStringAttribute('circleci_token');
-        },
-        set: function (value) {
-            this._circleciToken = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "circleciTokenInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._circleciToken;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "environment", {
-        get: function () {
-            return this.getStringAttribute('environment');
-        },
-        set: function (value) {
-            this._environment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "environmentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "integrationAuthId", {
-        // integration_auth_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('integration_auth_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "integrationId", {
-        // integration_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('integration_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "projectId", {
-        get: function () {
-            return this.getStringAttribute('project_id');
-        },
-        set: function (value) {
-            this._projectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "projectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "secretPath", {
-        get: function () {
-            return this.getStringAttribute('secret_path');
-        },
-        set: function (value) {
-            this._secretPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IntegrationCircleci.prototype, "secretPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // circleci_org_slug - computed: false, optional: false, required: true
+    _circleciOrgSlug;
+    get circleciOrgSlug() {
+        return this.getStringAttribute('circleci_org_slug');
+    }
+    set circleciOrgSlug(value) {
+        this._circleciOrgSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get circleciOrgSlugInput() {
+        return this._circleciOrgSlug;
+    }
+    // circleci_project_id - computed: false, optional: false, required: true
+    _circleciProjectId;
+    get circleciProjectId() {
+        return this.getStringAttribute('circleci_project_id');
+    }
+    set circleciProjectId(value) {
+        this._circleciProjectId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get circleciProjectIdInput() {
+        return this._circleciProjectId;
+    }
+    // circleci_token - computed: false, optional: false, required: true
+    _circleciToken;
+    get circleciToken() {
+        return this.getStringAttribute('circleci_token');
+    }
+    set circleciToken(value) {
+        this._circleciToken = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get circleciTokenInput() {
+        return this._circleciToken;
+    }
+    // environment - computed: false, optional: false, required: true
+    _environment;
+    get environment() {
+        return this.getStringAttribute('environment');
+    }
+    set environment(value) {
+        this._environment = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentInput() {
+        return this._environment;
+    }
+    // integration_auth_id - computed: true, optional: false, required: false
+    get integrationAuthId() {
+        return this.getStringAttribute('integration_auth_id');
+    }
+    // integration_id - computed: true, optional: false, required: false
+    get integrationId() {
+        return this.getStringAttribute('integration_id');
+    }
+    // project_id - computed: false, optional: false, required: true
+    _projectId;
+    get projectId() {
+        return this.getStringAttribute('project_id');
+    }
+    set projectId(value) {
+        this._projectId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectIdInput() {
+        return this._projectId;
+    }
+    // secret_path - computed: false, optional: false, required: true
+    _secretPath;
+    get secretPath() {
+        return this.getStringAttribute('secret_path');
+    }
+    set secretPath(value) {
+        this._secretPath = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretPathInput() {
+        return this._secretPath;
+    }
     // =========
     // SYNTHESIS
     // =========
-    IntegrationCircleci.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             circleci_org_slug: cdktf.stringToTerraform(this._circleciOrgSlug),
             circleci_project_id: cdktf.stringToTerraform(this._circleciProjectId),
@@ -206,9 +149,9 @@ var IntegrationCircleci = /** @class */ (function (_super) {
             project_id: cdktf.stringToTerraform(this._projectId),
             secret_path: cdktf.stringToTerraform(this._secretPath),
         };
-    };
-    IntegrationCircleci.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             circleci_org_slug: {
                 value: cdktf.stringToHclTerraform(this._circleciOrgSlug),
                 isBlock: false,
@@ -247,15 +190,6 @@ var IntegrationCircleci = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    IntegrationCircleci.tfResourceType = "infisical_integration_circleci";
-    return IntegrationCircleci;
-}(cdktf.TerraformResource));
-exports.IntegrationCircleci = IntegrationCircleci;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

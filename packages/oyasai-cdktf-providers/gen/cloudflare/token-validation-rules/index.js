@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/token_validation_rules
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TokenValidationRules = exports.TokenValidationRulesSelectorOutputReference = exports.TokenValidationRulesSelectorIncludeList = exports.TokenValidationRulesSelectorIncludeOutputReference = exports.TokenValidationRulesSelectorExcludeList = exports.TokenValidationRulesSelectorExcludeOutputReference = exports.TokenValidationRulesPositionOutputReference = void 0;
-exports.tokenValidationRulesPositionToTerraform = tokenValidationRulesPositionToTerraform;
-exports.tokenValidationRulesPositionToHclTerraform = tokenValidationRulesPositionToHclTerraform;
-exports.tokenValidationRulesSelectorExcludeToTerraform = tokenValidationRulesSelectorExcludeToTerraform;
-exports.tokenValidationRulesSelectorExcludeToHclTerraform = tokenValidationRulesSelectorExcludeToHclTerraform;
-exports.tokenValidationRulesSelectorIncludeToTerraform = tokenValidationRulesSelectorIncludeToTerraform;
-exports.tokenValidationRulesSelectorIncludeToHclTerraform = tokenValidationRulesSelectorIncludeToHclTerraform;
-exports.tokenValidationRulesSelectorToTerraform = tokenValidationRulesSelectorToTerraform;
-exports.tokenValidationRulesSelectorToHclTerraform = tokenValidationRulesSelectorToHclTerraform;
-var cdktf = require("cdktf");
-function tokenValidationRulesPositionToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function tokenValidationRulesPositionToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -40,14 +14,14 @@ function tokenValidationRulesPositionToTerraform(struct) {
         index: cdktf.numberToTerraform(struct.index),
     };
 }
-function tokenValidationRulesPositionToHclTerraform(struct) {
+export function tokenValidationRulesPositionToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         after: {
             value: cdktf.stringToHclTerraform(struct.after),
             isBlock: false,
@@ -68,133 +42,105 @@ function tokenValidationRulesPositionToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var TokenValidationRulesPositionOutputReference = /** @class */ (function (_super) {
-    __extends(TokenValidationRulesPositionOutputReference, _super);
+export class TokenValidationRulesPositionOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function TokenValidationRulesPositionOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(TokenValidationRulesPositionOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._after !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.after = this._after;
-            }
-            if (this._before !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.before = this._before;
-            }
-            if (this._index !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.index = this._index;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._after = undefined;
-                this._before = undefined;
-                this._index = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._after = value.after;
-                this._before = value.before;
-                this._index = value.index;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRulesPositionOutputReference.prototype, "after", {
-        get: function () {
-            return this.getStringAttribute('after');
-        },
-        set: function (value) {
-            this._after = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRulesPositionOutputReference.prototype.resetAfter = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._after !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.after = this._after;
+        }
+        if (this._before !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.before = this._before;
+        }
+        if (this._index !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.index = this._index;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._after = undefined;
+            this._before = undefined;
+            this._index = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._after = value.after;
+            this._before = value.before;
+            this._index = value.index;
+        }
+    }
+    // after - computed: false, optional: true, required: false
+    _after;
+    get after() {
+        return this.getStringAttribute('after');
+    }
+    set after(value) {
+        this._after = value;
+    }
+    resetAfter() {
         this._after = undefined;
-    };
-    Object.defineProperty(TokenValidationRulesPositionOutputReference.prototype, "afterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._after;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRulesPositionOutputReference.prototype, "before", {
-        get: function () {
-            return this.getStringAttribute('before');
-        },
-        set: function (value) {
-            this._before = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRulesPositionOutputReference.prototype.resetBefore = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get afterInput() {
+        return this._after;
+    }
+    // before - computed: false, optional: true, required: false
+    _before;
+    get before() {
+        return this.getStringAttribute('before');
+    }
+    set before(value) {
+        this._before = value;
+    }
+    resetBefore() {
         this._before = undefined;
-    };
-    Object.defineProperty(TokenValidationRulesPositionOutputReference.prototype, "beforeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._before;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRulesPositionOutputReference.prototype, "index", {
-        get: function () {
-            return this.getNumberAttribute('index');
-        },
-        set: function (value) {
-            this._index = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRulesPositionOutputReference.prototype.resetIndex = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get beforeInput() {
+        return this._before;
+    }
+    // index - computed: false, optional: true, required: false
+    _index;
+    get index() {
+        return this.getNumberAttribute('index');
+    }
+    set index(value) {
+        this._index = value;
+    }
+    resetIndex() {
         this._index = undefined;
-    };
-    Object.defineProperty(TokenValidationRulesPositionOutputReference.prototype, "indexInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._index;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return TokenValidationRulesPositionOutputReference;
-}(cdktf.ComplexObject));
-exports.TokenValidationRulesPositionOutputReference = TokenValidationRulesPositionOutputReference;
-function tokenValidationRulesSelectorExcludeToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get indexInput() {
+        return this._index;
+    }
+}
+export function tokenValidationRulesSelectorExcludeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -205,14 +151,14 @@ function tokenValidationRulesSelectorExcludeToTerraform(struct) {
         operation_ids: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.operationIds),
     };
 }
-function tokenValidationRulesSelectorExcludeToHclTerraform(struct) {
+export function tokenValidationRulesSelectorExcludeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         operation_ids: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.operationIds),
             isBlock: false,
@@ -221,104 +167,88 @@ function tokenValidationRulesSelectorExcludeToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var TokenValidationRulesSelectorExcludeOutputReference = /** @class */ (function (_super) {
-    __extends(TokenValidationRulesSelectorExcludeOutputReference, _super);
+export class TokenValidationRulesSelectorExcludeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function TokenValidationRulesSelectorExcludeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(TokenValidationRulesSelectorExcludeOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._operationIds !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.operationIds = this._operationIds;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._operationIds = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._operationIds = value.operationIds;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRulesSelectorExcludeOutputReference.prototype, "operationIds", {
-        get: function () {
-            return this.getListAttribute('operation_ids');
-        },
-        set: function (value) {
-            this._operationIds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRulesSelectorExcludeOutputReference.prototype.resetOperationIds = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._operationIds !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.operationIds = this._operationIds;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._operationIds = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._operationIds = value.operationIds;
+        }
+    }
+    // operation_ids - computed: false, optional: true, required: false
+    _operationIds;
+    get operationIds() {
+        return this.getListAttribute('operation_ids');
+    }
+    set operationIds(value) {
+        this._operationIds = value;
+    }
+    resetOperationIds() {
         this._operationIds = undefined;
-    };
-    Object.defineProperty(TokenValidationRulesSelectorExcludeOutputReference.prototype, "operationIdsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operationIds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return TokenValidationRulesSelectorExcludeOutputReference;
-}(cdktf.ComplexObject));
-exports.TokenValidationRulesSelectorExcludeOutputReference = TokenValidationRulesSelectorExcludeOutputReference;
-var TokenValidationRulesSelectorExcludeList = /** @class */ (function (_super) {
-    __extends(TokenValidationRulesSelectorExcludeList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get operationIdsInput() {
+        return this._operationIds;
+    }
+}
+export class TokenValidationRulesSelectorExcludeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function TokenValidationRulesSelectorExcludeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    TokenValidationRulesSelectorExcludeList.prototype.get = function (index) {
+    get(index) {
         return new TokenValidationRulesSelectorExcludeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return TokenValidationRulesSelectorExcludeList;
-}(cdktf.ComplexList));
-exports.TokenValidationRulesSelectorExcludeList = TokenValidationRulesSelectorExcludeList;
-function tokenValidationRulesSelectorIncludeToTerraform(struct) {
+    }
+}
+export function tokenValidationRulesSelectorIncludeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -329,14 +259,14 @@ function tokenValidationRulesSelectorIncludeToTerraform(struct) {
         host: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.host),
     };
 }
-function tokenValidationRulesSelectorIncludeToHclTerraform(struct) {
+export function tokenValidationRulesSelectorIncludeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         host: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.host),
             isBlock: false,
@@ -345,104 +275,88 @@ function tokenValidationRulesSelectorIncludeToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var TokenValidationRulesSelectorIncludeOutputReference = /** @class */ (function (_super) {
-    __extends(TokenValidationRulesSelectorIncludeOutputReference, _super);
+export class TokenValidationRulesSelectorIncludeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function TokenValidationRulesSelectorIncludeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(TokenValidationRulesSelectorIncludeOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._host = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._host = value.host;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRulesSelectorIncludeOutputReference.prototype, "host", {
-        get: function () {
-            return this.getListAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRulesSelectorIncludeOutputReference.prototype.resetHost = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._host = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._host = value.host;
+        }
+    }
+    // host - computed: false, optional: true, required: false
+    _host;
+    get host() {
+        return this.getListAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    resetHost() {
         this._host = undefined;
-    };
-    Object.defineProperty(TokenValidationRulesSelectorIncludeOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return TokenValidationRulesSelectorIncludeOutputReference;
-}(cdktf.ComplexObject));
-exports.TokenValidationRulesSelectorIncludeOutputReference = TokenValidationRulesSelectorIncludeOutputReference;
-var TokenValidationRulesSelectorIncludeList = /** @class */ (function (_super) {
-    __extends(TokenValidationRulesSelectorIncludeList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+}
+export class TokenValidationRulesSelectorIncludeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function TokenValidationRulesSelectorIncludeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    TokenValidationRulesSelectorIncludeList.prototype.get = function (index) {
+    get(index) {
         return new TokenValidationRulesSelectorIncludeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return TokenValidationRulesSelectorIncludeList;
-}(cdktf.ComplexList));
-exports.TokenValidationRulesSelectorIncludeList = TokenValidationRulesSelectorIncludeList;
-function tokenValidationRulesSelectorToTerraform(struct) {
+    }
+}
+export function tokenValidationRulesSelectorToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -454,14 +368,14 @@ function tokenValidationRulesSelectorToTerraform(struct) {
         include: cdktf.listMapper(tokenValidationRulesSelectorIncludeToTerraform, false)(struct.include),
     };
 }
-function tokenValidationRulesSelectorToHclTerraform(struct) {
+export function tokenValidationRulesSelectorToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         exclude: {
             value: cdktf.listMapperHcl(tokenValidationRulesSelectorExcludeToHclTerraform, false)(struct.exclude),
             isBlock: true,
@@ -476,115 +390,104 @@ function tokenValidationRulesSelectorToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var TokenValidationRulesSelectorOutputReference = /** @class */ (function (_super) {
-    __extends(TokenValidationRulesSelectorOutputReference, _super);
+export class TokenValidationRulesSelectorOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function TokenValidationRulesSelectorOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // exclude - computed: false, optional: true, required: false
-        _this._exclude = new TokenValidationRulesSelectorExcludeList(_this, "exclude", false);
-        // include - computed: false, optional: true, required: false
-        _this._include = new TokenValidationRulesSelectorIncludeList(_this, "include", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(TokenValidationRulesSelectorOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._exclude) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exclude = (_b = this._exclude) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._include) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.include = (_d = this._include) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._exclude.internalValue = undefined;
-                this._include.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._exclude.internalValue = value.exclude;
-                this._include.internalValue = value.include;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRulesSelectorOutputReference.prototype, "exclude", {
-        get: function () {
-            return this._exclude;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRulesSelectorOutputReference.prototype.putExclude = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._exclude?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exclude = this._exclude?.internalValue;
+        }
+        if (this._include?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.include = this._include?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._exclude.internalValue = undefined;
+            this._include.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._exclude.internalValue = value.exclude;
+            this._include.internalValue = value.include;
+        }
+    }
+    // exclude - computed: false, optional: true, required: false
+    _exclude = new TokenValidationRulesSelectorExcludeList(this, "exclude", false);
+    get exclude() {
+        return this._exclude;
+    }
+    putExclude(value) {
         this._exclude.internalValue = value;
-    };
-    TokenValidationRulesSelectorOutputReference.prototype.resetExclude = function () {
+    }
+    resetExclude() {
         this._exclude.internalValue = undefined;
-    };
-    Object.defineProperty(TokenValidationRulesSelectorOutputReference.prototype, "excludeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exclude.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRulesSelectorOutputReference.prototype, "include", {
-        get: function () {
-            return this._include;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRulesSelectorOutputReference.prototype.putInclude = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludeInput() {
+        return this._exclude.internalValue;
+    }
+    // include - computed: false, optional: true, required: false
+    _include = new TokenValidationRulesSelectorIncludeList(this, "include", false);
+    get include() {
+        return this._include;
+    }
+    putInclude(value) {
         this._include.internalValue = value;
-    };
-    TokenValidationRulesSelectorOutputReference.prototype.resetInclude = function () {
+    }
+    resetInclude() {
         this._include.internalValue = undefined;
-    };
-    Object.defineProperty(TokenValidationRulesSelectorOutputReference.prototype, "includeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._include.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return TokenValidationRulesSelectorOutputReference;
-}(cdktf.ComplexObject));
-exports.TokenValidationRulesSelectorOutputReference = TokenValidationRulesSelectorOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeInput() {
+        return this._include.internalValue;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/token_validation_rules cloudflare_token_validation_rules}
 */
-var TokenValidationRules = /** @class */ (function (_super) {
-    __extends(TokenValidationRules, _super);
+export class TokenValidationRules extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_token_validation_rules";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a TokenValidationRules resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the TokenValidationRules to import
+    * @param importFromId The id of the existing TokenValidationRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/token_validation_rules#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the TokenValidationRules to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_token_validation_rules", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -595,8 +498,8 @@ var TokenValidationRules = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options TokenValidationRulesConfig
     */
-    function TokenValidationRules(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_token_validation_rules',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -609,212 +512,137 @@ var TokenValidationRules = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // position - computed: false, optional: true, required: false
-        _this._position = new TokenValidationRulesPositionOutputReference(_this, "position");
-        // selector - computed: false, optional: false, required: true
-        _this._selector = new TokenValidationRulesSelectorOutputReference(_this, "selector");
-        _this._action = config.action;
-        _this._description = config.description;
-        _this._enabled = config.enabled;
-        _this._expression = config.expression;
-        _this._position.internalValue = config.position;
-        _this._selector.internalValue = config.selector;
-        _this._title = config.title;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._action = config.action;
+        this._description = config.description;
+        this._enabled = config.enabled;
+        this._expression = config.expression;
+        this._position.internalValue = config.position;
+        this._selector.internalValue = config.selector;
+        this._title = config.title;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a TokenValidationRules resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the TokenValidationRules to import
-    * @param importFromId The id of the existing TokenValidationRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/token_validation_rules#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the TokenValidationRules to import is found
-    */
-    TokenValidationRules.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_token_validation_rules", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(TokenValidationRules.prototype, "action", {
-        get: function () {
-            return this.getStringAttribute('action');
-        },
-        set: function (value) {
-            this._action = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "actionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._action;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "expression", {
-        get: function () {
-            return this.getStringAttribute('expression');
-        },
-        set: function (value) {
-            this._expression = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "expressionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._expression;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "lastUpdated", {
-        // last_updated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('last_updated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "position", {
-        get: function () {
-            return this._position;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRules.prototype.putPosition = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // action - computed: false, optional: false, required: true
+    _action;
+    get action() {
+        return this.getStringAttribute('action');
+    }
+    set action(value) {
+        this._action = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get actionInput() {
+        return this._action;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // description - computed: false, optional: false, required: true
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // expression - computed: false, optional: false, required: true
+    _expression;
+    get expression() {
+        return this.getStringAttribute('expression');
+    }
+    set expression(value) {
+        this._expression = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get expressionInput() {
+        return this._expression;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // last_updated - computed: true, optional: false, required: false
+    get lastUpdated() {
+        return this.getStringAttribute('last_updated');
+    }
+    // position - computed: false, optional: true, required: false
+    _position = new TokenValidationRulesPositionOutputReference(this, "position");
+    get position() {
+        return this._position;
+    }
+    putPosition(value) {
         this._position.internalValue = value;
-    };
-    TokenValidationRules.prototype.resetPosition = function () {
+    }
+    resetPosition() {
         this._position.internalValue = undefined;
-    };
-    Object.defineProperty(TokenValidationRules.prototype, "positionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._position.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "selector", {
-        get: function () {
-            return this._selector;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRules.prototype.putSelector = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get positionInput() {
+        return this._position.internalValue;
+    }
+    // selector - computed: false, optional: false, required: true
+    _selector = new TokenValidationRulesSelectorOutputReference(this, "selector");
+    get selector() {
+        return this._selector;
+    }
+    putSelector(value) {
         this._selector.internalValue = value;
-    };
-    Object.defineProperty(TokenValidationRules.prototype, "selectorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._selector.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "title", {
-        get: function () {
-            return this.getStringAttribute('title');
-        },
-        set: function (value) {
-            this._title = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "titleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._title;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(TokenValidationRules.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    TokenValidationRules.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get selectorInput() {
+        return this._selector.internalValue;
+    }
+    // title - computed: false, optional: false, required: true
+    _title;
+    get title() {
+        return this.getStringAttribute('title');
+    }
+    set title(value) {
+        this._title = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get titleInput() {
+        return this._title;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(TokenValidationRules.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    TokenValidationRules.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             action: cdktf.stringToTerraform(this._action),
             description: cdktf.stringToTerraform(this._description),
@@ -825,9 +653,9 @@ var TokenValidationRules = /** @class */ (function (_super) {
             title: cdktf.stringToTerraform(this._title),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    TokenValidationRules.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             action: {
                 value: cdktf.stringToHclTerraform(this._action),
                 isBlock: false,
@@ -878,15 +706,6 @@ var TokenValidationRules = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    TokenValidationRules.tfResourceType = "cloudflare_token_validation_rules";
-    return TokenValidationRules;
-}(cdktf.TerraformResource));
-exports.TokenValidationRules = TokenValidationRules;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

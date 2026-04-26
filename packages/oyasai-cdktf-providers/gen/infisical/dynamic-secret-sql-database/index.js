@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_sql_database
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DynamicSecretSqlDatabase = exports.DynamicSecretSqlDatabaseMetadataList = exports.DynamicSecretSqlDatabaseMetadataOutputReference = exports.DynamicSecretSqlDatabaseConfigurationOutputReference = exports.DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference = exports.DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference = void 0;
-exports.dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToTerraform = dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToTerraform;
-exports.dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToHclTerraform = dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToHclTerraform;
-exports.dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToTerraform = dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToTerraform;
-exports.dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToHclTerraform = dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToHclTerraform;
-exports.dynamicSecretSqlDatabaseConfigurationToTerraform = dynamicSecretSqlDatabaseConfigurationToTerraform;
-exports.dynamicSecretSqlDatabaseConfigurationToHclTerraform = dynamicSecretSqlDatabaseConfigurationToHclTerraform;
-exports.dynamicSecretSqlDatabaseMetadataToTerraform = dynamicSecretSqlDatabaseMetadataToTerraform;
-exports.dynamicSecretSqlDatabaseMetadataToHclTerraform = dynamicSecretSqlDatabaseMetadataToHclTerraform;
-var cdktf = require("cdktf");
-function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -41,14 +15,14 @@ function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToTerr
         uppercase: cdktf.numberToTerraform(struct.uppercase),
     };
 }
-function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToHclTerraform(struct) {
+export function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         digits: {
             value: cdktf.numberToHclTerraform(struct.digits),
             isBlock: false,
@@ -75,148 +49,114 @@ function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToHclT
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference, _super);
+export class DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._digits !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.digits = this._digits;
-            }
-            if (this._lowercase !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.lowercase = this._lowercase;
-            }
-            if (this._symbols !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.symbols = this._symbols;
-            }
-            if (this._uppercase !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.uppercase = this._uppercase;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._digits = undefined;
-                this._lowercase = undefined;
-                this._symbols = undefined;
-                this._uppercase = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._digits = value.digits;
-                this._lowercase = value.lowercase;
-                this._symbols = value.symbols;
-                this._uppercase = value.uppercase;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference.prototype, "digits", {
-        get: function () {
-            return this.getNumberAttribute('digits');
-        },
-        set: function (value) {
-            this._digits = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference.prototype, "digitsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._digits;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference.prototype, "lowercase", {
-        get: function () {
-            return this.getNumberAttribute('lowercase');
-        },
-        set: function (value) {
-            this._lowercase = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference.prototype, "lowercaseInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._lowercase;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference.prototype, "symbols", {
-        get: function () {
-            return this.getNumberAttribute('symbols');
-        },
-        set: function (value) {
-            this._symbols = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference.prototype, "symbolsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._symbols;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference.prototype, "uppercase", {
-        get: function () {
-            return this.getNumberAttribute('uppercase');
-        },
-        set: function (value) {
-            this._uppercase = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference.prototype, "uppercaseInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._uppercase;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference = DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference;
-function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._digits !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.digits = this._digits;
+        }
+        if (this._lowercase !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.lowercase = this._lowercase;
+        }
+        if (this._symbols !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.symbols = this._symbols;
+        }
+        if (this._uppercase !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.uppercase = this._uppercase;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._digits = undefined;
+            this._lowercase = undefined;
+            this._symbols = undefined;
+            this._uppercase = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._digits = value.digits;
+            this._lowercase = value.lowercase;
+            this._symbols = value.symbols;
+            this._uppercase = value.uppercase;
+        }
+    }
+    // digits - computed: false, optional: false, required: true
+    _digits;
+    get digits() {
+        return this.getNumberAttribute('digits');
+    }
+    set digits(value) {
+        this._digits = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get digitsInput() {
+        return this._digits;
+    }
+    // lowercase - computed: false, optional: false, required: true
+    _lowercase;
+    get lowercase() {
+        return this.getNumberAttribute('lowercase');
+    }
+    set lowercase(value) {
+        this._lowercase = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get lowercaseInput() {
+        return this._lowercase;
+    }
+    // symbols - computed: false, optional: false, required: true
+    _symbols;
+    get symbols() {
+        return this.getNumberAttribute('symbols');
+    }
+    set symbols(value) {
+        this._symbols = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get symbolsInput() {
+        return this._symbols;
+    }
+    // uppercase - computed: false, optional: false, required: true
+    _uppercase;
+    get uppercase() {
+        return this.getNumberAttribute('uppercase');
+    }
+    set uppercase(value) {
+        this._uppercase = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get uppercaseInput() {
+        return this._uppercase;
+    }
+}
+export function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -229,14 +169,14 @@ function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToTerraform(st
         required: dynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredToTerraform(struct.required),
     };
 }
-function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToHclTerraform(struct) {
+export function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         allowed_symbols: {
             value: cdktf.stringToHclTerraform(struct.allowedSymbols),
             isBlock: false,
@@ -257,130 +197,99 @@ function dynamicSecretSqlDatabaseConfigurationPasswordRequirementsToHclTerraform
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference, _super);
+export class DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // required - computed: false, optional: false, required: true
-        _this._required = new DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference(_this, "required");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._allowedSymbols !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowedSymbols = this._allowedSymbols;
-            }
-            if (this._length !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.length = this._length;
-            }
-            if (((_a = this._required) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.required = (_b = this._required) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._allowedSymbols = undefined;
-                this._length = undefined;
-                this._required.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._allowedSymbols = value.allowedSymbols;
-                this._length = value.length;
-                this._required.internalValue = value.required;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference.prototype, "allowedSymbols", {
-        get: function () {
-            return this.getStringAttribute('allowed_symbols');
-        },
-        set: function (value) {
-            this._allowedSymbols = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference.prototype.resetAllowedSymbols = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._allowedSymbols !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowedSymbols = this._allowedSymbols;
+        }
+        if (this._length !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.length = this._length;
+        }
+        if (this._required?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.required = this._required?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._allowedSymbols = undefined;
+            this._length = undefined;
+            this._required.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._allowedSymbols = value.allowedSymbols;
+            this._length = value.length;
+            this._required.internalValue = value.required;
+        }
+    }
+    // allowed_symbols - computed: false, optional: true, required: false
+    _allowedSymbols;
+    get allowedSymbols() {
+        return this.getStringAttribute('allowed_symbols');
+    }
+    set allowedSymbols(value) {
+        this._allowedSymbols = value;
+    }
+    resetAllowedSymbols() {
         this._allowedSymbols = undefined;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference.prototype, "allowedSymbolsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedSymbols;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference.prototype, "length", {
-        get: function () {
-            return this.getNumberAttribute('length');
-        },
-        set: function (value) {
-            this._length = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference.prototype, "lengthInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._length;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference.prototype, "required", {
-        get: function () {
-            return this._required;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference.prototype.putRequired = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedSymbolsInput() {
+        return this._allowedSymbols;
+    }
+    // length - computed: false, optional: false, required: true
+    _length;
+    get length() {
+        return this.getNumberAttribute('length');
+    }
+    set length(value) {
+        this._length = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get lengthInput() {
+        return this._length;
+    }
+    // required - computed: false, optional: false, required: true
+    _required = new DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequiredOutputReference(this, "required");
+    get required() {
+        return this._required;
+    }
+    putRequired(value) {
         this._required.internalValue = value;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference.prototype, "requiredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._required.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference = DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference;
-function dynamicSecretSqlDatabaseConfigurationToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredInput() {
+        return this._required.internalValue;
+    }
+}
+export function dynamicSecretSqlDatabaseConfigurationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -402,14 +311,14 @@ function dynamicSecretSqlDatabaseConfigurationToTerraform(struct) {
         username: cdktf.stringToTerraform(struct.username),
     };
 }
-function dynamicSecretSqlDatabaseConfigurationToHclTerraform(struct) {
+export function dynamicSecretSqlDatabaseConfigurationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ca: {
             value: cdktf.stringToHclTerraform(struct.ca),
             isBlock: false,
@@ -484,355 +393,270 @@ function dynamicSecretSqlDatabaseConfigurationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretSqlDatabaseConfigurationOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretSqlDatabaseConfigurationOutputReference, _super);
+export class DynamicSecretSqlDatabaseConfigurationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DynamicSecretSqlDatabaseConfigurationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // password_requirements - computed: false, optional: true, required: false
-        _this._passwordRequirements = new DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference(_this, "password_requirements");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ca !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ca = this._ca;
-            }
-            if (this._client !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.client = this._client;
-            }
-            if (this._creationStatement !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.creationStatement = this._creationStatement;
-            }
-            if (this._database !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.database = this._database;
-            }
-            if (this._gatewayId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.gatewayId = this._gatewayId;
-            }
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            if (this._password !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.password = this._password;
-            }
-            if (((_a = this._passwordRequirements) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.passwordRequirements = (_b = this._passwordRequirements) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._port !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.port = this._port;
-            }
-            if (this._renewStatement !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.renewStatement = this._renewStatement;
-            }
-            if (this._revocationStatement !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.revocationStatement = this._revocationStatement;
-            }
-            if (this._username !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.username = this._username;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ca = undefined;
-                this._client = undefined;
-                this._creationStatement = undefined;
-                this._database = undefined;
-                this._gatewayId = undefined;
-                this._host = undefined;
-                this._password = undefined;
-                this._passwordRequirements.internalValue = undefined;
-                this._port = undefined;
-                this._renewStatement = undefined;
-                this._revocationStatement = undefined;
-                this._username = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ca = value.ca;
-                this._client = value.client;
-                this._creationStatement = value.creationStatement;
-                this._database = value.database;
-                this._gatewayId = value.gatewayId;
-                this._host = value.host;
-                this._password = value.password;
-                this._passwordRequirements.internalValue = value.passwordRequirements;
-                this._port = value.port;
-                this._renewStatement = value.renewStatement;
-                this._revocationStatement = value.revocationStatement;
-                this._username = value.username;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "ca", {
-        get: function () {
-            return this.getStringAttribute('ca');
-        },
-        set: function (value) {
-            this._ca = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabaseConfigurationOutputReference.prototype.resetCa = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ca !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ca = this._ca;
+        }
+        if (this._client !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.client = this._client;
+        }
+        if (this._creationStatement !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.creationStatement = this._creationStatement;
+        }
+        if (this._database !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.database = this._database;
+        }
+        if (this._gatewayId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.gatewayId = this._gatewayId;
+        }
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        if (this._password !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.password = this._password;
+        }
+        if (this._passwordRequirements?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.passwordRequirements = this._passwordRequirements?.internalValue;
+        }
+        if (this._port !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.port = this._port;
+        }
+        if (this._renewStatement !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.renewStatement = this._renewStatement;
+        }
+        if (this._revocationStatement !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.revocationStatement = this._revocationStatement;
+        }
+        if (this._username !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.username = this._username;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ca = undefined;
+            this._client = undefined;
+            this._creationStatement = undefined;
+            this._database = undefined;
+            this._gatewayId = undefined;
+            this._host = undefined;
+            this._password = undefined;
+            this._passwordRequirements.internalValue = undefined;
+            this._port = undefined;
+            this._renewStatement = undefined;
+            this._revocationStatement = undefined;
+            this._username = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ca = value.ca;
+            this._client = value.client;
+            this._creationStatement = value.creationStatement;
+            this._database = value.database;
+            this._gatewayId = value.gatewayId;
+            this._host = value.host;
+            this._password = value.password;
+            this._passwordRequirements.internalValue = value.passwordRequirements;
+            this._port = value.port;
+            this._renewStatement = value.renewStatement;
+            this._revocationStatement = value.revocationStatement;
+            this._username = value.username;
+        }
+    }
+    // ca - computed: false, optional: true, required: false
+    _ca;
+    get ca() {
+        return this.getStringAttribute('ca');
+    }
+    set ca(value) {
+        this._ca = value;
+    }
+    resetCa() {
         this._ca = undefined;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "caInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ca;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "client", {
-        get: function () {
-            return this.getStringAttribute('client');
-        },
-        set: function (value) {
-            this._client = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "clientInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._client;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "creationStatement", {
-        get: function () {
-            return this.getStringAttribute('creation_statement');
-        },
-        set: function (value) {
-            this._creationStatement = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "creationStatementInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._creationStatement;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "database", {
-        get: function () {
-            return this.getStringAttribute('database');
-        },
-        set: function (value) {
-            this._database = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "databaseInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._database;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "gatewayId", {
-        get: function () {
-            return this.getStringAttribute('gateway_id');
-        },
-        set: function (value) {
-            this._gatewayId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabaseConfigurationOutputReference.prototype.resetGatewayId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get caInput() {
+        return this._ca;
+    }
+    // client - computed: false, optional: false, required: true
+    _client;
+    get client() {
+        return this.getStringAttribute('client');
+    }
+    set client(value) {
+        this._client = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get clientInput() {
+        return this._client;
+    }
+    // creation_statement - computed: false, optional: false, required: true
+    _creationStatement;
+    get creationStatement() {
+        return this.getStringAttribute('creation_statement');
+    }
+    set creationStatement(value) {
+        this._creationStatement = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get creationStatementInput() {
+        return this._creationStatement;
+    }
+    // database - computed: false, optional: false, required: true
+    _database;
+    get database() {
+        return this.getStringAttribute('database');
+    }
+    set database(value) {
+        this._database = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get databaseInput() {
+        return this._database;
+    }
+    // gateway_id - computed: false, optional: true, required: false
+    _gatewayId;
+    get gatewayId() {
+        return this.getStringAttribute('gateway_id');
+    }
+    set gatewayId(value) {
+        this._gatewayId = value;
+    }
+    resetGatewayId() {
         this._gatewayId = undefined;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "gatewayIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gatewayId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "password", {
-        get: function () {
-            return this.getStringAttribute('password');
-        },
-        set: function (value) {
-            this._password = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "passwordInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._password;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "passwordRequirements", {
-        get: function () {
-            return this._passwordRequirements;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabaseConfigurationOutputReference.prototype.putPasswordRequirements = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gatewayIdInput() {
+        return this._gatewayId;
+    }
+    // host - computed: false, optional: false, required: true
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // password - computed: false, optional: false, required: true
+    _password;
+    get password() {
+        return this.getStringAttribute('password');
+    }
+    set password(value) {
+        this._password = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get passwordInput() {
+        return this._password;
+    }
+    // password_requirements - computed: false, optional: true, required: false
+    _passwordRequirements = new DynamicSecretSqlDatabaseConfigurationPasswordRequirementsOutputReference(this, "password_requirements");
+    get passwordRequirements() {
+        return this._passwordRequirements;
+    }
+    putPasswordRequirements(value) {
         this._passwordRequirements.internalValue = value;
-    };
-    DynamicSecretSqlDatabaseConfigurationOutputReference.prototype.resetPasswordRequirements = function () {
+    }
+    resetPasswordRequirements() {
         this._passwordRequirements.internalValue = undefined;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "passwordRequirementsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._passwordRequirements.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "port", {
-        get: function () {
-            return this.getNumberAttribute('port');
-        },
-        set: function (value) {
-            this._port = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "portInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._port;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "renewStatement", {
-        get: function () {
-            return this.getStringAttribute('renew_statement');
-        },
-        set: function (value) {
-            this._renewStatement = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabaseConfigurationOutputReference.prototype.resetRenewStatement = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get passwordRequirementsInput() {
+        return this._passwordRequirements.internalValue;
+    }
+    // port - computed: false, optional: false, required: true
+    _port;
+    get port() {
+        return this.getNumberAttribute('port');
+    }
+    set port(value) {
+        this._port = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get portInput() {
+        return this._port;
+    }
+    // renew_statement - computed: false, optional: true, required: false
+    _renewStatement;
+    get renewStatement() {
+        return this.getStringAttribute('renew_statement');
+    }
+    set renewStatement(value) {
+        this._renewStatement = value;
+    }
+    resetRenewStatement() {
         this._renewStatement = undefined;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "renewStatementInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._renewStatement;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "revocationStatement", {
-        get: function () {
-            return this.getStringAttribute('revocation_statement');
-        },
-        set: function (value) {
-            this._revocationStatement = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "revocationStatementInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._revocationStatement;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "username", {
-        get: function () {
-            return this.getStringAttribute('username');
-        },
-        set: function (value) {
-            this._username = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseConfigurationOutputReference.prototype, "usernameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._username;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretSqlDatabaseConfigurationOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretSqlDatabaseConfigurationOutputReference = DynamicSecretSqlDatabaseConfigurationOutputReference;
-function dynamicSecretSqlDatabaseMetadataToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get renewStatementInput() {
+        return this._renewStatement;
+    }
+    // revocation_statement - computed: false, optional: false, required: true
+    _revocationStatement;
+    get revocationStatement() {
+        return this.getStringAttribute('revocation_statement');
+    }
+    set revocationStatement(value) {
+        this._revocationStatement = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get revocationStatementInput() {
+        return this._revocationStatement;
+    }
+    // username - computed: false, optional: false, required: true
+    _username;
+    get username() {
+        return this.getStringAttribute('username');
+    }
+    set username(value) {
+        this._username = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameInput() {
+        return this._username;
+    }
+}
+export function dynamicSecretSqlDatabaseMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -844,14 +668,14 @@ function dynamicSecretSqlDatabaseMetadataToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function dynamicSecretSqlDatabaseMetadataToHclTerraform(struct) {
+export function dynamicSecretSqlDatabaseMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         key: {
             value: cdktf.stringToHclTerraform(struct.key),
             isBlock: false,
@@ -866,129 +690,123 @@ function dynamicSecretSqlDatabaseMetadataToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretSqlDatabaseMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretSqlDatabaseMetadataOutputReference, _super);
+export class DynamicSecretSqlDatabaseMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretSqlDatabaseMetadataOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DynamicSecretSqlDatabaseMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._key !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.key = this._key;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._key = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._key = value.key;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseMetadataOutputReference.prototype, "key", {
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        set: function (value) {
-            this._key = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseMetadataOutputReference.prototype, "keyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._key;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseMetadataOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabaseMetadataOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretSqlDatabaseMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretSqlDatabaseMetadataOutputReference = DynamicSecretSqlDatabaseMetadataOutputReference;
-var DynamicSecretSqlDatabaseMetadataList = /** @class */ (function (_super) {
-    __extends(DynamicSecretSqlDatabaseMetadataList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._key !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.key = this._key;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._key = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._key = value.key;
+            this._value = value.value;
+        }
+    }
+    // key - computed: false, optional: false, required: true
+    _key;
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    set key(value) {
+        this._key = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyInput() {
+        return this._key;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class DynamicSecretSqlDatabaseMetadataList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretSqlDatabaseMetadataList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DynamicSecretSqlDatabaseMetadataList.prototype.get = function (index) {
+    get(index) {
         return new DynamicSecretSqlDatabaseMetadataOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DynamicSecretSqlDatabaseMetadataList;
-}(cdktf.ComplexList));
-exports.DynamicSecretSqlDatabaseMetadataList = DynamicSecretSqlDatabaseMetadataList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_sql_database infisical_dynamic_secret_sql_database}
 */
-var DynamicSecretSqlDatabase = /** @class */ (function (_super) {
-    __extends(DynamicSecretSqlDatabase, _super);
+export class DynamicSecretSqlDatabase extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_dynamic_secret_sql_database";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DynamicSecretSqlDatabase resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DynamicSecretSqlDatabase to import
+    * @param importFromId The id of the existing DynamicSecretSqlDatabase that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_sql_database#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DynamicSecretSqlDatabase to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_dynamic_secret_sql_database", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -999,8 +817,8 @@ var DynamicSecretSqlDatabase = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DynamicSecretSqlDatabaseConfig
     */
-    function DynamicSecretSqlDatabase(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_dynamic_secret_sql_database',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -1013,221 +831,145 @@ var DynamicSecretSqlDatabase = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // configuration - computed: false, optional: false, required: true
-        _this._configuration = new DynamicSecretSqlDatabaseConfigurationOutputReference(_this, "configuration");
-        // metadata - computed: false, optional: true, required: false
-        _this._metadata = new DynamicSecretSqlDatabaseMetadataList(_this, "metadata", true);
-        _this._configuration.internalValue = config.configuration;
-        _this._defaultTtl = config.defaultTtl;
-        _this._environmentSlug = config.environmentSlug;
-        _this._maxTtl = config.maxTtl;
-        _this._metadata.internalValue = config.metadata;
-        _this._name = config.name;
-        _this._path = config.path;
-        _this._projectSlug = config.projectSlug;
-        _this._usernameTemplate = config.usernameTemplate;
-        return _this;
+        });
+        this._configuration.internalValue = config.configuration;
+        this._defaultTtl = config.defaultTtl;
+        this._environmentSlug = config.environmentSlug;
+        this._maxTtl = config.maxTtl;
+        this._metadata.internalValue = config.metadata;
+        this._name = config.name;
+        this._path = config.path;
+        this._projectSlug = config.projectSlug;
+        this._usernameTemplate = config.usernameTemplate;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DynamicSecretSqlDatabase resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DynamicSecretSqlDatabase to import
-    * @param importFromId The id of the existing DynamicSecretSqlDatabase that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_sql_database#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DynamicSecretSqlDatabase to import is found
-    */
-    DynamicSecretSqlDatabase.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_dynamic_secret_sql_database", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "configuration", {
-        get: function () {
-            return this._configuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabase.prototype.putConfiguration = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // configuration - computed: false, optional: false, required: true
+    _configuration = new DynamicSecretSqlDatabaseConfigurationOutputReference(this, "configuration");
+    get configuration() {
+        return this._configuration;
+    }
+    putConfiguration(value) {
         this._configuration.internalValue = value;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "configurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configuration.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "defaultTtl", {
-        get: function () {
-            return this.getStringAttribute('default_ttl');
-        },
-        set: function (value) {
-            this._defaultTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "defaultTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "environmentSlug", {
-        get: function () {
-            return this.getStringAttribute('environment_slug');
-        },
-        set: function (value) {
-            this._environmentSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "environmentSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environmentSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "maxTtl", {
-        get: function () {
-            return this.getStringAttribute('max_ttl');
-        },
-        set: function (value) {
-            this._maxTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabase.prototype.resetMaxTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configurationInput() {
+        return this._configuration.internalValue;
+    }
+    // default_ttl - computed: false, optional: false, required: true
+    _defaultTtl;
+    get defaultTtl() {
+        return this.getStringAttribute('default_ttl');
+    }
+    set defaultTtl(value) {
+        this._defaultTtl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultTtlInput() {
+        return this._defaultTtl;
+    }
+    // environment_slug - computed: false, optional: false, required: true
+    _environmentSlug;
+    get environmentSlug() {
+        return this.getStringAttribute('environment_slug');
+    }
+    set environmentSlug(value) {
+        this._environmentSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentSlugInput() {
+        return this._environmentSlug;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // max_ttl - computed: false, optional: true, required: false
+    _maxTtl;
+    get maxTtl() {
+        return this.getStringAttribute('max_ttl');
+    }
+    set maxTtl(value) {
+        this._maxTtl = value;
+    }
+    resetMaxTtl() {
         this._maxTtl = undefined;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "maxTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "metadata", {
-        get: function () {
-            return this._metadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabase.prototype.putMetadata = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxTtlInput() {
+        return this._maxTtl;
+    }
+    // metadata - computed: false, optional: true, required: false
+    _metadata = new DynamicSecretSqlDatabaseMetadataList(this, "metadata", true);
+    get metadata() {
+        return this._metadata;
+    }
+    putMetadata(value) {
         this._metadata.internalValue = value;
-    };
-    DynamicSecretSqlDatabase.prototype.resetMetadata = function () {
+    }
+    resetMetadata() {
         this._metadata.internalValue = undefined;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "metadataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._metadata.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "usernameTemplate", {
-        get: function () {
-            return this.getStringAttribute('username_template');
-        },
-        set: function (value) {
-            this._usernameTemplate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretSqlDatabase.prototype.resetUsernameTemplate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get metadataInput() {
+        return this._metadata.internalValue;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // path - computed: false, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // username_template - computed: false, optional: true, required: false
+    _usernameTemplate;
+    get usernameTemplate() {
+        return this.getStringAttribute('username_template');
+    }
+    set usernameTemplate(value) {
+        this._usernameTemplate = value;
+    }
+    resetUsernameTemplate() {
         this._usernameTemplate = undefined;
-    };
-    Object.defineProperty(DynamicSecretSqlDatabase.prototype, "usernameTemplateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._usernameTemplate;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameTemplateInput() {
+        return this._usernameTemplate;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DynamicSecretSqlDatabase.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             configuration: dynamicSecretSqlDatabaseConfigurationToTerraform(this._configuration.internalValue),
             default_ttl: cdktf.stringToTerraform(this._defaultTtl),
@@ -1239,9 +981,9 @@ var DynamicSecretSqlDatabase = /** @class */ (function (_super) {
             project_slug: cdktf.stringToTerraform(this._projectSlug),
             username_template: cdktf.stringToTerraform(this._usernameTemplate),
         };
-    };
-    DynamicSecretSqlDatabase.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             configuration: {
                 value: dynamicSecretSqlDatabaseConfigurationToHclTerraform(this._configuration.internalValue),
                 isBlock: true,
@@ -1298,15 +1040,6 @@ var DynamicSecretSqlDatabase = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DynamicSecretSqlDatabase.tfResourceType = "infisical_dynamic_secret_sql_database";
-    return DynamicSecretSqlDatabase;
-}(cdktf.TerraformResource));
-exports.DynamicSecretSqlDatabase = DynamicSecretSqlDatabase;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

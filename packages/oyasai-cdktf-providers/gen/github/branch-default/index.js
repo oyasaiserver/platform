@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/branch_default
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BranchDefault = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/branch_default github_branch_default}
 */
-var BranchDefault = /** @class */ (function (_super) {
-    __extends(BranchDefault, _super);
+export class BranchDefault extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_branch_default";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a BranchDefault resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the BranchDefault to import
+    * @param importFromId The id of the existing BranchDefault that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/branch_default#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the BranchDefault to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_branch_default", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var BranchDefault = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options BranchDefaultConfig
     */
-    function BranchDefault(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_branch_default',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,130 +46,89 @@ var BranchDefault = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._branch = config.branch;
-        _this._etag = config.etag;
-        _this._id = config.id;
-        _this._rename = config.rename;
-        _this._repository = config.repository;
-        return _this;
+        });
+        this._branch = config.branch;
+        this._etag = config.etag;
+        this._id = config.id;
+        this._rename = config.rename;
+        this._repository = config.repository;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a BranchDefault resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the BranchDefault to import
-    * @param importFromId The id of the existing BranchDefault that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/branch_default#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the BranchDefault to import is found
-    */
-    BranchDefault.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_branch_default", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(BranchDefault.prototype, "branch", {
-        get: function () {
-            return this.getStringAttribute('branch');
-        },
-        set: function (value) {
-            this._branch = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchDefault.prototype, "branchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._branch;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchDefault.prototype, "etag", {
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        set: function (value) {
-            this._etag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchDefault.prototype.resetEtag = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // branch - computed: false, optional: false, required: true
+    _branch;
+    get branch() {
+        return this.getStringAttribute('branch');
+    }
+    set branch(value) {
+        this._branch = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get branchInput() {
+        return this._branch;
+    }
+    // etag - computed: true, optional: true, required: false
+    _etag;
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    set etag(value) {
+        this._etag = value;
+    }
+    resetEtag() {
         this._etag = undefined;
-    };
-    Object.defineProperty(BranchDefault.prototype, "etagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._etag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchDefault.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchDefault.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get etagInput() {
+        return this._etag;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(BranchDefault.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchDefault.prototype, "rename", {
-        get: function () {
-            return this.getBooleanAttribute('rename');
-        },
-        set: function (value) {
-            this._rename = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BranchDefault.prototype.resetRename = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // rename - computed: false, optional: true, required: false
+    _rename;
+    get rename() {
+        return this.getBooleanAttribute('rename');
+    }
+    set rename(value) {
+        this._rename = value;
+    }
+    resetRename() {
         this._rename = undefined;
-    };
-    Object.defineProperty(BranchDefault.prototype, "renameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rename;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchDefault.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BranchDefault.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get renameInput() {
+        return this._rename;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
     // =========
     // SYNTHESIS
     // =========
-    BranchDefault.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             branch: cdktf.stringToTerraform(this._branch),
             etag: cdktf.stringToTerraform(this._etag),
@@ -179,9 +136,9 @@ var BranchDefault = /** @class */ (function (_super) {
             rename: cdktf.booleanToTerraform(this._rename),
             repository: cdktf.stringToTerraform(this._repository),
         };
-    };
-    BranchDefault.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             branch: {
                 value: cdktf.stringToHclTerraform(this._branch),
                 isBlock: false,
@@ -214,15 +171,6 @@ var BranchDefault = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    BranchDefault.tfResourceType = "github_branch_default";
-    return BranchDefault;
-}(cdktf.TerraformResource));
-exports.BranchDefault = BranchDefault;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

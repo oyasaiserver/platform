@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/sso_connector
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SsoConnector = exports.SsoConnectorVerificationOutputReference = void 0;
-exports.ssoConnectorVerificationToTerraform = ssoConnectorVerificationToTerraform;
-exports.ssoConnectorVerificationToHclTerraform = ssoConnectorVerificationToHclTerraform;
-var cdktf = require("cdktf");
-function ssoConnectorVerificationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function ssoConnectorVerificationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,68 +10,68 @@ function ssoConnectorVerificationToTerraform(struct) {
     }
     return {};
 }
-function ssoConnectorVerificationToHclTerraform(struct) {
+export function ssoConnectorVerificationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var SsoConnectorVerificationOutputReference = /** @class */ (function (_super) {
-    __extends(SsoConnectorVerificationOutputReference, _super);
+export class SsoConnectorVerificationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function SsoConnectorVerificationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(SsoConnectorVerificationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnectorVerificationOutputReference.prototype, "code", {
-        // code - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('code');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnectorVerificationOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return SsoConnectorVerificationOutputReference;
-}(cdktf.ComplexObject));
-exports.SsoConnectorVerificationOutputReference = SsoConnectorVerificationOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // code - computed: true, optional: false, required: false
+    get code() {
+        return this.getStringAttribute('code');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/sso_connector cloudflare_sso_connector}
 */
-var SsoConnector = /** @class */ (function (_super) {
-    __extends(SsoConnector, _super);
+export class SsoConnector extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_sso_connector";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a SsoConnector resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the SsoConnector to import
+    * @param importFromId The id of the existing SsoConnector that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/sso_connector#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the SsoConnector to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_sso_connector", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -102,8 +82,8 @@ var SsoConnector = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options SsoConnectorConfig
     */
-    function SsoConnector(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_sso_connector',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -116,166 +96,109 @@ var SsoConnector = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // verification - computed: true, optional: false, required: false
-        _this._verification = new SsoConnectorVerificationOutputReference(_this, "verification");
-        _this._accountId = config.accountId;
-        _this._beginVerification = config.beginVerification;
-        _this._emailDomain = config.emailDomain;
-        _this._enabled = config.enabled;
-        _this._useFedrampLanguage = config.useFedrampLanguage;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._beginVerification = config.beginVerification;
+        this._emailDomain = config.emailDomain;
+        this._enabled = config.enabled;
+        this._useFedrampLanguage = config.useFedrampLanguage;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a SsoConnector resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the SsoConnector to import
-    * @param importFromId The id of the existing SsoConnector that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/sso_connector#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the SsoConnector to import is found
-    */
-    SsoConnector.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_sso_connector", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(SsoConnector.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SsoConnector.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(SsoConnector.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnector.prototype, "beginVerification", {
-        get: function () {
-            return this.getBooleanAttribute('begin_verification');
-        },
-        set: function (value) {
-            this._beginVerification = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SsoConnector.prototype.resetBeginVerification = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // begin_verification - computed: true, optional: true, required: false
+    _beginVerification;
+    get beginVerification() {
+        return this.getBooleanAttribute('begin_verification');
+    }
+    set beginVerification(value) {
+        this._beginVerification = value;
+    }
+    resetBeginVerification() {
         this._beginVerification = undefined;
-    };
-    Object.defineProperty(SsoConnector.prototype, "beginVerificationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._beginVerification;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnector.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnector.prototype, "emailDomain", {
-        get: function () {
-            return this.getStringAttribute('email_domain');
-        },
-        set: function (value) {
-            this._emailDomain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnector.prototype, "emailDomainInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._emailDomain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnector.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SsoConnector.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get beginVerificationInput() {
+        return this._beginVerification;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // email_domain - computed: false, optional: false, required: true
+    _emailDomain;
+    get emailDomain() {
+        return this.getStringAttribute('email_domain');
+    }
+    set emailDomain(value) {
+        this._emailDomain = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get emailDomainInput() {
+        return this._emailDomain;
+    }
+    // enabled - computed: false, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(SsoConnector.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnector.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnector.prototype, "updatedOn", {
-        // updated_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnector.prototype, "useFedrampLanguage", {
-        get: function () {
-            return this.getBooleanAttribute('use_fedramp_language');
-        },
-        set: function (value) {
-            this._useFedrampLanguage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SsoConnector.prototype.resetUseFedrampLanguage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // updated_on - computed: true, optional: false, required: false
+    get updatedOn() {
+        return this.getStringAttribute('updated_on');
+    }
+    // use_fedramp_language - computed: true, optional: true, required: false
+    _useFedrampLanguage;
+    get useFedrampLanguage() {
+        return this.getBooleanAttribute('use_fedramp_language');
+    }
+    set useFedrampLanguage(value) {
+        this._useFedrampLanguage = value;
+    }
+    resetUseFedrampLanguage() {
         this._useFedrampLanguage = undefined;
-    };
-    Object.defineProperty(SsoConnector.prototype, "useFedrampLanguageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._useFedrampLanguage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(SsoConnector.prototype, "verification", {
-        get: function () {
-            return this._verification;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get useFedrampLanguageInput() {
+        return this._useFedrampLanguage;
+    }
+    // verification - computed: true, optional: false, required: false
+    _verification = new SsoConnectorVerificationOutputReference(this, "verification");
+    get verification() {
+        return this._verification;
+    }
     // =========
     // SYNTHESIS
     // =========
-    SsoConnector.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             begin_verification: cdktf.booleanToTerraform(this._beginVerification),
@@ -283,9 +206,9 @@ var SsoConnector = /** @class */ (function (_super) {
             enabled: cdktf.booleanToTerraform(this._enabled),
             use_fedramp_language: cdktf.booleanToTerraform(this._useFedrampLanguage),
         };
-    };
-    SsoConnector.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -318,15 +241,6 @@ var SsoConnector = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    SsoConnector.tfResourceType = "cloudflare_sso_connector";
-    return SsoConnector;
-}(cdktf.TerraformResource));
-exports.SsoConnector = SsoConnector;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

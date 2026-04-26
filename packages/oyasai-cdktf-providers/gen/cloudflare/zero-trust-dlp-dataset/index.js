@@ -1,35 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_dataset
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustDlpDataset = exports.ZeroTrustDlpDatasetUploadsList = exports.ZeroTrustDlpDatasetUploadsOutputReference = exports.ZeroTrustDlpDatasetDatasetOutputReference = exports.ZeroTrustDlpDatasetDatasetUploadsList = exports.ZeroTrustDlpDatasetDatasetUploadsOutputReference = exports.ZeroTrustDlpDatasetDatasetColumnsList = exports.ZeroTrustDlpDatasetDatasetColumnsOutputReference = exports.ZeroTrustDlpDatasetColumnsList = exports.ZeroTrustDlpDatasetColumnsOutputReference = void 0;
-exports.zeroTrustDlpDatasetColumnsToTerraform = zeroTrustDlpDatasetColumnsToTerraform;
-exports.zeroTrustDlpDatasetColumnsToHclTerraform = zeroTrustDlpDatasetColumnsToHclTerraform;
-exports.zeroTrustDlpDatasetDatasetColumnsToTerraform = zeroTrustDlpDatasetDatasetColumnsToTerraform;
-exports.zeroTrustDlpDatasetDatasetColumnsToHclTerraform = zeroTrustDlpDatasetDatasetColumnsToHclTerraform;
-exports.zeroTrustDlpDatasetDatasetUploadsToTerraform = zeroTrustDlpDatasetDatasetUploadsToTerraform;
-exports.zeroTrustDlpDatasetDatasetUploadsToHclTerraform = zeroTrustDlpDatasetDatasetUploadsToHclTerraform;
-exports.zeroTrustDlpDatasetDatasetToTerraform = zeroTrustDlpDatasetDatasetToTerraform;
-exports.zeroTrustDlpDatasetDatasetToHclTerraform = zeroTrustDlpDatasetDatasetToHclTerraform;
-exports.zeroTrustDlpDatasetUploadsToTerraform = zeroTrustDlpDatasetUploadsToTerraform;
-exports.zeroTrustDlpDatasetUploadsToHclTerraform = zeroTrustDlpDatasetUploadsToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustDlpDatasetColumnsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustDlpDatasetColumnsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -38,105 +10,80 @@ function zeroTrustDlpDatasetColumnsToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustDlpDatasetColumnsToHclTerraform(struct) {
+export function zeroTrustDlpDatasetColumnsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustDlpDatasetColumnsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDatasetColumnsOutputReference, _super);
+export class ZeroTrustDlpDatasetColumnsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpDatasetColumnsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDlpDatasetColumnsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetColumnsOutputReference.prototype, "entryId", {
-        // entry_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('entry_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetColumnsOutputReference.prototype, "headerName", {
-        // header_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('header_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetColumnsOutputReference.prototype, "numCells", {
-        // num_cells - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('num_cells');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetColumnsOutputReference.prototype, "uploadStatus", {
-        // upload_status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('upload_status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpDatasetColumnsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpDatasetColumnsOutputReference = ZeroTrustDlpDatasetColumnsOutputReference;
-var ZeroTrustDlpDatasetColumnsList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDatasetColumnsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // entry_id - computed: true, optional: false, required: false
+    get entryId() {
+        return this.getStringAttribute('entry_id');
+    }
+    // header_name - computed: true, optional: false, required: false
+    get headerName() {
+        return this.getStringAttribute('header_name');
+    }
+    // num_cells - computed: true, optional: false, required: false
+    get numCells() {
+        return this.getNumberAttribute('num_cells');
+    }
+    // upload_status - computed: true, optional: false, required: false
+    get uploadStatus() {
+        return this.getStringAttribute('upload_status');
+    }
+}
+export class ZeroTrustDlpDatasetColumnsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpDatasetColumnsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDlpDatasetColumnsList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDlpDatasetColumnsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDlpDatasetColumnsList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDlpDatasetColumnsList = ZeroTrustDlpDatasetColumnsList;
-function zeroTrustDlpDatasetDatasetColumnsToTerraform(struct) {
+    }
+}
+export function zeroTrustDlpDatasetDatasetColumnsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -145,105 +92,80 @@ function zeroTrustDlpDatasetDatasetColumnsToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustDlpDatasetDatasetColumnsToHclTerraform(struct) {
+export function zeroTrustDlpDatasetDatasetColumnsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustDlpDatasetDatasetColumnsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDatasetDatasetColumnsOutputReference, _super);
+export class ZeroTrustDlpDatasetDatasetColumnsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpDatasetDatasetColumnsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetColumnsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetColumnsOutputReference.prototype, "entryId", {
-        // entry_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('entry_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetColumnsOutputReference.prototype, "headerName", {
-        // header_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('header_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetColumnsOutputReference.prototype, "numCells", {
-        // num_cells - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('num_cells');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetColumnsOutputReference.prototype, "uploadStatus", {
-        // upload_status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('upload_status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpDatasetDatasetColumnsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpDatasetDatasetColumnsOutputReference = ZeroTrustDlpDatasetDatasetColumnsOutputReference;
-var ZeroTrustDlpDatasetDatasetColumnsList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDatasetDatasetColumnsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // entry_id - computed: true, optional: false, required: false
+    get entryId() {
+        return this.getStringAttribute('entry_id');
+    }
+    // header_name - computed: true, optional: false, required: false
+    get headerName() {
+        return this.getStringAttribute('header_name');
+    }
+    // num_cells - computed: true, optional: false, required: false
+    get numCells() {
+        return this.getNumberAttribute('num_cells');
+    }
+    // upload_status - computed: true, optional: false, required: false
+    get uploadStatus() {
+        return this.getStringAttribute('upload_status');
+    }
+}
+export class ZeroTrustDlpDatasetDatasetColumnsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpDatasetDatasetColumnsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDlpDatasetDatasetColumnsList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDlpDatasetDatasetColumnsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDlpDatasetDatasetColumnsList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDlpDatasetDatasetColumnsList = ZeroTrustDlpDatasetDatasetColumnsList;
-function zeroTrustDlpDatasetDatasetUploadsToTerraform(struct) {
+    }
+}
+export function zeroTrustDlpDatasetDatasetUploadsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -252,97 +174,76 @@ function zeroTrustDlpDatasetDatasetUploadsToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustDlpDatasetDatasetUploadsToHclTerraform(struct) {
+export function zeroTrustDlpDatasetDatasetUploadsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustDlpDatasetDatasetUploadsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDatasetDatasetUploadsOutputReference, _super);
+export class ZeroTrustDlpDatasetDatasetUploadsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpDatasetDatasetUploadsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetUploadsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetUploadsOutputReference.prototype, "numCells", {
-        // num_cells - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('num_cells');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetUploadsOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetUploadsOutputReference.prototype, "version", {
-        // version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpDatasetDatasetUploadsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpDatasetDatasetUploadsOutputReference = ZeroTrustDlpDatasetDatasetUploadsOutputReference;
-var ZeroTrustDlpDatasetDatasetUploadsList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDatasetDatasetUploadsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // num_cells - computed: true, optional: false, required: false
+    get numCells() {
+        return this.getNumberAttribute('num_cells');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // version - computed: true, optional: false, required: false
+    get version() {
+        return this.getNumberAttribute('version');
+    }
+}
+export class ZeroTrustDlpDatasetDatasetUploadsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpDatasetDatasetUploadsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDlpDatasetDatasetUploadsList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDlpDatasetDatasetUploadsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDlpDatasetDatasetUploadsList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDlpDatasetDatasetUploadsList = ZeroTrustDlpDatasetDatasetUploadsList;
-function zeroTrustDlpDatasetDatasetToTerraform(struct) {
+    }
+}
+export function zeroTrustDlpDatasetDatasetToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -351,146 +252,90 @@ function zeroTrustDlpDatasetDatasetToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustDlpDatasetDatasetToHclTerraform(struct) {
+export function zeroTrustDlpDatasetDatasetToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustDlpDatasetDatasetOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDatasetDatasetOutputReference, _super);
+export class ZeroTrustDlpDatasetDatasetOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDlpDatasetDatasetOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // columns - computed: true, optional: false, required: false
-        _this._columns = new ZeroTrustDlpDatasetDatasetColumnsList(_this, "columns", false);
-        // uploads - computed: true, optional: false, required: false
-        _this._uploads = new ZeroTrustDlpDatasetDatasetUploadsList(_this, "uploads", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "caseSensitive", {
-        // case_sensitive - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('case_sensitive');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "columns", {
-        get: function () {
-            return this._columns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "description", {
-        // description - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "encodingVersion", {
-        // encoding_version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('encoding_version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "numCells", {
-        // num_cells - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('num_cells');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "secret", {
-        // secret - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('secret');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetDatasetOutputReference.prototype, "uploads", {
-        get: function () {
-            return this._uploads;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpDatasetDatasetOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpDatasetDatasetOutputReference = ZeroTrustDlpDatasetDatasetOutputReference;
-function zeroTrustDlpDatasetUploadsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // case_sensitive - computed: true, optional: false, required: false
+    get caseSensitive() {
+        return this.getBooleanAttribute('case_sensitive');
+    }
+    // columns - computed: true, optional: false, required: false
+    _columns = new ZeroTrustDlpDatasetDatasetColumnsList(this, "columns", false);
+    get columns() {
+        return this._columns;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // description - computed: true, optional: false, required: false
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    // encoding_version - computed: true, optional: false, required: false
+    get encodingVersion() {
+        return this.getNumberAttribute('encoding_version');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // num_cells - computed: true, optional: false, required: false
+    get numCells() {
+        return this.getNumberAttribute('num_cells');
+    }
+    // secret - computed: true, optional: false, required: false
+    get secret() {
+        return this.getBooleanAttribute('secret');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // uploads - computed: true, optional: false, required: false
+    _uploads = new ZeroTrustDlpDatasetDatasetUploadsList(this, "uploads", false);
+    get uploads() {
+        return this._uploads;
+    }
+}
+export function zeroTrustDlpDatasetUploadsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -499,101 +344,96 @@ function zeroTrustDlpDatasetUploadsToTerraform(struct) {
     }
     return {};
 }
-function zeroTrustDlpDatasetUploadsToHclTerraform(struct) {
+export function zeroTrustDlpDatasetUploadsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var ZeroTrustDlpDatasetUploadsOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDatasetUploadsOutputReference, _super);
+export class ZeroTrustDlpDatasetUploadsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpDatasetUploadsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDlpDatasetUploadsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetUploadsOutputReference.prototype, "numCells", {
-        // num_cells - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('num_cells');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetUploadsOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDatasetUploadsOutputReference.prototype, "version", {
-        // version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpDatasetUploadsOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpDatasetUploadsOutputReference = ZeroTrustDlpDatasetUploadsOutputReference;
-var ZeroTrustDlpDatasetUploadsList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDatasetUploadsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // num_cells - computed: true, optional: false, required: false
+    get numCells() {
+        return this.getNumberAttribute('num_cells');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // version - computed: true, optional: false, required: false
+    get version() {
+        return this.getNumberAttribute('version');
+    }
+}
+export class ZeroTrustDlpDatasetUploadsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDlpDatasetUploadsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDlpDatasetUploadsList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDlpDatasetUploadsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDlpDatasetUploadsList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDlpDatasetUploadsList = ZeroTrustDlpDatasetUploadsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_dataset cloudflare_zero_trust_dlp_dataset}
 */
-var ZeroTrustDlpDataset = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpDataset, _super);
+export class ZeroTrustDlpDataset extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_dlp_dataset";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustDlpDataset resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustDlpDataset to import
+    * @param importFromId The id of the existing ZeroTrustDlpDataset that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_dataset#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustDlpDataset to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dlp_dataset", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -604,8 +444,8 @@ var ZeroTrustDlpDataset = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustDlpDatasetConfig
     */
-    function ZeroTrustDlpDataset(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_dlp_dataset',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -618,260 +458,167 @@ var ZeroTrustDlpDataset = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // columns - computed: true, optional: false, required: false
-        _this._columns = new ZeroTrustDlpDatasetColumnsList(_this, "columns", false);
-        // dataset - computed: true, optional: false, required: false
-        _this._dataset = new ZeroTrustDlpDatasetDatasetOutputReference(_this, "dataset");
-        // uploads - computed: true, optional: false, required: false
-        _this._uploads = new ZeroTrustDlpDatasetUploadsList(_this, "uploads", false);
-        _this._accountId = config.accountId;
-        _this._caseSensitive = config.caseSensitive;
-        _this._datasetId = config.datasetId;
-        _this._description = config.description;
-        _this._encodingVersion = config.encodingVersion;
-        _this._name = config.name;
-        _this._secret = config.secret;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._caseSensitive = config.caseSensitive;
+        this._datasetId = config.datasetId;
+        this._description = config.description;
+        this._encodingVersion = config.encodingVersion;
+        this._name = config.name;
+        this._secret = config.secret;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustDlpDataset resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustDlpDataset to import
-    * @param importFromId The id of the existing ZeroTrustDlpDataset that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_dataset#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustDlpDataset to import is found
-    */
-    ZeroTrustDlpDataset.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dlp_dataset", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpDataset.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "caseSensitive", {
-        get: function () {
-            return this.getBooleanAttribute('case_sensitive');
-        },
-        set: function (value) {
-            this._caseSensitive = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpDataset.prototype.resetCaseSensitive = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // case_sensitive - computed: false, optional: true, required: false
+    _caseSensitive;
+    get caseSensitive() {
+        return this.getBooleanAttribute('case_sensitive');
+    }
+    set caseSensitive(value) {
+        this._caseSensitive = value;
+    }
+    resetCaseSensitive() {
         this._caseSensitive = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "caseSensitiveInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._caseSensitive;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "columns", {
-        get: function () {
-            return this._columns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "dataset", {
-        get: function () {
-            return this._dataset;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "datasetId", {
-        get: function () {
-            return this.getStringAttribute('dataset_id');
-        },
-        set: function (value) {
-            this._datasetId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpDataset.prototype.resetDatasetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get caseSensitiveInput() {
+        return this._caseSensitive;
+    }
+    // columns - computed: true, optional: false, required: false
+    _columns = new ZeroTrustDlpDatasetColumnsList(this, "columns", false);
+    get columns() {
+        return this._columns;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // dataset - computed: true, optional: false, required: false
+    _dataset = new ZeroTrustDlpDatasetDatasetOutputReference(this, "dataset");
+    get dataset() {
+        return this._dataset;
+    }
+    // dataset_id - computed: false, optional: true, required: false
+    _datasetId;
+    get datasetId() {
+        return this.getStringAttribute('dataset_id');
+    }
+    set datasetId(value) {
+        this._datasetId = value;
+    }
+    resetDatasetId() {
         this._datasetId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "datasetIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._datasetId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpDataset.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get datasetIdInput() {
+        return this._datasetId;
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "encodingVersion", {
-        get: function () {
-            return this.getNumberAttribute('encoding_version');
-        },
-        set: function (value) {
-            this._encodingVersion = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpDataset.prototype.resetEncodingVersion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // encoding_version - computed: false, optional: true, required: false
+    _encodingVersion;
+    get encodingVersion() {
+        return this.getNumberAttribute('encoding_version');
+    }
+    set encodingVersion(value) {
+        this._encodingVersion = value;
+    }
+    resetEncodingVersion() {
         this._encodingVersion = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "encodingVersionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._encodingVersion;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "maxCells", {
-        // max_cells - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('max_cells');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "numCells", {
-        // num_cells - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('num_cells');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "secret", {
-        get: function () {
-            return this.getBooleanAttribute('secret');
-        },
-        set: function (value) {
-            this._secret = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpDataset.prototype.resetSecret = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get encodingVersionInput() {
+        return this._encodingVersion;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // max_cells - computed: true, optional: false, required: false
+    get maxCells() {
+        return this.getNumberAttribute('max_cells');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // num_cells - computed: true, optional: false, required: false
+    get numCells() {
+        return this.getNumberAttribute('num_cells');
+    }
+    // secret - computed: false, optional: true, required: false
+    _secret;
+    get secret() {
+        return this.getBooleanAttribute('secret');
+    }
+    set secret(value) {
+        this._secret = value;
+    }
+    resetSecret() {
         this._secret = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "secretInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secret;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "updatedAt", {
-        // updated_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('updated_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "uploads", {
-        get: function () {
-            return this._uploads;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpDataset.prototype, "version", {
-        // version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('version');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretInput() {
+        return this._secret;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // updated_at - computed: true, optional: false, required: false
+    get updatedAt() {
+        return this.getStringAttribute('updated_at');
+    }
+    // uploads - computed: true, optional: false, required: false
+    _uploads = new ZeroTrustDlpDatasetUploadsList(this, "uploads", false);
+    get uploads() {
+        return this._uploads;
+    }
+    // version - computed: true, optional: false, required: false
+    get version() {
+        return this.getNumberAttribute('version');
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustDlpDataset.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             case_sensitive: cdktf.booleanToTerraform(this._caseSensitive),
@@ -881,9 +628,9 @@ var ZeroTrustDlpDataset = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             secret: cdktf.booleanToTerraform(this._secret),
         };
-    };
-    ZeroTrustDlpDataset.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -928,15 +675,6 @@ var ZeroTrustDlpDataset = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustDlpDataset.tfResourceType = "cloudflare_zero_trust_dlp_dataset";
-    return ZeroTrustDlpDataset;
-}(cdktf.TerraformResource));
-exports.ZeroTrustDlpDataset = ZeroTrustDlpDataset;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

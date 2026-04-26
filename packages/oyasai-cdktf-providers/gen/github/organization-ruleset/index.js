@@ -1,79 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_ruleset
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrganizationRuleset = exports.OrganizationRulesetRulesOutputReference = exports.OrganizationRulesetRulesTagNamePatternOutputReference = exports.OrganizationRulesetRulesRequiredWorkflowsOutputReference = exports.OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList = exports.OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference = exports.OrganizationRulesetRulesRequiredStatusChecksOutputReference = exports.OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList = exports.OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference = exports.OrganizationRulesetRulesRequiredCodeScanningOutputReference = exports.OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList = exports.OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference = exports.OrganizationRulesetRulesPullRequestOutputReference = exports.OrganizationRulesetRulesPullRequestRequiredReviewersList = exports.OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference = exports.OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference = exports.OrganizationRulesetRulesMaxFileSizeOutputReference = exports.OrganizationRulesetRulesMaxFilePathLengthOutputReference = exports.OrganizationRulesetRulesFilePathRestrictionOutputReference = exports.OrganizationRulesetRulesFileExtensionRestrictionOutputReference = exports.OrganizationRulesetRulesCopilotCodeReviewOutputReference = exports.OrganizationRulesetRulesCommitterEmailPatternOutputReference = exports.OrganizationRulesetRulesCommitMessagePatternOutputReference = exports.OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference = exports.OrganizationRulesetRulesBranchNamePatternOutputReference = exports.OrganizationRulesetConditionsOutputReference = exports.OrganizationRulesetConditionsRepositoryPropertyOutputReference = exports.OrganizationRulesetConditionsRepositoryPropertyIncludeList = exports.OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference = exports.OrganizationRulesetConditionsRepositoryPropertyExcludeList = exports.OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference = exports.OrganizationRulesetConditionsRepositoryNameOutputReference = exports.OrganizationRulesetConditionsRefNameOutputReference = exports.OrganizationRulesetBypassActorsList = exports.OrganizationRulesetBypassActorsOutputReference = void 0;
-exports.organizationRulesetBypassActorsToTerraform = organizationRulesetBypassActorsToTerraform;
-exports.organizationRulesetBypassActorsToHclTerraform = organizationRulesetBypassActorsToHclTerraform;
-exports.organizationRulesetConditionsRefNameToTerraform = organizationRulesetConditionsRefNameToTerraform;
-exports.organizationRulesetConditionsRefNameToHclTerraform = organizationRulesetConditionsRefNameToHclTerraform;
-exports.organizationRulesetConditionsRepositoryNameToTerraform = organizationRulesetConditionsRepositoryNameToTerraform;
-exports.organizationRulesetConditionsRepositoryNameToHclTerraform = organizationRulesetConditionsRepositoryNameToHclTerraform;
-exports.organizationRulesetConditionsRepositoryPropertyExcludeToTerraform = organizationRulesetConditionsRepositoryPropertyExcludeToTerraform;
-exports.organizationRulesetConditionsRepositoryPropertyExcludeToHclTerraform = organizationRulesetConditionsRepositoryPropertyExcludeToHclTerraform;
-exports.organizationRulesetConditionsRepositoryPropertyIncludeToTerraform = organizationRulesetConditionsRepositoryPropertyIncludeToTerraform;
-exports.organizationRulesetConditionsRepositoryPropertyIncludeToHclTerraform = organizationRulesetConditionsRepositoryPropertyIncludeToHclTerraform;
-exports.organizationRulesetConditionsRepositoryPropertyToTerraform = organizationRulesetConditionsRepositoryPropertyToTerraform;
-exports.organizationRulesetConditionsRepositoryPropertyToHclTerraform = organizationRulesetConditionsRepositoryPropertyToHclTerraform;
-exports.organizationRulesetConditionsToTerraform = organizationRulesetConditionsToTerraform;
-exports.organizationRulesetConditionsToHclTerraform = organizationRulesetConditionsToHclTerraform;
-exports.organizationRulesetRulesBranchNamePatternToTerraform = organizationRulesetRulesBranchNamePatternToTerraform;
-exports.organizationRulesetRulesBranchNamePatternToHclTerraform = organizationRulesetRulesBranchNamePatternToHclTerraform;
-exports.organizationRulesetRulesCommitAuthorEmailPatternToTerraform = organizationRulesetRulesCommitAuthorEmailPatternToTerraform;
-exports.organizationRulesetRulesCommitAuthorEmailPatternToHclTerraform = organizationRulesetRulesCommitAuthorEmailPatternToHclTerraform;
-exports.organizationRulesetRulesCommitMessagePatternToTerraform = organizationRulesetRulesCommitMessagePatternToTerraform;
-exports.organizationRulesetRulesCommitMessagePatternToHclTerraform = organizationRulesetRulesCommitMessagePatternToHclTerraform;
-exports.organizationRulesetRulesCommitterEmailPatternToTerraform = organizationRulesetRulesCommitterEmailPatternToTerraform;
-exports.organizationRulesetRulesCommitterEmailPatternToHclTerraform = organizationRulesetRulesCommitterEmailPatternToHclTerraform;
-exports.organizationRulesetRulesCopilotCodeReviewToTerraform = organizationRulesetRulesCopilotCodeReviewToTerraform;
-exports.organizationRulesetRulesCopilotCodeReviewToHclTerraform = organizationRulesetRulesCopilotCodeReviewToHclTerraform;
-exports.organizationRulesetRulesFileExtensionRestrictionToTerraform = organizationRulesetRulesFileExtensionRestrictionToTerraform;
-exports.organizationRulesetRulesFileExtensionRestrictionToHclTerraform = organizationRulesetRulesFileExtensionRestrictionToHclTerraform;
-exports.organizationRulesetRulesFilePathRestrictionToTerraform = organizationRulesetRulesFilePathRestrictionToTerraform;
-exports.organizationRulesetRulesFilePathRestrictionToHclTerraform = organizationRulesetRulesFilePathRestrictionToHclTerraform;
-exports.organizationRulesetRulesMaxFilePathLengthToTerraform = organizationRulesetRulesMaxFilePathLengthToTerraform;
-exports.organizationRulesetRulesMaxFilePathLengthToHclTerraform = organizationRulesetRulesMaxFilePathLengthToHclTerraform;
-exports.organizationRulesetRulesMaxFileSizeToTerraform = organizationRulesetRulesMaxFileSizeToTerraform;
-exports.organizationRulesetRulesMaxFileSizeToHclTerraform = organizationRulesetRulesMaxFileSizeToHclTerraform;
-exports.organizationRulesetRulesPullRequestRequiredReviewersReviewerToTerraform = organizationRulesetRulesPullRequestRequiredReviewersReviewerToTerraform;
-exports.organizationRulesetRulesPullRequestRequiredReviewersReviewerToHclTerraform = organizationRulesetRulesPullRequestRequiredReviewersReviewerToHclTerraform;
-exports.organizationRulesetRulesPullRequestRequiredReviewersToTerraform = organizationRulesetRulesPullRequestRequiredReviewersToTerraform;
-exports.organizationRulesetRulesPullRequestRequiredReviewersToHclTerraform = organizationRulesetRulesPullRequestRequiredReviewersToHclTerraform;
-exports.organizationRulesetRulesPullRequestToTerraform = organizationRulesetRulesPullRequestToTerraform;
-exports.organizationRulesetRulesPullRequestToHclTerraform = organizationRulesetRulesPullRequestToHclTerraform;
-exports.organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToTerraform = organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToTerraform;
-exports.organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToHclTerraform = organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToHclTerraform;
-exports.organizationRulesetRulesRequiredCodeScanningToTerraform = organizationRulesetRulesRequiredCodeScanningToTerraform;
-exports.organizationRulesetRulesRequiredCodeScanningToHclTerraform = organizationRulesetRulesRequiredCodeScanningToHclTerraform;
-exports.organizationRulesetRulesRequiredStatusChecksRequiredCheckToTerraform = organizationRulesetRulesRequiredStatusChecksRequiredCheckToTerraform;
-exports.organizationRulesetRulesRequiredStatusChecksRequiredCheckToHclTerraform = organizationRulesetRulesRequiredStatusChecksRequiredCheckToHclTerraform;
-exports.organizationRulesetRulesRequiredStatusChecksToTerraform = organizationRulesetRulesRequiredStatusChecksToTerraform;
-exports.organizationRulesetRulesRequiredStatusChecksToHclTerraform = organizationRulesetRulesRequiredStatusChecksToHclTerraform;
-exports.organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToTerraform = organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToTerraform;
-exports.organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToHclTerraform = organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToHclTerraform;
-exports.organizationRulesetRulesRequiredWorkflowsToTerraform = organizationRulesetRulesRequiredWorkflowsToTerraform;
-exports.organizationRulesetRulesRequiredWorkflowsToHclTerraform = organizationRulesetRulesRequiredWorkflowsToHclTerraform;
-exports.organizationRulesetRulesTagNamePatternToTerraform = organizationRulesetRulesTagNamePatternToTerraform;
-exports.organizationRulesetRulesTagNamePatternToHclTerraform = organizationRulesetRulesTagNamePatternToHclTerraform;
-exports.organizationRulesetRulesToTerraform = organizationRulesetRulesToTerraform;
-exports.organizationRulesetRulesToHclTerraform = organizationRulesetRulesToHclTerraform;
-var cdktf = require("cdktf");
-function organizationRulesetBypassActorsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function organizationRulesetBypassActorsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -86,14 +14,14 @@ function organizationRulesetBypassActorsToTerraform(struct) {
         bypass_mode: cdktf.stringToTerraform(struct.bypassMode),
     };
 }
-function organizationRulesetBypassActorsToHclTerraform(struct) {
+export function organizationRulesetBypassActorsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         actor_id: {
             value: cdktf.numberToHclTerraform(struct.actorId),
             isBlock: false,
@@ -114,152 +42,124 @@ function organizationRulesetBypassActorsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetBypassActorsOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetBypassActorsOutputReference, _super);
+export class OrganizationRulesetBypassActorsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetBypassActorsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(OrganizationRulesetBypassActorsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._actorId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.actorId = this._actorId;
-            }
-            if (this._actorType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.actorType = this._actorType;
-            }
-            if (this._bypassMode !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.bypassMode = this._bypassMode;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._actorId = undefined;
-                this._actorType = undefined;
-                this._bypassMode = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._actorId = value.actorId;
-                this._actorType = value.actorType;
-                this._bypassMode = value.bypassMode;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetBypassActorsOutputReference.prototype, "actorId", {
-        get: function () {
-            return this.getNumberAttribute('actor_id');
-        },
-        set: function (value) {
-            this._actorId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetBypassActorsOutputReference.prototype.resetActorId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._actorId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.actorId = this._actorId;
+        }
+        if (this._actorType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.actorType = this._actorType;
+        }
+        if (this._bypassMode !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.bypassMode = this._bypassMode;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._actorId = undefined;
+            this._actorType = undefined;
+            this._bypassMode = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._actorId = value.actorId;
+            this._actorType = value.actorType;
+            this._bypassMode = value.bypassMode;
+        }
+    }
+    // actor_id - computed: false, optional: true, required: false
+    _actorId;
+    get actorId() {
+        return this.getNumberAttribute('actor_id');
+    }
+    set actorId(value) {
+        this._actorId = value;
+    }
+    resetActorId() {
         this._actorId = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetBypassActorsOutputReference.prototype, "actorIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._actorId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetBypassActorsOutputReference.prototype, "actorType", {
-        get: function () {
-            return this.getStringAttribute('actor_type');
-        },
-        set: function (value) {
-            this._actorType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetBypassActorsOutputReference.prototype, "actorTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._actorType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetBypassActorsOutputReference.prototype, "bypassMode", {
-        get: function () {
-            return this.getStringAttribute('bypass_mode');
-        },
-        set: function (value) {
-            this._bypassMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetBypassActorsOutputReference.prototype, "bypassModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bypassMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetBypassActorsOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetBypassActorsOutputReference = OrganizationRulesetBypassActorsOutputReference;
-var OrganizationRulesetBypassActorsList = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetBypassActorsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get actorIdInput() {
+        return this._actorId;
+    }
+    // actor_type - computed: false, optional: false, required: true
+    _actorType;
+    get actorType() {
+        return this.getStringAttribute('actor_type');
+    }
+    set actorType(value) {
+        this._actorType = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get actorTypeInput() {
+        return this._actorType;
+    }
+    // bypass_mode - computed: false, optional: false, required: true
+    _bypassMode;
+    get bypassMode() {
+        return this.getStringAttribute('bypass_mode');
+    }
+    set bypassMode(value) {
+        this._bypassMode = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get bypassModeInput() {
+        return this._bypassMode;
+    }
+}
+export class OrganizationRulesetBypassActorsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetBypassActorsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    OrganizationRulesetBypassActorsList.prototype.get = function (index) {
+    get(index) {
         return new OrganizationRulesetBypassActorsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return OrganizationRulesetBypassActorsList;
-}(cdktf.ComplexList));
-exports.OrganizationRulesetBypassActorsList = OrganizationRulesetBypassActorsList;
-function organizationRulesetConditionsRefNameToTerraform(struct) {
+    }
+}
+export function organizationRulesetConditionsRefNameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -271,14 +171,14 @@ function organizationRulesetConditionsRefNameToTerraform(struct) {
         include: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.include),
     };
 }
-function organizationRulesetConditionsRefNameToHclTerraform(struct) {
+export function organizationRulesetConditionsRefNameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         exclude: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.exclude),
             isBlock: false,
@@ -293,91 +193,68 @@ function organizationRulesetConditionsRefNameToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetConditionsRefNameOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetConditionsRefNameOutputReference, _super);
+export class OrganizationRulesetConditionsRefNameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetConditionsRefNameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetConditionsRefNameOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._exclude !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exclude = this._exclude;
-            }
-            if (this._include !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.include = this._include;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._exclude = undefined;
-                this._include = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._exclude = value.exclude;
-                this._include = value.include;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRefNameOutputReference.prototype, "exclude", {
-        get: function () {
-            return this.getListAttribute('exclude');
-        },
-        set: function (value) {
-            this._exclude = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRefNameOutputReference.prototype, "excludeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exclude;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRefNameOutputReference.prototype, "include", {
-        get: function () {
-            return this.getListAttribute('include');
-        },
-        set: function (value) {
-            this._include = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRefNameOutputReference.prototype, "includeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._include;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetConditionsRefNameOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetConditionsRefNameOutputReference = OrganizationRulesetConditionsRefNameOutputReference;
-function organizationRulesetConditionsRepositoryNameToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._exclude !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exclude = this._exclude;
+        }
+        if (this._include !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.include = this._include;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._exclude = undefined;
+            this._include = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._exclude = value.exclude;
+            this._include = value.include;
+        }
+    }
+    // exclude - computed: false, optional: false, required: true
+    _exclude;
+    get exclude() {
+        return this.getListAttribute('exclude');
+    }
+    set exclude(value) {
+        this._exclude = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludeInput() {
+        return this._exclude;
+    }
+    // include - computed: false, optional: false, required: true
+    _include;
+    get include() {
+        return this.getListAttribute('include');
+    }
+    set include(value) {
+        this._include = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeInput() {
+        return this._include;
+    }
+}
+export function organizationRulesetConditionsRepositoryNameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -390,14 +267,14 @@ function organizationRulesetConditionsRepositoryNameToTerraform(struct) {
         protected: cdktf.booleanToTerraform(struct.protected),
     };
 }
-function organizationRulesetConditionsRepositoryNameToHclTerraform(struct) {
+export function organizationRulesetConditionsRepositoryNameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         exclude: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.exclude),
             isBlock: false,
@@ -418,118 +295,89 @@ function organizationRulesetConditionsRepositoryNameToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetConditionsRepositoryNameOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetConditionsRepositoryNameOutputReference, _super);
+export class OrganizationRulesetConditionsRepositoryNameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetConditionsRepositoryNameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryNameOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._exclude !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exclude = this._exclude;
-            }
-            if (this._include !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.include = this._include;
-            }
-            if (this._protected !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.protected = this._protected;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._exclude = undefined;
-                this._include = undefined;
-                this._protected = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._exclude = value.exclude;
-                this._include = value.include;
-                this._protected = value.protected;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryNameOutputReference.prototype, "exclude", {
-        get: function () {
-            return this.getListAttribute('exclude');
-        },
-        set: function (value) {
-            this._exclude = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryNameOutputReference.prototype, "excludeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exclude;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryNameOutputReference.prototype, "include", {
-        get: function () {
-            return this.getListAttribute('include');
-        },
-        set: function (value) {
-            this._include = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryNameOutputReference.prototype, "includeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._include;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryNameOutputReference.prototype, "protected", {
-        get: function () {
-            return this.getBooleanAttribute('protected');
-        },
-        set: function (value) {
-            this._protected = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsRepositoryNameOutputReference.prototype.resetProtected = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._exclude !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exclude = this._exclude;
+        }
+        if (this._include !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.include = this._include;
+        }
+        if (this._protected !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.protected = this._protected;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._exclude = undefined;
+            this._include = undefined;
+            this._protected = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._exclude = value.exclude;
+            this._include = value.include;
+            this._protected = value.protected;
+        }
+    }
+    // exclude - computed: false, optional: false, required: true
+    _exclude;
+    get exclude() {
+        return this.getListAttribute('exclude');
+    }
+    set exclude(value) {
+        this._exclude = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludeInput() {
+        return this._exclude;
+    }
+    // include - computed: false, optional: false, required: true
+    _include;
+    get include() {
+        return this.getListAttribute('include');
+    }
+    set include(value) {
+        this._include = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeInput() {
+        return this._include;
+    }
+    // protected - computed: false, optional: true, required: false
+    _protected;
+    get protected() {
+        return this.getBooleanAttribute('protected');
+    }
+    set protected(value) {
+        this._protected = value;
+    }
+    resetProtected() {
         this._protected = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryNameOutputReference.prototype, "protectedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._protected;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetConditionsRepositoryNameOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetConditionsRepositoryNameOutputReference = OrganizationRulesetConditionsRepositoryNameOutputReference;
-function organizationRulesetConditionsRepositoryPropertyExcludeToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get protectedInput() {
+        return this._protected;
+    }
+}
+export function organizationRulesetConditionsRepositoryPropertyExcludeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -542,14 +390,14 @@ function organizationRulesetConditionsRepositoryPropertyExcludeToTerraform(struc
         source: cdktf.stringToTerraform(struct.source),
     };
 }
-function organizationRulesetConditionsRepositoryPropertyExcludeToHclTerraform(struct) {
+export function organizationRulesetConditionsRepositoryPropertyExcludeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -570,158 +418,130 @@ function organizationRulesetConditionsRepositoryPropertyExcludeToHclTerraform(st
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference, _super);
+export class OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._propertyValues !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.propertyValues = this._propertyValues;
-            }
-            if (this._source !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.source = this._source;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._name = undefined;
-                this._propertyValues = undefined;
-                this._source = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._name = value.name;
-                this._propertyValues = value.propertyValues;
-                this._source = value.source;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype.resetName = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._propertyValues !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.propertyValues = this._propertyValues;
+        }
+        if (this._source !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.source = this._source;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._name = undefined;
+            this._propertyValues = undefined;
+            this._source = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._name = value.name;
+            this._propertyValues = value.propertyValues;
+            this._source = value.source;
+        }
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype, "propertyValues", {
-        get: function () {
-            return this.getListAttribute('property_values');
-        },
-        set: function (value) {
-            this._propertyValues = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype.resetPropertyValues = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // property_values - computed: false, optional: true, required: false
+    _propertyValues;
+    get propertyValues() {
+        return this.getListAttribute('property_values');
+    }
+    set propertyValues(value) {
+        this._propertyValues = value;
+    }
+    resetPropertyValues() {
         this._propertyValues = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype, "propertyValuesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._propertyValues;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype, "source", {
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        set: function (value) {
-            this._source = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype.resetSource = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get propertyValuesInput() {
+        return this._propertyValues;
+    }
+    // source - computed: false, optional: true, required: false
+    _source;
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    set source(value) {
+        this._source = value;
+    }
+    resetSource() {
         this._source = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference = OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference;
-var OrganizationRulesetConditionsRepositoryPropertyExcludeList = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetConditionsRepositoryPropertyExcludeList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source;
+    }
+}
+export class OrganizationRulesetConditionsRepositoryPropertyExcludeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetConditionsRepositoryPropertyExcludeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    OrganizationRulesetConditionsRepositoryPropertyExcludeList.prototype.get = function (index) {
+    get(index) {
         return new OrganizationRulesetConditionsRepositoryPropertyExcludeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return OrganizationRulesetConditionsRepositoryPropertyExcludeList;
-}(cdktf.ComplexList));
-exports.OrganizationRulesetConditionsRepositoryPropertyExcludeList = OrganizationRulesetConditionsRepositoryPropertyExcludeList;
-function organizationRulesetConditionsRepositoryPropertyIncludeToTerraform(struct) {
+    }
+}
+export function organizationRulesetConditionsRepositoryPropertyIncludeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -734,14 +554,14 @@ function organizationRulesetConditionsRepositoryPropertyIncludeToTerraform(struc
         source: cdktf.stringToTerraform(struct.source),
     };
 }
-function organizationRulesetConditionsRepositoryPropertyIncludeToHclTerraform(struct) {
+export function organizationRulesetConditionsRepositoryPropertyIncludeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -762,158 +582,130 @@ function organizationRulesetConditionsRepositoryPropertyIncludeToHclTerraform(st
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference, _super);
+export class OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._propertyValues !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.propertyValues = this._propertyValues;
-            }
-            if (this._source !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.source = this._source;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._name = undefined;
-                this._propertyValues = undefined;
-                this._source = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._name = value.name;
-                this._propertyValues = value.propertyValues;
-                this._source = value.source;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype.resetName = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._propertyValues !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.propertyValues = this._propertyValues;
+        }
+        if (this._source !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.source = this._source;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._name = undefined;
+            this._propertyValues = undefined;
+            this._source = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._name = value.name;
+            this._propertyValues = value.propertyValues;
+            this._source = value.source;
+        }
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype, "propertyValues", {
-        get: function () {
-            return this.getListAttribute('property_values');
-        },
-        set: function (value) {
-            this._propertyValues = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype.resetPropertyValues = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // property_values - computed: false, optional: true, required: false
+    _propertyValues;
+    get propertyValues() {
+        return this.getListAttribute('property_values');
+    }
+    set propertyValues(value) {
+        this._propertyValues = value;
+    }
+    resetPropertyValues() {
         this._propertyValues = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype, "propertyValuesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._propertyValues;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype, "source", {
-        get: function () {
-            return this.getStringAttribute('source');
-        },
-        set: function (value) {
-            this._source = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype.resetSource = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get propertyValuesInput() {
+        return this._propertyValues;
+    }
+    // source - computed: false, optional: true, required: false
+    _source;
+    get source() {
+        return this.getStringAttribute('source');
+    }
+    set source(value) {
+        this._source = value;
+    }
+    resetSource() {
         this._source = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference = OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference;
-var OrganizationRulesetConditionsRepositoryPropertyIncludeList = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetConditionsRepositoryPropertyIncludeList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source;
+    }
+}
+export class OrganizationRulesetConditionsRepositoryPropertyIncludeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetConditionsRepositoryPropertyIncludeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    OrganizationRulesetConditionsRepositoryPropertyIncludeList.prototype.get = function (index) {
+    get(index) {
         return new OrganizationRulesetConditionsRepositoryPropertyIncludeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return OrganizationRulesetConditionsRepositoryPropertyIncludeList;
-}(cdktf.ComplexList));
-exports.OrganizationRulesetConditionsRepositoryPropertyIncludeList = OrganizationRulesetConditionsRepositoryPropertyIncludeList;
-function organizationRulesetConditionsRepositoryPropertyToTerraform(struct) {
+    }
+}
+export function organizationRulesetConditionsRepositoryPropertyToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -925,14 +717,14 @@ function organizationRulesetConditionsRepositoryPropertyToTerraform(struct) {
         include: cdktf.listMapper(organizationRulesetConditionsRepositoryPropertyIncludeToTerraform, false)(struct.include),
     };
 }
-function organizationRulesetConditionsRepositoryPropertyToHclTerraform(struct) {
+export function organizationRulesetConditionsRepositoryPropertyToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         exclude: {
             value: cdktf.listMapperHcl(organizationRulesetConditionsRepositoryPropertyExcludeToHclTerraform, false)(struct.exclude),
             isBlock: true,
@@ -947,102 +739,74 @@ function organizationRulesetConditionsRepositoryPropertyToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetConditionsRepositoryPropertyOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetConditionsRepositoryPropertyOutputReference, _super);
+export class OrganizationRulesetConditionsRepositoryPropertyOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetConditionsRepositoryPropertyOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // exclude - computed: false, optional: true, required: false
-        _this._exclude = new OrganizationRulesetConditionsRepositoryPropertyExcludeList(_this, "exclude", false);
-        // include - computed: false, optional: true, required: false
-        _this._include = new OrganizationRulesetConditionsRepositoryPropertyIncludeList(_this, "include", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._exclude) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.exclude = (_b = this._exclude) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._include) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.include = (_d = this._include) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._exclude.internalValue = undefined;
-                this._include.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._exclude.internalValue = value.exclude;
-                this._include.internalValue = value.include;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyOutputReference.prototype, "exclude", {
-        get: function () {
-            return this._exclude;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsRepositoryPropertyOutputReference.prototype.putExclude = function (value) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._exclude?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.exclude = this._exclude?.internalValue;
+        }
+        if (this._include?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.include = this._include?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._exclude.internalValue = undefined;
+            this._include.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._exclude.internalValue = value.exclude;
+            this._include.internalValue = value.include;
+        }
+    }
+    // exclude - computed: false, optional: true, required: false
+    _exclude = new OrganizationRulesetConditionsRepositoryPropertyExcludeList(this, "exclude", false);
+    get exclude() {
+        return this._exclude;
+    }
+    putExclude(value) {
         this._exclude.internalValue = value;
-    };
-    OrganizationRulesetConditionsRepositoryPropertyOutputReference.prototype.resetExclude = function () {
+    }
+    resetExclude() {
         this._exclude.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyOutputReference.prototype, "excludeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._exclude.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyOutputReference.prototype, "include", {
-        get: function () {
-            return this._include;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsRepositoryPropertyOutputReference.prototype.putInclude = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get excludeInput() {
+        return this._exclude.internalValue;
+    }
+    // include - computed: false, optional: true, required: false
+    _include = new OrganizationRulesetConditionsRepositoryPropertyIncludeList(this, "include", false);
+    get include() {
+        return this._include;
+    }
+    putInclude(value) {
         this._include.internalValue = value;
-    };
-    OrganizationRulesetConditionsRepositoryPropertyOutputReference.prototype.resetInclude = function () {
+    }
+    resetInclude() {
         this._include.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsRepositoryPropertyOutputReference.prototype, "includeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._include.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetConditionsRepositoryPropertyOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetConditionsRepositoryPropertyOutputReference = OrganizationRulesetConditionsRepositoryPropertyOutputReference;
-function organizationRulesetConditionsToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeInput() {
+        return this._include.internalValue;
+    }
+}
+export function organizationRulesetConditionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1056,14 +820,14 @@ function organizationRulesetConditionsToTerraform(struct) {
         repository_property: organizationRulesetConditionsRepositoryPropertyToTerraform(struct.repositoryProperty),
     };
 }
-function organizationRulesetConditionsToHclTerraform(struct) {
+export function organizationRulesetConditionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         repository_id: {
             value: cdktf.listMapperHcl(cdktf.numberToHclTerraform, false)(struct.repositoryId),
             isBlock: false,
@@ -1090,158 +854,116 @@ function organizationRulesetConditionsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetConditionsOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetConditionsOutputReference, _super);
+export class OrganizationRulesetConditionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetConditionsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // ref_name - computed: false, optional: true, required: false
-        _this._refName = new OrganizationRulesetConditionsRefNameOutputReference(_this, "ref_name");
-        // repository_name - computed: false, optional: true, required: false
-        _this._repositoryName = new OrganizationRulesetConditionsRepositoryNameOutputReference(_this, "repository_name");
-        // repository_property - computed: false, optional: true, required: false
-        _this._repositoryProperty = new OrganizationRulesetConditionsRepositoryPropertyOutputReference(_this, "repository_property");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetConditionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._repositoryId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.repositoryId = this._repositoryId;
-            }
-            if (((_a = this._refName) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.refName = (_b = this._refName) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._repositoryName) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.repositoryName = (_d = this._repositoryName) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._repositoryProperty) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.repositoryProperty = (_f = this._repositoryProperty) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._repositoryId = undefined;
-                this._refName.internalValue = undefined;
-                this._repositoryName.internalValue = undefined;
-                this._repositoryProperty.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._repositoryId = value.repositoryId;
-                this._refName.internalValue = value.refName;
-                this._repositoryName.internalValue = value.repositoryName;
-                this._repositoryProperty.internalValue = value.repositoryProperty;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsOutputReference.prototype, "repositoryId", {
-        get: function () {
-            return this.getNumberListAttribute('repository_id');
-        },
-        set: function (value) {
-            this._repositoryId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsOutputReference.prototype.resetRepositoryId = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._repositoryId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.repositoryId = this._repositoryId;
+        }
+        if (this._refName?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.refName = this._refName?.internalValue;
+        }
+        if (this._repositoryName?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.repositoryName = this._repositoryName?.internalValue;
+        }
+        if (this._repositoryProperty?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.repositoryProperty = this._repositoryProperty?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._repositoryId = undefined;
+            this._refName.internalValue = undefined;
+            this._repositoryName.internalValue = undefined;
+            this._repositoryProperty.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._repositoryId = value.repositoryId;
+            this._refName.internalValue = value.refName;
+            this._repositoryName.internalValue = value.repositoryName;
+            this._repositoryProperty.internalValue = value.repositoryProperty;
+        }
+    }
+    // repository_id - computed: false, optional: true, required: false
+    _repositoryId;
+    get repositoryId() {
+        return this.getNumberListAttribute('repository_id');
+    }
+    set repositoryId(value) {
+        this._repositoryId = value;
+    }
+    resetRepositoryId() {
         this._repositoryId = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsOutputReference.prototype, "repositoryIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repositoryId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsOutputReference.prototype, "refName", {
-        get: function () {
-            return this._refName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsOutputReference.prototype.putRefName = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryIdInput() {
+        return this._repositoryId;
+    }
+    // ref_name - computed: false, optional: true, required: false
+    _refName = new OrganizationRulesetConditionsRefNameOutputReference(this, "ref_name");
+    get refName() {
+        return this._refName;
+    }
+    putRefName(value) {
         this._refName.internalValue = value;
-    };
-    OrganizationRulesetConditionsOutputReference.prototype.resetRefName = function () {
+    }
+    resetRefName() {
         this._refName.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsOutputReference.prototype, "refNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._refName.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsOutputReference.prototype, "repositoryName", {
-        get: function () {
-            return this._repositoryName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsOutputReference.prototype.putRepositoryName = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get refNameInput() {
+        return this._refName.internalValue;
+    }
+    // repository_name - computed: false, optional: true, required: false
+    _repositoryName = new OrganizationRulesetConditionsRepositoryNameOutputReference(this, "repository_name");
+    get repositoryName() {
+        return this._repositoryName;
+    }
+    putRepositoryName(value) {
         this._repositoryName.internalValue = value;
-    };
-    OrganizationRulesetConditionsOutputReference.prototype.resetRepositoryName = function () {
+    }
+    resetRepositoryName() {
         this._repositoryName.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsOutputReference.prototype, "repositoryNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repositoryName.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetConditionsOutputReference.prototype, "repositoryProperty", {
-        get: function () {
-            return this._repositoryProperty;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetConditionsOutputReference.prototype.putRepositoryProperty = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryNameInput() {
+        return this._repositoryName.internalValue;
+    }
+    // repository_property - computed: false, optional: true, required: false
+    _repositoryProperty = new OrganizationRulesetConditionsRepositoryPropertyOutputReference(this, "repository_property");
+    get repositoryProperty() {
+        return this._repositoryProperty;
+    }
+    putRepositoryProperty(value) {
         this._repositoryProperty.internalValue = value;
-    };
-    OrganizationRulesetConditionsOutputReference.prototype.resetRepositoryProperty = function () {
+    }
+    resetRepositoryProperty() {
         this._repositoryProperty.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetConditionsOutputReference.prototype, "repositoryPropertyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repositoryProperty.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetConditionsOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetConditionsOutputReference = OrganizationRulesetConditionsOutputReference;
-function organizationRulesetRulesBranchNamePatternToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryPropertyInput() {
+        return this._repositoryProperty.internalValue;
+    }
+}
+export function organizationRulesetRulesBranchNamePatternToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1255,14 +977,14 @@ function organizationRulesetRulesBranchNamePatternToTerraform(struct) {
         pattern: cdktf.stringToTerraform(struct.pattern),
     };
 }
-function organizationRulesetRulesBranchNamePatternToHclTerraform(struct) {
+export function organizationRulesetRulesBranchNamePatternToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -1289,145 +1011,110 @@ function organizationRulesetRulesBranchNamePatternToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesBranchNamePatternOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesBranchNamePatternOutputReference, _super);
+export class OrganizationRulesetRulesBranchNamePatternOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesBranchNamePatternOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesBranchNamePatternOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._negate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.negate = this._negate;
-            }
-            if (this._operator !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.operator = this._operator;
-            }
-            if (this._pattern !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pattern = this._pattern;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._name = undefined;
-                this._negate = undefined;
-                this._operator = undefined;
-                this._pattern = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._name = value.name;
-                this._negate = value.negate;
-                this._operator = value.operator;
-                this._pattern = value.pattern;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesBranchNamePatternOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesBranchNamePatternOutputReference.prototype.resetName = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._negate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.negate = this._negate;
+        }
+        if (this._operator !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.operator = this._operator;
+        }
+        if (this._pattern !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pattern = this._pattern;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._name = undefined;
+            this._negate = undefined;
+            this._operator = undefined;
+            this._pattern = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._name = value.name;
+            this._negate = value.negate;
+            this._operator = value.operator;
+            this._pattern = value.pattern;
+        }
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesBranchNamePatternOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesBranchNamePatternOutputReference.prototype, "negate", {
-        get: function () {
-            return this.getBooleanAttribute('negate');
-        },
-        set: function (value) {
-            this._negate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesBranchNamePatternOutputReference.prototype.resetNegate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // negate - computed: false, optional: true, required: false
+    _negate;
+    get negate() {
+        return this.getBooleanAttribute('negate');
+    }
+    set negate(value) {
+        this._negate = value;
+    }
+    resetNegate() {
         this._negate = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesBranchNamePatternOutputReference.prototype, "negateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._negate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesBranchNamePatternOutputReference.prototype, "operator", {
-        get: function () {
-            return this.getStringAttribute('operator');
-        },
-        set: function (value) {
-            this._operator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesBranchNamePatternOutputReference.prototype, "operatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesBranchNamePatternOutputReference.prototype, "pattern", {
-        get: function () {
-            return this.getStringAttribute('pattern');
-        },
-        set: function (value) {
-            this._pattern = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesBranchNamePatternOutputReference.prototype, "patternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesBranchNamePatternOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesBranchNamePatternOutputReference = OrganizationRulesetRulesBranchNamePatternOutputReference;
-function organizationRulesetRulesCommitAuthorEmailPatternToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get negateInput() {
+        return this._negate;
+    }
+    // operator - computed: false, optional: false, required: true
+    _operator;
+    get operator() {
+        return this.getStringAttribute('operator');
+    }
+    set operator(value) {
+        this._operator = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get operatorInput() {
+        return this._operator;
+    }
+    // pattern - computed: false, optional: false, required: true
+    _pattern;
+    get pattern() {
+        return this.getStringAttribute('pattern');
+    }
+    set pattern(value) {
+        this._pattern = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get patternInput() {
+        return this._pattern;
+    }
+}
+export function organizationRulesetRulesCommitAuthorEmailPatternToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1441,14 +1128,14 @@ function organizationRulesetRulesCommitAuthorEmailPatternToTerraform(struct) {
         pattern: cdktf.stringToTerraform(struct.pattern),
     };
 }
-function organizationRulesetRulesCommitAuthorEmailPatternToHclTerraform(struct) {
+export function organizationRulesetRulesCommitAuthorEmailPatternToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -1475,145 +1162,110 @@ function organizationRulesetRulesCommitAuthorEmailPatternToHclTerraform(struct) 
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference, _super);
+export class OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._negate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.negate = this._negate;
-            }
-            if (this._operator !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.operator = this._operator;
-            }
-            if (this._pattern !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pattern = this._pattern;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._name = undefined;
-                this._negate = undefined;
-                this._operator = undefined;
-                this._pattern = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._name = value.name;
-                this._negate = value.negate;
-                this._operator = value.operator;
-                this._pattern = value.pattern;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype.resetName = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._negate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.negate = this._negate;
+        }
+        if (this._operator !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.operator = this._operator;
+        }
+        if (this._pattern !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pattern = this._pattern;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._name = undefined;
+            this._negate = undefined;
+            this._operator = undefined;
+            this._pattern = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._name = value.name;
+            this._negate = value.negate;
+            this._operator = value.operator;
+            this._pattern = value.pattern;
+        }
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype, "negate", {
-        get: function () {
-            return this.getBooleanAttribute('negate');
-        },
-        set: function (value) {
-            this._negate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype.resetNegate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // negate - computed: false, optional: true, required: false
+    _negate;
+    get negate() {
+        return this.getBooleanAttribute('negate');
+    }
+    set negate(value) {
+        this._negate = value;
+    }
+    resetNegate() {
         this._negate = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype, "negateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._negate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype, "operator", {
-        get: function () {
-            return this.getStringAttribute('operator');
-        },
-        set: function (value) {
-            this._operator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype, "operatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype, "pattern", {
-        get: function () {
-            return this.getStringAttribute('pattern');
-        },
-        set: function (value) {
-            this._pattern = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference.prototype, "patternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference = OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference;
-function organizationRulesetRulesCommitMessagePatternToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get negateInput() {
+        return this._negate;
+    }
+    // operator - computed: false, optional: false, required: true
+    _operator;
+    get operator() {
+        return this.getStringAttribute('operator');
+    }
+    set operator(value) {
+        this._operator = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get operatorInput() {
+        return this._operator;
+    }
+    // pattern - computed: false, optional: false, required: true
+    _pattern;
+    get pattern() {
+        return this.getStringAttribute('pattern');
+    }
+    set pattern(value) {
+        this._pattern = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get patternInput() {
+        return this._pattern;
+    }
+}
+export function organizationRulesetRulesCommitMessagePatternToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1627,14 +1279,14 @@ function organizationRulesetRulesCommitMessagePatternToTerraform(struct) {
         pattern: cdktf.stringToTerraform(struct.pattern),
     };
 }
-function organizationRulesetRulesCommitMessagePatternToHclTerraform(struct) {
+export function organizationRulesetRulesCommitMessagePatternToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -1661,145 +1313,110 @@ function organizationRulesetRulesCommitMessagePatternToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesCommitMessagePatternOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesCommitMessagePatternOutputReference, _super);
+export class OrganizationRulesetRulesCommitMessagePatternOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesCommitMessagePatternOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._negate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.negate = this._negate;
-            }
-            if (this._operator !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.operator = this._operator;
-            }
-            if (this._pattern !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pattern = this._pattern;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._name = undefined;
-                this._negate = undefined;
-                this._operator = undefined;
-                this._pattern = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._name = value.name;
-                this._negate = value.negate;
-                this._operator = value.operator;
-                this._pattern = value.pattern;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype.resetName = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._negate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.negate = this._negate;
+        }
+        if (this._operator !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.operator = this._operator;
+        }
+        if (this._pattern !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pattern = this._pattern;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._name = undefined;
+            this._negate = undefined;
+            this._operator = undefined;
+            this._pattern = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._name = value.name;
+            this._negate = value.negate;
+            this._operator = value.operator;
+            this._pattern = value.pattern;
+        }
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype, "negate", {
-        get: function () {
-            return this.getBooleanAttribute('negate');
-        },
-        set: function (value) {
-            this._negate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype.resetNegate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // negate - computed: false, optional: true, required: false
+    _negate;
+    get negate() {
+        return this.getBooleanAttribute('negate');
+    }
+    set negate(value) {
+        this._negate = value;
+    }
+    resetNegate() {
         this._negate = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype, "negateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._negate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype, "operator", {
-        get: function () {
-            return this.getStringAttribute('operator');
-        },
-        set: function (value) {
-            this._operator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype, "operatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype, "pattern", {
-        get: function () {
-            return this.getStringAttribute('pattern');
-        },
-        set: function (value) {
-            this._pattern = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitMessagePatternOutputReference.prototype, "patternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesCommitMessagePatternOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesCommitMessagePatternOutputReference = OrganizationRulesetRulesCommitMessagePatternOutputReference;
-function organizationRulesetRulesCommitterEmailPatternToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get negateInput() {
+        return this._negate;
+    }
+    // operator - computed: false, optional: false, required: true
+    _operator;
+    get operator() {
+        return this.getStringAttribute('operator');
+    }
+    set operator(value) {
+        this._operator = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get operatorInput() {
+        return this._operator;
+    }
+    // pattern - computed: false, optional: false, required: true
+    _pattern;
+    get pattern() {
+        return this.getStringAttribute('pattern');
+    }
+    set pattern(value) {
+        this._pattern = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get patternInput() {
+        return this._pattern;
+    }
+}
+export function organizationRulesetRulesCommitterEmailPatternToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1813,14 +1430,14 @@ function organizationRulesetRulesCommitterEmailPatternToTerraform(struct) {
         pattern: cdktf.stringToTerraform(struct.pattern),
     };
 }
-function organizationRulesetRulesCommitterEmailPatternToHclTerraform(struct) {
+export function organizationRulesetRulesCommitterEmailPatternToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -1847,145 +1464,110 @@ function organizationRulesetRulesCommitterEmailPatternToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesCommitterEmailPatternOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesCommitterEmailPatternOutputReference, _super);
+export class OrganizationRulesetRulesCommitterEmailPatternOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesCommitterEmailPatternOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._negate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.negate = this._negate;
-            }
-            if (this._operator !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.operator = this._operator;
-            }
-            if (this._pattern !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pattern = this._pattern;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._name = undefined;
-                this._negate = undefined;
-                this._operator = undefined;
-                this._pattern = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._name = value.name;
-                this._negate = value.negate;
-                this._operator = value.operator;
-                this._pattern = value.pattern;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype.resetName = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._negate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.negate = this._negate;
+        }
+        if (this._operator !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.operator = this._operator;
+        }
+        if (this._pattern !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pattern = this._pattern;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._name = undefined;
+            this._negate = undefined;
+            this._operator = undefined;
+            this._pattern = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._name = value.name;
+            this._negate = value.negate;
+            this._operator = value.operator;
+            this._pattern = value.pattern;
+        }
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype, "negate", {
-        get: function () {
-            return this.getBooleanAttribute('negate');
-        },
-        set: function (value) {
-            this._negate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype.resetNegate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // negate - computed: false, optional: true, required: false
+    _negate;
+    get negate() {
+        return this.getBooleanAttribute('negate');
+    }
+    set negate(value) {
+        this._negate = value;
+    }
+    resetNegate() {
         this._negate = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype, "negateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._negate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype, "operator", {
-        get: function () {
-            return this.getStringAttribute('operator');
-        },
-        set: function (value) {
-            this._operator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype, "operatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype, "pattern", {
-        get: function () {
-            return this.getStringAttribute('pattern');
-        },
-        set: function (value) {
-            this._pattern = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCommitterEmailPatternOutputReference.prototype, "patternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesCommitterEmailPatternOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesCommitterEmailPatternOutputReference = OrganizationRulesetRulesCommitterEmailPatternOutputReference;
-function organizationRulesetRulesCopilotCodeReviewToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get negateInput() {
+        return this._negate;
+    }
+    // operator - computed: false, optional: false, required: true
+    _operator;
+    get operator() {
+        return this.getStringAttribute('operator');
+    }
+    set operator(value) {
+        this._operator = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get operatorInput() {
+        return this._operator;
+    }
+    // pattern - computed: false, optional: false, required: true
+    _pattern;
+    get pattern() {
+        return this.getStringAttribute('pattern');
+    }
+    set pattern(value) {
+        this._pattern = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get patternInput() {
+        return this._pattern;
+    }
+}
+export function organizationRulesetRulesCopilotCodeReviewToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1997,14 +1579,14 @@ function organizationRulesetRulesCopilotCodeReviewToTerraform(struct) {
         review_on_push: cdktf.booleanToTerraform(struct.reviewOnPush),
     };
 }
-function organizationRulesetRulesCopilotCodeReviewToHclTerraform(struct) {
+export function organizationRulesetRulesCopilotCodeReviewToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         review_draft_pull_requests: {
             value: cdktf.booleanToHclTerraform(struct.reviewDraftPullRequests),
             isBlock: false,
@@ -2019,97 +1601,74 @@ function organizationRulesetRulesCopilotCodeReviewToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesCopilotCodeReviewOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesCopilotCodeReviewOutputReference, _super);
+export class OrganizationRulesetRulesCopilotCodeReviewOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesCopilotCodeReviewOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesCopilotCodeReviewOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._reviewDraftPullRequests !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.reviewDraftPullRequests = this._reviewDraftPullRequests;
-            }
-            if (this._reviewOnPush !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.reviewOnPush = this._reviewOnPush;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._reviewDraftPullRequests = undefined;
-                this._reviewOnPush = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._reviewDraftPullRequests = value.reviewDraftPullRequests;
-                this._reviewOnPush = value.reviewOnPush;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCopilotCodeReviewOutputReference.prototype, "reviewDraftPullRequests", {
-        get: function () {
-            return this.getBooleanAttribute('review_draft_pull_requests');
-        },
-        set: function (value) {
-            this._reviewDraftPullRequests = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesCopilotCodeReviewOutputReference.prototype.resetReviewDraftPullRequests = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._reviewDraftPullRequests !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.reviewDraftPullRequests = this._reviewDraftPullRequests;
+        }
+        if (this._reviewOnPush !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.reviewOnPush = this._reviewOnPush;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._reviewDraftPullRequests = undefined;
+            this._reviewOnPush = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._reviewDraftPullRequests = value.reviewDraftPullRequests;
+            this._reviewOnPush = value.reviewOnPush;
+        }
+    }
+    // review_draft_pull_requests - computed: false, optional: true, required: false
+    _reviewDraftPullRequests;
+    get reviewDraftPullRequests() {
+        return this.getBooleanAttribute('review_draft_pull_requests');
+    }
+    set reviewDraftPullRequests(value) {
+        this._reviewDraftPullRequests = value;
+    }
+    resetReviewDraftPullRequests() {
         this._reviewDraftPullRequests = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesCopilotCodeReviewOutputReference.prototype, "reviewDraftPullRequestsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._reviewDraftPullRequests;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesCopilotCodeReviewOutputReference.prototype, "reviewOnPush", {
-        get: function () {
-            return this.getBooleanAttribute('review_on_push');
-        },
-        set: function (value) {
-            this._reviewOnPush = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesCopilotCodeReviewOutputReference.prototype.resetReviewOnPush = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get reviewDraftPullRequestsInput() {
+        return this._reviewDraftPullRequests;
+    }
+    // review_on_push - computed: false, optional: true, required: false
+    _reviewOnPush;
+    get reviewOnPush() {
+        return this.getBooleanAttribute('review_on_push');
+    }
+    set reviewOnPush(value) {
+        this._reviewOnPush = value;
+    }
+    resetReviewOnPush() {
         this._reviewOnPush = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesCopilotCodeReviewOutputReference.prototype, "reviewOnPushInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._reviewOnPush;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesCopilotCodeReviewOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesCopilotCodeReviewOutputReference = OrganizationRulesetRulesCopilotCodeReviewOutputReference;
-function organizationRulesetRulesFileExtensionRestrictionToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get reviewOnPushInput() {
+        return this._reviewOnPush;
+    }
+}
+export function organizationRulesetRulesFileExtensionRestrictionToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2120,14 +1679,14 @@ function organizationRulesetRulesFileExtensionRestrictionToTerraform(struct) {
         restricted_file_extensions: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.restrictedFileExtensions),
     };
 }
-function organizationRulesetRulesFileExtensionRestrictionToHclTerraform(struct) {
+export function organizationRulesetRulesFileExtensionRestrictionToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         restricted_file_extensions: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.restrictedFileExtensions),
             isBlock: false,
@@ -2136,67 +1695,50 @@ function organizationRulesetRulesFileExtensionRestrictionToHclTerraform(struct) 
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesFileExtensionRestrictionOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesFileExtensionRestrictionOutputReference, _super);
+export class OrganizationRulesetRulesFileExtensionRestrictionOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesFileExtensionRestrictionOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesFileExtensionRestrictionOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._restrictedFileExtensions !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.restrictedFileExtensions = this._restrictedFileExtensions;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._restrictedFileExtensions = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._restrictedFileExtensions = value.restrictedFileExtensions;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesFileExtensionRestrictionOutputReference.prototype, "restrictedFileExtensions", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('restricted_file_extensions'));
-        },
-        set: function (value) {
-            this._restrictedFileExtensions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesFileExtensionRestrictionOutputReference.prototype, "restrictedFileExtensionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._restrictedFileExtensions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesFileExtensionRestrictionOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesFileExtensionRestrictionOutputReference = OrganizationRulesetRulesFileExtensionRestrictionOutputReference;
-function organizationRulesetRulesFilePathRestrictionToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._restrictedFileExtensions !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.restrictedFileExtensions = this._restrictedFileExtensions;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._restrictedFileExtensions = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._restrictedFileExtensions = value.restrictedFileExtensions;
+        }
+    }
+    // restricted_file_extensions - computed: false, optional: false, required: true
+    _restrictedFileExtensions;
+    get restrictedFileExtensions() {
+        return cdktf.Fn.tolist(this.getListAttribute('restricted_file_extensions'));
+    }
+    set restrictedFileExtensions(value) {
+        this._restrictedFileExtensions = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get restrictedFileExtensionsInput() {
+        return this._restrictedFileExtensions;
+    }
+}
+export function organizationRulesetRulesFilePathRestrictionToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2207,14 +1749,14 @@ function organizationRulesetRulesFilePathRestrictionToTerraform(struct) {
         restricted_file_paths: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.restrictedFilePaths),
     };
 }
-function organizationRulesetRulesFilePathRestrictionToHclTerraform(struct) {
+export function organizationRulesetRulesFilePathRestrictionToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         restricted_file_paths: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.restrictedFilePaths),
             isBlock: false,
@@ -2223,67 +1765,50 @@ function organizationRulesetRulesFilePathRestrictionToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesFilePathRestrictionOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesFilePathRestrictionOutputReference, _super);
+export class OrganizationRulesetRulesFilePathRestrictionOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesFilePathRestrictionOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesFilePathRestrictionOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._restrictedFilePaths !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.restrictedFilePaths = this._restrictedFilePaths;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._restrictedFilePaths = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._restrictedFilePaths = value.restrictedFilePaths;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesFilePathRestrictionOutputReference.prototype, "restrictedFilePaths", {
-        get: function () {
-            return this.getListAttribute('restricted_file_paths');
-        },
-        set: function (value) {
-            this._restrictedFilePaths = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesFilePathRestrictionOutputReference.prototype, "restrictedFilePathsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._restrictedFilePaths;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesFilePathRestrictionOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesFilePathRestrictionOutputReference = OrganizationRulesetRulesFilePathRestrictionOutputReference;
-function organizationRulesetRulesMaxFilePathLengthToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._restrictedFilePaths !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.restrictedFilePaths = this._restrictedFilePaths;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._restrictedFilePaths = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._restrictedFilePaths = value.restrictedFilePaths;
+        }
+    }
+    // restricted_file_paths - computed: false, optional: false, required: true
+    _restrictedFilePaths;
+    get restrictedFilePaths() {
+        return this.getListAttribute('restricted_file_paths');
+    }
+    set restrictedFilePaths(value) {
+        this._restrictedFilePaths = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get restrictedFilePathsInput() {
+        return this._restrictedFilePaths;
+    }
+}
+export function organizationRulesetRulesMaxFilePathLengthToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2294,14 +1819,14 @@ function organizationRulesetRulesMaxFilePathLengthToTerraform(struct) {
         max_file_path_length: cdktf.numberToTerraform(struct.maxFilePathLength),
     };
 }
-function organizationRulesetRulesMaxFilePathLengthToHclTerraform(struct) {
+export function organizationRulesetRulesMaxFilePathLengthToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         max_file_path_length: {
             value: cdktf.numberToHclTerraform(struct.maxFilePathLength),
             isBlock: false,
@@ -2310,67 +1835,50 @@ function organizationRulesetRulesMaxFilePathLengthToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesMaxFilePathLengthOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesMaxFilePathLengthOutputReference, _super);
+export class OrganizationRulesetRulesMaxFilePathLengthOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesMaxFilePathLengthOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesMaxFilePathLengthOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._maxFilePathLength !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxFilePathLength = this._maxFilePathLength;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._maxFilePathLength = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._maxFilePathLength = value.maxFilePathLength;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesMaxFilePathLengthOutputReference.prototype, "maxFilePathLength", {
-        get: function () {
-            return this.getNumberAttribute('max_file_path_length');
-        },
-        set: function (value) {
-            this._maxFilePathLength = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesMaxFilePathLengthOutputReference.prototype, "maxFilePathLengthInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxFilePathLength;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesMaxFilePathLengthOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesMaxFilePathLengthOutputReference = OrganizationRulesetRulesMaxFilePathLengthOutputReference;
-function organizationRulesetRulesMaxFileSizeToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._maxFilePathLength !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxFilePathLength = this._maxFilePathLength;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._maxFilePathLength = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._maxFilePathLength = value.maxFilePathLength;
+        }
+    }
+    // max_file_path_length - computed: false, optional: false, required: true
+    _maxFilePathLength;
+    get maxFilePathLength() {
+        return this.getNumberAttribute('max_file_path_length');
+    }
+    set maxFilePathLength(value) {
+        this._maxFilePathLength = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxFilePathLengthInput() {
+        return this._maxFilePathLength;
+    }
+}
+export function organizationRulesetRulesMaxFileSizeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2381,14 +1889,14 @@ function organizationRulesetRulesMaxFileSizeToTerraform(struct) {
         max_file_size: cdktf.numberToTerraform(struct.maxFileSize),
     };
 }
-function organizationRulesetRulesMaxFileSizeToHclTerraform(struct) {
+export function organizationRulesetRulesMaxFileSizeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         max_file_size: {
             value: cdktf.numberToHclTerraform(struct.maxFileSize),
             isBlock: false,
@@ -2397,67 +1905,50 @@ function organizationRulesetRulesMaxFileSizeToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesMaxFileSizeOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesMaxFileSizeOutputReference, _super);
+export class OrganizationRulesetRulesMaxFileSizeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesMaxFileSizeOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesMaxFileSizeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._maxFileSize !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxFileSize = this._maxFileSize;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._maxFileSize = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._maxFileSize = value.maxFileSize;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesMaxFileSizeOutputReference.prototype, "maxFileSize", {
-        get: function () {
-            return this.getNumberAttribute('max_file_size');
-        },
-        set: function (value) {
-            this._maxFileSize = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesMaxFileSizeOutputReference.prototype, "maxFileSizeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxFileSize;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesMaxFileSizeOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesMaxFileSizeOutputReference = OrganizationRulesetRulesMaxFileSizeOutputReference;
-function organizationRulesetRulesPullRequestRequiredReviewersReviewerToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._maxFileSize !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxFileSize = this._maxFileSize;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._maxFileSize = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._maxFileSize = value.maxFileSize;
+        }
+    }
+    // max_file_size - computed: false, optional: false, required: true
+    _maxFileSize;
+    get maxFileSize() {
+        return this.getNumberAttribute('max_file_size');
+    }
+    set maxFileSize(value) {
+        this._maxFileSize = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxFileSizeInput() {
+        return this._maxFileSize;
+    }
+}
+export function organizationRulesetRulesPullRequestRequiredReviewersReviewerToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2469,14 +1960,14 @@ function organizationRulesetRulesPullRequestRequiredReviewersReviewerToTerraform
         type: cdktf.stringToTerraform(struct.type),
     };
 }
-function organizationRulesetRulesPullRequestRequiredReviewersReviewerToHclTerraform(struct) {
+export function organizationRulesetRulesPullRequestRequiredReviewersReviewerToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.numberToHclTerraform(struct.id),
             isBlock: false,
@@ -2491,91 +1982,68 @@ function organizationRulesetRulesPullRequestRequiredReviewersReviewerToHclTerraf
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference, _super);
+export class OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._id = undefined;
-                this._type = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._id = value.id;
-                this._type = value.type;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference.prototype, "id", {
-        get: function () {
-            return this.getNumberAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference = OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference;
-function organizationRulesetRulesPullRequestRequiredReviewersToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._id = undefined;
+            this._type = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._id = value.id;
+            this._type = value.type;
+        }
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getNumberAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+}
+export function organizationRulesetRulesPullRequestRequiredReviewersToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2588,14 +2056,14 @@ function organizationRulesetRulesPullRequestRequiredReviewersToTerraform(struct)
         reviewer: organizationRulesetRulesPullRequestRequiredReviewersReviewerToTerraform(struct.reviewer),
     };
 }
-function organizationRulesetRulesPullRequestRequiredReviewersToHclTerraform(struct) {
+export function organizationRulesetRulesPullRequestRequiredReviewersToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         file_patterns: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.filePatterns),
             isBlock: false,
@@ -2616,152 +2084,121 @@ function organizationRulesetRulesPullRequestRequiredReviewersToHclTerraform(stru
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference, _super);
+export class OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // reviewer - computed: false, optional: false, required: true
-        _this._reviewer = new OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference(_this, "reviewer");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._filePatterns !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.filePatterns = this._filePatterns;
-            }
-            if (this._minimumApprovals !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.minimumApprovals = this._minimumApprovals;
-            }
-            if (((_a = this._reviewer) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.reviewer = (_b = this._reviewer) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._filePatterns = undefined;
-                this._minimumApprovals = undefined;
-                this._reviewer.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._filePatterns = value.filePatterns;
-                this._minimumApprovals = value.minimumApprovals;
-                this._reviewer.internalValue = value.reviewer;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference.prototype, "filePatterns", {
-        get: function () {
-            return this.getListAttribute('file_patterns');
-        },
-        set: function (value) {
-            this._filePatterns = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference.prototype, "filePatternsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filePatterns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference.prototype, "minimumApprovals", {
-        get: function () {
-            return this.getNumberAttribute('minimum_approvals');
-        },
-        set: function (value) {
-            this._minimumApprovals = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference.prototype, "minimumApprovalsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._minimumApprovals;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference.prototype, "reviewer", {
-        get: function () {
-            return this._reviewer;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference.prototype.putReviewer = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._filePatterns !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.filePatterns = this._filePatterns;
+        }
+        if (this._minimumApprovals !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.minimumApprovals = this._minimumApprovals;
+        }
+        if (this._reviewer?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.reviewer = this._reviewer?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._filePatterns = undefined;
+            this._minimumApprovals = undefined;
+            this._reviewer.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._filePatterns = value.filePatterns;
+            this._minimumApprovals = value.minimumApprovals;
+            this._reviewer.internalValue = value.reviewer;
+        }
+    }
+    // file_patterns - computed: false, optional: false, required: true
+    _filePatterns;
+    get filePatterns() {
+        return this.getListAttribute('file_patterns');
+    }
+    set filePatterns(value) {
+        this._filePatterns = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get filePatternsInput() {
+        return this._filePatterns;
+    }
+    // minimum_approvals - computed: false, optional: false, required: true
+    _minimumApprovals;
+    get minimumApprovals() {
+        return this.getNumberAttribute('minimum_approvals');
+    }
+    set minimumApprovals(value) {
+        this._minimumApprovals = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get minimumApprovalsInput() {
+        return this._minimumApprovals;
+    }
+    // reviewer - computed: false, optional: false, required: true
+    _reviewer = new OrganizationRulesetRulesPullRequestRequiredReviewersReviewerOutputReference(this, "reviewer");
+    get reviewer() {
+        return this._reviewer;
+    }
+    putReviewer(value) {
         this._reviewer.internalValue = value;
-    };
-    Object.defineProperty(OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference.prototype, "reviewerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._reviewer.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference = OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference;
-var OrganizationRulesetRulesPullRequestRequiredReviewersList = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesPullRequestRequiredReviewersList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get reviewerInput() {
+        return this._reviewer.internalValue;
+    }
+}
+export class OrganizationRulesetRulesPullRequestRequiredReviewersList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetRulesPullRequestRequiredReviewersList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    OrganizationRulesetRulesPullRequestRequiredReviewersList.prototype.get = function (index) {
+    get(index) {
         return new OrganizationRulesetRulesPullRequestRequiredReviewersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return OrganizationRulesetRulesPullRequestRequiredReviewersList;
-}(cdktf.ComplexList));
-exports.OrganizationRulesetRulesPullRequestRequiredReviewersList = OrganizationRulesetRulesPullRequestRequiredReviewersList;
-function organizationRulesetRulesPullRequestToTerraform(struct) {
+    }
+}
+export function organizationRulesetRulesPullRequestToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -2778,14 +2215,14 @@ function organizationRulesetRulesPullRequestToTerraform(struct) {
         required_reviewers: cdktf.listMapper(organizationRulesetRulesPullRequestRequiredReviewersToTerraform, true)(struct.requiredReviewers),
     };
 }
-function organizationRulesetRulesPullRequestToHclTerraform(struct) {
+export function organizationRulesetRulesPullRequestToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         allowed_merge_methods: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.allowedMergeMethods),
             isBlock: false,
@@ -2830,235 +2267,179 @@ function organizationRulesetRulesPullRequestToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesPullRequestOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesPullRequestOutputReference, _super);
+export class OrganizationRulesetRulesPullRequestOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesPullRequestOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // required_reviewers - computed: false, optional: true, required: false
-        _this._requiredReviewers = new OrganizationRulesetRulesPullRequestRequiredReviewersList(_this, "required_reviewers", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._allowedMergeMethods !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowedMergeMethods = this._allowedMergeMethods;
-            }
-            if (this._dismissStaleReviewsOnPush !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.dismissStaleReviewsOnPush = this._dismissStaleReviewsOnPush;
-            }
-            if (this._requireCodeOwnerReview !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requireCodeOwnerReview = this._requireCodeOwnerReview;
-            }
-            if (this._requireLastPushApproval !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requireLastPushApproval = this._requireLastPushApproval;
-            }
-            if (this._requiredApprovingReviewCount !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredApprovingReviewCount = this._requiredApprovingReviewCount;
-            }
-            if (this._requiredReviewThreadResolution !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredReviewThreadResolution = this._requiredReviewThreadResolution;
-            }
-            if (((_a = this._requiredReviewers) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredReviewers = (_b = this._requiredReviewers) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._allowedMergeMethods = undefined;
-                this._dismissStaleReviewsOnPush = undefined;
-                this._requireCodeOwnerReview = undefined;
-                this._requireLastPushApproval = undefined;
-                this._requiredApprovingReviewCount = undefined;
-                this._requiredReviewThreadResolution = undefined;
-                this._requiredReviewers.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._allowedMergeMethods = value.allowedMergeMethods;
-                this._dismissStaleReviewsOnPush = value.dismissStaleReviewsOnPush;
-                this._requireCodeOwnerReview = value.requireCodeOwnerReview;
-                this._requireLastPushApproval = value.requireLastPushApproval;
-                this._requiredApprovingReviewCount = value.requiredApprovingReviewCount;
-                this._requiredReviewThreadResolution = value.requiredReviewThreadResolution;
-                this._requiredReviewers.internalValue = value.requiredReviewers;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "allowedMergeMethods", {
-        get: function () {
-            return this.getListAttribute('allowed_merge_methods');
-        },
-        set: function (value) {
-            this._allowedMergeMethods = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesPullRequestOutputReference.prototype.resetAllowedMergeMethods = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._allowedMergeMethods !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowedMergeMethods = this._allowedMergeMethods;
+        }
+        if (this._dismissStaleReviewsOnPush !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.dismissStaleReviewsOnPush = this._dismissStaleReviewsOnPush;
+        }
+        if (this._requireCodeOwnerReview !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requireCodeOwnerReview = this._requireCodeOwnerReview;
+        }
+        if (this._requireLastPushApproval !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requireLastPushApproval = this._requireLastPushApproval;
+        }
+        if (this._requiredApprovingReviewCount !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredApprovingReviewCount = this._requiredApprovingReviewCount;
+        }
+        if (this._requiredReviewThreadResolution !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredReviewThreadResolution = this._requiredReviewThreadResolution;
+        }
+        if (this._requiredReviewers?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredReviewers = this._requiredReviewers?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._allowedMergeMethods = undefined;
+            this._dismissStaleReviewsOnPush = undefined;
+            this._requireCodeOwnerReview = undefined;
+            this._requireLastPushApproval = undefined;
+            this._requiredApprovingReviewCount = undefined;
+            this._requiredReviewThreadResolution = undefined;
+            this._requiredReviewers.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._allowedMergeMethods = value.allowedMergeMethods;
+            this._dismissStaleReviewsOnPush = value.dismissStaleReviewsOnPush;
+            this._requireCodeOwnerReview = value.requireCodeOwnerReview;
+            this._requireLastPushApproval = value.requireLastPushApproval;
+            this._requiredApprovingReviewCount = value.requiredApprovingReviewCount;
+            this._requiredReviewThreadResolution = value.requiredReviewThreadResolution;
+            this._requiredReviewers.internalValue = value.requiredReviewers;
+        }
+    }
+    // allowed_merge_methods - computed: true, optional: true, required: false
+    _allowedMergeMethods;
+    get allowedMergeMethods() {
+        return this.getListAttribute('allowed_merge_methods');
+    }
+    set allowedMergeMethods(value) {
+        this._allowedMergeMethods = value;
+    }
+    resetAllowedMergeMethods() {
         this._allowedMergeMethods = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "allowedMergeMethodsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedMergeMethods;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "dismissStaleReviewsOnPush", {
-        get: function () {
-            return this.getBooleanAttribute('dismiss_stale_reviews_on_push');
-        },
-        set: function (value) {
-            this._dismissStaleReviewsOnPush = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesPullRequestOutputReference.prototype.resetDismissStaleReviewsOnPush = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedMergeMethodsInput() {
+        return this._allowedMergeMethods;
+    }
+    // dismiss_stale_reviews_on_push - computed: false, optional: true, required: false
+    _dismissStaleReviewsOnPush;
+    get dismissStaleReviewsOnPush() {
+        return this.getBooleanAttribute('dismiss_stale_reviews_on_push');
+    }
+    set dismissStaleReviewsOnPush(value) {
+        this._dismissStaleReviewsOnPush = value;
+    }
+    resetDismissStaleReviewsOnPush() {
         this._dismissStaleReviewsOnPush = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "dismissStaleReviewsOnPushInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dismissStaleReviewsOnPush;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requireCodeOwnerReview", {
-        get: function () {
-            return this.getBooleanAttribute('require_code_owner_review');
-        },
-        set: function (value) {
-            this._requireCodeOwnerReview = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesPullRequestOutputReference.prototype.resetRequireCodeOwnerReview = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dismissStaleReviewsOnPushInput() {
+        return this._dismissStaleReviewsOnPush;
+    }
+    // require_code_owner_review - computed: false, optional: true, required: false
+    _requireCodeOwnerReview;
+    get requireCodeOwnerReview() {
+        return this.getBooleanAttribute('require_code_owner_review');
+    }
+    set requireCodeOwnerReview(value) {
+        this._requireCodeOwnerReview = value;
+    }
+    resetRequireCodeOwnerReview() {
         this._requireCodeOwnerReview = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requireCodeOwnerReviewInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireCodeOwnerReview;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requireLastPushApproval", {
-        get: function () {
-            return this.getBooleanAttribute('require_last_push_approval');
-        },
-        set: function (value) {
-            this._requireLastPushApproval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesPullRequestOutputReference.prototype.resetRequireLastPushApproval = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireCodeOwnerReviewInput() {
+        return this._requireCodeOwnerReview;
+    }
+    // require_last_push_approval - computed: false, optional: true, required: false
+    _requireLastPushApproval;
+    get requireLastPushApproval() {
+        return this.getBooleanAttribute('require_last_push_approval');
+    }
+    set requireLastPushApproval(value) {
+        this._requireLastPushApproval = value;
+    }
+    resetRequireLastPushApproval() {
         this._requireLastPushApproval = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requireLastPushApprovalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireLastPushApproval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requiredApprovingReviewCount", {
-        get: function () {
-            return this.getNumberAttribute('required_approving_review_count');
-        },
-        set: function (value) {
-            this._requiredApprovingReviewCount = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesPullRequestOutputReference.prototype.resetRequiredApprovingReviewCount = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireLastPushApprovalInput() {
+        return this._requireLastPushApproval;
+    }
+    // required_approving_review_count - computed: false, optional: true, required: false
+    _requiredApprovingReviewCount;
+    get requiredApprovingReviewCount() {
+        return this.getNumberAttribute('required_approving_review_count');
+    }
+    set requiredApprovingReviewCount(value) {
+        this._requiredApprovingReviewCount = value;
+    }
+    resetRequiredApprovingReviewCount() {
         this._requiredApprovingReviewCount = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requiredApprovingReviewCountInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredApprovingReviewCount;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requiredReviewThreadResolution", {
-        get: function () {
-            return this.getBooleanAttribute('required_review_thread_resolution');
-        },
-        set: function (value) {
-            this._requiredReviewThreadResolution = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesPullRequestOutputReference.prototype.resetRequiredReviewThreadResolution = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredApprovingReviewCountInput() {
+        return this._requiredApprovingReviewCount;
+    }
+    // required_review_thread_resolution - computed: false, optional: true, required: false
+    _requiredReviewThreadResolution;
+    get requiredReviewThreadResolution() {
+        return this.getBooleanAttribute('required_review_thread_resolution');
+    }
+    set requiredReviewThreadResolution(value) {
+        this._requiredReviewThreadResolution = value;
+    }
+    resetRequiredReviewThreadResolution() {
         this._requiredReviewThreadResolution = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requiredReviewThreadResolutionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredReviewThreadResolution;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requiredReviewers", {
-        get: function () {
-            return this._requiredReviewers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesPullRequestOutputReference.prototype.putRequiredReviewers = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredReviewThreadResolutionInput() {
+        return this._requiredReviewThreadResolution;
+    }
+    // required_reviewers - computed: false, optional: true, required: false
+    _requiredReviewers = new OrganizationRulesetRulesPullRequestRequiredReviewersList(this, "required_reviewers", false);
+    get requiredReviewers() {
+        return this._requiredReviewers;
+    }
+    putRequiredReviewers(value) {
         this._requiredReviewers.internalValue = value;
-    };
-    OrganizationRulesetRulesPullRequestOutputReference.prototype.resetRequiredReviewers = function () {
+    }
+    resetRequiredReviewers() {
         this._requiredReviewers.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesPullRequestOutputReference.prototype, "requiredReviewersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredReviewers.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesPullRequestOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesPullRequestOutputReference = OrganizationRulesetRulesPullRequestOutputReference;
-function organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredReviewersInput() {
+        return this._requiredReviewers.internalValue;
+    }
+}
+export function organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3071,14 +2452,14 @@ function organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToT
         tool: cdktf.stringToTerraform(struct.tool),
     };
 }
-function organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToHclTerraform(struct) {
+export function organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         alerts_threshold: {
             value: cdktf.stringToHclTerraform(struct.alertsThreshold),
             isBlock: false,
@@ -3099,149 +2480,121 @@ function organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToH
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference, _super);
+export class OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._alertsThreshold !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.alertsThreshold = this._alertsThreshold;
-            }
-            if (this._securityAlertsThreshold !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.securityAlertsThreshold = this._securityAlertsThreshold;
-            }
-            if (this._tool !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tool = this._tool;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._alertsThreshold = undefined;
-                this._securityAlertsThreshold = undefined;
-                this._tool = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._alertsThreshold = value.alertsThreshold;
-                this._securityAlertsThreshold = value.securityAlertsThreshold;
-                this._tool = value.tool;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference.prototype, "alertsThreshold", {
-        get: function () {
-            return this.getStringAttribute('alerts_threshold');
-        },
-        set: function (value) {
-            this._alertsThreshold = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference.prototype, "alertsThresholdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._alertsThreshold;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference.prototype, "securityAlertsThreshold", {
-        get: function () {
-            return this.getStringAttribute('security_alerts_threshold');
-        },
-        set: function (value) {
-            this._securityAlertsThreshold = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference.prototype, "securityAlertsThresholdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._securityAlertsThreshold;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference.prototype, "tool", {
-        get: function () {
-            return this.getStringAttribute('tool');
-        },
-        set: function (value) {
-            this._tool = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference.prototype, "toolInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tool;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference = OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference;
-var OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._alertsThreshold !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.alertsThreshold = this._alertsThreshold;
+        }
+        if (this._securityAlertsThreshold !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.securityAlertsThreshold = this._securityAlertsThreshold;
+        }
+        if (this._tool !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tool = this._tool;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._alertsThreshold = undefined;
+            this._securityAlertsThreshold = undefined;
+            this._tool = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._alertsThreshold = value.alertsThreshold;
+            this._securityAlertsThreshold = value.securityAlertsThreshold;
+            this._tool = value.tool;
+        }
+    }
+    // alerts_threshold - computed: false, optional: false, required: true
+    _alertsThreshold;
+    get alertsThreshold() {
+        return this.getStringAttribute('alerts_threshold');
+    }
+    set alertsThreshold(value) {
+        this._alertsThreshold = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get alertsThresholdInput() {
+        return this._alertsThreshold;
+    }
+    // security_alerts_threshold - computed: false, optional: false, required: true
+    _securityAlertsThreshold;
+    get securityAlertsThreshold() {
+        return this.getStringAttribute('security_alerts_threshold');
+    }
+    set securityAlertsThreshold(value) {
+        this._securityAlertsThreshold = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get securityAlertsThresholdInput() {
+        return this._securityAlertsThreshold;
+    }
+    // tool - computed: false, optional: false, required: true
+    _tool;
+    get tool() {
+        return this.getStringAttribute('tool');
+    }
+    set tool(value) {
+        this._tool = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get toolInput() {
+        return this._tool;
+    }
+}
+export class OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList.prototype.get = function (index) {
+    get(index) {
         return new OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList;
-}(cdktf.ComplexList));
-exports.OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList = OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList;
-function organizationRulesetRulesRequiredCodeScanningToTerraform(struct) {
+    }
+}
+export function organizationRulesetRulesRequiredCodeScanningToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3252,14 +2605,14 @@ function organizationRulesetRulesRequiredCodeScanningToTerraform(struct) {
         required_code_scanning_tool: cdktf.listMapper(organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToTerraform, true)(struct.requiredCodeScanningTool),
     };
 }
-function organizationRulesetRulesRequiredCodeScanningToHclTerraform(struct) {
+export function organizationRulesetRulesRequiredCodeScanningToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         required_code_scanning_tool: {
             value: cdktf.listMapperHcl(organizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolToHclTerraform, true)(struct.requiredCodeScanningTool),
             isBlock: true,
@@ -3268,70 +2621,50 @@ function organizationRulesetRulesRequiredCodeScanningToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesRequiredCodeScanningOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesRequiredCodeScanningOutputReference, _super);
+export class OrganizationRulesetRulesRequiredCodeScanningOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesRequiredCodeScanningOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // required_code_scanning_tool - computed: false, optional: false, required: true
-        _this._requiredCodeScanningTool = new OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList(_this, "required_code_scanning_tool", true);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._requiredCodeScanningTool) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredCodeScanningTool = (_b = this._requiredCodeScanningTool) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._requiredCodeScanningTool.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._requiredCodeScanningTool.internalValue = value.requiredCodeScanningTool;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningOutputReference.prototype, "requiredCodeScanningTool", {
-        get: function () {
-            return this._requiredCodeScanningTool;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesRequiredCodeScanningOutputReference.prototype.putRequiredCodeScanningTool = function (value) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._requiredCodeScanningTool?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredCodeScanningTool = this._requiredCodeScanningTool?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._requiredCodeScanningTool.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._requiredCodeScanningTool.internalValue = value.requiredCodeScanningTool;
+        }
+    }
+    // required_code_scanning_tool - computed: false, optional: false, required: true
+    _requiredCodeScanningTool = new OrganizationRulesetRulesRequiredCodeScanningRequiredCodeScanningToolList(this, "required_code_scanning_tool", true);
+    get requiredCodeScanningTool() {
+        return this._requiredCodeScanningTool;
+    }
+    putRequiredCodeScanningTool(value) {
         this._requiredCodeScanningTool.internalValue = value;
-    };
-    Object.defineProperty(OrganizationRulesetRulesRequiredCodeScanningOutputReference.prototype, "requiredCodeScanningToolInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredCodeScanningTool.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesRequiredCodeScanningOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesRequiredCodeScanningOutputReference = OrganizationRulesetRulesRequiredCodeScanningOutputReference;
-function organizationRulesetRulesRequiredStatusChecksRequiredCheckToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredCodeScanningToolInput() {
+        return this._requiredCodeScanningTool.internalValue;
+    }
+}
+export function organizationRulesetRulesRequiredStatusChecksRequiredCheckToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3343,14 +2676,14 @@ function organizationRulesetRulesRequiredStatusChecksRequiredCheckToTerraform(st
         integration_id: cdktf.numberToTerraform(struct.integrationId),
     };
 }
-function organizationRulesetRulesRequiredStatusChecksRequiredCheckToHclTerraform(struct) {
+export function organizationRulesetRulesRequiredStatusChecksRequiredCheckToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         context: {
             value: cdktf.stringToHclTerraform(struct.context),
             isBlock: false,
@@ -3365,128 +2698,106 @@ function organizationRulesetRulesRequiredStatusChecksRequiredCheckToHclTerraform
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference, _super);
+export class OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._context !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.context = this._context;
-            }
-            if (this._integrationId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.integrationId = this._integrationId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._context = undefined;
-                this._integrationId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._context = value.context;
-                this._integrationId = value.integrationId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference.prototype, "context", {
-        get: function () {
-            return this.getStringAttribute('context');
-        },
-        set: function (value) {
-            this._context = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference.prototype, "contextInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._context;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference.prototype, "integrationId", {
-        get: function () {
-            return this.getNumberAttribute('integration_id');
-        },
-        set: function (value) {
-            this._integrationId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference.prototype.resetIntegrationId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._context !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.context = this._context;
+        }
+        if (this._integrationId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.integrationId = this._integrationId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._context = undefined;
+            this._integrationId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._context = value.context;
+            this._integrationId = value.integrationId;
+        }
+    }
+    // context - computed: false, optional: false, required: true
+    _context;
+    get context() {
+        return this.getStringAttribute('context');
+    }
+    set context(value) {
+        this._context = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get contextInput() {
+        return this._context;
+    }
+    // integration_id - computed: false, optional: true, required: false
+    _integrationId;
+    get integrationId() {
+        return this.getNumberAttribute('integration_id');
+    }
+    set integrationId(value) {
+        this._integrationId = value;
+    }
+    resetIntegrationId() {
         this._integrationId = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference.prototype, "integrationIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._integrationId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference = OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference;
-var OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get integrationIdInput() {
+        return this._integrationId;
+    }
+}
+export class OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList.prototype.get = function (index) {
+    get(index) {
         return new OrganizationRulesetRulesRequiredStatusChecksRequiredCheckOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList;
-}(cdktf.ComplexList));
-exports.OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList = OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList;
-function organizationRulesetRulesRequiredStatusChecksToTerraform(struct) {
+    }
+}
+export function organizationRulesetRulesRequiredStatusChecksToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3499,14 +2810,14 @@ function organizationRulesetRulesRequiredStatusChecksToTerraform(struct) {
         required_check: cdktf.listMapper(organizationRulesetRulesRequiredStatusChecksRequiredCheckToTerraform, true)(struct.requiredCheck),
     };
 }
-function organizationRulesetRulesRequiredStatusChecksToHclTerraform(struct) {
+export function organizationRulesetRulesRequiredStatusChecksToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         do_not_enforce_on_create: {
             value: cdktf.booleanToHclTerraform(struct.doNotEnforceOnCreate),
             isBlock: false,
@@ -3527,124 +2838,92 @@ function organizationRulesetRulesRequiredStatusChecksToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesRequiredStatusChecksOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesRequiredStatusChecksOutputReference, _super);
+export class OrganizationRulesetRulesRequiredStatusChecksOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesRequiredStatusChecksOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // required_check - computed: false, optional: false, required: true
-        _this._requiredCheck = new OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList(_this, "required_check", true);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._doNotEnforceOnCreate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.doNotEnforceOnCreate = this._doNotEnforceOnCreate;
-            }
-            if (this._strictRequiredStatusChecksPolicy !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.strictRequiredStatusChecksPolicy = this._strictRequiredStatusChecksPolicy;
-            }
-            if (((_a = this._requiredCheck) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredCheck = (_b = this._requiredCheck) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._doNotEnforceOnCreate = undefined;
-                this._strictRequiredStatusChecksPolicy = undefined;
-                this._requiredCheck.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._doNotEnforceOnCreate = value.doNotEnforceOnCreate;
-                this._strictRequiredStatusChecksPolicy = value.strictRequiredStatusChecksPolicy;
-                this._requiredCheck.internalValue = value.requiredCheck;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype, "doNotEnforceOnCreate", {
-        get: function () {
-            return this.getBooleanAttribute('do_not_enforce_on_create');
-        },
-        set: function (value) {
-            this._doNotEnforceOnCreate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype.resetDoNotEnforceOnCreate = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._doNotEnforceOnCreate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.doNotEnforceOnCreate = this._doNotEnforceOnCreate;
+        }
+        if (this._strictRequiredStatusChecksPolicy !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.strictRequiredStatusChecksPolicy = this._strictRequiredStatusChecksPolicy;
+        }
+        if (this._requiredCheck?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredCheck = this._requiredCheck?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._doNotEnforceOnCreate = undefined;
+            this._strictRequiredStatusChecksPolicy = undefined;
+            this._requiredCheck.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._doNotEnforceOnCreate = value.doNotEnforceOnCreate;
+            this._strictRequiredStatusChecksPolicy = value.strictRequiredStatusChecksPolicy;
+            this._requiredCheck.internalValue = value.requiredCheck;
+        }
+    }
+    // do_not_enforce_on_create - computed: false, optional: true, required: false
+    _doNotEnforceOnCreate;
+    get doNotEnforceOnCreate() {
+        return this.getBooleanAttribute('do_not_enforce_on_create');
+    }
+    set doNotEnforceOnCreate(value) {
+        this._doNotEnforceOnCreate = value;
+    }
+    resetDoNotEnforceOnCreate() {
         this._doNotEnforceOnCreate = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype, "doNotEnforceOnCreateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._doNotEnforceOnCreate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype, "strictRequiredStatusChecksPolicy", {
-        get: function () {
-            return this.getBooleanAttribute('strict_required_status_checks_policy');
-        },
-        set: function (value) {
-            this._strictRequiredStatusChecksPolicy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype.resetStrictRequiredStatusChecksPolicy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get doNotEnforceOnCreateInput() {
+        return this._doNotEnforceOnCreate;
+    }
+    // strict_required_status_checks_policy - computed: false, optional: true, required: false
+    _strictRequiredStatusChecksPolicy;
+    get strictRequiredStatusChecksPolicy() {
+        return this.getBooleanAttribute('strict_required_status_checks_policy');
+    }
+    set strictRequiredStatusChecksPolicy(value) {
+        this._strictRequiredStatusChecksPolicy = value;
+    }
+    resetStrictRequiredStatusChecksPolicy() {
         this._strictRequiredStatusChecksPolicy = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype, "strictRequiredStatusChecksPolicyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._strictRequiredStatusChecksPolicy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype, "requiredCheck", {
-        get: function () {
-            return this._requiredCheck;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype.putRequiredCheck = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get strictRequiredStatusChecksPolicyInput() {
+        return this._strictRequiredStatusChecksPolicy;
+    }
+    // required_check - computed: false, optional: false, required: true
+    _requiredCheck = new OrganizationRulesetRulesRequiredStatusChecksRequiredCheckList(this, "required_check", true);
+    get requiredCheck() {
+        return this._requiredCheck;
+    }
+    putRequiredCheck(value) {
         this._requiredCheck.internalValue = value;
-    };
-    Object.defineProperty(OrganizationRulesetRulesRequiredStatusChecksOutputReference.prototype, "requiredCheckInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredCheck.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesRequiredStatusChecksOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesRequiredStatusChecksOutputReference = OrganizationRulesetRulesRequiredStatusChecksOutputReference;
-function organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredCheckInput() {
+        return this._requiredCheck.internalValue;
+    }
+}
+export function organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3657,14 +2936,14 @@ function organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToTerraform(st
         repository_id: cdktf.numberToTerraform(struct.repositoryId),
     };
 }
-function organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToHclTerraform(struct) {
+export function organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         path: {
             value: cdktf.stringToHclTerraform(struct.path),
             isBlock: false,
@@ -3685,152 +2964,124 @@ function organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToHclTerraform
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference, _super);
+export class OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            if (this._ref !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ref = this._ref;
-            }
-            if (this._repositoryId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.repositoryId = this._repositoryId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._path = undefined;
-                this._ref = undefined;
-                this._repositoryId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._path = value.path;
-                this._ref = value.ref;
-                this._repositoryId = value.repositoryId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference.prototype, "ref", {
-        get: function () {
-            return this.getStringAttribute('ref');
-        },
-        set: function (value) {
-            this._ref = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference.prototype.resetRef = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        if (this._ref !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ref = this._ref;
+        }
+        if (this._repositoryId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.repositoryId = this._repositoryId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._path = undefined;
+            this._ref = undefined;
+            this._repositoryId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._path = value.path;
+            this._ref = value.ref;
+            this._repositoryId = value.repositoryId;
+        }
+    }
+    // path - computed: false, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // ref - computed: false, optional: true, required: false
+    _ref;
+    get ref() {
+        return this.getStringAttribute('ref');
+    }
+    set ref(value) {
+        this._ref = value;
+    }
+    resetRef() {
         this._ref = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference.prototype, "refInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ref;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference.prototype, "repositoryId", {
-        get: function () {
-            return this.getNumberAttribute('repository_id');
-        },
-        set: function (value) {
-            this._repositoryId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference.prototype, "repositoryIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repositoryId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference = OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference;
-var OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get refInput() {
+        return this._ref;
+    }
+    // repository_id - computed: false, optional: false, required: true
+    _repositoryId;
+    get repositoryId() {
+        return this.getNumberAttribute('repository_id');
+    }
+    set repositoryId(value) {
+        this._repositoryId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryIdInput() {
+        return this._repositoryId;
+    }
+}
+export class OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList.prototype.get = function (index) {
+    get(index) {
         return new OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList;
-}(cdktf.ComplexList));
-exports.OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList = OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList;
-function organizationRulesetRulesRequiredWorkflowsToTerraform(struct) {
+    }
+}
+export function organizationRulesetRulesRequiredWorkflowsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3842,14 +3093,14 @@ function organizationRulesetRulesRequiredWorkflowsToTerraform(struct) {
         required_workflow: cdktf.listMapper(organizationRulesetRulesRequiredWorkflowsRequiredWorkflowToTerraform, true)(struct.requiredWorkflow),
     };
 }
-function organizationRulesetRulesRequiredWorkflowsToHclTerraform(struct) {
+export function organizationRulesetRulesRequiredWorkflowsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         do_not_enforce_on_create: {
             value: cdktf.booleanToHclTerraform(struct.doNotEnforceOnCreate),
             isBlock: false,
@@ -3864,97 +3115,71 @@ function organizationRulesetRulesRequiredWorkflowsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesRequiredWorkflowsOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesRequiredWorkflowsOutputReference, _super);
+export class OrganizationRulesetRulesRequiredWorkflowsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesRequiredWorkflowsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // required_workflow - computed: false, optional: false, required: true
-        _this._requiredWorkflow = new OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList(_this, "required_workflow", true);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._doNotEnforceOnCreate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.doNotEnforceOnCreate = this._doNotEnforceOnCreate;
-            }
-            if (((_a = this._requiredWorkflow) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredWorkflow = (_b = this._requiredWorkflow) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._doNotEnforceOnCreate = undefined;
-                this._requiredWorkflow.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._doNotEnforceOnCreate = value.doNotEnforceOnCreate;
-                this._requiredWorkflow.internalValue = value.requiredWorkflow;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsOutputReference.prototype, "doNotEnforceOnCreate", {
-        get: function () {
-            return this.getBooleanAttribute('do_not_enforce_on_create');
-        },
-        set: function (value) {
-            this._doNotEnforceOnCreate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesRequiredWorkflowsOutputReference.prototype.resetDoNotEnforceOnCreate = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._doNotEnforceOnCreate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.doNotEnforceOnCreate = this._doNotEnforceOnCreate;
+        }
+        if (this._requiredWorkflow?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredWorkflow = this._requiredWorkflow?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._doNotEnforceOnCreate = undefined;
+            this._requiredWorkflow.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._doNotEnforceOnCreate = value.doNotEnforceOnCreate;
+            this._requiredWorkflow.internalValue = value.requiredWorkflow;
+        }
+    }
+    // do_not_enforce_on_create - computed: false, optional: true, required: false
+    _doNotEnforceOnCreate;
+    get doNotEnforceOnCreate() {
+        return this.getBooleanAttribute('do_not_enforce_on_create');
+    }
+    set doNotEnforceOnCreate(value) {
+        this._doNotEnforceOnCreate = value;
+    }
+    resetDoNotEnforceOnCreate() {
         this._doNotEnforceOnCreate = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsOutputReference.prototype, "doNotEnforceOnCreateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._doNotEnforceOnCreate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsOutputReference.prototype, "requiredWorkflow", {
-        get: function () {
-            return this._requiredWorkflow;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesRequiredWorkflowsOutputReference.prototype.putRequiredWorkflow = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get doNotEnforceOnCreateInput() {
+        return this._doNotEnforceOnCreate;
+    }
+    // required_workflow - computed: false, optional: false, required: true
+    _requiredWorkflow = new OrganizationRulesetRulesRequiredWorkflowsRequiredWorkflowList(this, "required_workflow", true);
+    get requiredWorkflow() {
+        return this._requiredWorkflow;
+    }
+    putRequiredWorkflow(value) {
         this._requiredWorkflow.internalValue = value;
-    };
-    Object.defineProperty(OrganizationRulesetRulesRequiredWorkflowsOutputReference.prototype, "requiredWorkflowInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredWorkflow.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesRequiredWorkflowsOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesRequiredWorkflowsOutputReference = OrganizationRulesetRulesRequiredWorkflowsOutputReference;
-function organizationRulesetRulesTagNamePatternToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredWorkflowInput() {
+        return this._requiredWorkflow.internalValue;
+    }
+}
+export function organizationRulesetRulesTagNamePatternToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -3968,14 +3193,14 @@ function organizationRulesetRulesTagNamePatternToTerraform(struct) {
         pattern: cdktf.stringToTerraform(struct.pattern),
     };
 }
-function organizationRulesetRulesTagNamePatternToHclTerraform(struct) {
+export function organizationRulesetRulesTagNamePatternToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -4002,145 +3227,110 @@ function organizationRulesetRulesTagNamePatternToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesTagNamePatternOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesTagNamePatternOutputReference, _super);
+export class OrganizationRulesetRulesTagNamePatternOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesTagNamePatternOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesTagNamePatternOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._negate !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.negate = this._negate;
-            }
-            if (this._operator !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.operator = this._operator;
-            }
-            if (this._pattern !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pattern = this._pattern;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._name = undefined;
-                this._negate = undefined;
-                this._operator = undefined;
-                this._pattern = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._name = value.name;
-                this._negate = value.negate;
-                this._operator = value.operator;
-                this._pattern = value.pattern;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesTagNamePatternOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesTagNamePatternOutputReference.prototype.resetName = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._negate !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.negate = this._negate;
+        }
+        if (this._operator !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.operator = this._operator;
+        }
+        if (this._pattern !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pattern = this._pattern;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._name = undefined;
+            this._negate = undefined;
+            this._operator = undefined;
+            this._pattern = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._name = value.name;
+            this._negate = value.negate;
+            this._operator = value.operator;
+            this._pattern = value.pattern;
+        }
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesTagNamePatternOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesTagNamePatternOutputReference.prototype, "negate", {
-        get: function () {
-            return this.getBooleanAttribute('negate');
-        },
-        set: function (value) {
-            this._negate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesTagNamePatternOutputReference.prototype.resetNegate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // negate - computed: false, optional: true, required: false
+    _negate;
+    get negate() {
+        return this.getBooleanAttribute('negate');
+    }
+    set negate(value) {
+        this._negate = value;
+    }
+    resetNegate() {
         this._negate = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesTagNamePatternOutputReference.prototype, "negateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._negate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesTagNamePatternOutputReference.prototype, "operator", {
-        get: function () {
-            return this.getStringAttribute('operator');
-        },
-        set: function (value) {
-            this._operator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesTagNamePatternOutputReference.prototype, "operatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._operator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesTagNamePatternOutputReference.prototype, "pattern", {
-        get: function () {
-            return this.getStringAttribute('pattern');
-        },
-        set: function (value) {
-            this._pattern = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesTagNamePatternOutputReference.prototype, "patternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesTagNamePatternOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesTagNamePatternOutputReference = OrganizationRulesetRulesTagNamePatternOutputReference;
-function organizationRulesetRulesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get negateInput() {
+        return this._negate;
+    }
+    // operator - computed: false, optional: false, required: true
+    _operator;
+    get operator() {
+        return this.getStringAttribute('operator');
+    }
+    set operator(value) {
+        this._operator = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get operatorInput() {
+        return this._operator;
+    }
+    // pattern - computed: false, optional: false, required: true
+    _pattern;
+    get pattern() {
+        return this.getStringAttribute('pattern');
+    }
+    set pattern(value) {
+        this._pattern = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get patternInput() {
+        return this._pattern;
+    }
+}
+export function organizationRulesetRulesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -4170,14 +3360,14 @@ function organizationRulesetRulesToTerraform(struct) {
         tag_name_pattern: organizationRulesetRulesTagNamePatternToTerraform(struct.tagNamePattern),
     };
 }
-function organizationRulesetRulesToHclTerraform(struct) {
+export function organizationRulesetRulesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         creation: {
             value: cdktf.booleanToHclTerraform(struct.creation),
             isBlock: false,
@@ -4300,616 +3490,472 @@ function organizationRulesetRulesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var OrganizationRulesetRulesOutputReference = /** @class */ (function (_super) {
-    __extends(OrganizationRulesetRulesOutputReference, _super);
+export class OrganizationRulesetRulesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function OrganizationRulesetRulesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // branch_name_pattern - computed: false, optional: true, required: false
-        _this._branchNamePattern = new OrganizationRulesetRulesBranchNamePatternOutputReference(_this, "branch_name_pattern");
-        // commit_author_email_pattern - computed: false, optional: true, required: false
-        _this._commitAuthorEmailPattern = new OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference(_this, "commit_author_email_pattern");
-        // commit_message_pattern - computed: false, optional: true, required: false
-        _this._commitMessagePattern = new OrganizationRulesetRulesCommitMessagePatternOutputReference(_this, "commit_message_pattern");
-        // committer_email_pattern - computed: false, optional: true, required: false
-        _this._committerEmailPattern = new OrganizationRulesetRulesCommitterEmailPatternOutputReference(_this, "committer_email_pattern");
-        // copilot_code_review - computed: false, optional: true, required: false
-        _this._copilotCodeReview = new OrganizationRulesetRulesCopilotCodeReviewOutputReference(_this, "copilot_code_review");
-        // file_extension_restriction - computed: false, optional: true, required: false
-        _this._fileExtensionRestriction = new OrganizationRulesetRulesFileExtensionRestrictionOutputReference(_this, "file_extension_restriction");
-        // file_path_restriction - computed: false, optional: true, required: false
-        _this._filePathRestriction = new OrganizationRulesetRulesFilePathRestrictionOutputReference(_this, "file_path_restriction");
-        // max_file_path_length - computed: false, optional: true, required: false
-        _this._maxFilePathLength = new OrganizationRulesetRulesMaxFilePathLengthOutputReference(_this, "max_file_path_length");
-        // max_file_size - computed: false, optional: true, required: false
-        _this._maxFileSize = new OrganizationRulesetRulesMaxFileSizeOutputReference(_this, "max_file_size");
-        // pull_request - computed: false, optional: true, required: false
-        _this._pullRequest = new OrganizationRulesetRulesPullRequestOutputReference(_this, "pull_request");
-        // required_code_scanning - computed: false, optional: true, required: false
-        _this._requiredCodeScanning = new OrganizationRulesetRulesRequiredCodeScanningOutputReference(_this, "required_code_scanning");
-        // required_status_checks - computed: false, optional: true, required: false
-        _this._requiredStatusChecks = new OrganizationRulesetRulesRequiredStatusChecksOutputReference(_this, "required_status_checks");
-        // required_workflows - computed: false, optional: true, required: false
-        _this._requiredWorkflows = new OrganizationRulesetRulesRequiredWorkflowsOutputReference(_this, "required_workflows");
-        // tag_name_pattern - computed: false, optional: true, required: false
-        _this._tagNamePattern = new OrganizationRulesetRulesTagNamePatternOutputReference(_this, "tag_name_pattern");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._creation !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.creation = this._creation;
-            }
-            if (this._deletion !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.deletion = this._deletion;
-            }
-            if (this._nonFastForward !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.nonFastForward = this._nonFastForward;
-            }
-            if (this._requiredLinearHistory !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredLinearHistory = this._requiredLinearHistory;
-            }
-            if (this._requiredSignatures !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredSignatures = this._requiredSignatures;
-            }
-            if (this._update !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.update = this._update;
-            }
-            if (((_a = this._branchNamePattern) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.branchNamePattern = (_b = this._branchNamePattern) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._commitAuthorEmailPattern) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.commitAuthorEmailPattern = (_d = this._commitAuthorEmailPattern) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._commitMessagePattern) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.commitMessagePattern = (_f = this._commitMessagePattern) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._committerEmailPattern) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.committerEmailPattern = (_h = this._committerEmailPattern) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (((_j = this._copilotCodeReview) === null || _j === void 0 ? void 0 : _j.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.copilotCodeReview = (_k = this._copilotCodeReview) === null || _k === void 0 ? void 0 : _k.internalValue;
-            }
-            if (((_l = this._fileExtensionRestriction) === null || _l === void 0 ? void 0 : _l.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.fileExtensionRestriction = (_m = this._fileExtensionRestriction) === null || _m === void 0 ? void 0 : _m.internalValue;
-            }
-            if (((_o = this._filePathRestriction) === null || _o === void 0 ? void 0 : _o.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.filePathRestriction = (_p = this._filePathRestriction) === null || _p === void 0 ? void 0 : _p.internalValue;
-            }
-            if (((_q = this._maxFilePathLength) === null || _q === void 0 ? void 0 : _q.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxFilePathLength = (_r = this._maxFilePathLength) === null || _r === void 0 ? void 0 : _r.internalValue;
-            }
-            if (((_s = this._maxFileSize) === null || _s === void 0 ? void 0 : _s.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maxFileSize = (_t = this._maxFileSize) === null || _t === void 0 ? void 0 : _t.internalValue;
-            }
-            if (((_u = this._pullRequest) === null || _u === void 0 ? void 0 : _u.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.pullRequest = (_v = this._pullRequest) === null || _v === void 0 ? void 0 : _v.internalValue;
-            }
-            if (((_w = this._requiredCodeScanning) === null || _w === void 0 ? void 0 : _w.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredCodeScanning = (_x = this._requiredCodeScanning) === null || _x === void 0 ? void 0 : _x.internalValue;
-            }
-            if (((_y = this._requiredStatusChecks) === null || _y === void 0 ? void 0 : _y.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredStatusChecks = (_z = this._requiredStatusChecks) === null || _z === void 0 ? void 0 : _z.internalValue;
-            }
-            if (((_0 = this._requiredWorkflows) === null || _0 === void 0 ? void 0 : _0.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.requiredWorkflows = (_1 = this._requiredWorkflows) === null || _1 === void 0 ? void 0 : _1.internalValue;
-            }
-            if (((_2 = this._tagNamePattern) === null || _2 === void 0 ? void 0 : _2.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.tagNamePattern = (_3 = this._tagNamePattern) === null || _3 === void 0 ? void 0 : _3.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._creation = undefined;
-                this._deletion = undefined;
-                this._nonFastForward = undefined;
-                this._requiredLinearHistory = undefined;
-                this._requiredSignatures = undefined;
-                this._update = undefined;
-                this._branchNamePattern.internalValue = undefined;
-                this._commitAuthorEmailPattern.internalValue = undefined;
-                this._commitMessagePattern.internalValue = undefined;
-                this._committerEmailPattern.internalValue = undefined;
-                this._copilotCodeReview.internalValue = undefined;
-                this._fileExtensionRestriction.internalValue = undefined;
-                this._filePathRestriction.internalValue = undefined;
-                this._maxFilePathLength.internalValue = undefined;
-                this._maxFileSize.internalValue = undefined;
-                this._pullRequest.internalValue = undefined;
-                this._requiredCodeScanning.internalValue = undefined;
-                this._requiredStatusChecks.internalValue = undefined;
-                this._requiredWorkflows.internalValue = undefined;
-                this._tagNamePattern.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._creation = value.creation;
-                this._deletion = value.deletion;
-                this._nonFastForward = value.nonFastForward;
-                this._requiredLinearHistory = value.requiredLinearHistory;
-                this._requiredSignatures = value.requiredSignatures;
-                this._update = value.update;
-                this._branchNamePattern.internalValue = value.branchNamePattern;
-                this._commitAuthorEmailPattern.internalValue = value.commitAuthorEmailPattern;
-                this._commitMessagePattern.internalValue = value.commitMessagePattern;
-                this._committerEmailPattern.internalValue = value.committerEmailPattern;
-                this._copilotCodeReview.internalValue = value.copilotCodeReview;
-                this._fileExtensionRestriction.internalValue = value.fileExtensionRestriction;
-                this._filePathRestriction.internalValue = value.filePathRestriction;
-                this._maxFilePathLength.internalValue = value.maxFilePathLength;
-                this._maxFileSize.internalValue = value.maxFileSize;
-                this._pullRequest.internalValue = value.pullRequest;
-                this._requiredCodeScanning.internalValue = value.requiredCodeScanning;
-                this._requiredStatusChecks.internalValue = value.requiredStatusChecks;
-                this._requiredWorkflows.internalValue = value.requiredWorkflows;
-                this._tagNamePattern.internalValue = value.tagNamePattern;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "creation", {
-        get: function () {
-            return this.getBooleanAttribute('creation');
-        },
-        set: function (value) {
-            this._creation = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.resetCreation = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._creation !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.creation = this._creation;
+        }
+        if (this._deletion !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.deletion = this._deletion;
+        }
+        if (this._nonFastForward !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.nonFastForward = this._nonFastForward;
+        }
+        if (this._requiredLinearHistory !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredLinearHistory = this._requiredLinearHistory;
+        }
+        if (this._requiredSignatures !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredSignatures = this._requiredSignatures;
+        }
+        if (this._update !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.update = this._update;
+        }
+        if (this._branchNamePattern?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.branchNamePattern = this._branchNamePattern?.internalValue;
+        }
+        if (this._commitAuthorEmailPattern?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.commitAuthorEmailPattern = this._commitAuthorEmailPattern?.internalValue;
+        }
+        if (this._commitMessagePattern?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.commitMessagePattern = this._commitMessagePattern?.internalValue;
+        }
+        if (this._committerEmailPattern?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.committerEmailPattern = this._committerEmailPattern?.internalValue;
+        }
+        if (this._copilotCodeReview?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.copilotCodeReview = this._copilotCodeReview?.internalValue;
+        }
+        if (this._fileExtensionRestriction?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.fileExtensionRestriction = this._fileExtensionRestriction?.internalValue;
+        }
+        if (this._filePathRestriction?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.filePathRestriction = this._filePathRestriction?.internalValue;
+        }
+        if (this._maxFilePathLength?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxFilePathLength = this._maxFilePathLength?.internalValue;
+        }
+        if (this._maxFileSize?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maxFileSize = this._maxFileSize?.internalValue;
+        }
+        if (this._pullRequest?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.pullRequest = this._pullRequest?.internalValue;
+        }
+        if (this._requiredCodeScanning?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredCodeScanning = this._requiredCodeScanning?.internalValue;
+        }
+        if (this._requiredStatusChecks?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredStatusChecks = this._requiredStatusChecks?.internalValue;
+        }
+        if (this._requiredWorkflows?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.requiredWorkflows = this._requiredWorkflows?.internalValue;
+        }
+        if (this._tagNamePattern?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.tagNamePattern = this._tagNamePattern?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._creation = undefined;
+            this._deletion = undefined;
+            this._nonFastForward = undefined;
+            this._requiredLinearHistory = undefined;
+            this._requiredSignatures = undefined;
+            this._update = undefined;
+            this._branchNamePattern.internalValue = undefined;
+            this._commitAuthorEmailPattern.internalValue = undefined;
+            this._commitMessagePattern.internalValue = undefined;
+            this._committerEmailPattern.internalValue = undefined;
+            this._copilotCodeReview.internalValue = undefined;
+            this._fileExtensionRestriction.internalValue = undefined;
+            this._filePathRestriction.internalValue = undefined;
+            this._maxFilePathLength.internalValue = undefined;
+            this._maxFileSize.internalValue = undefined;
+            this._pullRequest.internalValue = undefined;
+            this._requiredCodeScanning.internalValue = undefined;
+            this._requiredStatusChecks.internalValue = undefined;
+            this._requiredWorkflows.internalValue = undefined;
+            this._tagNamePattern.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._creation = value.creation;
+            this._deletion = value.deletion;
+            this._nonFastForward = value.nonFastForward;
+            this._requiredLinearHistory = value.requiredLinearHistory;
+            this._requiredSignatures = value.requiredSignatures;
+            this._update = value.update;
+            this._branchNamePattern.internalValue = value.branchNamePattern;
+            this._commitAuthorEmailPattern.internalValue = value.commitAuthorEmailPattern;
+            this._commitMessagePattern.internalValue = value.commitMessagePattern;
+            this._committerEmailPattern.internalValue = value.committerEmailPattern;
+            this._copilotCodeReview.internalValue = value.copilotCodeReview;
+            this._fileExtensionRestriction.internalValue = value.fileExtensionRestriction;
+            this._filePathRestriction.internalValue = value.filePathRestriction;
+            this._maxFilePathLength.internalValue = value.maxFilePathLength;
+            this._maxFileSize.internalValue = value.maxFileSize;
+            this._pullRequest.internalValue = value.pullRequest;
+            this._requiredCodeScanning.internalValue = value.requiredCodeScanning;
+            this._requiredStatusChecks.internalValue = value.requiredStatusChecks;
+            this._requiredWorkflows.internalValue = value.requiredWorkflows;
+            this._tagNamePattern.internalValue = value.tagNamePattern;
+        }
+    }
+    // creation - computed: false, optional: true, required: false
+    _creation;
+    get creation() {
+        return this.getBooleanAttribute('creation');
+    }
+    set creation(value) {
+        this._creation = value;
+    }
+    resetCreation() {
         this._creation = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "creationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._creation;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "deletion", {
-        get: function () {
-            return this.getBooleanAttribute('deletion');
-        },
-        set: function (value) {
-            this._deletion = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.resetDeletion = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get creationInput() {
+        return this._creation;
+    }
+    // deletion - computed: false, optional: true, required: false
+    _deletion;
+    get deletion() {
+        return this.getBooleanAttribute('deletion');
+    }
+    set deletion(value) {
+        this._deletion = value;
+    }
+    resetDeletion() {
         this._deletion = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "deletionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deletion;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "nonFastForward", {
-        get: function () {
-            return this.getBooleanAttribute('non_fast_forward');
-        },
-        set: function (value) {
-            this._nonFastForward = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.resetNonFastForward = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deletionInput() {
+        return this._deletion;
+    }
+    // non_fast_forward - computed: false, optional: true, required: false
+    _nonFastForward;
+    get nonFastForward() {
+        return this.getBooleanAttribute('non_fast_forward');
+    }
+    set nonFastForward(value) {
+        this._nonFastForward = value;
+    }
+    resetNonFastForward() {
         this._nonFastForward = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "nonFastForwardInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._nonFastForward;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredLinearHistory", {
-        get: function () {
-            return this.getBooleanAttribute('required_linear_history');
-        },
-        set: function (value) {
-            this._requiredLinearHistory = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.resetRequiredLinearHistory = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nonFastForwardInput() {
+        return this._nonFastForward;
+    }
+    // required_linear_history - computed: false, optional: true, required: false
+    _requiredLinearHistory;
+    get requiredLinearHistory() {
+        return this.getBooleanAttribute('required_linear_history');
+    }
+    set requiredLinearHistory(value) {
+        this._requiredLinearHistory = value;
+    }
+    resetRequiredLinearHistory() {
         this._requiredLinearHistory = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredLinearHistoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredLinearHistory;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredSignatures", {
-        get: function () {
-            return this.getBooleanAttribute('required_signatures');
-        },
-        set: function (value) {
-            this._requiredSignatures = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.resetRequiredSignatures = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredLinearHistoryInput() {
+        return this._requiredLinearHistory;
+    }
+    // required_signatures - computed: false, optional: true, required: false
+    _requiredSignatures;
+    get requiredSignatures() {
+        return this.getBooleanAttribute('required_signatures');
+    }
+    set requiredSignatures(value) {
+        this._requiredSignatures = value;
+    }
+    resetRequiredSignatures() {
         this._requiredSignatures = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredSignaturesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredSignatures;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "update", {
-        get: function () {
-            return this.getBooleanAttribute('update');
-        },
-        set: function (value) {
-            this._update = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.resetUpdate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredSignaturesInput() {
+        return this._requiredSignatures;
+    }
+    // update - computed: false, optional: true, required: false
+    _update;
+    get update() {
+        return this.getBooleanAttribute('update');
+    }
+    set update(value) {
+        this._update = value;
+    }
+    resetUpdate() {
         this._update = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "updateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._update;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "branchNamePattern", {
-        get: function () {
-            return this._branchNamePattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putBranchNamePattern = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get updateInput() {
+        return this._update;
+    }
+    // branch_name_pattern - computed: false, optional: true, required: false
+    _branchNamePattern = new OrganizationRulesetRulesBranchNamePatternOutputReference(this, "branch_name_pattern");
+    get branchNamePattern() {
+        return this._branchNamePattern;
+    }
+    putBranchNamePattern(value) {
         this._branchNamePattern.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetBranchNamePattern = function () {
+    }
+    resetBranchNamePattern() {
         this._branchNamePattern.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "branchNamePatternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._branchNamePattern.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "commitAuthorEmailPattern", {
-        get: function () {
-            return this._commitAuthorEmailPattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putCommitAuthorEmailPattern = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get branchNamePatternInput() {
+        return this._branchNamePattern.internalValue;
+    }
+    // commit_author_email_pattern - computed: false, optional: true, required: false
+    _commitAuthorEmailPattern = new OrganizationRulesetRulesCommitAuthorEmailPatternOutputReference(this, "commit_author_email_pattern");
+    get commitAuthorEmailPattern() {
+        return this._commitAuthorEmailPattern;
+    }
+    putCommitAuthorEmailPattern(value) {
         this._commitAuthorEmailPattern.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetCommitAuthorEmailPattern = function () {
+    }
+    resetCommitAuthorEmailPattern() {
         this._commitAuthorEmailPattern.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "commitAuthorEmailPatternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._commitAuthorEmailPattern.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "commitMessagePattern", {
-        get: function () {
-            return this._commitMessagePattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putCommitMessagePattern = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commitAuthorEmailPatternInput() {
+        return this._commitAuthorEmailPattern.internalValue;
+    }
+    // commit_message_pattern - computed: false, optional: true, required: false
+    _commitMessagePattern = new OrganizationRulesetRulesCommitMessagePatternOutputReference(this, "commit_message_pattern");
+    get commitMessagePattern() {
+        return this._commitMessagePattern;
+    }
+    putCommitMessagePattern(value) {
         this._commitMessagePattern.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetCommitMessagePattern = function () {
+    }
+    resetCommitMessagePattern() {
         this._commitMessagePattern.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "commitMessagePatternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._commitMessagePattern.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "committerEmailPattern", {
-        get: function () {
-            return this._committerEmailPattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putCommitterEmailPattern = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commitMessagePatternInput() {
+        return this._commitMessagePattern.internalValue;
+    }
+    // committer_email_pattern - computed: false, optional: true, required: false
+    _committerEmailPattern = new OrganizationRulesetRulesCommitterEmailPatternOutputReference(this, "committer_email_pattern");
+    get committerEmailPattern() {
+        return this._committerEmailPattern;
+    }
+    putCommitterEmailPattern(value) {
         this._committerEmailPattern.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetCommitterEmailPattern = function () {
+    }
+    resetCommitterEmailPattern() {
         this._committerEmailPattern.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "committerEmailPatternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._committerEmailPattern.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "copilotCodeReview", {
-        get: function () {
-            return this._copilotCodeReview;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putCopilotCodeReview = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get committerEmailPatternInput() {
+        return this._committerEmailPattern.internalValue;
+    }
+    // copilot_code_review - computed: false, optional: true, required: false
+    _copilotCodeReview = new OrganizationRulesetRulesCopilotCodeReviewOutputReference(this, "copilot_code_review");
+    get copilotCodeReview() {
+        return this._copilotCodeReview;
+    }
+    putCopilotCodeReview(value) {
         this._copilotCodeReview.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetCopilotCodeReview = function () {
+    }
+    resetCopilotCodeReview() {
         this._copilotCodeReview.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "copilotCodeReviewInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._copilotCodeReview.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "fileExtensionRestriction", {
-        get: function () {
-            return this._fileExtensionRestriction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putFileExtensionRestriction = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get copilotCodeReviewInput() {
+        return this._copilotCodeReview.internalValue;
+    }
+    // file_extension_restriction - computed: false, optional: true, required: false
+    _fileExtensionRestriction = new OrganizationRulesetRulesFileExtensionRestrictionOutputReference(this, "file_extension_restriction");
+    get fileExtensionRestriction() {
+        return this._fileExtensionRestriction;
+    }
+    putFileExtensionRestriction(value) {
         this._fileExtensionRestriction.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetFileExtensionRestriction = function () {
+    }
+    resetFileExtensionRestriction() {
         this._fileExtensionRestriction.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "fileExtensionRestrictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fileExtensionRestriction.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "filePathRestriction", {
-        get: function () {
-            return this._filePathRestriction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putFilePathRestriction = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileExtensionRestrictionInput() {
+        return this._fileExtensionRestriction.internalValue;
+    }
+    // file_path_restriction - computed: false, optional: true, required: false
+    _filePathRestriction = new OrganizationRulesetRulesFilePathRestrictionOutputReference(this, "file_path_restriction");
+    get filePathRestriction() {
+        return this._filePathRestriction;
+    }
+    putFilePathRestriction(value) {
         this._filePathRestriction.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetFilePathRestriction = function () {
+    }
+    resetFilePathRestriction() {
         this._filePathRestriction.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "filePathRestrictionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filePathRestriction.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "maxFilePathLength", {
-        get: function () {
-            return this._maxFilePathLength;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putMaxFilePathLength = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filePathRestrictionInput() {
+        return this._filePathRestriction.internalValue;
+    }
+    // max_file_path_length - computed: false, optional: true, required: false
+    _maxFilePathLength = new OrganizationRulesetRulesMaxFilePathLengthOutputReference(this, "max_file_path_length");
+    get maxFilePathLength() {
+        return this._maxFilePathLength;
+    }
+    putMaxFilePathLength(value) {
         this._maxFilePathLength.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetMaxFilePathLength = function () {
+    }
+    resetMaxFilePathLength() {
         this._maxFilePathLength.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "maxFilePathLengthInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxFilePathLength.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "maxFileSize", {
-        get: function () {
-            return this._maxFileSize;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putMaxFileSize = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxFilePathLengthInput() {
+        return this._maxFilePathLength.internalValue;
+    }
+    // max_file_size - computed: false, optional: true, required: false
+    _maxFileSize = new OrganizationRulesetRulesMaxFileSizeOutputReference(this, "max_file_size");
+    get maxFileSize() {
+        return this._maxFileSize;
+    }
+    putMaxFileSize(value) {
         this._maxFileSize.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetMaxFileSize = function () {
+    }
+    resetMaxFileSize() {
         this._maxFileSize.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "maxFileSizeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxFileSize.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "pullRequest", {
-        get: function () {
-            return this._pullRequest;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putPullRequest = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxFileSizeInput() {
+        return this._maxFileSize.internalValue;
+    }
+    // pull_request - computed: false, optional: true, required: false
+    _pullRequest = new OrganizationRulesetRulesPullRequestOutputReference(this, "pull_request");
+    get pullRequest() {
+        return this._pullRequest;
+    }
+    putPullRequest(value) {
         this._pullRequest.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetPullRequest = function () {
+    }
+    resetPullRequest() {
         this._pullRequest.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "pullRequestInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pullRequest.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredCodeScanning", {
-        get: function () {
-            return this._requiredCodeScanning;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putRequiredCodeScanning = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pullRequestInput() {
+        return this._pullRequest.internalValue;
+    }
+    // required_code_scanning - computed: false, optional: true, required: false
+    _requiredCodeScanning = new OrganizationRulesetRulesRequiredCodeScanningOutputReference(this, "required_code_scanning");
+    get requiredCodeScanning() {
+        return this._requiredCodeScanning;
+    }
+    putRequiredCodeScanning(value) {
         this._requiredCodeScanning.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetRequiredCodeScanning = function () {
+    }
+    resetRequiredCodeScanning() {
         this._requiredCodeScanning.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredCodeScanningInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredCodeScanning.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredStatusChecks", {
-        get: function () {
-            return this._requiredStatusChecks;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putRequiredStatusChecks = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredCodeScanningInput() {
+        return this._requiredCodeScanning.internalValue;
+    }
+    // required_status_checks - computed: false, optional: true, required: false
+    _requiredStatusChecks = new OrganizationRulesetRulesRequiredStatusChecksOutputReference(this, "required_status_checks");
+    get requiredStatusChecks() {
+        return this._requiredStatusChecks;
+    }
+    putRequiredStatusChecks(value) {
         this._requiredStatusChecks.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetRequiredStatusChecks = function () {
+    }
+    resetRequiredStatusChecks() {
         this._requiredStatusChecks.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredStatusChecksInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredStatusChecks.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredWorkflows", {
-        get: function () {
-            return this._requiredWorkflows;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putRequiredWorkflows = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredStatusChecksInput() {
+        return this._requiredStatusChecks.internalValue;
+    }
+    // required_workflows - computed: false, optional: true, required: false
+    _requiredWorkflows = new OrganizationRulesetRulesRequiredWorkflowsOutputReference(this, "required_workflows");
+    get requiredWorkflows() {
+        return this._requiredWorkflows;
+    }
+    putRequiredWorkflows(value) {
         this._requiredWorkflows.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetRequiredWorkflows = function () {
+    }
+    resetRequiredWorkflows() {
         this._requiredWorkflows.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "requiredWorkflowsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requiredWorkflows.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "tagNamePattern", {
-        get: function () {
-            return this._tagNamePattern;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRulesetRulesOutputReference.prototype.putTagNamePattern = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredWorkflowsInput() {
+        return this._requiredWorkflows.internalValue;
+    }
+    // tag_name_pattern - computed: false, optional: true, required: false
+    _tagNamePattern = new OrganizationRulesetRulesTagNamePatternOutputReference(this, "tag_name_pattern");
+    get tagNamePattern() {
+        return this._tagNamePattern;
+    }
+    putTagNamePattern(value) {
         this._tagNamePattern.internalValue = value;
-    };
-    OrganizationRulesetRulesOutputReference.prototype.resetTagNamePattern = function () {
+    }
+    resetTagNamePattern() {
         this._tagNamePattern.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRulesetRulesOutputReference.prototype, "tagNamePatternInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tagNamePattern.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OrganizationRulesetRulesOutputReference;
-}(cdktf.ComplexObject));
-exports.OrganizationRulesetRulesOutputReference = OrganizationRulesetRulesOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get tagNamePatternInput() {
+        return this._tagNamePattern.internalValue;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_ruleset github_organization_ruleset}
 */
-var OrganizationRuleset = /** @class */ (function (_super) {
-    __extends(OrganizationRuleset, _super);
+export class OrganizationRuleset extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_organization_ruleset";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a OrganizationRuleset resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the OrganizationRuleset to import
+    * @param importFromId The id of the existing OrganizationRuleset that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_ruleset#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the OrganizationRuleset to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_ruleset", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -4920,8 +3966,8 @@ var OrganizationRuleset = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options OrganizationRulesetConfig
     */
-    function OrganizationRuleset(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_organization_ruleset',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -4934,198 +3980,127 @@ var OrganizationRuleset = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // bypass_actors - computed: false, optional: true, required: false
-        _this._bypassActors = new OrganizationRulesetBypassActorsList(_this, "bypass_actors", false);
-        // conditions - computed: false, optional: true, required: false
-        _this._conditions = new OrganizationRulesetConditionsOutputReference(_this, "conditions");
-        // rules - computed: false, optional: false, required: true
-        _this._rules = new OrganizationRulesetRulesOutputReference(_this, "rules");
-        _this._enforcement = config.enforcement;
-        _this._id = config.id;
-        _this._name = config.name;
-        _this._target = config.target;
-        _this._bypassActors.internalValue = config.bypassActors;
-        _this._conditions.internalValue = config.conditions;
-        _this._rules.internalValue = config.rules;
-        return _this;
+        });
+        this._enforcement = config.enforcement;
+        this._id = config.id;
+        this._name = config.name;
+        this._target = config.target;
+        this._bypassActors.internalValue = config.bypassActors;
+        this._conditions.internalValue = config.conditions;
+        this._rules.internalValue = config.rules;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a OrganizationRuleset resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the OrganizationRuleset to import
-    * @param importFromId The id of the existing OrganizationRuleset that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_ruleset#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the OrganizationRuleset to import is found
-    */
-    OrganizationRuleset.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_ruleset", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(OrganizationRuleset.prototype, "enforcement", {
-        get: function () {
-            return this.getStringAttribute('enforcement');
-        },
-        set: function (value) {
-            this._enforcement = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "enforcementInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enforcement;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "etag", {
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRuleset.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // enforcement - computed: false, optional: false, required: true
+    _enforcement;
+    get enforcement() {
+        return this.getStringAttribute('enforcement');
+    }
+    set enforcement(value) {
+        this._enforcement = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enforcementInput() {
+        return this._enforcement;
+    }
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(OrganizationRuleset.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "nodeId", {
-        // node_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('node_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "rulesetId", {
-        // ruleset_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('ruleset_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "target", {
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        set: function (value) {
-            this._target = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "targetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "bypassActors", {
-        get: function () {
-            return this._bypassActors;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRuleset.prototype.putBypassActors = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // node_id - computed: true, optional: false, required: false
+    get nodeId() {
+        return this.getStringAttribute('node_id');
+    }
+    // ruleset_id - computed: true, optional: false, required: false
+    get rulesetId() {
+        return this.getNumberAttribute('ruleset_id');
+    }
+    // target - computed: false, optional: false, required: true
+    _target;
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    set target(value) {
+        this._target = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetInput() {
+        return this._target;
+    }
+    // bypass_actors - computed: false, optional: true, required: false
+    _bypassActors = new OrganizationRulesetBypassActorsList(this, "bypass_actors", false);
+    get bypassActors() {
+        return this._bypassActors;
+    }
+    putBypassActors(value) {
         this._bypassActors.internalValue = value;
-    };
-    OrganizationRuleset.prototype.resetBypassActors = function () {
+    }
+    resetBypassActors() {
         this._bypassActors.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRuleset.prototype, "bypassActorsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bypassActors.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "conditions", {
-        get: function () {
-            return this._conditions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRuleset.prototype.putConditions = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bypassActorsInput() {
+        return this._bypassActors.internalValue;
+    }
+    // conditions - computed: false, optional: true, required: false
+    _conditions = new OrganizationRulesetConditionsOutputReference(this, "conditions");
+    get conditions() {
+        return this._conditions;
+    }
+    putConditions(value) {
         this._conditions.internalValue = value;
-    };
-    OrganizationRuleset.prototype.resetConditions = function () {
+    }
+    resetConditions() {
         this._conditions.internalValue = undefined;
-    };
-    Object.defineProperty(OrganizationRuleset.prototype, "conditionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._conditions.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRuleset.prototype, "rules", {
-        get: function () {
-            return this._rules;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRuleset.prototype.putRules = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get conditionsInput() {
+        return this._conditions.internalValue;
+    }
+    // rules - computed: false, optional: false, required: true
+    _rules = new OrganizationRulesetRulesOutputReference(this, "rules");
+    get rules() {
+        return this._rules;
+    }
+    putRules(value) {
         this._rules.internalValue = value;
-    };
-    Object.defineProperty(OrganizationRuleset.prototype, "rulesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rules.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get rulesInput() {
+        return this._rules.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    OrganizationRuleset.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             enforcement: cdktf.stringToTerraform(this._enforcement),
             id: cdktf.stringToTerraform(this._id),
@@ -5135,9 +4110,9 @@ var OrganizationRuleset = /** @class */ (function (_super) {
             conditions: organizationRulesetConditionsToTerraform(this._conditions.internalValue),
             rules: organizationRulesetRulesToTerraform(this._rules.internalValue),
         };
-    };
-    OrganizationRuleset.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             enforcement: {
                 value: cdktf.stringToHclTerraform(this._enforcement),
                 isBlock: false,
@@ -5182,15 +4157,6 @@ var OrganizationRuleset = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    OrganizationRuleset.tfResourceType = "github_organization_ruleset";
-    return OrganizationRuleset;
-}(cdktf.TerraformResource));
-exports.OrganizationRuleset = OrganizationRuleset;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

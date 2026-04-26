@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_project
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrganizationProject = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_project github_organization_project}
 */
-var OrganizationProject = /** @class */ (function (_super) {
-    __extends(OrganizationProject, _super);
+export class OrganizationProject extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_organization_project";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a OrganizationProject resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the OrganizationProject to import
+    * @param importFromId The id of the existing OrganizationProject that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_project#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the OrganizationProject to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_project", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var OrganizationProject = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options OrganizationProjectConfig
     */
-    function OrganizationProject(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_organization_project',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,113 +46,76 @@ var OrganizationProject = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._body = config.body;
-        _this._id = config.id;
-        _this._name = config.name;
-        return _this;
+        });
+        this._body = config.body;
+        this._id = config.id;
+        this._name = config.name;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a OrganizationProject resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the OrganizationProject to import
-    * @param importFromId The id of the existing OrganizationProject that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_project#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the OrganizationProject to import is found
-    */
-    OrganizationProject.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_project", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(OrganizationProject.prototype, "body", {
-        get: function () {
-            return this.getStringAttribute('body');
-        },
-        set: function (value) {
-            this._body = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationProject.prototype.resetBody = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // body - computed: false, optional: true, required: false
+    _body;
+    get body() {
+        return this.getStringAttribute('body');
+    }
+    set body(value) {
+        this._body = value;
+    }
+    resetBody() {
         this._body = undefined;
-    };
-    Object.defineProperty(OrganizationProject.prototype, "bodyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._body;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProject.prototype, "etag", {
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProject.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationProject.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bodyInput() {
+        return this._body;
+    }
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(OrganizationProject.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProject.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProject.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationProject.prototype, "url", {
-        // url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // url - computed: true, optional: false, required: false
+    get url() {
+        return this.getStringAttribute('url');
+    }
     // =========
     // SYNTHESIS
     // =========
-    OrganizationProject.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             body: cdktf.stringToTerraform(this._body),
             id: cdktf.stringToTerraform(this._id),
             name: cdktf.stringToTerraform(this._name),
         };
-    };
-    OrganizationProject.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             body: {
                 value: cdktf.stringToHclTerraform(this._body),
                 isBlock: false,
@@ -175,15 +136,6 @@ var OrganizationProject = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    OrganizationProject.tfResourceType = "github_organization_project";
-    return OrganizationProject;
-}(cdktf.TerraformResource));
-exports.OrganizationProject = OrganizationProject;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

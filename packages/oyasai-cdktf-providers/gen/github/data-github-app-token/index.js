@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/app_token
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataGithubAppToken = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/app_token github_app_token}
 */
-var DataGithubAppToken = /** @class */ (function (_super) {
-    __extends(DataGithubAppToken, _super);
+export class DataGithubAppToken extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_app_token";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataGithubAppToken resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataGithubAppToken to import
+    * @param importFromId The id of the existing DataGithubAppToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/app_token#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataGithubAppToken to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_app_token", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataGithubAppToken = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataGithubAppTokenConfig
     */
-    function DataGithubAppToken(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_app_token',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,122 +46,83 @@ var DataGithubAppToken = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._appId = config.appId;
-        _this._id = config.id;
-        _this._installationId = config.installationId;
-        _this._pemFile = config.pemFile;
-        return _this;
+        });
+        this._appId = config.appId;
+        this._id = config.id;
+        this._installationId = config.installationId;
+        this._pemFile = config.pemFile;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataGithubAppToken resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataGithubAppToken to import
-    * @param importFromId The id of the existing DataGithubAppToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/app_token#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataGithubAppToken to import is found
-    */
-    DataGithubAppToken.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_app_token", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataGithubAppToken.prototype, "appId", {
-        get: function () {
-            return this.getStringAttribute('app_id');
-        },
-        set: function (value) {
-            this._appId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubAppToken.prototype, "appIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._appId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubAppToken.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubAppToken.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // app_id - computed: false, optional: false, required: true
+    _appId;
+    get appId() {
+        return this.getStringAttribute('app_id');
+    }
+    set appId(value) {
+        this._appId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get appIdInput() {
+        return this._appId;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataGithubAppToken.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubAppToken.prototype, "installationId", {
-        get: function () {
-            return this.getStringAttribute('installation_id');
-        },
-        set: function (value) {
-            this._installationId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubAppToken.prototype, "installationIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._installationId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubAppToken.prototype, "pemFile", {
-        get: function () {
-            return this.getStringAttribute('pem_file');
-        },
-        set: function (value) {
-            this._pemFile = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubAppToken.prototype, "pemFileInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pemFile;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubAppToken.prototype, "token", {
-        // token - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('token');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // installation_id - computed: false, optional: false, required: true
+    _installationId;
+    get installationId() {
+        return this.getStringAttribute('installation_id');
+    }
+    set installationId(value) {
+        this._installationId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get installationIdInput() {
+        return this._installationId;
+    }
+    // pem_file - computed: false, optional: false, required: true
+    _pemFile;
+    get pemFile() {
+        return this.getStringAttribute('pem_file');
+    }
+    set pemFile(value) {
+        this._pemFile = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pemFileInput() {
+        return this._pemFile;
+    }
+    // token - computed: true, optional: false, required: false
+    get token() {
+        return this.getStringAttribute('token');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataGithubAppToken.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             app_id: cdktf.stringToTerraform(this._appId),
             id: cdktf.stringToTerraform(this._id),
             installation_id: cdktf.stringToTerraform(this._installationId),
             pem_file: cdktf.stringToTerraform(this._pemFile),
         };
-    };
-    DataGithubAppToken.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             app_id: {
                 value: cdktf.stringToHclTerraform(this._appId),
                 isBlock: false,
@@ -190,15 +149,6 @@ var DataGithubAppToken = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataGithubAppToken.tfResourceType = "github_app_token";
-    return DataGithubAppToken;
-}(cdktf.TerraformDataSource));
-exports.DataGithubAppToken = DataGithubAppToken;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

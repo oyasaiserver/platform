@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_setting
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZoneSetting = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_setting cloudflare_zone_setting}
 */
-var ZoneSetting = /** @class */ (function (_super) {
-    __extends(ZoneSetting, _super);
+export class ZoneSetting extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zone_setting";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZoneSetting resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZoneSetting to import
+    * @param importFromId The id of the existing ZoneSetting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_setting#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZoneSetting to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone_setting", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ZoneSetting = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZoneSettingConfig
     */
-    function ZoneSetting(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zone_setting',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,152 +46,98 @@ var ZoneSetting = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._enabled = config.enabled;
-        _this._settingId = config.settingId;
-        _this._value = config.value;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._enabled = config.enabled;
+        this._settingId = config.settingId;
+        this._value = config.value;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZoneSetting resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZoneSetting to import
-    * @param importFromId The id of the existing ZoneSetting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zone_setting#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZoneSetting to import is found
-    */
-    ZoneSetting.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zone_setting", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZoneSetting.prototype, "editable", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // editable - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('editable');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneSetting.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneSetting.prototype.resetEnabled = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // editable - computed: true, optional: false, required: false
+    get editable() {
+        return this.getBooleanAttribute('editable');
+    }
+    // enabled - computed: true, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(ZoneSetting.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneSetting.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneSetting.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneSetting.prototype, "settingId", {
-        get: function () {
-            return this.getStringAttribute('setting_id');
-        },
-        set: function (value) {
-            this._settingId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneSetting.prototype, "settingIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._settingId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneSetting.prototype, "timeRemaining", {
-        // time_remaining - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('time_remaining');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneSetting.prototype, "value", {
-        get: function () {
-            return this.getAnyMapAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneSetting.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZoneSetting.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZoneSetting.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // setting_id - computed: false, optional: false, required: true
+    _settingId;
+    get settingId() {
+        return this.getStringAttribute('setting_id');
+    }
+    set settingId(value) {
+        this._settingId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get settingIdInput() {
+        return this._settingId;
+    }
+    // time_remaining - computed: true, optional: false, required: false
+    get timeRemaining() {
+        return this.getNumberAttribute('time_remaining');
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getAnyMapAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(ZoneSetting.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZoneSetting.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             enabled: cdktf.booleanToTerraform(this._enabled),
             setting_id: cdktf.stringToTerraform(this._settingId),
             value: cdktf.hashMapper(cdktf.anyToTerraform)(this._value),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    ZoneSetting.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             enabled: {
                 value: cdktf.booleanToHclTerraform(this._enabled),
                 isBlock: false,
@@ -220,15 +164,6 @@ var ZoneSetting = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZoneSetting.tfResourceType = "cloudflare_zone_setting";
-    return ZoneSetting;
-}(cdktf.TerraformResource));
-exports.ZoneSetting = ZoneSetting;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

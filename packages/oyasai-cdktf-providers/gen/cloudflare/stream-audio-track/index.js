@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream_audio_track
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.StreamAudioTrack = exports.StreamAudioTrackAudioList = exports.StreamAudioTrackAudioOutputReference = void 0;
-exports.streamAudioTrackAudioToTerraform = streamAudioTrackAudioToTerraform;
-exports.streamAudioTrackAudioToHclTerraform = streamAudioTrackAudioToHclTerraform;
-var cdktf = require("cdktf");
-function streamAudioTrackAudioToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function streamAudioTrackAudioToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,109 +10,100 @@ function streamAudioTrackAudioToTerraform(struct) {
     }
     return {};
 }
-function streamAudioTrackAudioToHclTerraform(struct) {
+export function streamAudioTrackAudioToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var StreamAudioTrackAudioOutputReference = /** @class */ (function (_super) {
-    __extends(StreamAudioTrackAudioOutputReference, _super);
+export class StreamAudioTrackAudioOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function StreamAudioTrackAudioOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(StreamAudioTrackAudioOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrackAudioOutputReference.prototype, "default", {
-        // default - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('default');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrackAudioOutputReference.prototype, "label", {
-        // label - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrackAudioOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrackAudioOutputReference.prototype, "uid", {
-        // uid - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uid');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return StreamAudioTrackAudioOutputReference;
-}(cdktf.ComplexObject));
-exports.StreamAudioTrackAudioOutputReference = StreamAudioTrackAudioOutputReference;
-var StreamAudioTrackAudioList = /** @class */ (function (_super) {
-    __extends(StreamAudioTrackAudioList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // default - computed: true, optional: false, required: false
+    get default() {
+        return this.getBooleanAttribute('default');
+    }
+    // label - computed: true, optional: false, required: false
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // uid - computed: true, optional: false, required: false
+    get uid() {
+        return this.getStringAttribute('uid');
+    }
+}
+export class StreamAudioTrackAudioList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function StreamAudioTrackAudioList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    StreamAudioTrackAudioList.prototype.get = function (index) {
+    get(index) {
         return new StreamAudioTrackAudioOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return StreamAudioTrackAudioList;
-}(cdktf.ComplexList));
-exports.StreamAudioTrackAudioList = StreamAudioTrackAudioList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream_audio_track cloudflare_stream_audio_track}
 */
-var StreamAudioTrack = /** @class */ (function (_super) {
-    __extends(StreamAudioTrack, _super);
+export class StreamAudioTrack extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_stream_audio_track";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a StreamAudioTrack resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the StreamAudioTrack to import
+    * @param importFromId The id of the existing StreamAudioTrack that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream_audio_track#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the StreamAudioTrack to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_stream_audio_track", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -143,8 +114,8 @@ var StreamAudioTrack = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options StreamAudioTrackConfig
     */
-    function StreamAudioTrack(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_stream_audio_track',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -157,158 +128,105 @@ var StreamAudioTrack = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // audio - computed: true, optional: false, required: false
-        _this._audio = new StreamAudioTrackAudioList(_this, "audio", false);
-        _this._accountId = config.accountId;
-        _this._audioIdentifier = config.audioIdentifier;
-        _this._default = config.default;
-        _this._identifier = config.identifier;
-        _this._label = config.label;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._audioIdentifier = config.audioIdentifier;
+        this._default = config.default;
+        this._identifier = config.identifier;
+        this._label = config.label;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a StreamAudioTrack resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the StreamAudioTrack to import
-    * @param importFromId The id of the existing StreamAudioTrack that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/stream_audio_track#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the StreamAudioTrack to import is found
-    */
-    StreamAudioTrack.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_stream_audio_track", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(StreamAudioTrack.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamAudioTrack.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(StreamAudioTrack.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrack.prototype, "audio", {
-        get: function () {
-            return this._audio;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrack.prototype, "audioIdentifier", {
-        get: function () {
-            return this.getStringAttribute('audio_identifier');
-        },
-        set: function (value) {
-            this._audioIdentifier = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamAudioTrack.prototype.resetAudioIdentifier = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // audio - computed: true, optional: false, required: false
+    _audio = new StreamAudioTrackAudioList(this, "audio", false);
+    get audio() {
+        return this._audio;
+    }
+    // audio_identifier - computed: false, optional: true, required: false
+    _audioIdentifier;
+    get audioIdentifier() {
+        return this.getStringAttribute('audio_identifier');
+    }
+    set audioIdentifier(value) {
+        this._audioIdentifier = value;
+    }
+    resetAudioIdentifier() {
         this._audioIdentifier = undefined;
-    };
-    Object.defineProperty(StreamAudioTrack.prototype, "audioIdentifierInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._audioIdentifier;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrack.prototype, "default", {
-        get: function () {
-            return this.getBooleanAttribute('default');
-        },
-        set: function (value) {
-            this._default = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamAudioTrack.prototype.resetDefault = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get audioIdentifierInput() {
+        return this._audioIdentifier;
+    }
+    // default - computed: true, optional: true, required: false
+    _default;
+    get default() {
+        return this.getBooleanAttribute('default');
+    }
+    set default(value) {
+        this._default = value;
+    }
+    resetDefault() {
         this._default = undefined;
-    };
-    Object.defineProperty(StreamAudioTrack.prototype, "defaultInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._default;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrack.prototype, "identifier", {
-        get: function () {
-            return this.getStringAttribute('identifier');
-        },
-        set: function (value) {
-            this._identifier = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrack.prototype, "identifierInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identifier;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrack.prototype, "label", {
-        get: function () {
-            return this.getStringAttribute('label');
-        },
-        set: function (value) {
-            this._label = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    StreamAudioTrack.prototype.resetLabel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultInput() {
+        return this._default;
+    }
+    // identifier - computed: false, optional: false, required: true
+    _identifier;
+    get identifier() {
+        return this.getStringAttribute('identifier');
+    }
+    set identifier(value) {
+        this._identifier = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identifierInput() {
+        return this._identifier;
+    }
+    // label - computed: false, optional: true, required: false
+    _label;
+    get label() {
+        return this.getStringAttribute('label');
+    }
+    set label(value) {
+        this._label = value;
+    }
+    resetLabel() {
         this._label = undefined;
-    };
-    Object.defineProperty(StreamAudioTrack.prototype, "labelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._label;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrack.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(StreamAudioTrack.prototype, "uid", {
-        // uid - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uid');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get labelInput() {
+        return this._label;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // uid - computed: true, optional: false, required: false
+    get uid() {
+        return this.getStringAttribute('uid');
+    }
     // =========
     // SYNTHESIS
     // =========
-    StreamAudioTrack.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             audio_identifier: cdktf.stringToTerraform(this._audioIdentifier),
@@ -316,9 +234,9 @@ var StreamAudioTrack = /** @class */ (function (_super) {
             identifier: cdktf.stringToTerraform(this._identifier),
             label: cdktf.stringToTerraform(this._label),
         };
-    };
-    StreamAudioTrack.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -351,15 +269,6 @@ var StreamAudioTrack = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    StreamAudioTrack.tfResourceType = "cloudflare_stream_audio_track";
-    return StreamAudioTrack;
-}(cdktf.TerraformResource));
-exports.StreamAudioTrack = StreamAudioTrack;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

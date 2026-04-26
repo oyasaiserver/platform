@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_repository_access_level
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ActionsRepositoryAccessLevel = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_repository_access_level github_actions_repository_access_level}
 */
-var ActionsRepositoryAccessLevel = /** @class */ (function (_super) {
-    __extends(ActionsRepositoryAccessLevel, _super);
+export class ActionsRepositoryAccessLevel extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_actions_repository_access_level";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ActionsRepositoryAccessLevel resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ActionsRepositoryAccessLevel to import
+    * @param importFromId The id of the existing ActionsRepositoryAccessLevel that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_repository_access_level#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ActionsRepositoryAccessLevel to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_actions_repository_access_level", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ActionsRepositoryAccessLevel = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ActionsRepositoryAccessLevelConfig
     */
-    function ActionsRepositoryAccessLevel(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_actions_repository_access_level',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,94 +46,65 @@ var ActionsRepositoryAccessLevel = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accessLevel = config.accessLevel;
-        _this._id = config.id;
-        _this._repository = config.repository;
-        return _this;
+        });
+        this._accessLevel = config.accessLevel;
+        this._id = config.id;
+        this._repository = config.repository;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ActionsRepositoryAccessLevel resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ActionsRepositoryAccessLevel to import
-    * @param importFromId The id of the existing ActionsRepositoryAccessLevel that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/actions_repository_access_level#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ActionsRepositoryAccessLevel to import is found
-    */
-    ActionsRepositoryAccessLevel.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_actions_repository_access_level", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ActionsRepositoryAccessLevel.prototype, "accessLevel", {
-        get: function () {
-            return this.getStringAttribute('access_level');
-        },
-        set: function (value) {
-            this._accessLevel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsRepositoryAccessLevel.prototype, "accessLevelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessLevel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsRepositoryAccessLevel.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ActionsRepositoryAccessLevel.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // access_level - computed: false, optional: false, required: true
+    _accessLevel;
+    get accessLevel() {
+        return this.getStringAttribute('access_level');
+    }
+    set accessLevel(value) {
+        this._accessLevel = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessLevelInput() {
+        return this._accessLevel;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(ActionsRepositoryAccessLevel.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsRepositoryAccessLevel.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ActionsRepositoryAccessLevel.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ActionsRepositoryAccessLevel.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             access_level: cdktf.stringToTerraform(this._accessLevel),
             id: cdktf.stringToTerraform(this._id),
             repository: cdktf.stringToTerraform(this._repository),
         };
-    };
-    ActionsRepositoryAccessLevel.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             access_level: {
                 value: cdktf.stringToHclTerraform(this._accessLevel),
                 isBlock: false,
@@ -156,15 +125,6 @@ var ActionsRepositoryAccessLevel = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ActionsRepositoryAccessLevel.tfResourceType = "github_actions_repository_access_level";
-    return ActionsRepositoryAccessLevel;
-}(cdktf.TerraformResource));
-exports.ActionsRepositoryAccessLevel = ActionsRepositoryAccessLevel;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

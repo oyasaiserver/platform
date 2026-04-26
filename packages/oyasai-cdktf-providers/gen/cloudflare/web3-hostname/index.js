@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/web3_hostname
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Web3Hostname = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/web3_hostname cloudflare_web3_hostname}
 */
-var Web3Hostname = /** @class */ (function (_super) {
-    __extends(Web3Hostname, _super);
+export class Web3Hostname extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_web3_hostname";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Web3Hostname resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Web3Hostname to import
+    * @param importFromId The id of the existing Web3Hostname that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/web3_hostname#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Web3Hostname to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_web3_hostname", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var Web3Hostname = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options Web3HostnameConfig
     */
-    function Web3Hostname(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_web3_hostname',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,165 +46,105 @@ var Web3Hostname = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._description = config.description;
-        _this._dnslink = config.dnslink;
-        _this._name = config.name;
-        _this._target = config.target;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._description = config.description;
+        this._dnslink = config.dnslink;
+        this._name = config.name;
+        this._target = config.target;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Web3Hostname resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Web3Hostname to import
-    * @param importFromId The id of the existing Web3Hostname that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/web3_hostname#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Web3Hostname to import is found
-    */
-    Web3Hostname.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_web3_hostname", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Web3Hostname.prototype, "createdOn", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Web3Hostname.prototype.resetDescription = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(Web3Hostname.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "dnslink", {
-        get: function () {
-            return this.getStringAttribute('dnslink');
-        },
-        set: function (value) {
-            this._dnslink = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Web3Hostname.prototype.resetDnslink = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // dnslink - computed: false, optional: true, required: false
+    _dnslink;
+    get dnslink() {
+        return this.getStringAttribute('dnslink');
+    }
+    set dnslink(value) {
+        this._dnslink = value;
+    }
+    resetDnslink() {
         this._dnslink = undefined;
-    };
-    Object.defineProperty(Web3Hostname.prototype, "dnslinkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._dnslink;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "target", {
-        get: function () {
-            return this.getStringAttribute('target');
-        },
-        set: function (value) {
-            this._target = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "targetInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._target;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Web3Hostname.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Web3Hostname.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dnslinkInput() {
+        return this._dnslink;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // target - computed: false, optional: false, required: true
+    _target;
+    get target() {
+        return this.getStringAttribute('target');
+    }
+    set target(value) {
+        this._target = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetInput() {
+        return this._target;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(Web3Hostname.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Web3Hostname.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             description: cdktf.stringToTerraform(this._description),
             dnslink: cdktf.stringToTerraform(this._dnslink),
@@ -214,9 +152,9 @@ var Web3Hostname = /** @class */ (function (_super) {
             target: cdktf.stringToTerraform(this._target),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    Web3Hostname.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             description: {
                 value: cdktf.stringToHclTerraform(this._description),
                 isBlock: false,
@@ -249,15 +187,6 @@ var Web3Hostname = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Web3Hostname.tfResourceType = "cloudflare_web3_hostname";
-    return Web3Hostname;
-}(cdktf.TerraformResource));
-exports.Web3Hostname = Web3Hostname;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

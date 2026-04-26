@@ -1,37 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_certificate_policy
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CertManagerCertificatePolicy = exports.CertManagerCertificatePolicyValidityOutputReference = exports.CertManagerCertificatePolicySubjectList = exports.CertManagerCertificatePolicySubjectOutputReference = exports.CertManagerCertificatePolicySansList = exports.CertManagerCertificatePolicySansOutputReference = exports.CertManagerCertificatePolicyKeyUsagesOutputReference = exports.CertManagerCertificatePolicyExtendedKeyUsagesOutputReference = exports.CertManagerCertificatePolicyAlgorithmsOutputReference = void 0;
-exports.certManagerCertificatePolicyAlgorithmsToTerraform = certManagerCertificatePolicyAlgorithmsToTerraform;
-exports.certManagerCertificatePolicyAlgorithmsToHclTerraform = certManagerCertificatePolicyAlgorithmsToHclTerraform;
-exports.certManagerCertificatePolicyExtendedKeyUsagesToTerraform = certManagerCertificatePolicyExtendedKeyUsagesToTerraform;
-exports.certManagerCertificatePolicyExtendedKeyUsagesToHclTerraform = certManagerCertificatePolicyExtendedKeyUsagesToHclTerraform;
-exports.certManagerCertificatePolicyKeyUsagesToTerraform = certManagerCertificatePolicyKeyUsagesToTerraform;
-exports.certManagerCertificatePolicyKeyUsagesToHclTerraform = certManagerCertificatePolicyKeyUsagesToHclTerraform;
-exports.certManagerCertificatePolicySansToTerraform = certManagerCertificatePolicySansToTerraform;
-exports.certManagerCertificatePolicySansToHclTerraform = certManagerCertificatePolicySansToHclTerraform;
-exports.certManagerCertificatePolicySubjectToTerraform = certManagerCertificatePolicySubjectToTerraform;
-exports.certManagerCertificatePolicySubjectToHclTerraform = certManagerCertificatePolicySubjectToHclTerraform;
-exports.certManagerCertificatePolicyValidityToTerraform = certManagerCertificatePolicyValidityToTerraform;
-exports.certManagerCertificatePolicyValidityToHclTerraform = certManagerCertificatePolicyValidityToHclTerraform;
-var cdktf = require("cdktf");
-function certManagerCertificatePolicyAlgorithmsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function certManagerCertificatePolicyAlgorithmsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -43,14 +13,14 @@ function certManagerCertificatePolicyAlgorithmsToTerraform(struct) {
         signature: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.signature),
     };
 }
-function certManagerCertificatePolicyAlgorithmsToHclTerraform(struct) {
+export function certManagerCertificatePolicyAlgorithmsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         key_algorithm: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.keyAlgorithm),
             isBlock: false,
@@ -65,100 +35,78 @@ function certManagerCertificatePolicyAlgorithmsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CertManagerCertificatePolicyAlgorithmsOutputReference = /** @class */ (function (_super) {
-    __extends(CertManagerCertificatePolicyAlgorithmsOutputReference, _super);
+export class CertManagerCertificatePolicyAlgorithmsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CertManagerCertificatePolicyAlgorithmsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CertManagerCertificatePolicyAlgorithmsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._keyAlgorithm !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.keyAlgorithm = this._keyAlgorithm;
-            }
-            if (this._signature !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.signature = this._signature;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._keyAlgorithm = undefined;
-                this._signature = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._keyAlgorithm = value.keyAlgorithm;
-                this._signature = value.signature;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyAlgorithmsOutputReference.prototype, "keyAlgorithm", {
-        get: function () {
-            return this.getListAttribute('key_algorithm');
-        },
-        set: function (value) {
-            this._keyAlgorithm = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyAlgorithmsOutputReference.prototype, "keyAlgorithmInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyAlgorithm;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyAlgorithmsOutputReference.prototype, "signature", {
-        get: function () {
-            return this.getListAttribute('signature');
-        },
-        set: function (value) {
-            this._signature = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyAlgorithmsOutputReference.prototype, "signatureInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._signature;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CertManagerCertificatePolicyAlgorithmsOutputReference;
-}(cdktf.ComplexObject));
-exports.CertManagerCertificatePolicyAlgorithmsOutputReference = CertManagerCertificatePolicyAlgorithmsOutputReference;
-function certManagerCertificatePolicyExtendedKeyUsagesToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._keyAlgorithm !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.keyAlgorithm = this._keyAlgorithm;
+        }
+        if (this._signature !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.signature = this._signature;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._keyAlgorithm = undefined;
+            this._signature = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._keyAlgorithm = value.keyAlgorithm;
+            this._signature = value.signature;
+        }
+    }
+    // key_algorithm - computed: false, optional: false, required: true
+    _keyAlgorithm;
+    get keyAlgorithm() {
+        return this.getListAttribute('key_algorithm');
+    }
+    set keyAlgorithm(value) {
+        this._keyAlgorithm = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyAlgorithmInput() {
+        return this._keyAlgorithm;
+    }
+    // signature - computed: false, optional: false, required: true
+    _signature;
+    get signature() {
+        return this.getListAttribute('signature');
+    }
+    set signature(value) {
+        this._signature = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get signatureInput() {
+        return this._signature;
+    }
+}
+export function certManagerCertificatePolicyExtendedKeyUsagesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -171,14 +119,14 @@ function certManagerCertificatePolicyExtendedKeyUsagesToTerraform(struct) {
         required: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.required),
     };
 }
-function certManagerCertificatePolicyExtendedKeyUsagesToHclTerraform(struct) {
+export function certManagerCertificatePolicyExtendedKeyUsagesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         allowed: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.allowed),
             isBlock: false,
@@ -199,133 +147,105 @@ function certManagerCertificatePolicyExtendedKeyUsagesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CertManagerCertificatePolicyExtendedKeyUsagesOutputReference = /** @class */ (function (_super) {
-    __extends(CertManagerCertificatePolicyExtendedKeyUsagesOutputReference, _super);
+export class CertManagerCertificatePolicyExtendedKeyUsagesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CertManagerCertificatePolicyExtendedKeyUsagesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._allowed !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowed = this._allowed;
-            }
-            if (this._denied !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.denied = this._denied;
-            }
-            if (this._required !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.required = this._required;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._allowed = undefined;
-                this._denied = undefined;
-                this._required = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._allowed = value.allowed;
-                this._denied = value.denied;
-                this._required = value.required;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype, "allowed", {
-        get: function () {
-            return this.getListAttribute('allowed');
-        },
-        set: function (value) {
-            this._allowed = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype.resetAllowed = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._allowed !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowed = this._allowed;
+        }
+        if (this._denied !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.denied = this._denied;
+        }
+        if (this._required !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.required = this._required;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._allowed = undefined;
+            this._denied = undefined;
+            this._required = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._allowed = value.allowed;
+            this._denied = value.denied;
+            this._required = value.required;
+        }
+    }
+    // allowed - computed: false, optional: true, required: false
+    _allowed;
+    get allowed() {
+        return this.getListAttribute('allowed');
+    }
+    set allowed(value) {
+        this._allowed = value;
+    }
+    resetAllowed() {
         this._allowed = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype, "allowedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype, "denied", {
-        get: function () {
-            return this.getListAttribute('denied');
-        },
-        set: function (value) {
-            this._denied = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype.resetDenied = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedInput() {
+        return this._allowed;
+    }
+    // denied - computed: false, optional: true, required: false
+    _denied;
+    get denied() {
+        return this.getListAttribute('denied');
+    }
+    set denied(value) {
+        this._denied = value;
+    }
+    resetDenied() {
         this._denied = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype, "deniedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._denied;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype, "required", {
-        get: function () {
-            return this.getListAttribute('required');
-        },
-        set: function (value) {
-            this._required = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype.resetRequired = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deniedInput() {
+        return this._denied;
+    }
+    // required - computed: false, optional: true, required: false
+    _required;
+    get required() {
+        return this.getListAttribute('required');
+    }
+    set required(value) {
+        this._required = value;
+    }
+    resetRequired() {
         this._required = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicyExtendedKeyUsagesOutputReference.prototype, "requiredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._required;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CertManagerCertificatePolicyExtendedKeyUsagesOutputReference;
-}(cdktf.ComplexObject));
-exports.CertManagerCertificatePolicyExtendedKeyUsagesOutputReference = CertManagerCertificatePolicyExtendedKeyUsagesOutputReference;
-function certManagerCertificatePolicyKeyUsagesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredInput() {
+        return this._required;
+    }
+}
+export function certManagerCertificatePolicyKeyUsagesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -338,14 +258,14 @@ function certManagerCertificatePolicyKeyUsagesToTerraform(struct) {
         required: cdktf.listMapper(cdktf.stringToTerraform, false)(struct.required),
     };
 }
-function certManagerCertificatePolicyKeyUsagesToHclTerraform(struct) {
+export function certManagerCertificatePolicyKeyUsagesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         allowed: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.allowed),
             isBlock: false,
@@ -366,133 +286,105 @@ function certManagerCertificatePolicyKeyUsagesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CertManagerCertificatePolicyKeyUsagesOutputReference = /** @class */ (function (_super) {
-    __extends(CertManagerCertificatePolicyKeyUsagesOutputReference, _super);
+export class CertManagerCertificatePolicyKeyUsagesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CertManagerCertificatePolicyKeyUsagesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CertManagerCertificatePolicyKeyUsagesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._allowed !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowed = this._allowed;
-            }
-            if (this._denied !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.denied = this._denied;
-            }
-            if (this._required !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.required = this._required;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._allowed = undefined;
-                this._denied = undefined;
-                this._required = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._allowed = value.allowed;
-                this._denied = value.denied;
-                this._required = value.required;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyKeyUsagesOutputReference.prototype, "allowed", {
-        get: function () {
-            return this.getListAttribute('allowed');
-        },
-        set: function (value) {
-            this._allowed = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicyKeyUsagesOutputReference.prototype.resetAllowed = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._allowed !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowed = this._allowed;
+        }
+        if (this._denied !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.denied = this._denied;
+        }
+        if (this._required !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.required = this._required;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._allowed = undefined;
+            this._denied = undefined;
+            this._required = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._allowed = value.allowed;
+            this._denied = value.denied;
+            this._required = value.required;
+        }
+    }
+    // allowed - computed: false, optional: true, required: false
+    _allowed;
+    get allowed() {
+        return this.getListAttribute('allowed');
+    }
+    set allowed(value) {
+        this._allowed = value;
+    }
+    resetAllowed() {
         this._allowed = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicyKeyUsagesOutputReference.prototype, "allowedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyKeyUsagesOutputReference.prototype, "denied", {
-        get: function () {
-            return this.getListAttribute('denied');
-        },
-        set: function (value) {
-            this._denied = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicyKeyUsagesOutputReference.prototype.resetDenied = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedInput() {
+        return this._allowed;
+    }
+    // denied - computed: false, optional: true, required: false
+    _denied;
+    get denied() {
+        return this.getListAttribute('denied');
+    }
+    set denied(value) {
+        this._denied = value;
+    }
+    resetDenied() {
         this._denied = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicyKeyUsagesOutputReference.prototype, "deniedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._denied;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyKeyUsagesOutputReference.prototype, "required", {
-        get: function () {
-            return this.getListAttribute('required');
-        },
-        set: function (value) {
-            this._required = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicyKeyUsagesOutputReference.prototype.resetRequired = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deniedInput() {
+        return this._denied;
+    }
+    // required - computed: false, optional: true, required: false
+    _required;
+    get required() {
+        return this.getListAttribute('required');
+    }
+    set required(value) {
+        this._required = value;
+    }
+    resetRequired() {
         this._required = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicyKeyUsagesOutputReference.prototype, "requiredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._required;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CertManagerCertificatePolicyKeyUsagesOutputReference;
-}(cdktf.ComplexObject));
-exports.CertManagerCertificatePolicyKeyUsagesOutputReference = CertManagerCertificatePolicyKeyUsagesOutputReference;
-function certManagerCertificatePolicySansToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredInput() {
+        return this._required;
+    }
+}
+export function certManagerCertificatePolicySansToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -506,14 +398,14 @@ function certManagerCertificatePolicySansToTerraform(struct) {
         type: cdktf.stringToTerraform(struct.type),
     };
 }
-function certManagerCertificatePolicySansToHclTerraform(struct) {
+export function certManagerCertificatePolicySansToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         allowed: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.allowed),
             isBlock: false,
@@ -540,182 +432,148 @@ function certManagerCertificatePolicySansToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CertManagerCertificatePolicySansOutputReference = /** @class */ (function (_super) {
-    __extends(CertManagerCertificatePolicySansOutputReference, _super);
+export class CertManagerCertificatePolicySansOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function CertManagerCertificatePolicySansOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(CertManagerCertificatePolicySansOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._allowed !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowed = this._allowed;
-            }
-            if (this._denied !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.denied = this._denied;
-            }
-            if (this._required !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.required = this._required;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._allowed = undefined;
-                this._denied = undefined;
-                this._required = undefined;
-                this._type = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._allowed = value.allowed;
-                this._denied = value.denied;
-                this._required = value.required;
-                this._type = value.type;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySansOutputReference.prototype, "allowed", {
-        get: function () {
-            return this.getListAttribute('allowed');
-        },
-        set: function (value) {
-            this._allowed = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicySansOutputReference.prototype.resetAllowed = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._allowed !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowed = this._allowed;
+        }
+        if (this._denied !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.denied = this._denied;
+        }
+        if (this._required !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.required = this._required;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._allowed = undefined;
+            this._denied = undefined;
+            this._required = undefined;
+            this._type = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._allowed = value.allowed;
+            this._denied = value.denied;
+            this._required = value.required;
+            this._type = value.type;
+        }
+    }
+    // allowed - computed: false, optional: true, required: false
+    _allowed;
+    get allowed() {
+        return this.getListAttribute('allowed');
+    }
+    set allowed(value) {
+        this._allowed = value;
+    }
+    resetAllowed() {
         this._allowed = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicySansOutputReference.prototype, "allowedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySansOutputReference.prototype, "denied", {
-        get: function () {
-            return this.getListAttribute('denied');
-        },
-        set: function (value) {
-            this._denied = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicySansOutputReference.prototype.resetDenied = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedInput() {
+        return this._allowed;
+    }
+    // denied - computed: false, optional: true, required: false
+    _denied;
+    get denied() {
+        return this.getListAttribute('denied');
+    }
+    set denied(value) {
+        this._denied = value;
+    }
+    resetDenied() {
         this._denied = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicySansOutputReference.prototype, "deniedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._denied;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySansOutputReference.prototype, "required", {
-        get: function () {
-            return this.getListAttribute('required');
-        },
-        set: function (value) {
-            this._required = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicySansOutputReference.prototype.resetRequired = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deniedInput() {
+        return this._denied;
+    }
+    // required - computed: false, optional: true, required: false
+    _required;
+    get required() {
+        return this.getListAttribute('required');
+    }
+    set required(value) {
+        this._required = value;
+    }
+    resetRequired() {
         this._required = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicySansOutputReference.prototype, "requiredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._required;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySansOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySansOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CertManagerCertificatePolicySansOutputReference;
-}(cdktf.ComplexObject));
-exports.CertManagerCertificatePolicySansOutputReference = CertManagerCertificatePolicySansOutputReference;
-var CertManagerCertificatePolicySansList = /** @class */ (function (_super) {
-    __extends(CertManagerCertificatePolicySansList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredInput() {
+        return this._required;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+}
+export class CertManagerCertificatePolicySansList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function CertManagerCertificatePolicySansList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    CertManagerCertificatePolicySansList.prototype.get = function (index) {
+    get(index) {
         return new CertManagerCertificatePolicySansOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return CertManagerCertificatePolicySansList;
-}(cdktf.ComplexList));
-exports.CertManagerCertificatePolicySansList = CertManagerCertificatePolicySansList;
-function certManagerCertificatePolicySubjectToTerraform(struct) {
+    }
+}
+export function certManagerCertificatePolicySubjectToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -729,14 +587,14 @@ function certManagerCertificatePolicySubjectToTerraform(struct) {
         type: cdktf.stringToTerraform(struct.type),
     };
 }
-function certManagerCertificatePolicySubjectToHclTerraform(struct) {
+export function certManagerCertificatePolicySubjectToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         allowed: {
             value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct.allowed),
             isBlock: false,
@@ -763,182 +621,148 @@ function certManagerCertificatePolicySubjectToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CertManagerCertificatePolicySubjectOutputReference = /** @class */ (function (_super) {
-    __extends(CertManagerCertificatePolicySubjectOutputReference, _super);
+export class CertManagerCertificatePolicySubjectOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function CertManagerCertificatePolicySubjectOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(CertManagerCertificatePolicySubjectOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._allowed !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.allowed = this._allowed;
-            }
-            if (this._denied !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.denied = this._denied;
-            }
-            if (this._required !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.required = this._required;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._allowed = undefined;
-                this._denied = undefined;
-                this._required = undefined;
-                this._type = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._allowed = value.allowed;
-                this._denied = value.denied;
-                this._required = value.required;
-                this._type = value.type;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySubjectOutputReference.prototype, "allowed", {
-        get: function () {
-            return this.getListAttribute('allowed');
-        },
-        set: function (value) {
-            this._allowed = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicySubjectOutputReference.prototype.resetAllowed = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._allowed !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.allowed = this._allowed;
+        }
+        if (this._denied !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.denied = this._denied;
+        }
+        if (this._required !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.required = this._required;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._allowed = undefined;
+            this._denied = undefined;
+            this._required = undefined;
+            this._type = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._allowed = value.allowed;
+            this._denied = value.denied;
+            this._required = value.required;
+            this._type = value.type;
+        }
+    }
+    // allowed - computed: false, optional: true, required: false
+    _allowed;
+    get allowed() {
+        return this.getListAttribute('allowed');
+    }
+    set allowed(value) {
+        this._allowed = value;
+    }
+    resetAllowed() {
         this._allowed = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicySubjectOutputReference.prototype, "allowedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowed;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySubjectOutputReference.prototype, "denied", {
-        get: function () {
-            return this.getListAttribute('denied');
-        },
-        set: function (value) {
-            this._denied = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicySubjectOutputReference.prototype.resetDenied = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedInput() {
+        return this._allowed;
+    }
+    // denied - computed: false, optional: true, required: false
+    _denied;
+    get denied() {
+        return this.getListAttribute('denied');
+    }
+    set denied(value) {
+        this._denied = value;
+    }
+    resetDenied() {
         this._denied = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicySubjectOutputReference.prototype, "deniedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._denied;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySubjectOutputReference.prototype, "required", {
-        get: function () {
-            return this.getListAttribute('required');
-        },
-        set: function (value) {
-            this._required = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicySubjectOutputReference.prototype.resetRequired = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deniedInput() {
+        return this._denied;
+    }
+    // required - computed: false, optional: true, required: false
+    _required;
+    get required() {
+        return this.getListAttribute('required');
+    }
+    set required(value) {
+        this._required = value;
+    }
+    resetRequired() {
         this._required = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicySubjectOutputReference.prototype, "requiredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._required;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySubjectOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicySubjectOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CertManagerCertificatePolicySubjectOutputReference;
-}(cdktf.ComplexObject));
-exports.CertManagerCertificatePolicySubjectOutputReference = CertManagerCertificatePolicySubjectOutputReference;
-var CertManagerCertificatePolicySubjectList = /** @class */ (function (_super) {
-    __extends(CertManagerCertificatePolicySubjectList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get requiredInput() {
+        return this._required;
+    }
+    // type - computed: false, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+}
+export class CertManagerCertificatePolicySubjectList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function CertManagerCertificatePolicySubjectList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    CertManagerCertificatePolicySubjectList.prototype.get = function (index) {
+    get(index) {
         return new CertManagerCertificatePolicySubjectOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return CertManagerCertificatePolicySubjectList;
-}(cdktf.ComplexList));
-exports.CertManagerCertificatePolicySubjectList = CertManagerCertificatePolicySubjectList;
-function certManagerCertificatePolicyValidityToTerraform(struct) {
+    }
+}
+export function certManagerCertificatePolicyValidityToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -949,14 +773,14 @@ function certManagerCertificatePolicyValidityToTerraform(struct) {
         max: cdktf.stringToTerraform(struct.max),
     };
 }
-function certManagerCertificatePolicyValidityToHclTerraform(struct) {
+export function certManagerCertificatePolicyValidityToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         max: {
             value: cdktf.stringToHclTerraform(struct.max),
             isBlock: false,
@@ -965,83 +789,83 @@ function certManagerCertificatePolicyValidityToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var CertManagerCertificatePolicyValidityOutputReference = /** @class */ (function (_super) {
-    __extends(CertManagerCertificatePolicyValidityOutputReference, _super);
+export class CertManagerCertificatePolicyValidityOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function CertManagerCertificatePolicyValidityOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(CertManagerCertificatePolicyValidityOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._max !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.max = this._max;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._max = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._max = value.max;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicyValidityOutputReference.prototype, "max", {
-        get: function () {
-            return this.getStringAttribute('max');
-        },
-        set: function (value) {
-            this._max = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicyValidityOutputReference.prototype.resetMax = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._max !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.max = this._max;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._max = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._max = value.max;
+        }
+    }
+    // max - computed: false, optional: true, required: false
+    _max;
+    get max() {
+        return this.getStringAttribute('max');
+    }
+    set max(value) {
+        this._max = value;
+    }
+    resetMax() {
         this._max = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicyValidityOutputReference.prototype, "maxInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._max;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return CertManagerCertificatePolicyValidityOutputReference;
-}(cdktf.ComplexObject));
-exports.CertManagerCertificatePolicyValidityOutputReference = CertManagerCertificatePolicyValidityOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxInput() {
+        return this._max;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_certificate_policy infisical_cert_manager_certificate_policy}
 */
-var CertManagerCertificatePolicy = /** @class */ (function (_super) {
-    __extends(CertManagerCertificatePolicy, _super);
+export class CertManagerCertificatePolicy extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_cert_manager_certificate_policy";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a CertManagerCertificatePolicy resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the CertManagerCertificatePolicy to import
+    * @param importFromId The id of the existing CertManagerCertificatePolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_certificate_policy#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the CertManagerCertificatePolicy to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_certificate_policy", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1052,8 +876,8 @@ var CertManagerCertificatePolicy = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options CertManagerCertificatePolicyConfig
     */
-    function CertManagerCertificatePolicy(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_cert_manager_certificate_policy',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -1066,235 +890,154 @@ var CertManagerCertificatePolicy = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // algorithms - computed: false, optional: false, required: true
-        _this._algorithms = new CertManagerCertificatePolicyAlgorithmsOutputReference(_this, "algorithms");
-        // extended_key_usages - computed: false, optional: true, required: false
-        _this._extendedKeyUsages = new CertManagerCertificatePolicyExtendedKeyUsagesOutputReference(_this, "extended_key_usages");
-        // key_usages - computed: false, optional: true, required: false
-        _this._keyUsages = new CertManagerCertificatePolicyKeyUsagesOutputReference(_this, "key_usages");
-        // sans - computed: false, optional: true, required: false
-        _this._sans = new CertManagerCertificatePolicySansList(_this, "sans", false);
-        // subject - computed: false, optional: true, required: false
-        _this._subject = new CertManagerCertificatePolicySubjectList(_this, "subject", false);
-        // validity - computed: false, optional: true, required: false
-        _this._validity = new CertManagerCertificatePolicyValidityOutputReference(_this, "validity");
-        _this._description = config.description;
-        _this._name = config.name;
-        _this._projectSlug = config.projectSlug;
-        _this._algorithms.internalValue = config.algorithms;
-        _this._extendedKeyUsages.internalValue = config.extendedKeyUsages;
-        _this._keyUsages.internalValue = config.keyUsages;
-        _this._sans.internalValue = config.sans;
-        _this._subject.internalValue = config.subject;
-        _this._validity.internalValue = config.validity;
-        return _this;
+        });
+        this._description = config.description;
+        this._name = config.name;
+        this._projectSlug = config.projectSlug;
+        this._algorithms.internalValue = config.algorithms;
+        this._extendedKeyUsages.internalValue = config.extendedKeyUsages;
+        this._keyUsages.internalValue = config.keyUsages;
+        this._sans.internalValue = config.sans;
+        this._subject.internalValue = config.subject;
+        this._validity.internalValue = config.validity;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a CertManagerCertificatePolicy resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the CertManagerCertificatePolicy to import
-    * @param importFromId The id of the existing CertManagerCertificatePolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_certificate_policy#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the CertManagerCertificatePolicy to import is found
-    */
-    CertManagerCertificatePolicy.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_certificate_policy", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicy.prototype.resetDescription = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "algorithms", {
-        get: function () {
-            return this._algorithms;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicy.prototype.putAlgorithms = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // algorithms - computed: false, optional: false, required: true
+    _algorithms = new CertManagerCertificatePolicyAlgorithmsOutputReference(this, "algorithms");
+    get algorithms() {
+        return this._algorithms;
+    }
+    putAlgorithms(value) {
         this._algorithms.internalValue = value;
-    };
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "algorithmsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._algorithms.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "extendedKeyUsages", {
-        get: function () {
-            return this._extendedKeyUsages;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicy.prototype.putExtendedKeyUsages = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get algorithmsInput() {
+        return this._algorithms.internalValue;
+    }
+    // extended_key_usages - computed: false, optional: true, required: false
+    _extendedKeyUsages = new CertManagerCertificatePolicyExtendedKeyUsagesOutputReference(this, "extended_key_usages");
+    get extendedKeyUsages() {
+        return this._extendedKeyUsages;
+    }
+    putExtendedKeyUsages(value) {
         this._extendedKeyUsages.internalValue = value;
-    };
-    CertManagerCertificatePolicy.prototype.resetExtendedKeyUsages = function () {
+    }
+    resetExtendedKeyUsages() {
         this._extendedKeyUsages.internalValue = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "extendedKeyUsagesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._extendedKeyUsages.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "keyUsages", {
-        get: function () {
-            return this._keyUsages;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicy.prototype.putKeyUsages = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get extendedKeyUsagesInput() {
+        return this._extendedKeyUsages.internalValue;
+    }
+    // key_usages - computed: false, optional: true, required: false
+    _keyUsages = new CertManagerCertificatePolicyKeyUsagesOutputReference(this, "key_usages");
+    get keyUsages() {
+        return this._keyUsages;
+    }
+    putKeyUsages(value) {
         this._keyUsages.internalValue = value;
-    };
-    CertManagerCertificatePolicy.prototype.resetKeyUsages = function () {
+    }
+    resetKeyUsages() {
         this._keyUsages.internalValue = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "keyUsagesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyUsages.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "sans", {
-        get: function () {
-            return this._sans;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicy.prototype.putSans = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyUsagesInput() {
+        return this._keyUsages.internalValue;
+    }
+    // sans - computed: false, optional: true, required: false
+    _sans = new CertManagerCertificatePolicySansList(this, "sans", false);
+    get sans() {
+        return this._sans;
+    }
+    putSans(value) {
         this._sans.internalValue = value;
-    };
-    CertManagerCertificatePolicy.prototype.resetSans = function () {
+    }
+    resetSans() {
         this._sans.internalValue = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "sansInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sans.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "subject", {
-        get: function () {
-            return this._subject;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicy.prototype.putSubject = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sansInput() {
+        return this._sans.internalValue;
+    }
+    // subject - computed: false, optional: true, required: false
+    _subject = new CertManagerCertificatePolicySubjectList(this, "subject", false);
+    get subject() {
+        return this._subject;
+    }
+    putSubject(value) {
         this._subject.internalValue = value;
-    };
-    CertManagerCertificatePolicy.prototype.resetSubject = function () {
+    }
+    resetSubject() {
         this._subject.internalValue = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "subjectInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._subject.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "validity", {
-        get: function () {
-            return this._validity;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCertificatePolicy.prototype.putValidity = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get subjectInput() {
+        return this._subject.internalValue;
+    }
+    // validity - computed: false, optional: true, required: false
+    _validity = new CertManagerCertificatePolicyValidityOutputReference(this, "validity");
+    get validity() {
+        return this._validity;
+    }
+    putValidity(value) {
         this._validity.internalValue = value;
-    };
-    CertManagerCertificatePolicy.prototype.resetValidity = function () {
+    }
+    resetValidity() {
         this._validity.internalValue = undefined;
-    };
-    Object.defineProperty(CertManagerCertificatePolicy.prototype, "validityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._validity.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get validityInput() {
+        return this._validity.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    CertManagerCertificatePolicy.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             description: cdktf.stringToTerraform(this._description),
             name: cdktf.stringToTerraform(this._name),
@@ -1306,9 +1049,9 @@ var CertManagerCertificatePolicy = /** @class */ (function (_super) {
             subject: cdktf.listMapper(certManagerCertificatePolicySubjectToTerraform, true)(this._subject.internalValue),
             validity: certManagerCertificatePolicyValidityToTerraform(this._validity.internalValue),
         };
-    };
-    CertManagerCertificatePolicy.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             description: {
                 value: cdktf.stringToHclTerraform(this._description),
                 isBlock: false,
@@ -1365,15 +1108,6 @@ var CertManagerCertificatePolicy = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    CertManagerCertificatePolicy.tfResourceType = "infisical_cert_manager_certificate_policy";
-    return CertManagerCertificatePolicy;
-}(cdktf.TerraformResource));
-exports.CertManagerCertificatePolicy = CertManagerCertificatePolicy;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

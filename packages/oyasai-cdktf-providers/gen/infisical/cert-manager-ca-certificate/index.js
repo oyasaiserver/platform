@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_ca_certificate
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CertManagerCaCertificate = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_ca_certificate infisical_cert_manager_ca_certificate}
 */
-var CertManagerCaCertificate = /** @class */ (function (_super) {
-    __extends(CertManagerCaCertificate, _super);
+export class CertManagerCaCertificate extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_cert_manager_ca_certificate";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a CertManagerCaCertificate resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the CertManagerCaCertificate to import
+    * @param importFromId The id of the existing CertManagerCaCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_ca_certificate#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the CertManagerCaCertificate to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_ca_certificate", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var CertManagerCaCertificate = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options CertManagerCaCertificateConfig
     */
-    function CertManagerCaCertificate(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_cert_manager_ca_certificate',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -48,159 +46,102 @@ var CertManagerCaCertificate = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._caId = config.caId;
-        _this._maxPathLength = config.maxPathLength;
-        _this._notAfter = config.notAfter;
-        _this._notBefore = config.notBefore;
-        _this._parentCaId = config.parentCaId;
-        return _this;
+        });
+        this._caId = config.caId;
+        this._maxPathLength = config.maxPathLength;
+        this._notAfter = config.notAfter;
+        this._notBefore = config.notBefore;
+        this._parentCaId = config.parentCaId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a CertManagerCaCertificate resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the CertManagerCaCertificate to import
-    * @param importFromId The id of the existing CertManagerCaCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/cert_manager_ca_certificate#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the CertManagerCaCertificate to import is found
-    */
-    CertManagerCaCertificate.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_cert_manager_ca_certificate", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(CertManagerCaCertificate.prototype, "caId", {
-        get: function () {
-            return this.getStringAttribute('ca_id');
-        },
-        set: function (value) {
-            this._caId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "caIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._caId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "certificate", {
-        // certificate - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificate');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "certificateChain", {
-        // certificate_chain - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificate_chain');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "maxPathLength", {
-        get: function () {
-            return this.getNumberAttribute('max_path_length');
-        },
-        set: function (value) {
-            this._maxPathLength = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCaCertificate.prototype.resetMaxPathLength = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // ca_id - computed: false, optional: false, required: true
+    _caId;
+    get caId() {
+        return this.getStringAttribute('ca_id');
+    }
+    set caId(value) {
+        this._caId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get caIdInput() {
+        return this._caId;
+    }
+    // certificate - computed: true, optional: false, required: false
+    get certificate() {
+        return this.getStringAttribute('certificate');
+    }
+    // certificate_chain - computed: true, optional: false, required: false
+    get certificateChain() {
+        return this.getStringAttribute('certificate_chain');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // max_path_length - computed: true, optional: true, required: false
+    _maxPathLength;
+    get maxPathLength() {
+        return this.getNumberAttribute('max_path_length');
+    }
+    set maxPathLength(value) {
+        this._maxPathLength = value;
+    }
+    resetMaxPathLength() {
         this._maxPathLength = undefined;
-    };
-    Object.defineProperty(CertManagerCaCertificate.prototype, "maxPathLengthInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxPathLength;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "notAfter", {
-        get: function () {
-            return this.getStringAttribute('not_after');
-        },
-        set: function (value) {
-            this._notAfter = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "notAfterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._notAfter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "notBefore", {
-        get: function () {
-            return this.getStringAttribute('not_before');
-        },
-        set: function (value) {
-            this._notBefore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "notBeforeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._notBefore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "parentCaId", {
-        get: function () {
-            return this.getStringAttribute('parent_ca_id');
-        },
-        set: function (value) {
-            this._parentCaId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    CertManagerCaCertificate.prototype.resetParentCaId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxPathLengthInput() {
+        return this._maxPathLength;
+    }
+    // not_after - computed: false, optional: false, required: true
+    _notAfter;
+    get notAfter() {
+        return this.getStringAttribute('not_after');
+    }
+    set notAfter(value) {
+        this._notAfter = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get notAfterInput() {
+        return this._notAfter;
+    }
+    // not_before - computed: false, optional: false, required: true
+    _notBefore;
+    get notBefore() {
+        return this.getStringAttribute('not_before');
+    }
+    set notBefore(value) {
+        this._notBefore = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get notBeforeInput() {
+        return this._notBefore;
+    }
+    // parent_ca_id - computed: false, optional: true, required: false
+    _parentCaId;
+    get parentCaId() {
+        return this.getStringAttribute('parent_ca_id');
+    }
+    set parentCaId(value) {
+        this._parentCaId = value;
+    }
+    resetParentCaId() {
         this._parentCaId = undefined;
-    };
-    Object.defineProperty(CertManagerCaCertificate.prototype, "parentCaIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._parentCaId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CertManagerCaCertificate.prototype, "serialNumber", {
-        // serial_number - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('serial_number');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get parentCaIdInput() {
+        return this._parentCaId;
+    }
+    // serial_number - computed: true, optional: false, required: false
+    get serialNumber() {
+        return this.getStringAttribute('serial_number');
+    }
     // =========
     // SYNTHESIS
     // =========
-    CertManagerCaCertificate.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             ca_id: cdktf.stringToTerraform(this._caId),
             max_path_length: cdktf.numberToTerraform(this._maxPathLength),
@@ -208,9 +149,9 @@ var CertManagerCaCertificate = /** @class */ (function (_super) {
             not_before: cdktf.stringToTerraform(this._notBefore),
             parent_ca_id: cdktf.stringToTerraform(this._parentCaId),
         };
-    };
-    CertManagerCaCertificate.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             ca_id: {
                 value: cdktf.stringToHclTerraform(this._caId),
                 isBlock: false,
@@ -243,15 +184,6 @@ var CertManagerCaCertificate = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    CertManagerCaCertificate.tfResourceType = "infisical_cert_manager_ca_certificate";
-    return CertManagerCaCertificate;
-}(cdktf.TerraformResource));
-exports.CertManagerCaCertificate = CertManagerCaCertificate;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

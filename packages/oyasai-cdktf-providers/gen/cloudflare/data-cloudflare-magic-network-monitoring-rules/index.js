@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_network_monitoring_rules
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareMagicNetworkMonitoringRules = exports.DataCloudflareMagicNetworkMonitoringRulesResultList = exports.DataCloudflareMagicNetworkMonitoringRulesResultOutputReference = void 0;
-exports.dataCloudflareMagicNetworkMonitoringRulesResultToTerraform = dataCloudflareMagicNetworkMonitoringRulesResultToTerraform;
-exports.dataCloudflareMagicNetworkMonitoringRulesResultToHclTerraform = dataCloudflareMagicNetworkMonitoringRulesResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareMagicNetworkMonitoringRulesResultToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareMagicNetworkMonitoringRulesResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,165 +10,128 @@ function dataCloudflareMagicNetworkMonitoringRulesResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareMagicNetworkMonitoringRulesResultToHclTerraform(struct) {
+export function dataCloudflareMagicNetworkMonitoringRulesResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareMagicNetworkMonitoringRulesResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference, _super);
+export class DataCloudflareMagicNetworkMonitoringRulesResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareMagicNetworkMonitoringRulesResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "automaticAdvertisement", {
-        // automatic_advertisement - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('automatic_advertisement');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "bandwidthThreshold", {
-        // bandwidth_threshold - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('bandwidth_threshold');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "duration", {
-        // duration - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('duration');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "packetThreshold", {
-        // packet_threshold - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('packet_threshold');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "prefixMatch", {
-        // prefix_match - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('prefix_match');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "prefixes", {
-        // prefixes - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('prefixes');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "zscoreSensitivity", {
-        // zscore_sensitivity - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('zscore_sensitivity');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRulesResultOutputReference.prototype, "zscoreTarget", {
-        // zscore_target - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('zscore_target');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareMagicNetworkMonitoringRulesResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareMagicNetworkMonitoringRulesResultOutputReference = DataCloudflareMagicNetworkMonitoringRulesResultOutputReference;
-var DataCloudflareMagicNetworkMonitoringRulesResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareMagicNetworkMonitoringRulesResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // automatic_advertisement - computed: true, optional: false, required: false
+    get automaticAdvertisement() {
+        return this.getBooleanAttribute('automatic_advertisement');
+    }
+    // bandwidth_threshold - computed: true, optional: false, required: false
+    get bandwidthThreshold() {
+        return this.getNumberAttribute('bandwidth_threshold');
+    }
+    // duration - computed: true, optional: false, required: false
+    get duration() {
+        return this.getStringAttribute('duration');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // packet_threshold - computed: true, optional: false, required: false
+    get packetThreshold() {
+        return this.getNumberAttribute('packet_threshold');
+    }
+    // prefix_match - computed: true, optional: false, required: false
+    get prefixMatch() {
+        return this.getStringAttribute('prefix_match');
+    }
+    // prefixes - computed: true, optional: false, required: false
+    get prefixes() {
+        return this.getListAttribute('prefixes');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // zscore_sensitivity - computed: true, optional: false, required: false
+    get zscoreSensitivity() {
+        return this.getStringAttribute('zscore_sensitivity');
+    }
+    // zscore_target - computed: true, optional: false, required: false
+    get zscoreTarget() {
+        return this.getStringAttribute('zscore_target');
+    }
+}
+export class DataCloudflareMagicNetworkMonitoringRulesResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareMagicNetworkMonitoringRulesResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareMagicNetworkMonitoringRulesResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareMagicNetworkMonitoringRulesResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareMagicNetworkMonitoringRulesResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareMagicNetworkMonitoringRulesResultList = DataCloudflareMagicNetworkMonitoringRulesResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_network_monitoring_rules cloudflare_magic_network_monitoring_rules}
 */
-var DataCloudflareMagicNetworkMonitoringRules = /** @class */ (function (_super) {
-    __extends(DataCloudflareMagicNetworkMonitoringRules, _super);
+export class DataCloudflareMagicNetworkMonitoringRules extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_magic_network_monitoring_rules";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareMagicNetworkMonitoringRules resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareMagicNetworkMonitoringRules to import
+    * @param importFromId The id of the existing DataCloudflareMagicNetworkMonitoringRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_network_monitoring_rules#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareMagicNetworkMonitoringRules to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_network_monitoring_rules", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -199,9 +142,8 @@ var DataCloudflareMagicNetworkMonitoringRules = /** @class */ (function (_super)
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareMagicNetworkMonitoringRulesConfig = {}
     */
-    function DataCloudflareMagicNetworkMonitoringRules(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_magic_network_monitoring_rules',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -214,86 +156,59 @@ var DataCloudflareMagicNetworkMonitoringRules = /** @class */ (function (_super)
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareMagicNetworkMonitoringRulesResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._maxItems = config.maxItems;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._maxItems = config.maxItems;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareMagicNetworkMonitoringRules resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareMagicNetworkMonitoringRules to import
-    * @param importFromId The id of the existing DataCloudflareMagicNetworkMonitoringRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_network_monitoring_rules#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareMagicNetworkMonitoringRules to import is found
-    */
-    DataCloudflareMagicNetworkMonitoringRules.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_network_monitoring_rules", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRules.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareMagicNetworkMonitoringRules.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRules.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRules.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareMagicNetworkMonitoringRules.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRules.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMagicNetworkMonitoringRules.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareMagicNetworkMonitoringRulesResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareMagicNetworkMonitoringRules.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             max_items: cdktf.numberToTerraform(this._maxItems),
         };
-    };
-    DataCloudflareMagicNetworkMonitoringRules.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -308,15 +223,6 @@ var DataCloudflareMagicNetworkMonitoringRules = /** @class */ (function (_super)
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareMagicNetworkMonitoringRules.tfResourceType = "cloudflare_magic_network_monitoring_rules";
-    return DataCloudflareMagicNetworkMonitoringRules;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareMagicNetworkMonitoringRules = DataCloudflareMagicNetworkMonitoringRules;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

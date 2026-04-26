@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/email_routing_rules
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareEmailRoutingRules = exports.DataCloudflareEmailRoutingRulesResultList = exports.DataCloudflareEmailRoutingRulesResultOutputReference = exports.DataCloudflareEmailRoutingRulesResultMatchersList = exports.DataCloudflareEmailRoutingRulesResultMatchersOutputReference = exports.DataCloudflareEmailRoutingRulesResultActionsList = exports.DataCloudflareEmailRoutingRulesResultActionsOutputReference = void 0;
-exports.dataCloudflareEmailRoutingRulesResultActionsToTerraform = dataCloudflareEmailRoutingRulesResultActionsToTerraform;
-exports.dataCloudflareEmailRoutingRulesResultActionsToHclTerraform = dataCloudflareEmailRoutingRulesResultActionsToHclTerraform;
-exports.dataCloudflareEmailRoutingRulesResultMatchersToTerraform = dataCloudflareEmailRoutingRulesResultMatchersToTerraform;
-exports.dataCloudflareEmailRoutingRulesResultMatchersToHclTerraform = dataCloudflareEmailRoutingRulesResultMatchersToHclTerraform;
-exports.dataCloudflareEmailRoutingRulesResultToTerraform = dataCloudflareEmailRoutingRulesResultToTerraform;
-exports.dataCloudflareEmailRoutingRulesResultToHclTerraform = dataCloudflareEmailRoutingRulesResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareEmailRoutingRulesResultActionsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareEmailRoutingRulesResultActionsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -34,89 +10,72 @@ function dataCloudflareEmailRoutingRulesResultActionsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareEmailRoutingRulesResultActionsToHclTerraform(struct) {
+export function dataCloudflareEmailRoutingRulesResultActionsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareEmailRoutingRulesResultActionsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailRoutingRulesResultActionsOutputReference, _super);
+export class DataCloudflareEmailRoutingRulesResultActionsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareEmailRoutingRulesResultActionsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultActionsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultActionsOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultActionsOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareEmailRoutingRulesResultActionsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareEmailRoutingRulesResultActionsOutputReference = DataCloudflareEmailRoutingRulesResultActionsOutputReference;
-var DataCloudflareEmailRoutingRulesResultActionsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailRoutingRulesResultActionsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getListAttribute('value');
+    }
+}
+export class DataCloudflareEmailRoutingRulesResultActionsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareEmailRoutingRulesResultActionsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareEmailRoutingRulesResultActionsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareEmailRoutingRulesResultActionsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareEmailRoutingRulesResultActionsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareEmailRoutingRulesResultActionsList = DataCloudflareEmailRoutingRulesResultActionsList;
-function dataCloudflareEmailRoutingRulesResultMatchersToTerraform(struct) {
+    }
+}
+export function dataCloudflareEmailRoutingRulesResultMatchersToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -125,97 +84,76 @@ function dataCloudflareEmailRoutingRulesResultMatchersToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareEmailRoutingRulesResultMatchersToHclTerraform(struct) {
+export function dataCloudflareEmailRoutingRulesResultMatchersToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareEmailRoutingRulesResultMatchersOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailRoutingRulesResultMatchersOutputReference, _super);
+export class DataCloudflareEmailRoutingRulesResultMatchersOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareEmailRoutingRulesResultMatchersOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultMatchersOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultMatchersOutputReference.prototype, "field", {
-        // field - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('field');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultMatchersOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultMatchersOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareEmailRoutingRulesResultMatchersOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareEmailRoutingRulesResultMatchersOutputReference = DataCloudflareEmailRoutingRulesResultMatchersOutputReference;
-var DataCloudflareEmailRoutingRulesResultMatchersList = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailRoutingRulesResultMatchersList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // field - computed: true, optional: false, required: false
+    get field() {
+        return this.getStringAttribute('field');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export class DataCloudflareEmailRoutingRulesResultMatchersList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareEmailRoutingRulesResultMatchersList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareEmailRoutingRulesResultMatchersList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareEmailRoutingRulesResultMatchersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareEmailRoutingRulesResultMatchersList;
-}(cdktf.ComplexList));
-exports.DataCloudflareEmailRoutingRulesResultMatchersList = DataCloudflareEmailRoutingRulesResultMatchersList;
-function dataCloudflareEmailRoutingRulesResultToTerraform(struct) {
+    }
+}
+export function dataCloudflareEmailRoutingRulesResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -224,135 +162,114 @@ function dataCloudflareEmailRoutingRulesResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareEmailRoutingRulesResultToHclTerraform(struct) {
+export function dataCloudflareEmailRoutingRulesResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareEmailRoutingRulesResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailRoutingRulesResultOutputReference, _super);
+export class DataCloudflareEmailRoutingRulesResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareEmailRoutingRulesResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // actions - computed: true, optional: false, required: false
-        _this._actions = new DataCloudflareEmailRoutingRulesResultActionsList(_this, "actions", false);
-        // matchers - computed: true, optional: false, required: false
-        _this._matchers = new DataCloudflareEmailRoutingRulesResultMatchersList(_this, "matchers", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultOutputReference.prototype, "actions", {
-        get: function () {
-            return this._actions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultOutputReference.prototype, "enabled", {
-        // enabled - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultOutputReference.prototype, "matchers", {
-        get: function () {
-            return this._matchers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultOutputReference.prototype, "priority", {
-        // priority - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('priority');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRulesResultOutputReference.prototype, "tag", {
-        // tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareEmailRoutingRulesResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareEmailRoutingRulesResultOutputReference = DataCloudflareEmailRoutingRulesResultOutputReference;
-var DataCloudflareEmailRoutingRulesResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailRoutingRulesResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // actions - computed: true, optional: false, required: false
+    _actions = new DataCloudflareEmailRoutingRulesResultActionsList(this, "actions", false);
+    get actions() {
+        return this._actions;
+    }
+    // enabled - computed: true, optional: false, required: false
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // matchers - computed: true, optional: false, required: false
+    _matchers = new DataCloudflareEmailRoutingRulesResultMatchersList(this, "matchers", false);
+    get matchers() {
+        return this._matchers;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // priority - computed: true, optional: false, required: false
+    get priority() {
+        return this.getNumberAttribute('priority');
+    }
+    // tag - computed: true, optional: false, required: false
+    get tag() {
+        return this.getStringAttribute('tag');
+    }
+}
+export class DataCloudflareEmailRoutingRulesResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareEmailRoutingRulesResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareEmailRoutingRulesResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareEmailRoutingRulesResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareEmailRoutingRulesResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareEmailRoutingRulesResultList = DataCloudflareEmailRoutingRulesResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/email_routing_rules cloudflare_email_routing_rules}
 */
-var DataCloudflareEmailRoutingRules = /** @class */ (function (_super) {
-    __extends(DataCloudflareEmailRoutingRules, _super);
+export class DataCloudflareEmailRoutingRules extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_email_routing_rules";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareEmailRoutingRules resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareEmailRoutingRules to import
+    * @param importFromId The id of the existing DataCloudflareEmailRoutingRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/email_routing_rules#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareEmailRoutingRules to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_email_routing_rules", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -363,9 +280,8 @@ var DataCloudflareEmailRoutingRules = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareEmailRoutingRulesConfig = {}
     */
-    function DataCloudflareEmailRoutingRules(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_email_routing_rules',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -378,109 +294,76 @@ var DataCloudflareEmailRoutingRules = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareEmailRoutingRulesResultList(_this, "result", false);
-        _this._enabled = config.enabled;
-        _this._maxItems = config.maxItems;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._enabled = config.enabled;
+        this._maxItems = config.maxItems;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareEmailRoutingRules resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareEmailRoutingRules to import
-    * @param importFromId The id of the existing DataCloudflareEmailRoutingRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/email_routing_rules#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareEmailRoutingRules to import is found
-    */
-    DataCloudflareEmailRoutingRules.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_email_routing_rules", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareEmailRoutingRules.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailRoutingRules.prototype.resetEnabled = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // enabled - computed: false, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailRoutingRules.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRules.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailRoutingRules.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailRoutingRules.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRules.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareEmailRoutingRules.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareEmailRoutingRules.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareEmailRoutingRulesResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareEmailRoutingRules.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareEmailRoutingRules.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             enabled: cdktf.booleanToTerraform(this._enabled),
             max_items: cdktf.numberToTerraform(this._maxItems),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareEmailRoutingRules.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             enabled: {
                 value: cdktf.booleanToHclTerraform(this._enabled),
                 isBlock: false,
@@ -501,15 +384,6 @@ var DataCloudflareEmailRoutingRules = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareEmailRoutingRules.tfResourceType = "cloudflare_email_routing_rules";
-    return DataCloudflareEmailRoutingRules;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareEmailRoutingRules = DataCloudflareEmailRoutingRules;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

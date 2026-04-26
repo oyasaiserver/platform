@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_transit_connector
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MagicTransitConnector = exports.MagicTransitConnectorDeviceOutputReference = void 0;
-exports.magicTransitConnectorDeviceToTerraform = magicTransitConnectorDeviceToTerraform;
-exports.magicTransitConnectorDeviceToHclTerraform = magicTransitConnectorDeviceToHclTerraform;
-var cdktf = require("cdktf");
-function magicTransitConnectorDeviceToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function magicTransitConnectorDeviceToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -34,14 +14,14 @@ function magicTransitConnectorDeviceToTerraform(struct) {
         serial_number: cdktf.stringToTerraform(struct.serialNumber),
     };
 }
-function magicTransitConnectorDeviceToHclTerraform(struct) {
+export function magicTransitConnectorDeviceToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -62,137 +42,125 @@ function magicTransitConnectorDeviceToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var MagicTransitConnectorDeviceOutputReference = /** @class */ (function (_super) {
-    __extends(MagicTransitConnectorDeviceOutputReference, _super);
+export class MagicTransitConnectorDeviceOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function MagicTransitConnectorDeviceOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(MagicTransitConnectorDeviceOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._provisionLicense !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.provisionLicense = this._provisionLicense;
-            }
-            if (this._serialNumber !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.serialNumber = this._serialNumber;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-                this._provisionLicense = undefined;
-                this._serialNumber = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-                this._provisionLicense = value.provisionLicense;
-                this._serialNumber = value.serialNumber;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnectorDeviceOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicTransitConnectorDeviceOutputReference.prototype.resetId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._provisionLicense !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.provisionLicense = this._provisionLicense;
+        }
+        if (this._serialNumber !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.serialNumber = this._serialNumber;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+            this._provisionLicense = undefined;
+            this._serialNumber = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+            this._provisionLicense = value.provisionLicense;
+            this._serialNumber = value.serialNumber;
+        }
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(MagicTransitConnectorDeviceOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnectorDeviceOutputReference.prototype, "provisionLicense", {
-        get: function () {
-            return this.getBooleanAttribute('provision_license');
-        },
-        set: function (value) {
-            this._provisionLicense = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicTransitConnectorDeviceOutputReference.prototype.resetProvisionLicense = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // provision_license - computed: false, optional: true, required: false
+    _provisionLicense;
+    get provisionLicense() {
+        return this.getBooleanAttribute('provision_license');
+    }
+    set provisionLicense(value) {
+        this._provisionLicense = value;
+    }
+    resetProvisionLicense() {
         this._provisionLicense = undefined;
-    };
-    Object.defineProperty(MagicTransitConnectorDeviceOutputReference.prototype, "provisionLicenseInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._provisionLicense;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnectorDeviceOutputReference.prototype, "serialNumber", {
-        get: function () {
-            return this.getStringAttribute('serial_number');
-        },
-        set: function (value) {
-            this._serialNumber = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicTransitConnectorDeviceOutputReference.prototype.resetSerialNumber = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get provisionLicenseInput() {
+        return this._provisionLicense;
+    }
+    // serial_number - computed: true, optional: true, required: false
+    _serialNumber;
+    get serialNumber() {
+        return this.getStringAttribute('serial_number');
+    }
+    set serialNumber(value) {
+        this._serialNumber = value;
+    }
+    resetSerialNumber() {
         this._serialNumber = undefined;
-    };
-    Object.defineProperty(MagicTransitConnectorDeviceOutputReference.prototype, "serialNumberInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._serialNumber;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MagicTransitConnectorDeviceOutputReference;
-}(cdktf.ComplexObject));
-exports.MagicTransitConnectorDeviceOutputReference = MagicTransitConnectorDeviceOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get serialNumberInput() {
+        return this._serialNumber;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_transit_connector cloudflare_magic_transit_connector}
 */
-var MagicTransitConnector = /** @class */ (function (_super) {
-    __extends(MagicTransitConnector, _super);
+export class MagicTransitConnector extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_magic_transit_connector";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a MagicTransitConnector resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the MagicTransitConnector to import
+    * @param importFromId The id of the existing MagicTransitConnector that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_transit_connector#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the MagicTransitConnector to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_transit_connector", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -203,8 +171,8 @@ var MagicTransitConnector = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options MagicTransitConnectorConfig
     */
-    function MagicTransitConnector(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_magic_transit_connector',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -217,192 +185,129 @@ var MagicTransitConnector = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // device - computed: false, optional: false, required: true
-        _this._device = new MagicTransitConnectorDeviceOutputReference(_this, "device");
-        _this._accountId = config.accountId;
-        _this._activated = config.activated;
-        _this._device.internalValue = config.device;
-        _this._interruptWindowDurationHours = config.interruptWindowDurationHours;
-        _this._interruptWindowHourOfDay = config.interruptWindowHourOfDay;
-        _this._notes = config.notes;
-        _this._timezone = config.timezone;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._activated = config.activated;
+        this._device.internalValue = config.device;
+        this._interruptWindowDurationHours = config.interruptWindowDurationHours;
+        this._interruptWindowHourOfDay = config.interruptWindowHourOfDay;
+        this._notes = config.notes;
+        this._timezone = config.timezone;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a MagicTransitConnector resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the MagicTransitConnector to import
-    * @param importFromId The id of the existing MagicTransitConnector that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/magic_transit_connector#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the MagicTransitConnector to import is found
-    */
-    MagicTransitConnector.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_magic_transit_connector", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(MagicTransitConnector.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnector.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnector.prototype, "activated", {
-        get: function () {
-            return this.getBooleanAttribute('activated');
-        },
-        set: function (value) {
-            this._activated = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicTransitConnector.prototype.resetActivated = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: false, required: true
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // activated - computed: true, optional: true, required: false
+    _activated;
+    get activated() {
+        return this.getBooleanAttribute('activated');
+    }
+    set activated(value) {
+        this._activated = value;
+    }
+    resetActivated() {
         this._activated = undefined;
-    };
-    Object.defineProperty(MagicTransitConnector.prototype, "activatedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._activated;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnector.prototype, "device", {
-        get: function () {
-            return this._device;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicTransitConnector.prototype.putDevice = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get activatedInput() {
+        return this._activated;
+    }
+    // device - computed: false, optional: false, required: true
+    _device = new MagicTransitConnectorDeviceOutputReference(this, "device");
+    get device() {
+        return this._device;
+    }
+    putDevice(value) {
         this._device.internalValue = value;
-    };
-    Object.defineProperty(MagicTransitConnector.prototype, "deviceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._device.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnector.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnector.prototype, "interruptWindowDurationHours", {
-        get: function () {
-            return this.getNumberAttribute('interrupt_window_duration_hours');
-        },
-        set: function (value) {
-            this._interruptWindowDurationHours = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicTransitConnector.prototype.resetInterruptWindowDurationHours = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deviceInput() {
+        return this._device.internalValue;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // interrupt_window_duration_hours - computed: true, optional: true, required: false
+    _interruptWindowDurationHours;
+    get interruptWindowDurationHours() {
+        return this.getNumberAttribute('interrupt_window_duration_hours');
+    }
+    set interruptWindowDurationHours(value) {
+        this._interruptWindowDurationHours = value;
+    }
+    resetInterruptWindowDurationHours() {
         this._interruptWindowDurationHours = undefined;
-    };
-    Object.defineProperty(MagicTransitConnector.prototype, "interruptWindowDurationHoursInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._interruptWindowDurationHours;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnector.prototype, "interruptWindowHourOfDay", {
-        get: function () {
-            return this.getNumberAttribute('interrupt_window_hour_of_day');
-        },
-        set: function (value) {
-            this._interruptWindowHourOfDay = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicTransitConnector.prototype.resetInterruptWindowHourOfDay = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get interruptWindowDurationHoursInput() {
+        return this._interruptWindowDurationHours;
+    }
+    // interrupt_window_hour_of_day - computed: true, optional: true, required: false
+    _interruptWindowHourOfDay;
+    get interruptWindowHourOfDay() {
+        return this.getNumberAttribute('interrupt_window_hour_of_day');
+    }
+    set interruptWindowHourOfDay(value) {
+        this._interruptWindowHourOfDay = value;
+    }
+    resetInterruptWindowHourOfDay() {
         this._interruptWindowHourOfDay = undefined;
-    };
-    Object.defineProperty(MagicTransitConnector.prototype, "interruptWindowHourOfDayInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._interruptWindowHourOfDay;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnector.prototype, "licenseKey", {
-        // license_key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('license_key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnector.prototype, "notes", {
-        get: function () {
-            return this.getStringAttribute('notes');
-        },
-        set: function (value) {
-            this._notes = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicTransitConnector.prototype.resetNotes = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get interruptWindowHourOfDayInput() {
+        return this._interruptWindowHourOfDay;
+    }
+    // license_key - computed: true, optional: false, required: false
+    get licenseKey() {
+        return this.getStringAttribute('license_key');
+    }
+    // notes - computed: true, optional: true, required: false
+    _notes;
+    get notes() {
+        return this.getStringAttribute('notes');
+    }
+    set notes(value) {
+        this._notes = value;
+    }
+    resetNotes() {
         this._notes = undefined;
-    };
-    Object.defineProperty(MagicTransitConnector.prototype, "notesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._notes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MagicTransitConnector.prototype, "timezone", {
-        get: function () {
-            return this.getStringAttribute('timezone');
-        },
-        set: function (value) {
-            this._timezone = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    MagicTransitConnector.prototype.resetTimezone = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get notesInput() {
+        return this._notes;
+    }
+    // timezone - computed: true, optional: true, required: false
+    _timezone;
+    get timezone() {
+        return this.getStringAttribute('timezone');
+    }
+    set timezone(value) {
+        this._timezone = value;
+    }
+    resetTimezone() {
         this._timezone = undefined;
-    };
-    Object.defineProperty(MagicTransitConnector.prototype, "timezoneInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._timezone;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get timezoneInput() {
+        return this._timezone;
+    }
     // =========
     // SYNTHESIS
     // =========
-    MagicTransitConnector.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             activated: cdktf.booleanToTerraform(this._activated),
@@ -412,9 +317,9 @@ var MagicTransitConnector = /** @class */ (function (_super) {
             notes: cdktf.stringToTerraform(this._notes),
             timezone: cdktf.stringToTerraform(this._timezone),
         };
-    };
-    MagicTransitConnector.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -459,15 +364,6 @@ var MagicTransitConnector = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    MagicTransitConnector.tfResourceType = "cloudflare_magic_transit_connector";
-    return MagicTransitConnector;
-}(cdktf.TerraformResource));
-exports.MagicTransitConnector = MagicTransitConnector;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

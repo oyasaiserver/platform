@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/api_shield
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareApiShield = exports.DataCloudflareApiShieldAuthIdCharacteristicsList = exports.DataCloudflareApiShieldAuthIdCharacteristicsOutputReference = void 0;
-exports.dataCloudflareApiShieldAuthIdCharacteristicsToTerraform = dataCloudflareApiShieldAuthIdCharacteristicsToTerraform;
-exports.dataCloudflareApiShieldAuthIdCharacteristicsToHclTerraform = dataCloudflareApiShieldAuthIdCharacteristicsToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareApiShieldAuthIdCharacteristicsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareApiShieldAuthIdCharacteristicsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,93 +10,92 @@ function dataCloudflareApiShieldAuthIdCharacteristicsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareApiShieldAuthIdCharacteristicsToHclTerraform(struct) {
+export function dataCloudflareApiShieldAuthIdCharacteristicsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareApiShieldAuthIdCharacteristicsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareApiShieldAuthIdCharacteristicsOutputReference, _super);
+export class DataCloudflareApiShieldAuthIdCharacteristicsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareApiShieldAuthIdCharacteristicsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareApiShieldAuthIdCharacteristicsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareApiShieldAuthIdCharacteristicsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareApiShieldAuthIdCharacteristicsOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareApiShieldAuthIdCharacteristicsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareApiShieldAuthIdCharacteristicsOutputReference = DataCloudflareApiShieldAuthIdCharacteristicsOutputReference;
-var DataCloudflareApiShieldAuthIdCharacteristicsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareApiShieldAuthIdCharacteristicsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+}
+export class DataCloudflareApiShieldAuthIdCharacteristicsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareApiShieldAuthIdCharacteristicsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareApiShieldAuthIdCharacteristicsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareApiShieldAuthIdCharacteristicsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareApiShieldAuthIdCharacteristicsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareApiShieldAuthIdCharacteristicsList = DataCloudflareApiShieldAuthIdCharacteristicsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/api_shield cloudflare_api_shield}
 */
-var DataCloudflareApiShield = /** @class */ (function (_super) {
-    __extends(DataCloudflareApiShield, _super);
+export class DataCloudflareApiShield extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_api_shield";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareApiShield resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareApiShield to import
+    * @param importFromId The id of the existing DataCloudflareApiShield that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/api_shield#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareApiShield to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_api_shield", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -127,9 +106,8 @@ var DataCloudflareApiShield = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareApiShieldConfig = {}
     */
-    function DataCloudflareApiShield(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_api_shield',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -142,97 +120,63 @@ var DataCloudflareApiShield = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // auth_id_characteristics - computed: true, optional: false, required: false
-        _this._authIdCharacteristics = new DataCloudflareApiShieldAuthIdCharacteristicsList(_this, "auth_id_characteristics", false);
-        _this._normalize = config.normalize;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._normalize = config.normalize;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareApiShield resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareApiShield to import
-    * @param importFromId The id of the existing DataCloudflareApiShield that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/api_shield#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareApiShield to import is found
-    */
-    DataCloudflareApiShield.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_api_shield", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareApiShield.prototype, "authIdCharacteristics", {
-        get: function () {
-            return this._authIdCharacteristics;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareApiShield.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareApiShield.prototype, "normalize", {
-        get: function () {
-            return this.getBooleanAttribute('normalize');
-        },
-        set: function (value) {
-            this._normalize = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareApiShield.prototype.resetNormalize = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // auth_id_characteristics - computed: true, optional: false, required: false
+    _authIdCharacteristics = new DataCloudflareApiShieldAuthIdCharacteristicsList(this, "auth_id_characteristics", false);
+    get authIdCharacteristics() {
+        return this._authIdCharacteristics;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // normalize - computed: false, optional: true, required: false
+    _normalize;
+    get normalize() {
+        return this.getBooleanAttribute('normalize');
+    }
+    set normalize(value) {
+        this._normalize = value;
+    }
+    resetNormalize() {
         this._normalize = undefined;
-    };
-    Object.defineProperty(DataCloudflareApiShield.prototype, "normalizeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._normalize;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareApiShield.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareApiShield.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get normalizeInput() {
+        return this._normalize;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareApiShield.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareApiShield.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             normalize: cdktf.booleanToTerraform(this._normalize),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareApiShield.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             normalize: {
                 value: cdktf.booleanToHclTerraform(this._normalize),
                 isBlock: false,
@@ -247,15 +191,6 @@ var DataCloudflareApiShield = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareApiShield.tfResourceType = "cloudflare_api_shield";
-    return DataCloudflareApiShield;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareApiShield = DataCloudflareApiShield;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

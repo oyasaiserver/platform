@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_settings
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustDlpSettings = exports.ZeroTrustDlpSettingsPayloadLoggingOutputReference = void 0;
-exports.zeroTrustDlpSettingsPayloadLoggingToTerraform = zeroTrustDlpSettingsPayloadLoggingToTerraform;
-exports.zeroTrustDlpSettingsPayloadLoggingToHclTerraform = zeroTrustDlpSettingsPayloadLoggingToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustDlpSettingsPayloadLoggingToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustDlpSettingsPayloadLoggingToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -33,14 +13,14 @@ function zeroTrustDlpSettingsPayloadLoggingToTerraform(struct) {
         public_key: cdktf.stringToTerraform(struct.publicKey),
     };
 }
-function zeroTrustDlpSettingsPayloadLoggingToHclTerraform(struct) {
+export function zeroTrustDlpSettingsPayloadLoggingToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         masking_level: {
             value: cdktf.stringToHclTerraform(struct.maskingLevel),
             isBlock: false,
@@ -55,110 +35,104 @@ function zeroTrustDlpSettingsPayloadLoggingToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDlpSettingsPayloadLoggingOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpSettingsPayloadLoggingOutputReference, _super);
+export class ZeroTrustDlpSettingsPayloadLoggingOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDlpSettingsPayloadLoggingOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDlpSettingsPayloadLoggingOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._maskingLevel !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.maskingLevel = this._maskingLevel;
-            }
-            if (this._publicKey !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.publicKey = this._publicKey;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._maskingLevel = undefined;
-                this._publicKey = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._maskingLevel = value.maskingLevel;
-                this._publicKey = value.publicKey;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpSettingsPayloadLoggingOutputReference.prototype, "maskingLevel", {
-        get: function () {
-            return this.getStringAttribute('masking_level');
-        },
-        set: function (value) {
-            this._maskingLevel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpSettingsPayloadLoggingOutputReference.prototype.resetMaskingLevel = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._maskingLevel !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.maskingLevel = this._maskingLevel;
+        }
+        if (this._publicKey !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.publicKey = this._publicKey;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._maskingLevel = undefined;
+            this._publicKey = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._maskingLevel = value.maskingLevel;
+            this._publicKey = value.publicKey;
+        }
+    }
+    // masking_level - computed: true, optional: true, required: false
+    _maskingLevel;
+    get maskingLevel() {
+        return this.getStringAttribute('masking_level');
+    }
+    set maskingLevel(value) {
+        this._maskingLevel = value;
+    }
+    resetMaskingLevel() {
         this._maskingLevel = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpSettingsPayloadLoggingOutputReference.prototype, "maskingLevelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maskingLevel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpSettingsPayloadLoggingOutputReference.prototype, "publicKey", {
-        get: function () {
-            return this.getStringAttribute('public_key');
-        },
-        set: function (value) {
-            this._publicKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpSettingsPayloadLoggingOutputReference.prototype.resetPublicKey = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maskingLevelInput() {
+        return this._maskingLevel;
+    }
+    // public_key - computed: true, optional: true, required: false
+    _publicKey;
+    get publicKey() {
+        return this.getStringAttribute('public_key');
+    }
+    set publicKey(value) {
+        this._publicKey = value;
+    }
+    resetPublicKey() {
         this._publicKey = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpSettingsPayloadLoggingOutputReference.prototype, "publicKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._publicKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDlpSettingsPayloadLoggingOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDlpSettingsPayloadLoggingOutputReference = ZeroTrustDlpSettingsPayloadLoggingOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get publicKeyInput() {
+        return this._publicKey;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_settings cloudflare_zero_trust_dlp_settings}
 */
-var ZeroTrustDlpSettings = /** @class */ (function (_super) {
-    __extends(ZeroTrustDlpSettings, _super);
+export class ZeroTrustDlpSettings extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_dlp_settings";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustDlpSettings resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustDlpSettings to import
+    * @param importFromId The id of the existing ZeroTrustDlpSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_settings#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustDlpSettings to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dlp_settings", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -169,8 +143,8 @@ var ZeroTrustDlpSettings = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustDlpSettingsConfig
     */
-    function ZeroTrustDlpSettings(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_dlp_settings',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -183,130 +157,89 @@ var ZeroTrustDlpSettings = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // payload_logging - computed: true, optional: true, required: false
-        _this._payloadLogging = new ZeroTrustDlpSettingsPayloadLoggingOutputReference(_this, "payload_logging");
-        _this._accountId = config.accountId;
-        _this._aiContextAnalysis = config.aiContextAnalysis;
-        _this._ocr = config.ocr;
-        _this._payloadLogging.internalValue = config.payloadLogging;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._aiContextAnalysis = config.aiContextAnalysis;
+        this._ocr = config.ocr;
+        this._payloadLogging.internalValue = config.payloadLogging;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustDlpSettings resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustDlpSettings to import
-    * @param importFromId The id of the existing ZeroTrustDlpSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dlp_settings#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustDlpSettings to import is found
-    */
-    ZeroTrustDlpSettings.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dlp_settings", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustDlpSettings.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpSettings.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpSettings.prototype, "aiContextAnalysis", {
-        get: function () {
-            return this.getBooleanAttribute('ai_context_analysis');
-        },
-        set: function (value) {
-            this._aiContextAnalysis = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpSettings.prototype.resetAiContextAnalysis = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: false, required: true
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // ai_context_analysis - computed: true, optional: true, required: false
+    _aiContextAnalysis;
+    get aiContextAnalysis() {
+        return this.getBooleanAttribute('ai_context_analysis');
+    }
+    set aiContextAnalysis(value) {
+        this._aiContextAnalysis = value;
+    }
+    resetAiContextAnalysis() {
         this._aiContextAnalysis = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpSettings.prototype, "aiContextAnalysisInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._aiContextAnalysis;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpSettings.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpSettings.prototype, "ocr", {
-        get: function () {
-            return this.getBooleanAttribute('ocr');
-        },
-        set: function (value) {
-            this._ocr = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpSettings.prototype.resetOcr = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aiContextAnalysisInput() {
+        return this._aiContextAnalysis;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // ocr - computed: true, optional: true, required: false
+    _ocr;
+    get ocr() {
+        return this.getBooleanAttribute('ocr');
+    }
+    set ocr(value) {
+        this._ocr = value;
+    }
+    resetOcr() {
         this._ocr = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpSettings.prototype, "ocrInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ocr;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDlpSettings.prototype, "payloadLogging", {
-        get: function () {
-            return this._payloadLogging;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDlpSettings.prototype.putPayloadLogging = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ocrInput() {
+        return this._ocr;
+    }
+    // payload_logging - computed: true, optional: true, required: false
+    _payloadLogging = new ZeroTrustDlpSettingsPayloadLoggingOutputReference(this, "payload_logging");
+    get payloadLogging() {
+        return this._payloadLogging;
+    }
+    putPayloadLogging(value) {
         this._payloadLogging.internalValue = value;
-    };
-    ZeroTrustDlpSettings.prototype.resetPayloadLogging = function () {
+    }
+    resetPayloadLogging() {
         this._payloadLogging.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDlpSettings.prototype, "payloadLoggingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._payloadLogging.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get payloadLoggingInput() {
+        return this._payloadLogging.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustDlpSettings.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             ai_context_analysis: cdktf.booleanToTerraform(this._aiContextAnalysis),
             ocr: cdktf.booleanToTerraform(this._ocr),
             payload_logging: zeroTrustDlpSettingsPayloadLoggingToTerraform(this._payloadLogging.internalValue),
         };
-    };
-    ZeroTrustDlpSettings.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -333,15 +266,6 @@ var ZeroTrustDlpSettings = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustDlpSettings.tfResourceType = "cloudflare_zero_trust_dlp_settings";
-    return ZeroTrustDlpSettings;
-}(cdktf.TerraformResource));
-exports.ZeroTrustDlpSettings = ZeroTrustDlpSettings;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_dns_settings_internal_view
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AccountDnsSettingsInternalView = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_dns_settings_internal_view cloudflare_account_dns_settings_internal_view}
 */
-var AccountDnsSettingsInternalView = /** @class */ (function (_super) {
-    __extends(AccountDnsSettingsInternalView, _super);
+export class AccountDnsSettingsInternalView extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_account_dns_settings_internal_view";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a AccountDnsSettingsInternalView resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the AccountDnsSettingsInternalView to import
+    * @param importFromId The id of the existing AccountDnsSettingsInternalView that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_dns_settings_internal_view#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the AccountDnsSettingsInternalView to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_dns_settings_internal_view", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var AccountDnsSettingsInternalView = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options AccountDnsSettingsInternalViewConfig
     */
-    function AccountDnsSettingsInternalView(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_account_dns_settings_internal_view',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,118 +46,77 @@ var AccountDnsSettingsInternalView = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._name = config.name;
-        _this._zones = config.zones;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._name = config.name;
+        this._zones = config.zones;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a AccountDnsSettingsInternalView resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the AccountDnsSettingsInternalView to import
-    * @param importFromId The id of the existing AccountDnsSettingsInternalView that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account_dns_settings_internal_view#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the AccountDnsSettingsInternalView to import is found
-    */
-    AccountDnsSettingsInternalView.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account_dns_settings_internal_view", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(AccountDnsSettingsInternalView.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountDnsSettingsInternalView.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(AccountDnsSettingsInternalView.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsInternalView.prototype, "createdTime", {
-        // created_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsInternalView.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsInternalView.prototype, "modifiedTime", {
-        // modified_time - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_time');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsInternalView.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsInternalView.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsInternalView.prototype, "zones", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('zones'));
-        },
-        set: function (value) {
-            this._zones = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountDnsSettingsInternalView.prototype, "zonesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zones;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // created_time - computed: true, optional: false, required: false
+    get createdTime() {
+        return this.getStringAttribute('created_time');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_time - computed: true, optional: false, required: false
+    get modifiedTime() {
+        return this.getStringAttribute('modified_time');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // zones - computed: false, optional: false, required: true
+    _zones;
+    get zones() {
+        return cdktf.Fn.tolist(this.getListAttribute('zones'));
+    }
+    set zones(value) {
+        this._zones = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zonesInput() {
+        return this._zones;
+    }
     // =========
     // SYNTHESIS
     // =========
-    AccountDnsSettingsInternalView.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             name: cdktf.stringToTerraform(this._name),
             zones: cdktf.listMapper(cdktf.stringToTerraform, false)(this._zones),
         };
-    };
-    AccountDnsSettingsInternalView.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -180,15 +137,6 @@ var AccountDnsSettingsInternalView = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    AccountDnsSettingsInternalView.tfResourceType = "cloudflare_account_dns_settings_internal_view";
-    return AccountDnsSettingsInternalView;
-}(cdktf.TerraformResource));
-exports.AccountDnsSettingsInternalView = AccountDnsSettingsInternalView;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

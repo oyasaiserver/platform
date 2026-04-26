@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_role_user
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrganizationRoleUser = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_role_user github_organization_role_user}
 */
-var OrganizationRoleUser = /** @class */ (function (_super) {
-    __extends(OrganizationRoleUser, _super);
+export class OrganizationRoleUser extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_organization_role_user";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a OrganizationRoleUser resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the OrganizationRoleUser to import
+    * @param importFromId The id of the existing OrganizationRoleUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_role_user#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the OrganizationRoleUser to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_role_user", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var OrganizationRoleUser = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options OrganizationRoleUserConfig
     */
-    function OrganizationRoleUser(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_organization_role_user',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,94 +46,65 @@ var OrganizationRoleUser = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        _this._login = config.login;
-        _this._roleId = config.roleId;
-        return _this;
+        });
+        this._id = config.id;
+        this._login = config.login;
+        this._roleId = config.roleId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a OrganizationRoleUser resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the OrganizationRoleUser to import
-    * @param importFromId The id of the existing OrganizationRoleUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/organization_role_user#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the OrganizationRoleUser to import is found
-    */
-    OrganizationRoleUser.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_organization_role_user", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(OrganizationRoleUser.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    OrganizationRoleUser.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(OrganizationRoleUser.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRoleUser.prototype, "login", {
-        get: function () {
-            return this.getStringAttribute('login');
-        },
-        set: function (value) {
-            this._login = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRoleUser.prototype, "loginInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._login;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRoleUser.prototype, "roleId", {
-        get: function () {
-            return this.getNumberAttribute('role_id');
-        },
-        set: function (value) {
-            this._roleId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(OrganizationRoleUser.prototype, "roleIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._roleId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // login - computed: false, optional: false, required: true
+    _login;
+    get login() {
+        return this.getStringAttribute('login');
+    }
+    set login(value) {
+        this._login = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get loginInput() {
+        return this._login;
+    }
+    // role_id - computed: false, optional: false, required: true
+    _roleId;
+    get roleId() {
+        return this.getNumberAttribute('role_id');
+    }
+    set roleId(value) {
+        this._roleId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get roleIdInput() {
+        return this._roleId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    OrganizationRoleUser.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             login: cdktf.stringToTerraform(this._login),
             role_id: cdktf.numberToTerraform(this._roleId),
         };
-    };
-    OrganizationRoleUser.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -156,15 +125,6 @@ var OrganizationRoleUser = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    OrganizationRoleUser.tfResourceType = "github_organization_role_user";
-    return OrganizationRoleUser;
-}(cdktf.TerraformResource));
-exports.OrganizationRoleUser = OrganizationRoleUser;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

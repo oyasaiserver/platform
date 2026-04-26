@@ -1,43 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/custom_hostname
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareCustomHostname = exports.DataCloudflareCustomHostnameSslOutputReference = exports.DataCloudflareCustomHostnameSslValidationRecordsList = exports.DataCloudflareCustomHostnameSslValidationRecordsOutputReference = exports.DataCloudflareCustomHostnameSslValidationErrorsList = exports.DataCloudflareCustomHostnameSslValidationErrorsOutputReference = exports.DataCloudflareCustomHostnameSslSettingsOutputReference = exports.DataCloudflareCustomHostnameSslDcvDelegationRecordsList = exports.DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference = exports.DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference = exports.DataCloudflareCustomHostnameOwnershipVerificationOutputReference = exports.DataCloudflareCustomHostnameFilterOutputReference = exports.DataCloudflareCustomHostnameFilterHostnameOutputReference = void 0;
-exports.dataCloudflareCustomHostnameFilterHostnameToTerraform = dataCloudflareCustomHostnameFilterHostnameToTerraform;
-exports.dataCloudflareCustomHostnameFilterHostnameToHclTerraform = dataCloudflareCustomHostnameFilterHostnameToHclTerraform;
-exports.dataCloudflareCustomHostnameFilterToTerraform = dataCloudflareCustomHostnameFilterToTerraform;
-exports.dataCloudflareCustomHostnameFilterToHclTerraform = dataCloudflareCustomHostnameFilterToHclTerraform;
-exports.dataCloudflareCustomHostnameOwnershipVerificationToTerraform = dataCloudflareCustomHostnameOwnershipVerificationToTerraform;
-exports.dataCloudflareCustomHostnameOwnershipVerificationToHclTerraform = dataCloudflareCustomHostnameOwnershipVerificationToHclTerraform;
-exports.dataCloudflareCustomHostnameOwnershipVerificationHttpToTerraform = dataCloudflareCustomHostnameOwnershipVerificationHttpToTerraform;
-exports.dataCloudflareCustomHostnameOwnershipVerificationHttpToHclTerraform = dataCloudflareCustomHostnameOwnershipVerificationHttpToHclTerraform;
-exports.dataCloudflareCustomHostnameSslDcvDelegationRecordsToTerraform = dataCloudflareCustomHostnameSslDcvDelegationRecordsToTerraform;
-exports.dataCloudflareCustomHostnameSslDcvDelegationRecordsToHclTerraform = dataCloudflareCustomHostnameSslDcvDelegationRecordsToHclTerraform;
-exports.dataCloudflareCustomHostnameSslSettingsToTerraform = dataCloudflareCustomHostnameSslSettingsToTerraform;
-exports.dataCloudflareCustomHostnameSslSettingsToHclTerraform = dataCloudflareCustomHostnameSslSettingsToHclTerraform;
-exports.dataCloudflareCustomHostnameSslValidationErrorsToTerraform = dataCloudflareCustomHostnameSslValidationErrorsToTerraform;
-exports.dataCloudflareCustomHostnameSslValidationErrorsToHclTerraform = dataCloudflareCustomHostnameSslValidationErrorsToHclTerraform;
-exports.dataCloudflareCustomHostnameSslValidationRecordsToTerraform = dataCloudflareCustomHostnameSslValidationRecordsToTerraform;
-exports.dataCloudflareCustomHostnameSslValidationRecordsToHclTerraform = dataCloudflareCustomHostnameSslValidationRecordsToHclTerraform;
-exports.dataCloudflareCustomHostnameSslToTerraform = dataCloudflareCustomHostnameSslToTerraform;
-exports.dataCloudflareCustomHostnameSslToHclTerraform = dataCloudflareCustomHostnameSslToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareCustomHostnameFilterHostnameToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareCustomHostnameFilterHostnameToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -48,14 +12,14 @@ function dataCloudflareCustomHostnameFilterHostnameToTerraform(struct) {
         contain: cdktf.stringToTerraform(struct.contain),
     };
 }
-function dataCloudflareCustomHostnameFilterHostnameToHclTerraform(struct) {
+export function dataCloudflareCustomHostnameFilterHostnameToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         contain: {
             value: cdktf.stringToHclTerraform(struct.contain),
             isBlock: false,
@@ -64,79 +28,63 @@ function dataCloudflareCustomHostnameFilterHostnameToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareCustomHostnameFilterHostnameOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameFilterHostnameOutputReference, _super);
+export class DataCloudflareCustomHostnameFilterHostnameOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareCustomHostnameFilterHostnameOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareCustomHostnameFilterHostnameOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._contain !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.contain = this._contain;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._contain = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._contain = value.contain;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterHostnameOutputReference.prototype, "contain", {
-        get: function () {
-            return this.getStringAttribute('contain');
-        },
-        set: function (value) {
-            this._contain = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterHostnameOutputReference.prototype.resetContain = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._contain !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.contain = this._contain;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._contain = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._contain = value.contain;
+        }
+    }
+    // contain - computed: false, optional: true, required: false
+    _contain;
+    get contain() {
+        return this.getStringAttribute('contain');
+    }
+    set contain(value) {
+        this._contain = value;
+    }
+    resetContain() {
         this._contain = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterHostnameOutputReference.prototype, "containInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contain;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCustomHostnameFilterHostnameOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCustomHostnameFilterHostnameOutputReference = DataCloudflareCustomHostnameFilterHostnameOutputReference;
-function dataCloudflareCustomHostnameFilterToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get containInput() {
+        return this._contain;
+    }
+}
+export function dataCloudflareCustomHostnameFilterToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -156,14 +104,14 @@ function dataCloudflareCustomHostnameFilterToTerraform(struct) {
         wildcard: cdktf.booleanToTerraform(struct.wildcard),
     };
 }
-function dataCloudflareCustomHostnameFilterToHclTerraform(struct) {
+export function dataCloudflareCustomHostnameFilterToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         certificate_authority: {
             value: cdktf.stringToHclTerraform(struct.certificateAuthority),
             isBlock: false,
@@ -226,325 +174,252 @@ function dataCloudflareCustomHostnameFilterToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DataCloudflareCustomHostnameFilterOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameFilterOutputReference, _super);
+export class DataCloudflareCustomHostnameFilterOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareCustomHostnameFilterOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // hostname - computed: false, optional: true, required: false
-        _this._hostname = new DataCloudflareCustomHostnameFilterHostnameOutputReference(_this, "hostname");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._certificateAuthority !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.certificateAuthority = this._certificateAuthority;
-            }
-            if (this._customOriginServer !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.customOriginServer = this._customOriginServer;
-            }
-            if (this._direction !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.direction = this._direction;
-            }
-            if (((_a = this._hostname) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hostname = (_b = this._hostname) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (this._hostnameStatus !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.hostnameStatus = this._hostnameStatus;
-            }
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            if (this._order !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.order = this._order;
-            }
-            if (this._ssl !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ssl = this._ssl;
-            }
-            if (this._sslStatus !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.sslStatus = this._sslStatus;
-            }
-            if (this._wildcard !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.wildcard = this._wildcard;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._certificateAuthority = undefined;
-                this._customOriginServer = undefined;
-                this._direction = undefined;
-                this._hostname.internalValue = undefined;
-                this._hostnameStatus = undefined;
-                this._id = undefined;
-                this._order = undefined;
-                this._ssl = undefined;
-                this._sslStatus = undefined;
-                this._wildcard = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._certificateAuthority = value.certificateAuthority;
-                this._customOriginServer = value.customOriginServer;
-                this._direction = value.direction;
-                this._hostname.internalValue = value.hostname;
-                this._hostnameStatus = value.hostnameStatus;
-                this._id = value.id;
-                this._order = value.order;
-                this._ssl = value.ssl;
-                this._sslStatus = value.sslStatus;
-                this._wildcard = value.wildcard;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "certificateAuthority", {
-        get: function () {
-            return this.getStringAttribute('certificate_authority');
-        },
-        set: function (value) {
-            this._certificateAuthority = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetCertificateAuthority = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._certificateAuthority !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.certificateAuthority = this._certificateAuthority;
+        }
+        if (this._customOriginServer !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.customOriginServer = this._customOriginServer;
+        }
+        if (this._direction !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.direction = this._direction;
+        }
+        if (this._hostname?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hostname = this._hostname?.internalValue;
+        }
+        if (this._hostnameStatus !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.hostnameStatus = this._hostnameStatus;
+        }
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        if (this._order !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.order = this._order;
+        }
+        if (this._ssl !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ssl = this._ssl;
+        }
+        if (this._sslStatus !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.sslStatus = this._sslStatus;
+        }
+        if (this._wildcard !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.wildcard = this._wildcard;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._certificateAuthority = undefined;
+            this._customOriginServer = undefined;
+            this._direction = undefined;
+            this._hostname.internalValue = undefined;
+            this._hostnameStatus = undefined;
+            this._id = undefined;
+            this._order = undefined;
+            this._ssl = undefined;
+            this._sslStatus = undefined;
+            this._wildcard = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._certificateAuthority = value.certificateAuthority;
+            this._customOriginServer = value.customOriginServer;
+            this._direction = value.direction;
+            this._hostname.internalValue = value.hostname;
+            this._hostnameStatus = value.hostnameStatus;
+            this._id = value.id;
+            this._order = value.order;
+            this._ssl = value.ssl;
+            this._sslStatus = value.sslStatus;
+            this._wildcard = value.wildcard;
+        }
+    }
+    // certificate_authority - computed: false, optional: true, required: false
+    _certificateAuthority;
+    get certificateAuthority() {
+        return this.getStringAttribute('certificate_authority');
+    }
+    set certificateAuthority(value) {
+        this._certificateAuthority = value;
+    }
+    resetCertificateAuthority() {
         this._certificateAuthority = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "certificateAuthorityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificateAuthority;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "customOriginServer", {
-        get: function () {
-            return this.getStringAttribute('custom_origin_server');
-        },
-        set: function (value) {
-            this._customOriginServer = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetCustomOriginServer = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateAuthorityInput() {
+        return this._certificateAuthority;
+    }
+    // custom_origin_server - computed: false, optional: true, required: false
+    _customOriginServer;
+    get customOriginServer() {
+        return this.getStringAttribute('custom_origin_server');
+    }
+    set customOriginServer(value) {
+        this._customOriginServer = value;
+    }
+    resetCustomOriginServer() {
         this._customOriginServer = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "customOriginServerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customOriginServer;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetDirection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get customOriginServerInput() {
+        return this._customOriginServer;
+    }
+    // direction - computed: false, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "hostname", {
-        get: function () {
-            return this._hostname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.putHostname = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // hostname - computed: false, optional: true, required: false
+    _hostname = new DataCloudflareCustomHostnameFilterHostnameOutputReference(this, "hostname");
+    get hostname() {
+        return this._hostname;
+    }
+    putHostname(value) {
         this._hostname.internalValue = value;
-    };
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetHostname = function () {
+    }
+    resetHostname() {
         this._hostname.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "hostnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostname.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "hostnameStatus", {
-        get: function () {
-            return this.getStringAttribute('hostname_status');
-        },
-        set: function (value) {
-            this._hostnameStatus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetHostnameStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameInput() {
+        return this._hostname.internalValue;
+    }
+    // hostname_status - computed: false, optional: true, required: false
+    _hostnameStatus;
+    get hostnameStatus() {
+        return this.getStringAttribute('hostname_status');
+    }
+    set hostnameStatus(value) {
+        this._hostnameStatus = value;
+    }
+    resetHostnameStatus() {
         this._hostnameStatus = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "hostnameStatusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hostnameStatus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostnameStatusInput() {
+        return this._hostnameStatus;
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "order", {
-        get: function () {
-            return this.getStringAttribute('order');
-        },
-        set: function (value) {
-            this._order = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetOrder = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // order - computed: true, optional: true, required: false
+    _order;
+    get order() {
+        return this.getStringAttribute('order');
+    }
+    set order(value) {
+        this._order = value;
+    }
+    resetOrder() {
         this._order = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "orderInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._order;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "ssl", {
-        get: function () {
-            return this.getNumberAttribute('ssl');
-        },
-        set: function (value) {
-            this._ssl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetSsl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get orderInput() {
+        return this._order;
+    }
+    // ssl - computed: false, optional: true, required: false
+    _ssl;
+    get ssl() {
+        return this.getNumberAttribute('ssl');
+    }
+    set ssl(value) {
+        this._ssl = value;
+    }
+    resetSsl() {
         this._ssl = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "sslInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ssl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "sslStatus", {
-        get: function () {
-            return this.getStringAttribute('ssl_status');
-        },
-        set: function (value) {
-            this._sslStatus = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetSslStatus = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sslInput() {
+        return this._ssl;
+    }
+    // ssl_status - computed: false, optional: true, required: false
+    _sslStatus;
+    get sslStatus() {
+        return this.getStringAttribute('ssl_status');
+    }
+    set sslStatus(value) {
+        this._sslStatus = value;
+    }
+    resetSslStatus() {
         this._sslStatus = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "sslStatusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sslStatus;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "wildcard", {
-        get: function () {
-            return this.getBooleanAttribute('wildcard');
-        },
-        set: function (value) {
-            this._wildcard = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostnameFilterOutputReference.prototype.resetWildcard = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sslStatusInput() {
+        return this._sslStatus;
+    }
+    // wildcard - computed: false, optional: true, required: false
+    _wildcard;
+    get wildcard() {
+        return this.getBooleanAttribute('wildcard');
+    }
+    set wildcard(value) {
+        this._wildcard = value;
+    }
+    resetWildcard() {
         this._wildcard = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostnameFilterOutputReference.prototype, "wildcardInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._wildcard;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCustomHostnameFilterOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCustomHostnameFilterOutputReference = DataCloudflareCustomHostnameFilterOutputReference;
-function dataCloudflareCustomHostnameOwnershipVerificationToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get wildcardInput() {
+        return this._wildcard;
+    }
+}
+export function dataCloudflareCustomHostnameOwnershipVerificationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -553,72 +428,52 @@ function dataCloudflareCustomHostnameOwnershipVerificationToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareCustomHostnameOwnershipVerificationToHclTerraform(struct) {
+export function dataCloudflareCustomHostnameOwnershipVerificationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareCustomHostnameOwnershipVerificationOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameOwnershipVerificationOutputReference, _super);
+export class DataCloudflareCustomHostnameOwnershipVerificationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareCustomHostnameOwnershipVerificationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareCustomHostnameOwnershipVerificationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameOwnershipVerificationOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameOwnershipVerificationOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameOwnershipVerificationOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCustomHostnameOwnershipVerificationOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCustomHostnameOwnershipVerificationOutputReference = DataCloudflareCustomHostnameOwnershipVerificationOutputReference;
-function dataCloudflareCustomHostnameOwnershipVerificationHttpToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export function dataCloudflareCustomHostnameOwnershipVerificationHttpToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -627,64 +482,48 @@ function dataCloudflareCustomHostnameOwnershipVerificationHttpToTerraform(struct
     }
     return {};
 }
-function dataCloudflareCustomHostnameOwnershipVerificationHttpToHclTerraform(struct) {
+export function dataCloudflareCustomHostnameOwnershipVerificationHttpToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference, _super);
+export class DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference.prototype, "httpBody", {
-        // http_body - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('http_body');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference.prototype, "httpUrl", {
-        // http_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('http_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference = DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference;
-function dataCloudflareCustomHostnameSslDcvDelegationRecordsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // http_body - computed: true, optional: false, required: false
+    get httpBody() {
+        return this.getStringAttribute('http_body');
+    }
+    // http_url - computed: true, optional: false, required: false
+    get httpUrl() {
+        return this.getStringAttribute('http_url');
+    }
+}
+export function dataCloudflareCustomHostnameSslDcvDelegationRecordsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -693,137 +532,96 @@ function dataCloudflareCustomHostnameSslDcvDelegationRecordsToTerraform(struct) 
     }
     return {};
 }
-function dataCloudflareCustomHostnameSslDcvDelegationRecordsToHclTerraform(struct) {
+export function dataCloudflareCustomHostnameSslDcvDelegationRecordsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference, _super);
+export class DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference.prototype, "cname", {
-        // cname - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cname');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference.prototype, "cnameTarget", {
-        // cname_target - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cname_target');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference.prototype, "emails", {
-        // emails - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('emails');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference.prototype, "httpBody", {
-        // http_body - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('http_body');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference.prototype, "httpUrl", {
-        // http_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('http_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference.prototype, "txtName", {
-        // txt_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('txt_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference.prototype, "txtValue", {
-        // txt_value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('txt_value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference = DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference;
-var DataCloudflareCustomHostnameSslDcvDelegationRecordsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameSslDcvDelegationRecordsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // cname - computed: true, optional: false, required: false
+    get cname() {
+        return this.getStringAttribute('cname');
+    }
+    // cname_target - computed: true, optional: false, required: false
+    get cnameTarget() {
+        return this.getStringAttribute('cname_target');
+    }
+    // emails - computed: true, optional: false, required: false
+    get emails() {
+        return this.getListAttribute('emails');
+    }
+    // http_body - computed: true, optional: false, required: false
+    get httpBody() {
+        return this.getStringAttribute('http_body');
+    }
+    // http_url - computed: true, optional: false, required: false
+    get httpUrl() {
+        return this.getStringAttribute('http_url');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // txt_name - computed: true, optional: false, required: false
+    get txtName() {
+        return this.getStringAttribute('txt_name');
+    }
+    // txt_value - computed: true, optional: false, required: false
+    get txtValue() {
+        return this.getStringAttribute('txt_value');
+    }
+}
+export class DataCloudflareCustomHostnameSslDcvDelegationRecordsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareCustomHostnameSslDcvDelegationRecordsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareCustomHostnameSslDcvDelegationRecordsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareCustomHostnameSslDcvDelegationRecordsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareCustomHostnameSslDcvDelegationRecordsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareCustomHostnameSslDcvDelegationRecordsList = DataCloudflareCustomHostnameSslDcvDelegationRecordsList;
-function dataCloudflareCustomHostnameSslSettingsToTerraform(struct) {
+    }
+}
+export function dataCloudflareCustomHostnameSslSettingsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -832,88 +630,60 @@ function dataCloudflareCustomHostnameSslSettingsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareCustomHostnameSslSettingsToHclTerraform(struct) {
+export function dataCloudflareCustomHostnameSslSettingsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareCustomHostnameSslSettingsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameSslSettingsOutputReference, _super);
+export class DataCloudflareCustomHostnameSslSettingsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareCustomHostnameSslSettingsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareCustomHostnameSslSettingsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslSettingsOutputReference.prototype, "ciphers", {
-        // ciphers - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('ciphers');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslSettingsOutputReference.prototype, "earlyHints", {
-        // early_hints - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('early_hints');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslSettingsOutputReference.prototype, "http2", {
-        // http2 - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('http2');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslSettingsOutputReference.prototype, "minTlsVersion", {
-        // min_tls_version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('min_tls_version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslSettingsOutputReference.prototype, "tls13", {
-        // tls_1_3 - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('tls_1_3');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCustomHostnameSslSettingsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCustomHostnameSslSettingsOutputReference = DataCloudflareCustomHostnameSslSettingsOutputReference;
-function dataCloudflareCustomHostnameSslValidationErrorsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // ciphers - computed: true, optional: false, required: false
+    get ciphers() {
+        return this.getListAttribute('ciphers');
+    }
+    // early_hints - computed: true, optional: false, required: false
+    get earlyHints() {
+        return this.getStringAttribute('early_hints');
+    }
+    // http2 - computed: true, optional: false, required: false
+    get http2() {
+        return this.getStringAttribute('http2');
+    }
+    // min_tls_version - computed: true, optional: false, required: false
+    get minTlsVersion() {
+        return this.getStringAttribute('min_tls_version');
+    }
+    // tls_1_3 - computed: true, optional: false, required: false
+    get tls13() {
+        return this.getStringAttribute('tls_1_3');
+    }
+}
+export function dataCloudflareCustomHostnameSslValidationErrorsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -922,81 +692,68 @@ function dataCloudflareCustomHostnameSslValidationErrorsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareCustomHostnameSslValidationErrorsToHclTerraform(struct) {
+export function dataCloudflareCustomHostnameSslValidationErrorsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareCustomHostnameSslValidationErrorsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameSslValidationErrorsOutputReference, _super);
+export class DataCloudflareCustomHostnameSslValidationErrorsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareCustomHostnameSslValidationErrorsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationErrorsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationErrorsOutputReference.prototype, "message", {
-        // message - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('message');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCustomHostnameSslValidationErrorsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCustomHostnameSslValidationErrorsOutputReference = DataCloudflareCustomHostnameSslValidationErrorsOutputReference;
-var DataCloudflareCustomHostnameSslValidationErrorsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameSslValidationErrorsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // message - computed: true, optional: false, required: false
+    get message() {
+        return this.getStringAttribute('message');
+    }
+}
+export class DataCloudflareCustomHostnameSslValidationErrorsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareCustomHostnameSslValidationErrorsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareCustomHostnameSslValidationErrorsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareCustomHostnameSslValidationErrorsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareCustomHostnameSslValidationErrorsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareCustomHostnameSslValidationErrorsList = DataCloudflareCustomHostnameSslValidationErrorsList;
-function dataCloudflareCustomHostnameSslValidationRecordsToTerraform(struct) {
+    }
+}
+export function dataCloudflareCustomHostnameSslValidationRecordsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1005,137 +762,96 @@ function dataCloudflareCustomHostnameSslValidationRecordsToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareCustomHostnameSslValidationRecordsToHclTerraform(struct) {
+export function dataCloudflareCustomHostnameSslValidationRecordsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareCustomHostnameSslValidationRecordsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameSslValidationRecordsOutputReference, _super);
+export class DataCloudflareCustomHostnameSslValidationRecordsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareCustomHostnameSslValidationRecordsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationRecordsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationRecordsOutputReference.prototype, "cname", {
-        // cname - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cname');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationRecordsOutputReference.prototype, "cnameTarget", {
-        // cname_target - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('cname_target');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationRecordsOutputReference.prototype, "emails", {
-        // emails - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('emails');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationRecordsOutputReference.prototype, "httpBody", {
-        // http_body - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('http_body');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationRecordsOutputReference.prototype, "httpUrl", {
-        // http_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('http_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationRecordsOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationRecordsOutputReference.prototype, "txtName", {
-        // txt_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('txt_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslValidationRecordsOutputReference.prototype, "txtValue", {
-        // txt_value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('txt_value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCustomHostnameSslValidationRecordsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCustomHostnameSslValidationRecordsOutputReference = DataCloudflareCustomHostnameSslValidationRecordsOutputReference;
-var DataCloudflareCustomHostnameSslValidationRecordsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameSslValidationRecordsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // cname - computed: true, optional: false, required: false
+    get cname() {
+        return this.getStringAttribute('cname');
+    }
+    // cname_target - computed: true, optional: false, required: false
+    get cnameTarget() {
+        return this.getStringAttribute('cname_target');
+    }
+    // emails - computed: true, optional: false, required: false
+    get emails() {
+        return this.getListAttribute('emails');
+    }
+    // http_body - computed: true, optional: false, required: false
+    get httpBody() {
+        return this.getStringAttribute('http_body');
+    }
+    // http_url - computed: true, optional: false, required: false
+    get httpUrl() {
+        return this.getStringAttribute('http_url');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // txt_name - computed: true, optional: false, required: false
+    get txtName() {
+        return this.getStringAttribute('txt_name');
+    }
+    // txt_value - computed: true, optional: false, required: false
+    get txtValue() {
+        return this.getStringAttribute('txt_value');
+    }
+}
+export class DataCloudflareCustomHostnameSslValidationRecordsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareCustomHostnameSslValidationRecordsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareCustomHostnameSslValidationRecordsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareCustomHostnameSslValidationRecordsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareCustomHostnameSslValidationRecordsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareCustomHostnameSslValidationRecordsList = DataCloudflareCustomHostnameSslValidationRecordsList;
-function dataCloudflareCustomHostnameSslToTerraform(struct) {
+    }
+}
+export function dataCloudflareCustomHostnameSslToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1144,216 +860,144 @@ function dataCloudflareCustomHostnameSslToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareCustomHostnameSslToHclTerraform(struct) {
+export function dataCloudflareCustomHostnameSslToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareCustomHostnameSslOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostnameSslOutputReference, _super);
+export class DataCloudflareCustomHostnameSslOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareCustomHostnameSslOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // dcv_delegation_records - computed: true, optional: false, required: false
-        _this._dcvDelegationRecords = new DataCloudflareCustomHostnameSslDcvDelegationRecordsList(_this, "dcv_delegation_records", false);
-        // settings - computed: true, optional: false, required: false
-        _this._settings = new DataCloudflareCustomHostnameSslSettingsOutputReference(_this, "settings");
-        // validation_errors - computed: true, optional: false, required: false
-        _this._validationErrors = new DataCloudflareCustomHostnameSslValidationErrorsList(_this, "validation_errors", false);
-        // validation_records - computed: true, optional: false, required: false
-        _this._validationRecords = new DataCloudflareCustomHostnameSslValidationRecordsList(_this, "validation_records", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "bundleMethod", {
-        // bundle_method - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('bundle_method');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "certificateAuthority", {
-        // certificate_authority - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificate_authority');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "customCertificate", {
-        // custom_certificate - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('custom_certificate');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "customCsrId", {
-        // custom_csr_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('custom_csr_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "customKey", {
-        // custom_key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('custom_key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "dcvDelegationRecords", {
-        get: function () {
-            return this._dcvDelegationRecords;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "expiresOn", {
-        // expires_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "hosts", {
-        // hosts - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('hosts');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "issuer", {
-        // issuer - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('issuer');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "method", {
-        // method - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('method');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "serialNumber", {
-        // serial_number - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('serial_number');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "settings", {
-        get: function () {
-            return this._settings;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "signature", {
-        // signature - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('signature');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "type", {
-        // type - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "uploadedOn", {
-        // uploaded_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uploaded_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "validationErrors", {
-        get: function () {
-            return this._validationErrors;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "validationRecords", {
-        get: function () {
-            return this._validationRecords;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostnameSslOutputReference.prototype, "wildcard", {
-        // wildcard - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('wildcard');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareCustomHostnameSslOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareCustomHostnameSslOutputReference = DataCloudflareCustomHostnameSslOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // bundle_method - computed: true, optional: false, required: false
+    get bundleMethod() {
+        return this.getStringAttribute('bundle_method');
+    }
+    // certificate_authority - computed: true, optional: false, required: false
+    get certificateAuthority() {
+        return this.getStringAttribute('certificate_authority');
+    }
+    // custom_certificate - computed: true, optional: false, required: false
+    get customCertificate() {
+        return this.getStringAttribute('custom_certificate');
+    }
+    // custom_csr_id - computed: true, optional: false, required: false
+    get customCsrId() {
+        return this.getStringAttribute('custom_csr_id');
+    }
+    // custom_key - computed: true, optional: false, required: false
+    get customKey() {
+        return this.getStringAttribute('custom_key');
+    }
+    // dcv_delegation_records - computed: true, optional: false, required: false
+    _dcvDelegationRecords = new DataCloudflareCustomHostnameSslDcvDelegationRecordsList(this, "dcv_delegation_records", false);
+    get dcvDelegationRecords() {
+        return this._dcvDelegationRecords;
+    }
+    // expires_on - computed: true, optional: false, required: false
+    get expiresOn() {
+        return this.getStringAttribute('expires_on');
+    }
+    // hosts - computed: true, optional: false, required: false
+    get hosts() {
+        return this.getListAttribute('hosts');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // issuer - computed: true, optional: false, required: false
+    get issuer() {
+        return this.getStringAttribute('issuer');
+    }
+    // method - computed: true, optional: false, required: false
+    get method() {
+        return this.getStringAttribute('method');
+    }
+    // serial_number - computed: true, optional: false, required: false
+    get serialNumber() {
+        return this.getStringAttribute('serial_number');
+    }
+    // settings - computed: true, optional: false, required: false
+    _settings = new DataCloudflareCustomHostnameSslSettingsOutputReference(this, "settings");
+    get settings() {
+        return this._settings;
+    }
+    // signature - computed: true, optional: false, required: false
+    get signature() {
+        return this.getStringAttribute('signature');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // type - computed: true, optional: false, required: false
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    // uploaded_on - computed: true, optional: false, required: false
+    get uploadedOn() {
+        return this.getStringAttribute('uploaded_on');
+    }
+    // validation_errors - computed: true, optional: false, required: false
+    _validationErrors = new DataCloudflareCustomHostnameSslValidationErrorsList(this, "validation_errors", false);
+    get validationErrors() {
+        return this._validationErrors;
+    }
+    // validation_records - computed: true, optional: false, required: false
+    _validationRecords = new DataCloudflareCustomHostnameSslValidationRecordsList(this, "validation_records", false);
+    get validationRecords() {
+        return this._validationRecords;
+    }
+    // wildcard - computed: true, optional: false, required: false
+    get wildcard() {
+        return this.getBooleanAttribute('wildcard');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/custom_hostname cloudflare_custom_hostname}
 */
-var DataCloudflareCustomHostname = /** @class */ (function (_super) {
-    __extends(DataCloudflareCustomHostname, _super);
+export class DataCloudflareCustomHostname extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_custom_hostname";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareCustomHostname resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareCustomHostname to import
+    * @param importFromId The id of the existing DataCloudflareCustomHostname that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/custom_hostname#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareCustomHostname to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_custom_hostname", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1364,9 +1008,8 @@ var DataCloudflareCustomHostname = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareCustomHostnameConfig = {}
     */
-    function DataCloudflareCustomHostname(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_custom_hostname',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -1379,197 +1022,119 @@ var DataCloudflareCustomHostname = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // custom_metadata - computed: true, optional: false, required: false
-        _this._customMetadata = new cdktf.StringMap(_this, "custom_metadata");
-        // filter - computed: false, optional: true, required: false
-        _this._filter = new DataCloudflareCustomHostnameFilterOutputReference(_this, "filter");
-        // ownership_verification - computed: true, optional: false, required: false
-        _this._ownershipVerification = new DataCloudflareCustomHostnameOwnershipVerificationOutputReference(_this, "ownership_verification");
-        // ownership_verification_http - computed: true, optional: false, required: false
-        _this._ownershipVerificationHttp = new DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference(_this, "ownership_verification_http");
-        // ssl - computed: true, optional: false, required: false
-        _this._ssl = new DataCloudflareCustomHostnameSslOutputReference(_this, "ssl");
-        _this._customHostnameId = config.customHostnameId;
-        _this._filter.internalValue = config.filter;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._customHostnameId = config.customHostnameId;
+        this._filter.internalValue = config.filter;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareCustomHostname resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareCustomHostname to import
-    * @param importFromId The id of the existing DataCloudflareCustomHostname that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/custom_hostname#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareCustomHostname to import is found
-    */
-    DataCloudflareCustomHostname.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_custom_hostname", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "createdAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "customHostnameId", {
-        get: function () {
-            return this.getStringAttribute('custom_hostname_id');
-        },
-        set: function (value) {
-            this._customHostnameId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostname.prototype.resetCustomHostnameId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // custom_hostname_id - computed: false, optional: true, required: false
+    _customHostnameId;
+    get customHostnameId() {
+        return this.getStringAttribute('custom_hostname_id');
+    }
+    set customHostnameId(value) {
+        this._customHostnameId = value;
+    }
+    resetCustomHostnameId() {
         this._customHostnameId = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "customHostnameIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customHostnameId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "customMetadata", {
-        get: function () {
-            return this._customMetadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "customOriginServer", {
-        // custom_origin_server - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('custom_origin_server');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "customOriginSni", {
-        // custom_origin_sni - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('custom_origin_sni');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "filter", {
-        get: function () {
-            return this._filter;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostname.prototype.putFilter = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get customHostnameIdInput() {
+        return this._customHostnameId;
+    }
+    // custom_metadata - computed: true, optional: false, required: false
+    _customMetadata = new cdktf.StringMap(this, "custom_metadata");
+    get customMetadata() {
+        return this._customMetadata;
+    }
+    // custom_origin_server - computed: true, optional: false, required: false
+    get customOriginServer() {
+        return this.getStringAttribute('custom_origin_server');
+    }
+    // custom_origin_sni - computed: true, optional: false, required: false
+    get customOriginSni() {
+        return this.getStringAttribute('custom_origin_sni');
+    }
+    // filter - computed: false, optional: true, required: false
+    _filter = new DataCloudflareCustomHostnameFilterOutputReference(this, "filter");
+    get filter() {
+        return this._filter;
+    }
+    putFilter(value) {
         this._filter.internalValue = value;
-    };
-    DataCloudflareCustomHostname.prototype.resetFilter = function () {
+    }
+    resetFilter() {
         this._filter.internalValue = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "filterInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._filter.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "hostname", {
-        // hostname - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('hostname');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "ownershipVerification", {
-        get: function () {
-            return this._ownershipVerification;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "ownershipVerificationHttp", {
-        get: function () {
-            return this._ownershipVerificationHttp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "ssl", {
-        get: function () {
-            return this._ssl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "verificationErrors", {
-        // verification_errors - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('verification_errors');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareCustomHostname.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get filterInput() {
+        return this._filter.internalValue;
+    }
+    // hostname - computed: true, optional: false, required: false
+    get hostname() {
+        return this.getStringAttribute('hostname');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // ownership_verification - computed: true, optional: false, required: false
+    _ownershipVerification = new DataCloudflareCustomHostnameOwnershipVerificationOutputReference(this, "ownership_verification");
+    get ownershipVerification() {
+        return this._ownershipVerification;
+    }
+    // ownership_verification_http - computed: true, optional: false, required: false
+    _ownershipVerificationHttp = new DataCloudflareCustomHostnameOwnershipVerificationHttpOutputReference(this, "ownership_verification_http");
+    get ownershipVerificationHttp() {
+        return this._ownershipVerificationHttp;
+    }
+    // ssl - computed: true, optional: false, required: false
+    _ssl = new DataCloudflareCustomHostnameSslOutputReference(this, "ssl");
+    get ssl() {
+        return this._ssl;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // verification_errors - computed: true, optional: false, required: false
+    get verificationErrors() {
+        return this.getListAttribute('verification_errors');
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(DataCloudflareCustomHostname.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareCustomHostname.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             custom_hostname_id: cdktf.stringToTerraform(this._customHostnameId),
             filter: dataCloudflareCustomHostnameFilterToTerraform(this._filter.internalValue),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareCustomHostname.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             custom_hostname_id: {
                 value: cdktf.stringToHclTerraform(this._customHostnameId),
                 isBlock: false,
@@ -1590,15 +1155,6 @@ var DataCloudflareCustomHostname = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareCustomHostname.tfResourceType = "cloudflare_custom_hostname";
-    return DataCloudflareCustomHostname;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareCustomHostname = DataCloudflareCustomHostname;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

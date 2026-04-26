@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/membership
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataGithubMembership = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/membership github_membership}
 */
-var DataGithubMembership = /** @class */ (function (_super) {
-    __extends(DataGithubMembership, _super);
+export class DataGithubMembership extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_membership";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataGithubMembership resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataGithubMembership to import
+    * @param importFromId The id of the existing DataGithubMembership that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/membership#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataGithubMembership to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_membership", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataGithubMembership = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataGithubMembershipConfig
     */
-    function DataGithubMembership(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_membership',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,124 +46,80 @@ var DataGithubMembership = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._id = config.id;
-        _this._organization = config.organization;
-        _this._username = config.username;
-        return _this;
+        });
+        this._id = config.id;
+        this._organization = config.organization;
+        this._username = config.username;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataGithubMembership resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataGithubMembership to import
-    * @param importFromId The id of the existing DataGithubMembership that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/data-sources/membership#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataGithubMembership to import is found
-    */
-    DataGithubMembership.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_membership", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataGithubMembership.prototype, "etag", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // etag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubMembership.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubMembership.prototype.resetId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // etag - computed: true, optional: false, required: false
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataGithubMembership.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubMembership.prototype, "organization", {
-        get: function () {
-            return this.getStringAttribute('organization');
-        },
-        set: function (value) {
-            this._organization = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataGithubMembership.prototype.resetOrganization = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // organization - computed: false, optional: true, required: false
+    _organization;
+    get organization() {
+        return this.getStringAttribute('organization');
+    }
+    set organization(value) {
+        this._organization = value;
+    }
+    resetOrganization() {
         this._organization = undefined;
-    };
-    Object.defineProperty(DataGithubMembership.prototype, "organizationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._organization;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubMembership.prototype, "role", {
-        // role - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('role');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubMembership.prototype, "state", {
-        // state - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('state');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubMembership.prototype, "username", {
-        get: function () {
-            return this.getStringAttribute('username');
-        },
-        set: function (value) {
-            this._username = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataGithubMembership.prototype, "usernameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._username;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get organizationInput() {
+        return this._organization;
+    }
+    // role - computed: true, optional: false, required: false
+    get role() {
+        return this.getStringAttribute('role');
+    }
+    // state - computed: true, optional: false, required: false
+    get state() {
+        return this.getStringAttribute('state');
+    }
+    // username - computed: false, optional: false, required: true
+    _username;
+    get username() {
+        return this.getStringAttribute('username');
+    }
+    set username(value) {
+        this._username = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameInput() {
+        return this._username;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataGithubMembership.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             id: cdktf.stringToTerraform(this._id),
             organization: cdktf.stringToTerraform(this._organization),
             username: cdktf.stringToTerraform(this._username),
         };
-    };
-    DataGithubMembership.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             id: {
                 value: cdktf.stringToHclTerraform(this._id),
                 isBlock: false,
@@ -186,15 +140,6 @@ var DataGithubMembership = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataGithubMembership.tfResourceType = "github_membership";
-    return DataGithubMembership;
-}(cdktf.TerraformDataSource));
-exports.DataGithubMembership = DataGithubMembership;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/authenticated_origin_pulls_certificates
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareAuthenticatedOriginPullsCertificates = exports.DataCloudflareAuthenticatedOriginPullsCertificatesResultList = exports.DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference = void 0;
-exports.dataCloudflareAuthenticatedOriginPullsCertificatesResultToTerraform = dataCloudflareAuthenticatedOriginPullsCertificatesResultToTerraform;
-exports.dataCloudflareAuthenticatedOriginPullsCertificatesResultToHclTerraform = dataCloudflareAuthenticatedOriginPullsCertificatesResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareAuthenticatedOriginPullsCertificatesResultToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareAuthenticatedOriginPullsCertificatesResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,141 +10,116 @@ function dataCloudflareAuthenticatedOriginPullsCertificatesResultToTerraform(str
     }
     return {};
 }
-function dataCloudflareAuthenticatedOriginPullsCertificatesResultToHclTerraform(struct) {
+export function dataCloudflareAuthenticatedOriginPullsCertificatesResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference, _super);
+export class DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference.prototype, "certificate", {
-        // certificate - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificate');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference.prototype, "expiresOn", {
-        // expires_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference.prototype, "issuer", {
-        // issuer - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('issuer');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference.prototype, "serialNumber", {
-        // serial_number - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('serial_number');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference.prototype, "signature", {
-        // signature - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('signature');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference.prototype, "uploadedOn", {
-        // uploaded_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uploaded_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference = DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference;
-var DataCloudflareAuthenticatedOriginPullsCertificatesResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareAuthenticatedOriginPullsCertificatesResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // certificate - computed: true, optional: false, required: false
+    get certificate() {
+        return this.getStringAttribute('certificate');
+    }
+    // expires_on - computed: true, optional: false, required: false
+    get expiresOn() {
+        return this.getStringAttribute('expires_on');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // issuer - computed: true, optional: false, required: false
+    get issuer() {
+        return this.getStringAttribute('issuer');
+    }
+    // serial_number - computed: true, optional: false, required: false
+    get serialNumber() {
+        return this.getStringAttribute('serial_number');
+    }
+    // signature - computed: true, optional: false, required: false
+    get signature() {
+        return this.getStringAttribute('signature');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // uploaded_on - computed: true, optional: false, required: false
+    get uploadedOn() {
+        return this.getStringAttribute('uploaded_on');
+    }
+}
+export class DataCloudflareAuthenticatedOriginPullsCertificatesResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareAuthenticatedOriginPullsCertificatesResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareAuthenticatedOriginPullsCertificatesResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareAuthenticatedOriginPullsCertificatesResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareAuthenticatedOriginPullsCertificatesResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareAuthenticatedOriginPullsCertificatesResultList = DataCloudflareAuthenticatedOriginPullsCertificatesResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/authenticated_origin_pulls_certificates cloudflare_authenticated_origin_pulls_certificates}
 */
-var DataCloudflareAuthenticatedOriginPullsCertificates = /** @class */ (function (_super) {
-    __extends(DataCloudflareAuthenticatedOriginPullsCertificates, _super);
+export class DataCloudflareAuthenticatedOriginPullsCertificates extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_authenticated_origin_pulls_certificates";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareAuthenticatedOriginPullsCertificates resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareAuthenticatedOriginPullsCertificates to import
+    * @param importFromId The id of the existing DataCloudflareAuthenticatedOriginPullsCertificates that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/authenticated_origin_pulls_certificates#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareAuthenticatedOriginPullsCertificates to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_authenticated_origin_pulls_certificates", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -175,8 +130,8 @@ var DataCloudflareAuthenticatedOriginPullsCertificates = /** @class */ (function
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareAuthenticatedOriginPullsCertificatesConfig
     */
-    function DataCloudflareAuthenticatedOriginPullsCertificates(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_authenticated_origin_pulls_certificates',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -189,83 +144,56 @@ var DataCloudflareAuthenticatedOriginPullsCertificates = /** @class */ (function
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareAuthenticatedOriginPullsCertificatesResultList(_this, "result", false);
-        _this._maxItems = config.maxItems;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._maxItems = config.maxItems;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareAuthenticatedOriginPullsCertificates resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareAuthenticatedOriginPullsCertificates to import
-    * @param importFromId The id of the existing DataCloudflareAuthenticatedOriginPullsCertificates that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/authenticated_origin_pulls_certificates#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareAuthenticatedOriginPullsCertificates to import is found
-    */
-    DataCloudflareAuthenticatedOriginPullsCertificates.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_authenticated_origin_pulls_certificates", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificates.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareAuthenticatedOriginPullsCertificates.prototype.resetMaxItems = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificates.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificates.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificates.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareAuthenticatedOriginPullsCertificates.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareAuthenticatedOriginPullsCertificatesResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
+    // zone_id - computed: false, optional: false, required: true
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareAuthenticatedOriginPullsCertificates.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             max_items: cdktf.numberToTerraform(this._maxItems),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    DataCloudflareAuthenticatedOriginPullsCertificates.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             max_items: {
                 value: cdktf.numberToHclTerraform(this._maxItems),
                 isBlock: false,
@@ -280,15 +208,6 @@ var DataCloudflareAuthenticatedOriginPullsCertificates = /** @class */ (function
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareAuthenticatedOriginPullsCertificates.tfResourceType = "cloudflare_authenticated_origin_pulls_certificates";
-    return DataCloudflareAuthenticatedOriginPullsCertificates;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareAuthenticatedOriginPullsCertificates = DataCloudflareAuthenticatedOriginPullsCertificates;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

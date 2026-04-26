@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/pages_domain
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PagesDomain = exports.PagesDomainVerificationDataOutputReference = exports.PagesDomainValidationDataOutputReference = void 0;
-exports.pagesDomainValidationDataToTerraform = pagesDomainValidationDataToTerraform;
-exports.pagesDomainValidationDataToHclTerraform = pagesDomainValidationDataToHclTerraform;
-exports.pagesDomainVerificationDataToTerraform = pagesDomainVerificationDataToTerraform;
-exports.pagesDomainVerificationDataToHclTerraform = pagesDomainVerificationDataToHclTerraform;
-var cdktf = require("cdktf");
-function pagesDomainValidationDataToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function pagesDomainValidationDataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,88 +10,60 @@ function pagesDomainValidationDataToTerraform(struct) {
     }
     return {};
 }
-function pagesDomainValidationDataToHclTerraform(struct) {
+export function pagesDomainValidationDataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var PagesDomainValidationDataOutputReference = /** @class */ (function (_super) {
-    __extends(PagesDomainValidationDataOutputReference, _super);
+export class PagesDomainValidationDataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PagesDomainValidationDataOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PagesDomainValidationDataOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomainValidationDataOutputReference.prototype, "errorMessage", {
-        // error_message - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('error_message');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomainValidationDataOutputReference.prototype, "method", {
-        // method - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('method');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomainValidationDataOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomainValidationDataOutputReference.prototype, "txtName", {
-        // txt_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('txt_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomainValidationDataOutputReference.prototype, "txtValue", {
-        // txt_value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('txt_value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PagesDomainValidationDataOutputReference;
-}(cdktf.ComplexObject));
-exports.PagesDomainValidationDataOutputReference = PagesDomainValidationDataOutputReference;
-function pagesDomainVerificationDataToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // error_message - computed: true, optional: false, required: false
+    get errorMessage() {
+        return this.getStringAttribute('error_message');
+    }
+    // method - computed: true, optional: false, required: false
+    get method() {
+        return this.getStringAttribute('method');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // txt_name - computed: true, optional: false, required: false
+    get txtName() {
+        return this.getStringAttribute('txt_name');
+    }
+    // txt_value - computed: true, optional: false, required: false
+    get txtValue() {
+        return this.getStringAttribute('txt_value');
+    }
+}
+export function pagesDomainVerificationDataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -122,68 +72,68 @@ function pagesDomainVerificationDataToTerraform(struct) {
     }
     return {};
 }
-function pagesDomainVerificationDataToHclTerraform(struct) {
+export function pagesDomainVerificationDataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var PagesDomainVerificationDataOutputReference = /** @class */ (function (_super) {
-    __extends(PagesDomainVerificationDataOutputReference, _super);
+export class PagesDomainVerificationDataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function PagesDomainVerificationDataOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(PagesDomainVerificationDataOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomainVerificationDataOutputReference.prototype, "errorMessage", {
-        // error_message - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('error_message');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomainVerificationDataOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return PagesDomainVerificationDataOutputReference;
-}(cdktf.ComplexObject));
-exports.PagesDomainVerificationDataOutputReference = PagesDomainVerificationDataOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // error_message - computed: true, optional: false, required: false
+    get errorMessage() {
+        return this.getStringAttribute('error_message');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/pages_domain cloudflare_pages_domain}
 */
-var PagesDomain = /** @class */ (function (_super) {
-    __extends(PagesDomain, _super);
+export class PagesDomain extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_pages_domain";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a PagesDomain resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the PagesDomain to import
+    * @param importFromId The id of the existing PagesDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/pages_domain#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the PagesDomain to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_pages_domain", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -194,8 +144,8 @@ var PagesDomain = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options PagesDomainConfig
     */
-    function PagesDomain(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_pages_domain',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -208,160 +158,99 @@ var PagesDomain = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // validation_data - computed: true, optional: false, required: false
-        _this._validationData = new PagesDomainValidationDataOutputReference(_this, "validation_data");
-        // verification_data - computed: true, optional: false, required: false
-        _this._verificationData = new PagesDomainVerificationDataOutputReference(_this, "verification_data");
-        _this._accountId = config.accountId;
-        _this._name = config.name;
-        _this._projectName = config.projectName;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._name = config.name;
+        this._projectName = config.projectName;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a PagesDomain resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the PagesDomain to import
-    * @param importFromId The id of the existing PagesDomain that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/pages_domain#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the PagesDomain to import is found
-    */
-    PagesDomain.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_pages_domain", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(PagesDomain.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    PagesDomain.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(PagesDomain.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "certificateAuthority", {
-        // certificate_authority - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificate_authority');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "domainId", {
-        // domain_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('domain_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "projectName", {
-        get: function () {
-            return this.getStringAttribute('project_name');
-        },
-        set: function (value) {
-            this._projectName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "projectNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "validationData", {
-        get: function () {
-            return this._validationData;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "verificationData", {
-        get: function () {
-            return this._verificationData;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(PagesDomain.prototype, "zoneTag", {
-        // zone_tag - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('zone_tag');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // certificate_authority - computed: true, optional: false, required: false
+    get certificateAuthority() {
+        return this.getStringAttribute('certificate_authority');
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // domain_id - computed: true, optional: false, required: false
+    get domainId() {
+        return this.getStringAttribute('domain_id');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // project_name - computed: false, optional: false, required: true
+    _projectName;
+    get projectName() {
+        return this.getStringAttribute('project_name');
+    }
+    set projectName(value) {
+        this._projectName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectNameInput() {
+        return this._projectName;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // validation_data - computed: true, optional: false, required: false
+    _validationData = new PagesDomainValidationDataOutputReference(this, "validation_data");
+    get validationData() {
+        return this._validationData;
+    }
+    // verification_data - computed: true, optional: false, required: false
+    _verificationData = new PagesDomainVerificationDataOutputReference(this, "verification_data");
+    get verificationData() {
+        return this._verificationData;
+    }
+    // zone_tag - computed: true, optional: false, required: false
+    get zoneTag() {
+        return this.getStringAttribute('zone_tag');
+    }
     // =========
     // SYNTHESIS
     // =========
-    PagesDomain.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             name: cdktf.stringToTerraform(this._name),
             project_name: cdktf.stringToTerraform(this._projectName),
         };
-    };
-    PagesDomain.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -382,15 +271,6 @@ var PagesDomain = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    PagesDomain.tfResourceType = "cloudflare_pages_domain";
-    return PagesDomain;
-}(cdktf.TerraformResource));
-exports.PagesDomain = PagesDomain;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

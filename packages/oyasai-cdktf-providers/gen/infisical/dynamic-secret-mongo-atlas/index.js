@@ -1,33 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_mongo_atlas
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DynamicSecretMongoAtlas = exports.DynamicSecretMongoAtlasMetadataList = exports.DynamicSecretMongoAtlasMetadataOutputReference = exports.DynamicSecretMongoAtlasConfigurationOutputReference = exports.DynamicSecretMongoAtlasConfigurationScopesList = exports.DynamicSecretMongoAtlasConfigurationScopesOutputReference = exports.DynamicSecretMongoAtlasConfigurationRolesList = exports.DynamicSecretMongoAtlasConfigurationRolesOutputReference = void 0;
-exports.dynamicSecretMongoAtlasConfigurationRolesToTerraform = dynamicSecretMongoAtlasConfigurationRolesToTerraform;
-exports.dynamicSecretMongoAtlasConfigurationRolesToHclTerraform = dynamicSecretMongoAtlasConfigurationRolesToHclTerraform;
-exports.dynamicSecretMongoAtlasConfigurationScopesToTerraform = dynamicSecretMongoAtlasConfigurationScopesToTerraform;
-exports.dynamicSecretMongoAtlasConfigurationScopesToHclTerraform = dynamicSecretMongoAtlasConfigurationScopesToHclTerraform;
-exports.dynamicSecretMongoAtlasConfigurationToTerraform = dynamicSecretMongoAtlasConfigurationToTerraform;
-exports.dynamicSecretMongoAtlasConfigurationToHclTerraform = dynamicSecretMongoAtlasConfigurationToHclTerraform;
-exports.dynamicSecretMongoAtlasMetadataToTerraform = dynamicSecretMongoAtlasMetadataToTerraform;
-exports.dynamicSecretMongoAtlasMetadataToHclTerraform = dynamicSecretMongoAtlasMetadataToHclTerraform;
-var cdktf = require("cdktf");
-function dynamicSecretMongoAtlasConfigurationRolesToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dynamicSecretMongoAtlasConfigurationRolesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -40,14 +14,14 @@ function dynamicSecretMongoAtlasConfigurationRolesToTerraform(struct) {
         role_name: cdktf.stringToTerraform(struct.roleName),
     };
 }
-function dynamicSecretMongoAtlasConfigurationRolesToHclTerraform(struct) {
+export function dynamicSecretMongoAtlasConfigurationRolesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         collection_name: {
             value: cdktf.stringToHclTerraform(struct.collectionName),
             isBlock: false,
@@ -68,152 +42,124 @@ function dynamicSecretMongoAtlasConfigurationRolesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretMongoAtlasConfigurationRolesOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoAtlasConfigurationRolesOutputReference, _super);
+export class DynamicSecretMongoAtlasConfigurationRolesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretMongoAtlasConfigurationRolesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationRolesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._collectionName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.collectionName = this._collectionName;
-            }
-            if (this._databaseName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.databaseName = this._databaseName;
-            }
-            if (this._roleName !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.roleName = this._roleName;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._collectionName = undefined;
-                this._databaseName = undefined;
-                this._roleName = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._collectionName = value.collectionName;
-                this._databaseName = value.databaseName;
-                this._roleName = value.roleName;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationRolesOutputReference.prototype, "collectionName", {
-        get: function () {
-            return this.getStringAttribute('collection_name');
-        },
-        set: function (value) {
-            this._collectionName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoAtlasConfigurationRolesOutputReference.prototype.resetCollectionName = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._collectionName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.collectionName = this._collectionName;
+        }
+        if (this._databaseName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.databaseName = this._databaseName;
+        }
+        if (this._roleName !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.roleName = this._roleName;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._collectionName = undefined;
+            this._databaseName = undefined;
+            this._roleName = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._collectionName = value.collectionName;
+            this._databaseName = value.databaseName;
+            this._roleName = value.roleName;
+        }
+    }
+    // collection_name - computed: false, optional: true, required: false
+    _collectionName;
+    get collectionName() {
+        return this.getStringAttribute('collection_name');
+    }
+    set collectionName(value) {
+        this._collectionName = value;
+    }
+    resetCollectionName() {
         this._collectionName = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationRolesOutputReference.prototype, "collectionNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._collectionName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationRolesOutputReference.prototype, "databaseName", {
-        get: function () {
-            return this.getStringAttribute('database_name');
-        },
-        set: function (value) {
-            this._databaseName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationRolesOutputReference.prototype, "databaseNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._databaseName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationRolesOutputReference.prototype, "roleName", {
-        get: function () {
-            return this.getStringAttribute('role_name');
-        },
-        set: function (value) {
-            this._roleName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationRolesOutputReference.prototype, "roleNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._roleName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretMongoAtlasConfigurationRolesOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretMongoAtlasConfigurationRolesOutputReference = DynamicSecretMongoAtlasConfigurationRolesOutputReference;
-var DynamicSecretMongoAtlasConfigurationRolesList = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoAtlasConfigurationRolesList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get collectionNameInput() {
+        return this._collectionName;
+    }
+    // database_name - computed: false, optional: false, required: true
+    _databaseName;
+    get databaseName() {
+        return this.getStringAttribute('database_name');
+    }
+    set databaseName(value) {
+        this._databaseName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get databaseNameInput() {
+        return this._databaseName;
+    }
+    // role_name - computed: false, optional: false, required: true
+    _roleName;
+    get roleName() {
+        return this.getStringAttribute('role_name');
+    }
+    set roleName(value) {
+        this._roleName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get roleNameInput() {
+        return this._roleName;
+    }
+}
+export class DynamicSecretMongoAtlasConfigurationRolesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretMongoAtlasConfigurationRolesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DynamicSecretMongoAtlasConfigurationRolesList.prototype.get = function (index) {
+    get(index) {
         return new DynamicSecretMongoAtlasConfigurationRolesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DynamicSecretMongoAtlasConfigurationRolesList;
-}(cdktf.ComplexList));
-exports.DynamicSecretMongoAtlasConfigurationRolesList = DynamicSecretMongoAtlasConfigurationRolesList;
-function dynamicSecretMongoAtlasConfigurationScopesToTerraform(struct) {
+    }
+}
+export function dynamicSecretMongoAtlasConfigurationScopesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -225,14 +171,14 @@ function dynamicSecretMongoAtlasConfigurationScopesToTerraform(struct) {
         type: cdktf.stringToTerraform(struct.type),
     };
 }
-function dynamicSecretMongoAtlasConfigurationScopesToHclTerraform(struct) {
+export function dynamicSecretMongoAtlasConfigurationScopesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         name: {
             value: cdktf.stringToHclTerraform(struct.name),
             isBlock: false,
@@ -247,125 +193,103 @@ function dynamicSecretMongoAtlasConfigurationScopesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretMongoAtlasConfigurationScopesOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoAtlasConfigurationScopesOutputReference, _super);
+export class DynamicSecretMongoAtlasConfigurationScopesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretMongoAtlasConfigurationScopesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationScopesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._name !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.name = this._name;
-            }
-            if (this._type !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.type = this._type;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._name = undefined;
-                this._type = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._name = value.name;
-                this._type = value.type;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationScopesOutputReference.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationScopesOutputReference.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationScopesOutputReference.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationScopesOutputReference.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretMongoAtlasConfigurationScopesOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretMongoAtlasConfigurationScopesOutputReference = DynamicSecretMongoAtlasConfigurationScopesOutputReference;
-var DynamicSecretMongoAtlasConfigurationScopesList = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoAtlasConfigurationScopesList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._name !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.name = this._name;
+        }
+        if (this._type !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.type = this._type;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._name = undefined;
+            this._type = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._name = value.name;
+            this._type = value.type;
+        }
+    }
+    // name - computed: true, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // type - computed: true, optional: false, required: true
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+}
+export class DynamicSecretMongoAtlasConfigurationScopesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretMongoAtlasConfigurationScopesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DynamicSecretMongoAtlasConfigurationScopesList.prototype.get = function (index) {
+    get(index) {
         return new DynamicSecretMongoAtlasConfigurationScopesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DynamicSecretMongoAtlasConfigurationScopesList;
-}(cdktf.ComplexList));
-exports.DynamicSecretMongoAtlasConfigurationScopesList = DynamicSecretMongoAtlasConfigurationScopesList;
-function dynamicSecretMongoAtlasConfigurationToTerraform(struct) {
+    }
+}
+export function dynamicSecretMongoAtlasConfigurationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -380,14 +304,14 @@ function dynamicSecretMongoAtlasConfigurationToTerraform(struct) {
         scopes: cdktf.listMapper(dynamicSecretMongoAtlasConfigurationScopesToTerraform, false)(struct.scopes),
     };
 }
-function dynamicSecretMongoAtlasConfigurationToHclTerraform(struct) {
+export function dynamicSecretMongoAtlasConfigurationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         admin_private_key: {
             value: cdktf.stringToHclTerraform(struct.adminPrivateKey),
             isBlock: false,
@@ -420,180 +344,135 @@ function dynamicSecretMongoAtlasConfigurationToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretMongoAtlasConfigurationOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoAtlasConfigurationOutputReference, _super);
+export class DynamicSecretMongoAtlasConfigurationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DynamicSecretMongoAtlasConfigurationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        // roles - computed: false, optional: false, required: true
-        _this._roles = new DynamicSecretMongoAtlasConfigurationRolesList(_this, "roles", false);
-        // scopes - computed: true, optional: true, required: false
-        _this._scopes = new DynamicSecretMongoAtlasConfigurationScopesList(_this, "scopes", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d;
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._adminPrivateKey !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.adminPrivateKey = this._adminPrivateKey;
-            }
-            if (this._adminPublicKey !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.adminPublicKey = this._adminPublicKey;
-            }
-            if (this._groupId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.groupId = this._groupId;
-            }
-            if (((_a = this._roles) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.roles = (_b = this._roles) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._scopes) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.scopes = (_d = this._scopes) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._adminPrivateKey = undefined;
-                this._adminPublicKey = undefined;
-                this._groupId = undefined;
-                this._roles.internalValue = undefined;
-                this._scopes.internalValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._adminPrivateKey = value.adminPrivateKey;
-                this._adminPublicKey = value.adminPublicKey;
-                this._groupId = value.groupId;
-                this._roles.internalValue = value.roles;
-                this._scopes.internalValue = value.scopes;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "adminPrivateKey", {
-        get: function () {
-            return this.getStringAttribute('admin_private_key');
-        },
-        set: function (value) {
-            this._adminPrivateKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "adminPrivateKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._adminPrivateKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "adminPublicKey", {
-        get: function () {
-            return this.getStringAttribute('admin_public_key');
-        },
-        set: function (value) {
-            this._adminPublicKey = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "adminPublicKeyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._adminPublicKey;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "groupId", {
-        get: function () {
-            return this.getStringAttribute('group_id');
-        },
-        set: function (value) {
-            this._groupId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "groupIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._groupId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "roles", {
-        get: function () {
-            return this._roles;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoAtlasConfigurationOutputReference.prototype.putRoles = function (value) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._adminPrivateKey !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.adminPrivateKey = this._adminPrivateKey;
+        }
+        if (this._adminPublicKey !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.adminPublicKey = this._adminPublicKey;
+        }
+        if (this._groupId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.groupId = this._groupId;
+        }
+        if (this._roles?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.roles = this._roles?.internalValue;
+        }
+        if (this._scopes?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.scopes = this._scopes?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._adminPrivateKey = undefined;
+            this._adminPublicKey = undefined;
+            this._groupId = undefined;
+            this._roles.internalValue = undefined;
+            this._scopes.internalValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._adminPrivateKey = value.adminPrivateKey;
+            this._adminPublicKey = value.adminPublicKey;
+            this._groupId = value.groupId;
+            this._roles.internalValue = value.roles;
+            this._scopes.internalValue = value.scopes;
+        }
+    }
+    // admin_private_key - computed: false, optional: false, required: true
+    _adminPrivateKey;
+    get adminPrivateKey() {
+        return this.getStringAttribute('admin_private_key');
+    }
+    set adminPrivateKey(value) {
+        this._adminPrivateKey = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get adminPrivateKeyInput() {
+        return this._adminPrivateKey;
+    }
+    // admin_public_key - computed: false, optional: false, required: true
+    _adminPublicKey;
+    get adminPublicKey() {
+        return this.getStringAttribute('admin_public_key');
+    }
+    set adminPublicKey(value) {
+        this._adminPublicKey = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get adminPublicKeyInput() {
+        return this._adminPublicKey;
+    }
+    // group_id - computed: false, optional: false, required: true
+    _groupId;
+    get groupId() {
+        return this.getStringAttribute('group_id');
+    }
+    set groupId(value) {
+        this._groupId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get groupIdInput() {
+        return this._groupId;
+    }
+    // roles - computed: false, optional: false, required: true
+    _roles = new DynamicSecretMongoAtlasConfigurationRolesList(this, "roles", false);
+    get roles() {
+        return this._roles;
+    }
+    putRoles(value) {
         this._roles.internalValue = value;
-    };
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "rolesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._roles.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "scopes", {
-        get: function () {
-            return this._scopes;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoAtlasConfigurationOutputReference.prototype.putScopes = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rolesInput() {
+        return this._roles.internalValue;
+    }
+    // scopes - computed: true, optional: true, required: false
+    _scopes = new DynamicSecretMongoAtlasConfigurationScopesList(this, "scopes", false);
+    get scopes() {
+        return this._scopes;
+    }
+    putScopes(value) {
         this._scopes.internalValue = value;
-    };
-    DynamicSecretMongoAtlasConfigurationOutputReference.prototype.resetScopes = function () {
+    }
+    resetScopes() {
         this._scopes.internalValue = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoAtlasConfigurationOutputReference.prototype, "scopesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._scopes.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretMongoAtlasConfigurationOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretMongoAtlasConfigurationOutputReference = DynamicSecretMongoAtlasConfigurationOutputReference;
-function dynamicSecretMongoAtlasMetadataToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get scopesInput() {
+        return this._scopes.internalValue;
+    }
+}
+export function dynamicSecretMongoAtlasMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -605,14 +484,14 @@ function dynamicSecretMongoAtlasMetadataToTerraform(struct) {
         value: cdktf.stringToTerraform(struct.value),
     };
 }
-function dynamicSecretMongoAtlasMetadataToHclTerraform(struct) {
+export function dynamicSecretMongoAtlasMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         key: {
             value: cdktf.stringToHclTerraform(struct.key),
             isBlock: false,
@@ -627,129 +506,123 @@ function dynamicSecretMongoAtlasMetadataToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var DynamicSecretMongoAtlasMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoAtlasMetadataOutputReference, _super);
+export class DynamicSecretMongoAtlasMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretMongoAtlasMetadataOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DynamicSecretMongoAtlasMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._key !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.key = this._key;
-            }
-            if (this._value !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.value = this._value;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._key = undefined;
-                this._value = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._key = value.key;
-                this._value = value.value;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasMetadataOutputReference.prototype, "key", {
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        set: function (value) {
-            this._key = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasMetadataOutputReference.prototype, "keyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._key;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasMetadataOutputReference.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlasMetadataOutputReference.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DynamicSecretMongoAtlasMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.DynamicSecretMongoAtlasMetadataOutputReference = DynamicSecretMongoAtlasMetadataOutputReference;
-var DynamicSecretMongoAtlasMetadataList = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoAtlasMetadataList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._key !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.key = this._key;
+        }
+        if (this._value !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.value = this._value;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._key = undefined;
+            this._value = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._key = value.key;
+            this._value = value.value;
+        }
+    }
+    // key - computed: false, optional: false, required: true
+    _key;
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    set key(value) {
+        this._key = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyInput() {
+        return this._key;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
+}
+export class DynamicSecretMongoAtlasMetadataList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DynamicSecretMongoAtlasMetadataList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DynamicSecretMongoAtlasMetadataList.prototype.get = function (index) {
+    get(index) {
         return new DynamicSecretMongoAtlasMetadataOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DynamicSecretMongoAtlasMetadataList;
-}(cdktf.ComplexList));
-exports.DynamicSecretMongoAtlasMetadataList = DynamicSecretMongoAtlasMetadataList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_mongo_atlas infisical_dynamic_secret_mongo_atlas}
 */
-var DynamicSecretMongoAtlas = /** @class */ (function (_super) {
-    __extends(DynamicSecretMongoAtlas, _super);
+export class DynamicSecretMongoAtlas extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_dynamic_secret_mongo_atlas";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DynamicSecretMongoAtlas resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DynamicSecretMongoAtlas to import
+    * @param importFromId The id of the existing DynamicSecretMongoAtlas that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_mongo_atlas#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DynamicSecretMongoAtlas to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_dynamic_secret_mongo_atlas", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -760,8 +633,8 @@ var DynamicSecretMongoAtlas = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DynamicSecretMongoAtlasConfig
     */
-    function DynamicSecretMongoAtlas(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_dynamic_secret_mongo_atlas',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -774,221 +647,145 @@ var DynamicSecretMongoAtlas = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // configuration - computed: false, optional: false, required: true
-        _this._configuration = new DynamicSecretMongoAtlasConfigurationOutputReference(_this, "configuration");
-        // metadata - computed: false, optional: true, required: false
-        _this._metadata = new DynamicSecretMongoAtlasMetadataList(_this, "metadata", true);
-        _this._configuration.internalValue = config.configuration;
-        _this._defaultTtl = config.defaultTtl;
-        _this._environmentSlug = config.environmentSlug;
-        _this._maxTtl = config.maxTtl;
-        _this._metadata.internalValue = config.metadata;
-        _this._name = config.name;
-        _this._path = config.path;
-        _this._projectSlug = config.projectSlug;
-        _this._usernameTemplate = config.usernameTemplate;
-        return _this;
+        });
+        this._configuration.internalValue = config.configuration;
+        this._defaultTtl = config.defaultTtl;
+        this._environmentSlug = config.environmentSlug;
+        this._maxTtl = config.maxTtl;
+        this._metadata.internalValue = config.metadata;
+        this._name = config.name;
+        this._path = config.path;
+        this._projectSlug = config.projectSlug;
+        this._usernameTemplate = config.usernameTemplate;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DynamicSecretMongoAtlas resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DynamicSecretMongoAtlas to import
-    * @param importFromId The id of the existing DynamicSecretMongoAtlas that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/dynamic_secret_mongo_atlas#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DynamicSecretMongoAtlas to import is found
-    */
-    DynamicSecretMongoAtlas.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_dynamic_secret_mongo_atlas", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "configuration", {
-        get: function () {
-            return this._configuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoAtlas.prototype.putConfiguration = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // configuration - computed: false, optional: false, required: true
+    _configuration = new DynamicSecretMongoAtlasConfigurationOutputReference(this, "configuration");
+    get configuration() {
+        return this._configuration;
+    }
+    putConfiguration(value) {
         this._configuration.internalValue = value;
-    };
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "configurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._configuration.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "defaultTtl", {
-        get: function () {
-            return this.getStringAttribute('default_ttl');
-        },
-        set: function (value) {
-            this._defaultTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "defaultTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "environmentSlug", {
-        get: function () {
-            return this.getStringAttribute('environment_slug');
-        },
-        set: function (value) {
-            this._environmentSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "environmentSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environmentSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "maxTtl", {
-        get: function () {
-            return this.getStringAttribute('max_ttl');
-        },
-        set: function (value) {
-            this._maxTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoAtlas.prototype.resetMaxTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get configurationInput() {
+        return this._configuration.internalValue;
+    }
+    // default_ttl - computed: false, optional: false, required: true
+    _defaultTtl;
+    get defaultTtl() {
+        return this.getStringAttribute('default_ttl');
+    }
+    set defaultTtl(value) {
+        this._defaultTtl = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultTtlInput() {
+        return this._defaultTtl;
+    }
+    // environment_slug - computed: false, optional: false, required: true
+    _environmentSlug;
+    get environmentSlug() {
+        return this.getStringAttribute('environment_slug');
+    }
+    set environmentSlug(value) {
+        this._environmentSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentSlugInput() {
+        return this._environmentSlug;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // max_ttl - computed: false, optional: true, required: false
+    _maxTtl;
+    get maxTtl() {
+        return this.getStringAttribute('max_ttl');
+    }
+    set maxTtl(value) {
+        this._maxTtl = value;
+    }
+    resetMaxTtl() {
         this._maxTtl = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "maxTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "metadata", {
-        get: function () {
-            return this._metadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoAtlas.prototype.putMetadata = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxTtlInput() {
+        return this._maxTtl;
+    }
+    // metadata - computed: false, optional: true, required: false
+    _metadata = new DynamicSecretMongoAtlasMetadataList(this, "metadata", true);
+    get metadata() {
+        return this._metadata;
+    }
+    putMetadata(value) {
         this._metadata.internalValue = value;
-    };
-    DynamicSecretMongoAtlas.prototype.resetMetadata = function () {
+    }
+    resetMetadata() {
         this._metadata.internalValue = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "metadataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._metadata.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "projectSlug", {
-        get: function () {
-            return this.getStringAttribute('project_slug');
-        },
-        set: function (value) {
-            this._projectSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "projectSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "usernameTemplate", {
-        get: function () {
-            return this.getStringAttribute('username_template');
-        },
-        set: function (value) {
-            this._usernameTemplate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DynamicSecretMongoAtlas.prototype.resetUsernameTemplate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get metadataInput() {
+        return this._metadata.internalValue;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // path - computed: false, optional: false, required: true
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+    // project_slug - computed: false, optional: false, required: true
+    _projectSlug;
+    get projectSlug() {
+        return this.getStringAttribute('project_slug');
+    }
+    set projectSlug(value) {
+        this._projectSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectSlugInput() {
+        return this._projectSlug;
+    }
+    // username_template - computed: false, optional: true, required: false
+    _usernameTemplate;
+    get usernameTemplate() {
+        return this.getStringAttribute('username_template');
+    }
+    set usernameTemplate(value) {
+        this._usernameTemplate = value;
+    }
+    resetUsernameTemplate() {
         this._usernameTemplate = undefined;
-    };
-    Object.defineProperty(DynamicSecretMongoAtlas.prototype, "usernameTemplateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._usernameTemplate;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get usernameTemplateInput() {
+        return this._usernameTemplate;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DynamicSecretMongoAtlas.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             configuration: dynamicSecretMongoAtlasConfigurationToTerraform(this._configuration.internalValue),
             default_ttl: cdktf.stringToTerraform(this._defaultTtl),
@@ -1000,9 +797,9 @@ var DynamicSecretMongoAtlas = /** @class */ (function (_super) {
             project_slug: cdktf.stringToTerraform(this._projectSlug),
             username_template: cdktf.stringToTerraform(this._usernameTemplate),
         };
-    };
-    DynamicSecretMongoAtlas.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             configuration: {
                 value: dynamicSecretMongoAtlasConfigurationToHclTerraform(this._configuration.internalValue),
                 isBlock: true,
@@ -1059,15 +856,6 @@ var DynamicSecretMongoAtlas = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DynamicSecretMongoAtlas.tfResourceType = "infisical_dynamic_secret_mongo_atlas";
-    return DynamicSecretMongoAtlas;
-}(cdktf.TerraformResource));
-exports.DynamicSecretMongoAtlas = DynamicSecretMongoAtlas;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/data-sources/secret_metadata
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataInfisicalSecretMetadata = exports.DataInfisicalSecretMetadataTagsList = exports.DataInfisicalSecretMetadataTagsOutputReference = exports.DataInfisicalSecretMetadataSecretMetadataList = exports.DataInfisicalSecretMetadataSecretMetadataOutputReference = void 0;
-exports.dataInfisicalSecretMetadataSecretMetadataToTerraform = dataInfisicalSecretMetadataSecretMetadataToTerraform;
-exports.dataInfisicalSecretMetadataSecretMetadataToHclTerraform = dataInfisicalSecretMetadataSecretMetadataToHclTerraform;
-exports.dataInfisicalSecretMetadataTagsToTerraform = dataInfisicalSecretMetadataTagsToTerraform;
-exports.dataInfisicalSecretMetadataTagsToHclTerraform = dataInfisicalSecretMetadataTagsToHclTerraform;
-var cdktf = require("cdktf");
-function dataInfisicalSecretMetadataSecretMetadataToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataInfisicalSecretMetadataSecretMetadataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,97 +10,76 @@ function dataInfisicalSecretMetadataSecretMetadataToTerraform(struct) {
     }
     return {};
 }
-function dataInfisicalSecretMetadataSecretMetadataToHclTerraform(struct) {
+export function dataInfisicalSecretMetadataSecretMetadataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataInfisicalSecretMetadataSecretMetadataOutputReference = /** @class */ (function (_super) {
-    __extends(DataInfisicalSecretMetadataSecretMetadataOutputReference, _super);
+export class DataInfisicalSecretMetadataSecretMetadataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataInfisicalSecretMetadataSecretMetadataOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataInfisicalSecretMetadataSecretMetadataOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadataSecretMetadataOutputReference.prototype, "isEncrypted", {
-        // is_encrypted - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_encrypted');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadataSecretMetadataOutputReference.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadataSecretMetadataOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataInfisicalSecretMetadataSecretMetadataOutputReference;
-}(cdktf.ComplexObject));
-exports.DataInfisicalSecretMetadataSecretMetadataOutputReference = DataInfisicalSecretMetadataSecretMetadataOutputReference;
-var DataInfisicalSecretMetadataSecretMetadataList = /** @class */ (function (_super) {
-    __extends(DataInfisicalSecretMetadataSecretMetadataList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // is_encrypted - computed: true, optional: false, required: false
+    get isEncrypted() {
+        return this.getBooleanAttribute('is_encrypted');
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export class DataInfisicalSecretMetadataSecretMetadataList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataInfisicalSecretMetadataSecretMetadataList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataInfisicalSecretMetadataSecretMetadataList.prototype.get = function (index) {
+    get(index) {
         return new DataInfisicalSecretMetadataSecretMetadataOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataInfisicalSecretMetadataSecretMetadataList;
-}(cdktf.ComplexList));
-exports.DataInfisicalSecretMetadataSecretMetadataList = DataInfisicalSecretMetadataSecretMetadataList;
-function dataInfisicalSecretMetadataTagsToTerraform(struct) {
+    }
+}
+export function dataInfisicalSecretMetadataTagsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -131,109 +88,100 @@ function dataInfisicalSecretMetadataTagsToTerraform(struct) {
     }
     return {};
 }
-function dataInfisicalSecretMetadataTagsToHclTerraform(struct) {
+export function dataInfisicalSecretMetadataTagsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataInfisicalSecretMetadataTagsOutputReference = /** @class */ (function (_super) {
-    __extends(DataInfisicalSecretMetadataTagsOutputReference, _super);
+export class DataInfisicalSecretMetadataTagsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataInfisicalSecretMetadataTagsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataInfisicalSecretMetadataTagsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadataTagsOutputReference.prototype, "color", {
-        // color - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('color');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadataTagsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadataTagsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadataTagsOutputReference.prototype, "slug", {
-        // slug - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('slug');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataInfisicalSecretMetadataTagsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataInfisicalSecretMetadataTagsOutputReference = DataInfisicalSecretMetadataTagsOutputReference;
-var DataInfisicalSecretMetadataTagsList = /** @class */ (function (_super) {
-    __extends(DataInfisicalSecretMetadataTagsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // color - computed: true, optional: false, required: false
+    get color() {
+        return this.getStringAttribute('color');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // slug - computed: true, optional: false, required: false
+    get slug() {
+        return this.getStringAttribute('slug');
+    }
+}
+export class DataInfisicalSecretMetadataTagsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataInfisicalSecretMetadataTagsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataInfisicalSecretMetadataTagsList.prototype.get = function (index) {
+    get(index) {
         return new DataInfisicalSecretMetadataTagsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataInfisicalSecretMetadataTagsList;
-}(cdktf.ComplexList));
-exports.DataInfisicalSecretMetadataTagsList = DataInfisicalSecretMetadataTagsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/data-sources/secret_metadata infisical_secret_metadata}
 */
-var DataInfisicalSecretMetadata = /** @class */ (function (_super) {
-    __extends(DataInfisicalSecretMetadata, _super);
+export class DataInfisicalSecretMetadata extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_secret_metadata";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataInfisicalSecretMetadata resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataInfisicalSecretMetadata to import
+    * @param importFromId The id of the existing DataInfisicalSecretMetadata that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/data-sources/secret_metadata#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataInfisicalSecretMetadata to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_secret_metadata", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -244,8 +192,8 @@ var DataInfisicalSecretMetadata = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataInfisicalSecretMetadataConfig
     */
-    function DataInfisicalSecretMetadata(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_secret_metadata',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -258,150 +206,97 @@ var DataInfisicalSecretMetadata = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // secret_metadata - computed: true, optional: false, required: false
-        _this._secretMetadata = new DataInfisicalSecretMetadataSecretMetadataList(_this, "secret_metadata", false);
-        // tags - computed: true, optional: false, required: false
-        _this._tags = new DataInfisicalSecretMetadataTagsList(_this, "tags", false);
-        _this._environmentSlug = config.environmentSlug;
-        _this._folderPath = config.folderPath;
-        _this._name = config.name;
-        _this._projectId = config.projectId;
-        _this._secretType = config.secretType;
-        return _this;
+        });
+        this._environmentSlug = config.environmentSlug;
+        this._folderPath = config.folderPath;
+        this._name = config.name;
+        this._projectId = config.projectId;
+        this._secretType = config.secretType;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataInfisicalSecretMetadata resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataInfisicalSecretMetadata to import
-    * @param importFromId The id of the existing DataInfisicalSecretMetadata that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/data-sources/secret_metadata#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataInfisicalSecretMetadata to import is found
-    */
-    DataInfisicalSecretMetadata.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_secret_metadata", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "environmentSlug", {
-        get: function () {
-            return this.getStringAttribute('environment_slug');
-        },
-        set: function (value) {
-            this._environmentSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "environmentSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._environmentSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "folderPath", {
-        get: function () {
-            return this.getStringAttribute('folder_path');
-        },
-        set: function (value) {
-            this._folderPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "folderPathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._folderPath;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "projectId", {
-        get: function () {
-            return this.getStringAttribute('project_id');
-        },
-        set: function (value) {
-            this._projectId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "projectIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._projectId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "secretMetadata", {
-        get: function () {
-            return this._secretMetadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "secretType", {
-        get: function () {
-            return this.getStringAttribute('secret_type');
-        },
-        set: function (value) {
-            this._secretType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataInfisicalSecretMetadata.prototype.resetSecretType = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // environment_slug - computed: false, optional: false, required: true
+    _environmentSlug;
+    get environmentSlug() {
+        return this.getStringAttribute('environment_slug');
+    }
+    set environmentSlug(value) {
+        this._environmentSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get environmentSlugInput() {
+        return this._environmentSlug;
+    }
+    // folder_path - computed: false, optional: false, required: true
+    _folderPath;
+    get folderPath() {
+        return this.getStringAttribute('folder_path');
+    }
+    set folderPath(value) {
+        this._folderPath = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get folderPathInput() {
+        return this._folderPath;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // project_id - computed: false, optional: false, required: true
+    _projectId;
+    get projectId() {
+        return this.getStringAttribute('project_id');
+    }
+    set projectId(value) {
+        this._projectId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get projectIdInput() {
+        return this._projectId;
+    }
+    // secret_metadata - computed: true, optional: false, required: false
+    _secretMetadata = new DataInfisicalSecretMetadataSecretMetadataList(this, "secret_metadata", false);
+    get secretMetadata() {
+        return this._secretMetadata;
+    }
+    // secret_type - computed: true, optional: true, required: false
+    _secretType;
+    get secretType() {
+        return this.getStringAttribute('secret_type');
+    }
+    set secretType(value) {
+        this._secretType = value;
+    }
+    resetSecretType() {
         this._secretType = undefined;
-    };
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "secretTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "secretVersion", {
-        // secret_version - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('secret_version');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataInfisicalSecretMetadata.prototype, "tags", {
-        get: function () {
-            return this._tags;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretTypeInput() {
+        return this._secretType;
+    }
+    // secret_version - computed: true, optional: false, required: false
+    get secretVersion() {
+        return this.getNumberAttribute('secret_version');
+    }
+    // tags - computed: true, optional: false, required: false
+    _tags = new DataInfisicalSecretMetadataTagsList(this, "tags", false);
+    get tags() {
+        return this._tags;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataInfisicalSecretMetadata.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             environment_slug: cdktf.stringToTerraform(this._environmentSlug),
             folder_path: cdktf.stringToTerraform(this._folderPath),
@@ -409,9 +304,9 @@ var DataInfisicalSecretMetadata = /** @class */ (function (_super) {
             project_id: cdktf.stringToTerraform(this._projectId),
             secret_type: cdktf.stringToTerraform(this._secretType),
         };
-    };
-    DataInfisicalSecretMetadata.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             environment_slug: {
                 value: cdktf.stringToHclTerraform(this._environmentSlug),
                 isBlock: false,
@@ -444,15 +339,6 @@ var DataInfisicalSecretMetadata = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataInfisicalSecretMetadata.tfResourceType = "infisical_secret_metadata";
-    return DataInfisicalSecretMetadata;
-}(cdktf.TerraformDataSource));
-exports.DataInfisicalSecretMetadata = DataInfisicalSecretMetadata;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

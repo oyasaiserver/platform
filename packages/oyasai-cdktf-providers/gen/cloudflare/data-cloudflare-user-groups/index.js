@@ -1,41 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/user_groups
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareUserGroups = exports.DataCloudflareUserGroupsResultList = exports.DataCloudflareUserGroupsResultOutputReference = exports.DataCloudflareUserGroupsResultPoliciesList = exports.DataCloudflareUserGroupsResultPoliciesOutputReference = exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsList = exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference = exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList = exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference = exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList = exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference = exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference = exports.DataCloudflareUserGroupsResultPoliciesPermissionGroupsList = exports.DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference = exports.DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference = void 0;
-exports.dataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaToTerraform = dataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaToTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaToHclTerraform = dataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaToHclTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesPermissionGroupsToTerraform = dataCloudflareUserGroupsResultPoliciesPermissionGroupsToTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesPermissionGroupsToHclTerraform = dataCloudflareUserGroupsResultPoliciesPermissionGroupsToHclTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesResourceGroupsMetaToTerraform = dataCloudflareUserGroupsResultPoliciesResourceGroupsMetaToTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesResourceGroupsMetaToHclTerraform = dataCloudflareUserGroupsResultPoliciesResourceGroupsMetaToHclTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsToTerraform = dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsToTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsToHclTerraform = dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsToHclTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeToTerraform = dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeToTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeToHclTerraform = dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeToHclTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesResourceGroupsToTerraform = dataCloudflareUserGroupsResultPoliciesResourceGroupsToTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesResourceGroupsToHclTerraform = dataCloudflareUserGroupsResultPoliciesResourceGroupsToHclTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesToTerraform = dataCloudflareUserGroupsResultPoliciesToTerraform;
-exports.dataCloudflareUserGroupsResultPoliciesToHclTerraform = dataCloudflareUserGroupsResultPoliciesToHclTerraform;
-exports.dataCloudflareUserGroupsResultToTerraform = dataCloudflareUserGroupsResultToTerraform;
-exports.dataCloudflareUserGroupsResultToHclTerraform = dataCloudflareUserGroupsResultToHclTerraform;
-var cdktf = require("cdktf");
-function dataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function dataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -44,64 +10,48 @@ function dataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaToTerraform(s
     }
     return {};
 }
-function dataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaToHclTerraform(struct) {
+export function dataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference, _super);
+export class DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference = DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference;
-function dataCloudflareUserGroupsResultPoliciesPermissionGroupsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export function dataCloudflareUserGroupsResultPoliciesPermissionGroupsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -110,98 +60,77 @@ function dataCloudflareUserGroupsResultPoliciesPermissionGroupsToTerraform(struc
     }
     return {};
 }
-function dataCloudflareUserGroupsResultPoliciesPermissionGroupsToHclTerraform(struct) {
+export function dataCloudflareUserGroupsResultPoliciesPermissionGroupsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference, _super);
+export class DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // meta - computed: true, optional: false, required: false
-        _this._meta = new DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference(_this, "meta");
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference.prototype, "meta", {
-        get: function () {
-            return this._meta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference = DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference;
-var DataCloudflareUserGroupsResultPoliciesPermissionGroupsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesPermissionGroupsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // meta - computed: true, optional: false, required: false
+    _meta = new DataCloudflareUserGroupsResultPoliciesPermissionGroupsMetaOutputReference(this, "meta");
+    get meta() {
+        return this._meta;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export class DataCloudflareUserGroupsResultPoliciesPermissionGroupsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesPermissionGroupsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareUserGroupsResultPoliciesPermissionGroupsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareUserGroupsResultPoliciesPermissionGroupsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareUserGroupsResultPoliciesPermissionGroupsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareUserGroupsResultPoliciesPermissionGroupsList = DataCloudflareUserGroupsResultPoliciesPermissionGroupsList;
-function dataCloudflareUserGroupsResultPoliciesResourceGroupsMetaToTerraform(struct) {
+    }
+}
+export function dataCloudflareUserGroupsResultPoliciesResourceGroupsMetaToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -210,64 +139,48 @@ function dataCloudflareUserGroupsResultPoliciesResourceGroupsMetaToTerraform(str
     }
     return {};
 }
-function dataCloudflareUserGroupsResultPoliciesResourceGroupsMetaToHclTerraform(struct) {
+export function dataCloudflareUserGroupsResultPoliciesResourceGroupsMetaToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference, _super);
+export class DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference.prototype, "value", {
-        // value - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference = DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference;
-function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    // value - computed: true, optional: false, required: false
+    get value() {
+        return this.getStringAttribute('value');
+    }
+}
+export function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -276,81 +189,68 @@ function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsToTerra
     }
     return {};
 }
-function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsToHclTerraform(struct) {
+export function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference, _super);
+export class DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference = DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference;
-var DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+}
+export class DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList = DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList;
-function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeToTerraform(struct) {
+    }
+}
+export function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -359,90 +259,73 @@ function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeToTerraform(st
     }
     return {};
 }
-function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeToHclTerraform(struct) {
+export function dataCloudflareUserGroupsResultPoliciesResourceGroupsScopeToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference, _super);
+export class DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // objects - computed: true, optional: false, required: false
-        _this._objects = new DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList(_this, "objects", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference.prototype, "key", {
-        // key - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('key');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference.prototype, "objects", {
-        get: function () {
-            return this._objects;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference = DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference;
-var DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // key - computed: true, optional: false, required: false
+    get key() {
+        return this.getStringAttribute('key');
+    }
+    // objects - computed: true, optional: false, required: false
+    _objects = new DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeObjectsList(this, "objects", false);
+    get objects() {
+        return this._objects;
+    }
+}
+export class DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList;
-}(cdktf.ComplexList));
-exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList = DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList;
-function dataCloudflareUserGroupsResultPoliciesResourceGroupsToTerraform(struct) {
+    }
+}
+export function dataCloudflareUserGroupsResultPoliciesResourceGroupsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -451,107 +334,82 @@ function dataCloudflareUserGroupsResultPoliciesResourceGroupsToTerraform(struct)
     }
     return {};
 }
-function dataCloudflareUserGroupsResultPoliciesResourceGroupsToHclTerraform(struct) {
+export function dataCloudflareUserGroupsResultPoliciesResourceGroupsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference, _super);
+export class DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // meta - computed: true, optional: false, required: false
-        _this._meta = new DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference(_this, "meta");
-        // scope - computed: true, optional: false, required: false
-        _this._scope = new DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList(_this, "scope", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference.prototype, "meta", {
-        get: function () {
-            return this._meta;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference.prototype, "scope", {
-        get: function () {
-            return this._scope;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference = DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference;
-var DataCloudflareUserGroupsResultPoliciesResourceGroupsList = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesResourceGroupsList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // meta - computed: true, optional: false, required: false
+    _meta = new DataCloudflareUserGroupsResultPoliciesResourceGroupsMetaOutputReference(this, "meta");
+    get meta() {
+        return this._meta;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // scope - computed: true, optional: false, required: false
+    _scope = new DataCloudflareUserGroupsResultPoliciesResourceGroupsScopeList(this, "scope", false);
+    get scope() {
+        return this._scope;
+    }
+}
+export class DataCloudflareUserGroupsResultPoliciesResourceGroupsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesResourceGroupsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareUserGroupsResultPoliciesResourceGroupsList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareUserGroupsResultPoliciesResourceGroupsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareUserGroupsResultPoliciesResourceGroupsList;
-}(cdktf.ComplexList));
-exports.DataCloudflareUserGroupsResultPoliciesResourceGroupsList = DataCloudflareUserGroupsResultPoliciesResourceGroupsList;
-function dataCloudflareUserGroupsResultPoliciesToTerraform(struct) {
+    }
+}
+export function dataCloudflareUserGroupsResultPoliciesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -560,107 +418,82 @@ function dataCloudflareUserGroupsResultPoliciesToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareUserGroupsResultPoliciesToHclTerraform(struct) {
+export function dataCloudflareUserGroupsResultPoliciesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareUserGroupsResultPoliciesOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesOutputReference, _super);
+export class DataCloudflareUserGroupsResultPoliciesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // permission_groups - computed: true, optional: false, required: false
-        _this._permissionGroups = new DataCloudflareUserGroupsResultPoliciesPermissionGroupsList(_this, "permission_groups", false);
-        // resource_groups - computed: true, optional: false, required: false
-        _this._resourceGroups = new DataCloudflareUserGroupsResultPoliciesResourceGroupsList(_this, "resource_groups", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesOutputReference.prototype, "access", {
-        // access - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('access');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesOutputReference.prototype, "permissionGroups", {
-        get: function () {
-            return this._permissionGroups;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultPoliciesOutputReference.prototype, "resourceGroups", {
-        get: function () {
-            return this._resourceGroups;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserGroupsResultPoliciesOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserGroupsResultPoliciesOutputReference = DataCloudflareUserGroupsResultPoliciesOutputReference;
-var DataCloudflareUserGroupsResultPoliciesList = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultPoliciesList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // access - computed: true, optional: false, required: false
+    get access() {
+        return this.getStringAttribute('access');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // permission_groups - computed: true, optional: false, required: false
+    _permissionGroups = new DataCloudflareUserGroupsResultPoliciesPermissionGroupsList(this, "permission_groups", false);
+    get permissionGroups() {
+        return this._permissionGroups;
+    }
+    // resource_groups - computed: true, optional: false, required: false
+    _resourceGroups = new DataCloudflareUserGroupsResultPoliciesResourceGroupsList(this, "resource_groups", false);
+    get resourceGroups() {
+        return this._resourceGroups;
+    }
+}
+export class DataCloudflareUserGroupsResultPoliciesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultPoliciesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareUserGroupsResultPoliciesList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareUserGroupsResultPoliciesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareUserGroupsResultPoliciesList;
-}(cdktf.ComplexList));
-exports.DataCloudflareUserGroupsResultPoliciesList = DataCloudflareUserGroupsResultPoliciesList;
-function dataCloudflareUserGroupsResultToTerraform(struct) {
+    }
+}
+export function dataCloudflareUserGroupsResultToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -669,118 +502,105 @@ function dataCloudflareUserGroupsResultToTerraform(struct) {
     }
     return {};
 }
-function dataCloudflareUserGroupsResultToHclTerraform(struct) {
+export function dataCloudflareUserGroupsResultToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var DataCloudflareUserGroupsResultOutputReference = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultOutputReference, _super);
+export class DataCloudflareUserGroupsResultOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        // policies - computed: true, optional: false, required: false
-        _this._policies = new DataCloudflareUserGroupsResultPoliciesList(_this, "policies", false);
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(DataCloudflareUserGroupsResultOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultOutputReference.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultOutputReference.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultOutputReference.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroupsResultOutputReference.prototype, "policies", {
-        get: function () {
-            return this._policies;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return DataCloudflareUserGroupsResultOutputReference;
-}(cdktf.ComplexObject));
-exports.DataCloudflareUserGroupsResultOutputReference = DataCloudflareUserGroupsResultOutputReference;
-var DataCloudflareUserGroupsResultList = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroupsResultList, _super);
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // policies - computed: true, optional: false, required: false
+    _policies = new DataCloudflareUserGroupsResultPoliciesList(this, "policies", false);
+    get policies() {
+        return this._policies;
+    }
+}
+export class DataCloudflareUserGroupsResultList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function DataCloudflareUserGroupsResultList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    DataCloudflareUserGroupsResultList.prototype.get = function (index) {
+    get(index) {
         return new DataCloudflareUserGroupsResultOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return DataCloudflareUserGroupsResultList;
-}(cdktf.ComplexList));
-exports.DataCloudflareUserGroupsResultList = DataCloudflareUserGroupsResultList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/user_groups cloudflare_user_groups}
 */
-var DataCloudflareUserGroups = /** @class */ (function (_super) {
-    __extends(DataCloudflareUserGroups, _super);
+export class DataCloudflareUserGroups extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_user_groups";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareUserGroups resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareUserGroups to import
+    * @param importFromId The id of the existing DataCloudflareUserGroups that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/user_groups#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareUserGroups to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_user_groups", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -791,8 +611,8 @@ var DataCloudflareUserGroups = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareUserGroupsConfig
     */
-    function DataCloudflareUserGroups(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_user_groups',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -805,164 +625,113 @@ var DataCloudflareUserGroups = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // result - computed: true, optional: false, required: false
-        _this._result = new DataCloudflareUserGroupsResultList(_this, "result", false);
-        _this._accountId = config.accountId;
-        _this._direction = config.direction;
-        _this._fuzzyName = config.fuzzyName;
-        _this._id = config.id;
-        _this._maxItems = config.maxItems;
-        _this._name = config.name;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._direction = config.direction;
+        this._fuzzyName = config.fuzzyName;
+        this._id = config.id;
+        this._maxItems = config.maxItems;
+        this._name = config.name;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareUserGroups resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareUserGroups to import
-    * @param importFromId The id of the existing DataCloudflareUserGroups that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/user_groups#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareUserGroups to import is found
-    */
-    DataCloudflareUserGroups.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_user_groups", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "direction", {
-        get: function () {
-            return this.getStringAttribute('direction');
-        },
-        set: function (value) {
-            this._direction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserGroups.prototype.resetDirection = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: false, required: true
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // direction - computed: true, optional: true, required: false
+    _direction;
+    get direction() {
+        return this.getStringAttribute('direction');
+    }
+    set direction(value) {
+        this._direction = value;
+    }
+    resetDirection() {
         this._direction = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "directionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._direction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "fuzzyName", {
-        get: function () {
-            return this.getStringAttribute('fuzzy_name');
-        },
-        set: function (value) {
-            this._fuzzyName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserGroups.prototype.resetFuzzyName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get directionInput() {
+        return this._direction;
+    }
+    // fuzzy_name - computed: false, optional: true, required: false
+    _fuzzyName;
+    get fuzzyName() {
+        return this.getStringAttribute('fuzzy_name');
+    }
+    set fuzzyName(value) {
+        this._fuzzyName = value;
+    }
+    resetFuzzyName() {
         this._fuzzyName = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "fuzzyNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fuzzyName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserGroups.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fuzzyNameInput() {
+        return this._fuzzyName;
+    }
+    // id - computed: false, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "maxItems", {
-        get: function () {
-            return this.getNumberAttribute('max_items');
-        },
-        set: function (value) {
-            this._maxItems = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserGroups.prototype.resetMaxItems = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // max_items - computed: false, optional: true, required: false
+    _maxItems;
+    get maxItems() {
+        return this.getNumberAttribute('max_items');
+    }
+    set maxItems(value) {
+        this._maxItems = value;
+    }
+    resetMaxItems() {
         this._maxItems = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "maxItemsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._maxItems;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    DataCloudflareUserGroups.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get maxItemsInput() {
+        return this._maxItems;
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareUserGroups.prototype, "result", {
-        get: function () {
-            return this._result;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // result - computed: true, optional: false, required: false
+    _result = new DataCloudflareUserGroupsResultList(this, "result", false);
+    get result() {
+        return this._result;
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareUserGroups.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             direction: cdktf.stringToTerraform(this._direction),
@@ -971,9 +740,9 @@ var DataCloudflareUserGroups = /** @class */ (function (_super) {
             max_items: cdktf.numberToTerraform(this._maxItems),
             name: cdktf.stringToTerraform(this._name),
         };
-    };
-    DataCloudflareUserGroups.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -1012,15 +781,6 @@ var DataCloudflareUserGroups = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareUserGroups.tfResourceType = "cloudflare_user_groups";
-    return DataCloudflareUserGroups;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareUserGroups = DataCloudflareUserGroups;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

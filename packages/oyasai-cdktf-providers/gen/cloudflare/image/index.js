@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/image
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Image = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/image cloudflare_image}
 */
-var Image = /** @class */ (function (_super) {
-    __extends(Image, _super);
+export class Image extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_image";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Image resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Image to import
+    * @param importFromId The id of the existing Image that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/image#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Image to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_image", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var Image = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ImageConfig
     */
-    function Image(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_image',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,209 +46,140 @@ var Image = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._creator = config.creator;
-        _this._file = config.file;
-        _this._id = config.id;
-        _this._metadata = config.metadata;
-        _this._requireSignedUrls = config.requireSignedUrls;
-        _this._url = config.url;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._creator = config.creator;
+        this._file = config.file;
+        this._id = config.id;
+        this._metadata = config.metadata;
+        this._requireSignedUrls = config.requireSignedUrls;
+        this._url = config.url;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Image resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Image to import
-    * @param importFromId The id of the existing Image that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/image#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Image to import is found
-    */
-    Image.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_image", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Image.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Image.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(Image.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "creator", {
-        get: function () {
-            return this.getStringAttribute('creator');
-        },
-        set: function (value) {
-            this._creator = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Image.prototype.resetCreator = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // creator - computed: false, optional: true, required: false
+    _creator;
+    get creator() {
+        return this.getStringAttribute('creator');
+    }
+    set creator(value) {
+        this._creator = value;
+    }
+    resetCreator() {
         this._creator = undefined;
-    };
-    Object.defineProperty(Image.prototype, "creatorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._creator;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "file", {
-        get: function () {
-            return this.getStringAttribute('file');
-        },
-        set: function (value) {
-            this._file = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Image.prototype.resetFile = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get creatorInput() {
+        return this._creator;
+    }
+    // file - computed: false, optional: true, required: false
+    _file;
+    get file() {
+        return this.getStringAttribute('file');
+    }
+    set file(value) {
+        this._file = value;
+    }
+    resetFile() {
         this._file = undefined;
-    };
-    Object.defineProperty(Image.prototype, "fileInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._file;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "filename", {
-        // filename - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('filename');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "meta", {
-        // meta - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('meta');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "metadata", {
-        get: function () {
-            return this.getStringAttribute('metadata');
-        },
-        set: function (value) {
-            this._metadata = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Image.prototype.resetMetadata = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fileInput() {
+        return this._file;
+    }
+    // filename - computed: true, optional: false, required: false
+    get filename() {
+        return this.getStringAttribute('filename');
+    }
+    // id - computed: false, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // meta - computed: true, optional: false, required: false
+    get meta() {
+        return this.getStringAttribute('meta');
+    }
+    // metadata - computed: false, optional: true, required: false
+    _metadata;
+    get metadata() {
+        return this.getStringAttribute('metadata');
+    }
+    set metadata(value) {
+        this._metadata = value;
+    }
+    resetMetadata() {
         this._metadata = undefined;
-    };
-    Object.defineProperty(Image.prototype, "metadataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._metadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "requireSignedUrls", {
-        get: function () {
-            return this.getBooleanAttribute('require_signed_urls');
-        },
-        set: function (value) {
-            this._requireSignedUrls = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Image.prototype.resetRequireSignedUrls = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get metadataInput() {
+        return this._metadata;
+    }
+    // require_signed_urls - computed: true, optional: true, required: false
+    _requireSignedUrls;
+    get requireSignedUrls() {
+        return this.getBooleanAttribute('require_signed_urls');
+    }
+    set requireSignedUrls(value) {
+        this._requireSignedUrls = value;
+    }
+    resetRequireSignedUrls() {
         this._requireSignedUrls = undefined;
-    };
-    Object.defineProperty(Image.prototype, "requireSignedUrlsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._requireSignedUrls;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "uploaded", {
-        // uploaded - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uploaded');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "url", {
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        set: function (value) {
-            this._url = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Image.prototype.resetUrl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get requireSignedUrlsInput() {
+        return this._requireSignedUrls;
+    }
+    // uploaded - computed: true, optional: false, required: false
+    get uploaded() {
+        return this.getStringAttribute('uploaded');
+    }
+    // url - computed: false, optional: true, required: false
+    _url;
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    set url(value) {
+        this._url = value;
+    }
+    resetUrl() {
         this._url = undefined;
-    };
-    Object.defineProperty(Image.prototype, "urlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._url;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Image.prototype, "variants", {
-        // variants - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('variants');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get urlInput() {
+        return this._url;
+    }
+    // variants - computed: true, optional: false, required: false
+    get variants() {
+        return this.getListAttribute('variants');
+    }
     // =========
     // SYNTHESIS
     // =========
-    Image.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             creator: cdktf.stringToTerraform(this._creator),
@@ -260,9 +189,9 @@ var Image = /** @class */ (function (_super) {
             require_signed_urls: cdktf.booleanToTerraform(this._requireSignedUrls),
             url: cdktf.stringToTerraform(this._url),
         };
-    };
-    Image.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -307,15 +236,6 @@ var Image = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Image.tfResourceType = "cloudflare_image";
-    return Image;
-}(cdktf.TerraformResource));
-exports.Image = Image;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

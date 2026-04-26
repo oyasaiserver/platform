@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_settings
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustDeviceSettings = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_settings cloudflare_zero_trust_device_settings}
 */
-var ZeroTrustDeviceSettings = /** @class */ (function (_super) {
-    __extends(ZeroTrustDeviceSettings, _super);
+export class ZeroTrustDeviceSettings extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_device_settings";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustDeviceSettings resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustDeviceSettings to import
+    * @param importFromId The id of the existing ZeroTrustDeviceSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_settings#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustDeviceSettings to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_settings", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,9 +32,8 @@ var ZeroTrustDeviceSettings = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustDeviceSettingsConfig = {}
     */
-    function ZeroTrustDeviceSettings(scope, id, config) {
-        if (config === void 0) { config = {}; }
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config = {}) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_device_settings',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -49,246 +46,175 @@ var ZeroTrustDeviceSettings = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._disableForTime = config.disableForTime;
-        _this._externalEmergencySignalEnabled = config.externalEmergencySignalEnabled;
-        _this._externalEmergencySignalFingerprint = config.externalEmergencySignalFingerprint;
-        _this._externalEmergencySignalInterval = config.externalEmergencySignalInterval;
-        _this._externalEmergencySignalUrl = config.externalEmergencySignalUrl;
-        _this._gatewayProxyEnabled = config.gatewayProxyEnabled;
-        _this._gatewayUdpProxyEnabled = config.gatewayUdpProxyEnabled;
-        _this._rootCertificateInstallationEnabled = config.rootCertificateInstallationEnabled;
-        _this._useZtVirtualIp = config.useZtVirtualIp;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._disableForTime = config.disableForTime;
+        this._externalEmergencySignalEnabled = config.externalEmergencySignalEnabled;
+        this._externalEmergencySignalFingerprint = config.externalEmergencySignalFingerprint;
+        this._externalEmergencySignalInterval = config.externalEmergencySignalInterval;
+        this._externalEmergencySignalUrl = config.externalEmergencySignalUrl;
+        this._gatewayProxyEnabled = config.gatewayProxyEnabled;
+        this._gatewayUdpProxyEnabled = config.gatewayUdpProxyEnabled;
+        this._rootCertificateInstallationEnabled = config.rootCertificateInstallationEnabled;
+        this._useZtVirtualIp = config.useZtVirtualIp;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustDeviceSettings resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustDeviceSettings to import
-    * @param importFromId The id of the existing ZeroTrustDeviceSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_device_settings#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustDeviceSettings to import is found
-    */
-    ZeroTrustDeviceSettings.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_device_settings", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "disableForTime", {
-        get: function () {
-            return this.getNumberAttribute('disable_for_time');
-        },
-        set: function (value) {
-            this._disableForTime = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetDisableForTime = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // disable_for_time - computed: false, optional: true, required: false
+    _disableForTime;
+    get disableForTime() {
+        return this.getNumberAttribute('disable_for_time');
+    }
+    set disableForTime(value) {
+        this._disableForTime = value;
+    }
+    resetDisableForTime() {
         this._disableForTime = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "disableForTimeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disableForTime;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "externalEmergencySignalEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('external_emergency_signal_enabled');
-        },
-        set: function (value) {
-            this._externalEmergencySignalEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetExternalEmergencySignalEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableForTimeInput() {
+        return this._disableForTime;
+    }
+    // external_emergency_signal_enabled - computed: false, optional: true, required: false
+    _externalEmergencySignalEnabled;
+    get externalEmergencySignalEnabled() {
+        return this.getBooleanAttribute('external_emergency_signal_enabled');
+    }
+    set externalEmergencySignalEnabled(value) {
+        this._externalEmergencySignalEnabled = value;
+    }
+    resetExternalEmergencySignalEnabled() {
         this._externalEmergencySignalEnabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "externalEmergencySignalEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._externalEmergencySignalEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "externalEmergencySignalFingerprint", {
-        get: function () {
-            return this.getStringAttribute('external_emergency_signal_fingerprint');
-        },
-        set: function (value) {
-            this._externalEmergencySignalFingerprint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetExternalEmergencySignalFingerprint = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalEmergencySignalEnabledInput() {
+        return this._externalEmergencySignalEnabled;
+    }
+    // external_emergency_signal_fingerprint - computed: false, optional: true, required: false
+    _externalEmergencySignalFingerprint;
+    get externalEmergencySignalFingerprint() {
+        return this.getStringAttribute('external_emergency_signal_fingerprint');
+    }
+    set externalEmergencySignalFingerprint(value) {
+        this._externalEmergencySignalFingerprint = value;
+    }
+    resetExternalEmergencySignalFingerprint() {
         this._externalEmergencySignalFingerprint = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "externalEmergencySignalFingerprintInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._externalEmergencySignalFingerprint;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "externalEmergencySignalInterval", {
-        get: function () {
-            return this.getStringAttribute('external_emergency_signal_interval');
-        },
-        set: function (value) {
-            this._externalEmergencySignalInterval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetExternalEmergencySignalInterval = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalEmergencySignalFingerprintInput() {
+        return this._externalEmergencySignalFingerprint;
+    }
+    // external_emergency_signal_interval - computed: false, optional: true, required: false
+    _externalEmergencySignalInterval;
+    get externalEmergencySignalInterval() {
+        return this.getStringAttribute('external_emergency_signal_interval');
+    }
+    set externalEmergencySignalInterval(value) {
+        this._externalEmergencySignalInterval = value;
+    }
+    resetExternalEmergencySignalInterval() {
         this._externalEmergencySignalInterval = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "externalEmergencySignalIntervalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._externalEmergencySignalInterval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "externalEmergencySignalUrl", {
-        get: function () {
-            return this.getStringAttribute('external_emergency_signal_url');
-        },
-        set: function (value) {
-            this._externalEmergencySignalUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetExternalEmergencySignalUrl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalEmergencySignalIntervalInput() {
+        return this._externalEmergencySignalInterval;
+    }
+    // external_emergency_signal_url - computed: false, optional: true, required: false
+    _externalEmergencySignalUrl;
+    get externalEmergencySignalUrl() {
+        return this.getStringAttribute('external_emergency_signal_url');
+    }
+    set externalEmergencySignalUrl(value) {
+        this._externalEmergencySignalUrl = value;
+    }
+    resetExternalEmergencySignalUrl() {
         this._externalEmergencySignalUrl = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "externalEmergencySignalUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._externalEmergencySignalUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "gatewayProxyEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('gateway_proxy_enabled');
-        },
-        set: function (value) {
-            this._gatewayProxyEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetGatewayProxyEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get externalEmergencySignalUrlInput() {
+        return this._externalEmergencySignalUrl;
+    }
+    // gateway_proxy_enabled - computed: false, optional: true, required: false
+    _gatewayProxyEnabled;
+    get gatewayProxyEnabled() {
+        return this.getBooleanAttribute('gateway_proxy_enabled');
+    }
+    set gatewayProxyEnabled(value) {
+        this._gatewayProxyEnabled = value;
+    }
+    resetGatewayProxyEnabled() {
         this._gatewayProxyEnabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "gatewayProxyEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gatewayProxyEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "gatewayUdpProxyEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('gateway_udp_proxy_enabled');
-        },
-        set: function (value) {
-            this._gatewayUdpProxyEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetGatewayUdpProxyEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gatewayProxyEnabledInput() {
+        return this._gatewayProxyEnabled;
+    }
+    // gateway_udp_proxy_enabled - computed: false, optional: true, required: false
+    _gatewayUdpProxyEnabled;
+    get gatewayUdpProxyEnabled() {
+        return this.getBooleanAttribute('gateway_udp_proxy_enabled');
+    }
+    set gatewayUdpProxyEnabled(value) {
+        this._gatewayUdpProxyEnabled = value;
+    }
+    resetGatewayUdpProxyEnabled() {
         this._gatewayUdpProxyEnabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "gatewayUdpProxyEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gatewayUdpProxyEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "rootCertificateInstallationEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('root_certificate_installation_enabled');
-        },
-        set: function (value) {
-            this._rootCertificateInstallationEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetRootCertificateInstallationEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gatewayUdpProxyEnabledInput() {
+        return this._gatewayUdpProxyEnabled;
+    }
+    // root_certificate_installation_enabled - computed: false, optional: true, required: false
+    _rootCertificateInstallationEnabled;
+    get rootCertificateInstallationEnabled() {
+        return this.getBooleanAttribute('root_certificate_installation_enabled');
+    }
+    set rootCertificateInstallationEnabled(value) {
+        this._rootCertificateInstallationEnabled = value;
+    }
+    resetRootCertificateInstallationEnabled() {
         this._rootCertificateInstallationEnabled = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "rootCertificateInstallationEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._rootCertificateInstallationEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "useZtVirtualIp", {
-        get: function () {
-            return this.getBooleanAttribute('use_zt_virtual_ip');
-        },
-        set: function (value) {
-            this._useZtVirtualIp = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDeviceSettings.prototype.resetUseZtVirtualIp = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get rootCertificateInstallationEnabledInput() {
+        return this._rootCertificateInstallationEnabled;
+    }
+    // use_zt_virtual_ip - computed: false, optional: true, required: false
+    _useZtVirtualIp;
+    get useZtVirtualIp() {
+        return this.getBooleanAttribute('use_zt_virtual_ip');
+    }
+    set useZtVirtualIp(value) {
+        this._useZtVirtualIp = value;
+    }
+    resetUseZtVirtualIp() {
         this._useZtVirtualIp = undefined;
-    };
-    Object.defineProperty(ZeroTrustDeviceSettings.prototype, "useZtVirtualIpInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._useZtVirtualIp;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get useZtVirtualIpInput() {
+        return this._useZtVirtualIp;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustDeviceSettings.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             disable_for_time: cdktf.numberToTerraform(this._disableForTime),
@@ -301,9 +227,9 @@ var ZeroTrustDeviceSettings = /** @class */ (function (_super) {
             root_certificate_installation_enabled: cdktf.booleanToTerraform(this._rootCertificateInstallationEnabled),
             use_zt_virtual_ip: cdktf.booleanToTerraform(this._useZtVirtualIp),
         };
-    };
-    ZeroTrustDeviceSettings.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -366,15 +292,6 @@ var ZeroTrustDeviceSettings = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustDeviceSettings.tfResourceType = "cloudflare_zero_trust_device_settings";
-    return ZeroTrustDeviceSettings;
-}(cdktf.TerraformResource));
-exports.ZeroTrustDeviceSettings = ZeroTrustDeviceSettings;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

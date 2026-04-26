@@ -1,29 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dex_test
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustDexTest = exports.ZeroTrustDexTestTargetPoliciesList = exports.ZeroTrustDexTestTargetPoliciesOutputReference = exports.ZeroTrustDexTestDataOutputReference = void 0;
-exports.zeroTrustDexTestDataToTerraform = zeroTrustDexTestDataToTerraform;
-exports.zeroTrustDexTestDataToHclTerraform = zeroTrustDexTestDataToHclTerraform;
-exports.zeroTrustDexTestTargetPoliciesToTerraform = zeroTrustDexTestTargetPoliciesToTerraform;
-exports.zeroTrustDexTestTargetPoliciesToHclTerraform = zeroTrustDexTestTargetPoliciesToHclTerraform;
-var cdktf = require("cdktf");
-function zeroTrustDexTestDataToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function zeroTrustDexTestDataToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -36,14 +14,14 @@ function zeroTrustDexTestDataToTerraform(struct) {
         method: cdktf.stringToTerraform(struct.method),
     };
 }
-function zeroTrustDexTestDataToHclTerraform(struct) {
+export function zeroTrustDexTestDataToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         host: {
             value: cdktf.stringToHclTerraform(struct.host),
             isBlock: false,
@@ -64,133 +42,105 @@ function zeroTrustDexTestDataToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDexTestDataOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDexTestDataOutputReference, _super);
+export class ZeroTrustDexTestDataOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function ZeroTrustDexTestDataOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(ZeroTrustDexTestDataOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._host !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.host = this._host;
-            }
-            if (this._kind !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.kind = this._kind;
-            }
-            if (this._method !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.method = this._method;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._host = undefined;
-                this._kind = undefined;
-                this._method = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._host = value.host;
-                this._kind = value.kind;
-                this._method = value.method;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTestDataOutputReference.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDexTestDataOutputReference.prototype.resetHost = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._host !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.host = this._host;
+        }
+        if (this._kind !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.kind = this._kind;
+        }
+        if (this._method !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.method = this._method;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._host = undefined;
+            this._kind = undefined;
+            this._method = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._host = value.host;
+            this._kind = value.kind;
+            this._method = value.method;
+        }
+    }
+    // host - computed: false, optional: true, required: false
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    resetHost() {
         this._host = undefined;
-    };
-    Object.defineProperty(ZeroTrustDexTestDataOutputReference.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTestDataOutputReference.prototype, "kind", {
-        get: function () {
-            return this.getStringAttribute('kind');
-        },
-        set: function (value) {
-            this._kind = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDexTestDataOutputReference.prototype.resetKind = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // kind - computed: false, optional: true, required: false
+    _kind;
+    get kind() {
+        return this.getStringAttribute('kind');
+    }
+    set kind(value) {
+        this._kind = value;
+    }
+    resetKind() {
         this._kind = undefined;
-    };
-    Object.defineProperty(ZeroTrustDexTestDataOutputReference.prototype, "kindInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._kind;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTestDataOutputReference.prototype, "method", {
-        get: function () {
-            return this.getStringAttribute('method');
-        },
-        set: function (value) {
-            this._method = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDexTestDataOutputReference.prototype.resetMethod = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get kindInput() {
+        return this._kind;
+    }
+    // method - computed: false, optional: true, required: false
+    _method;
+    get method() {
+        return this.getStringAttribute('method');
+    }
+    set method(value) {
+        this._method = value;
+    }
+    resetMethod() {
         this._method = undefined;
-    };
-    Object.defineProperty(ZeroTrustDexTestDataOutputReference.prototype, "methodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._method;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDexTestDataOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDexTestDataOutputReference = ZeroTrustDexTestDataOutputReference;
-function zeroTrustDexTestTargetPoliciesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get methodInput() {
+        return this._method;
+    }
+}
+export function zeroTrustDexTestTargetPoliciesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -201,14 +151,14 @@ function zeroTrustDexTestTargetPoliciesToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function zeroTrustDexTestTargetPoliciesToHclTerraform(struct) {
+export function zeroTrustDexTestTargetPoliciesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -217,121 +167,113 @@ function zeroTrustDexTestTargetPoliciesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var ZeroTrustDexTestTargetPoliciesOutputReference = /** @class */ (function (_super) {
-    __extends(ZeroTrustDexTestTargetPoliciesOutputReference, _super);
+export class ZeroTrustDexTestTargetPoliciesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDexTestTargetPoliciesOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(ZeroTrustDexTestTargetPoliciesOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTestTargetPoliciesOutputReference.prototype, "default", {
-        // default - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('default');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTestTargetPoliciesOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTestTargetPoliciesOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTestTargetPoliciesOutputReference.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return ZeroTrustDexTestTargetPoliciesOutputReference;
-}(cdktf.ComplexObject));
-exports.ZeroTrustDexTestTargetPoliciesOutputReference = ZeroTrustDexTestTargetPoliciesOutputReference;
-var ZeroTrustDexTestTargetPoliciesList = /** @class */ (function (_super) {
-    __extends(ZeroTrustDexTestTargetPoliciesList, _super);
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // default - computed: true, optional: false, required: false
+    get default() {
+        return this.getBooleanAttribute('default');
+    }
+    // id - computed: true, optional: false, required: true
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+}
+export class ZeroTrustDexTestTargetPoliciesList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function ZeroTrustDexTestTargetPoliciesList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    ZeroTrustDexTestTargetPoliciesList.prototype.get = function (index) {
+    get(index) {
         return new ZeroTrustDexTestTargetPoliciesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return ZeroTrustDexTestTargetPoliciesList;
-}(cdktf.ComplexList));
-exports.ZeroTrustDexTestTargetPoliciesList = ZeroTrustDexTestTargetPoliciesList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dex_test cloudflare_zero_trust_dex_test}
 */
-var ZeroTrustDexTest = /** @class */ (function (_super) {
-    __extends(ZeroTrustDexTest, _super);
+export class ZeroTrustDexTest extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_dex_test";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustDexTest resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustDexTest to import
+    * @param importFromId The id of the existing ZeroTrustDexTest that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dex_test#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustDexTest to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dex_test", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -342,8 +284,8 @@ var ZeroTrustDexTest = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustDexTestConfig
     */
-    function ZeroTrustDexTest(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_dex_test',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -356,196 +298,127 @@ var ZeroTrustDexTest = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // data - computed: false, optional: false, required: true
-        _this._data = new ZeroTrustDexTestDataOutputReference(_this, "data");
-        // target_policies - computed: true, optional: true, required: false
-        _this._targetPolicies = new ZeroTrustDexTestTargetPoliciesList(_this, "target_policies", false);
-        _this._accountId = config.accountId;
-        _this._data.internalValue = config.data;
-        _this._description = config.description;
-        _this._enabled = config.enabled;
-        _this._interval = config.interval;
-        _this._name = config.name;
-        _this._targetPolicies.internalValue = config.targetPolicies;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._data.internalValue = config.data;
+        this._description = config.description;
+        this._enabled = config.enabled;
+        this._interval = config.interval;
+        this._name = config.name;
+        this._targetPolicies.internalValue = config.targetPolicies;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustDexTest resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustDexTest to import
-    * @param importFromId The id of the existing ZeroTrustDexTest that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_dex_test#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustDexTest to import is found
-    */
-    ZeroTrustDexTest.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_dex_test", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustDexTest.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDexTest.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustDexTest.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "data", {
-        get: function () {
-            return this._data;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDexTest.prototype.putData = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // data - computed: false, optional: false, required: true
+    _data = new ZeroTrustDexTestDataOutputReference(this, "data");
+    get data() {
+        return this._data;
+    }
+    putData(value) {
         this._data.internalValue = value;
-    };
-    Object.defineProperty(ZeroTrustDexTest.prototype, "dataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._data.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDexTest.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get dataInput() {
+        return this._data.internalValue;
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(ZeroTrustDexTest.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "interval", {
-        get: function () {
-            return this.getStringAttribute('interval');
-        },
-        set: function (value) {
-            this._interval = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "intervalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._interval;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "targetPolicies", {
-        get: function () {
-            return this._targetPolicies;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustDexTest.prototype.putTargetPolicies = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // enabled - computed: false, optional: false, required: true
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // interval - computed: false, optional: false, required: true
+    _interval;
+    get interval() {
+        return this.getStringAttribute('interval');
+    }
+    set interval(value) {
+        this._interval = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get intervalInput() {
+        return this._interval;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // target_policies - computed: true, optional: true, required: false
+    _targetPolicies = new ZeroTrustDexTestTargetPoliciesList(this, "target_policies", false);
+    get targetPolicies() {
+        return this._targetPolicies;
+    }
+    putTargetPolicies(value) {
         this._targetPolicies.internalValue = value;
-    };
-    ZeroTrustDexTest.prototype.resetTargetPolicies = function () {
+    }
+    resetTargetPolicies() {
         this._targetPolicies.internalValue = undefined;
-    };
-    Object.defineProperty(ZeroTrustDexTest.prototype, "targetPoliciesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._targetPolicies.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "targeted", {
-        // targeted - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('targeted');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustDexTest.prototype, "testId", {
-        // test_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('test_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get targetPoliciesInput() {
+        return this._targetPolicies.internalValue;
+    }
+    // targeted - computed: true, optional: false, required: false
+    get targeted() {
+        return this.getBooleanAttribute('targeted');
+    }
+    // test_id - computed: true, optional: false, required: false
+    get testId() {
+        return this.getStringAttribute('test_id');
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustDexTest.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             data: zeroTrustDexTestDataToTerraform(this._data.internalValue),
@@ -555,9 +428,9 @@ var ZeroTrustDexTest = /** @class */ (function (_super) {
             name: cdktf.stringToTerraform(this._name),
             target_policies: cdktf.listMapper(zeroTrustDexTestTargetPoliciesToTerraform, false)(this._targetPolicies.internalValue),
         };
-    };
-    ZeroTrustDexTest.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -602,15 +475,6 @@ var ZeroTrustDexTest = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustDexTest.tfResourceType = "cloudflare_zero_trust_dex_test";
-    return ZeroTrustDexTest;
-}(cdktf.TerraformResource));
-exports.ZeroTrustDexTest = ZeroTrustDexTest;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

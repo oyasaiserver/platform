@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_kv
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WorkersKv = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_kv cloudflare_workers_kv}
 */
-var WorkersKv = /** @class */ (function (_super) {
-    __extends(WorkersKv, _super);
+export class WorkersKv extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_workers_kv";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a WorkersKv resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the WorkersKv to import
+    * @param importFromId The id of the existing WorkersKv that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_kv#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the WorkersKv to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_kv", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var WorkersKv = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options WorkersKvConfig
     */
-    function WorkersKv(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_workers_kv',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,135 +46,90 @@ var WorkersKv = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._keyName = config.keyName;
-        _this._metadata = config.metadata;
-        _this._namespaceId = config.namespaceId;
-        _this._value = config.value;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._keyName = config.keyName;
+        this._metadata = config.metadata;
+        this._namespaceId = config.namespaceId;
+        this._value = config.value;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a WorkersKv resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the WorkersKv to import
-    * @param importFromId The id of the existing WorkersKv that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/workers_kv#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the WorkersKv to import is found
-    */
-    WorkersKv.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_workers_kv", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(WorkersKv.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersKv.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(WorkersKv.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersKv.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersKv.prototype, "keyName", {
-        get: function () {
-            return this.getStringAttribute('key_name');
-        },
-        set: function (value) {
-            this._keyName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersKv.prototype, "keyNameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._keyName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersKv.prototype, "metadata", {
-        get: function () {
-            return this.getStringAttribute('metadata');
-        },
-        set: function (value) {
-            this._metadata = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WorkersKv.prototype.resetMetadata = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // key_name - computed: false, optional: false, required: true
+    _keyName;
+    get keyName() {
+        return this.getStringAttribute('key_name');
+    }
+    set keyName(value) {
+        this._keyName = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get keyNameInput() {
+        return this._keyName;
+    }
+    // metadata - computed: false, optional: true, required: false
+    _metadata;
+    get metadata() {
+        return this.getStringAttribute('metadata');
+    }
+    set metadata(value) {
+        this._metadata = value;
+    }
+    resetMetadata() {
         this._metadata = undefined;
-    };
-    Object.defineProperty(WorkersKv.prototype, "metadataInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._metadata;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersKv.prototype, "namespaceId", {
-        get: function () {
-            return this.getStringAttribute('namespace_id');
-        },
-        set: function (value) {
-            this._namespaceId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersKv.prototype, "namespaceIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._namespaceId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersKv.prototype, "value", {
-        get: function () {
-            return this.getStringAttribute('value');
-        },
-        set: function (value) {
-            this._value = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WorkersKv.prototype, "valueInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._value;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get metadataInput() {
+        return this._metadata;
+    }
+    // namespace_id - computed: false, optional: false, required: true
+    _namespaceId;
+    get namespaceId() {
+        return this.getStringAttribute('namespace_id');
+    }
+    set namespaceId(value) {
+        this._namespaceId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get namespaceIdInput() {
+        return this._namespaceId;
+    }
+    // value - computed: false, optional: false, required: true
+    _value;
+    get value() {
+        return this.getStringAttribute('value');
+    }
+    set value(value) {
+        this._value = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get valueInput() {
+        return this._value;
+    }
     // =========
     // SYNTHESIS
     // =========
-    WorkersKv.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             key_name: cdktf.stringToTerraform(this._keyName),
@@ -184,9 +137,9 @@ var WorkersKv = /** @class */ (function (_super) {
             namespace_id: cdktf.stringToTerraform(this._namespaceId),
             value: cdktf.stringToTerraform(this._value),
         };
-    };
-    WorkersKv.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -219,15 +172,6 @@ var WorkersKv = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    WorkersKv.tfResourceType = "cloudflare_workers_kv";
-    return WorkersKv;
-}(cdktf.TerraformResource));
-exports.WorkersKv = WorkersKv;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

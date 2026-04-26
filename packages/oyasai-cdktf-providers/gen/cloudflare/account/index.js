@@ -1,31 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Account = exports.AccountUnitOutputReference = exports.AccountSettingsOutputReference = exports.AccountManagedByOutputReference = void 0;
-exports.accountManagedByToTerraform = accountManagedByToTerraform;
-exports.accountManagedByToHclTerraform = accountManagedByToHclTerraform;
-exports.accountSettingsToTerraform = accountSettingsToTerraform;
-exports.accountSettingsToHclTerraform = accountSettingsToHclTerraform;
-exports.accountUnitToTerraform = accountUnitToTerraform;
-exports.accountUnitToHclTerraform = accountUnitToHclTerraform;
-var cdktf = require("cdktf");
-function accountManagedByToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function accountManagedByToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -34,73 +10,58 @@ function accountManagedByToTerraform(struct) {
     }
     return {};
 }
-function accountManagedByToHclTerraform(struct) {
+export function accountManagedByToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var AccountManagedByOutputReference = /** @class */ (function (_super) {
-    __extends(AccountManagedByOutputReference, _super);
+export class AccountManagedByOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AccountManagedByOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AccountManagedByOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountManagedByOutputReference.prototype, "parentOrgId", {
-        // parent_org_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('parent_org_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountManagedByOutputReference.prototype, "parentOrgName", {
-        // parent_org_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('parent_org_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountManagedByOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountManagedByOutputReference = AccountManagedByOutputReference;
-function accountSettingsToTerraform(struct) {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+        }
+    }
+    // parent_org_id - computed: true, optional: false, required: false
+    get parentOrgId() {
+        return this.getStringAttribute('parent_org_id');
+    }
+    // parent_org_name - computed: true, optional: false, required: false
+    get parentOrgName() {
+        return this.getStringAttribute('parent_org_name');
+    }
+}
+export function accountSettingsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -112,14 +73,14 @@ function accountSettingsToTerraform(struct) {
         enforce_twofactor: cdktf.booleanToTerraform(struct.enforceTwofactor),
     };
 }
-function accountSettingsToHclTerraform(struct) {
+export function accountSettingsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         abuse_contact_email: {
             value: cdktf.stringToHclTerraform(struct.abuseContactEmail),
             isBlock: false,
@@ -134,106 +95,84 @@ function accountSettingsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountSettingsOutputReference = /** @class */ (function (_super) {
-    __extends(AccountSettingsOutputReference, _super);
+export class AccountSettingsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AccountSettingsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AccountSettingsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._abuseContactEmail !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.abuseContactEmail = this._abuseContactEmail;
-            }
-            if (this._enforceTwofactor !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.enforceTwofactor = this._enforceTwofactor;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._abuseContactEmail = undefined;
-                this._enforceTwofactor = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._abuseContactEmail = value.abuseContactEmail;
-                this._enforceTwofactor = value.enforceTwofactor;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountSettingsOutputReference.prototype, "abuseContactEmail", {
-        get: function () {
-            return this.getStringAttribute('abuse_contact_email');
-        },
-        set: function (value) {
-            this._abuseContactEmail = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountSettingsOutputReference.prototype.resetAbuseContactEmail = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._abuseContactEmail !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.abuseContactEmail = this._abuseContactEmail;
+        }
+        if (this._enforceTwofactor !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.enforceTwofactor = this._enforceTwofactor;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._abuseContactEmail = undefined;
+            this._enforceTwofactor = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._abuseContactEmail = value.abuseContactEmail;
+            this._enforceTwofactor = value.enforceTwofactor;
+        }
+    }
+    // abuse_contact_email - computed: true, optional: true, required: false
+    _abuseContactEmail;
+    get abuseContactEmail() {
+        return this.getStringAttribute('abuse_contact_email');
+    }
+    set abuseContactEmail(value) {
+        this._abuseContactEmail = value;
+    }
+    resetAbuseContactEmail() {
         this._abuseContactEmail = undefined;
-    };
-    Object.defineProperty(AccountSettingsOutputReference.prototype, "abuseContactEmailInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._abuseContactEmail;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountSettingsOutputReference.prototype, "enforceTwofactor", {
-        get: function () {
-            return this.getBooleanAttribute('enforce_twofactor');
-        },
-        set: function (value) {
-            this._enforceTwofactor = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountSettingsOutputReference.prototype.resetEnforceTwofactor = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get abuseContactEmailInput() {
+        return this._abuseContactEmail;
+    }
+    // enforce_twofactor - computed: true, optional: true, required: false
+    _enforceTwofactor;
+    get enforceTwofactor() {
+        return this.getBooleanAttribute('enforce_twofactor');
+    }
+    set enforceTwofactor(value) {
+        this._enforceTwofactor = value;
+    }
+    resetEnforceTwofactor() {
         this._enforceTwofactor = undefined;
-    };
-    Object.defineProperty(AccountSettingsOutputReference.prototype, "enforceTwofactorInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enforceTwofactor;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountSettingsOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountSettingsOutputReference = AccountSettingsOutputReference;
-function accountUnitToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enforceTwofactorInput() {
+        return this._enforceTwofactor;
+    }
+}
+export function accountUnitToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -244,14 +183,14 @@ function accountUnitToTerraform(struct) {
         id: cdktf.stringToTerraform(struct.id),
     };
 }
-function accountUnitToHclTerraform(struct) {
+export function accountUnitToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         id: {
             value: cdktf.stringToHclTerraform(struct.id),
             isBlock: false,
@@ -260,83 +199,83 @@ function accountUnitToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var AccountUnitOutputReference = /** @class */ (function (_super) {
-    __extends(AccountUnitOutputReference, _super);
+export class AccountUnitOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function AccountUnitOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(AccountUnitOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._id !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.id = this._id;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._id = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._id = value.id;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AccountUnitOutputReference.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AccountUnitOutputReference.prototype.resetId = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._id !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.id = this._id;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._id = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._id = value.id;
+        }
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(AccountUnitOutputReference.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return AccountUnitOutputReference;
-}(cdktf.ComplexObject));
-exports.AccountUnitOutputReference = AccountUnitOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account cloudflare_account}
 */
-var Account = /** @class */ (function (_super) {
-    __extends(Account, _super);
+export class Account extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_account";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Account resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Account to import
+    * @param importFromId The id of the existing Account that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Account to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -347,8 +286,8 @@ var Account = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options AccountConfig
     */
-    function Account(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_account',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -361,158 +300,100 @@ var Account = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // managed_by - computed: true, optional: true, required: false
-        _this._managedBy = new AccountManagedByOutputReference(_this, "managed_by");
-        // settings - computed: true, optional: true, required: false
-        _this._settings = new AccountSettingsOutputReference(_this, "settings");
-        // unit - computed: true, optional: true, required: false
-        _this._unit = new AccountUnitOutputReference(_this, "unit");
-        _this._managedBy.internalValue = config.managedBy;
-        _this._name = config.name;
-        _this._settings.internalValue = config.settings;
-        _this._type = config.type;
-        _this._unit.internalValue = config.unit;
-        return _this;
+        });
+        this._managedBy.internalValue = config.managedBy;
+        this._name = config.name;
+        this._settings.internalValue = config.settings;
+        this._type = config.type;
+        this._unit.internalValue = config.unit;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Account resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Account to import
-    * @param importFromId The id of the existing Account that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/account#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Account to import is found
-    */
-    Account.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_account", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Account.prototype, "createdOn", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Account.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Account.prototype, "managedBy", {
-        get: function () {
-            return this._managedBy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Account.prototype.putManagedBy = function (value) {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // managed_by - computed: true, optional: true, required: false
+    _managedBy = new AccountManagedByOutputReference(this, "managed_by");
+    get managedBy() {
+        return this._managedBy;
+    }
+    putManagedBy(value) {
         this._managedBy.internalValue = value;
-    };
-    Account.prototype.resetManagedBy = function () {
+    }
+    resetManagedBy() {
         this._managedBy.internalValue = undefined;
-    };
-    Object.defineProperty(Account.prototype, "managedByInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._managedBy.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Account.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Account.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Account.prototype, "settings", {
-        get: function () {
-            return this._settings;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Account.prototype.putSettings = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get managedByInput() {
+        return this._managedBy.internalValue;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // settings - computed: true, optional: true, required: false
+    _settings = new AccountSettingsOutputReference(this, "settings");
+    get settings() {
+        return this._settings;
+    }
+    putSettings(value) {
         this._settings.internalValue = value;
-    };
-    Account.prototype.resetSettings = function () {
+    }
+    resetSettings() {
         this._settings.internalValue = undefined;
-    };
-    Object.defineProperty(Account.prototype, "settingsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._settings.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Account.prototype, "type", {
-        get: function () {
-            return this.getStringAttribute('type');
-        },
-        set: function (value) {
-            this._type = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Account.prototype.resetType = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get settingsInput() {
+        return this._settings.internalValue;
+    }
+    // type - computed: true, optional: true, required: false
+    _type;
+    get type() {
+        return this.getStringAttribute('type');
+    }
+    set type(value) {
+        this._type = value;
+    }
+    resetType() {
         this._type = undefined;
-    };
-    Object.defineProperty(Account.prototype, "typeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._type;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Account.prototype, "unit", {
-        get: function () {
-            return this._unit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Account.prototype.putUnit = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get typeInput() {
+        return this._type;
+    }
+    // unit - computed: true, optional: true, required: false
+    _unit = new AccountUnitOutputReference(this, "unit");
+    get unit() {
+        return this._unit;
+    }
+    putUnit(value) {
         this._unit.internalValue = value;
-    };
-    Account.prototype.resetUnit = function () {
+    }
+    resetUnit() {
         this._unit.internalValue = undefined;
-    };
-    Object.defineProperty(Account.prototype, "unitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._unit.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get unitInput() {
+        return this._unit.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Account.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             managed_by: accountManagedByToTerraform(this._managedBy.internalValue),
             name: cdktf.stringToTerraform(this._name),
@@ -520,9 +401,9 @@ var Account = /** @class */ (function (_super) {
             type: cdktf.stringToTerraform(this._type),
             unit: accountUnitToTerraform(this._unit.internalValue),
         };
-    };
-    Account.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             managed_by: {
                 value: accountManagedByToHclTerraform(this._managedBy.internalValue),
                 isBlock: true,
@@ -555,15 +436,6 @@ var Account = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Account.tfResourceType = "cloudflare_account";
-    return Account;
-}(cdktf.TerraformResource));
-exports.Account = Account;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

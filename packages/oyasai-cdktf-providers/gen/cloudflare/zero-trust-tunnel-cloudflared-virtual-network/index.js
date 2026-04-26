@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_cloudflared_virtual_network
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ZeroTrustTunnelCloudflaredVirtualNetwork = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_cloudflared_virtual_network cloudflare_zero_trust_tunnel_cloudflared_virtual_network}
 */
-var ZeroTrustTunnelCloudflaredVirtualNetwork = /** @class */ (function (_super) {
-    __extends(ZeroTrustTunnelCloudflaredVirtualNetwork, _super);
+export class ZeroTrustTunnelCloudflaredVirtualNetwork extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_zero_trust_tunnel_cloudflared_virtual_network";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a ZeroTrustTunnelCloudflaredVirtualNetwork resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the ZeroTrustTunnelCloudflaredVirtualNetwork to import
+    * @param importFromId The id of the existing ZeroTrustTunnelCloudflaredVirtualNetwork that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_cloudflared_virtual_network#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the ZeroTrustTunnelCloudflaredVirtualNetwork to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var ZeroTrustTunnelCloudflaredVirtualNetwork = /** @class */ (function (_super) 
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options ZeroTrustTunnelCloudflaredVirtualNetworkConfig
     */
-    function ZeroTrustTunnelCloudflaredVirtualNetwork(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_zero_trust_tunnel_cloudflared_virtual_network',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,157 +46,104 @@ var ZeroTrustTunnelCloudflaredVirtualNetwork = /** @class */ (function (_super) 
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._comment = config.comment;
-        _this._isDefault = config.isDefault;
-        _this._isDefaultNetwork = config.isDefaultNetwork;
-        _this._name = config.name;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._comment = config.comment;
+        this._isDefault = config.isDefault;
+        this._isDefaultNetwork = config.isDefaultNetwork;
+        this._name = config.name;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a ZeroTrustTunnelCloudflaredVirtualNetwork resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the ZeroTrustTunnelCloudflaredVirtualNetwork to import
-    * @param importFromId The id of the existing ZeroTrustTunnelCloudflaredVirtualNetwork that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_tunnel_cloudflared_virtual_network#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the ZeroTrustTunnelCloudflaredVirtualNetwork to import is found
-    */
-    ZeroTrustTunnelCloudflaredVirtualNetwork.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustTunnelCloudflaredVirtualNetwork.prototype.resetAccountId = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: true, required: false
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    resetAccountId() {
         this._accountId = undefined;
-    };
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "comment", {
-        get: function () {
-            return this.getStringAttribute('comment');
-        },
-        set: function (value) {
-            this._comment = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustTunnelCloudflaredVirtualNetwork.prototype.resetComment = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // comment - computed: true, optional: true, required: false
+    _comment;
+    get comment() {
+        return this.getStringAttribute('comment');
+    }
+    set comment(value) {
+        this._comment = value;
+    }
+    resetComment() {
         this._comment = undefined;
-    };
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "commentInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._comment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "createdAt", {
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "deletedAt", {
-        // deleted_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('deleted_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "isDefault", {
-        get: function () {
-            return this.getBooleanAttribute('is_default');
-        },
-        set: function (value) {
-            this._isDefault = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustTunnelCloudflaredVirtualNetwork.prototype.resetIsDefault = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get commentInput() {
+        return this._comment;
+    }
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // deleted_at - computed: true, optional: false, required: false
+    get deletedAt() {
+        return this.getStringAttribute('deleted_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // is_default - computed: false, optional: true, required: false
+    _isDefault;
+    get isDefault() {
+        return this.getBooleanAttribute('is_default');
+    }
+    set isDefault(value) {
+        this._isDefault = value;
+    }
+    resetIsDefault() {
         this._isDefault = undefined;
-    };
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "isDefaultInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isDefault;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "isDefaultNetwork", {
-        get: function () {
-            return this.getBooleanAttribute('is_default_network');
-        },
-        set: function (value) {
-            this._isDefaultNetwork = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ZeroTrustTunnelCloudflaredVirtualNetwork.prototype.resetIsDefaultNetwork = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isDefaultInput() {
+        return this._isDefault;
+    }
+    // is_default_network - computed: true, optional: true, required: false
+    _isDefaultNetwork;
+    get isDefaultNetwork() {
+        return this.getBooleanAttribute('is_default_network');
+    }
+    set isDefaultNetwork(value) {
+        this._isDefaultNetwork = value;
+    }
+    resetIsDefaultNetwork() {
         this._isDefaultNetwork = undefined;
-    };
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "isDefaultNetworkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isDefaultNetwork;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ZeroTrustTunnelCloudflaredVirtualNetwork.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get isDefaultNetworkInput() {
+        return this._isDefaultNetwork;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
     // =========
     // SYNTHESIS
     // =========
-    ZeroTrustTunnelCloudflaredVirtualNetwork.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             comment: cdktf.stringToTerraform(this._comment),
@@ -206,9 +151,9 @@ var ZeroTrustTunnelCloudflaredVirtualNetwork = /** @class */ (function (_super) 
             is_default_network: cdktf.booleanToTerraform(this._isDefaultNetwork),
             name: cdktf.stringToTerraform(this._name),
         };
-    };
-    ZeroTrustTunnelCloudflaredVirtualNetwork.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -241,15 +186,6 @@ var ZeroTrustTunnelCloudflaredVirtualNetwork = /** @class */ (function (_super) 
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    ZeroTrustTunnelCloudflaredVirtualNetwork.tfResourceType = "cloudflare_zero_trust_tunnel_cloudflared_virtual_network";
-    return ZeroTrustTunnelCloudflaredVirtualNetwork;
-}(cdktf.TerraformResource));
-exports.ZeroTrustTunnelCloudflaredVirtualNetwork = ZeroTrustTunnelCloudflaredVirtualNetwork;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

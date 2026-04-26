@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/keyless_certificate
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.KeylessCertificate = exports.KeylessCertificateTunnelOutputReference = void 0;
-exports.keylessCertificateTunnelToTerraform = keylessCertificateTunnelToTerraform;
-exports.keylessCertificateTunnelToHclTerraform = keylessCertificateTunnelToHclTerraform;
-var cdktf = require("cdktf");
-function keylessCertificateTunnelToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function keylessCertificateTunnelToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -33,14 +13,14 @@ function keylessCertificateTunnelToTerraform(struct) {
         vnet_id: cdktf.stringToTerraform(struct.vnetId),
     };
 }
-function keylessCertificateTunnelToHclTerraform(struct) {
+export function keylessCertificateTunnelToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         private_ip: {
             value: cdktf.stringToHclTerraform(struct.privateIp),
             isBlock: false,
@@ -55,104 +35,98 @@ function keylessCertificateTunnelToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var KeylessCertificateTunnelOutputReference = /** @class */ (function (_super) {
-    __extends(KeylessCertificateTunnelOutputReference, _super);
+export class KeylessCertificateTunnelOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function KeylessCertificateTunnelOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(KeylessCertificateTunnelOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._privateIp !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.privateIp = this._privateIp;
-            }
-            if (this._vnetId !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.vnetId = this._vnetId;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._privateIp = undefined;
-                this._vnetId = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._privateIp = value.privateIp;
-                this._vnetId = value.vnetId;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificateTunnelOutputReference.prototype, "privateIp", {
-        get: function () {
-            return this.getStringAttribute('private_ip');
-        },
-        set: function (value) {
-            this._privateIp = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificateTunnelOutputReference.prototype, "privateIpInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._privateIp;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificateTunnelOutputReference.prototype, "vnetId", {
-        get: function () {
-            return this.getStringAttribute('vnet_id');
-        },
-        set: function (value) {
-            this._vnetId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificateTunnelOutputReference.prototype, "vnetIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._vnetId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return KeylessCertificateTunnelOutputReference;
-}(cdktf.ComplexObject));
-exports.KeylessCertificateTunnelOutputReference = KeylessCertificateTunnelOutputReference;
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._privateIp !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.privateIp = this._privateIp;
+        }
+        if (this._vnetId !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.vnetId = this._vnetId;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._privateIp = undefined;
+            this._vnetId = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._privateIp = value.privateIp;
+            this._vnetId = value.vnetId;
+        }
+    }
+    // private_ip - computed: false, optional: false, required: true
+    _privateIp;
+    get privateIp() {
+        return this.getStringAttribute('private_ip');
+    }
+    set privateIp(value) {
+        this._privateIp = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get privateIpInput() {
+        return this._privateIp;
+    }
+    // vnet_id - computed: false, optional: false, required: true
+    _vnetId;
+    get vnetId() {
+        return this.getStringAttribute('vnet_id');
+    }
+    set vnetId(value) {
+        this._vnetId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get vnetIdInput() {
+        return this._vnetId;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/keyless_certificate cloudflare_keyless_certificate}
 */
-var KeylessCertificate = /** @class */ (function (_super) {
-    __extends(KeylessCertificate, _super);
+export class KeylessCertificate extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_keyless_certificate";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a KeylessCertificate resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the KeylessCertificate to import
+    * @param importFromId The id of the existing KeylessCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/keyless_certificate#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the KeylessCertificate to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_keyless_certificate", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -163,8 +137,8 @@ var KeylessCertificate = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options KeylessCertificateConfig
     */
-    function KeylessCertificate(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_keyless_certificate',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -177,238 +151,157 @@ var KeylessCertificate = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // tunnel - computed: false, optional: true, required: false
-        _this._tunnel = new KeylessCertificateTunnelOutputReference(_this, "tunnel");
-        _this._bundleMethod = config.bundleMethod;
-        _this._certificate = config.certificate;
-        _this._enabled = config.enabled;
-        _this._host = config.host;
-        _this._name = config.name;
-        _this._port = config.port;
-        _this._tunnel.internalValue = config.tunnel;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._bundleMethod = config.bundleMethod;
+        this._certificate = config.certificate;
+        this._enabled = config.enabled;
+        this._host = config.host;
+        this._name = config.name;
+        this._port = config.port;
+        this._tunnel.internalValue = config.tunnel;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a KeylessCertificate resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the KeylessCertificate to import
-    * @param importFromId The id of the existing KeylessCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/keyless_certificate#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the KeylessCertificate to import is found
-    */
-    KeylessCertificate.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_keyless_certificate", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(KeylessCertificate.prototype, "bundleMethod", {
-        get: function () {
-            return this.getStringAttribute('bundle_method');
-        },
-        set: function (value) {
-            this._bundleMethod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KeylessCertificate.prototype.resetBundleMethod = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // bundle_method - computed: true, optional: true, required: false
+    _bundleMethod;
+    get bundleMethod() {
+        return this.getStringAttribute('bundle_method');
+    }
+    set bundleMethod(value) {
+        this._bundleMethod = value;
+    }
+    resetBundleMethod() {
         this._bundleMethod = undefined;
-    };
-    Object.defineProperty(KeylessCertificate.prototype, "bundleMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bundleMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "certificate", {
-        get: function () {
-            return this.getStringAttribute('certificate');
-        },
-        set: function (value) {
-            this._certificate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "certificateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._certificate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "createdOn", {
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "enabled", {
-        get: function () {
-            return this.getBooleanAttribute('enabled');
-        },
-        set: function (value) {
-            this._enabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KeylessCertificate.prototype.resetEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bundleMethodInput() {
+        return this._bundleMethod;
+    }
+    // certificate - computed: false, optional: false, required: true
+    _certificate;
+    get certificate() {
+        return this.getStringAttribute('certificate');
+    }
+    set certificate(value) {
+        this._certificate = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get certificateInput() {
+        return this._certificate;
+    }
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // enabled - computed: false, optional: true, required: false
+    _enabled;
+    get enabled() {
+        return this.getBooleanAttribute('enabled');
+    }
+    set enabled(value) {
+        this._enabled = value;
+    }
+    resetEnabled() {
         this._enabled = undefined;
-    };
-    Object.defineProperty(KeylessCertificate.prototype, "enabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "host", {
-        get: function () {
-            return this.getStringAttribute('host');
-        },
-        set: function (value) {
-            this._host = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "hostInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._host;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KeylessCertificate.prototype.resetName = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enabledInput() {
+        return this._enabled;
+    }
+    // host - computed: false, optional: false, required: true
+    _host;
+    get host() {
+        return this.getStringAttribute('host');
+    }
+    set host(value) {
+        this._host = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get hostInput() {
+        return this._host;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(KeylessCertificate.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "permissions", {
-        // permissions - computed: true, optional: false, required: false
-        get: function () {
-            return this.getListAttribute('permissions');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "port", {
-        get: function () {
-            return this.getNumberAttribute('port');
-        },
-        set: function (value) {
-            this._port = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KeylessCertificate.prototype.resetPort = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // permissions - computed: true, optional: false, required: false
+    get permissions() {
+        return this.getListAttribute('permissions');
+    }
+    // port - computed: true, optional: true, required: false
+    _port;
+    get port() {
+        return this.getNumberAttribute('port');
+    }
+    set port(value) {
+        this._port = value;
+    }
+    resetPort() {
         this._port = undefined;
-    };
-    Object.defineProperty(KeylessCertificate.prototype, "portInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._port;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "tunnel", {
-        get: function () {
-            return this._tunnel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KeylessCertificate.prototype.putTunnel = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get portInput() {
+        return this._port;
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // tunnel - computed: false, optional: true, required: false
+    _tunnel = new KeylessCertificateTunnelOutputReference(this, "tunnel");
+    get tunnel() {
+        return this._tunnel;
+    }
+    putTunnel(value) {
         this._tunnel.internalValue = value;
-    };
-    KeylessCertificate.prototype.resetTunnel = function () {
+    }
+    resetTunnel() {
         this._tunnel.internalValue = undefined;
-    };
-    Object.defineProperty(KeylessCertificate.prototype, "tunnelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._tunnel.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(KeylessCertificate.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    KeylessCertificate.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get tunnelInput() {
+        return this._tunnel.internalValue;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(KeylessCertificate.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    KeylessCertificate.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             bundle_method: cdktf.stringToTerraform(this._bundleMethod),
             certificate: cdktf.stringToTerraform(this._certificate),
@@ -419,9 +312,9 @@ var KeylessCertificate = /** @class */ (function (_super) {
             tunnel: keylessCertificateTunnelToTerraform(this._tunnel.internalValue),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    KeylessCertificate.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             bundle_method: {
                 value: cdktf.stringToHclTerraform(this._bundleMethod),
                 isBlock: false,
@@ -472,15 +365,6 @@ var KeylessCertificate = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    KeylessCertificate.tfResourceType = "cloudflare_keyless_certificate";
-    return KeylessCertificate;
-}(cdktf.TerraformResource));
-exports.KeylessCertificate = KeylessCertificate;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

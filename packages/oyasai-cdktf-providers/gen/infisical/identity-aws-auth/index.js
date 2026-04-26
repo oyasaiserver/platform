@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdentityAwsAuth = exports.IdentityAwsAuthAccessTokenTrustedIpsList = exports.IdentityAwsAuthAccessTokenTrustedIpsOutputReference = void 0;
-exports.identityAwsAuthAccessTokenTrustedIpsToTerraform = identityAwsAuthAccessTokenTrustedIpsToTerraform;
-exports.identityAwsAuthAccessTokenTrustedIpsToHclTerraform = identityAwsAuthAccessTokenTrustedIpsToHclTerraform;
-var cdktf = require("cdktf");
-function identityAwsAuthAccessTokenTrustedIpsToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function identityAwsAuthAccessTokenTrustedIpsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -32,14 +12,14 @@ function identityAwsAuthAccessTokenTrustedIpsToTerraform(struct) {
         ip_address: cdktf.stringToTerraform(struct.ipAddress),
     };
 }
-function identityAwsAuthAccessTokenTrustedIpsToHclTerraform(struct) {
+export function identityAwsAuthAccessTokenTrustedIpsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         ip_address: {
             value: cdktf.stringToHclTerraform(struct.ipAddress),
             isBlock: false,
@@ -48,108 +28,108 @@ function identityAwsAuthAccessTokenTrustedIpsToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var IdentityAwsAuthAccessTokenTrustedIpsOutputReference = /** @class */ (function (_super) {
-    __extends(IdentityAwsAuthAccessTokenTrustedIpsOutputReference, _super);
+export class IdentityAwsAuthAccessTokenTrustedIpsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
+    resolvableValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param complexObjectIndex the index of this item in the list
     * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function IdentityAwsAuthAccessTokenTrustedIpsOutputReference(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute, complexObjectIndex, complexObjectIsFromSet) {
+        super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
     }
-    Object.defineProperty(IdentityAwsAuthAccessTokenTrustedIpsOutputReference.prototype, "internalValue", {
-        get: function () {
-            if (this.resolvableValue) {
-                return this.resolvableValue;
-            }
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._ipAddress !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.ipAddress = this._ipAddress;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this.resolvableValue = undefined;
-                this._ipAddress = undefined;
-            }
-            else if (cdktf.Tokenization.isResolvable(value)) {
-                this.isEmptyObject = false;
-                this.resolvableValue = value;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this.resolvableValue = undefined;
-                this._ipAddress = value.ipAddress;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuthAccessTokenTrustedIpsOutputReference.prototype, "ipAddress", {
-        get: function () {
-            return this.getStringAttribute('ip_address');
-        },
-        set: function (value) {
-            this._ipAddress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAwsAuthAccessTokenTrustedIpsOutputReference.prototype.resetIpAddress = function () {
+    get internalValue() {
+        if (this.resolvableValue) {
+            return this.resolvableValue;
+        }
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._ipAddress !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.ipAddress = this._ipAddress;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this.resolvableValue = undefined;
+            this._ipAddress = undefined;
+        }
+        else if (cdktf.Tokenization.isResolvable(value)) {
+            this.isEmptyObject = false;
+            this.resolvableValue = value;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this.resolvableValue = undefined;
+            this._ipAddress = value.ipAddress;
+        }
+    }
+    // ip_address - computed: true, optional: true, required: false
+    _ipAddress;
+    get ipAddress() {
+        return this.getStringAttribute('ip_address');
+    }
+    set ipAddress(value) {
+        this._ipAddress = value;
+    }
+    resetIpAddress() {
         this._ipAddress = undefined;
-    };
-    Object.defineProperty(IdentityAwsAuthAccessTokenTrustedIpsOutputReference.prototype, "ipAddressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ipAddress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return IdentityAwsAuthAccessTokenTrustedIpsOutputReference;
-}(cdktf.ComplexObject));
-exports.IdentityAwsAuthAccessTokenTrustedIpsOutputReference = IdentityAwsAuthAccessTokenTrustedIpsOutputReference;
-var IdentityAwsAuthAccessTokenTrustedIpsList = /** @class */ (function (_super) {
-    __extends(IdentityAwsAuthAccessTokenTrustedIpsList, _super);
+    }
+    // Temporarily expose input value. Use with caution.
+    get ipAddressInput() {
+        return this._ipAddress;
+    }
+}
+export class IdentityAwsAuthAccessTokenTrustedIpsList extends cdktf.ComplexList {
+    terraformResource;
+    terraformAttribute;
+    wrapsSet;
+    internalValue;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
     */
-    function IdentityAwsAuthAccessTokenTrustedIpsList(terraformResource, terraformAttribute, wrapsSet) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, wrapsSet) || this;
-        _this.terraformResource = terraformResource;
-        _this.terraformAttribute = terraformAttribute;
-        _this.wrapsSet = wrapsSet;
-        return _this;
+    constructor(terraformResource, terraformAttribute, wrapsSet) {
+        super(terraformResource, terraformAttribute, wrapsSet);
+        this.terraformResource = terraformResource;
+        this.terraformAttribute = terraformAttribute;
+        this.wrapsSet = wrapsSet;
     }
     /**
     * @param index the index of the item to return
     */
-    IdentityAwsAuthAccessTokenTrustedIpsList.prototype.get = function (index) {
+    get(index) {
         return new IdentityAwsAuthAccessTokenTrustedIpsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
-    };
-    return IdentityAwsAuthAccessTokenTrustedIpsList;
-}(cdktf.ComplexList));
-exports.IdentityAwsAuthAccessTokenTrustedIpsList = IdentityAwsAuthAccessTokenTrustedIpsList;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth infisical_identity_aws_auth}
 */
-var IdentityAwsAuth = /** @class */ (function (_super) {
-    __extends(IdentityAwsAuth, _super);
+export class IdentityAwsAuth extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_identity_aws_auth";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a IdentityAwsAuth resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the IdentityAwsAuth to import
+    * @param importFromId The id of the existing IdentityAwsAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the IdentityAwsAuth to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_aws_auth", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -160,8 +140,8 @@ var IdentityAwsAuth = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options IdentityAwsAuthConfig
     */
-    function IdentityAwsAuth(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_identity_aws_auth',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -174,209 +154,144 @@ var IdentityAwsAuth = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // access_token_trusted_ips - computed: true, optional: true, required: false
-        _this._accessTokenTrustedIps = new IdentityAwsAuthAccessTokenTrustedIpsList(_this, "access_token_trusted_ips", false);
-        _this._accessTokenMaxTtl = config.accessTokenMaxTtl;
-        _this._accessTokenNumUsesLimit = config.accessTokenNumUsesLimit;
-        _this._accessTokenTrustedIps.internalValue = config.accessTokenTrustedIps;
-        _this._accessTokenTtl = config.accessTokenTtl;
-        _this._allowedAccountIds = config.allowedAccountIds;
-        _this._allowedPrincipalArns = config.allowedPrincipalArns;
-        _this._identityId = config.identityId;
-        _this._stsEndpoint = config.stsEndpoint;
-        return _this;
+        });
+        this._accessTokenMaxTtl = config.accessTokenMaxTtl;
+        this._accessTokenNumUsesLimit = config.accessTokenNumUsesLimit;
+        this._accessTokenTrustedIps.internalValue = config.accessTokenTrustedIps;
+        this._accessTokenTtl = config.accessTokenTtl;
+        this._allowedAccountIds = config.allowedAccountIds;
+        this._allowedPrincipalArns = config.allowedPrincipalArns;
+        this._identityId = config.identityId;
+        this._stsEndpoint = config.stsEndpoint;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a IdentityAwsAuth resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the IdentityAwsAuth to import
-    * @param importFromId The id of the existing IdentityAwsAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the IdentityAwsAuth to import is found
-    */
-    IdentityAwsAuth.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_aws_auth", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(IdentityAwsAuth.prototype, "accessTokenMaxTtl", {
-        get: function () {
-            return this.getNumberAttribute('access_token_max_ttl');
-        },
-        set: function (value) {
-            this._accessTokenMaxTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAwsAuth.prototype.resetAccessTokenMaxTtl = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // access_token_max_ttl - computed: true, optional: true, required: false
+    _accessTokenMaxTtl;
+    get accessTokenMaxTtl() {
+        return this.getNumberAttribute('access_token_max_ttl');
+    }
+    set accessTokenMaxTtl(value) {
+        this._accessTokenMaxTtl = value;
+    }
+    resetAccessTokenMaxTtl() {
         this._accessTokenMaxTtl = undefined;
-    };
-    Object.defineProperty(IdentityAwsAuth.prototype, "accessTokenMaxTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenMaxTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuth.prototype, "accessTokenNumUsesLimit", {
-        get: function () {
-            return this.getNumberAttribute('access_token_num_uses_limit');
-        },
-        set: function (value) {
-            this._accessTokenNumUsesLimit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAwsAuth.prototype.resetAccessTokenNumUsesLimit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenMaxTtlInput() {
+        return this._accessTokenMaxTtl;
+    }
+    // access_token_num_uses_limit - computed: true, optional: true, required: false
+    _accessTokenNumUsesLimit;
+    get accessTokenNumUsesLimit() {
+        return this.getNumberAttribute('access_token_num_uses_limit');
+    }
+    set accessTokenNumUsesLimit(value) {
+        this._accessTokenNumUsesLimit = value;
+    }
+    resetAccessTokenNumUsesLimit() {
         this._accessTokenNumUsesLimit = undefined;
-    };
-    Object.defineProperty(IdentityAwsAuth.prototype, "accessTokenNumUsesLimitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenNumUsesLimit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuth.prototype, "accessTokenTrustedIps", {
-        get: function () {
-            return this._accessTokenTrustedIps;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAwsAuth.prototype.putAccessTokenTrustedIps = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenNumUsesLimitInput() {
+        return this._accessTokenNumUsesLimit;
+    }
+    // access_token_trusted_ips - computed: true, optional: true, required: false
+    _accessTokenTrustedIps = new IdentityAwsAuthAccessTokenTrustedIpsList(this, "access_token_trusted_ips", false);
+    get accessTokenTrustedIps() {
+        return this._accessTokenTrustedIps;
+    }
+    putAccessTokenTrustedIps(value) {
         this._accessTokenTrustedIps.internalValue = value;
-    };
-    IdentityAwsAuth.prototype.resetAccessTokenTrustedIps = function () {
+    }
+    resetAccessTokenTrustedIps() {
         this._accessTokenTrustedIps.internalValue = undefined;
-    };
-    Object.defineProperty(IdentityAwsAuth.prototype, "accessTokenTrustedIpsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenTrustedIps.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuth.prototype, "accessTokenTtl", {
-        get: function () {
-            return this.getNumberAttribute('access_token_ttl');
-        },
-        set: function (value) {
-            this._accessTokenTtl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAwsAuth.prototype.resetAccessTokenTtl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenTrustedIpsInput() {
+        return this._accessTokenTrustedIps.internalValue;
+    }
+    // access_token_ttl - computed: true, optional: true, required: false
+    _accessTokenTtl;
+    get accessTokenTtl() {
+        return this.getNumberAttribute('access_token_ttl');
+    }
+    set accessTokenTtl(value) {
+        this._accessTokenTtl = value;
+    }
+    resetAccessTokenTtl() {
         this._accessTokenTtl = undefined;
-    };
-    Object.defineProperty(IdentityAwsAuth.prototype, "accessTokenTtlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accessTokenTtl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuth.prototype, "allowedAccountIds", {
-        get: function () {
-            return this.getListAttribute('allowed_account_ids');
-        },
-        set: function (value) {
-            this._allowedAccountIds = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAwsAuth.prototype.resetAllowedAccountIds = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get accessTokenTtlInput() {
+        return this._accessTokenTtl;
+    }
+    // allowed_account_ids - computed: true, optional: true, required: false
+    _allowedAccountIds;
+    get allowedAccountIds() {
+        return this.getListAttribute('allowed_account_ids');
+    }
+    set allowedAccountIds(value) {
+        this._allowedAccountIds = value;
+    }
+    resetAllowedAccountIds() {
         this._allowedAccountIds = undefined;
-    };
-    Object.defineProperty(IdentityAwsAuth.prototype, "allowedAccountIdsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedAccountIds;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuth.prototype, "allowedPrincipalArns", {
-        get: function () {
-            return this.getListAttribute('allowed_principal_arns');
-        },
-        set: function (value) {
-            this._allowedPrincipalArns = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAwsAuth.prototype.resetAllowedPrincipalArns = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedAccountIdsInput() {
+        return this._allowedAccountIds;
+    }
+    // allowed_principal_arns - computed: true, optional: true, required: false
+    _allowedPrincipalArns;
+    get allowedPrincipalArns() {
+        return this.getListAttribute('allowed_principal_arns');
+    }
+    set allowedPrincipalArns(value) {
+        this._allowedPrincipalArns = value;
+    }
+    resetAllowedPrincipalArns() {
         this._allowedPrincipalArns = undefined;
-    };
-    Object.defineProperty(IdentityAwsAuth.prototype, "allowedPrincipalArnsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowedPrincipalArns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuth.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuth.prototype, "identityId", {
-        get: function () {
-            return this.getStringAttribute('identity_id');
-        },
-        set: function (value) {
-            this._identityId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuth.prototype, "identityIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityAwsAuth.prototype, "stsEndpoint", {
-        get: function () {
-            return this.getStringAttribute('sts_endpoint');
-        },
-        set: function (value) {
-            this._stsEndpoint = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityAwsAuth.prototype.resetStsEndpoint = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowedPrincipalArnsInput() {
+        return this._allowedPrincipalArns;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // identity_id - computed: false, optional: false, required: true
+    _identityId;
+    get identityId() {
+        return this.getStringAttribute('identity_id');
+    }
+    set identityId(value) {
+        this._identityId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityIdInput() {
+        return this._identityId;
+    }
+    // sts_endpoint - computed: true, optional: true, required: false
+    _stsEndpoint;
+    get stsEndpoint() {
+        return this.getStringAttribute('sts_endpoint');
+    }
+    set stsEndpoint(value) {
+        this._stsEndpoint = value;
+    }
+    resetStsEndpoint() {
         this._stsEndpoint = undefined;
-    };
-    Object.defineProperty(IdentityAwsAuth.prototype, "stsEndpointInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._stsEndpoint;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get stsEndpointInput() {
+        return this._stsEndpoint;
+    }
     // =========
     // SYNTHESIS
     // =========
-    IdentityAwsAuth.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             access_token_max_ttl: cdktf.numberToTerraform(this._accessTokenMaxTtl),
             access_token_num_uses_limit: cdktf.numberToTerraform(this._accessTokenNumUsesLimit),
@@ -387,9 +302,9 @@ var IdentityAwsAuth = /** @class */ (function (_super) {
             identity_id: cdktf.stringToTerraform(this._identityId),
             sts_endpoint: cdktf.stringToTerraform(this._stsEndpoint),
         };
-    };
-    IdentityAwsAuth.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             access_token_max_ttl: {
                 value: cdktf.numberToHclTerraform(this._accessTokenMaxTtl),
                 isBlock: false,
@@ -440,15 +355,6 @@ var IdentityAwsAuth = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    IdentityAwsAuth.tfResourceType = "infisical_identity_aws_auth";
-    return IdentityAwsAuth;
-}(cdktf.TerraformResource));
-exports.IdentityAwsAuth = IdentityAwsAuth;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

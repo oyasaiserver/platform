@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/enterprise_security_analysis_settings
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.EnterpriseSecurityAnalysisSettings = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/enterprise_security_analysis_settings github_enterprise_security_analysis_settings}
 */
-var EnterpriseSecurityAnalysisSettings = /** @class */ (function (_super) {
-    __extends(EnterpriseSecurityAnalysisSettings, _super);
+export class EnterpriseSecurityAnalysisSettings extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_enterprise_security_analysis_settings";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a EnterpriseSecurityAnalysisSettings resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the EnterpriseSecurityAnalysisSettings to import
+    * @param importFromId The id of the existing EnterpriseSecurityAnalysisSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/enterprise_security_analysis_settings#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the EnterpriseSecurityAnalysisSettings to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_enterprise_security_analysis_settings", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var EnterpriseSecurityAnalysisSettings = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options EnterpriseSecurityAnalysisSettingsConfig
     */
-    function EnterpriseSecurityAnalysisSettings(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_enterprise_security_analysis_settings',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -48,177 +46,124 @@ var EnterpriseSecurityAnalysisSettings = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._advancedSecurityEnabledForNewRepositories = config.advancedSecurityEnabledForNewRepositories;
-        _this._enterpriseSlug = config.enterpriseSlug;
-        _this._id = config.id;
-        _this._secretScanningEnabledForNewRepositories = config.secretScanningEnabledForNewRepositories;
-        _this._secretScanningPushProtectionCustomLink = config.secretScanningPushProtectionCustomLink;
-        _this._secretScanningPushProtectionEnabledForNewRepositories = config.secretScanningPushProtectionEnabledForNewRepositories;
-        _this._secretScanningValidityChecksEnabled = config.secretScanningValidityChecksEnabled;
-        return _this;
+        });
+        this._advancedSecurityEnabledForNewRepositories = config.advancedSecurityEnabledForNewRepositories;
+        this._enterpriseSlug = config.enterpriseSlug;
+        this._id = config.id;
+        this._secretScanningEnabledForNewRepositories = config.secretScanningEnabledForNewRepositories;
+        this._secretScanningPushProtectionCustomLink = config.secretScanningPushProtectionCustomLink;
+        this._secretScanningPushProtectionEnabledForNewRepositories = config.secretScanningPushProtectionEnabledForNewRepositories;
+        this._secretScanningValidityChecksEnabled = config.secretScanningValidityChecksEnabled;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a EnterpriseSecurityAnalysisSettings resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the EnterpriseSecurityAnalysisSettings to import
-    * @param importFromId The id of the existing EnterpriseSecurityAnalysisSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/enterprise_security_analysis_settings#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the EnterpriseSecurityAnalysisSettings to import is found
-    */
-    EnterpriseSecurityAnalysisSettings.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_enterprise_security_analysis_settings", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "advancedSecurityEnabledForNewRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('advanced_security_enabled_for_new_repositories');
-        },
-        set: function (value) {
-            this._advancedSecurityEnabledForNewRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    EnterpriseSecurityAnalysisSettings.prototype.resetAdvancedSecurityEnabledForNewRepositories = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // advanced_security_enabled_for_new_repositories - computed: false, optional: true, required: false
+    _advancedSecurityEnabledForNewRepositories;
+    get advancedSecurityEnabledForNewRepositories() {
+        return this.getBooleanAttribute('advanced_security_enabled_for_new_repositories');
+    }
+    set advancedSecurityEnabledForNewRepositories(value) {
+        this._advancedSecurityEnabledForNewRepositories = value;
+    }
+    resetAdvancedSecurityEnabledForNewRepositories() {
         this._advancedSecurityEnabledForNewRepositories = undefined;
-    };
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "advancedSecurityEnabledForNewRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._advancedSecurityEnabledForNewRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "enterpriseSlug", {
-        get: function () {
-            return this.getStringAttribute('enterprise_slug');
-        },
-        set: function (value) {
-            this._enterpriseSlug = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "enterpriseSlugInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enterpriseSlug;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    EnterpriseSecurityAnalysisSettings.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get advancedSecurityEnabledForNewRepositoriesInput() {
+        return this._advancedSecurityEnabledForNewRepositories;
+    }
+    // enterprise_slug - computed: false, optional: false, required: true
+    _enterpriseSlug;
+    get enterpriseSlug() {
+        return this.getStringAttribute('enterprise_slug');
+    }
+    set enterpriseSlug(value) {
+        this._enterpriseSlug = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get enterpriseSlugInput() {
+        return this._enterpriseSlug;
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "secretScanningEnabledForNewRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('secret_scanning_enabled_for_new_repositories');
-        },
-        set: function (value) {
-            this._secretScanningEnabledForNewRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    EnterpriseSecurityAnalysisSettings.prototype.resetSecretScanningEnabledForNewRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // secret_scanning_enabled_for_new_repositories - computed: false, optional: true, required: false
+    _secretScanningEnabledForNewRepositories;
+    get secretScanningEnabledForNewRepositories() {
+        return this.getBooleanAttribute('secret_scanning_enabled_for_new_repositories');
+    }
+    set secretScanningEnabledForNewRepositories(value) {
+        this._secretScanningEnabledForNewRepositories = value;
+    }
+    resetSecretScanningEnabledForNewRepositories() {
         this._secretScanningEnabledForNewRepositories = undefined;
-    };
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "secretScanningEnabledForNewRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanningEnabledForNewRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "secretScanningPushProtectionCustomLink", {
-        get: function () {
-            return this.getStringAttribute('secret_scanning_push_protection_custom_link');
-        },
-        set: function (value) {
-            this._secretScanningPushProtectionCustomLink = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    EnterpriseSecurityAnalysisSettings.prototype.resetSecretScanningPushProtectionCustomLink = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningEnabledForNewRepositoriesInput() {
+        return this._secretScanningEnabledForNewRepositories;
+    }
+    // secret_scanning_push_protection_custom_link - computed: false, optional: true, required: false
+    _secretScanningPushProtectionCustomLink;
+    get secretScanningPushProtectionCustomLink() {
+        return this.getStringAttribute('secret_scanning_push_protection_custom_link');
+    }
+    set secretScanningPushProtectionCustomLink(value) {
+        this._secretScanningPushProtectionCustomLink = value;
+    }
+    resetSecretScanningPushProtectionCustomLink() {
         this._secretScanningPushProtectionCustomLink = undefined;
-    };
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "secretScanningPushProtectionCustomLinkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanningPushProtectionCustomLink;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "secretScanningPushProtectionEnabledForNewRepositories", {
-        get: function () {
-            return this.getBooleanAttribute('secret_scanning_push_protection_enabled_for_new_repositories');
-        },
-        set: function (value) {
-            this._secretScanningPushProtectionEnabledForNewRepositories = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    EnterpriseSecurityAnalysisSettings.prototype.resetSecretScanningPushProtectionEnabledForNewRepositories = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningPushProtectionCustomLinkInput() {
+        return this._secretScanningPushProtectionCustomLink;
+    }
+    // secret_scanning_push_protection_enabled_for_new_repositories - computed: false, optional: true, required: false
+    _secretScanningPushProtectionEnabledForNewRepositories;
+    get secretScanningPushProtectionEnabledForNewRepositories() {
+        return this.getBooleanAttribute('secret_scanning_push_protection_enabled_for_new_repositories');
+    }
+    set secretScanningPushProtectionEnabledForNewRepositories(value) {
+        this._secretScanningPushProtectionEnabledForNewRepositories = value;
+    }
+    resetSecretScanningPushProtectionEnabledForNewRepositories() {
         this._secretScanningPushProtectionEnabledForNewRepositories = undefined;
-    };
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "secretScanningPushProtectionEnabledForNewRepositoriesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanningPushProtectionEnabledForNewRepositories;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "secretScanningValidityChecksEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('secret_scanning_validity_checks_enabled');
-        },
-        set: function (value) {
-            this._secretScanningValidityChecksEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    EnterpriseSecurityAnalysisSettings.prototype.resetSecretScanningValidityChecksEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningPushProtectionEnabledForNewRepositoriesInput() {
+        return this._secretScanningPushProtectionEnabledForNewRepositories;
+    }
+    // secret_scanning_validity_checks_enabled - computed: false, optional: true, required: false
+    _secretScanningValidityChecksEnabled;
+    get secretScanningValidityChecksEnabled() {
+        return this.getBooleanAttribute('secret_scanning_validity_checks_enabled');
+    }
+    set secretScanningValidityChecksEnabled(value) {
+        this._secretScanningValidityChecksEnabled = value;
+    }
+    resetSecretScanningValidityChecksEnabled() {
         this._secretScanningValidityChecksEnabled = undefined;
-    };
-    Object.defineProperty(EnterpriseSecurityAnalysisSettings.prototype, "secretScanningValidityChecksEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanningValidityChecksEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningValidityChecksEnabledInput() {
+        return this._secretScanningValidityChecksEnabled;
+    }
     // =========
     // SYNTHESIS
     // =========
-    EnterpriseSecurityAnalysisSettings.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             advanced_security_enabled_for_new_repositories: cdktf.booleanToTerraform(this._advancedSecurityEnabledForNewRepositories),
             enterprise_slug: cdktf.stringToTerraform(this._enterpriseSlug),
@@ -228,9 +173,9 @@ var EnterpriseSecurityAnalysisSettings = /** @class */ (function (_super) {
             secret_scanning_push_protection_enabled_for_new_repositories: cdktf.booleanToTerraform(this._secretScanningPushProtectionEnabledForNewRepositories),
             secret_scanning_validity_checks_enabled: cdktf.booleanToTerraform(this._secretScanningValidityChecksEnabled),
         };
-    };
-    EnterpriseSecurityAnalysisSettings.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             advanced_security_enabled_for_new_repositories: {
                 value: cdktf.booleanToHclTerraform(this._advancedSecurityEnabledForNewRepositories),
                 isBlock: false,
@@ -275,15 +220,6 @@ var EnterpriseSecurityAnalysisSettings = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    EnterpriseSecurityAnalysisSettings.tfResourceType = "github_enterprise_security_analysis_settings";
-    return EnterpriseSecurityAnalysisSettings;
-}(cdktf.TerraformResource));
-exports.EnterpriseSecurityAnalysisSettings = EnterpriseSecurityAnalysisSettings;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

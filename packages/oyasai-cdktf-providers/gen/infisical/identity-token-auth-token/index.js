@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_token_auth_token
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdentityTokenAuthToken = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_token_auth_token infisical_identity_token_auth_token}
 */
-var IdentityTokenAuthToken = /** @class */ (function (_super) {
-    __extends(IdentityTokenAuthToken, _super);
+export class IdentityTokenAuthToken extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "infisical_identity_token_auth_token";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a IdentityTokenAuthToken resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the IdentityTokenAuthToken to import
+    * @param importFromId The id of the existing IdentityTokenAuthToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_token_auth_token#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the IdentityTokenAuthToken to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_token_auth_token", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var IdentityTokenAuthToken = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options IdentityTokenAuthTokenConfig
     */
-    function IdentityTokenAuthToken(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'infisical_identity_token_auth_token',
             terraformGeneratorMetadata: {
                 providerName: 'infisical',
@@ -48,133 +46,79 @@ var IdentityTokenAuthToken = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._identityId = config.identityId;
-        _this._name = config.name;
-        return _this;
+        });
+        this._identityId = config.identityId;
+        this._name = config.name;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a IdentityTokenAuthToken resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the IdentityTokenAuthToken to import
-    * @param importFromId The id of the existing IdentityTokenAuthToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_token_auth_token#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the IdentityTokenAuthToken to import is found
-    */
-    IdentityTokenAuthToken.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "infisical_identity_token_auth_token", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "createdAt", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_at - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_at');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "identityId", {
-        get: function () {
-            return this.getStringAttribute('identity_id');
-        },
-        set: function (value) {
-            this._identityId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "identityIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._identityId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "isRevoked", {
-        // is_revoked - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('is_revoked');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    IdentityTokenAuthToken.prototype.resetName = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_at - computed: true, optional: false, required: false
+    get createdAt() {
+        return this.getStringAttribute('created_at');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // identity_id - computed: false, optional: false, required: true
+    _identityId;
+    get identityId() {
+        return this.getStringAttribute('identity_id');
+    }
+    set identityId(value) {
+        this._identityId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get identityIdInput() {
+        return this._identityId;
+    }
+    // is_revoked - computed: true, optional: false, required: false
+    get isRevoked() {
+        return this.getBooleanAttribute('is_revoked');
+    }
+    // name - computed: false, optional: true, required: false
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    resetName() {
         this._name = undefined;
-    };
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "numberOfUses", {
-        // number_of_uses - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('number_of_uses');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "numberOfUsesLimit", {
-        // number_of_uses_limit - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('number_of_uses_limit');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "token", {
-        // token - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('token');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(IdentityTokenAuthToken.prototype, "ttl", {
-        // ttl - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('ttl');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // number_of_uses - computed: true, optional: false, required: false
+    get numberOfUses() {
+        return this.getNumberAttribute('number_of_uses');
+    }
+    // number_of_uses_limit - computed: true, optional: false, required: false
+    get numberOfUsesLimit() {
+        return this.getNumberAttribute('number_of_uses_limit');
+    }
+    // token - computed: true, optional: false, required: false
+    get token() {
+        return this.getStringAttribute('token');
+    }
+    // ttl - computed: true, optional: false, required: false
+    get ttl() {
+        return this.getNumberAttribute('ttl');
+    }
     // =========
     // SYNTHESIS
     // =========
-    IdentityTokenAuthToken.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             identity_id: cdktf.stringToTerraform(this._identityId),
             name: cdktf.stringToTerraform(this._name),
         };
-    };
-    IdentityTokenAuthToken.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             identity_id: {
                 value: cdktf.stringToHclTerraform(this._identityId),
                 isBlock: false,
@@ -189,15 +133,6 @@ var IdentityTokenAuthToken = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    IdentityTokenAuthToken.tfResourceType = "infisical_identity_token_auth_token";
-    return IdentityTokenAuthToken;
-}(cdktf.TerraformResource));
-exports.IdentityTokenAuthToken = IdentityTokenAuthToken;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

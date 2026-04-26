@@ -1,45 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Repository = exports.RepositoryTemplateOutputReference = exports.RepositorySecurityAndAnalysisOutputReference = exports.RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference = exports.RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference = exports.RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference = exports.RepositorySecurityAndAnalysisSecretScanningOutputReference = exports.RepositorySecurityAndAnalysisCodeSecurityOutputReference = exports.RepositorySecurityAndAnalysisAdvancedSecurityOutputReference = exports.RepositoryPagesOutputReference = exports.RepositoryPagesSourceOutputReference = void 0;
-exports.repositoryPagesSourceToTerraform = repositoryPagesSourceToTerraform;
-exports.repositoryPagesSourceToHclTerraform = repositoryPagesSourceToHclTerraform;
-exports.repositoryPagesToTerraform = repositoryPagesToTerraform;
-exports.repositoryPagesToHclTerraform = repositoryPagesToHclTerraform;
-exports.repositorySecurityAndAnalysisAdvancedSecurityToTerraform = repositorySecurityAndAnalysisAdvancedSecurityToTerraform;
-exports.repositorySecurityAndAnalysisAdvancedSecurityToHclTerraform = repositorySecurityAndAnalysisAdvancedSecurityToHclTerraform;
-exports.repositorySecurityAndAnalysisCodeSecurityToTerraform = repositorySecurityAndAnalysisCodeSecurityToTerraform;
-exports.repositorySecurityAndAnalysisCodeSecurityToHclTerraform = repositorySecurityAndAnalysisCodeSecurityToHclTerraform;
-exports.repositorySecurityAndAnalysisSecretScanningToTerraform = repositorySecurityAndAnalysisSecretScanningToTerraform;
-exports.repositorySecurityAndAnalysisSecretScanningToHclTerraform = repositorySecurityAndAnalysisSecretScanningToHclTerraform;
-exports.repositorySecurityAndAnalysisSecretScanningAiDetectionToTerraform = repositorySecurityAndAnalysisSecretScanningAiDetectionToTerraform;
-exports.repositorySecurityAndAnalysisSecretScanningAiDetectionToHclTerraform = repositorySecurityAndAnalysisSecretScanningAiDetectionToHclTerraform;
-exports.repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToTerraform = repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToTerraform;
-exports.repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToHclTerraform = repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToHclTerraform;
-exports.repositorySecurityAndAnalysisSecretScanningPushProtectionToTerraform = repositorySecurityAndAnalysisSecretScanningPushProtectionToTerraform;
-exports.repositorySecurityAndAnalysisSecretScanningPushProtectionToHclTerraform = repositorySecurityAndAnalysisSecretScanningPushProtectionToHclTerraform;
-exports.repositorySecurityAndAnalysisToTerraform = repositorySecurityAndAnalysisToTerraform;
-exports.repositorySecurityAndAnalysisToHclTerraform = repositorySecurityAndAnalysisToHclTerraform;
-exports.repositoryTemplateToTerraform = repositoryTemplateToTerraform;
-exports.repositoryTemplateToHclTerraform = repositoryTemplateToHclTerraform;
-var cdktf = require("cdktf");
-function repositoryPagesSourceToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function repositoryPagesSourceToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -51,14 +13,14 @@ function repositoryPagesSourceToTerraform(struct) {
         path: cdktf.stringToTerraform(struct.path),
     };
 }
-function repositoryPagesSourceToHclTerraform(struct) {
+export function repositoryPagesSourceToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         branch: {
             value: cdktf.stringToHclTerraform(struct.branch),
             isBlock: false,
@@ -73,94 +35,71 @@ function repositoryPagesSourceToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositoryPagesSourceOutputReference = /** @class */ (function (_super) {
-    __extends(RepositoryPagesSourceOutputReference, _super);
+export class RepositoryPagesSourceOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositoryPagesSourceOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositoryPagesSourceOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._branch !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.branch = this._branch;
-            }
-            if (this._path !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.path = this._path;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._branch = undefined;
-                this._path = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._branch = value.branch;
-                this._path = value.path;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesSourceOutputReference.prototype, "branch", {
-        get: function () {
-            return this.getStringAttribute('branch');
-        },
-        set: function (value) {
-            this._branch = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesSourceOutputReference.prototype, "branchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._branch;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesSourceOutputReference.prototype, "path", {
-        get: function () {
-            return this.getStringAttribute('path');
-        },
-        set: function (value) {
-            this._path = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryPagesSourceOutputReference.prototype.resetPath = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._branch !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.branch = this._branch;
+        }
+        if (this._path !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.path = this._path;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._branch = undefined;
+            this._path = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._branch = value.branch;
+            this._path = value.path;
+        }
+    }
+    // branch - computed: false, optional: false, required: true
+    _branch;
+    get branch() {
+        return this.getStringAttribute('branch');
+    }
+    set branch(value) {
+        this._branch = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get branchInput() {
+        return this._branch;
+    }
+    // path - computed: false, optional: true, required: false
+    _path;
+    get path() {
+        return this.getStringAttribute('path');
+    }
+    set path(value) {
+        this._path = value;
+    }
+    resetPath() {
         this._path = undefined;
-    };
-    Object.defineProperty(RepositoryPagesSourceOutputReference.prototype, "pathInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._path;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositoryPagesSourceOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositoryPagesSourceOutputReference = RepositoryPagesSourceOutputReference;
-function repositoryPagesToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pathInput() {
+        return this._path;
+    }
+}
+export function repositoryPagesToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -173,14 +112,14 @@ function repositoryPagesToTerraform(struct) {
         source: repositoryPagesSourceToTerraform(struct.source),
     };
 }
-function repositoryPagesToHclTerraform(struct) {
+export function repositoryPagesToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         build_type: {
             value: cdktf.stringToHclTerraform(struct.buildType),
             isBlock: false,
@@ -201,159 +140,111 @@ function repositoryPagesToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositoryPagesOutputReference = /** @class */ (function (_super) {
-    __extends(RepositoryPagesOutputReference, _super);
+export class RepositoryPagesOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositoryPagesOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // source - computed: false, optional: true, required: false
-        _this._source = new RepositoryPagesSourceOutputReference(_this, "source");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._buildType !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.buildType = this._buildType;
-            }
-            if (this._cname !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.cname = this._cname;
-            }
-            if (((_a = this._source) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.source = (_b = this._source) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._buildType = undefined;
-                this._cname = undefined;
-                this._source.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._buildType = value.buildType;
-                this._cname = value.cname;
-                this._source.internalValue = value.source;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "buildType", {
-        get: function () {
-            return this.getStringAttribute('build_type');
-        },
-        set: function (value) {
-            this._buildType = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryPagesOutputReference.prototype.resetBuildType = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._buildType !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.buildType = this._buildType;
+        }
+        if (this._cname !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.cname = this._cname;
+        }
+        if (this._source?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.source = this._source?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._buildType = undefined;
+            this._cname = undefined;
+            this._source.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._buildType = value.buildType;
+            this._cname = value.cname;
+            this._source.internalValue = value.source;
+        }
+    }
+    // build_type - computed: false, optional: true, required: false
+    _buildType;
+    get buildType() {
+        return this.getStringAttribute('build_type');
+    }
+    set buildType(value) {
+        this._buildType = value;
+    }
+    resetBuildType() {
         this._buildType = undefined;
-    };
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "buildTypeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._buildType;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "cname", {
-        get: function () {
-            return this.getStringAttribute('cname');
-        },
-        set: function (value) {
-            this._cname = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryPagesOutputReference.prototype.resetCname = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get buildTypeInput() {
+        return this._buildType;
+    }
+    // cname - computed: false, optional: true, required: false
+    _cname;
+    get cname() {
+        return this.getStringAttribute('cname');
+    }
+    set cname(value) {
+        this._cname = value;
+    }
+    resetCname() {
         this._cname = undefined;
-    };
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "cnameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cname;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "custom404", {
-        // custom_404 - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('custom_404');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "htmlUrl", {
-        // html_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('html_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "status", {
-        // status - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "url", {
-        // url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "source", {
-        get: function () {
-            return this._source;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryPagesOutputReference.prototype.putSource = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cnameInput() {
+        return this._cname;
+    }
+    // custom_404 - computed: true, optional: false, required: false
+    get custom404() {
+        return this.getBooleanAttribute('custom_404');
+    }
+    // html_url - computed: true, optional: false, required: false
+    get htmlUrl() {
+        return this.getStringAttribute('html_url');
+    }
+    // status - computed: true, optional: false, required: false
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    // url - computed: true, optional: false, required: false
+    get url() {
+        return this.getStringAttribute('url');
+    }
+    // source - computed: false, optional: true, required: false
+    _source = new RepositoryPagesSourceOutputReference(this, "source");
+    get source() {
+        return this._source;
+    }
+    putSource(value) {
         this._source.internalValue = value;
-    };
-    RepositoryPagesOutputReference.prototype.resetSource = function () {
+    }
+    resetSource() {
         this._source.internalValue = undefined;
-    };
-    Object.defineProperty(RepositoryPagesOutputReference.prototype, "sourceInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._source.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositoryPagesOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositoryPagesOutputReference = RepositoryPagesOutputReference;
-function repositorySecurityAndAnalysisAdvancedSecurityToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceInput() {
+        return this._source.internalValue;
+    }
+}
+export function repositorySecurityAndAnalysisAdvancedSecurityToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -364,14 +255,14 @@ function repositorySecurityAndAnalysisAdvancedSecurityToTerraform(struct) {
         status: cdktf.stringToTerraform(struct.status),
     };
 }
-function repositorySecurityAndAnalysisAdvancedSecurityToHclTerraform(struct) {
+export function repositorySecurityAndAnalysisAdvancedSecurityToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         status: {
             value: cdktf.stringToHclTerraform(struct.status),
             isBlock: false,
@@ -380,67 +271,50 @@ function repositorySecurityAndAnalysisAdvancedSecurityToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositorySecurityAndAnalysisAdvancedSecurityOutputReference = /** @class */ (function (_super) {
-    __extends(RepositorySecurityAndAnalysisAdvancedSecurityOutputReference, _super);
+export class RepositorySecurityAndAnalysisAdvancedSecurityOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositorySecurityAndAnalysisAdvancedSecurityOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositorySecurityAndAnalysisAdvancedSecurityOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._status !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.status = this._status;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._status = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._status = value.status;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisAdvancedSecurityOutputReference.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisAdvancedSecurityOutputReference.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositorySecurityAndAnalysisAdvancedSecurityOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositorySecurityAndAnalysisAdvancedSecurityOutputReference = RepositorySecurityAndAnalysisAdvancedSecurityOutputReference;
-function repositorySecurityAndAnalysisCodeSecurityToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._status !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.status = this._status;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._status = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._status = value.status;
+        }
+    }
+    // status - computed: false, optional: false, required: true
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+}
+export function repositorySecurityAndAnalysisCodeSecurityToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -451,14 +325,14 @@ function repositorySecurityAndAnalysisCodeSecurityToTerraform(struct) {
         status: cdktf.stringToTerraform(struct.status),
     };
 }
-function repositorySecurityAndAnalysisCodeSecurityToHclTerraform(struct) {
+export function repositorySecurityAndAnalysisCodeSecurityToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         status: {
             value: cdktf.stringToHclTerraform(struct.status),
             isBlock: false,
@@ -467,67 +341,50 @@ function repositorySecurityAndAnalysisCodeSecurityToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositorySecurityAndAnalysisCodeSecurityOutputReference = /** @class */ (function (_super) {
-    __extends(RepositorySecurityAndAnalysisCodeSecurityOutputReference, _super);
+export class RepositorySecurityAndAnalysisCodeSecurityOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositorySecurityAndAnalysisCodeSecurityOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositorySecurityAndAnalysisCodeSecurityOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._status !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.status = this._status;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._status = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._status = value.status;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisCodeSecurityOutputReference.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisCodeSecurityOutputReference.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositorySecurityAndAnalysisCodeSecurityOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositorySecurityAndAnalysisCodeSecurityOutputReference = RepositorySecurityAndAnalysisCodeSecurityOutputReference;
-function repositorySecurityAndAnalysisSecretScanningToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._status !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.status = this._status;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._status = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._status = value.status;
+        }
+    }
+    // status - computed: false, optional: false, required: true
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+}
+export function repositorySecurityAndAnalysisSecretScanningToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -538,14 +395,14 @@ function repositorySecurityAndAnalysisSecretScanningToTerraform(struct) {
         status: cdktf.stringToTerraform(struct.status),
     };
 }
-function repositorySecurityAndAnalysisSecretScanningToHclTerraform(struct) {
+export function repositorySecurityAndAnalysisSecretScanningToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         status: {
             value: cdktf.stringToHclTerraform(struct.status),
             isBlock: false,
@@ -554,67 +411,50 @@ function repositorySecurityAndAnalysisSecretScanningToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositorySecurityAndAnalysisSecretScanningOutputReference = /** @class */ (function (_super) {
-    __extends(RepositorySecurityAndAnalysisSecretScanningOutputReference, _super);
+export class RepositorySecurityAndAnalysisSecretScanningOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositorySecurityAndAnalysisSecretScanningOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._status !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.status = this._status;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._status = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._status = value.status;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningOutputReference.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningOutputReference.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositorySecurityAndAnalysisSecretScanningOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositorySecurityAndAnalysisSecretScanningOutputReference = RepositorySecurityAndAnalysisSecretScanningOutputReference;
-function repositorySecurityAndAnalysisSecretScanningAiDetectionToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._status !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.status = this._status;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._status = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._status = value.status;
+        }
+    }
+    // status - computed: false, optional: false, required: true
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+}
+export function repositorySecurityAndAnalysisSecretScanningAiDetectionToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -625,14 +465,14 @@ function repositorySecurityAndAnalysisSecretScanningAiDetectionToTerraform(struc
         status: cdktf.stringToTerraform(struct.status),
     };
 }
-function repositorySecurityAndAnalysisSecretScanningAiDetectionToHclTerraform(struct) {
+export function repositorySecurityAndAnalysisSecretScanningAiDetectionToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         status: {
             value: cdktf.stringToHclTerraform(struct.status),
             isBlock: false,
@@ -641,67 +481,50 @@ function repositorySecurityAndAnalysisSecretScanningAiDetectionToHclTerraform(st
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference = /** @class */ (function (_super) {
-    __extends(RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference, _super);
+export class RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._status !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.status = this._status;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._status = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._status = value.status;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference = RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference;
-function repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._status !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.status = this._status;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._status = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._status = value.status;
+        }
+    }
+    // status - computed: false, optional: false, required: true
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+}
+export function repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -712,14 +535,14 @@ function repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToTerrafo
         status: cdktf.stringToTerraform(struct.status),
     };
 }
-function repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToHclTerraform(struct) {
+export function repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         status: {
             value: cdktf.stringToHclTerraform(struct.status),
             isBlock: false,
@@ -728,67 +551,50 @@ function repositorySecurityAndAnalysisSecretScanningNonProviderPatternsToHclTerr
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference = /** @class */ (function (_super) {
-    __extends(RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference, _super);
+export class RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._status !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.status = this._status;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._status = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._status = value.status;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference = RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference;
-function repositorySecurityAndAnalysisSecretScanningPushProtectionToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._status !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.status = this._status;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._status = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._status = value.status;
+        }
+    }
+    // status - computed: false, optional: false, required: true
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+}
+export function repositorySecurityAndAnalysisSecretScanningPushProtectionToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -799,14 +605,14 @@ function repositorySecurityAndAnalysisSecretScanningPushProtectionToTerraform(st
         status: cdktf.stringToTerraform(struct.status),
     };
 }
-function repositorySecurityAndAnalysisSecretScanningPushProtectionToHclTerraform(struct) {
+export function repositorySecurityAndAnalysisSecretScanningPushProtectionToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         status: {
             value: cdktf.stringToHclTerraform(struct.status),
             isBlock: false,
@@ -815,67 +621,50 @@ function repositorySecurityAndAnalysisSecretScanningPushProtectionToHclTerraform
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference = /** @class */ (function (_super) {
-    __extends(RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference, _super);
+export class RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._status !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.status = this._status;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._status = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._status = value.status;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference.prototype, "status", {
-        get: function () {
-            return this.getStringAttribute('status');
-        },
-        set: function (value) {
-            this._status = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference.prototype, "statusInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._status;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference = RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference;
-function repositorySecurityAndAnalysisToTerraform(struct) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._status !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.status = this._status;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._status = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._status = value.status;
+        }
+    }
+    // status - computed: false, optional: false, required: true
+    _status;
+    get status() {
+        return this.getStringAttribute('status');
+    }
+    set status(value) {
+        this._status = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get statusInput() {
+        return this._status;
+    }
+}
+export function repositorySecurityAndAnalysisToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -891,14 +680,14 @@ function repositorySecurityAndAnalysisToTerraform(struct) {
         secret_scanning_push_protection: repositorySecurityAndAnalysisSecretScanningPushProtectionToTerraform(struct.secretScanningPushProtection),
     };
 }
-function repositorySecurityAndAnalysisToHclTerraform(struct) {
+export function repositorySecurityAndAnalysisToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         advanced_security: {
             value: repositorySecurityAndAnalysisAdvancedSecurityToHclTerraform(struct.advancedSecurity),
             isBlock: true,
@@ -937,218 +726,158 @@ function repositorySecurityAndAnalysisToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositorySecurityAndAnalysisOutputReference = /** @class */ (function (_super) {
-    __extends(RepositorySecurityAndAnalysisOutputReference, _super);
+export class RepositorySecurityAndAnalysisOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositorySecurityAndAnalysisOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        // advanced_security - computed: false, optional: true, required: false
-        _this._advancedSecurity = new RepositorySecurityAndAnalysisAdvancedSecurityOutputReference(_this, "advanced_security");
-        // code_security - computed: false, optional: true, required: false
-        _this._codeSecurity = new RepositorySecurityAndAnalysisCodeSecurityOutputReference(_this, "code_security");
-        // secret_scanning - computed: false, optional: true, required: false
-        _this._secretScanning = new RepositorySecurityAndAnalysisSecretScanningOutputReference(_this, "secret_scanning");
-        // secret_scanning_ai_detection - computed: false, optional: true, required: false
-        _this._secretScanningAiDetection = new RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference(_this, "secret_scanning_ai_detection");
-        // secret_scanning_non_provider_patterns - computed: false, optional: true, required: false
-        _this._secretScanningNonProviderPatterns = new RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference(_this, "secret_scanning_non_provider_patterns");
-        // secret_scanning_push_protection - computed: false, optional: true, required: false
-        _this._secretScanningPushProtection = new RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference(_this, "secret_scanning_push_protection");
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "internalValue", {
-        get: function () {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (((_a = this._advancedSecurity) === null || _a === void 0 ? void 0 : _a.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.advancedSecurity = (_b = this._advancedSecurity) === null || _b === void 0 ? void 0 : _b.internalValue;
-            }
-            if (((_c = this._codeSecurity) === null || _c === void 0 ? void 0 : _c.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.codeSecurity = (_d = this._codeSecurity) === null || _d === void 0 ? void 0 : _d.internalValue;
-            }
-            if (((_e = this._secretScanning) === null || _e === void 0 ? void 0 : _e.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretScanning = (_f = this._secretScanning) === null || _f === void 0 ? void 0 : _f.internalValue;
-            }
-            if (((_g = this._secretScanningAiDetection) === null || _g === void 0 ? void 0 : _g.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretScanningAiDetection = (_h = this._secretScanningAiDetection) === null || _h === void 0 ? void 0 : _h.internalValue;
-            }
-            if (((_j = this._secretScanningNonProviderPatterns) === null || _j === void 0 ? void 0 : _j.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretScanningNonProviderPatterns = (_k = this._secretScanningNonProviderPatterns) === null || _k === void 0 ? void 0 : _k.internalValue;
-            }
-            if (((_l = this._secretScanningPushProtection) === null || _l === void 0 ? void 0 : _l.internalValue) !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.secretScanningPushProtection = (_m = this._secretScanningPushProtection) === null || _m === void 0 ? void 0 : _m.internalValue;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._advancedSecurity.internalValue = undefined;
-                this._codeSecurity.internalValue = undefined;
-                this._secretScanning.internalValue = undefined;
-                this._secretScanningAiDetection.internalValue = undefined;
-                this._secretScanningNonProviderPatterns.internalValue = undefined;
-                this._secretScanningPushProtection.internalValue = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._advancedSecurity.internalValue = value.advancedSecurity;
-                this._codeSecurity.internalValue = value.codeSecurity;
-                this._secretScanning.internalValue = value.secretScanning;
-                this._secretScanningAiDetection.internalValue = value.secretScanningAiDetection;
-                this._secretScanningNonProviderPatterns.internalValue = value.secretScanningNonProviderPatterns;
-                this._secretScanningPushProtection.internalValue = value.secretScanningPushProtection;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "advancedSecurity", {
-        get: function () {
-            return this._advancedSecurity;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositorySecurityAndAnalysisOutputReference.prototype.putAdvancedSecurity = function (value) {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._advancedSecurity?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.advancedSecurity = this._advancedSecurity?.internalValue;
+        }
+        if (this._codeSecurity?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.codeSecurity = this._codeSecurity?.internalValue;
+        }
+        if (this._secretScanning?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretScanning = this._secretScanning?.internalValue;
+        }
+        if (this._secretScanningAiDetection?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretScanningAiDetection = this._secretScanningAiDetection?.internalValue;
+        }
+        if (this._secretScanningNonProviderPatterns?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretScanningNonProviderPatterns = this._secretScanningNonProviderPatterns?.internalValue;
+        }
+        if (this._secretScanningPushProtection?.internalValue !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.secretScanningPushProtection = this._secretScanningPushProtection?.internalValue;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._advancedSecurity.internalValue = undefined;
+            this._codeSecurity.internalValue = undefined;
+            this._secretScanning.internalValue = undefined;
+            this._secretScanningAiDetection.internalValue = undefined;
+            this._secretScanningNonProviderPatterns.internalValue = undefined;
+            this._secretScanningPushProtection.internalValue = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._advancedSecurity.internalValue = value.advancedSecurity;
+            this._codeSecurity.internalValue = value.codeSecurity;
+            this._secretScanning.internalValue = value.secretScanning;
+            this._secretScanningAiDetection.internalValue = value.secretScanningAiDetection;
+            this._secretScanningNonProviderPatterns.internalValue = value.secretScanningNonProviderPatterns;
+            this._secretScanningPushProtection.internalValue = value.secretScanningPushProtection;
+        }
+    }
+    // advanced_security - computed: false, optional: true, required: false
+    _advancedSecurity = new RepositorySecurityAndAnalysisAdvancedSecurityOutputReference(this, "advanced_security");
+    get advancedSecurity() {
+        return this._advancedSecurity;
+    }
+    putAdvancedSecurity(value) {
         this._advancedSecurity.internalValue = value;
-    };
-    RepositorySecurityAndAnalysisOutputReference.prototype.resetAdvancedSecurity = function () {
+    }
+    resetAdvancedSecurity() {
         this._advancedSecurity.internalValue = undefined;
-    };
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "advancedSecurityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._advancedSecurity.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "codeSecurity", {
-        get: function () {
-            return this._codeSecurity;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositorySecurityAndAnalysisOutputReference.prototype.putCodeSecurity = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get advancedSecurityInput() {
+        return this._advancedSecurity.internalValue;
+    }
+    // code_security - computed: false, optional: true, required: false
+    _codeSecurity = new RepositorySecurityAndAnalysisCodeSecurityOutputReference(this, "code_security");
+    get codeSecurity() {
+        return this._codeSecurity;
+    }
+    putCodeSecurity(value) {
         this._codeSecurity.internalValue = value;
-    };
-    RepositorySecurityAndAnalysisOutputReference.prototype.resetCodeSecurity = function () {
+    }
+    resetCodeSecurity() {
         this._codeSecurity.internalValue = undefined;
-    };
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "codeSecurityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._codeSecurity.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "secretScanning", {
-        get: function () {
-            return this._secretScanning;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositorySecurityAndAnalysisOutputReference.prototype.putSecretScanning = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get codeSecurityInput() {
+        return this._codeSecurity.internalValue;
+    }
+    // secret_scanning - computed: false, optional: true, required: false
+    _secretScanning = new RepositorySecurityAndAnalysisSecretScanningOutputReference(this, "secret_scanning");
+    get secretScanning() {
+        return this._secretScanning;
+    }
+    putSecretScanning(value) {
         this._secretScanning.internalValue = value;
-    };
-    RepositorySecurityAndAnalysisOutputReference.prototype.resetSecretScanning = function () {
+    }
+    resetSecretScanning() {
         this._secretScanning.internalValue = undefined;
-    };
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "secretScanningInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanning.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "secretScanningAiDetection", {
-        get: function () {
-            return this._secretScanningAiDetection;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositorySecurityAndAnalysisOutputReference.prototype.putSecretScanningAiDetection = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningInput() {
+        return this._secretScanning.internalValue;
+    }
+    // secret_scanning_ai_detection - computed: false, optional: true, required: false
+    _secretScanningAiDetection = new RepositorySecurityAndAnalysisSecretScanningAiDetectionOutputReference(this, "secret_scanning_ai_detection");
+    get secretScanningAiDetection() {
+        return this._secretScanningAiDetection;
+    }
+    putSecretScanningAiDetection(value) {
         this._secretScanningAiDetection.internalValue = value;
-    };
-    RepositorySecurityAndAnalysisOutputReference.prototype.resetSecretScanningAiDetection = function () {
+    }
+    resetSecretScanningAiDetection() {
         this._secretScanningAiDetection.internalValue = undefined;
-    };
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "secretScanningAiDetectionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanningAiDetection.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "secretScanningNonProviderPatterns", {
-        get: function () {
-            return this._secretScanningNonProviderPatterns;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositorySecurityAndAnalysisOutputReference.prototype.putSecretScanningNonProviderPatterns = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningAiDetectionInput() {
+        return this._secretScanningAiDetection.internalValue;
+    }
+    // secret_scanning_non_provider_patterns - computed: false, optional: true, required: false
+    _secretScanningNonProviderPatterns = new RepositorySecurityAndAnalysisSecretScanningNonProviderPatternsOutputReference(this, "secret_scanning_non_provider_patterns");
+    get secretScanningNonProviderPatterns() {
+        return this._secretScanningNonProviderPatterns;
+    }
+    putSecretScanningNonProviderPatterns(value) {
         this._secretScanningNonProviderPatterns.internalValue = value;
-    };
-    RepositorySecurityAndAnalysisOutputReference.prototype.resetSecretScanningNonProviderPatterns = function () {
+    }
+    resetSecretScanningNonProviderPatterns() {
         this._secretScanningNonProviderPatterns.internalValue = undefined;
-    };
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "secretScanningNonProviderPatternsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanningNonProviderPatterns.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "secretScanningPushProtection", {
-        get: function () {
-            return this._secretScanningPushProtection;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositorySecurityAndAnalysisOutputReference.prototype.putSecretScanningPushProtection = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningNonProviderPatternsInput() {
+        return this._secretScanningNonProviderPatterns.internalValue;
+    }
+    // secret_scanning_push_protection - computed: false, optional: true, required: false
+    _secretScanningPushProtection = new RepositorySecurityAndAnalysisSecretScanningPushProtectionOutputReference(this, "secret_scanning_push_protection");
+    get secretScanningPushProtection() {
+        return this._secretScanningPushProtection;
+    }
+    putSecretScanningPushProtection(value) {
         this._secretScanningPushProtection.internalValue = value;
-    };
-    RepositorySecurityAndAnalysisOutputReference.prototype.resetSecretScanningPushProtection = function () {
+    }
+    resetSecretScanningPushProtection() {
         this._secretScanningPushProtection.internalValue = undefined;
-    };
-    Object.defineProperty(RepositorySecurityAndAnalysisOutputReference.prototype, "secretScanningPushProtectionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._secretScanningPushProtection.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositorySecurityAndAnalysisOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositorySecurityAndAnalysisOutputReference = RepositorySecurityAndAnalysisOutputReference;
-function repositoryTemplateToTerraform(struct) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get secretScanningPushProtectionInput() {
+        return this._secretScanningPushProtection.internalValue;
+    }
+}
+export function repositoryTemplateToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -1161,14 +890,14 @@ function repositoryTemplateToTerraform(struct) {
         repository: cdktf.stringToTerraform(struct.repository),
     };
 }
-function repositoryTemplateToHclTerraform(struct) {
+export function repositoryTemplateToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {
+    const attrs = {
         include_all_branches: {
             value: cdktf.booleanToHclTerraform(struct.includeAllBranches),
             isBlock: false,
@@ -1189,122 +918,109 @@ function repositoryTemplateToHclTerraform(struct) {
         },
     };
     // remove undefined attributes
-    return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-        var _ = _a[0], value = _a[1];
-        return value !== undefined && value.value !== undefined;
-    }));
+    return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
-var RepositoryTemplateOutputReference = /** @class */ (function (_super) {
-    __extends(RepositoryTemplateOutputReference, _super);
+export class RepositoryTemplateOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function RepositoryTemplateOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false, 0) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false, 0);
     }
-    Object.defineProperty(RepositoryTemplateOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            if (this._includeAllBranches !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.includeAllBranches = this._includeAllBranches;
-            }
-            if (this._owner !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.owner = this._owner;
-            }
-            if (this._repository !== undefined) {
-                hasAnyValues = true;
-                internalValueResult.repository = this._repository;
-            }
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-                this._includeAllBranches = undefined;
-                this._owner = undefined;
-                this._repository = undefined;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-                this._includeAllBranches = value.includeAllBranches;
-                this._owner = value.owner;
-                this._repository = value.repository;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryTemplateOutputReference.prototype, "includeAllBranches", {
-        get: function () {
-            return this.getBooleanAttribute('include_all_branches');
-        },
-        set: function (value) {
-            this._includeAllBranches = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RepositoryTemplateOutputReference.prototype.resetIncludeAllBranches = function () {
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        if (this._includeAllBranches !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.includeAllBranches = this._includeAllBranches;
+        }
+        if (this._owner !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.owner = this._owner;
+        }
+        if (this._repository !== undefined) {
+            hasAnyValues = true;
+            internalValueResult.repository = this._repository;
+        }
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+            this._includeAllBranches = undefined;
+            this._owner = undefined;
+            this._repository = undefined;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+            this._includeAllBranches = value.includeAllBranches;
+            this._owner = value.owner;
+            this._repository = value.repository;
+        }
+    }
+    // include_all_branches - computed: false, optional: true, required: false
+    _includeAllBranches;
+    get includeAllBranches() {
+        return this.getBooleanAttribute('include_all_branches');
+    }
+    set includeAllBranches(value) {
+        this._includeAllBranches = value;
+    }
+    resetIncludeAllBranches() {
         this._includeAllBranches = undefined;
-    };
-    Object.defineProperty(RepositoryTemplateOutputReference.prototype, "includeAllBranchesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._includeAllBranches;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryTemplateOutputReference.prototype, "owner", {
-        get: function () {
-            return this.getStringAttribute('owner');
-        },
-        set: function (value) {
-            this._owner = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryTemplateOutputReference.prototype, "ownerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._owner;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryTemplateOutputReference.prototype, "repository", {
-        get: function () {
-            return this.getStringAttribute('repository');
-        },
-        set: function (value) {
-            this._repository = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RepositoryTemplateOutputReference.prototype, "repositoryInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._repository;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RepositoryTemplateOutputReference;
-}(cdktf.ComplexObject));
-exports.RepositoryTemplateOutputReference = RepositoryTemplateOutputReference;
+    }
+    // Temporarily expose input value. Use with caution.
+    get includeAllBranchesInput() {
+        return this._includeAllBranches;
+    }
+    // owner - computed: false, optional: false, required: true
+    _owner;
+    get owner() {
+        return this.getStringAttribute('owner');
+    }
+    set owner(value) {
+        this._owner = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get ownerInput() {
+        return this._owner;
+    }
+    // repository - computed: false, optional: false, required: true
+    _repository;
+    get repository() {
+        return this.getStringAttribute('repository');
+    }
+    set repository(value) {
+        this._repository = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get repositoryInput() {
+        return this._repository;
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository github_repository}
 */
-var Repository = /** @class */ (function (_super) {
-    __extends(Repository, _super);
+export class Repository extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "github_repository";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a Repository resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the Repository to import
+    * @param importFromId The id of the existing Repository that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the Repository to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -1315,8 +1031,8 @@ var Repository = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options RepositoryConfig
     */
-    function Repository(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'github_repository',
             terraformGeneratorMetadata: {
                 providerName: 'github',
@@ -1329,981 +1045,688 @@ var Repository = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // pages - computed: false, optional: true, required: false
-        _this._pages = new RepositoryPagesOutputReference(_this, "pages");
-        // security_and_analysis - computed: false, optional: true, required: false
-        _this._securityAndAnalysis = new RepositorySecurityAndAnalysisOutputReference(_this, "security_and_analysis");
-        // template - computed: false, optional: true, required: false
-        _this._template = new RepositoryTemplateOutputReference(_this, "template");
-        _this._allowAutoMerge = config.allowAutoMerge;
-        _this._allowForking = config.allowForking;
-        _this._allowMergeCommit = config.allowMergeCommit;
-        _this._allowRebaseMerge = config.allowRebaseMerge;
-        _this._allowSquashMerge = config.allowSquashMerge;
-        _this._allowUpdateBranch = config.allowUpdateBranch;
-        _this._archiveOnDestroy = config.archiveOnDestroy;
-        _this._archived = config.archived;
-        _this._autoInit = config.autoInit;
-        _this._defaultBranch = config.defaultBranch;
-        _this._deleteBranchOnMerge = config.deleteBranchOnMerge;
-        _this._description = config.description;
-        _this._etag = config.etag;
-        _this._fork = config.fork;
-        _this._gitignoreTemplate = config.gitignoreTemplate;
-        _this._hasDiscussions = config.hasDiscussions;
-        _this._hasDownloads = config.hasDownloads;
-        _this._hasIssues = config.hasIssues;
-        _this._hasProjects = config.hasProjects;
-        _this._hasWiki = config.hasWiki;
-        _this._homepageUrl = config.homepageUrl;
-        _this._id = config.id;
-        _this._ignoreVulnerabilityAlertsDuringRead = config.ignoreVulnerabilityAlertsDuringRead;
-        _this._isTemplate = config.isTemplate;
-        _this._licenseTemplate = config.licenseTemplate;
-        _this._mergeCommitMessage = config.mergeCommitMessage;
-        _this._mergeCommitTitle = config.mergeCommitTitle;
-        _this._name = config.name;
-        _this._private = config.private;
-        _this._sourceOwner = config.sourceOwner;
-        _this._sourceRepo = config.sourceRepo;
-        _this._squashMergeCommitMessage = config.squashMergeCommitMessage;
-        _this._squashMergeCommitTitle = config.squashMergeCommitTitle;
-        _this._topics = config.topics;
-        _this._visibility = config.visibility;
-        _this._vulnerabilityAlerts = config.vulnerabilityAlerts;
-        _this._webCommitSignoffRequired = config.webCommitSignoffRequired;
-        _this._pages.internalValue = config.pages;
-        _this._securityAndAnalysis.internalValue = config.securityAndAnalysis;
-        _this._template.internalValue = config.template;
-        return _this;
+        });
+        this._allowAutoMerge = config.allowAutoMerge;
+        this._allowForking = config.allowForking;
+        this._allowMergeCommit = config.allowMergeCommit;
+        this._allowRebaseMerge = config.allowRebaseMerge;
+        this._allowSquashMerge = config.allowSquashMerge;
+        this._allowUpdateBranch = config.allowUpdateBranch;
+        this._archiveOnDestroy = config.archiveOnDestroy;
+        this._archived = config.archived;
+        this._autoInit = config.autoInit;
+        this._defaultBranch = config.defaultBranch;
+        this._deleteBranchOnMerge = config.deleteBranchOnMerge;
+        this._description = config.description;
+        this._etag = config.etag;
+        this._fork = config.fork;
+        this._gitignoreTemplate = config.gitignoreTemplate;
+        this._hasDiscussions = config.hasDiscussions;
+        this._hasDownloads = config.hasDownloads;
+        this._hasIssues = config.hasIssues;
+        this._hasProjects = config.hasProjects;
+        this._hasWiki = config.hasWiki;
+        this._homepageUrl = config.homepageUrl;
+        this._id = config.id;
+        this._ignoreVulnerabilityAlertsDuringRead = config.ignoreVulnerabilityAlertsDuringRead;
+        this._isTemplate = config.isTemplate;
+        this._licenseTemplate = config.licenseTemplate;
+        this._mergeCommitMessage = config.mergeCommitMessage;
+        this._mergeCommitTitle = config.mergeCommitTitle;
+        this._name = config.name;
+        this._private = config.private;
+        this._sourceOwner = config.sourceOwner;
+        this._sourceRepo = config.sourceRepo;
+        this._squashMergeCommitMessage = config.squashMergeCommitMessage;
+        this._squashMergeCommitTitle = config.squashMergeCommitTitle;
+        this._topics = config.topics;
+        this._visibility = config.visibility;
+        this._vulnerabilityAlerts = config.vulnerabilityAlerts;
+        this._webCommitSignoffRequired = config.webCommitSignoffRequired;
+        this._pages.internalValue = config.pages;
+        this._securityAndAnalysis.internalValue = config.securityAndAnalysis;
+        this._template.internalValue = config.template;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a Repository resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the Repository to import
-    * @param importFromId The id of the existing Repository that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.0/docs/resources/repository#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the Repository to import is found
-    */
-    Repository.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "github_repository", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(Repository.prototype, "allowAutoMerge", {
-        get: function () {
-            return this.getBooleanAttribute('allow_auto_merge');
-        },
-        set: function (value) {
-            this._allowAutoMerge = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetAllowAutoMerge = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // allow_auto_merge - computed: false, optional: true, required: false
+    _allowAutoMerge;
+    get allowAutoMerge() {
+        return this.getBooleanAttribute('allow_auto_merge');
+    }
+    set allowAutoMerge(value) {
+        this._allowAutoMerge = value;
+    }
+    resetAllowAutoMerge() {
         this._allowAutoMerge = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "allowAutoMergeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowAutoMerge;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "allowForking", {
-        get: function () {
-            return this.getBooleanAttribute('allow_forking');
-        },
-        set: function (value) {
-            this._allowForking = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetAllowForking = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowAutoMergeInput() {
+        return this._allowAutoMerge;
+    }
+    // allow_forking - computed: true, optional: true, required: false
+    _allowForking;
+    get allowForking() {
+        return this.getBooleanAttribute('allow_forking');
+    }
+    set allowForking(value) {
+        this._allowForking = value;
+    }
+    resetAllowForking() {
         this._allowForking = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "allowForkingInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowForking;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "allowMergeCommit", {
-        get: function () {
-            return this.getBooleanAttribute('allow_merge_commit');
-        },
-        set: function (value) {
-            this._allowMergeCommit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetAllowMergeCommit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowForkingInput() {
+        return this._allowForking;
+    }
+    // allow_merge_commit - computed: false, optional: true, required: false
+    _allowMergeCommit;
+    get allowMergeCommit() {
+        return this.getBooleanAttribute('allow_merge_commit');
+    }
+    set allowMergeCommit(value) {
+        this._allowMergeCommit = value;
+    }
+    resetAllowMergeCommit() {
         this._allowMergeCommit = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "allowMergeCommitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowMergeCommit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "allowRebaseMerge", {
-        get: function () {
-            return this.getBooleanAttribute('allow_rebase_merge');
-        },
-        set: function (value) {
-            this._allowRebaseMerge = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetAllowRebaseMerge = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowMergeCommitInput() {
+        return this._allowMergeCommit;
+    }
+    // allow_rebase_merge - computed: false, optional: true, required: false
+    _allowRebaseMerge;
+    get allowRebaseMerge() {
+        return this.getBooleanAttribute('allow_rebase_merge');
+    }
+    set allowRebaseMerge(value) {
+        this._allowRebaseMerge = value;
+    }
+    resetAllowRebaseMerge() {
         this._allowRebaseMerge = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "allowRebaseMergeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowRebaseMerge;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "allowSquashMerge", {
-        get: function () {
-            return this.getBooleanAttribute('allow_squash_merge');
-        },
-        set: function (value) {
-            this._allowSquashMerge = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetAllowSquashMerge = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowRebaseMergeInput() {
+        return this._allowRebaseMerge;
+    }
+    // allow_squash_merge - computed: false, optional: true, required: false
+    _allowSquashMerge;
+    get allowSquashMerge() {
+        return this.getBooleanAttribute('allow_squash_merge');
+    }
+    set allowSquashMerge(value) {
+        this._allowSquashMerge = value;
+    }
+    resetAllowSquashMerge() {
         this._allowSquashMerge = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "allowSquashMergeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowSquashMerge;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "allowUpdateBranch", {
-        get: function () {
-            return this.getBooleanAttribute('allow_update_branch');
-        },
-        set: function (value) {
-            this._allowUpdateBranch = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetAllowUpdateBranch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowSquashMergeInput() {
+        return this._allowSquashMerge;
+    }
+    // allow_update_branch - computed: false, optional: true, required: false
+    _allowUpdateBranch;
+    get allowUpdateBranch() {
+        return this.getBooleanAttribute('allow_update_branch');
+    }
+    set allowUpdateBranch(value) {
+        this._allowUpdateBranch = value;
+    }
+    resetAllowUpdateBranch() {
         this._allowUpdateBranch = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "allowUpdateBranchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._allowUpdateBranch;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "archiveOnDestroy", {
-        get: function () {
-            return this.getBooleanAttribute('archive_on_destroy');
-        },
-        set: function (value) {
-            this._archiveOnDestroy = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetArchiveOnDestroy = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get allowUpdateBranchInput() {
+        return this._allowUpdateBranch;
+    }
+    // archive_on_destroy - computed: false, optional: true, required: false
+    _archiveOnDestroy;
+    get archiveOnDestroy() {
+        return this.getBooleanAttribute('archive_on_destroy');
+    }
+    set archiveOnDestroy(value) {
+        this._archiveOnDestroy = value;
+    }
+    resetArchiveOnDestroy() {
         this._archiveOnDestroy = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "archiveOnDestroyInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._archiveOnDestroy;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "archived", {
-        get: function () {
-            return this.getBooleanAttribute('archived');
-        },
-        set: function (value) {
-            this._archived = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetArchived = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get archiveOnDestroyInput() {
+        return this._archiveOnDestroy;
+    }
+    // archived - computed: false, optional: true, required: false
+    _archived;
+    get archived() {
+        return this.getBooleanAttribute('archived');
+    }
+    set archived(value) {
+        this._archived = value;
+    }
+    resetArchived() {
         this._archived = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "archivedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._archived;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "autoInit", {
-        get: function () {
-            return this.getBooleanAttribute('auto_init');
-        },
-        set: function (value) {
-            this._autoInit = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetAutoInit = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get archivedInput() {
+        return this._archived;
+    }
+    // auto_init - computed: false, optional: true, required: false
+    _autoInit;
+    get autoInit() {
+        return this.getBooleanAttribute('auto_init');
+    }
+    set autoInit(value) {
+        this._autoInit = value;
+    }
+    resetAutoInit() {
         this._autoInit = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "autoInitInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._autoInit;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "defaultBranch", {
-        get: function () {
-            return this.getStringAttribute('default_branch');
-        },
-        set: function (value) {
-            this._defaultBranch = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetDefaultBranch = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get autoInitInput() {
+        return this._autoInit;
+    }
+    // default_branch - computed: true, optional: true, required: false
+    _defaultBranch;
+    get defaultBranch() {
+        return this.getStringAttribute('default_branch');
+    }
+    set defaultBranch(value) {
+        this._defaultBranch = value;
+    }
+    resetDefaultBranch() {
         this._defaultBranch = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "defaultBranchInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._defaultBranch;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "deleteBranchOnMerge", {
-        get: function () {
-            return this.getBooleanAttribute('delete_branch_on_merge');
-        },
-        set: function (value) {
-            this._deleteBranchOnMerge = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetDeleteBranchOnMerge = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get defaultBranchInput() {
+        return this._defaultBranch;
+    }
+    // delete_branch_on_merge - computed: false, optional: true, required: false
+    _deleteBranchOnMerge;
+    get deleteBranchOnMerge() {
+        return this.getBooleanAttribute('delete_branch_on_merge');
+    }
+    set deleteBranchOnMerge(value) {
+        this._deleteBranchOnMerge = value;
+    }
+    resetDeleteBranchOnMerge() {
         this._deleteBranchOnMerge = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "deleteBranchOnMergeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._deleteBranchOnMerge;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get deleteBranchOnMergeInput() {
+        return this._deleteBranchOnMerge;
+    }
+    // description - computed: false, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "etag", {
-        get: function () {
-            return this.getStringAttribute('etag');
-        },
-        set: function (value) {
-            this._etag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetEtag = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // etag - computed: true, optional: true, required: false
+    _etag;
+    get etag() {
+        return this.getStringAttribute('etag');
+    }
+    set etag(value) {
+        this._etag = value;
+    }
+    resetEtag() {
         this._etag = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "etagInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._etag;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "fork", {
-        get: function () {
-            return this.getStringAttribute('fork');
-        },
-        set: function (value) {
-            this._fork = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetFork = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get etagInput() {
+        return this._etag;
+    }
+    // fork - computed: true, optional: true, required: false
+    _fork;
+    get fork() {
+        return this.getStringAttribute('fork');
+    }
+    set fork(value) {
+        this._fork = value;
+    }
+    resetFork() {
         this._fork = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "forkInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fork;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "fullName", {
-        // full_name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('full_name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "gitCloneUrl", {
-        // git_clone_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('git_clone_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "gitignoreTemplate", {
-        get: function () {
-            return this.getStringAttribute('gitignore_template');
-        },
-        set: function (value) {
-            this._gitignoreTemplate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetGitignoreTemplate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get forkInput() {
+        return this._fork;
+    }
+    // full_name - computed: true, optional: false, required: false
+    get fullName() {
+        return this.getStringAttribute('full_name');
+    }
+    // git_clone_url - computed: true, optional: false, required: false
+    get gitCloneUrl() {
+        return this.getStringAttribute('git_clone_url');
+    }
+    // gitignore_template - computed: false, optional: true, required: false
+    _gitignoreTemplate;
+    get gitignoreTemplate() {
+        return this.getStringAttribute('gitignore_template');
+    }
+    set gitignoreTemplate(value) {
+        this._gitignoreTemplate = value;
+    }
+    resetGitignoreTemplate() {
         this._gitignoreTemplate = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "gitignoreTemplateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._gitignoreTemplate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "hasDiscussions", {
-        get: function () {
-            return this.getBooleanAttribute('has_discussions');
-        },
-        set: function (value) {
-            this._hasDiscussions = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetHasDiscussions = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get gitignoreTemplateInput() {
+        return this._gitignoreTemplate;
+    }
+    // has_discussions - computed: false, optional: true, required: false
+    _hasDiscussions;
+    get hasDiscussions() {
+        return this.getBooleanAttribute('has_discussions');
+    }
+    set hasDiscussions(value) {
+        this._hasDiscussions = value;
+    }
+    resetHasDiscussions() {
         this._hasDiscussions = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "hasDiscussionsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hasDiscussions;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "hasDownloads", {
-        get: function () {
-            return this.getBooleanAttribute('has_downloads');
-        },
-        set: function (value) {
-            this._hasDownloads = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetHasDownloads = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hasDiscussionsInput() {
+        return this._hasDiscussions;
+    }
+    // has_downloads - computed: false, optional: true, required: false
+    _hasDownloads;
+    get hasDownloads() {
+        return this.getBooleanAttribute('has_downloads');
+    }
+    set hasDownloads(value) {
+        this._hasDownloads = value;
+    }
+    resetHasDownloads() {
         this._hasDownloads = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "hasDownloadsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hasDownloads;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "hasIssues", {
-        get: function () {
-            return this.getBooleanAttribute('has_issues');
-        },
-        set: function (value) {
-            this._hasIssues = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetHasIssues = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hasDownloadsInput() {
+        return this._hasDownloads;
+    }
+    // has_issues - computed: false, optional: true, required: false
+    _hasIssues;
+    get hasIssues() {
+        return this.getBooleanAttribute('has_issues');
+    }
+    set hasIssues(value) {
+        this._hasIssues = value;
+    }
+    resetHasIssues() {
         this._hasIssues = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "hasIssuesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hasIssues;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "hasProjects", {
-        get: function () {
-            return this.getBooleanAttribute('has_projects');
-        },
-        set: function (value) {
-            this._hasProjects = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetHasProjects = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hasIssuesInput() {
+        return this._hasIssues;
+    }
+    // has_projects - computed: false, optional: true, required: false
+    _hasProjects;
+    get hasProjects() {
+        return this.getBooleanAttribute('has_projects');
+    }
+    set hasProjects(value) {
+        this._hasProjects = value;
+    }
+    resetHasProjects() {
         this._hasProjects = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "hasProjectsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hasProjects;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "hasWiki", {
-        get: function () {
-            return this.getBooleanAttribute('has_wiki');
-        },
-        set: function (value) {
-            this._hasWiki = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetHasWiki = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hasProjectsInput() {
+        return this._hasProjects;
+    }
+    // has_wiki - computed: false, optional: true, required: false
+    _hasWiki;
+    get hasWiki() {
+        return this.getBooleanAttribute('has_wiki');
+    }
+    set hasWiki(value) {
+        this._hasWiki = value;
+    }
+    resetHasWiki() {
         this._hasWiki = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "hasWikiInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._hasWiki;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "homepageUrl", {
-        get: function () {
-            return this.getStringAttribute('homepage_url');
-        },
-        set: function (value) {
-            this._homepageUrl = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetHomepageUrl = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get hasWikiInput() {
+        return this._hasWiki;
+    }
+    // homepage_url - computed: false, optional: true, required: false
+    _homepageUrl;
+    get homepageUrl() {
+        return this.getStringAttribute('homepage_url');
+    }
+    set homepageUrl(value) {
+        this._homepageUrl = value;
+    }
+    resetHomepageUrl() {
         this._homepageUrl = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "homepageUrlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._homepageUrl;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "htmlUrl", {
-        // html_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('html_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "httpCloneUrl", {
-        // http_clone_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('http_clone_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "id", {
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        set: function (value) {
-            this._id = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get homepageUrlInput() {
+        return this._homepageUrl;
+    }
+    // html_url - computed: true, optional: false, required: false
+    get htmlUrl() {
+        return this.getStringAttribute('html_url');
+    }
+    // http_clone_url - computed: true, optional: false, required: false
+    get httpCloneUrl() {
+        return this.getStringAttribute('http_clone_url');
+    }
+    // id - computed: true, optional: true, required: false
+    _id;
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    set id(value) {
+        this._id = value;
+    }
+    resetId() {
         this._id = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "idInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "ignoreVulnerabilityAlertsDuringRead", {
-        get: function () {
-            return this.getBooleanAttribute('ignore_vulnerability_alerts_during_read');
-        },
-        set: function (value) {
-            this._ignoreVulnerabilityAlertsDuringRead = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetIgnoreVulnerabilityAlertsDuringRead = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get idInput() {
+        return this._id;
+    }
+    // ignore_vulnerability_alerts_during_read - computed: false, optional: true, required: false
+    _ignoreVulnerabilityAlertsDuringRead;
+    get ignoreVulnerabilityAlertsDuringRead() {
+        return this.getBooleanAttribute('ignore_vulnerability_alerts_during_read');
+    }
+    set ignoreVulnerabilityAlertsDuringRead(value) {
+        this._ignoreVulnerabilityAlertsDuringRead = value;
+    }
+    resetIgnoreVulnerabilityAlertsDuringRead() {
         this._ignoreVulnerabilityAlertsDuringRead = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "ignoreVulnerabilityAlertsDuringReadInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._ignoreVulnerabilityAlertsDuringRead;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "isTemplate", {
-        get: function () {
-            return this.getBooleanAttribute('is_template');
-        },
-        set: function (value) {
-            this._isTemplate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetIsTemplate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get ignoreVulnerabilityAlertsDuringReadInput() {
+        return this._ignoreVulnerabilityAlertsDuringRead;
+    }
+    // is_template - computed: false, optional: true, required: false
+    _isTemplate;
+    get isTemplate() {
+        return this.getBooleanAttribute('is_template');
+    }
+    set isTemplate(value) {
+        this._isTemplate = value;
+    }
+    resetIsTemplate() {
         this._isTemplate = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "isTemplateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isTemplate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "licenseTemplate", {
-        get: function () {
-            return this.getStringAttribute('license_template');
-        },
-        set: function (value) {
-            this._licenseTemplate = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetLicenseTemplate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isTemplateInput() {
+        return this._isTemplate;
+    }
+    // license_template - computed: false, optional: true, required: false
+    _licenseTemplate;
+    get licenseTemplate() {
+        return this.getStringAttribute('license_template');
+    }
+    set licenseTemplate(value) {
+        this._licenseTemplate = value;
+    }
+    resetLicenseTemplate() {
         this._licenseTemplate = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "licenseTemplateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._licenseTemplate;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "mergeCommitMessage", {
-        get: function () {
-            return this.getStringAttribute('merge_commit_message');
-        },
-        set: function (value) {
-            this._mergeCommitMessage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetMergeCommitMessage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get licenseTemplateInput() {
+        return this._licenseTemplate;
+    }
+    // merge_commit_message - computed: false, optional: true, required: false
+    _mergeCommitMessage;
+    get mergeCommitMessage() {
+        return this.getStringAttribute('merge_commit_message');
+    }
+    set mergeCommitMessage(value) {
+        this._mergeCommitMessage = value;
+    }
+    resetMergeCommitMessage() {
         this._mergeCommitMessage = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "mergeCommitMessageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mergeCommitMessage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "mergeCommitTitle", {
-        get: function () {
-            return this.getStringAttribute('merge_commit_title');
-        },
-        set: function (value) {
-            this._mergeCommitTitle = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetMergeCommitTitle = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mergeCommitMessageInput() {
+        return this._mergeCommitMessage;
+    }
+    // merge_commit_title - computed: false, optional: true, required: false
+    _mergeCommitTitle;
+    get mergeCommitTitle() {
+        return this.getStringAttribute('merge_commit_title');
+    }
+    set mergeCommitTitle(value) {
+        this._mergeCommitTitle = value;
+    }
+    resetMergeCommitTitle() {
         this._mergeCommitTitle = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "mergeCommitTitleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mergeCommitTitle;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "nodeId", {
-        // node_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('node_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "primaryLanguage", {
-        // primary_language - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('primary_language');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "private", {
-        get: function () {
-            return this.getBooleanAttribute('private');
-        },
-        set: function (value) {
-            this._private = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetPrivate = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get mergeCommitTitleInput() {
+        return this._mergeCommitTitle;
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // node_id - computed: true, optional: false, required: false
+    get nodeId() {
+        return this.getStringAttribute('node_id');
+    }
+    // primary_language - computed: true, optional: false, required: false
+    get primaryLanguage() {
+        return this.getStringAttribute('primary_language');
+    }
+    // private - computed: true, optional: true, required: false
+    _private;
+    get private() {
+        return this.getBooleanAttribute('private');
+    }
+    set private(value) {
+        this._private = value;
+    }
+    resetPrivate() {
         this._private = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "privateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._private;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "repoId", {
-        // repo_id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getNumberAttribute('repo_id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "sourceOwner", {
-        get: function () {
-            return this.getStringAttribute('source_owner');
-        },
-        set: function (value) {
-            this._sourceOwner = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetSourceOwner = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get privateInput() {
+        return this._private;
+    }
+    // repo_id - computed: true, optional: false, required: false
+    get repoId() {
+        return this.getNumberAttribute('repo_id');
+    }
+    // source_owner - computed: true, optional: true, required: false
+    _sourceOwner;
+    get sourceOwner() {
+        return this.getStringAttribute('source_owner');
+    }
+    set sourceOwner(value) {
+        this._sourceOwner = value;
+    }
+    resetSourceOwner() {
         this._sourceOwner = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "sourceOwnerInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sourceOwner;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "sourceRepo", {
-        get: function () {
-            return this.getStringAttribute('source_repo');
-        },
-        set: function (value) {
-            this._sourceRepo = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetSourceRepo = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceOwnerInput() {
+        return this._sourceOwner;
+    }
+    // source_repo - computed: true, optional: true, required: false
+    _sourceRepo;
+    get sourceRepo() {
+        return this.getStringAttribute('source_repo');
+    }
+    set sourceRepo(value) {
+        this._sourceRepo = value;
+    }
+    resetSourceRepo() {
         this._sourceRepo = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "sourceRepoInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sourceRepo;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "squashMergeCommitMessage", {
-        get: function () {
-            return this.getStringAttribute('squash_merge_commit_message');
-        },
-        set: function (value) {
-            this._squashMergeCommitMessage = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetSquashMergeCommitMessage = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sourceRepoInput() {
+        return this._sourceRepo;
+    }
+    // squash_merge_commit_message - computed: false, optional: true, required: false
+    _squashMergeCommitMessage;
+    get squashMergeCommitMessage() {
+        return this.getStringAttribute('squash_merge_commit_message');
+    }
+    set squashMergeCommitMessage(value) {
+        this._squashMergeCommitMessage = value;
+    }
+    resetSquashMergeCommitMessage() {
         this._squashMergeCommitMessage = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "squashMergeCommitMessageInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._squashMergeCommitMessage;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "squashMergeCommitTitle", {
-        get: function () {
-            return this.getStringAttribute('squash_merge_commit_title');
-        },
-        set: function (value) {
-            this._squashMergeCommitTitle = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetSquashMergeCommitTitle = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get squashMergeCommitMessageInput() {
+        return this._squashMergeCommitMessage;
+    }
+    // squash_merge_commit_title - computed: false, optional: true, required: false
+    _squashMergeCommitTitle;
+    get squashMergeCommitTitle() {
+        return this.getStringAttribute('squash_merge_commit_title');
+    }
+    set squashMergeCommitTitle(value) {
+        this._squashMergeCommitTitle = value;
+    }
+    resetSquashMergeCommitTitle() {
         this._squashMergeCommitTitle = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "squashMergeCommitTitleInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._squashMergeCommitTitle;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "sshCloneUrl", {
-        // ssh_clone_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('ssh_clone_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "svnUrl", {
-        // svn_url - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('svn_url');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "topics", {
-        get: function () {
-            return cdktf.Fn.tolist(this.getListAttribute('topics'));
-        },
-        set: function (value) {
-            this._topics = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetTopics = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get squashMergeCommitTitleInput() {
+        return this._squashMergeCommitTitle;
+    }
+    // ssh_clone_url - computed: true, optional: false, required: false
+    get sshCloneUrl() {
+        return this.getStringAttribute('ssh_clone_url');
+    }
+    // svn_url - computed: true, optional: false, required: false
+    get svnUrl() {
+        return this.getStringAttribute('svn_url');
+    }
+    // topics - computed: true, optional: true, required: false
+    _topics;
+    get topics() {
+        return cdktf.Fn.tolist(this.getListAttribute('topics'));
+    }
+    set topics(value) {
+        this._topics = value;
+    }
+    resetTopics() {
         this._topics = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "topicsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._topics;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "visibility", {
-        get: function () {
-            return this.getStringAttribute('visibility');
-        },
-        set: function (value) {
-            this._visibility = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetVisibility = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get topicsInput() {
+        return this._topics;
+    }
+    // visibility - computed: true, optional: true, required: false
+    _visibility;
+    get visibility() {
+        return this.getStringAttribute('visibility');
+    }
+    set visibility(value) {
+        this._visibility = value;
+    }
+    resetVisibility() {
         this._visibility = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "visibilityInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._visibility;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "vulnerabilityAlerts", {
-        get: function () {
-            return this.getBooleanAttribute('vulnerability_alerts');
-        },
-        set: function (value) {
-            this._vulnerabilityAlerts = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetVulnerabilityAlerts = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get visibilityInput() {
+        return this._visibility;
+    }
+    // vulnerability_alerts - computed: true, optional: true, required: false
+    _vulnerabilityAlerts;
+    get vulnerabilityAlerts() {
+        return this.getBooleanAttribute('vulnerability_alerts');
+    }
+    set vulnerabilityAlerts(value) {
+        this._vulnerabilityAlerts = value;
+    }
+    resetVulnerabilityAlerts() {
         this._vulnerabilityAlerts = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "vulnerabilityAlertsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._vulnerabilityAlerts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "webCommitSignoffRequired", {
-        get: function () {
-            return this.getBooleanAttribute('web_commit_signoff_required');
-        },
-        set: function (value) {
-            this._webCommitSignoffRequired = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.resetWebCommitSignoffRequired = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get vulnerabilityAlertsInput() {
+        return this._vulnerabilityAlerts;
+    }
+    // web_commit_signoff_required - computed: true, optional: true, required: false
+    _webCommitSignoffRequired;
+    get webCommitSignoffRequired() {
+        return this.getBooleanAttribute('web_commit_signoff_required');
+    }
+    set webCommitSignoffRequired(value) {
+        this._webCommitSignoffRequired = value;
+    }
+    resetWebCommitSignoffRequired() {
         this._webCommitSignoffRequired = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "webCommitSignoffRequiredInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._webCommitSignoffRequired;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "pages", {
-        get: function () {
-            return this._pages;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.putPages = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get webCommitSignoffRequiredInput() {
+        return this._webCommitSignoffRequired;
+    }
+    // pages - computed: false, optional: true, required: false
+    _pages = new RepositoryPagesOutputReference(this, "pages");
+    get pages() {
+        return this._pages;
+    }
+    putPages(value) {
         this._pages.internalValue = value;
-    };
-    Repository.prototype.resetPages = function () {
+    }
+    resetPages() {
         this._pages.internalValue = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "pagesInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._pages.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "securityAndAnalysis", {
-        get: function () {
-            return this._securityAndAnalysis;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.putSecurityAndAnalysis = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get pagesInput() {
+        return this._pages.internalValue;
+    }
+    // security_and_analysis - computed: false, optional: true, required: false
+    _securityAndAnalysis = new RepositorySecurityAndAnalysisOutputReference(this, "security_and_analysis");
+    get securityAndAnalysis() {
+        return this._securityAndAnalysis;
+    }
+    putSecurityAndAnalysis(value) {
         this._securityAndAnalysis.internalValue = value;
-    };
-    Repository.prototype.resetSecurityAndAnalysis = function () {
+    }
+    resetSecurityAndAnalysis() {
         this._securityAndAnalysis.internalValue = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "securityAndAnalysisInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._securityAndAnalysis.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Repository.prototype, "template", {
-        get: function () {
-            return this._template;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Repository.prototype.putTemplate = function (value) {
+    }
+    // Temporarily expose input value. Use with caution.
+    get securityAndAnalysisInput() {
+        return this._securityAndAnalysis.internalValue;
+    }
+    // template - computed: false, optional: true, required: false
+    _template = new RepositoryTemplateOutputReference(this, "template");
+    get template() {
+        return this._template;
+    }
+    putTemplate(value) {
         this._template.internalValue = value;
-    };
-    Repository.prototype.resetTemplate = function () {
+    }
+    resetTemplate() {
         this._template.internalValue = undefined;
-    };
-    Object.defineProperty(Repository.prototype, "templateInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._template.internalValue;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get templateInput() {
+        return this._template.internalValue;
+    }
     // =========
     // SYNTHESIS
     // =========
-    Repository.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             allow_auto_merge: cdktf.booleanToTerraform(this._allowAutoMerge),
             allow_forking: cdktf.booleanToTerraform(this._allowForking),
@@ -2346,9 +1769,9 @@ var Repository = /** @class */ (function (_super) {
             security_and_analysis: repositorySecurityAndAnalysisToTerraform(this._securityAndAnalysis.internalValue),
             template: repositoryTemplateToTerraform(this._template.internalValue),
         };
-    };
-    Repository.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             allow_auto_merge: {
                 value: cdktf.booleanToHclTerraform(this._allowAutoMerge),
                 isBlock: false,
@@ -2591,15 +2014,6 @@ var Repository = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    Repository.tfResourceType = "github_repository";
-    return Repository;
-}(cdktf.TerraformResource));
-exports.Repository = Repository;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

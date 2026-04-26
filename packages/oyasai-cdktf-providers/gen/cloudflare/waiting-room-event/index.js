@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/waiting_room_event
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WaitingRoomEvent = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/waiting_room_event cloudflare_waiting_room_event}
 */
-var WaitingRoomEvent = /** @class */ (function (_super) {
-    __extends(WaitingRoomEvent, _super);
+export class WaitingRoomEvent extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_waiting_room_event";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a WaitingRoomEvent resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the WaitingRoomEvent to import
+    * @param importFromId The id of the existing WaitingRoomEvent that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/waiting_room_event#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the WaitingRoomEvent to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_waiting_room_event", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var WaitingRoomEvent = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options WaitingRoomEventConfig
     */
-    function WaitingRoomEvent(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_waiting_room_event',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,415 +46,287 @@ var WaitingRoomEvent = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._customPageHtml = config.customPageHtml;
-        _this._description = config.description;
-        _this._disableSessionRenewal = config.disableSessionRenewal;
-        _this._eventEndTime = config.eventEndTime;
-        _this._eventStartTime = config.eventStartTime;
-        _this._name = config.name;
-        _this._newUsersPerMinute = config.newUsersPerMinute;
-        _this._prequeueStartTime = config.prequeueStartTime;
-        _this._queueingMethod = config.queueingMethod;
-        _this._sessionDuration = config.sessionDuration;
-        _this._shuffleAtEventStart = config.shuffleAtEventStart;
-        _this._suspended = config.suspended;
-        _this._totalActiveUsers = config.totalActiveUsers;
-        _this._turnstileAction = config.turnstileAction;
-        _this._turnstileMode = config.turnstileMode;
-        _this._waitingRoomId = config.waitingRoomId;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._customPageHtml = config.customPageHtml;
+        this._description = config.description;
+        this._disableSessionRenewal = config.disableSessionRenewal;
+        this._eventEndTime = config.eventEndTime;
+        this._eventStartTime = config.eventStartTime;
+        this._name = config.name;
+        this._newUsersPerMinute = config.newUsersPerMinute;
+        this._prequeueStartTime = config.prequeueStartTime;
+        this._queueingMethod = config.queueingMethod;
+        this._sessionDuration = config.sessionDuration;
+        this._shuffleAtEventStart = config.shuffleAtEventStart;
+        this._suspended = config.suspended;
+        this._totalActiveUsers = config.totalActiveUsers;
+        this._turnstileAction = config.turnstileAction;
+        this._turnstileMode = config.turnstileMode;
+        this._waitingRoomId = config.waitingRoomId;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a WaitingRoomEvent resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the WaitingRoomEvent to import
-    * @param importFromId The id of the existing WaitingRoomEvent that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/waiting_room_event#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the WaitingRoomEvent to import is found
-    */
-    WaitingRoomEvent.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_waiting_room_event", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "createdOn", {
-        // ==========
-        // ATTRIBUTES
-        // ==========
-        // created_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('created_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "customPageHtml", {
-        get: function () {
-            return this.getStringAttribute('custom_page_html');
-        },
-        set: function (value) {
-            this._customPageHtml = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetCustomPageHtml = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // created_on - computed: true, optional: false, required: false
+    get createdOn() {
+        return this.getStringAttribute('created_on');
+    }
+    // custom_page_html - computed: false, optional: true, required: false
+    _customPageHtml;
+    get customPageHtml() {
+        return this.getStringAttribute('custom_page_html');
+    }
+    set customPageHtml(value) {
+        this._customPageHtml = value;
+    }
+    resetCustomPageHtml() {
         this._customPageHtml = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "customPageHtmlInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._customPageHtml;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "description", {
-        get: function () {
-            return this.getStringAttribute('description');
-        },
-        set: function (value) {
-            this._description = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetDescription = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get customPageHtmlInput() {
+        return this._customPageHtml;
+    }
+    // description - computed: true, optional: true, required: false
+    _description;
+    get description() {
+        return this.getStringAttribute('description');
+    }
+    set description(value) {
+        this._description = value;
+    }
+    resetDescription() {
         this._description = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "descriptionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._description;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "disableSessionRenewal", {
-        get: function () {
-            return this.getBooleanAttribute('disable_session_renewal');
-        },
-        set: function (value) {
-            this._disableSessionRenewal = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetDisableSessionRenewal = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get descriptionInput() {
+        return this._description;
+    }
+    // disable_session_renewal - computed: false, optional: true, required: false
+    _disableSessionRenewal;
+    get disableSessionRenewal() {
+        return this.getBooleanAttribute('disable_session_renewal');
+    }
+    set disableSessionRenewal(value) {
+        this._disableSessionRenewal = value;
+    }
+    resetDisableSessionRenewal() {
         this._disableSessionRenewal = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "disableSessionRenewalInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._disableSessionRenewal;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "eventEndTime", {
-        get: function () {
-            return this.getStringAttribute('event_end_time');
-        },
-        set: function (value) {
-            this._eventEndTime = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "eventEndTimeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._eventEndTime;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "eventStartTime", {
-        get: function () {
-            return this.getStringAttribute('event_start_time');
-        },
-        set: function (value) {
-            this._eventStartTime = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "eventStartTimeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._eventStartTime;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "modifiedOn", {
-        // modified_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('modified_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "name", {
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        set: function (value) {
-            this._name = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "nameInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "newUsersPerMinute", {
-        get: function () {
-            return this.getNumberAttribute('new_users_per_minute');
-        },
-        set: function (value) {
-            this._newUsersPerMinute = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetNewUsersPerMinute = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get disableSessionRenewalInput() {
+        return this._disableSessionRenewal;
+    }
+    // event_end_time - computed: false, optional: false, required: true
+    _eventEndTime;
+    get eventEndTime() {
+        return this.getStringAttribute('event_end_time');
+    }
+    set eventEndTime(value) {
+        this._eventEndTime = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get eventEndTimeInput() {
+        return this._eventEndTime;
+    }
+    // event_start_time - computed: false, optional: false, required: true
+    _eventStartTime;
+    get eventStartTime() {
+        return this.getStringAttribute('event_start_time');
+    }
+    set eventStartTime(value) {
+        this._eventStartTime = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get eventStartTimeInput() {
+        return this._eventStartTime;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // modified_on - computed: true, optional: false, required: false
+    get modifiedOn() {
+        return this.getStringAttribute('modified_on');
+    }
+    // name - computed: false, optional: false, required: true
+    _name;
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    set name(value) {
+        this._name = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get nameInput() {
+        return this._name;
+    }
+    // new_users_per_minute - computed: false, optional: true, required: false
+    _newUsersPerMinute;
+    get newUsersPerMinute() {
+        return this.getNumberAttribute('new_users_per_minute');
+    }
+    set newUsersPerMinute(value) {
+        this._newUsersPerMinute = value;
+    }
+    resetNewUsersPerMinute() {
         this._newUsersPerMinute = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "newUsersPerMinuteInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._newUsersPerMinute;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "prequeueStartTime", {
-        get: function () {
-            return this.getStringAttribute('prequeue_start_time');
-        },
-        set: function (value) {
-            this._prequeueStartTime = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetPrequeueStartTime = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get newUsersPerMinuteInput() {
+        return this._newUsersPerMinute;
+    }
+    // prequeue_start_time - computed: false, optional: true, required: false
+    _prequeueStartTime;
+    get prequeueStartTime() {
+        return this.getStringAttribute('prequeue_start_time');
+    }
+    set prequeueStartTime(value) {
+        this._prequeueStartTime = value;
+    }
+    resetPrequeueStartTime() {
         this._prequeueStartTime = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "prequeueStartTimeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._prequeueStartTime;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "queueingMethod", {
-        get: function () {
-            return this.getStringAttribute('queueing_method');
-        },
-        set: function (value) {
-            this._queueingMethod = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetQueueingMethod = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get prequeueStartTimeInput() {
+        return this._prequeueStartTime;
+    }
+    // queueing_method - computed: false, optional: true, required: false
+    _queueingMethod;
+    get queueingMethod() {
+        return this.getStringAttribute('queueing_method');
+    }
+    set queueingMethod(value) {
+        this._queueingMethod = value;
+    }
+    resetQueueingMethod() {
         this._queueingMethod = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "queueingMethodInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._queueingMethod;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "sessionDuration", {
-        get: function () {
-            return this.getNumberAttribute('session_duration');
-        },
-        set: function (value) {
-            this._sessionDuration = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetSessionDuration = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get queueingMethodInput() {
+        return this._queueingMethod;
+    }
+    // session_duration - computed: false, optional: true, required: false
+    _sessionDuration;
+    get sessionDuration() {
+        return this.getNumberAttribute('session_duration');
+    }
+    set sessionDuration(value) {
+        this._sessionDuration = value;
+    }
+    resetSessionDuration() {
         this._sessionDuration = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "sessionDurationInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sessionDuration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "shuffleAtEventStart", {
-        get: function () {
-            return this.getBooleanAttribute('shuffle_at_event_start');
-        },
-        set: function (value) {
-            this._shuffleAtEventStart = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetShuffleAtEventStart = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sessionDurationInput() {
+        return this._sessionDuration;
+    }
+    // shuffle_at_event_start - computed: true, optional: true, required: false
+    _shuffleAtEventStart;
+    get shuffleAtEventStart() {
+        return this.getBooleanAttribute('shuffle_at_event_start');
+    }
+    set shuffleAtEventStart(value) {
+        this._shuffleAtEventStart = value;
+    }
+    resetShuffleAtEventStart() {
         this._shuffleAtEventStart = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "shuffleAtEventStartInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._shuffleAtEventStart;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "suspended", {
-        get: function () {
-            return this.getBooleanAttribute('suspended');
-        },
-        set: function (value) {
-            this._suspended = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetSuspended = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get shuffleAtEventStartInput() {
+        return this._shuffleAtEventStart;
+    }
+    // suspended - computed: true, optional: true, required: false
+    _suspended;
+    get suspended() {
+        return this.getBooleanAttribute('suspended');
+    }
+    set suspended(value) {
+        this._suspended = value;
+    }
+    resetSuspended() {
         this._suspended = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "suspendedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._suspended;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "totalActiveUsers", {
-        get: function () {
-            return this.getNumberAttribute('total_active_users');
-        },
-        set: function (value) {
-            this._totalActiveUsers = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetTotalActiveUsers = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get suspendedInput() {
+        return this._suspended;
+    }
+    // total_active_users - computed: false, optional: true, required: false
+    _totalActiveUsers;
+    get totalActiveUsers() {
+        return this.getNumberAttribute('total_active_users');
+    }
+    set totalActiveUsers(value) {
+        this._totalActiveUsers = value;
+    }
+    resetTotalActiveUsers() {
         this._totalActiveUsers = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "totalActiveUsersInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._totalActiveUsers;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "turnstileAction", {
-        get: function () {
-            return this.getStringAttribute('turnstile_action');
-        },
-        set: function (value) {
-            this._turnstileAction = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetTurnstileAction = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get totalActiveUsersInput() {
+        return this._totalActiveUsers;
+    }
+    // turnstile_action - computed: false, optional: true, required: false
+    _turnstileAction;
+    get turnstileAction() {
+        return this.getStringAttribute('turnstile_action');
+    }
+    set turnstileAction(value) {
+        this._turnstileAction = value;
+    }
+    resetTurnstileAction() {
         this._turnstileAction = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "turnstileActionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._turnstileAction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "turnstileMode", {
-        get: function () {
-            return this.getStringAttribute('turnstile_mode');
-        },
-        set: function (value) {
-            this._turnstileMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetTurnstileMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get turnstileActionInput() {
+        return this._turnstileAction;
+    }
+    // turnstile_mode - computed: false, optional: true, required: false
+    _turnstileMode;
+    get turnstileMode() {
+        return this.getStringAttribute('turnstile_mode');
+    }
+    set turnstileMode(value) {
+        this._turnstileMode = value;
+    }
+    resetTurnstileMode() {
         this._turnstileMode = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "turnstileModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._turnstileMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "waitingRoomId", {
-        get: function () {
-            return this.getStringAttribute('waiting_room_id');
-        },
-        set: function (value) {
-            this._waitingRoomId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "waitingRoomIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._waitingRoomId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(WaitingRoomEvent.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    WaitingRoomEvent.prototype.resetZoneId = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get turnstileModeInput() {
+        return this._turnstileMode;
+    }
+    // waiting_room_id - computed: false, optional: false, required: true
+    _waitingRoomId;
+    get waitingRoomId() {
+        return this.getStringAttribute('waiting_room_id');
+    }
+    set waitingRoomId(value) {
+        this._waitingRoomId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get waitingRoomIdInput() {
+        return this._waitingRoomId;
+    }
+    // zone_id - computed: false, optional: true, required: false
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    resetZoneId() {
         this._zoneId = undefined;
-    };
-    Object.defineProperty(WaitingRoomEvent.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    WaitingRoomEvent.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             custom_page_html: cdktf.stringToTerraform(this._customPageHtml),
             description: cdktf.stringToTerraform(this._description),
@@ -476,9 +346,9 @@ var WaitingRoomEvent = /** @class */ (function (_super) {
             waiting_room_id: cdktf.stringToTerraform(this._waitingRoomId),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    WaitingRoomEvent.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             custom_page_html: {
                 value: cdktf.stringToHclTerraform(this._customPageHtml),
                 isBlock: false,
@@ -583,15 +453,6 @@ var WaitingRoomEvent = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    WaitingRoomEvent.tfResourceType = "cloudflare_waiting_room_event";
-    return WaitingRoomEvent;
-}(cdktf.TerraformResource));
-exports.WaitingRoomEvent = WaitingRoomEvent;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

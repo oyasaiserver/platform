@@ -1,29 +1,27 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/mtls_certificate
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DataCloudflareMtlsCertificate = void 0;
-var cdktf = require("cdktf");
+import * as cdktf from 'cdktf';
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/mtls_certificate cloudflare_mtls_certificate}
 */
-var DataCloudflareMtlsCertificate = /** @class */ (function (_super) {
-    __extends(DataCloudflareMtlsCertificate, _super);
+export class DataCloudflareMtlsCertificate extends cdktf.TerraformDataSource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_mtls_certificate";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a DataCloudflareMtlsCertificate resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareMtlsCertificate to import
+    * @param importFromId The id of the existing DataCloudflareMtlsCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/mtls_certificate#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareMtlsCertificate to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_mtls_certificate", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -34,8 +32,8 @@ var DataCloudflareMtlsCertificate = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options DataCloudflareMtlsCertificateConfig
     */
-    function DataCloudflareMtlsCertificate(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_mtls_certificate',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -48,143 +46,84 @@ var DataCloudflareMtlsCertificate = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        _this._accountId = config.accountId;
-        _this._mtlsCertificateId = config.mtlsCertificateId;
-        return _this;
+        });
+        this._accountId = config.accountId;
+        this._mtlsCertificateId = config.mtlsCertificateId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a DataCloudflareMtlsCertificate resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the DataCloudflareMtlsCertificate to import
-    * @param importFromId The id of the existing DataCloudflareMtlsCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/mtls_certificate#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the DataCloudflareMtlsCertificate to import is found
-    */
-    DataCloudflareMtlsCertificate.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_mtls_certificate", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "accountId", {
-        get: function () {
-            return this.getStringAttribute('account_id');
-        },
-        set: function (value) {
-            this._accountId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "accountIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._accountId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "ca", {
-        // ca - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('ca');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "certificates", {
-        // certificates - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('certificates');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "expiresOn", {
-        // expires_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('expires_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "issuer", {
-        // issuer - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('issuer');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "mtlsCertificateId", {
-        get: function () {
-            return this.getStringAttribute('mtls_certificate_id');
-        },
-        set: function (value) {
-            this._mtlsCertificateId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "mtlsCertificateIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._mtlsCertificateId;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "name", {
-        // name - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('name');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "serialNumber", {
-        // serial_number - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('serial_number');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "signature", {
-        // signature - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('signature');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(DataCloudflareMtlsCertificate.prototype, "uploadedOn", {
-        // uploaded_on - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('uploaded_on');
-        },
-        enumerable: false,
-        configurable: true
-    });
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // account_id - computed: false, optional: false, required: true
+    _accountId;
+    get accountId() {
+        return this.getStringAttribute('account_id');
+    }
+    set accountId(value) {
+        this._accountId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get accountIdInput() {
+        return this._accountId;
+    }
+    // ca - computed: true, optional: false, required: false
+    get ca() {
+        return this.getBooleanAttribute('ca');
+    }
+    // certificates - computed: true, optional: false, required: false
+    get certificates() {
+        return this.getStringAttribute('certificates');
+    }
+    // expires_on - computed: true, optional: false, required: false
+    get expiresOn() {
+        return this.getStringAttribute('expires_on');
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // issuer - computed: true, optional: false, required: false
+    get issuer() {
+        return this.getStringAttribute('issuer');
+    }
+    // mtls_certificate_id - computed: false, optional: false, required: true
+    _mtlsCertificateId;
+    get mtlsCertificateId() {
+        return this.getStringAttribute('mtls_certificate_id');
+    }
+    set mtlsCertificateId(value) {
+        this._mtlsCertificateId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get mtlsCertificateIdInput() {
+        return this._mtlsCertificateId;
+    }
+    // name - computed: true, optional: false, required: false
+    get name() {
+        return this.getStringAttribute('name');
+    }
+    // serial_number - computed: true, optional: false, required: false
+    get serialNumber() {
+        return this.getStringAttribute('serial_number');
+    }
+    // signature - computed: true, optional: false, required: false
+    get signature() {
+        return this.getStringAttribute('signature');
+    }
+    // uploaded_on - computed: true, optional: false, required: false
+    get uploadedOn() {
+        return this.getStringAttribute('uploaded_on');
+    }
     // =========
     // SYNTHESIS
     // =========
-    DataCloudflareMtlsCertificate.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             account_id: cdktf.stringToTerraform(this._accountId),
             mtls_certificate_id: cdktf.stringToTerraform(this._mtlsCertificateId),
         };
-    };
-    DataCloudflareMtlsCertificate.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             account_id: {
                 value: cdktf.stringToHclTerraform(this._accountId),
                 isBlock: false,
@@ -199,15 +138,6 @@ var DataCloudflareMtlsCertificate = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    DataCloudflareMtlsCertificate.tfResourceType = "cloudflare_mtls_certificate";
-    return DataCloudflareMtlsCertificate;
-}(cdktf.TerraformDataSource));
-exports.DataCloudflareMtlsCertificate = DataCloudflareMtlsCertificate;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}

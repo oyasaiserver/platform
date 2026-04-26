@@ -1,27 +1,7 @@
-"use strict";
 // https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/bot_management
 // generated from terraform resource schema
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BotManagement = exports.BotManagementStaleZoneConfigurationOutputReference = void 0;
-exports.botManagementStaleZoneConfigurationToTerraform = botManagementStaleZoneConfigurationToTerraform;
-exports.botManagementStaleZoneConfigurationToHclTerraform = botManagementStaleZoneConfigurationToHclTerraform;
-var cdktf = require("cdktf");
-function botManagementStaleZoneConfigurationToTerraform(struct) {
+import * as cdktf from 'cdktf';
+export function botManagementStaleZoneConfigurationToTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
@@ -30,108 +10,88 @@ function botManagementStaleZoneConfigurationToTerraform(struct) {
     }
     return {};
 }
-function botManagementStaleZoneConfigurationToHclTerraform(struct) {
+export function botManagementStaleZoneConfigurationToHclTerraform(struct) {
     if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) {
         return struct;
     }
     if (cdktf.isComplexElement(struct)) {
         throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
     }
-    var attrs = {};
+    const attrs = {};
     return attrs;
 }
-var BotManagementStaleZoneConfigurationOutputReference = /** @class */ (function (_super) {
-    __extends(BotManagementStaleZoneConfigurationOutputReference, _super);
+export class BotManagementStaleZoneConfigurationOutputReference extends cdktf.ComplexObject {
+    isEmptyObject = false;
     /**
     * @param terraformResource The parent resource
     * @param terraformAttribute The attribute on the parent resource this class is referencing
     */
-    function BotManagementStaleZoneConfigurationOutputReference(terraformResource, terraformAttribute) {
-        var _this = _super.call(this, terraformResource, terraformAttribute, false) || this;
-        _this.isEmptyObject = false;
-        return _this;
+    constructor(terraformResource, terraformAttribute) {
+        super(terraformResource, terraformAttribute, false);
     }
-    Object.defineProperty(BotManagementStaleZoneConfigurationOutputReference.prototype, "internalValue", {
-        get: function () {
-            var hasAnyValues = this.isEmptyObject;
-            var internalValueResult = {};
-            return hasAnyValues ? internalValueResult : undefined;
-        },
-        set: function (value) {
-            if (value === undefined) {
-                this.isEmptyObject = false;
-            }
-            else {
-                this.isEmptyObject = Object.keys(value).length === 0;
-            }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagementStaleZoneConfigurationOutputReference.prototype, "fightMode", {
-        // fight_mode - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('fight_mode');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagementStaleZoneConfigurationOutputReference.prototype, "optimizeWordpress", {
-        // optimize_wordpress - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('optimize_wordpress');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagementStaleZoneConfigurationOutputReference.prototype, "sbfmDefinitelyAutomated", {
-        // sbfm_definitely_automated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('sbfm_definitely_automated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagementStaleZoneConfigurationOutputReference.prototype, "sbfmLikelyAutomated", {
-        // sbfm_likely_automated - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('sbfm_likely_automated');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagementStaleZoneConfigurationOutputReference.prototype, "sbfmStaticResourceProtection", {
-        // sbfm_static_resource_protection - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('sbfm_static_resource_protection');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagementStaleZoneConfigurationOutputReference.prototype, "sbfmVerifiedBots", {
-        // sbfm_verified_bots - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('sbfm_verified_bots');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagementStaleZoneConfigurationOutputReference.prototype, "suppressSessionScore", {
-        // suppress_session_score - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('suppress_session_score');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return BotManagementStaleZoneConfigurationOutputReference;
-}(cdktf.ComplexObject));
-exports.BotManagementStaleZoneConfigurationOutputReference = BotManagementStaleZoneConfigurationOutputReference;
+    get internalValue() {
+        let hasAnyValues = this.isEmptyObject;
+        const internalValueResult = {};
+        return hasAnyValues ? internalValueResult : undefined;
+    }
+    set internalValue(value) {
+        if (value === undefined) {
+            this.isEmptyObject = false;
+        }
+        else {
+            this.isEmptyObject = Object.keys(value).length === 0;
+        }
+    }
+    // fight_mode - computed: true, optional: false, required: false
+    get fightMode() {
+        return this.getBooleanAttribute('fight_mode');
+    }
+    // optimize_wordpress - computed: true, optional: false, required: false
+    get optimizeWordpress() {
+        return this.getBooleanAttribute('optimize_wordpress');
+    }
+    // sbfm_definitely_automated - computed: true, optional: false, required: false
+    get sbfmDefinitelyAutomated() {
+        return this.getStringAttribute('sbfm_definitely_automated');
+    }
+    // sbfm_likely_automated - computed: true, optional: false, required: false
+    get sbfmLikelyAutomated() {
+        return this.getStringAttribute('sbfm_likely_automated');
+    }
+    // sbfm_static_resource_protection - computed: true, optional: false, required: false
+    get sbfmStaticResourceProtection() {
+        return this.getStringAttribute('sbfm_static_resource_protection');
+    }
+    // sbfm_verified_bots - computed: true, optional: false, required: false
+    get sbfmVerifiedBots() {
+        return this.getStringAttribute('sbfm_verified_bots');
+    }
+    // suppress_session_score - computed: true, optional: false, required: false
+    get suppressSessionScore() {
+        return this.getBooleanAttribute('suppress_session_score');
+    }
+}
 /**
 * Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/bot_management cloudflare_bot_management}
 */
-var BotManagement = /** @class */ (function (_super) {
-    __extends(BotManagement, _super);
+export class BotManagement extends cdktf.TerraformResource {
+    // =================
+    // STATIC PROPERTIES
+    // =================
+    static tfResourceType = "cloudflare_bot_management";
+    // ==============
+    // STATIC Methods
+    // ==============
+    /**
+    * Generates CDKTF code for importing a BotManagement resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the BotManagement to import
+    * @param importFromId The id of the existing BotManagement that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/bot_management#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the BotManagement to import is found
+    */
+    static generateConfigForImport(scope, importToId, importFromId, provider) {
+        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_bot_management", importId: importFromId, provider });
+    }
     // ===========
     // INITIALIZER
     // ===========
@@ -142,8 +102,8 @@ var BotManagement = /** @class */ (function (_super) {
     * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
     * @param options BotManagementConfig
     */
-    function BotManagement(scope, id, config) {
-        var _this = _super.call(this, scope, id, {
+    constructor(scope, id, config) {
+        super(scope, id, {
             terraformResourceType: 'cloudflare_bot_management',
             terraformGeneratorMetadata: {
                 providerName: 'cloudflare',
@@ -156,400 +116,281 @@ var BotManagement = /** @class */ (function (_super) {
             provisioners: config.provisioners,
             connection: config.connection,
             forEach: config.forEach
-        }) || this;
-        // stale_zone_configuration - computed: true, optional: false, required: false
-        _this._staleZoneConfiguration = new BotManagementStaleZoneConfigurationOutputReference(_this, "stale_zone_configuration");
-        _this._aiBotsProtection = config.aiBotsProtection;
-        _this._autoUpdateModel = config.autoUpdateModel;
-        _this._bmCookieEnabled = config.bmCookieEnabled;
-        _this._cfRobotsVariant = config.cfRobotsVariant;
-        _this._contentBotsProtection = config.contentBotsProtection;
-        _this._crawlerProtection = config.crawlerProtection;
-        _this._enableJs = config.enableJs;
-        _this._fightMode = config.fightMode;
-        _this._isRobotsTxtManaged = config.isRobotsTxtManaged;
-        _this._optimizeWordpress = config.optimizeWordpress;
-        _this._sbfmDefinitelyAutomated = config.sbfmDefinitelyAutomated;
-        _this._sbfmLikelyAutomated = config.sbfmLikelyAutomated;
-        _this._sbfmStaticResourceProtection = config.sbfmStaticResourceProtection;
-        _this._sbfmVerifiedBots = config.sbfmVerifiedBots;
-        _this._suppressSessionScore = config.suppressSessionScore;
-        _this._zoneId = config.zoneId;
-        return _this;
+        });
+        this._aiBotsProtection = config.aiBotsProtection;
+        this._autoUpdateModel = config.autoUpdateModel;
+        this._bmCookieEnabled = config.bmCookieEnabled;
+        this._cfRobotsVariant = config.cfRobotsVariant;
+        this._contentBotsProtection = config.contentBotsProtection;
+        this._crawlerProtection = config.crawlerProtection;
+        this._enableJs = config.enableJs;
+        this._fightMode = config.fightMode;
+        this._isRobotsTxtManaged = config.isRobotsTxtManaged;
+        this._optimizeWordpress = config.optimizeWordpress;
+        this._sbfmDefinitelyAutomated = config.sbfmDefinitelyAutomated;
+        this._sbfmLikelyAutomated = config.sbfmLikelyAutomated;
+        this._sbfmStaticResourceProtection = config.sbfmStaticResourceProtection;
+        this._sbfmVerifiedBots = config.sbfmVerifiedBots;
+        this._suppressSessionScore = config.suppressSessionScore;
+        this._zoneId = config.zoneId;
     }
-    // ==============
-    // STATIC Methods
-    // ==============
-    /**
-    * Generates CDKTF code for importing a BotManagement resource upon running "cdktf plan <stack-name>"
-    * @param scope The scope in which to define this construct
-    * @param importToId The construct id used in the generated config for the BotManagement to import
-    * @param importFromId The id of the existing BotManagement that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/bot_management#import import section} in the documentation of this resource for the id to use
-    * @param provider? Optional instance of the provider where the BotManagement to import is found
-    */
-    BotManagement.generateConfigForImport = function (scope, importToId, importFromId, provider) {
-        return new cdktf.ImportableResource(scope, importToId, { terraformResourceType: "cloudflare_bot_management", importId: importFromId, provider: provider });
-    };
-    Object.defineProperty(BotManagement.prototype, "aiBotsProtection", {
-        get: function () {
-            return this.getStringAttribute('ai_bots_protection');
-        },
-        set: function (value) {
-            this._aiBotsProtection = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetAiBotsProtection = function () {
+    // ==========
+    // ATTRIBUTES
+    // ==========
+    // ai_bots_protection - computed: true, optional: true, required: false
+    _aiBotsProtection;
+    get aiBotsProtection() {
+        return this.getStringAttribute('ai_bots_protection');
+    }
+    set aiBotsProtection(value) {
+        this._aiBotsProtection = value;
+    }
+    resetAiBotsProtection() {
         this._aiBotsProtection = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "aiBotsProtectionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._aiBotsProtection;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "autoUpdateModel", {
-        get: function () {
-            return this.getBooleanAttribute('auto_update_model');
-        },
-        set: function (value) {
-            this._autoUpdateModel = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetAutoUpdateModel = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get aiBotsProtectionInput() {
+        return this._aiBotsProtection;
+    }
+    // auto_update_model - computed: true, optional: true, required: false
+    _autoUpdateModel;
+    get autoUpdateModel() {
+        return this.getBooleanAttribute('auto_update_model');
+    }
+    set autoUpdateModel(value) {
+        this._autoUpdateModel = value;
+    }
+    resetAutoUpdateModel() {
         this._autoUpdateModel = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "autoUpdateModelInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._autoUpdateModel;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "bmCookieEnabled", {
-        get: function () {
-            return this.getBooleanAttribute('bm_cookie_enabled');
-        },
-        set: function (value) {
-            this._bmCookieEnabled = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetBmCookieEnabled = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get autoUpdateModelInput() {
+        return this._autoUpdateModel;
+    }
+    // bm_cookie_enabled - computed: true, optional: true, required: false
+    _bmCookieEnabled;
+    get bmCookieEnabled() {
+        return this.getBooleanAttribute('bm_cookie_enabled');
+    }
+    set bmCookieEnabled(value) {
+        this._bmCookieEnabled = value;
+    }
+    resetBmCookieEnabled() {
         this._bmCookieEnabled = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "bmCookieEnabledInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._bmCookieEnabled;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "cfRobotsVariant", {
-        get: function () {
-            return this.getStringAttribute('cf_robots_variant');
-        },
-        set: function (value) {
-            this._cfRobotsVariant = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetCfRobotsVariant = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get bmCookieEnabledInput() {
+        return this._bmCookieEnabled;
+    }
+    // cf_robots_variant - computed: true, optional: true, required: false
+    _cfRobotsVariant;
+    get cfRobotsVariant() {
+        return this.getStringAttribute('cf_robots_variant');
+    }
+    set cfRobotsVariant(value) {
+        this._cfRobotsVariant = value;
+    }
+    resetCfRobotsVariant() {
         this._cfRobotsVariant = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "cfRobotsVariantInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._cfRobotsVariant;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "contentBotsProtection", {
-        get: function () {
-            return this.getStringAttribute('content_bots_protection');
-        },
-        set: function (value) {
-            this._contentBotsProtection = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetContentBotsProtection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get cfRobotsVariantInput() {
+        return this._cfRobotsVariant;
+    }
+    // content_bots_protection - computed: true, optional: true, required: false
+    _contentBotsProtection;
+    get contentBotsProtection() {
+        return this.getStringAttribute('content_bots_protection');
+    }
+    set contentBotsProtection(value) {
+        this._contentBotsProtection = value;
+    }
+    resetContentBotsProtection() {
         this._contentBotsProtection = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "contentBotsProtectionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._contentBotsProtection;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "crawlerProtection", {
-        get: function () {
-            return this.getStringAttribute('crawler_protection');
-        },
-        set: function (value) {
-            this._crawlerProtection = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetCrawlerProtection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get contentBotsProtectionInput() {
+        return this._contentBotsProtection;
+    }
+    // crawler_protection - computed: true, optional: true, required: false
+    _crawlerProtection;
+    get crawlerProtection() {
+        return this.getStringAttribute('crawler_protection');
+    }
+    set crawlerProtection(value) {
+        this._crawlerProtection = value;
+    }
+    resetCrawlerProtection() {
         this._crawlerProtection = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "crawlerProtectionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._crawlerProtection;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "enableJs", {
-        get: function () {
-            return this.getBooleanAttribute('enable_js');
-        },
-        set: function (value) {
-            this._enableJs = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetEnableJs = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get crawlerProtectionInput() {
+        return this._crawlerProtection;
+    }
+    // enable_js - computed: true, optional: true, required: false
+    _enableJs;
+    get enableJs() {
+        return this.getBooleanAttribute('enable_js');
+    }
+    set enableJs(value) {
+        this._enableJs = value;
+    }
+    resetEnableJs() {
         this._enableJs = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "enableJsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._enableJs;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "fightMode", {
-        get: function () {
-            return this.getBooleanAttribute('fight_mode');
-        },
-        set: function (value) {
-            this._fightMode = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetFightMode = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get enableJsInput() {
+        return this._enableJs;
+    }
+    // fight_mode - computed: true, optional: true, required: false
+    _fightMode;
+    get fightMode() {
+        return this.getBooleanAttribute('fight_mode');
+    }
+    set fightMode(value) {
+        this._fightMode = value;
+    }
+    resetFightMode() {
         this._fightMode = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "fightModeInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._fightMode;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "id", {
-        // id - computed: true, optional: false, required: false
-        get: function () {
-            return this.getStringAttribute('id');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "isRobotsTxtManaged", {
-        get: function () {
-            return this.getBooleanAttribute('is_robots_txt_managed');
-        },
-        set: function (value) {
-            this._isRobotsTxtManaged = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetIsRobotsTxtManaged = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get fightModeInput() {
+        return this._fightMode;
+    }
+    // id - computed: true, optional: false, required: false
+    get id() {
+        return this.getStringAttribute('id');
+    }
+    // is_robots_txt_managed - computed: true, optional: true, required: false
+    _isRobotsTxtManaged;
+    get isRobotsTxtManaged() {
+        return this.getBooleanAttribute('is_robots_txt_managed');
+    }
+    set isRobotsTxtManaged(value) {
+        this._isRobotsTxtManaged = value;
+    }
+    resetIsRobotsTxtManaged() {
         this._isRobotsTxtManaged = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "isRobotsTxtManagedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._isRobotsTxtManaged;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "optimizeWordpress", {
-        get: function () {
-            return this.getBooleanAttribute('optimize_wordpress');
-        },
-        set: function (value) {
-            this._optimizeWordpress = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetOptimizeWordpress = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get isRobotsTxtManagedInput() {
+        return this._isRobotsTxtManaged;
+    }
+    // optimize_wordpress - computed: true, optional: true, required: false
+    _optimizeWordpress;
+    get optimizeWordpress() {
+        return this.getBooleanAttribute('optimize_wordpress');
+    }
+    set optimizeWordpress(value) {
+        this._optimizeWordpress = value;
+    }
+    resetOptimizeWordpress() {
         this._optimizeWordpress = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "optimizeWordpressInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._optimizeWordpress;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "sbfmDefinitelyAutomated", {
-        get: function () {
-            return this.getStringAttribute('sbfm_definitely_automated');
-        },
-        set: function (value) {
-            this._sbfmDefinitelyAutomated = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetSbfmDefinitelyAutomated = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get optimizeWordpressInput() {
+        return this._optimizeWordpress;
+    }
+    // sbfm_definitely_automated - computed: true, optional: true, required: false
+    _sbfmDefinitelyAutomated;
+    get sbfmDefinitelyAutomated() {
+        return this.getStringAttribute('sbfm_definitely_automated');
+    }
+    set sbfmDefinitelyAutomated(value) {
+        this._sbfmDefinitelyAutomated = value;
+    }
+    resetSbfmDefinitelyAutomated() {
         this._sbfmDefinitelyAutomated = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "sbfmDefinitelyAutomatedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sbfmDefinitelyAutomated;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "sbfmLikelyAutomated", {
-        get: function () {
-            return this.getStringAttribute('sbfm_likely_automated');
-        },
-        set: function (value) {
-            this._sbfmLikelyAutomated = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetSbfmLikelyAutomated = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sbfmDefinitelyAutomatedInput() {
+        return this._sbfmDefinitelyAutomated;
+    }
+    // sbfm_likely_automated - computed: true, optional: true, required: false
+    _sbfmLikelyAutomated;
+    get sbfmLikelyAutomated() {
+        return this.getStringAttribute('sbfm_likely_automated');
+    }
+    set sbfmLikelyAutomated(value) {
+        this._sbfmLikelyAutomated = value;
+    }
+    resetSbfmLikelyAutomated() {
         this._sbfmLikelyAutomated = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "sbfmLikelyAutomatedInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sbfmLikelyAutomated;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "sbfmStaticResourceProtection", {
-        get: function () {
-            return this.getBooleanAttribute('sbfm_static_resource_protection');
-        },
-        set: function (value) {
-            this._sbfmStaticResourceProtection = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetSbfmStaticResourceProtection = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sbfmLikelyAutomatedInput() {
+        return this._sbfmLikelyAutomated;
+    }
+    // sbfm_static_resource_protection - computed: true, optional: true, required: false
+    _sbfmStaticResourceProtection;
+    get sbfmStaticResourceProtection() {
+        return this.getBooleanAttribute('sbfm_static_resource_protection');
+    }
+    set sbfmStaticResourceProtection(value) {
+        this._sbfmStaticResourceProtection = value;
+    }
+    resetSbfmStaticResourceProtection() {
         this._sbfmStaticResourceProtection = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "sbfmStaticResourceProtectionInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sbfmStaticResourceProtection;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "sbfmVerifiedBots", {
-        get: function () {
-            return this.getStringAttribute('sbfm_verified_bots');
-        },
-        set: function (value) {
-            this._sbfmVerifiedBots = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetSbfmVerifiedBots = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sbfmStaticResourceProtectionInput() {
+        return this._sbfmStaticResourceProtection;
+    }
+    // sbfm_verified_bots - computed: true, optional: true, required: false
+    _sbfmVerifiedBots;
+    get sbfmVerifiedBots() {
+        return this.getStringAttribute('sbfm_verified_bots');
+    }
+    set sbfmVerifiedBots(value) {
+        this._sbfmVerifiedBots = value;
+    }
+    resetSbfmVerifiedBots() {
         this._sbfmVerifiedBots = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "sbfmVerifiedBotsInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._sbfmVerifiedBots;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "staleZoneConfiguration", {
-        get: function () {
-            return this._staleZoneConfiguration;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "suppressSessionScore", {
-        get: function () {
-            return this.getBooleanAttribute('suppress_session_score');
-        },
-        set: function (value) {
-            this._suppressSessionScore = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    BotManagement.prototype.resetSuppressSessionScore = function () {
+    }
+    // Temporarily expose input value. Use with caution.
+    get sbfmVerifiedBotsInput() {
+        return this._sbfmVerifiedBots;
+    }
+    // stale_zone_configuration - computed: true, optional: false, required: false
+    _staleZoneConfiguration = new BotManagementStaleZoneConfigurationOutputReference(this, "stale_zone_configuration");
+    get staleZoneConfiguration() {
+        return this._staleZoneConfiguration;
+    }
+    // suppress_session_score - computed: true, optional: true, required: false
+    _suppressSessionScore;
+    get suppressSessionScore() {
+        return this.getBooleanAttribute('suppress_session_score');
+    }
+    set suppressSessionScore(value) {
+        this._suppressSessionScore = value;
+    }
+    resetSuppressSessionScore() {
         this._suppressSessionScore = undefined;
-    };
-    Object.defineProperty(BotManagement.prototype, "suppressSessionScoreInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._suppressSessionScore;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "usingLatestModel", {
-        // using_latest_model - computed: true, optional: false, required: false
-        get: function () {
-            return this.getBooleanAttribute('using_latest_model');
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "zoneId", {
-        get: function () {
-            return this.getStringAttribute('zone_id');
-        },
-        set: function (value) {
-            this._zoneId = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(BotManagement.prototype, "zoneIdInput", {
-        // Temporarily expose input value. Use with caution.
-        get: function () {
-            return this._zoneId;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // Temporarily expose input value. Use with caution.
+    get suppressSessionScoreInput() {
+        return this._suppressSessionScore;
+    }
+    // using_latest_model - computed: true, optional: false, required: false
+    get usingLatestModel() {
+        return this.getBooleanAttribute('using_latest_model');
+    }
+    // zone_id - computed: false, optional: false, required: true
+    _zoneId;
+    get zoneId() {
+        return this.getStringAttribute('zone_id');
+    }
+    set zoneId(value) {
+        this._zoneId = value;
+    }
+    // Temporarily expose input value. Use with caution.
+    get zoneIdInput() {
+        return this._zoneId;
+    }
     // =========
     // SYNTHESIS
     // =========
-    BotManagement.prototype.synthesizeAttributes = function () {
+    synthesizeAttributes() {
         return {
             ai_bots_protection: cdktf.stringToTerraform(this._aiBotsProtection),
             auto_update_model: cdktf.booleanToTerraform(this._autoUpdateModel),
@@ -568,9 +409,9 @@ var BotManagement = /** @class */ (function (_super) {
             suppress_session_score: cdktf.booleanToTerraform(this._suppressSessionScore),
             zone_id: cdktf.stringToTerraform(this._zoneId),
         };
-    };
-    BotManagement.prototype.synthesizeHclAttributes = function () {
-        var attrs = {
+    }
+    synthesizeHclAttributes() {
+        const attrs = {
             ai_bots_protection: {
                 value: cdktf.stringToHclTerraform(this._aiBotsProtection),
                 isBlock: false,
@@ -669,15 +510,6 @@ var BotManagement = /** @class */ (function (_super) {
             },
         };
         // remove undefined attributes
-        return Object.fromEntries(Object.entries(attrs).filter(function (_a) {
-            var _ = _a[0], value = _a[1];
-            return value !== undefined && value.value !== undefined;
-        }));
-    };
-    // =================
-    // STATIC PROPERTIES
-    // =================
-    BotManagement.tfResourceType = "cloudflare_bot_management";
-    return BotManagement;
-}(cdktf.TerraformResource));
-exports.BotManagement = BotManagement;
+        return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+    }
+}
