@@ -1,0 +1,54 @@
+import { Construct } from 'constructs';
+import * as cdktf from 'cdktf';
+export interface DataCloudflareSchemaValidationOperationSettingsConfig extends cdktf.TerraformMetaArguments {
+    /**
+    * UUID.
+    *
+    * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/schema_validation_operation_settings#operation_id DataCloudflareSchemaValidationOperationSettings#operation_id}
+    */
+    readonly operationId: string;
+    /**
+    * Identifier.
+    *
+    * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/schema_validation_operation_settings#zone_id DataCloudflareSchemaValidationOperationSettings#zone_id}
+    */
+    readonly zoneId?: string;
+}
+/**
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/schema_validation_operation_settings cloudflare_schema_validation_operation_settings}
+*/
+export declare class DataCloudflareSchemaValidationOperationSettings extends cdktf.TerraformDataSource {
+    static readonly tfResourceType = "cloudflare_schema_validation_operation_settings";
+    /**
+    * Generates CDKTF code for importing a DataCloudflareSchemaValidationOperationSettings resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareSchemaValidationOperationSettings to import
+    * @param importFromId The id of the existing DataCloudflareSchemaValidationOperationSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/schema_validation_operation_settings#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareSchemaValidationOperationSettings to import is found
+    */
+    static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider): any;
+    /**
+    * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/schema_validation_operation_settings cloudflare_schema_validation_operation_settings} Data Source
+    *
+    * @param scope The scope in which to define this construct
+    * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
+    * @param options DataCloudflareSchemaValidationOperationSettingsConfig
+    */
+    constructor(scope: Construct, id: string, config: DataCloudflareSchemaValidationOperationSettingsConfig);
+    get mitigationAction(): any;
+    private _operationId?;
+    get operationId(): string;
+    set operationId(value: string);
+    get operationIdInput(): string;
+    private _zoneId?;
+    get zoneId(): string;
+    set zoneId(value: string);
+    resetZoneId(): void;
+    get zoneIdInput(): string;
+    protected synthesizeAttributes(): {
+        [name: string]: any;
+    };
+    protected synthesizeHclAttributes(): {
+        [name: string]: any;
+    };
+}

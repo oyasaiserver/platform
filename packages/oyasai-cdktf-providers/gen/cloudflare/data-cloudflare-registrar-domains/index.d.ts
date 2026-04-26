@@ -1,0 +1,148 @@
+import { Construct } from 'constructs';
+import * as cdktf from 'cdktf';
+export interface DataCloudflareRegistrarDomainsConfig extends cdktf.TerraformMetaArguments {
+    /**
+    * Identifier
+    *
+    * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/registrar_domains#account_id DataCloudflareRegistrarDomains#account_id}
+    */
+    readonly accountId?: string;
+    /**
+    * Max items to fetch, default: 1000
+    *
+    * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/registrar_domains#max_items DataCloudflareRegistrarDomains#max_items}
+    */
+    readonly maxItems?: number;
+}
+export interface DataCloudflareRegistrarDomainsResultRegistrantContact {
+}
+export declare function dataCloudflareRegistrarDomainsResultRegistrantContactToTerraform(struct?: DataCloudflareRegistrarDomainsResultRegistrantContact): any;
+export declare function dataCloudflareRegistrarDomainsResultRegistrantContactToHclTerraform(struct?: DataCloudflareRegistrarDomainsResultRegistrantContact): any;
+export declare class DataCloudflareRegistrarDomainsResultRegistrantContactOutputReference extends cdktf.ComplexObject {
+    private isEmptyObject;
+    /**
+    * @param terraformResource The parent resource
+    * @param terraformAttribute The attribute on the parent resource this class is referencing
+    */
+    constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string);
+    get internalValue(): DataCloudflareRegistrarDomainsResultRegistrantContact | undefined;
+    set internalValue(value: DataCloudflareRegistrarDomainsResultRegistrantContact | undefined);
+    get address(): any;
+    get address2(): any;
+    get city(): any;
+    get country(): any;
+    get email(): any;
+    get fax(): any;
+    get firstName(): any;
+    get id(): any;
+    get lastName(): any;
+    get organization(): any;
+    get phone(): any;
+    get state(): any;
+    get zip(): any;
+}
+export interface DataCloudflareRegistrarDomainsResultTransferIn {
+}
+export declare function dataCloudflareRegistrarDomainsResultTransferInToTerraform(struct?: DataCloudflareRegistrarDomainsResultTransferIn): any;
+export declare function dataCloudflareRegistrarDomainsResultTransferInToHclTerraform(struct?: DataCloudflareRegistrarDomainsResultTransferIn): any;
+export declare class DataCloudflareRegistrarDomainsResultTransferInOutputReference extends cdktf.ComplexObject {
+    private isEmptyObject;
+    /**
+    * @param terraformResource The parent resource
+    * @param terraformAttribute The attribute on the parent resource this class is referencing
+    */
+    constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string);
+    get internalValue(): DataCloudflareRegistrarDomainsResultTransferIn | undefined;
+    set internalValue(value: DataCloudflareRegistrarDomainsResultTransferIn | undefined);
+    get acceptFoa(): any;
+    get approveTransfer(): any;
+    get canCancelTransfer(): any;
+    get disablePrivacy(): any;
+    get enterAuthCode(): any;
+    get unlockDomain(): any;
+}
+export interface DataCloudflareRegistrarDomainsResult {
+}
+export declare function dataCloudflareRegistrarDomainsResultToTerraform(struct?: DataCloudflareRegistrarDomainsResult): any;
+export declare function dataCloudflareRegistrarDomainsResultToHclTerraform(struct?: DataCloudflareRegistrarDomainsResult): any;
+export declare class DataCloudflareRegistrarDomainsResultOutputReference extends cdktf.ComplexObject {
+    private isEmptyObject;
+    /**
+    * @param terraformResource The parent resource
+    * @param terraformAttribute The attribute on the parent resource this class is referencing
+    * @param complexObjectIndex the index of this item in the list
+    * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+    */
+    constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean);
+    get internalValue(): DataCloudflareRegistrarDomainsResult | undefined;
+    set internalValue(value: DataCloudflareRegistrarDomainsResult | undefined);
+    get available(): any;
+    get canRegister(): any;
+    get createdAt(): any;
+    get currentRegistrar(): any;
+    get expiresAt(): any;
+    get id(): any;
+    get locked(): any;
+    private _registrantContact;
+    get registrantContact(): DataCloudflareRegistrarDomainsResultRegistrantContactOutputReference;
+    get registryStatuses(): any;
+    get supportedTld(): any;
+    private _transferIn;
+    get transferIn(): DataCloudflareRegistrarDomainsResultTransferInOutputReference;
+    get updatedAt(): any;
+}
+export declare class DataCloudflareRegistrarDomainsResultList extends cdktf.ComplexList {
+    protected terraformResource: cdktf.IInterpolatingParent;
+    protected terraformAttribute: string;
+    protected wrapsSet: boolean;
+    /**
+    * @param terraformResource The parent resource
+    * @param terraformAttribute The attribute on the parent resource this class is referencing
+    * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+    */
+    constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, wrapsSet: boolean);
+    /**
+    * @param index the index of the item to return
+    */
+    get(index: number): DataCloudflareRegistrarDomainsResultOutputReference;
+}
+/**
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/registrar_domains cloudflare_registrar_domains}
+*/
+export declare class DataCloudflareRegistrarDomains extends cdktf.TerraformDataSource {
+    static readonly tfResourceType = "cloudflare_registrar_domains";
+    /**
+    * Generates CDKTF code for importing a DataCloudflareRegistrarDomains resource upon running "cdktf plan <stack-name>"
+    * @param scope The scope in which to define this construct
+    * @param importToId The construct id used in the generated config for the DataCloudflareRegistrarDomains to import
+    * @param importFromId The id of the existing DataCloudflareRegistrarDomains that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/registrar_domains#import import section} in the documentation of this resource for the id to use
+    * @param provider? Optional instance of the provider where the DataCloudflareRegistrarDomains to import is found
+    */
+    static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider): any;
+    /**
+    * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/registrar_domains cloudflare_registrar_domains} Data Source
+    *
+    * @param scope The scope in which to define this construct
+    * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
+    * @param options DataCloudflareRegistrarDomainsConfig = {}
+    */
+    constructor(scope: Construct, id: string, config?: DataCloudflareRegistrarDomainsConfig);
+    private _accountId?;
+    get accountId(): string;
+    set accountId(value: string);
+    resetAccountId(): void;
+    get accountIdInput(): string;
+    private _maxItems?;
+    get maxItems(): number;
+    set maxItems(value: number);
+    resetMaxItems(): void;
+    get maxItemsInput(): number;
+    private _result;
+    get result(): DataCloudflareRegistrarDomainsResultList;
+    protected synthesizeAttributes(): {
+        [name: string]: any;
+    };
+    protected synthesizeHclAttributes(): {
+        [name: string]: any;
+    };
+}
