@@ -11,6 +11,10 @@ permissions:
   id-token: write
 
 jobs:
+  push-to-ghcr:
+    uses: ./.github/workflows/push-to-ghcr.yaml
+    secrets: inherit
+
   infra:
     secrets: inherit
     uses: ./.github/workflows/modify-platform-stack.yaml
@@ -21,6 +25,7 @@ jobs:
 
   services:
     needs:
+      - push-to-ghcr
       - infra
     secrets: inherit
     uses: ./.github/workflows/modify-platform-stack.yaml
