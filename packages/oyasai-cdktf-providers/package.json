@@ -3,19 +3,12 @@
   "type": "module",
   "exports": {
     "./*": {
-      "types": "./dist/*/index.d.ts",
-      "import": "./dist/*/index.js"
+      "types": "./gen/*/index.d.ts",
+      "import": "./gen/*/index.js"
     }
-  },
-  "scripts": {
-    "build": "tsc"
   },
   "peerDependencies": {
     "cdktf": "0.21.0",
-    "constructs": "10.5.1",
-    "typescript": "5.9.3"
-  },
-  "dependencies": {
-    "@types/node": "^25.5.2"
+    "constructs": "10.5.1"
   }
 }
