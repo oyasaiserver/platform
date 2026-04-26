@@ -6,21 +6,48 @@ import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
 import type { CommonInfra } from "./common-infra.ts";
 import { R2CustomDomain } from "@oyasaiserver/cdktf-providers/cloudflare/r2-custom-domain";
 import { Repository } from "@oyasaiserver/cdktf-providers/github/repository";
-import { BranchProtection } from "@oyasaiserver/cdktf-providers/github/branch-protection";
 import { BranchDefault } from "@oyasaiserver/cdktf-providers/github/branch-default";
 import { RepositoryRuleset } from "@oyasaiserver/cdktf-providers/github/repository-ruleset";
+import { ActionsOrganizationVariable } from "@oyasaiserver/cdktf-providers/github/actions-organization-variable";
+import { ActionsOrganizationSecret } from "@oyasaiserver/cdktf-providers/github/actions-organization-secret";
+import { ActionsOrganizationSecretRepository } from "@oyasaiserver/cdktf-providers/github/actions-organization-secret-repository";
+import { ActionsSecret } from "@oyasaiserver/cdktf-providers/github/actions-secret";
+import { ActionsOrganizationSecretRepositories } from "@oyasaiserver/cdktf-providers/github/actions-organization-secret-repositories";
 
 type Props = {
   commonInfra: CommonInfra;
 };
 
 export class CommonInternal extends OyasaiTerraformStack {
+  // TODO: Where should we put this? - shun 2026 04
+  public readonly nixCachePublicKey =
+    "oyasaiserver:f0coAsRP8jLzDTOmVCY8hqQibMHtZcxjk60oVCQkjtU=";
+
   constructor(scope: Construct, id: string, { commonInfra }: Props) {
     super(scope, id);
 
     const { secrets, oyasaiIoRegistrarDomain, oyasaiIoZone } = commonInfra;
 
     this.createCloudBackend();
+
+    new CloudflareProvider(this, this.t("cloudflare-provider"));
+
+    const nixCacheBucket = new R2Bucket(this, "nix-cache-r2-bucket", {
+      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+      name: "nix-cache",
+    });
+
+    // Practically read-only because Cloudflare limits upload to 100MB for
+    // "proxied" domains. - shun 2026-04
+    //
+    // https://developers.cloudflare.com/support/troubleshooting/http-status-codes/4xx-client-error/error-413/#cloudflare-specific-information
+    new R2CustomDomain(this, "nix-cache-r2-custom-domain", {
+      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+      bucketName: nixCacheBucket.name,
+      domain: `nix-cache.${oyasaiIoRegistrarDomain.domainName}`,
+      enabled: true,
+      zoneId: oyasaiIoZone.id,
+    });
 
     new GithubProvider(this, "github-provider", {
       // Required for app auth
@@ -58,71 +85,97 @@ export class CommonInternal extends OyasaiTerraformStack {
       },
     );
 
-    new BranchDefault(
+    new BranchDefault(this, this.t("platform-default-branch"), {
+      repository: platformRepository.name,
+      branch: "master",
+      // DANGER: never destroy the default branch.
+      lifecycle: {
+        preventDestroy: true,
+      },
+    });
+
+    new RepositoryRuleset(
       this,
-      this.t("platform-default-branch"),
+      this.t("platform-protect-master-repository-ruleset"),
       {
-        repository: platformRepository.name,
-        branch: "master",
-        // DANGER: never destroy the default branch.
-        lifecycle: {
-          preventDestroy: true,
+        enforcement: "active",
+        name: "protect-master",
+        rules: {
+          pullRequest: {
+            allowedMergeMethods: ["squash"],
+            requiredReviewThreadResolution: true,
+            // Allow merge without an approval, unless protected by CODEOWNER
+            requireCodeOwnerReview: true,
+            requiredApprovingReviewCount: 0,
+          },
+          deletion: true,
+          requiredStatusChecks: {
+            requiredCheck: [
+              "nocommit",
+              "merging-into-master",
+              "pr-title",
+              "nix-flake-health",
+              "nix-flake-check (macos-latest)",
+              "nix-flake-check (ubuntu-latest)",
+              "nix-devshell (macos-latest)",
+              "nix-devshell (ubuntu-latest)",
+            ].map((context) => ({ context })),
+          },
         },
+        target: "branch",
+        conditions: {
+          refName: {
+            exclude: [],
+            include: ["~DEFAULT_BRANCH"],
+          },
+        },
+        repository: platformRepository.name,
       },
     );
 
-    new RepositoryRuleset(this, this.t("platform-protect-master-repository-ruleset"), {
-      enforcement: "active",
-      name: "protect-master",
-      rules: {
-        pullRequest: {
-          allowedMergeMethods: ["squash"],
-          requiredReviewThreadResolution: true,
-          // Allow merge without an approval, unless protected by CODEOWNER
-          requireCodeOwnerReview: true,
-          requiredApprovingReviewCount: 0,
-        },
-        deletion: true,
-        requiredStatusChecks: {
-          requiredCheck: [
-            "nocommit",
-            "merging-into-master",
-            "pr-title",
-            "nix-flake-health",
-            "nix-flake-check (macos-latest)",
-            "nix-flake-check (ubuntu-latest)",
-            "nix-devshell (macos-latest)",
-            "nix-devshell (ubuntu-latest)"
-          ].map(context => ({context}))
-        }
+    new ActionsOrganizationVariable(
+      this,
+      this.t("nix-cache-public-key-actions-org-variable"),
+      {
+        variableName: "NIX_CACHE_PUBLIC_KEY",
+        value: this.nixCachePublicKey,
+        visibility: "all",
       },
-      target: "branch",
-      conditions: {
-        refName: {
-          exclude: [],
-          include: ["~DEFAULT_BRANCH"]
-        }
+    );
+
+    new ActionsOrganizationVariable(
+      this,
+      this.t("nix-cache-substituter-actions-org-variable"),
+      {
+        variableName: "NIX_CACHE_SUBSTITUTER",
+        value: `s3://${nixCacheBucket.name}?endpoint=${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com&compression=zstd`,
+        visibility: "all",
       },
-      repository: platformRepository.name
-    })
+    );
 
-    new CloudflareProvider(this, this.t("cloudflare-provider"));
-
-    const nixCacheBucket = new R2Bucket(this, "nix-cache-r2-bucket", {
-      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-      name: "nix-cache",
+    // TODO: inject via OIDC? But that sounds too permissive... - shun 2026 04
+    new ActionsSecret(this, this.t("nix-cache-signing-key-actions-secret"), {
+      repository: platformRepository.name,
+      secretName: "NIX_CACHE_SIGNING_KEY",
+      value: secrets.NIX_CACHE_SIGNING_KEY,
     });
-
-    // Practically read-only because Cloudflare limits upload to 100MB for
-    // "proxied" domains. - shun 2026-04
-    //
-    // https://developers.cloudflare.com/support/troubleshooting/http-status-codes/4xx-client-error/error-413/#cloudflare-specific-information
-    new R2CustomDomain(this, "nix-cache-r2-custom-domain", {
-      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
-      bucketName: nixCacheBucket.name,
-      domain: `nix-cache.${oyasaiIoRegistrarDomain.domainName}`,
-      enabled: true,
-      zoneId: oyasaiIoZone.id,
-    });
+    new ActionsSecret(
+      this,
+      this.t("platform-cloudflare-access-key-id-actions-secret"),
+      {
+        repository: platformRepository.name,
+        secretName: "CLOUDFLARE_ACCESS_KEY_ID",
+        value: secrets.CLOUDFLARE_ACCESS_KEY_ID,
+      },
+    );
+    new ActionsSecret(
+      this,
+      this.t("platform-cloudflare-secret-access-key-actions-secret"),
+      {
+        repository: platformRepository.name,
+        secretName: "CLOUDFLARE_SECRET_ACCESS_KEY",
+        value: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
+      },
+    );
   }
 }

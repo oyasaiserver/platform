@@ -16,8 +16,8 @@ jobs:
       - uses: cachix/install-nix-action@616559265b40713947b9c190a8ff4b507b5df49b
       - name: Configure Cloudflare R2 credentials
         run: |
-          sudo -i aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          sudo -i aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          sudo -i aws configure set aws_access_key_id "${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}"
+          sudo -i aws configure set aws_secret_access_key "${{ secrets.CLOUDFLARE_SECRET_ACCESS_KEY }}"
       - name: Setup Nix S3 cache
         uses: ./packages/nix-copy-action
         with:
