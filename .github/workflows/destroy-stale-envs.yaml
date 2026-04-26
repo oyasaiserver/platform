@@ -72,6 +72,7 @@ jobs:
       - list-stale-environments
     secrets: inherit
     strategy:
+      fail-fast: false
       matrix:
         environment: ${{ fromJson(needs.list-stale-environments.outputs.stale-environments) }}
     uses: ./.github/workflows/destroy-platform.yaml
