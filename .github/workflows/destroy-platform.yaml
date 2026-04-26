@@ -10,7 +10,6 @@ on:
 jobs:
   cdktf:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
       OYASAI_IMAGE_ID: "{}"
