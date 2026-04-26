@@ -7,9 +7,6 @@ on:
       - opened
       - synchronize
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-
 jobs:
   deploy:
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
@@ -17,3 +14,4 @@ jobs:
     uses: ./.github/workflows/deploy-platform.yaml
     with:
       environment: pr-${{ github.event.pull_request.number }}
+      start-proxy: true
