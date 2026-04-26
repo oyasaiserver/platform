@@ -1,12 +1,4 @@
-{
-  stdenvNoCC,
-  stdenv,
-  inputs,
-}:
-let
-  inherit (stdenv.hostPlatform) system;
-  inherit (inputs.gradle2nix.packages.${system}) gradle2nix;
-in
+{ stdenvNoCC, gradle2nix }:
 stdenvNoCC.mkDerivation {
   name = "gradle2nix-gradle-plugin";
   dontUnpack = true;
