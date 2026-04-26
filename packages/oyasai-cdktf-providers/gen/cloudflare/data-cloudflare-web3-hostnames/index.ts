@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/web3_hostnames
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/web3_hostnames
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,15 +10,15 @@ export interface DataCloudflareWeb3HostnamesConfig extends cdktf.TerraformMetaAr
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/web3_hostnames#max_items DataCloudflareWeb3Hostnames#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/web3_hostnames#max_items DataCloudflareWeb3Hostnames#max_items}
   */
   readonly maxItems?: number;
   /**
   * Specify the identifier of the hostname.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/web3_hostnames#zone_id DataCloudflareWeb3Hostnames#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/web3_hostnames#zone_id DataCloudflareWeb3Hostnames#zone_id}
   */
-  readonly zoneId: string;
+  readonly zoneId?: string;
 }
 export interface DataCloudflareWeb3HostnamesResult {
 }
@@ -132,7 +132,7 @@ export class DataCloudflareWeb3HostnamesResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/web3_hostnames cloudflare_web3_hostnames}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/web3_hostnames cloudflare_web3_hostnames}
 */
 export class DataCloudflareWeb3Hostnames extends cdktf.TerraformDataSource {
 
@@ -148,7 +148,7 @@ export class DataCloudflareWeb3Hostnames extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWeb3Hostnames resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWeb3Hostnames to import
-  * @param importFromId The id of the existing DataCloudflareWeb3Hostnames that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/web3_hostnames#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWeb3Hostnames that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/web3_hostnames#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWeb3Hostnames to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -160,18 +160,18 @@ export class DataCloudflareWeb3Hostnames extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/web3_hostnames cloudflare_web3_hostnames} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/web3_hostnames cloudflare_web3_hostnames} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareWeb3HostnamesConfig
+  * @param options DataCloudflareWeb3HostnamesConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareWeb3HostnamesConfig) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareWeb3HostnamesConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_web3_hostnames',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -211,13 +211,16 @@ export class DataCloudflareWeb3Hostnames extends cdktf.TerraformDataSource {
     return this._result;
   }
 
-  // zone_id - computed: false, optional: false, required: true
+  // zone_id - computed: false, optional: true, required: false
   private _zoneId?: string; 
   public get zoneId() {
     return this.getStringAttribute('zone_id');
   }
   public set zoneId(value: string) {
     this._zoneId = value;
+  }
+  public resetZoneId() {
+    this._zoneId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get zoneIdInput() {

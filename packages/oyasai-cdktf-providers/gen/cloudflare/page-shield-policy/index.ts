@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -11,43 +11,43 @@ export interface PageShieldPolicyConfig extends cdktf.TerraformMetaArguments {
   * The action to take if the expression matches
   * Available values: "allow", "log", "add_reporting_directives".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy#action PageShieldPolicy#action}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy#action PageShieldPolicy#action}
   */
   readonly action: string;
   /**
   * A description for the policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy#description PageShieldPolicy#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy#description PageShieldPolicy#description}
   */
   readonly description: string;
   /**
   * Whether the policy is enabled
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy#enabled PageShieldPolicy#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy#enabled PageShieldPolicy#enabled}
   */
   readonly enabled: boolean | cdktf.IResolvable;
   /**
   * The expression which must match for the policy to be applied, using the Cloudflare Firewall rule expression syntax
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy#expression PageShieldPolicy#expression}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy#expression PageShieldPolicy#expression}
   */
   readonly expression: string;
   /**
   * The policy which will be applied
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy#value PageShieldPolicy#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy#value PageShieldPolicy#value}
   */
   readonly value: string;
   /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy#zone_id PageShieldPolicy#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy#zone_id PageShieldPolicy#zone_id}
   */
-  readonly zoneId: string;
+  readonly zoneId?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy cloudflare_page_shield_policy}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy cloudflare_page_shield_policy}
 */
 export class PageShieldPolicy extends cdktf.TerraformResource {
 
@@ -63,7 +63,7 @@ export class PageShieldPolicy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a PageShieldPolicy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the PageShieldPolicy to import
-  * @param importFromId The id of the existing PageShieldPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing PageShieldPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the PageShieldPolicy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -75,7 +75,7 @@ export class PageShieldPolicy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/page_shield_policy cloudflare_page_shield_policy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/page_shield_policy cloudflare_page_shield_policy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -86,7 +86,7 @@ export class PageShieldPolicy extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_page_shield_policy',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -178,13 +178,16 @@ export class PageShieldPolicy extends cdktf.TerraformResource {
     return this._value;
   }
 
-  // zone_id - computed: false, optional: false, required: true
+  // zone_id - computed: false, optional: true, required: false
   private _zoneId?: string; 
   public get zoneId() {
     return this.getStringAttribute('zone_id');
   }
   public set zoneId(value: string) {
     this._zoneId = value;
+  }
+  public resetZoneId() {
+    this._zoneId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get zoneIdInput() {

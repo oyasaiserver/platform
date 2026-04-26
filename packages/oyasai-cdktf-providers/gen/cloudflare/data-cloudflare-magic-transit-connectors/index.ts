@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_transit_connectors
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_connectors
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareMagicTransitConnectorsConfig extends cdktf.Terraf
   /**
   * Account identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_transit_connectors#account_id DataCloudflareMagicTransitConnectors#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_connectors#account_id DataCloudflareMagicTransitConnectors#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_transit_connectors#max_items DataCloudflareMagicTransitConnectors#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_connectors#max_items DataCloudflareMagicTransitConnectors#max_items}
   */
   readonly maxItems?: number;
 }
@@ -146,9 +146,19 @@ export class DataCloudflareMagicTransitConnectorsResultOutputReference extends c
     return this.getStringAttribute('id');
   }
 
+  // interrupt_window_days_of_week - computed: true, optional: false, required: false
+  public get interruptWindowDaysOfWeek() {
+    return this.getListAttribute('interrupt_window_days_of_week');
+  }
+
   // interrupt_window_duration_hours - computed: true, optional: false, required: false
   public get interruptWindowDurationHours() {
     return this.getNumberAttribute('interrupt_window_duration_hours');
+  }
+
+  // interrupt_window_embargo_dates - computed: true, optional: false, required: false
+  public get interruptWindowEmbargoDates() {
+    return this.getListAttribute('interrupt_window_embargo_dates');
   }
 
   // interrupt_window_hour_of_day - computed: true, optional: false, required: false
@@ -207,7 +217,7 @@ export class DataCloudflareMagicTransitConnectorsResultList extends cdktf.Comple
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_transit_connectors cloudflare_magic_transit_connectors}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_connectors cloudflare_magic_transit_connectors}
 */
 export class DataCloudflareMagicTransitConnectors extends cdktf.TerraformDataSource {
 
@@ -223,7 +233,7 @@ export class DataCloudflareMagicTransitConnectors extends cdktf.TerraformDataSou
   * Generates CDKTF code for importing a DataCloudflareMagicTransitConnectors resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareMagicTransitConnectors to import
-  * @param importFromId The id of the existing DataCloudflareMagicTransitConnectors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_transit_connectors#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareMagicTransitConnectors that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_connectors#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareMagicTransitConnectors to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -235,18 +245,18 @@ export class DataCloudflareMagicTransitConnectors extends cdktf.TerraformDataSou
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_transit_connectors cloudflare_magic_transit_connectors} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_transit_connectors cloudflare_magic_transit_connectors} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareMagicTransitConnectorsConfig
+  * @param options DataCloudflareMagicTransitConnectorsConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareMagicTransitConnectorsConfig) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareMagicTransitConnectorsConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_magic_transit_connectors',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -264,13 +274,16 @@ export class DataCloudflareMagicTransitConnectors extends cdktf.TerraformDataSou
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {

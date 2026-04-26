@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,21 +8,380 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustAccessAiControlsMcpPortalsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals#account_id DataCloudflareZeroTrustAccessAiControlsMcpPortals#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals#account_id DataCloudflareZeroTrustAccessAiControlsMcpPortals#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals#max_items DataCloudflareZeroTrustAccessAiControlsMcpPortals#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals#max_items DataCloudflareZeroTrustAccessAiControlsMcpPortals#max_items}
   */
   readonly maxItems?: number;
   /**
   * Search by id, name, hostname
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals#search DataCloudflareZeroTrustAccessAiControlsMcpPortals#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals#search DataCloudflareZeroTrustAccessAiControlsMcpPortals#search}
   */
   readonly search?: string;
+}
+export interface DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPrompts {
+}
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPromptsToTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPrompts): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPromptsToHclTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPrompts): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPromptsOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPrompts | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPrompts | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // description - computed: true, optional: false, required: false
+  public get description() {
+    return this.getStringAttribute('description');
+  }
+
+  // enabled - computed: true, optional: false, required: false
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
+  }
+
+  // name - computed: true, optional: false, required: false
+  public get name() {
+    return this.getStringAttribute('name');
+  }
+
+  // portal_alias - computed: true, optional: false, required: false
+  public get portalAlias() {
+    return this.getStringAttribute('portal_alias');
+  }
+
+  // server_alias - computed: true, optional: false, required: false
+  public get serverAlias() {
+    return this.getStringAttribute('server_alias');
+  }
+}
+
+export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPromptsList extends cdktf.ComplexList {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPromptsOutputReference {
+    return new DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPromptsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
+export interface DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedTools {
+}
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedToolsToTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedTools): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedToolsToHclTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedTools): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedToolsOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedTools | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedTools | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // description - computed: true, optional: false, required: false
+  public get description() {
+    return this.getStringAttribute('description');
+  }
+
+  // enabled - computed: true, optional: false, required: false
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
+  }
+
+  // name - computed: true, optional: false, required: false
+  public get name() {
+    return this.getStringAttribute('name');
+  }
+
+  // portal_alias - computed: true, optional: false, required: false
+  public get portalAlias() {
+    return this.getStringAttribute('portal_alias');
+  }
+
+  // server_alias - computed: true, optional: false, required: false
+  public get serverAlias() {
+    return this.getStringAttribute('server_alias');
+  }
+}
+
+export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedToolsList extends cdktf.ComplexList {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedToolsOutputReference {
+    return new DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedToolsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
+export interface DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServers {
+}
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersToTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServers): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersToHclTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServers): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServers | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServers | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // auth_type - computed: true, optional: false, required: false
+  public get authType() {
+    return this.getStringAttribute('auth_type');
+  }
+
+  // created_at - computed: true, optional: false, required: false
+  public get createdAt() {
+    return this.getStringAttribute('created_at');
+  }
+
+  // created_by - computed: true, optional: false, required: false
+  public get createdBy() {
+    return this.getStringAttribute('created_by');
+  }
+
+  // default_disabled - computed: true, optional: false, required: false
+  public get defaultDisabled() {
+    return this.getBooleanAttribute('default_disabled');
+  }
+
+  // description - computed: true, optional: false, required: false
+  public get description() {
+    return this.getStringAttribute('description');
+  }
+
+  // error - computed: true, optional: false, required: false
+  public get error() {
+    return this.getStringAttribute('error');
+  }
+
+  // hostname - computed: true, optional: false, required: false
+  public get hostname() {
+    return this.getStringAttribute('hostname');
+  }
+
+  // id - computed: true, optional: false, required: false
+  public get id() {
+    return this.getStringAttribute('id');
+  }
+
+  // last_successful_sync - computed: true, optional: false, required: false
+  public get lastSuccessfulSync() {
+    return this.getStringAttribute('last_successful_sync');
+  }
+
+  // last_synced - computed: true, optional: false, required: false
+  public get lastSynced() {
+    return this.getStringAttribute('last_synced');
+  }
+
+  // modified_at - computed: true, optional: false, required: false
+  public get modifiedAt() {
+    return this.getStringAttribute('modified_at');
+  }
+
+  // modified_by - computed: true, optional: false, required: false
+  public get modifiedBy() {
+    return this.getStringAttribute('modified_by');
+  }
+
+  // name - computed: true, optional: false, required: false
+  public get name() {
+    return this.getStringAttribute('name');
+  }
+
+  // on_behalf - computed: true, optional: false, required: false
+  public get onBehalf() {
+    return this.getBooleanAttribute('on_behalf');
+  }
+
+  // prompts - computed: true, optional: false, required: false
+  private _prompts = new cdktf.StringMapList(this, "prompts", false);
+  public get prompts() {
+    return this._prompts;
+  }
+
+  // status - computed: true, optional: false, required: false
+  public get status() {
+    return this.getStringAttribute('status');
+  }
+
+  // tools - computed: true, optional: false, required: false
+  private _tools = new cdktf.StringMapList(this, "tools", false);
+  public get tools() {
+    return this._tools;
+  }
+
+  // updated_prompts - computed: true, optional: false, required: false
+  private _updatedPrompts = new DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedPromptsList(this, "updated_prompts", false);
+  public get updatedPrompts() {
+    return this._updatedPrompts;
+  }
+
+  // updated_tools - computed: true, optional: false, required: false
+  private _updatedTools = new DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersUpdatedToolsList(this, "updated_tools", false);
+  public get updatedTools() {
+    return this._updatedTools;
+  }
+}
+
+export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersList extends cdktf.ComplexList {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersOutputReference {
+    return new DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
 }
 export interface DataCloudflareZeroTrustAccessAiControlsMcpPortalsResult {
 }
@@ -75,6 +434,11 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultOutputRefere
     }
   }
 
+  // allow_code_mode - computed: true, optional: false, required: false
+  public get allowCodeMode() {
+    return this.getBooleanAttribute('allow_code_mode');
+  }
+
   // created_at - computed: true, optional: false, required: false
   public get createdAt() {
     return this.getStringAttribute('created_at');
@@ -119,6 +483,12 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultOutputRefere
   public get secureWebGateway() {
     return this.getBooleanAttribute('secure_web_gateway');
   }
+
+  // servers - computed: true, optional: false, required: false
+  private _servers = new DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultServersList(this, "servers", false);
+  public get servers() {
+    return this._servers;
+  }
 }
 
 export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultList extends cdktf.ComplexList {
@@ -141,7 +511,7 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpPortalsResultList extends
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals cloudflare_zero_trust_access_ai_controls_mcp_portals}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals cloudflare_zero_trust_access_ai_controls_mcp_portals}
 */
 export class DataCloudflareZeroTrustAccessAiControlsMcpPortals extends cdktf.TerraformDataSource {
 
@@ -157,7 +527,7 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpPortals extends cdktf.Ter
   * Generates CDKTF code for importing a DataCloudflareZeroTrustAccessAiControlsMcpPortals resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustAccessAiControlsMcpPortals to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustAccessAiControlsMcpPortals that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustAccessAiControlsMcpPortals that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustAccessAiControlsMcpPortals to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -169,18 +539,18 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpPortals extends cdktf.Ter
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals cloudflare_zero_trust_access_ai_controls_mcp_portals} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_ai_controls_mcp_portals cloudflare_zero_trust_access_ai_controls_mcp_portals} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareZeroTrustAccessAiControlsMcpPortalsConfig
+  * @param options DataCloudflareZeroTrustAccessAiControlsMcpPortalsConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareZeroTrustAccessAiControlsMcpPortalsConfig) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareZeroTrustAccessAiControlsMcpPortalsConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_zero_trust_access_ai_controls_mcp_portals',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -199,13 +569,16 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpPortals extends cdktf.Ter
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {

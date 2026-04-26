@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/notification_policy_webhooks_list
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policy_webhooks_list
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareNotificationPolicyWebhooksListConfig extends cdkt
   /**
   * The account id
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/notification_policy_webhooks_list#account_id DataCloudflareNotificationPolicyWebhooksList#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policy_webhooks_list#account_id DataCloudflareNotificationPolicyWebhooksList#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/notification_policy_webhooks_list#max_items DataCloudflareNotificationPolicyWebhooksList#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policy_webhooks_list#max_items DataCloudflareNotificationPolicyWebhooksList#max_items}
   */
   readonly maxItems?: number;
 }
@@ -132,7 +132,7 @@ export class DataCloudflareNotificationPolicyWebhooksListResultList extends cdkt
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/notification_policy_webhooks_list cloudflare_notification_policy_webhooks_list}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policy_webhooks_list cloudflare_notification_policy_webhooks_list}
 */
 export class DataCloudflareNotificationPolicyWebhooksList extends cdktf.TerraformDataSource {
 
@@ -148,7 +148,7 @@ export class DataCloudflareNotificationPolicyWebhooksList extends cdktf.Terrafor
   * Generates CDKTF code for importing a DataCloudflareNotificationPolicyWebhooksList resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareNotificationPolicyWebhooksList to import
-  * @param importFromId The id of the existing DataCloudflareNotificationPolicyWebhooksList that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/notification_policy_webhooks_list#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareNotificationPolicyWebhooksList that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policy_webhooks_list#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareNotificationPolicyWebhooksList to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -160,18 +160,18 @@ export class DataCloudflareNotificationPolicyWebhooksList extends cdktf.Terrafor
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/notification_policy_webhooks_list cloudflare_notification_policy_webhooks_list} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/notification_policy_webhooks_list cloudflare_notification_policy_webhooks_list} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareNotificationPolicyWebhooksListConfig
+  * @param options DataCloudflareNotificationPolicyWebhooksListConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareNotificationPolicyWebhooksListConfig) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareNotificationPolicyWebhooksListConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_notification_policy_webhooks_list',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -189,13 +189,16 @@ export class DataCloudflareNotificationPolicyWebhooksList extends cdktf.Terrafor
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {

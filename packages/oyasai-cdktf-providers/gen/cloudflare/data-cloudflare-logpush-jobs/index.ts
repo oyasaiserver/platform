@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/logpush_jobs
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/logpush_jobs
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataCloudflareLogpushJobsConfig extends cdktf.TerraformMetaArgu
   /**
   * The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/logpush_jobs#account_id DataCloudflareLogpushJobs#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/logpush_jobs#account_id DataCloudflareLogpushJobs#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/logpush_jobs#max_items DataCloudflareLogpushJobs#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/logpush_jobs#max_items DataCloudflareLogpushJobs#max_items}
   */
   readonly maxItems?: number;
   /**
   * The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/logpush_jobs#zone_id DataCloudflareLogpushJobs#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/logpush_jobs#zone_id DataCloudflareLogpushJobs#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -98,6 +98,11 @@ export class DataCloudflareLogpushJobsResultOutputOptionsOutputReference extends
   // field_names - computed: true, optional: false, required: false
   public get fieldNames() {
     return this.getListAttribute('field_names');
+  }
+
+  // merge_subrequests - computed: true, optional: false, required: false
+  public get mergeSubrequests() {
+    return this.getBooleanAttribute('merge_subrequests');
   }
 
   // output_type - computed: true, optional: false, required: false
@@ -283,7 +288,7 @@ export class DataCloudflareLogpushJobsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/logpush_jobs cloudflare_logpush_jobs}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/logpush_jobs cloudflare_logpush_jobs}
 */
 export class DataCloudflareLogpushJobs extends cdktf.TerraformDataSource {
 
@@ -299,7 +304,7 @@ export class DataCloudflareLogpushJobs extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareLogpushJobs resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareLogpushJobs to import
-  * @param importFromId The id of the existing DataCloudflareLogpushJobs that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/logpush_jobs#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareLogpushJobs that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/logpush_jobs#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareLogpushJobs to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -311,7 +316,7 @@ export class DataCloudflareLogpushJobs extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/logpush_jobs cloudflare_logpush_jobs} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/logpush_jobs cloudflare_logpush_jobs} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -322,7 +327,7 @@ export class DataCloudflareLogpushJobs extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_logpush_jobs',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

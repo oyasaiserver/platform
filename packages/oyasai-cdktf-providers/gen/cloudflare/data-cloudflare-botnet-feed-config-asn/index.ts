@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/botnet_feed_config_asn
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/botnet_feed_config_asn
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareBotnetFeedConfigAsnConfig extends cdktf.Terraform
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/botnet_feed_config_asn#account_id DataCloudflareBotnetFeedConfigAsn#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/botnet_feed_config_asn#account_id DataCloudflareBotnetFeedConfigAsn#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/botnet_feed_config_asn cloudflare_botnet_feed_config_asn}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/botnet_feed_config_asn cloudflare_botnet_feed_config_asn}
 */
 export class DataCloudflareBotnetFeedConfigAsn extends cdktf.TerraformDataSource {
 
@@ -32,7 +32,7 @@ export class DataCloudflareBotnetFeedConfigAsn extends cdktf.TerraformDataSource
   * Generates CDKTF code for importing a DataCloudflareBotnetFeedConfigAsn resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareBotnetFeedConfigAsn to import
-  * @param importFromId The id of the existing DataCloudflareBotnetFeedConfigAsn that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/botnet_feed_config_asn#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareBotnetFeedConfigAsn that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/botnet_feed_config_asn#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareBotnetFeedConfigAsn to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,18 +44,18 @@ export class DataCloudflareBotnetFeedConfigAsn extends cdktf.TerraformDataSource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/botnet_feed_config_asn cloudflare_botnet_feed_config_asn} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/botnet_feed_config_asn cloudflare_botnet_feed_config_asn} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareBotnetFeedConfigAsnConfig
+  * @param options DataCloudflareBotnetFeedConfigAsnConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareBotnetFeedConfigAsnConfig) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareBotnetFeedConfigAsnConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_botnet_feed_config_asn',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -72,13 +72,16 @@ export class DataCloudflareBotnetFeedConfigAsn extends cdktf.TerraformDataSource
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {

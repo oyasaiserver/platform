@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker_versions
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker_versions
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataCloudflareWorkerVersionsConfig extends cdktf.TerraformMetaA
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker_versions#account_id DataCloudflareWorkerVersions#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker_versions#account_id DataCloudflareWorkerVersions#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker_versions#max_items DataCloudflareWorkerVersions#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker_versions#max_items DataCloudflareWorkerVersions#max_items}
   */
   readonly maxItems?: number;
   /**
   * Identifier for the Worker, which can be ID or name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker_versions#worker_id DataCloudflareWorkerVersions#worker_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker_versions#worker_id DataCloudflareWorkerVersions#worker_id}
   */
   readonly workerId: string;
 }
@@ -539,6 +539,11 @@ export class DataCloudflareWorkerVersionsResultBindingsOutputReference extends c
     return this.getListAttribute('allowed_sender_addresses');
   }
 
+  // app_id - computed: true, optional: false, required: false
+  public get appId() {
+    return this.getStringAttribute('app_id');
+  }
+
   // bucket_name - computed: true, optional: false, required: false
   public get bucketName() {
     return this.getStringAttribute('bucket_name');
@@ -554,6 +559,11 @@ export class DataCloudflareWorkerVersionsResultBindingsOutputReference extends c
     return this.getStringAttribute('class_name');
   }
 
+  // database_id - computed: true, optional: false, required: false
+  public get databaseId() {
+    return this.getStringAttribute('database_id');
+  }
+
   // dataset - computed: true, optional: false, required: false
   public get dataset() {
     return this.getStringAttribute('dataset');
@@ -562,6 +572,16 @@ export class DataCloudflareWorkerVersionsResultBindingsOutputReference extends c
   // destination_address - computed: true, optional: false, required: false
   public get destinationAddress() {
     return this.getStringAttribute('destination_address');
+  }
+
+  // dispatch_namespace - computed: true, optional: false, required: false
+  public get dispatchNamespace() {
+    return this.getStringAttribute('dispatch_namespace');
+  }
+
+  // entrypoint - computed: true, optional: false, required: false
+  public get entrypoint() {
+    return this.getStringAttribute('entrypoint');
   }
 
   // environment - computed: true, optional: false, required: false
@@ -582,6 +602,11 @@ export class DataCloudflareWorkerVersionsResultBindingsOutputReference extends c
   // index_name - computed: true, optional: false, required: false
   public get indexName() {
     return this.getStringAttribute('index_name');
+  }
+
+  // instance_name - computed: true, optional: false, required: false
+  public get instanceName() {
+    return this.getStringAttribute('instance_name');
   }
 
   // json - computed: true, optional: false, required: false
@@ -617,6 +642,11 @@ export class DataCloudflareWorkerVersionsResultBindingsOutputReference extends c
   // namespace_id - computed: true, optional: false, required: false
   public get namespaceId() {
     return this.getStringAttribute('namespace_id');
+  }
+
+  // network_id - computed: true, optional: false, required: false
+  public get networkId() {
+    return this.getStringAttribute('network_id');
   }
 
   // old_name - computed: true, optional: false, required: false
@@ -660,6 +690,11 @@ export class DataCloudflareWorkerVersionsResultBindingsOutputReference extends c
     return this.getStringAttribute('service');
   }
 
+  // service_id - computed: true, optional: false, required: false
+  public get serviceId() {
+    return this.getStringAttribute('service_id');
+  }
+
   // simple - computed: true, optional: false, required: false
   private _simple = new DataCloudflareWorkerVersionsResultBindingsSimpleOutputReference(this, "simple");
   public get simple() {
@@ -674,6 +709,11 @@ export class DataCloudflareWorkerVersionsResultBindingsOutputReference extends c
   // text - computed: true, optional: false, required: false
   public get text() {
     return this.getStringAttribute('text');
+  }
+
+  // tunnel_id - computed: true, optional: false, required: false
+  public get tunnelId() {
+    return this.getStringAttribute('tunnel_id');
   }
 
   // type - computed: true, optional: false, required: false
@@ -713,6 +753,81 @@ export class DataCloudflareWorkerVersionsResultBindingsList extends cdktf.Comple
   */
   public get(index: number): DataCloudflareWorkerVersionsResultBindingsOutputReference {
     return new DataCloudflareWorkerVersionsResultBindingsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
+export interface DataCloudflareWorkerVersionsResultContainers {
+}
+
+export function dataCloudflareWorkerVersionsResultContainersToTerraform(struct?: DataCloudflareWorkerVersionsResultContainers): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareWorkerVersionsResultContainersToHclTerraform(struct?: DataCloudflareWorkerVersionsResultContainers): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareWorkerVersionsResultContainersOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataCloudflareWorkerVersionsResultContainers | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareWorkerVersionsResultContainers | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // class_name - computed: true, optional: false, required: false
+  public get className() {
+    return this.getStringAttribute('class_name');
+  }
+}
+
+export class DataCloudflareWorkerVersionsResultContainersList extends cdktf.ComplexList {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataCloudflareWorkerVersionsResultContainersOutputReference {
+    return new DataCloudflareWorkerVersionsResultContainersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
 export interface DataCloudflareWorkerVersionsResultLimits {
@@ -767,6 +882,11 @@ export class DataCloudflareWorkerVersionsResultLimitsOutputReference extends cdk
   // cpu_ms - computed: true, optional: false, required: false
   public get cpuMs() {
     return this.getNumberAttribute('cpu_ms');
+  }
+
+  // subrequests - computed: true, optional: false, required: false
+  public get subrequests() {
+    return this.getNumberAttribute('subrequests');
   }
 }
 export interface DataCloudflareWorkerVersionsResultMigrationsRenamedClasses {
@@ -1612,6 +1732,12 @@ export class DataCloudflareWorkerVersionsResultOutputReference extends cdktf.Com
     return cdktf.Fn.tolist(this.getListAttribute('compatibility_flags'));
   }
 
+  // containers - computed: true, optional: false, required: false
+  private _containers = new DataCloudflareWorkerVersionsResultContainersList(this, "containers", true);
+  public get containers() {
+    return this._containers;
+  }
+
   // created_on - computed: true, optional: false, required: false
   public get createdOn() {
     return this.getStringAttribute('created_on');
@@ -1636,6 +1762,11 @@ export class DataCloudflareWorkerVersionsResultOutputReference extends cdktf.Com
   // main_script_base64 - computed: true, optional: false, required: false
   public get mainScriptBase64() {
     return this.getStringAttribute('main_script_base64');
+  }
+
+  // migration_tag - computed: true, optional: false, required: false
+  public get migrationTag() {
+    return this.getStringAttribute('migration_tag');
   }
 
   // migrations - computed: true, optional: false, required: false
@@ -1671,6 +1802,11 @@ export class DataCloudflareWorkerVersionsResultOutputReference extends cdktf.Com
     return this.getNumberAttribute('startup_time_ms');
   }
 
+  // urls - computed: true, optional: false, required: false
+  public get urls() {
+    return this.getListAttribute('urls');
+  }
+
   // usage_model - computed: true, optional: false, required: false
   public get usageModel() {
     return this.getStringAttribute('usage_model');
@@ -1697,7 +1833,7 @@ export class DataCloudflareWorkerVersionsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker_versions cloudflare_worker_versions}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker_versions cloudflare_worker_versions}
 */
 export class DataCloudflareWorkerVersions extends cdktf.TerraformDataSource {
 
@@ -1713,7 +1849,7 @@ export class DataCloudflareWorkerVersions extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWorkerVersions resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkerVersions to import
-  * @param importFromId The id of the existing DataCloudflareWorkerVersions that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker_versions#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkerVersions that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker_versions#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkerVersions to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1725,7 +1861,7 @@ export class DataCloudflareWorkerVersions extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker_versions cloudflare_worker_versions} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker_versions cloudflare_worker_versions} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1736,7 +1872,7 @@ export class DataCloudflareWorkerVersions extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_worker_versions',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -1755,13 +1891,16 @@ export class DataCloudflareWorkerVersions extends cdktf.TerraformDataSource {
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {

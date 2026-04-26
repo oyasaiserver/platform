@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/managed_transforms
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/managed_transforms
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,9 +10,9 @@ export interface DataCloudflareManagedTransformsConfig extends cdktf.TerraformMe
   /**
   * The unique ID of the zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/managed_transforms#zone_id DataCloudflareManagedTransforms#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/managed_transforms#zone_id DataCloudflareManagedTransforms#zone_id}
   */
-  readonly zoneId: string;
+  readonly zoneId?: string;
 }
 export interface DataCloudflareManagedTransformsManagedRequestHeaders {
 }
@@ -176,7 +176,7 @@ export class DataCloudflareManagedTransformsManagedResponseHeadersList extends c
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/managed_transforms cloudflare_managed_transforms}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/managed_transforms cloudflare_managed_transforms}
 */
 export class DataCloudflareManagedTransforms extends cdktf.TerraformDataSource {
 
@@ -192,7 +192,7 @@ export class DataCloudflareManagedTransforms extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareManagedTransforms resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareManagedTransforms to import
-  * @param importFromId The id of the existing DataCloudflareManagedTransforms that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/managed_transforms#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareManagedTransforms that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/managed_transforms#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareManagedTransforms to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -204,18 +204,18 @@ export class DataCloudflareManagedTransforms extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/managed_transforms cloudflare_managed_transforms} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/managed_transforms cloudflare_managed_transforms} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareManagedTransformsConfig
+  * @param options DataCloudflareManagedTransformsConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareManagedTransformsConfig) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareManagedTransformsConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_managed_transforms',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -249,13 +249,16 @@ export class DataCloudflareManagedTransforms extends cdktf.TerraformDataSource {
     return this._managedResponseHeaders;
   }
 
-  // zone_id - computed: false, optional: false, required: true
+  // zone_id - computed: false, optional: true, required: false
   private _zoneId?: string; 
   public get zoneId() {
     return this.getStringAttribute('zone_id');
   }
   public set zoneId(value: string) {
     this._zoneId = value;
+  }
+  public resetZoneId() {
+    this._zoneId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get zoneIdInput() {

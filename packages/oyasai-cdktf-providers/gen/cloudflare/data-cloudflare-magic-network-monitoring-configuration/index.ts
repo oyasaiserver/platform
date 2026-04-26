@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_network_monitoring_configuration
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_network_monitoring_configuration
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,9 +8,9 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareMagicNetworkMonitoringConfigurationConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_network_monitoring_configuration#account_id DataCloudflareMagicNetworkMonitoringConfiguration#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_network_monitoring_configuration#account_id DataCloudflareMagicNetworkMonitoringConfiguration#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
 }
 export interface DataCloudflareMagicNetworkMonitoringConfigurationWarpDevices {
 }
@@ -99,7 +99,7 @@ export class DataCloudflareMagicNetworkMonitoringConfigurationWarpDevicesList ex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_network_monitoring_configuration cloudflare_magic_network_monitoring_configuration}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_network_monitoring_configuration cloudflare_magic_network_monitoring_configuration}
 */
 export class DataCloudflareMagicNetworkMonitoringConfiguration extends cdktf.TerraformDataSource {
 
@@ -115,7 +115,7 @@ export class DataCloudflareMagicNetworkMonitoringConfiguration extends cdktf.Ter
   * Generates CDKTF code for importing a DataCloudflareMagicNetworkMonitoringConfiguration resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareMagicNetworkMonitoringConfiguration to import
-  * @param importFromId The id of the existing DataCloudflareMagicNetworkMonitoringConfiguration that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_network_monitoring_configuration#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareMagicNetworkMonitoringConfiguration that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_network_monitoring_configuration#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareMagicNetworkMonitoringConfiguration to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -127,18 +127,18 @@ export class DataCloudflareMagicNetworkMonitoringConfiguration extends cdktf.Ter
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/magic_network_monitoring_configuration cloudflare_magic_network_monitoring_configuration} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/magic_network_monitoring_configuration cloudflare_magic_network_monitoring_configuration} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareMagicNetworkMonitoringConfigurationConfig
+  * @param options DataCloudflareMagicNetworkMonitoringConfigurationConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareMagicNetworkMonitoringConfigurationConfig) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareMagicNetworkMonitoringConfigurationConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_magic_network_monitoring_configuration',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -155,13 +155,16 @@ export class DataCloudflareMagicNetworkMonitoringConfiguration extends cdktf.Ter
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/ai_search_token
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,25 +8,29 @@ import * as cdktf from 'cdktf';
 
 export interface AiSearchTokenConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/ai_search_token#account_id AiSearchToken#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token#account_id AiSearchToken#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/ai_search_token#cf_api_id AiSearchToken#cf_api_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token#cf_api_id AiSearchToken#cf_api_id}
   */
   readonly cfApiId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/ai_search_token#cf_api_key AiSearchToken#cf_api_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token#cf_api_key AiSearchToken#cf_api_key}
   */
   readonly cfApiKey: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/ai_search_token#name AiSearchToken#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token#legacy AiSearchToken#legacy}
+  */
+  readonly legacy?: boolean | cdktf.IResolvable;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token#name AiSearchToken#name}
   */
   readonly name: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/ai_search_token cloudflare_ai_search_token}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token cloudflare_ai_search_token}
 */
 export class AiSearchToken extends cdktf.TerraformResource {
 
@@ -42,7 +46,7 @@ export class AiSearchToken extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AiSearchToken resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AiSearchToken to import
-  * @param importFromId The id of the existing AiSearchToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/ai_search_token#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AiSearchToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AiSearchToken to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -54,7 +58,7 @@ export class AiSearchToken extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/resources/ai_search_token cloudflare_ai_search_token} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/ai_search_token cloudflare_ai_search_token} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -65,7 +69,7 @@ export class AiSearchToken extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_ai_search_token',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -78,6 +82,7 @@ export class AiSearchToken extends cdktf.TerraformResource {
     this._accountId = config.accountId;
     this._cfApiId = config.cfApiId;
     this._cfApiKey = config.cfApiKey;
+    this._legacy = config.legacy;
     this._name = config.name;
   }
 
@@ -85,13 +90,16 @@ export class AiSearchToken extends cdktf.TerraformResource {
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {
@@ -144,9 +152,20 @@ export class AiSearchToken extends cdktf.TerraformResource {
     return this.getStringAttribute('id');
   }
 
-  // legacy - computed: true, optional: false, required: false
+  // legacy - computed: true, optional: true, required: false
+  private _legacy?: boolean | cdktf.IResolvable; 
   public get legacy() {
     return this.getBooleanAttribute('legacy');
+  }
+  public set legacy(value: boolean | cdktf.IResolvable) {
+    this._legacy = value;
+  }
+  public resetLegacy() {
+    this._legacy = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get legacyInput() {
+    return this._legacy;
   }
 
   // modified_at - computed: true, optional: false, required: false
@@ -181,6 +200,7 @@ export class AiSearchToken extends cdktf.TerraformResource {
       account_id: cdktf.stringToTerraform(this._accountId),
       cf_api_id: cdktf.stringToTerraform(this._cfApiId),
       cf_api_key: cdktf.stringToTerraform(this._cfApiKey),
+      legacy: cdktf.booleanToTerraform(this._legacy),
       name: cdktf.stringToTerraform(this._name),
     };
   }
@@ -204,6 +224,12 @@ export class AiSearchToken extends cdktf.TerraformResource {
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      legacy: {
+        value: cdktf.booleanToHclTerraform(this._legacy),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       name: {
         value: cdktf.stringToHclTerraform(this._name),

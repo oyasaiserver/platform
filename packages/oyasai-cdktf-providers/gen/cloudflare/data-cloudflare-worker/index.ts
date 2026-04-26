@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,15 +10,152 @@ export interface DataCloudflareWorkerConfig extends cdktf.TerraformMetaArguments
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker#account_id DataCloudflareWorker#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker#account_id DataCloudflareWorker#account_id}
   */
-  readonly accountId: string;
+  readonly accountId?: string;
+  /**
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker#filter DataCloudflareWorker#filter}
+  */
+  readonly filter?: DataCloudflareWorkerFilter;
   /**
   * Identifier for the Worker, which can be ID or name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker#worker_id DataCloudflareWorker#worker_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker#worker_id DataCloudflareWorker#worker_id}
   */
-  readonly workerId: string;
+  readonly workerId?: string;
+}
+export interface DataCloudflareWorkerFilter {
+  /**
+  * Sort direction.
+  * Available values: "asc", "desc".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker#order DataCloudflareWorker#order}
+  */
+  readonly order?: string;
+  /**
+  * Property to sort results by.
+  * Available values: "deployed_on", "updated_on", "created_on", "name".
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker#order_by DataCloudflareWorker#order_by}
+  */
+  readonly orderBy?: string;
+}
+
+export function dataCloudflareWorkerFilterToTerraform(struct?: DataCloudflareWorkerFilter | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    order: cdktf.stringToTerraform(struct!.order),
+    order_by: cdktf.stringToTerraform(struct!.orderBy),
+  }
+}
+
+
+export function dataCloudflareWorkerFilterToHclTerraform(struct?: DataCloudflareWorkerFilter | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    order: {
+      value: cdktf.stringToHclTerraform(struct!.order),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    order_by: {
+      value: cdktf.stringToHclTerraform(struct!.orderBy),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class DataCloudflareWorkerFilterOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareWorkerFilter | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._order !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.order = this._order;
+    }
+    if (this._orderBy !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.orderBy = this._orderBy;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareWorkerFilter | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._order = undefined;
+      this._orderBy = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._order = value.order;
+      this._orderBy = value.orderBy;
+    }
+  }
+
+  // order - computed: true, optional: true, required: false
+  private _order?: string; 
+  public get order() {
+    return this.getStringAttribute('order');
+  }
+  public set order(value: string) {
+    this._order = value;
+  }
+  public resetOrder() {
+    this._order = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get orderInput() {
+    return this._order;
+  }
+
+  // order_by - computed: true, optional: true, required: false
+  private _orderBy?: string; 
+  public get orderBy() {
+    return this.getStringAttribute('order_by');
+  }
+  public set orderBy(value: string) {
+    this._orderBy = value;
+  }
+  public resetOrderBy() {
+    this._orderBy = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get orderByInput() {
+    return this._orderBy;
+  }
 }
 export interface DataCloudflareWorkerObservabilityLogs {
 }
@@ -69,6 +206,11 @@ export class DataCloudflareWorkerObservabilityLogsOutputReference extends cdktf.
     }
   }
 
+  // destinations - computed: true, optional: false, required: false
+  public get destinations() {
+    return this.getListAttribute('destinations');
+  }
+
   // enabled - computed: true, optional: false, required: false
   public get enabled() {
     return this.getBooleanAttribute('enabled');
@@ -82,6 +224,80 @@ export class DataCloudflareWorkerObservabilityLogsOutputReference extends cdktf.
   // invocation_logs - computed: true, optional: false, required: false
   public get invocationLogs() {
     return this.getBooleanAttribute('invocation_logs');
+  }
+
+  // persist - computed: true, optional: false, required: false
+  public get persist() {
+    return this.getBooleanAttribute('persist');
+  }
+}
+export interface DataCloudflareWorkerObservabilityTraces {
+}
+
+export function dataCloudflareWorkerObservabilityTracesToTerraform(struct?: DataCloudflareWorkerObservabilityTraces): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareWorkerObservabilityTracesToHclTerraform(struct?: DataCloudflareWorkerObservabilityTraces): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareWorkerObservabilityTracesOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareWorkerObservabilityTraces | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareWorkerObservabilityTraces | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // destinations - computed: true, optional: false, required: false
+  public get destinations() {
+    return this.getListAttribute('destinations');
+  }
+
+  // enabled - computed: true, optional: false, required: false
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
+  }
+
+  // head_sampling_rate - computed: true, optional: false, required: false
+  public get headSamplingRate() {
+    return this.getNumberAttribute('head_sampling_rate');
+  }
+
+  // persist - computed: true, optional: false, required: false
+  public get persist() {
+    return this.getBooleanAttribute('persist');
   }
 }
 export interface DataCloudflareWorkerObservability {
@@ -147,6 +363,12 @@ export class DataCloudflareWorkerObservabilityOutputReference extends cdktf.Comp
   private _logs = new DataCloudflareWorkerObservabilityLogsOutputReference(this, "logs");
   public get logs() {
     return this._logs;
+  }
+
+  // traces - computed: true, optional: false, required: false
+  private _traces = new DataCloudflareWorkerObservabilityTracesOutputReference(this, "traces");
+  public get traces() {
+    return this._traces;
   }
 }
 export interface DataCloudflareWorkerReferencesDispatchNamespaceOutbounds {
@@ -804,7 +1026,7 @@ export class DataCloudflareWorkerTailConsumersList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker cloudflare_worker}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker cloudflare_worker}
 */
 export class DataCloudflareWorker extends cdktf.TerraformDataSource {
 
@@ -820,7 +1042,7 @@ export class DataCloudflareWorker extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWorker resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorker to import
-  * @param importFromId The id of the existing DataCloudflareWorker that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorker that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorker to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -832,18 +1054,18 @@ export class DataCloudflareWorker extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.18.0/docs/data-sources/worker cloudflare_worker} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/worker cloudflare_worker} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
-  * @param options DataCloudflareWorkerConfig
+  * @param options DataCloudflareWorkerConfig = {}
   */
-  public constructor(scope: Construct, id: string, config: DataCloudflareWorkerConfig) {
+  public constructor(scope: Construct, id: string, config: DataCloudflareWorkerConfig = {}) {
     super(scope, id, {
       terraformResourceType: 'cloudflare_worker',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.18.0'
+        providerVersion: '5.19.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -854,6 +1076,7 @@ export class DataCloudflareWorker extends cdktf.TerraformDataSource {
       forEach: config.forEach
     });
     this._accountId = config.accountId;
+    this._filter.internalValue = config.filter;
     this._workerId = config.workerId;
   }
 
@@ -861,13 +1084,16 @@ export class DataCloudflareWorker extends cdktf.TerraformDataSource {
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: false, required: true
+  // account_id - computed: false, optional: true, required: false
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
+  }
+  public resetAccountId() {
+    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {
@@ -877,6 +1103,27 @@ export class DataCloudflareWorker extends cdktf.TerraformDataSource {
   // created_on - computed: true, optional: false, required: false
   public get createdOn() {
     return this.getStringAttribute('created_on');
+  }
+
+  // deployed_on - computed: true, optional: false, required: false
+  public get deployedOn() {
+    return this.getStringAttribute('deployed_on');
+  }
+
+  // filter - computed: false, optional: true, required: false
+  private _filter = new DataCloudflareWorkerFilterOutputReference(this, "filter");
+  public get filter() {
+    return this._filter;
+  }
+  public putFilter(value: DataCloudflareWorkerFilter) {
+    this._filter.internalValue = value;
+  }
+  public resetFilter() {
+    this._filter.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get filterInput() {
+    return this._filter.internalValue;
   }
 
   // id - computed: true, optional: false, required: false
@@ -928,13 +1175,16 @@ export class DataCloudflareWorker extends cdktf.TerraformDataSource {
     return this.getStringAttribute('updated_on');
   }
 
-  // worker_id - computed: false, optional: false, required: true
+  // worker_id - computed: false, optional: true, required: false
   private _workerId?: string; 
   public get workerId() {
     return this.getStringAttribute('worker_id');
   }
   public set workerId(value: string) {
     this._workerId = value;
+  }
+  public resetWorkerId() {
+    this._workerId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get workerIdInput() {
@@ -948,6 +1198,7 @@ export class DataCloudflareWorker extends cdktf.TerraformDataSource {
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
+      filter: dataCloudflareWorkerFilterToTerraform(this._filter.internalValue),
       worker_id: cdktf.stringToTerraform(this._workerId),
     };
   }
@@ -959,6 +1210,12 @@ export class DataCloudflareWorker extends cdktf.TerraformDataSource {
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      filter: {
+        value: dataCloudflareWorkerFilterToHclTerraform(this._filter.internalValue),
+        isBlock: true,
+        type: "struct",
+        storageClassType: "DataCloudflareWorkerFilter",
       },
       worker_id: {
         value: cdktf.stringToHclTerraform(this._workerId),
