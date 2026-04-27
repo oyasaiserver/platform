@@ -1,10 +1,9 @@
 #!/usr/bin/env node --enable-source-maps
-import { parseArgs } from "node:util";
-import { join } from "node:path";
-import { URL } from "node:url";
 import { ModrinthV2Client } from "@xmcl/modrinth";
 import { ok } from "node:assert";
 import { writeFile } from "node:fs/promises";
+import { URL } from "node:url";
+import { parseArgs } from "node:util";
 
 const args = parseArgs({
   options: {

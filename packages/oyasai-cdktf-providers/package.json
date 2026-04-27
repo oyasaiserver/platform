@@ -10,12 +10,12 @@
   "scripts": {
     "build": "tsc"
   },
+  "dependencies": {
+    "@types/node": "^25.5.2"
+  },
   "peerDependencies": {
     "cdktf": "0.21.0",
     "constructs": "10.5.1",
     "typescript": "5.9.3"
-  },
-  "dependencies": {
-    "@types/node": "^25.5.2"
   }
 }

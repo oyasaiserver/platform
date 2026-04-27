@@ -1,10 +1,10 @@
+import { spawnSync } from "node:child_process";
 import { constants, readFileSync, writeFileSync } from "node:fs";
 import { EOL, homedir } from "node:os";
-import { spawnSync } from "node:child_process";
-import { URL } from "node:url";
-import { listNixStore, NIX_STORE_SNAPSHOT_PATH } from "./common.ts";
-import { getInput } from "./actions-toolkit.ts";
 import { join } from "node:path";
+import { URL } from "node:url";
+import { getInput } from "./actions-toolkit.ts";
+import { listNixStore, NIX_STORE_SNAPSHOT_PATH } from "./common.ts";
 
 const CHUNK_SIZE = 100;
 
