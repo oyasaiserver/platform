@@ -1,17 +1,16 @@
-import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
-import type { Construct } from "constructs";
-import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
-import { Project } from "@oyasaiserver/cdktf-providers/infisical/project";
-import { IdentityOidcAuth } from "@oyasaiserver/cdktf-providers/infisical/identity-oidc-auth";
+import { DataCloudflareRegistrarDomain } from "@oyasaiserver/cdktf-providers/cloudflare/data-cloudflare-registrar-domain";
+import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
+import { Zone } from "@oyasaiserver/cdktf-providers/cloudflare/zone";
+import { DataInfisicalSecrets } from "@oyasaiserver/cdktf-providers/infisical/data-infisical-secrets";
 import { Identity } from "@oyasaiserver/cdktf-providers/infisical/identity";
+import { IdentityOidcAuth } from "@oyasaiserver/cdktf-providers/infisical/identity-oidc-auth";
+import { Project } from "@oyasaiserver/cdktf-providers/infisical/project";
 import { ProjectEnvironment } from "@oyasaiserver/cdktf-providers/infisical/project-environment";
 import { ProjectIdentity } from "@oyasaiserver/cdktf-providers/infisical/project-identity";
-import { DataInfisicalSecrets } from "@oyasaiserver/cdktf-providers/infisical/data-infisical-secrets";
+import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
+import type { Construct } from "constructs";
 import { arrayToObject } from "../helpers.ts";
-import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
-import { RegistrarDomain } from "@oyasaiserver/cdktf-providers/cloudflare/registrar-domain";
-import { DataCloudflareRegistrarDomain } from "@oyasaiserver/cdktf-providers/cloudflare/data-cloudflare-registrar-domain";
-import { Zone } from "@oyasaiserver/cdktf-providers/cloudflare/zone";
+import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
 export const secretKeys = [
   // keep-sorted start

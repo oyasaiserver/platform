@@ -2,8 +2,8 @@ import { DnsRecord } from "@oyasaiserver/cdktf-providers/cloudflare/dns-record";
 import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
 import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
 import type { Construct } from "constructs";
-import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
 import type { CommonInfra } from "./common-infra.ts";
+import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
 
 type Props = {
   commonInfra: CommonInfra;
