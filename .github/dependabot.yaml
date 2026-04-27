@@ -2,7 +2,8 @@ version: 2
 
 updates:
   - package-ecosystem: "npm"
-    directory: "/"
+    directories:
+      - "packages/*"
     cooldown:
       default-days: 14
     schedule:
