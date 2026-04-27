@@ -1,5 +1,6 @@
 import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
 import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
+import { R2BucketLifecycle } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket-lifecycle";
 import { R2CustomDomain } from "@oyasaiserver/cdktf-providers/cloudflare/r2-custom-domain";
 import { ActionsOrganizationVariable } from "@oyasaiserver/cdktf-providers/github/actions-organization-variable";
 import { ActionsSecret } from "@oyasaiserver/cdktf-providers/github/actions-secret";
@@ -8,6 +9,7 @@ import { GithubProvider } from "@oyasaiserver/cdktf-providers/github/provider";
 import { Repository } from "@oyasaiserver/cdktf-providers/github/repository";
 import { RepositoryRuleset } from "@oyasaiserver/cdktf-providers/github/repository-ruleset";
 import type { Construct } from "constructs";
+import { DAY_IN_SECONDS } from "../helpers.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
@@ -32,6 +34,34 @@ export class CommonInternal extends OyasaiTerraformStack {
     const nixCacheBucket = new R2Bucket(this, "nix-cache-r2-bucket", {
       accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
       name: "nix-cache",
+      // Most popular location for GitHub Action runners
+      location: "enam",
+    });
+
+    const nixCacheExpirationDays = 7;
+
+    new R2BucketLifecycle(this, this.t("nix-cache-r2-bucket-lifecycle"), {
+      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+      bucketName: nixCacheBucket.name,
+      rules: [
+        {
+          id: `Expire all cache after ${nixCacheExpirationDays} days`,
+          enabled: true,
+          conditions: {
+            prefix: "", // everything
+          },
+          // S3 lifecycle expiry is based on upload time, not last access. Since
+          // `nix copy` skips entries that already exist, timestamps are never
+          // refreshed on reuse. Run `nix copy --force` periodically to reset
+          // object age and avoid eviction.
+          deleteObjectsTransition: {
+            condition: {
+              type: "Age",
+              maxAge: nixCacheExpirationDays * DAY_IN_SECONDS,
+            },
+          },
+        },
+      ],
     });
 
     // Practically read-only because Cloudflare limits upload to 100MB for
