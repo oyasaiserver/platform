@@ -2,6 +2,8 @@ import type { ContainerPorts } from "@oyasaiserver/cdktf-providers/docker/contai
 import { ok } from "node:assert";
 import { env } from "node:process";
 
+export const DAY_IN_SECONDS = 24 * 60 * 60;
+
 export function envs(
   object: Readonly<Record<string, string | number | boolean>>,
 ): string[] {
