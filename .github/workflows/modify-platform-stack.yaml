@@ -58,7 +58,7 @@ jobs:
         run: |
           nix build .#all-docker-tags.json
           echo "OYASAI_IMAGE_ID=$(<result tee /dev/stderr)" >> "$GITHUB_ENV"
-      - uses: infisical/secrets-action@2f82400bf354ef2cf466ee0590e0ea86db9c1336
+      - uses: infisical/secrets-action@77ab1f4ccd183a543cb5b42435fbd181189f4995
         with:
           method: oidc
           env-slug: common
