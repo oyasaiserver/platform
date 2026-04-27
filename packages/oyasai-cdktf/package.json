@@ -11,7 +11,7 @@
   "dependencies": {
     "@oyasaiserver/cdktf-providers": "file:../oyasai-cdktf-providers",
     "cdktf": "0.21.0",
-    "constructs": "10.5.1"
+    "constructs": "10.6.0"
   },
   "peerDependencies": {
     "@types/node": "25.0.3",

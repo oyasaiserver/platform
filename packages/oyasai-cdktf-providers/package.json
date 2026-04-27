@@ -11,7 +11,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@types/node": "^25.5.2"
+    "@types/node": "^25.6.0"
   },
   "peerDependencies": {
     "cdktf": "0.21.0",
