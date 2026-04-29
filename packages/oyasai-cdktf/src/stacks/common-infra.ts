@@ -1,7 +1,6 @@
 import { DataCloudflareRegistrarDomain } from "@oyasaiserver/cdktf-providers/cloudflare/data-cloudflare-registrar-domain";
 import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
 import { Zone } from "@oyasaiserver/cdktf-providers/cloudflare/zone";
-import { DataInfisicalSecrets } from "@oyasaiserver/cdktf-providers/infisical/data-infisical-secrets";
 import { Identity } from "@oyasaiserver/cdktf-providers/infisical/identity";
 import { IdentityOidcAuth } from "@oyasaiserver/cdktf-providers/infisical/identity-oidc-auth";
 import { Project } from "@oyasaiserver/cdktf-providers/infisical/project";
@@ -9,32 +8,17 @@ import { ProjectEnvironment } from "@oyasaiserver/cdktf-providers/infisical/proj
 import { ProjectIdentity } from "@oyasaiserver/cdktf-providers/infisical/project-identity";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
 import type { Construct } from "constructs";
-import { arrayToObject } from "../helpers.ts";
+import { createSecrets } from "../secrets.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
-
-export const secretKeys = [
-  // keep-sorted start
-  "CLOUDFLARE_ACCESS_KEY_ID",
-  "CLOUDFLARE_ACCOUNT_ID",
-  "CLOUDFLARE_SECRET_ACCESS_KEY",
-  "MARIADB_PASSWORD",
-  "NIX_CACHE_SIGNING_KEY",
-  "RCON_PASSWORD",
-  "RESTIC_PASSWORD",
-  "TLS_CA_PEM",
-  "TLS_CERT_PEM",
-  "TLS_KEY_PEM",
-  // keep-sorted end
-] as const;
-
-export type SecretKey = (typeof secretKeys)[number];
 
 export class CommonInfra extends OyasaiTerraformStack {
   private readonly infisicalOrgId = "a8e8e008-81e0-4a4f-81a9-8441c6820e7e";
 
-  public readonly secrets: Record<SecretKey, string>;
   public readonly oyasaiIoRegistrarDomain: DataCloudflareRegistrarDomain;
   public readonly oyasaiIoZone: Zone;
+
+  public readonly platformInfisicalProject: Project;
+  public readonly platformInfisicalProjectEnvironment: ProjectEnvironment;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -67,7 +51,7 @@ export class CommonInfra extends OyasaiTerraformStack {
       },
     );
 
-    const platformInfisicalProject = new Project(
+    this.platformInfisicalProject = new Project(
       this,
       this.t("platform-infisical-project"),
       {
@@ -77,7 +61,7 @@ export class CommonInfra extends OyasaiTerraformStack {
     );
 
     new ProjectIdentity(this, this.t("platform-machine-project-identity"), {
-      projectId: platformInfisicalProject.id,
+      projectId: this.platformInfisicalProject.id,
       identityId: platformInfisicalMachineIdentity.id,
       roles: [
         {
@@ -86,31 +70,17 @@ export class CommonInfra extends OyasaiTerraformStack {
       ],
     });
 
-    const platformInfisicalProjectEnvironment = new ProjectEnvironment(
+    this.platformInfisicalProjectEnvironment = new ProjectEnvironment(
       this,
       this.t("platform-common-infisical-project-environment"),
       {
         name: "common",
-        projectId: platformInfisicalProject.id,
+        projectId: this.platformInfisicalProject.id,
         slug: "common",
       },
     );
 
-    const dataSecrets = new DataInfisicalSecrets(
-      this,
-      this.t("platform-data-infisical-secrets"),
-      {
-        folderPath: "/",
-        workspaceId: platformInfisicalProject.id,
-        envSlug: platformInfisicalProjectEnvironment.slug,
-      },
-    );
-
-    // FIXME: Should use dataSecrets.get(...) but ComplexMap.get() generates
-    // malformed TF expressions when CDKTF serializses to CSO. - shun 2026-04
-    this.secrets = arrayToObject(secretKeys, (k) => {
-      return dataSecrets.getStringAttribute(`secrets["${k}"].value`);
-    });
+    const secrets = createSecrets(this, this);
 
     // TODO: Data because Cloudflare doesn't support importing registrar domain
     // - shun 2026-04
@@ -118,14 +88,14 @@ export class CommonInfra extends OyasaiTerraformStack {
       this,
       this.t("oyasai-io-registrar-domain"),
       {
-        accountId: this.secrets.CLOUDFLARE_ACCOUNT_ID,
+        accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
         domainName: "oyasai.io",
       },
     );
 
     this.oyasaiIoZone = new Zone(this, "oyasai-io-zone", {
       account: {
-        id: this.secrets.CLOUDFLARE_ACCOUNT_ID,
+        id: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
       },
       name: this.oyasaiIoRegistrarDomain.domainName,
       type: "full",

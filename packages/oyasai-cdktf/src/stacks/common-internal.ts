@@ -8,8 +8,10 @@ import { BranchDefault } from "@oyasaiserver/cdktf-providers/github/branch-defau
 import { GithubProvider } from "@oyasaiserver/cdktf-providers/github/provider";
 import { Repository } from "@oyasaiserver/cdktf-providers/github/repository";
 import { RepositoryRuleset } from "@oyasaiserver/cdktf-providers/github/repository-ruleset";
+import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
 import type { Construct } from "constructs";
 import { DAY_IN_SECONDS } from "../helpers.ts";
+import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
@@ -25,14 +27,17 @@ export class CommonInternal extends OyasaiTerraformStack {
   constructor(scope: Construct, id: string, { commonInfra }: Props) {
     super(scope, id);
 
-    const { secrets, oyasaiIoRegistrarDomain, oyasaiIoZone } = commonInfra;
-
     this.createCloudBackend();
 
     new CloudflareProvider(this, this.t("cloudflare-provider"));
 
+    new InfisicalProvider(this, this.t("infisical-provider"));
+
+    const { oyasaiIoRegistrarDomain, oyasaiIoZone } = commonInfra;
+    const secrets = createSecrets(this, commonInfra);
+
     const nixCacheBucket = new R2Bucket(this, "nix-cache-r2-bucket", {
-      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+      accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
       name: "nix-cache",
       // Most popular location for GitHub Action runners
       location: "enam",
@@ -41,7 +46,7 @@ export class CommonInternal extends OyasaiTerraformStack {
     const nixCacheExpirationDays = 7;
 
     new R2BucketLifecycle(this, this.t("nix-cache-r2-bucket-lifecycle"), {
-      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+      accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
       bucketName: nixCacheBucket.name,
       rules: [
         {
@@ -69,7 +74,7 @@ export class CommonInternal extends OyasaiTerraformStack {
     //
     // https://developers.cloudflare.com/support/troubleshooting/http-status-codes/4xx-client-error/error-413/#cloudflare-specific-information
     new R2CustomDomain(this, "nix-cache-r2-custom-domain", {
-      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+      accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
       bucketName: nixCacheBucket.name,
       domain: `nix-cache.${oyasaiIoRegistrarDomain.domainName}`,
       enabled: true,
@@ -175,7 +180,7 @@ export class CommonInternal extends OyasaiTerraformStack {
       this.t("nix-cache-substituter-actions-org-variable"),
       {
         variableName: "NIX_CACHE_SUBSTITUTER",
-        value: `s3://${nixCacheBucket.name}?endpoint=${secrets.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com&compression=zstd`,
+        value: `s3://${nixCacheBucket.name}?endpoint=${secrets.get("CLOUDFLARE_ACCOUNT_ID")}.r2.cloudflarestorage.com&compression=zstd`,
         visibility: "all",
       },
     );
@@ -184,7 +189,7 @@ export class CommonInternal extends OyasaiTerraformStack {
     new ActionsSecret(this, this.t("nix-cache-signing-key-actions-secret"), {
       repository: platformRepository.name,
       secretName: "NIX_CACHE_SIGNING_KEY",
-      value: secrets.NIX_CACHE_SIGNING_KEY,
+      value: secrets.get("NIX_CACHE_SIGNING_KEY"),
     });
     new ActionsSecret(
       this,
@@ -192,7 +197,7 @@ export class CommonInternal extends OyasaiTerraformStack {
       {
         repository: platformRepository.name,
         secretName: "CLOUDFLARE_ACCESS_KEY_ID",
-        value: secrets.CLOUDFLARE_ACCESS_KEY_ID,
+        value: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
       },
     );
     new ActionsSecret(
@@ -201,7 +206,7 @@ export class CommonInternal extends OyasaiTerraformStack {
       {
         repository: platformRepository.name,
         secretName: "CLOUDFLARE_SECRET_ACCESS_KEY",
-        value: secrets.CLOUDFLARE_SECRET_ACCESS_KEY,
+        value: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
       },
     );
   }
