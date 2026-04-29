@@ -1,7 +1,9 @@
 import { DnsRecord } from "@oyasaiserver/cdktf-providers/cloudflare/dns-record";
 import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
 import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
+import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
 import type { Construct } from "constructs";
+import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
 
@@ -24,12 +26,15 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
 
     this.createCloudBackend();
 
-    const { secrets, oyasaiIoZone, oyasaiIoRegistrarDomain } = commonInfra;
-
     new CloudflareProvider(this, this.t("cloudflare-provider"));
 
+    new InfisicalProvider(this, this.t("infisical-provider"));
+
+    const { oyasaiIoZone, oyasaiIoRegistrarDomain } = commonInfra;
+    const secrets = createSecrets(this, commonInfra);
+
     this.r2Bucket = new R2Bucket(this, this.t("r2-bucket"), {
-      accountId: secrets.CLOUDFLARE_ACCOUNT_ID,
+      accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
       name: `oyasai-${this.t("platform")}`,
       // If master, pick the closest to on-prem server location, otherwise use
       // the most popular location for GitHub Action runners.

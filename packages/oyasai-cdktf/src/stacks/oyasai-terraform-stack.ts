@@ -12,7 +12,7 @@ export abstract class OyasaiTerraformStack extends TerraformStack {
     this.id = id;
   }
 
-  protected t(...fragments: string[]): string {
+  t(...fragments: string[]): string {
     return fragments.join("-");
   }
 
@@ -38,7 +38,7 @@ export abstract class OyasaiPlatformTerraformStack extends OyasaiTerraformStack 
     this.isMaster = this.environment === "master";
   }
 
-  protected override t(...fragments: string[]): string {
+  override t(...fragments: string[]): string {
     return super.t(this.environment, ...fragments);
   }
 }
