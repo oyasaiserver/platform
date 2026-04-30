@@ -72,6 +72,10 @@ jobs:
             ${{ inputs.stack }}
       - name: ${{ inputs.operation }}
         run: |
+          nix profile add nixpkgs#infisical
+          INFISICAL_TOKEN=$(infisical user get token --plain --silent)
+          echo "::add-mask::$INFISICAL_TOKEN"
+          export INFISICAL_TOKEN
           nix run .#oyasai-cdktf -- \
             ${{ inputs.operation }} \
             ${{ inputs.stack }} \
