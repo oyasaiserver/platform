@@ -27,10 +27,12 @@ let
       motd=§l§r                 §b§lOyasai§f§lServer§7 [v${version}]§r\n§l§f            建築勢は集合だ！建築！建築！建築！！！
       network-compression-threshold=96
       pvp=false
+      simulation-distance=16
       spawn-animals=false
       spawn-npcs=false
       spawn-protection=0
-      view-distance=24
+      sync-chunk-writes=false
+      view-distance=32
       enable-rcon=true
       rcon.port=25575
     '';
