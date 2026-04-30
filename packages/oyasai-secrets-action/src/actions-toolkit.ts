@@ -7,32 +7,17 @@
 import { ok } from "node:assert";
 import { randomUUID } from "node:crypto";
 import { appendFileSync } from "node:fs";
-import { env } from "node:process";
+import { env, stdout } from "node:process";
 import { URL } from "node:url";
 
 export interface InputOptions {
   required?: boolean;
 }
 
-/*
- * Inspired by: https://github.com/actions/toolkit/blob/b68d046fe39bcaf86bb49660cb3f307c35d6efb9/packages/core/src/core.ts#L151
- */
 export function getInput(name: string, options?: InputOptions): string {
   const val = env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] ?? "";
   ok(!options?.required || val, `Missing required input: ${name}`);
   return val.trim();
-}
-
-export function getBooleanInput(name: string): boolean {
-  const val = getInput(name).toLowerCase();
-  if (["true", "yes", "1"].includes(val)) return true;
-  if (["false", "no", "0"].includes(val)) return false;
-  throw new TypeError(`Input "${name}" is not a boolean: "${val}"`);
-}
-
-export function setFailed(message: string): void {
-  issueCommand("error", {}, message);
-  process.exitCode = 1;
 }
 
 export function exportVariable(name: string, val: string): void {
@@ -40,7 +25,7 @@ export function exportVariable(name: string, val: string): void {
     /^[A-Za-z_][A-Za-z0-9_]*$/.test(name),
     `Invalid environment variable name: "${name}"`,
   );
-  const envFile = process.env.GITHUB_ENV;
+  const envFile = env.GITHUB_ENV;
   if (envFile) {
     const delimiter = `ghadelimiter_${randomUUID()}`;
     appendFileSync(envFile, `${name}<<${delimiter}\n${val}\n${delimiter}\n`);
@@ -54,8 +39,8 @@ export function setSecret(secret: string): void {
 }
 
 export async function getIDToken(audience: string): Promise<string> {
-  const tokenUrl = process.env.ACTIONS_ID_TOKEN_REQUEST_URL;
-  const tokenRequest = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
+  const tokenUrl = env.ACTIONS_ID_TOKEN_REQUEST_URL;
+  const tokenRequest = env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
 
   if (!tokenUrl || !tokenRequest) {
     throw new Error(
@@ -78,14 +63,6 @@ export async function getIDToken(audience: string): Promise<string> {
   return data.value;
 }
 
-export function info(message: string): void {
-  process.stdout.write(`${message}\n`);
-}
-
-export function debug(message: string): void {
-  issueCommand("debug", {}, message);
-}
-
 function issueCommand(
   command: string,
   properties: Record<string, string>,
@@ -94,7 +71,7 @@ function issueCommand(
   const cmdStr = Object.entries(properties)
     .map(([k, v]) => `${k}=${escapeProperty(v)}`)
     .join(",");
-  process.stdout.write(
+  stdout.write(
     `::${command}${cmdStr ? ` ${cmdStr}` : ""}::${escapeData(data)}\n`,
   );
 }
