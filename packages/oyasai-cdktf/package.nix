@@ -4,20 +4,25 @@
   terraform,
   writeShellApplication,
   lib,
+  oyasaiMakeSecretsWrapper,
 }:
 let
   oyasaiCdktf = package-lock2nix.mkNpmModule { src = ./.; };
-in
-writeShellApplication {
-  name = "oyasai-cdktf";
-  runtimeEnv = {
-    CDKTF_APP = lib.getExe oyasaiCdktf;
+  main = writeShellApplication {
+    name = "oyasai-cdktf-main";
+    runtimeEnv = {
+      CDKTF_APP = lib.getExe oyasaiCdktf;
+    };
+    runtimeInputs = [
+      cdktf-cli
+      terraform
+    ];
+    text = ''
+      cdktf "$@"
+    '';
   };
-  runtimeInputs = [
-    cdktf-cli
-    terraform
-  ];
-  text = ''
-    cdktf "$@"
-  '';
+in
+oyasaiMakeSecretsWrapper {
+  inherit main;
+  name = "oyasai-cdktf";
 }

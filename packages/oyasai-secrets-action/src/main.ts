@@ -59,22 +59,8 @@ async function main() {
   const secretPath = getInput("secret-path");
 
   const infisicalToken = await oidcLogin(domain, identityId, oidcAudience);
-
   setSecret(infisicalToken);
   exportVariable("INFISICAL_TOKEN", infisicalToken);
-
-  const secrets = await getSecrets({
-    domain,
-    envSlug,
-    infisicalToken,
-    projectSlug,
-    secretPath,
-  });
-
-  for (const { secretKey, secretValue } of secrets) {
-    setSecret(secretValue);
-    exportVariable(secretKey, secretValue);
-  }
 }
 
 main();

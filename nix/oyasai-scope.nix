@@ -77,6 +77,8 @@ lib.makeScope pkgs.newScope (
     oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
 
     oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
+
+    oyasaiMakeSecretsWrapper = callPackage ./oyasai-make-secrets-wrapper.nix { };
   }
   // lib.packagesFromDirectoryRecursive {
     inherit callPackage;
