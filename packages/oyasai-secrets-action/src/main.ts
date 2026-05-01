@@ -1,138 +1,79 @@
 import {
-  debug,
   exportVariable,
-  getBooleanInput,
   getIDToken,
   getInput,
-  info,
-  setFailed,
   setSecret,
 } from "./actions-toolkit.ts";
+import type {
+  GetSecretsOptions,
+  GetSecretsResponse,
+  OidcLoginResponse,
+} from "./types.ts";
 
 async function oidcLogin(
   domain: string,
   identityId: string,
   oidcAudience: string,
 ) {
-  const idToken = await getIDToken(oidcAudience);
-
-  const response = await fetch(`${domain}/api/v1/auth/oidc-auth/login`, {
+  const jwt = await getIDToken(oidcAudience);
+  const url = new URL("/api/v1/auth/oidc-auth/login", domain);
+  const response = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ identityId, jwt: idToken }).toString(),
+    body: new URLSearchParams({
+      identityId,
+      jwt,
+    }),
   });
-
-  if (!response.ok) {
-    const err = (await response.json().catch(() => ({}))) as {
-      message?: string;
-    };
-    throw new Error(
-      `OIDC login failed: ${err?.message ?? response.statusText}`,
-    );
-  }
-
-  const data = (await response.json()) as { accessToken: string };
-  return data.accessToken;
+  const { accessToken } = (await response.json()) as OidcLoginResponse;
+  return accessToken;
 }
 
-async function getRawSecrets({
+async function getSecrets({
   domain,
   envSlug,
   infisicalToken,
   projectSlug,
   secretPath,
-  shouldIncludeImports,
-  shouldRecurse,
-}: {
-  domain: string;
-  envSlug: string;
-  infisicalToken: string;
-  projectSlug: string;
-  secretPath: string;
-  shouldIncludeImports: boolean;
-  shouldRecurse: boolean;
-}) {
-  const params = new URLSearchParams({
-    secretPath,
-    environment: envSlug,
-    include_imports: String(shouldIncludeImports),
-    recursive: String(shouldRecurse),
-    workspaceSlug: projectSlug,
-    expandSecretReferences: "true",
+}: GetSecretsOptions) {
+  const url = new URL("/api/v3/secrets/raw", domain);
+  url.searchParams.set("secretPath", secretPath);
+  url.searchParams.set("environment", envSlug);
+  url.searchParams.set("workspaceSlug", projectSlug);
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${infisicalToken}`,
+    },
   });
-
-  const response = await fetch(`${domain}/api/v3/secrets/raw?${params}`, {
-    headers: { Authorization: `Bearer ${infisicalToken}` },
-  });
-
-  if (!response.ok) {
-    const err = (await response.json().catch(() => ({}))) as {
-      message?: string;
-    };
-    throw new Error(
-      `Failed to fetch secrets: ${err?.message ?? response.statusText}`,
-    );
-  }
-
-  const result = (await response.json()) as {
-    secrets: { secretKey: string; secretValue: string }[];
-    imports?: { secrets: { secretKey: string; secretValue: string }[] }[];
-  };
-
-  const keyValueSecrets = Object.fromEntries(
-    result.secrets.map((s) => [s.secretKey, s.secretValue]),
-  );
-
-  if (result.imports) {
-    for (let i = result.imports.length - 1; i >= 0; i--) {
-      result.imports[i]?.secrets.forEach((s) => {
-        if (keyValueSecrets[s.secretKey] === undefined) {
-          keyValueSecrets[s.secretKey] = s.secretValue;
-        }
-      });
-    }
-  }
-
-  return keyValueSecrets;
+  const { secrets } = (await response.json()) as GetSecretsResponse;
+  return secrets;
 }
 
 async function main() {
-  try {
-    const identityId = getInput("identity-id", { required: true });
-    const oidcAudience = getInput("oidc-audience");
-    const domain = getInput("domain", { required: true });
-    const envSlug = getInput("env-slug", { required: true });
-    const projectSlug = getInput("project-slug", { required: true });
-    const secretPath = getInput("secret-path");
-    const shouldIncludeImports = getBooleanInput("include-imports");
-    const shouldRecurse = getBooleanInput("recursive");
+  const identityId = getInput("identity-id", { required: true });
+  const oidcAudience = getInput("oidc-audience");
+  const domain = getInput("domain", { required: true });
+  const envSlug = getInput("env-slug", { required: true });
+  const projectSlug = getInput("project-slug", { required: true });
+  const secretPath = getInput("secret-path");
 
-    const infisicalToken = await oidcLogin(domain, identityId, oidcAudience);
-    setSecret(infisicalToken);
-    exportVariable("INFISICAL_TOKEN", infisicalToken);
+  const infisicalToken = await oidcLogin(domain, identityId, oidcAudience);
 
-    const keyValueSecrets = await getRawSecrets({
-      domain,
-      envSlug,
-      infisicalToken,
-      projectSlug,
-      secretPath,
-      shouldIncludeImports,
-      shouldRecurse,
-    });
+  setSecret(infisicalToken);
+  exportVariable("INFISICAL_TOKEN", infisicalToken);
 
-    debug(
-      `Exporting the following envs: ${JSON.stringify(Object.keys(keyValueSecrets))}`,
-    );
+  const secrets = await getSecrets({
+    domain,
+    envSlug,
+    infisicalToken,
+    projectSlug,
+    secretPath,
+  });
 
-    Object.entries(keyValueSecrets).forEach(([key, value]) => {
-      setSecret(value);
-      exportVariable(key, value);
-    });
-
-    info("Injected secrets as environment variables");
-  } catch (err) {
-    setFailed((err as Error)?.message);
+  for (const { secretKey, secretValue } of secrets) {
+    setSecret(secretValue);
+    exportVariable(secretKey, secretValue);
   }
 }
 

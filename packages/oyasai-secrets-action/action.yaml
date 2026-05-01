@@ -23,14 +23,6 @@ inputs:
     description: Path within the project to fetch secrets from.
     required: false
     default: "/"
-  include-imports:
-    description: Whether to include imported secrets.
-    required: false
-    default: "true"
-  recursive:
-    description: Whether to fetch secrets recursively from sub-paths.
-    required: false
-    default: "false"
 
 runs:
   using: node24
