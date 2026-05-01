@@ -72,16 +72,16 @@ object IsCandidate : CommandExecutor {
                                     "ログイン日数: $joinDays/${next.minJoinDays}日 ${if (joinDays >= next.minJoinDays) "§a(達成)" else "§c(未達成)"}"
                                 val messageElapse =
                                     "経過日数: ${
-                        ChronoUnit.DAYS.between(
-                          DateTimeUtils.unixToJST(player.firstPlayed),
-                          DateTimeUtils.getCurrentJST()
-                        )
-                      }/${next.minElapse}日 ${
-                        if (ChronoUnit.DAYS.between(
-                            DateTimeUtils.unixToJST(player.firstPlayed), DateTimeUtils.getCurrentJST(),
-                          ) >= next.minElapse
-                        ) "§a(達成)" else "§c(未達成)"
-                      }"
+                                      ChronoUnit.DAYS.between(
+                                        DateTimeUtils.unixToJST(player.firstPlayed),
+                                        DateTimeUtils.getCurrentJST()
+                                      )
+                                    }/${next.minElapse}日 ${
+                                      if (ChronoUnit.DAYS.between(
+                                          DateTimeUtils.unixToJST(player.firstPlayed), DateTimeUtils.getCurrentJST(),
+                                        ) >= next.minElapse
+                                      ) "§a(達成)" else "§c(未達成)"
+                                    }"
                                 val messageBuildCount =
                                     "建築数: $buildCount/${next.minBuilds}個 ${if (buildCount >= next.minBuilds) "§a(達成)" else "§c(未達成)"}"
                                 sender.sendMessage(messageHour)

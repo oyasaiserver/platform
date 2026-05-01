@@ -56,56 +56,48 @@ object SeePlayerInfo : CommandExecutor {
                     if (lastPromo != null) DateTimeUtils.parseToJST(lastPromo.date)
                     else DateTimeUtils.getCurrentJST()
 
-                Bukkit.getScheduler()
-                    .runTask(
-                        plugin,
-                        Runnable {
-                          sender.sendMessage("§e${playerName}さんの情報:")
-                          val rankFuture = PermsUtils.getCurrentRank(player.uniqueId)
+                sender.sendMessage("§e${playerName}さんの情報:")
+                val rankFuture = PermsUtils.getCurrentRank(player.uniqueId)
 
-                          rankFuture.thenAccept { rank ->
-                            Bukkit.getScheduler()
-                                .runTask(
-                                    plugin,
-                                    Runnable {
-                                      sender.sendMessage(
-                                          " - §a現在のランク: §r${rank?.name} (ID: ${rank?.groupName})")
-                                      sender.sendMessage(
-                                          " - §a最後の昇格日: §e${lastPromo?.date} (${
-                  ChronoUnit.DAYS.between(
-                    lastPromoDate,
-                    DateTimeUtils.getCurrentJST(),
-                  )
-                }日前)")
-                                      sender.sendMessage(
-                                          " - §a初回ログイン: §e${statsData.getFirstPlayed()}")
-                                      sender.sendMessage(
-                                          " - §a最終ログイン: §e${statsData.getLastOnlineTime()}")
-                                      sender.sendMessage(" - §aログイン回数: §e${statsData.join}回")
-                                      sender.sendMessage(
-                                          " - §a総プレイ時間: §e${statsData.getPlayTime()}")
-                                      sender.sendMessage(" - §a建築数: §e${builds.size}個")
-                                      if (builds.isNotEmpty()) {
-                                        val firstBuild = builds.minByOrNull { it.time }
-                                        val lastBuild = builds.maxByOrNull { it.time }
-                                        sender.sendMessage(
-                                            " - §a初建築: §e${DateTimeUtils.formatToString(firstBuild?.time ?: LocalDateTime.now())}, §a経過日数: ${
-                    ChronoUnit.DAYS.between(
-                      firstBuild?.time,
-                      LocalDateTime.now(),
-                    )
-                  }")
-                                        sender.sendMessage(
-                                            " - §a最終建築: §e${DateTimeUtils.formatToString(lastBuild?.time ?: LocalDateTime.now())}, §a経過日数: ${
-                    ChronoUnit.DAYS.between(
-                      lastBuild?.time,
-                      LocalDateTime.now(),
-                    )
-                  }")
-                                      }
-                                    })
-                          }
-                        })
+                rankFuture.thenAccept { rank ->
+                  Bukkit.getScheduler()
+                      .runTask(
+                          plugin,
+                          Runnable {
+                            sender.sendMessage(
+                                " - §a現在のランク: §r${rank?.name} (ID: ${rank?.groupName})")
+                            sender.sendMessage(
+                                " - §a最後の昇格日: §e${lastPromo?.date} (${
+                            ChronoUnit.DAYS.between(
+                              lastPromoDate,
+                              DateTimeUtils.getCurrentJST(),
+                            )
+                          }日前)")
+                            sender.sendMessage(" - §a初回ログイン: §e${statsData.getFirstPlayed()}")
+                            sender.sendMessage(" - §a最終ログイン: §e${statsData.getLastOnlineTime()}")
+                            sender.sendMessage(" - §aログイン回数: §e${statsData.join}回")
+                            sender.sendMessage(" - §a総プレイ時間: §e${statsData.getPlayTime()}")
+                            sender.sendMessage(" - §a建築数: §e${builds.size}個")
+                            if (builds.isNotEmpty()) {
+                              val firstBuild = builds.minByOrNull { it.time }
+                              val lastBuild = builds.maxByOrNull { it.time }
+                              sender.sendMessage(
+                                  " - §a初建築: §e${DateTimeUtils.formatToString(firstBuild?.time ?: LocalDateTime.now())}, §a経過日数: ${
+                              ChronoUnit.DAYS.between(
+                                firstBuild?.time,
+                                LocalDateTime.now(),
+                              )
+                            }")
+                              sender.sendMessage(
+                                  " - §a最終建築: §e${DateTimeUtils.formatToString(lastBuild?.time ?: LocalDateTime.now())}, §a経過日数: ${
+                              ChronoUnit.DAYS.between(
+                                lastBuild?.time,
+                                LocalDateTime.now(),
+                              )
+                            }")
+                            }
+                          })
+                }
               } else {
                 // GUI一覧表示・チャットで1個ずつ表示
                 val history = getStats(player.uniqueId).promotions
@@ -121,88 +113,75 @@ object SeePlayerInfo : CommandExecutor {
                     return@Runnable
                   }
 
-                  Bukkit.getScheduler()
-                      .runTask(
-                          plugin,
-                          Runnable {
-                            sender.sendMessage("§e${playerName}さんの昇格履歴:")
-                            if (history.records.isEmpty()) {
-                              sender.sendMessage(" - 昇格履歴がありません。")
-                            } else {
-                              val record = history.records.sortedByDescending { it.date }.get(page)
+                  sender.sendMessage("§e${playerName}さんの昇格履歴:")
+                  if (history.records.isEmpty()) {
+                    sender.sendMessage(" - 昇格履歴がありません。")
+                  } else {
+                    val record = history.records.sortedByDescending { it.date }.get(page)
 
-                              // type 昇格・降格
-                              // date 昇格日：
-                              // previousRank -> newRank
-                              // note　備考
-                              // promotedBy　昇格者：
-                              // isForced　特例昇格：
-                              // lastBuildID　最後の建築ID
-                              // builds　建築数
-                              // lastLv　昇格時点のレベル
-                              // lastExp　昇格時点の経験値
-                              // << (r/n) >>　ページ切り替え(1ページ1件)、クリック可
+                    // type 昇格・降格
+                    // date 昇格日：
+                    // previousRank -> newRank
+                    // note　備考
+                    // promotedBy　昇格者：
+                    // isForced　特例昇格：
+                    // lastBuildID　最後の建築ID
+                    // builds　建築数
+                    // lastLv　昇格時点のレベル
+                    // lastExp　昇格時点の経験値
+                    // << (r/n) >>　ページ切り替え(1ページ1件)、クリック可
 
-                              val message =
-                                  Component.text(
-                                          "===============${page + 1}/${history.records.size}=============")
-                                      .appendNewline()
-                                      .append(Component.text(" - 日付: ${record.date}"))
-                                      .appendNewline()
-                                      .append(Component.text(" - 種類: ${record.type}"))
-                                      .appendNewline()
-                                      .append(
-                                          Component.text(
-                                              " - ランク: ${record.previousRank} -> ${record.newRank}"))
-                                      .appendNewline()
-                                      .append(Component.text(" - 備考: ${record.note}"))
-                                      .appendNewline()
-                                      .append(
-                                          Component.text(
-                                              " - 昇格者: ${Bukkit.getOfflinePlayer(UUID.fromString(record.promotedBy)).name}"))
-                                      .appendNewline()
-                                      .append(
-                                          Component.text(
-                                              " - 特例昇格: ${if (record.isForced) "はい" else "いいえ"}"))
-                                      .appendNewline()
-                                      .append(
-                                          Component.text(" - プレイ時間: ${record.playedSec / 3600}時間"))
-                                      .appendNewline()
-                                      .append(
-                                          Component.text(" - 最後の建築ID: ${record.lastBuildID}")
-                                              .clickEvent(
-                                                  ClickEvent.runCommand(
-                                                      "sltp ${record.lastBuildID}")))
-                                      .appendNewline()
-                                      .append(Component.text(" - 建築数: ${record.builds}"))
-                                      .appendNewline()
-                                      .append(Component.text(" - 昇格時点のレベル: ${record.lastLv}"))
-                                      .appendNewline()
-                                      .append(Component.text(" - 昇格時点の経験値: ${record.lastExp}"))
-                                      .appendNewline()
-                                      .append(
-                                          Component.text("<<================")
-                                              .hoverEvent(
-                                                  HoverEvent.showText(
-                                                      Component.text("クリックして前のページ")))
-                                              .clickEvent(
-                                                  ClickEvent.runCommand(
-                                                      "syokaku seeplayerinfo ${playerName} ${page}")))
-                                      //
-                                      // .append(Component.text("<<<<<<<<<<<<<<<").clickEvent(ClickEvent.runCommand("syokaku
-                                      // ${playerName} ${if(page+1<history.records.size) page+1 else
-                                      // page}")))//ページを戻る
-                                      .append(
-                                          Component.text("================>>")
-                                              .hoverEvent(
-                                                  HoverEvent.showText(
-                                                      Component.text("クリックして次のページ")))
-                                              .clickEvent(
-                                                  ClickEvent.runCommand(
-                                                      "syokaku seeplayerinfo ${playerName} ${page + 2}")))
-                              sender.sendMessage(message)
-                            }
-                          })
+                    val message =
+                        Component.text(
+                                "===============${page + 1}/${history.records.size}=============")
+                            .appendNewline()
+                            .append(Component.text(" - 日付: ${record.date}"))
+                            .appendNewline()
+                            .append(Component.text(" - 種類: ${record.type}"))
+                            .appendNewline()
+                            .append(
+                                Component.text(
+                                    " - ランク: ${record.previousRank} -> ${record.newRank}"))
+                            .appendNewline()
+                            .append(Component.text(" - 備考: ${record.note}"))
+                            .appendNewline()
+                            .append(
+                                Component.text(
+                                    " - 昇格者: ${Bukkit.getOfflinePlayer(UUID.fromString(record.promotedBy)).name}"))
+                            .appendNewline()
+                            .append(
+                                Component.text(" - 特例昇格: ${if (record.isForced) "はい" else "いいえ"}"))
+                            .appendNewline()
+                            .append(Component.text(" - プレイ時間: ${record.playedSec / 3600}時間"))
+                            .appendNewline()
+                            .append(
+                                Component.text(" - 最後の建築ID: ${record.lastBuildID}")
+                                    .clickEvent(
+                                        ClickEvent.runCommand("sltp ${record.lastBuildID}")))
+                            .appendNewline()
+                            .append(Component.text(" - 建築数: ${record.builds}"))
+                            .appendNewline()
+                            .append(Component.text(" - 昇格時点のレベル: ${record.lastLv}"))
+                            .appendNewline()
+                            .append(Component.text(" - 昇格時点の経験値: ${record.lastExp}"))
+                            .appendNewline()
+                            .append(
+                                Component.text("<<================")
+                                    .hoverEvent(HoverEvent.showText(Component.text("クリックして前のページ")))
+                                    .clickEvent(
+                                        ClickEvent.runCommand(
+                                            "syokaku seeplayerinfo ${playerName} ${page}")))
+                            //
+                            // .append(Component.text("<<<<<<<<<<<<<<<").clickEvent(ClickEvent.runCommand("syokaku
+                            // ${playerName} ${if(page+1<history.records.size) page+1 else page}")))//ページを戻る
+                            .append(
+                                Component.text("================>>")
+                                    .hoverEvent(HoverEvent.showText(Component.text("クリックして次のページ")))
+                                    .clickEvent(
+                                        ClickEvent.runCommand(
+                                            "syokaku seeplayerinfo ${playerName} ${page + 2}")))
+                    sender.sendMessage(message)
+                  }
                 } else if (args[1] == "gui" && sender is Player) {
                   // GUIで一覧表示
                   val inventory = Bukkit.createInventory(sender, 54, "${playerName}さんの昇格履歴")
