@@ -173,7 +173,8 @@ object SeePlayerInfo : CommandExecutor {
                                             "syokaku seeplayerinfo ${playerName} ${page}")))
                             //
                             // .append(Component.text("<<<<<<<<<<<<<<<").clickEvent(ClickEvent.runCommand("syokaku
-                            // ${playerName} ${if(page+1<history.records.size) page+1 else page}")))//ページを戻る
+                            // ${playerName} ${if(page+1<history.records.size) page+1 else page}")))
+                            // ページを戻る
                             .append(
                                 Component.text("================>>")
                                     .hoverEvent(HoverEvent.showText(Component.text("クリックして次のページ")))
