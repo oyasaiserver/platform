@@ -54,10 +54,13 @@ jobs:
         with:
           endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
           signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
+      - name: Create images.json
+        run: echo "<nodeploy>" > images.json
       - name: Compute docker image names
+        if: inputs.stack == 'services'
         run: |
           nix build .#all-docker-tags.json
-          echo "OYASAI_IMAGE_ID=$(<result tee /dev/stderr)" >> "$GITHUB_ENV"
+          <result tee /dev/stderr > images.json
       - uses: ./packages/oyasai-secrets-action
         with:
           env-slug: common
@@ -71,11 +74,12 @@ jobs:
             ${{ inputs.stack }}
       - name: ${{ inputs.operation }}
         run: |
-          nix run .#oyasai-cdktf -- \
-            ${{ inputs.operation }} \
-            ${{ inputs.stack }} \
-            --ignore-missing-stack-dependencies \
-            --auto-approve
+          OYASAI_IMAGE_ID="$(cat images.json)" \
+            nix run .#oyasai-cdktf -- \
+              ${{ inputs.operation }} \
+              ${{ inputs.stack }} \
+              --ignore-missing-stack-dependencies \
+              --auto-approve
       - name: Delete TF Workspace
         if: inputs.operation == 'destroy'
         run: |

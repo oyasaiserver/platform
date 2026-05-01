@@ -7,7 +7,7 @@ import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
 
-type Props = {
+type StackDependencies = {
   commonInfra: CommonInfra;
 };
 
@@ -20,7 +20,7 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
     scope: Construct,
     id: string,
     environment: string,
-    { commonInfra }: Props,
+    { commonInfra }: StackDependencies,
   ) {
     super(scope, id, environment);
 

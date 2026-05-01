@@ -15,7 +15,7 @@ import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
-type Props = {
+type StackDependencies = {
   commonInfra: CommonInfra;
 };
 
@@ -24,7 +24,11 @@ export class CommonInternal extends OyasaiTerraformStack {
   public readonly nixCachePublicKey =
     "oyasaiserver:f0coAsRP8jLzDTOmVCY8hqQibMHtZcxjk60oVCQkjtU=";
 
-  constructor(scope: Construct, id: string, { commonInfra }: Props) {
+  constructor(
+    scope: Construct,
+    id: string,
+    { commonInfra }: StackDependencies,
+  ) {
     super(scope, id);
 
     this.createCloudBackend();
