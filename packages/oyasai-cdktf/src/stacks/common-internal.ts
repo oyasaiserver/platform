@@ -43,7 +43,7 @@ export class CommonInternal extends OyasaiTerraformStack {
       location: "enam",
     });
 
-    const nixCacheExpirationDays = 7;
+    const nixCacheExpirationDays = 180;
 
     new R2BucketLifecycle(this, this.t("nix-cache-r2-bucket-lifecycle"), {
       accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
@@ -161,6 +161,12 @@ export class CommonInternal extends OyasaiTerraformStack {
             include: ["~DEFAULT_BRANCH"],
           },
         },
+        bypassActors: [
+          {
+            actorType: "OrganizationAdmin",
+            bypassMode: "always",
+          },
+        ],
         repository: platformRepository.name,
       },
     );
