@@ -12,7 +12,7 @@ import org.bukkit.persistence.PersistentDataType
 object Bou {
 
   fun create(): ItemStack {
-    val item = ItemStack(Material.STICK)
+    val item = ItemStack(Material.BREEZE_ROD)
     val meta: ItemMeta = item.itemMeta!!
 
     // 名前

@@ -1,6 +1,6 @@
-{ ... }:
+{ prettier-plugins }:
 {
-  perSystem.treefmt.programs = {
+  programs = {
     # keep-sorted start block=yes
     actionlint.enable = true;
     autocorrect = {
@@ -8,6 +8,7 @@
       excludes = [ "plugins/*" ];
     };
     jsonfmt.enable = true;
+    just.enable = true;
     keep-sorted.enable = true;
     ktfmt.enable = true;
     mdformat = {
@@ -20,7 +21,13 @@
       enable = true;
       strict = true;
     };
-    prettier.enable = true;
+    prettier = {
+      enable = true;
+      settings.plugins = [
+        "${prettier-plugins}/node_modules/prettier-plugin-organize-imports/index.js"
+        "${prettier-plugins}/node_modules/prettier-plugin-packagejson/lib/index.cjs"
+      ];
+    };
     shellcheck.enable = true;
     shfmt = {
       enable = true;
@@ -46,4 +53,5 @@
     };
     # keep-sorted end
   };
+  settings.global.excludes = [ "*/gen/*" ];
 }

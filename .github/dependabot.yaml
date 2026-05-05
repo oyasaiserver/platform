@@ -1,26 +1,40 @@
 version: 2
+
 updates:
   - package-ecosystem: "npm"
-    directory: "/"
+    directories:
+      - "packages/*"
+    cooldown:
+      default-days: 14
     schedule:
       interval: "weekly"
     groups:
       all:
         patterns:
           - "*"
-    ignore:
-      - dependency-name: "@cdktf/*"
   - package-ecosystem: "github-actions"
     directory: "/"
+    cooldown:
+      default-days: 14
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "nix"
+    directory: "/"
+    cooldown:
+      default-days: 14
     schedule:
       interval: "weekly"
   - package-ecosystem: "gradle"
     directory: "/"
+    cooldown:
+      default-days: 14
     schedule:
       interval: "weekly"
     groups:
       all:
         patterns:
           - "*"
+        exclude-patterns:
+          - "gradle-wrapper"
     ignore:
       - dependency-name: "*purpur-api*"

@@ -1,10 +1,9 @@
 package me.ankokunsan.entityPose
 
 enum class EntiPart(val display: String) {
-  ALL("体全体"),
+  ALL("全体"),
   HEAD("頭"),
   SITTING("座る"),
-  ZAHYO("座標変更"),
   X("X座標"),
   Y("Y座標"),
   Z("Z座標"),

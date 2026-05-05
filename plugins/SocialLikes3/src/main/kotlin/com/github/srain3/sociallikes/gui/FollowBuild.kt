@@ -9,6 +9,7 @@ import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
+import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.LocalDateTime
 import java.util.*
 import org.bukkit.Bukkit
@@ -49,7 +50,7 @@ object FollowBuild : Listener {
     itemListNewIte.forEach { itemListNew.add(it.value) }
     val itemListALL = itemListALL0.toSortedMap(reverseOrder()).values.toList()
 
-    val pane = PaginatedPane(0, 0, 9, 5)
+    val pane = PaginatedPane(9, 5)
     pane.setOnClick {
       val id =
           it.currentItem
@@ -60,9 +61,9 @@ object FollowBuild : Listener {
       Bukkit.dispatchCommand(it.whoClicked, "sociallikes3:sltp $id")
     }
     pane.populateWithItemStacks(itemListNew)
-    gui.addPane(pane)
+    gui.addPane(Slot.fromXY(0, 0), pane)
 
-    val navigation = StaticPane(0, 5, 9, 1)
+    val navigation = StaticPane(9, 1)
     navigation.addItem(
         GuiItem(
             ItemStack(Material.RED_WOOL).apply {
@@ -159,7 +160,7 @@ object FollowBuild : Listener {
         6,
         0,
     )
-    gui.addPane(navigation)
+    gui.addPane(Slot.fromXY(0, 5), navigation)
 
     gui.update()
     return gui
@@ -250,7 +251,7 @@ object FollowBuild : Listener {
     }
     gui.setOnTopDrag { it.isCancelled = true }
 
-    val pane = PaginatedPane(0, 0, 9, 5)
+    val pane = PaginatedPane(9, 5)
     val headItemList = mutableListOf<ItemStack>()
     userList.forEach {
       val item = ItemStack(Material.PLAYER_HEAD)
@@ -275,9 +276,9 @@ object FollowBuild : Listener {
       it.whoClicked.closeInventory()
       Bukkit.dispatchCommand(it.whoClicked, "sluser $userName")
     }
-    gui.addPane(pane)
+    gui.addPane(Slot.fromXY(0, 0), pane)
 
-    val navigation = StaticPane(0, 5, 9, 1)
+    val navigation = StaticPane(9, 1)
     navigation.addItem(
         GuiItem(
             ItemStack(Material.RED_WOOL).apply {
@@ -319,7 +320,7 @@ object FollowBuild : Listener {
         4,
         0,
     )
-    gui.addPane(navigation)
+    gui.addPane(Slot.fromXY(0, 5), navigation)
 
     return gui
   }

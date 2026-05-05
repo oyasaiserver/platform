@@ -1,11 +1,8 @@
 {
   package-lock2nix,
   stdenvNoCC,
-  makeWrapper,
   lib,
-  plugins,
-  plugins-batch,
-  just,
+  oyasai-plugins,
   writeShellApplication,
 }:
 
@@ -35,9 +32,7 @@ let
           mkdir -p ${builtins.dirOf out}
         ''
         + (
-          if definition.type == "local" then
-            "cp ${plugins.${id}}/${definition.name} ${out}"
-          else if definition.type == "static" then
+          if definition.type == "static" then
             "cp ${directory.static}/${definition.name} ${out}"
           else
             "${final}/bin/plugin-registry-download-helper ${
@@ -50,7 +45,7 @@ let
 
   final = package-lock2nix.mkNpmModule {
     src = ./.;
-    buildInputs = [ plugins-batch ];
+    buildInputs = [ oyasai-plugins ];
 
     passthru = {
       update = stdenvNoCC.mkDerivation {
@@ -63,7 +58,13 @@ let
         '';
       };
 
-      forVersion = (version: (lib.mapAttrs (id: _: "${final}/${mkOut version id}") data.${version}));
+      forVersion = (
+        version:
+        (lib.mapAttrs (
+          id: _:
+          if (lib.hasAttr id oyasai-plugins) then oyasai-plugins.${id} else "${final}/${mkOut version id}"
+        ) (data.${version} // oyasai-plugins))
+      );
     };
   };
 in

@@ -2,6 +2,7 @@
   oyasaiDockerTools,
   dockerTools,
   stdenv,
+  lib,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -24,5 +25,5 @@ oyasaiDockerTools.buildImage {
   };
   config.Entrypoint = [ "/usr/bin/backup" ];
   config.Cmd = [ "loop" ];
-  platforms = builtins.attrNames hashes;
+  platforms = lib.attrNames hashes;
 }

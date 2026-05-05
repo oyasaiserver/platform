@@ -1,0 +1,29 @@
+name: Oyasai Secrets Action
+description: Fetches secrets from Infisical using OIDC authentication and exports them as environment variables
+
+inputs:
+  identity-id:
+    description: Infisical machine identity ID for OIDC authentication.
+    required: true
+  oidc-audience:
+    description: Audience for the GitHub OIDC token.
+    required: false
+    default: ""
+  domain:
+    description: Infisical instance URL.
+    required: false
+    default: "https://app.infisical.com"
+  env-slug:
+    description: Infisical environment slug to fetch secrets from.
+    required: true
+  project-slug:
+    description: Infisical project slug.
+    required: true
+  secret-path:
+    description: Path within the project to fetch secrets from.
+    required: false
+    default: "/"
+
+runs:
+  using: node24
+  main: src/main.ts

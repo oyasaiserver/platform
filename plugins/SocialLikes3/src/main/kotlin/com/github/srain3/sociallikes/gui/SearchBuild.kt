@@ -10,6 +10,7 @@ import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
+import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.format.DateTimeFormatter
 import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.*
@@ -32,7 +33,7 @@ object SearchBuild {
     }
     gui.setOnTopDrag { it.isCancelled = true }
 
-    val pagePane = PaginatedPane(0, 0, 9, 5)
+    val pagePane = PaginatedPane(9, 5)
     val itemList = mutableListOf<ItemStack>()
     slDataList.forEach { itemList.add(createSignItem(it)) }
     pagePane.populateWithItemStacks(itemList)
@@ -43,9 +44,9 @@ object SearchBuild {
       it.whoClicked.closeInventory()
       Bukkit.dispatchCommand(it.whoClicked, "sociallikes3:sltp $id")
     }
-    gui.addPane(pagePane)
+    gui.addPane(Slot.fromXY(0, 0), pagePane)
 
-    val navigation = StaticPane(0, 5, 9, 1)
+    val navigation = StaticPane(9, 1)
     navigation.addItem(
         GuiItem(
             ItemStack(Material.RED_WOOL).apply {
@@ -89,7 +90,7 @@ object SearchBuild {
         4,
         0,
     )
-    gui.addPane(navigation)
+    gui.addPane(Slot.fromXY(0, 5), navigation)
 
     gui.update()
     return gui

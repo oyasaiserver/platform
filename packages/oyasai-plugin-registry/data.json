@@ -207,6 +207,10 @@
       "type": "static",
       "name": "Arceon.jar"
     },
+    "oyasaivehicles": {
+      "type": "static",
+      "name": "OyasaiVehicles.jar"
+    },
     "ezedits": {
       "type": "static",
       "name": "ezEdits.jar"
@@ -214,42 +218,6 @@
     "tokenmanager": {
       "type": "static",
       "name": "TokenManager.jar"
-    },
-    "dynamicprofile": {
-      "type": "local",
-      "name": "DynamicProfile.jar"
-    },
-    "oyasaiadmintools": {
-      "type": "local",
-      "name": "OyasaiAdminTools.jar"
-    },
-    "oyasaiutilities": {
-      "type": "local",
-      "name": "OyasaiUtilities.jar"
-    },
-    "painttools": {
-      "type": "local",
-      "name": "PaintTools.jar"
-    },
-    "sociallikes3": {
-      "type": "local",
-      "name": "SocialLikes3.jar"
-    },
-    "socialvotes": {
-      "type": "local",
-      "name": "SocialVotes.jar"
-    },
-    "tpswitch": {
-      "type": "local",
-      "name": "TPSwitch.jar"
-    },
-    "vertex": {
-      "type": "local",
-      "name": "Vertex.jar"
-    },
-    "oyasaipets": {
-      "type": "local",
-      "name": "OyasaiPets.jar"
     },
     "floodgate": {
       "type": "url",

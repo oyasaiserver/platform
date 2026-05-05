@@ -19,6 +19,7 @@
     "erasableSyntaxOnly": true,
     "noUncheckedSideEffectImports": true,
     "skipLibCheck": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "types": ["node"]
   }
 }

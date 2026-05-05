@@ -1,5 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+tasks.register<JavaExec>("lock") {
+  val gradle2nixHome = rootDir.resolve("packages/gradle2nix-gradle-plugin/gen")
+  classpath = files(fileTree(gradle2nixHome.resolve("lib")) { include("*.jar") })
+  mainClass = "org.nixos.gradle2nix.MainKt"
+  jvmArgs("-Dorg.nixos.gradle2nix.share=${gradle2nixHome.resolve("share")}")
+  args("--project", rootDir)
+}
+
 buildscript {
   dependencies {
     classpath(libs.kotlin.plugin)
@@ -12,9 +20,10 @@ buildscript {
 allprojects {
   repositories {
     mavenCentral()
-    maven("https://repo.purpurmc.org/snapshots")
     maven("https://nexus.frengor.com/repository/public/")
+    maven("https://repo.purpurmc.org/snapshots")
     maven("https://nexus.scarsz.me/content/groups/public/")
+    maven("https://maven.enginehub.org/repo/")
   }
 }
 

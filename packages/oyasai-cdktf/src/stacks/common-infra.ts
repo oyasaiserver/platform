@@ -1,0 +1,104 @@
+import { DataCloudflareRegistrarDomain } from "@oyasaiserver/cdktf-providers/cloudflare/data-cloudflare-registrar-domain";
+import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
+import { Zone } from "@oyasaiserver/cdktf-providers/cloudflare/zone";
+import { Identity } from "@oyasaiserver/cdktf-providers/infisical/identity";
+import { IdentityOidcAuth } from "@oyasaiserver/cdktf-providers/infisical/identity-oidc-auth";
+import { Project } from "@oyasaiserver/cdktf-providers/infisical/project";
+import { ProjectEnvironment } from "@oyasaiserver/cdktf-providers/infisical/project-environment";
+import { ProjectIdentity } from "@oyasaiserver/cdktf-providers/infisical/project-identity";
+import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
+import type { Construct } from "constructs";
+import { createSecrets } from "../secrets.ts";
+import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
+
+export class CommonInfra extends OyasaiTerraformStack {
+  private readonly infisicalOrgId = "a8e8e008-81e0-4a4f-81a9-8441c6820e7e";
+
+  public readonly oyasaiIoRegistrarDomain: DataCloudflareRegistrarDomain;
+  public readonly oyasaiIoZone: Zone;
+
+  public readonly platformInfisicalProject: Project;
+  public readonly platformInfisicalProjectEnvironment: ProjectEnvironment;
+
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+
+    this.createCloudBackend();
+
+    new CloudflareProvider(this, this.t("cloudflare-provider"));
+
+    new InfisicalProvider(this, this.t("infisical-provider"));
+
+    const platformInfisicalMachineIdentity = new Identity(
+      this,
+      this.t("platform-infisical-identity"),
+      {
+        name: "oyasai-machine",
+        orgId: this.infisicalOrgId,
+        role: "admin",
+        hasDeleteProtection: true,
+      },
+    );
+
+    new IdentityOidcAuth(
+      this,
+      this.t("platform-infisical-identity-oidc-auth"),
+      {
+        boundIssuer: "https://token.actions.githubusercontent.com",
+        boundSubject: "repo:oyasaiserver/platform:*",
+        identityId: platformInfisicalMachineIdentity.id,
+        oidcDiscoveryUrl: "https://token.actions.githubusercontent.com",
+      },
+    );
+
+    this.platformInfisicalProject = new Project(
+      this,
+      this.t("platform-infisical-project"),
+      {
+        name: "platform",
+        slug: "platform",
+      },
+    );
+
+    new ProjectIdentity(this, this.t("platform-machine-project-identity"), {
+      projectId: this.platformInfisicalProject.id,
+      identityId: platformInfisicalMachineIdentity.id,
+      roles: [
+        {
+          roleSlug: "admin",
+        },
+      ],
+    });
+
+    this.platformInfisicalProjectEnvironment = new ProjectEnvironment(
+      this,
+      this.t("platform-common-infisical-project-environment"),
+      {
+        name: "common",
+        projectId: this.platformInfisicalProject.id,
+        slug: "common",
+      },
+    );
+
+    const secrets = createSecrets(this, this);
+
+    // TODO: Data because Cloudflare doesn't support importing registrar domain
+    // - shun 2026-04
+    this.oyasaiIoRegistrarDomain = new DataCloudflareRegistrarDomain(
+      this,
+      this.t("oyasai-io-registrar-domain"),
+      {
+        accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
+        domainName: "oyasai.io",
+      },
+    );
+
+    this.oyasaiIoZone = new Zone(this, "oyasai-io-zone", {
+      account: {
+        id: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
+      },
+      name: this.oyasaiIoRegistrarDomain.domainName,
+      type: "full",
+    });
+  }
+}

@@ -14,6 +14,7 @@ import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
+import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.util.UUID
 import me.realized.tokenmanager.api.TokenManager
 import net.kyori.adventure.text.Component
@@ -124,7 +125,7 @@ object SLSignSetting {
     val sltpSignCostCreative = config.getLong("priceSltpSignCreative", 100L)
     val sltpSignCost = config.getLong("priceSltpSign", 50L)
 
-    val pane = StaticPane(0, 0, 9, 3)
+    val pane = StaticPane(9, 3)
     pane.apply {
       addItem(
           GuiItem(
@@ -509,7 +510,7 @@ object SLSignSetting {
           2,
       )
     }
-    gui.addPane(pane)
+    gui.addPane(Slot.fromXY(0, 0), pane)
 
     gui.update()
 

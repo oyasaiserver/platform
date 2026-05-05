@@ -11,6 +11,7 @@ import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
+import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.format.DateTimeFormatter
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.HoverEvent
@@ -29,7 +30,7 @@ import org.bukkit.inventory.meta.SkullMeta
 object SLSignLikes {
   fun createGUI(sign: Sign, slData: SLData, owner: Boolean, isOP: Boolean): ChestGui {
     val gui =
-        ChestGui(6, Tools.socialLikesLOGOShort + "&0ID:${slData.id}「&a${slData.title}&0」p1".color())
+        ChestGui(6, Tools.socialLikesLOGOShort + "&0ID:${slData.id}「&2${slData.title}&0」p1".color())
     gui.setOnTopClick {
       it.isCancelled = true
       if (it.currentItem != null) {
@@ -39,7 +40,7 @@ object SLSignLikes {
     }
     gui.setOnTopDrag { it.isCancelled = true }
 
-    val pagePane = PaginatedPane(0, 0, 9, 5)
+    val pagePane = PaginatedPane(9, 5)
     val headItemList = mutableListOf<ItemStack>()
     slData.likes.forEach {
       val item = ItemStack(Material.PLAYER_HEAD)
@@ -49,9 +50,9 @@ object SLSignLikes {
       headItemList.add(item)
     }
     pagePane.populateWithItemStacks(headItemList)
-    gui.addPane(pagePane)
+    gui.addPane(Slot.fromXY(0, 0), pagePane)
 
-    val navigation = StaticPane(0, 5, 9, 1)
+    val navigation = StaticPane(9, 1)
     navigation.addItem(
         GuiItem(
             ItemStack(Material.RED_WOOL).apply {
@@ -62,7 +63,7 @@ object SLSignLikes {
                 pagePane.setPage(pagePane.page - 1)
                 gui.title =
                     Tools.socialLikesLOGOShort +
-                        "&0ID:${slData.id}「&a${slData.title}&0」p${pagePane.page+1}".color()
+                        "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
                 gui.update()
               }
             },
@@ -79,7 +80,7 @@ object SLSignLikes {
                 pagePane.setPage(pagePane.page + 1)
                 gui.title =
                     Tools.socialLikesLOGOShort +
-                        "&0ID:${slData.id}「&a${slData.title}&0」p${pagePane.page+1}".color()
+                        "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
                 gui.update()
               }
             },
@@ -163,7 +164,7 @@ object SLSignLikes {
               it.whoClicked.closeInventory()
               UserBuild.createGUI(offlineOwnerPlayer, (it.whoClicked as Player)).show(it.whoClicked)
             },
-        3,
+        5,
         0,
     )
     navigation.addItem(
@@ -237,7 +238,7 @@ object SLSignLikes {
         2,
         0,
     )
-    gui.addPane(navigation)
+    gui.addPane(Slot.fromXY(0, 5), navigation)
 
     gui.update()
     return gui

@@ -7,6 +7,7 @@ import com.github.srain3.sociallikes.Tools.color
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
+import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -29,16 +30,16 @@ object SLMenu {
     }
     gui.setOnTopDrag { it.isCancelled = true }
 
-    val paneUp = StaticPane(0, 0, 9, 1)
-    val paneDown = StaticPane(0, 4, 9, 1)
-    val paneMid = StaticPane(0, 1, 9, 3)
+    val paneUp = StaticPane(9, 1)
+    val paneDown = StaticPane(9, 1)
+    val paneMid = StaticPane(9, 3)
 
     paneUp.fillWith(
         ItemStack(Material.PURPLE_STAINED_GLASS_PANE).allFlag().addText(" ", mutableListOf()))
     paneDown.fillWith(
         ItemStack(Material.GRAY_STAINED_GLASS_PANE).allFlag().addText(" ", mutableListOf()))
-    gui.addPane(paneUp)
-    gui.addPane(paneDown)
+    gui.addPane(Slot.fromXY(0, 0), paneUp)
+    gui.addPane(Slot.fromXY(0, 4), paneDown)
 
     paneMid.apply {
       addItem(
@@ -87,7 +88,7 @@ object SLMenu {
       )
     }
 
-    gui.addPane(paneMid)
+    gui.addPane(Slot.fromXY(0, 1), paneMid)
     gui.update()
 
     return gui

@@ -1,5 +1,0 @@
-{
-  "app": "node src/index.ts",
-  "language": "typescript",
-  "projectId": "1129dba1-c375-4ed0-ac92-258762707dd5"
-}
