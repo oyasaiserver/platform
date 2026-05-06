@@ -104,10 +104,6 @@
       "type": "spiget",
       "id": 10997
     },
-    "mypet": {
-      "type": "spiget",
-      "id": 12725
-    },
     "nuvotifier": {
       "type": "spiget",
       "id": 13449

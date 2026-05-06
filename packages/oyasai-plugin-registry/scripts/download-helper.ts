@@ -87,7 +87,10 @@ export async function downloadJar(definition: any): Promise<Uint8Array> {
     "application/java-archive",
     "application/octet-stream",
   ];
-  ok(jarHeaders.includes(response.headers.get("Content-Type") ?? ""));
+  ok(
+    jarHeaders.includes(response.headers.get("Content-Type") ?? ""),
+    JSON.stringify(definition),
+  );
   const arrayBuffer = await response.arrayBuffer();
   return new Uint8Array(arrayBuffer);
 }
