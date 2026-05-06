@@ -1,0 +1,29 @@
+limits:
+  max-blocks-csm: 2000000
+  max-columns-csm: 100000
+  max-undo-blocks-csm: 2000000
+  max-undo-snapshots-csm: 4
+  max-blocks-window: 512
+  max-undo-snapshots-window: 8
+
+window:
+  default-width: 2
+  default-height: 3
+  frame: IRON_TRAPDOOR
+  glass: WHITE_STAINED_GLASS
+  backing: DRIED_KELP_BLOCK
+
+csm:
+  default-rotation: 2
+  default-side: R
+  select-after-load: true
+
+debug-stick:
+  enabled: true
+  max-distance: 6.0
+  require-creative: false
+  apply-physics: false
+  memory-persist: true
+
+prefix: "<gray>[<gold>CitiesSkyMine</gold>]</gray> "
+debug: false

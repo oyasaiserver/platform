@@ -84,6 +84,7 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
         Location(loc.world, loc.blockX.toDouble(), loc.blockY.toDouble(), loc.blockZ.toDouble())
     // プレイヤーの向きを 45° スナップして最初の腕方向に使う
     session.rotationDeg = round(loc.yaw.toDouble() / 45.0) * 45.0
+    plugin.saveIntersectionSettings(player, session)
     player.sendMessage("§a[RI] 交差点中心を §f(${loc.blockX}, ${loc.blockY}, ${loc.blockZ}) §aに設定しました。")
     player.sendMessage(
         "§7向き: §f${session.rotationDeg.toInt()}°スナップ  腕数: §f${session.arms}  " +
@@ -103,6 +104,7 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
       if (!applyOne(player, session, args[i], args[i + 1])) return
       i += 2
     }
+    plugin.saveIntersectionSettings(player, session)
     plugin.updateIntersectionPreview(player)
   }
 
