@@ -69,7 +69,6 @@ let
       multiversecore
       multiverseprotals
       mycommand
-      mypet
       nuvotifier
       openinv
       oyasaiadmintools
