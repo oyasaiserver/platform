@@ -31,12 +31,15 @@ class CitiesSkyMineCommand(
   ): Boolean {
     val sub = args.getOrNull(0)?.lowercase()
     return when (sub) {
-      null, "help" -> {
+      null,
+      "help" -> {
         showHelp(sender)
         true
       }
-      "version", "ver" -> {
-        MessageUtil.info(sender, "CitiesSkyMine version: <white>${plugin.description.version}</white>")
+      "version",
+      "ver" -> {
+        MessageUtil.info(
+            sender, "CitiesSkyMine version: <white>${plugin.description.version}</white>")
         true
       }
       "info" -> {
@@ -65,7 +68,9 @@ class CitiesSkyMineCommand(
         if (!requirePermission(sender, "citiesskymine.payload")) return true
         payloadCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
-      "load", "load64", "undo" -> {
+      "load",
+      "load64",
+      "undo" -> {
         if (!requirePermission(sender, "citiesskymine.payload")) return true
         payloadCommand.onCommand(sender, command, label, args)
       }
@@ -102,7 +107,9 @@ class CitiesSkyMineCommand(
       "intersection" -> intersectionCommand.onTabComplete(sender, command, alias, childArgs)
       "facade" -> facadeCommand.onTabComplete(sender, command, alias, childArgs)
       "payload" -> payloadCommand.onTabComplete(sender, command, alias, childArgs)
-      "load", "load64", "undo" -> payloadCommand.onTabComplete(sender, command, alias, args)
+      "load",
+      "load64",
+      "undo" -> payloadCommand.onTabComplete(sender, command, alias, args)
       "window" -> windowCommand.onTabComplete(sender, command, alias, childArgs)
       "debugstick" -> debugStickCommand.onTabComplete(sender, command, alias, childArgs)
       else -> emptyList()
@@ -116,7 +123,8 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm facade <...>", "ファサードを生成")
     MessageUtil.helpEntry(sender, "/csm payload load <payload> [0-3] [L|R]", "payloadをFAWEで配置")
     MessageUtil.helpEntry(sender, "/csm payload undo [last]", "payload配置を復元")
-    MessageUtil.helpEntry(sender, "/csm window [width] [height] [frame] [glass] [backing]", "正面方向に窓を生成")
+    MessageUtil.helpEntry(
+        sender, "/csm window [width] [height] [frame] [glass] [backing]", "正面方向に窓を生成")
     MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
   }

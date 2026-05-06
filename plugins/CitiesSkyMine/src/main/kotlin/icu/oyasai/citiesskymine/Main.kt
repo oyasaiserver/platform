@@ -70,13 +70,7 @@ class Main : JavaPlugin() {
         DebugStickCommand(this, debugStickMemoryStore ?: DebugStickMemoryStore(this))
     val csmHandler =
         CitiesSkyMineCommand(
-            this,
-            rcHandler,
-            riHandler,
-            hbHandler,
-            payloadHandler,
-            windowHandler,
-            debugStickHandler)
+            this, rcHandler, riHandler, hbHandler, payloadHandler, windowHandler, debugStickHandler)
     val csmCmd = getCommand("csm")
     csmCmd?.setExecutor(csmHandler)
     csmCmd?.tabCompleter = csmHandler
@@ -109,7 +103,9 @@ class Main : JavaPlugin() {
   // ──────────────────────────────────────────────────
 
   fun getSession(player: Player): RoadSession =
-      sessions.getOrPut(player.uniqueId) { RoadSession().also { loadRoadSettings(player, it.settings) } }
+      sessions.getOrPut(player.uniqueId) {
+        RoadSession().also { loadRoadSettings(player, it.settings) }
+      }
 
   fun updatePreview(player: Player) {
     val session = getSession(player)
@@ -212,7 +208,8 @@ class Main : JavaPlugin() {
   private fun loadRoadSettings(player: Player, settings: RoadSettings) {
     val store = playerDataStore
     settings.radius = store.getDouble(player, "road.radius") ?: settings.radius
-    settings.transitionLength = store.getDouble(player, "road.transition") ?: settings.transitionLength
+    settings.transitionLength =
+        store.getDouble(player, "road.transition") ?: settings.transitionLength
     settings.laneWidth = store.getInt(player, "road.lane") ?: settings.laneWidth
     settings.centerLineWidth = store.getInt(player, "road.centerline") ?: settings.centerLineWidth
     settings.outerLineWidth = store.getInt(player, "road.outerline") ?: settings.outerLineWidth
@@ -235,5 +232,8 @@ class Main : JavaPlugin() {
   }
 
   private fun materialFromPlayerData(player: Player, path: String): Material? =
-      playerDataStore.getString(player, path)?.let { Material.matchMaterial(it) }?.takeIf { it.isBlock }
+      playerDataStore
+          .getString(player, path)
+          ?.let { Material.matchMaterial(it) }
+          ?.takeIf { it.isBlock }
 }
