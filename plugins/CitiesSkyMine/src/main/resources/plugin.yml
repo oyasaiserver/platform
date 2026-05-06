@@ -8,9 +8,14 @@ depend:
   - FastAsyncWorldEdit
 
 commands:
+  csm:
+    description: "CitiesSkyMine 統合コマンド"
+    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|undo|window|debugstick>"
+    permission: citiesskymine.use
+    permission-message: "このコマンドはOP権限が必要です。"
   rc:
     description: "道路カーブを生成するコマンド"
-    usage: "/rc <help|set|build|undo|reset|version>"
+    usage: "/rc <help|set|build|undo|reset|status|debugline|smoothline|version>"
     permission: citiesskymine.road
     permission-message: "このコマンドはOP権限が必要です。"
   ri:
@@ -20,14 +25,40 @@ commands:
     permission-message: "このコマンドはOP権限が必要です。"
   hb:
     description: "オスマン様式ファサードを生成するコマンド"
-    usage: "/hb <build|undo|help> [ベイ数] [パレット]"
+    usage: "/hb <build|schem|undo|help> [options]"
     permission: citiesskymine.build
     permission-message: "このコマンドはOP権限が必要です。"
 
 permissions:
+  citiesskymine.*:
+    description: "CitiesSkyMine の全権限"
+    default: op
+    children:
+      citiesskymine.use: true
+      citiesskymine.admin: true
+      citiesskymine.road: true
+      citiesskymine.build: true
+      citiesskymine.payload: true
+      citiesskymine.window: true
+      citiesskymine.debugstick: true
+  citiesskymine.use:
+    description: "CitiesSkyMine 統合コマンドの使用権限"
+    default: op
+  citiesskymine.admin:
+    description: "CitiesSkyMine 管理コマンドの使用権限"
+    default: op
   citiesskymine.road:
     description: "道路生成コマンドの使用権限"
     default: op
   citiesskymine.build:
     description: "建築生成コマンドの使用権限"
+    default: op
+  citiesskymine.payload:
+    description: "payload 配置コマンドの使用権限"
+    default: op
+  citiesskymine.window:
+    description: "窓生成コマンドの使用権限"
+    default: op
+  citiesskymine.debugstick:
+    description: "debug-stick 互換コマンドの使用権限"
     default: op

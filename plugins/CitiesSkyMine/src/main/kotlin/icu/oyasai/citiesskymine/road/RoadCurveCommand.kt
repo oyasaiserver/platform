@@ -225,6 +225,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       if (!applyOneSetting(player, s, args[i], args[i + 1])) return
       i += 2
     }
+    plugin.saveRoadSettings(player, s)
     // 設定変更をプレビューに即時反映
     plugin.updatePreview(player)
   }
@@ -339,6 +340,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
           }
         }
     s.debugLineGroups = newValue
+    plugin.saveRoadSettings(player, s)
     val state = if (newValue) "§aON" else "§7OFF"
     player.sendMessage("§a[RC] 白線デバッグ色分け: $state")
     // プレビュー機能は無効化されているため何もしない

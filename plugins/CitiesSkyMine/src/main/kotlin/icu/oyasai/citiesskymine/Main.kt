@@ -1,16 +1,53 @@
 package icu.oyasai.citiesskymine
 
+import icu.oyasai.citiesskymine.command.CitiesSkyMineCommand
+import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
+import icu.oyasai.citiesskymine.debugstick.DebugStickMemoryStore
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
-import icu.oyasai.citiesskymine.road.*
-import java.util.*
+import icu.oyasai.citiesskymine.payload.PayloadCommand
+import icu.oyasai.citiesskymine.road.IntersectionCommand
+import icu.oyasai.citiesskymine.road.IntersectionPreview
+import icu.oyasai.citiesskymine.road.IntersectionSession
+import icu.oyasai.citiesskymine.road.RoadCurveCommand
+import icu.oyasai.citiesskymine.road.RoadGeometry
+import icu.oyasai.citiesskymine.road.RoadPreview
+import icu.oyasai.citiesskymine.road.RoadSession
+import icu.oyasai.citiesskymine.road.RoadSettings
+import icu.oyasai.citiesskymine.road.WaypointListener
+import icu.oyasai.citiesskymine.storage.PlayerDataStore
+import icu.oyasai.citiesskymine.window.WindowCommand
+import java.util.HashMap
+import java.util.UUID
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
 class Main : JavaPlugin() {
+  lateinit var playerDataStore: PlayerDataStore
+    private set
+
   private val sessions = HashMap<UUID, RoadSession>()
   private val intersectionSessions = HashMap<UUID, IntersectionSession>()
+  private var debugStickMemoryStore: DebugStickMemoryStore? = null
+
+  companion object {
+    lateinit var instance: Main
+      private set
+  }
 
   override fun onEnable() {
+    instance = this
+    saveDefaultConfig()
+
+    if (!checkDependencies()) {
+      logger.severe("依存プラグインが見つかりません。CitiesSkyMine を無効化します。")
+      server.pluginManager.disablePlugin(this)
+      return
+    }
+
+    playerDataStore = PlayerDataStore(this)
+    debugStickMemoryStore = DebugStickMemoryStore(this).also { it.load() }
+
     val rcHandler = RoadCurveCommand(this)
     val rcCmd = getCommand("rc")
     rcCmd?.setExecutor(rcHandler)
@@ -27,21 +64,52 @@ class Main : JavaPlugin() {
     hbCmd?.setExecutor(hbHandler)
     hbCmd?.tabCompleter = hbHandler
 
+    val payloadHandler = PayloadCommand(this)
+    val windowHandler = WindowCommand(this)
+    val debugStickHandler =
+        DebugStickCommand(this, debugStickMemoryStore ?: DebugStickMemoryStore(this))
+    val csmHandler =
+        CitiesSkyMineCommand(
+            this,
+            rcHandler,
+            riHandler,
+            hbHandler,
+            payloadHandler,
+            windowHandler,
+            debugStickHandler)
+    val csmCmd = getCommand("csm")
+    csmCmd?.setExecutor(csmHandler)
+    csmCmd?.tabCompleter = csmHandler
+
     logger.info("CitiesSkyMine enabled")
   }
 
   override fun onDisable() {
+    debugStickMemoryStore?.save()
+    if (::playerDataStore.isInitialized) {
+      playerDataStore.saveAll()
+    }
     sessions.values.forEach { it.previewTask?.cancel() }
     intersectionSessions.values.forEach { it.previewTask?.cancel() }
     sessions.clear()
     intersectionSessions.clear()
   }
 
+  private fun checkDependencies(): Boolean {
+    val fawe = server.pluginManager.getPlugin("FastAsyncWorldEdit")
+    if (fawe == null || !fawe.isEnabled) {
+      logger.severe("FastAsyncWorldEdit が見つかりません!")
+      return false
+    }
+    return true
+  }
+
   // ──────────────────────────────────────────────────
   // Road セッション
   // ──────────────────────────────────────────────────
 
-  fun getSession(player: Player): RoadSession = sessions.getOrPut(player.uniqueId) { RoadSession() }
+  fun getSession(player: Player): RoadSession =
+      sessions.getOrPut(player.uniqueId) { RoadSession().also { loadRoadSettings(player, it.settings) } }
 
   fun updatePreview(player: Player) {
     val session = getSession(player)
@@ -81,7 +149,9 @@ class Main : JavaPlugin() {
   // ──────────────────────────────────────────────────
 
   fun getIntersectionSession(player: Player): IntersectionSession =
-      intersectionSessions.getOrPut(player.uniqueId) { IntersectionSession() }
+      intersectionSessions.getOrPut(player.uniqueId) {
+        IntersectionSession().also { loadIntersectionSettings(player, it) }
+      }
 
   /** 設定変更・中心設定後に呼び出す。dirty フラグを立ててプレビュータスクを起動する。 */
   fun updateIntersectionPreview(player: Player) {
@@ -112,4 +182,58 @@ class Main : JavaPlugin() {
     session.previewTask?.cancel()
     session.previewTask = null
   }
+
+  fun saveRoadSettings(player: Player, settings: RoadSettings) {
+    playerDataStore.setMany(
+        player,
+        mapOf(
+            "road.radius" to settings.radius,
+            "road.transition" to settings.transitionLength,
+            "road.lane" to settings.laneWidth,
+            "road.centerline" to settings.centerLineWidth,
+            "road.outerline" to settings.outerLineWidth,
+            "road.sidewalk" to settings.sidewalkWidth,
+            "road.roadmat" to settings.roadMaterial.name,
+            "road.sidewalkmat" to settings.sidewalkMaterial.name,
+            "road.linemat" to settings.lineMaterial.name,
+            "road.debug-line-groups" to settings.debugLineGroups))
+  }
+
+  fun saveIntersectionSettings(player: Player, session: IntersectionSession) {
+    playerDataStore.setMany(
+        player,
+        mapOf(
+            "intersection.arms" to session.arms,
+            "intersection.arm-length" to session.armLength,
+            "intersection.corner-radius" to session.cornerRadius,
+            "intersection.rotation" to session.rotationDeg))
+  }
+
+  private fun loadRoadSettings(player: Player, settings: RoadSettings) {
+    val store = playerDataStore
+    settings.radius = store.getDouble(player, "road.radius") ?: settings.radius
+    settings.transitionLength = store.getDouble(player, "road.transition") ?: settings.transitionLength
+    settings.laneWidth = store.getInt(player, "road.lane") ?: settings.laneWidth
+    settings.centerLineWidth = store.getInt(player, "road.centerline") ?: settings.centerLineWidth
+    settings.outerLineWidth = store.getInt(player, "road.outerline") ?: settings.outerLineWidth
+    settings.sidewalkWidth = store.getInt(player, "road.sidewalk") ?: settings.sidewalkWidth
+    settings.roadMaterial = materialFromPlayerData(player, "road.roadmat") ?: settings.roadMaterial
+    settings.sidewalkMaterial =
+        materialFromPlayerData(player, "road.sidewalkmat") ?: settings.sidewalkMaterial
+    settings.lineMaterial = materialFromPlayerData(player, "road.linemat") ?: settings.lineMaterial
+    settings.debugLineGroups =
+        store.getBoolean(player, "road.debug-line-groups") ?: settings.debugLineGroups
+  }
+
+  private fun loadIntersectionSettings(player: Player, session: IntersectionSession) {
+    val store = playerDataStore
+    session.arms = store.getInt(player, "intersection.arms") ?: session.arms
+    session.armLength = store.getInt(player, "intersection.arm-length") ?: session.armLength
+    session.cornerRadius =
+        store.getInt(player, "intersection.corner-radius") ?: session.cornerRadius
+    session.rotationDeg = store.getDouble(player, "intersection.rotation") ?: session.rotationDeg
+  }
+
+  private fun materialFromPlayerData(player: Player, path: String): Material? =
+      playerDataStore.getString(player, path)?.let { Material.matchMaterial(it) }?.takeIf { it.isBlock }
 }
