@@ -16,7 +16,7 @@ items:
       - ""
       - "&eクリックで実行"
     actions:
-      - {open_sell: true}
+      - {open_sell: true,}
 
   empty1:
     slot: 2

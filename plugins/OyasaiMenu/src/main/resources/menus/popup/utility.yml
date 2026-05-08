@@ -41,7 +41,7 @@ items:
     lore: ["&7/spawn"]
     actions:
       - {player_cmd: "spawn"}
-      - {close: true}
+      - {close: true,}
 
   warp_craft:
     slot: 10
@@ -50,7 +50,7 @@ items:
     lore: ["&7/craft"]
     actions:
       - {player_cmd: "craft"}
-      - {close: true}
+      - {close: true,}
 
   fly:
     slot: 19
@@ -59,7 +59,7 @@ items:
     lore: ["&c※ポイント購入 or 上級者以上のランクが必要"]
     actions:
       - {player_cmd: "fly"}
-      - {close: true}
+      - {close: true,}
 
   language:
     slot: 28
@@ -75,7 +75,7 @@ items:
     lore: ["&7/getmenu"]
     actions:
       - {player_cmd: "getmenu"}
-      - {close: true}
+      - {close: true,}
 
   warp_shigen:
     slot: 2
@@ -84,7 +84,7 @@ items:
     lore: ["&7/warp shigen"]
     actions:
       - {player_cmd: "warp shigen"}
-      - {close: true}
+      - {close: true,}
 
   ec:
     slot: 11
@@ -93,7 +93,7 @@ items:
     lore: ["&7/ec"]
     actions:
       - {player_cmd: "ec"}
-      - {close: true}
+      - {close: true,}
 
   redbull:
     slot: 20
@@ -102,7 +102,7 @@ items:
     lore: ["&7flyを強制的に有効にします", "&c※1日フライ券がない場合は20Pを消費"]
     actions:
       - {player_cmd: "redbull"}
-      - {close: true}
+      - {close: true,}
 
   tpset_open:
     slot: 29
@@ -113,7 +113,7 @@ items:
       - "&7/tpset ng <player> でブラックリスト設定"
     actions:
       - {player_cmd: "tpset open"}
-      - {close: true}
+      - {close: true,}
 
   tpaccept:
     slot: 38
@@ -122,7 +122,7 @@ items:
     lore: ["&7/tpaccept"]
     actions:
       - {player_cmd: "tpaccept"}
-      - {close: true}
+      - {close: true,}
 
   warp_pvp:
     slot: 3
@@ -131,7 +131,7 @@ items:
     lore: ["&7/warp pvp"]
     actions:
       - {player_cmd: "warp pvp"}
-      - {close: true}
+      - {close: true,}
 
   bp:
     slot: 12
@@ -140,7 +140,7 @@ items:
     lore: ["&7/bp"]
     actions:
       - {player_cmd: "bp"}
-      - {close: true}
+      - {close: true,}
 
   gms:
     slot: 21
@@ -149,7 +149,7 @@ items:
     lore: ["&7/gms"]
     actions:
       - {player_cmd: "gms"}
-      - {close: true}
+      - {close: true,}
 
   tpset_close:
     slot: 30
@@ -160,7 +160,7 @@ items:
       - "&7/tpset ok <player> でホワイトリスト設定"
     actions:
       - {player_cmd: "tpset close"}
-      - {close: true}
+      - {close: true,}
 
   tpdeny:
     slot: 39
@@ -169,7 +169,7 @@ items:
     lore: ["&7/tpdeny"]
     actions:
       - {player_cmd: "tpdeny"}
-      - {close: true}
+      - {close: true,}
 
   warp_casino:
     slot: 4
@@ -178,7 +178,7 @@ items:
     lore: ["&7/warp casino"]
     actions:
       - {player_cmd: "warp casino"}
-      - {close: true}
+      - {close: true,}
 
   trash:
     slot: 13
@@ -187,7 +187,7 @@ items:
     lore: ["&7/trash"]
     actions:
       - {player_cmd: "trash"}
-      - {close: true}
+      - {close: true,}
 
   gmc:
     slot: 22
@@ -196,7 +196,7 @@ items:
     lore: ["&c※ポイント購入 or 匠以上のランクが必要"]
     actions:
       - {player_cmd: "gmc"}
-      - {close: true}
+      - {close: true,}
 
   tpset_mode:
     slot: 31
@@ -205,7 +205,7 @@ items:
     lore: ["&7現在のTP許可設定を確認する"]
     actions:
       - {player_cmd: "tpset mode"}
-      - {close: true}
+      - {close: true,}
 
   startpaint:
     slot: 40
@@ -218,7 +218,7 @@ items:
     actions:
       - {player_cmd: "startpaint"}
       - {console_cmd: "give %player% item_frame 1"}
-      - {close: true}
+      - {close: true,}
 
   warp_endertt:
     slot: 5
@@ -227,7 +227,7 @@ items:
     lore: ["&7/warp endertt"]
     actions:
       - {player_cmd: "warp endertt"}
-      - {close: true}
+      - {close: true,}
 
   anvil:
     slot: 14
@@ -236,7 +236,7 @@ items:
     lore: ["&7/anvil"]
     actions:
       - {player_cmd: "anvil"}
-      - {close: true}
+      - {close: true,}
 
   gmsp:
     slot: 23
@@ -245,7 +245,7 @@ items:
     lore: ["&c※建築士以上のランクが必要"]
     actions:
       - {player_cmd: "gmsp"}
-      - {close: true}
+      - {close: true,}
 
   getdye:
     slot: 41
@@ -255,7 +255,7 @@ items:
     lore: ["&c※「表現の自由」が必要"]
     actions:
       - {player_cmd: "getdye"}
-      - {close: true}
+      - {close: true,}
 
   grindstone:
     slot: 15
@@ -264,7 +264,7 @@ items:
     lore: ["&7/grindstone"]
     actions:
       - {player_cmd: "grindstone"}
-      - {close: true}
+      - {close: true,}
 
   afk:
     slot: 24
@@ -273,7 +273,7 @@ items:
     lore: ["&7その場でAFK状態に"]
     actions:
       - {player_cmd: "afk"}
-      - {close: true}
+      - {close: true,}
 
   item_frame_get:
     slot: 42
@@ -283,7 +283,7 @@ items:
     lore: ["&c※「表現の自由」が必要"]
     actions:
       - {console_cmd: "give %player% item_frame 1"}
-      - {close: true}
+      - {close: true,}
 
   loom:
     slot: 16
@@ -292,7 +292,7 @@ items:
     lore: ["&7/loom"]
     actions:
       - {player_cmd: "loom"}
-      - {close: true}
+      - {close: true,}
 
   annnai:
     slot: 25

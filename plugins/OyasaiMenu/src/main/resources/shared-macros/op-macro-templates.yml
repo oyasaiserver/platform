@@ -12,7 +12,6 @@
 # ただし再配布は既にIDがないプレイヤーのみです (ログイン時に再チェック)。
 
 templates:
-
   worldsettings:
     name: "ワールド設定"
     cooldown: 5

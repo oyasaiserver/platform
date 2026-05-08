@@ -20,7 +20,7 @@ items:
       - {player_cmd: "join Global"}
       - {console_cmd: 'tellraw %player% [{"bold":true,"color":"yellow","text":"グローバルチャット"}]'}
       - {player_cmd: "chwho Global"}
-      - {close: true}
+      - {close: true,}
 
   channel2:
     slot: 28
@@ -36,7 +36,7 @@ items:
       - {player_cmd: "join 2"}
       - {console_cmd: 'tellraw %player% [{"bold":true,"color":"aqua","text":"チャンネル2"}]'}
       - {player_cmd: "chwho 2"}
-      - {close: true}
+      - {close: true,}
 
   channel3:
     slot: 19
@@ -52,7 +52,7 @@ items:
       - {player_cmd: "join 3"}
       - {console_cmd: 'tellraw %player% [{"bold":true,"color":"blue","text":"チャンネル3"}]'}
       - {player_cmd: "chwho 3"}
-      - {close: true}
+      - {close: true,}
 
   members:
     slot: 10
@@ -66,7 +66,7 @@ items:
       - {player_cmd: "chwho Global"}
       - {player_cmd: "chwho 2"}
       - {player_cmd: "chwho 3"}
-      - {close: true}
+      - {close: true,}
 
   staff_channel:
     slot: 1
