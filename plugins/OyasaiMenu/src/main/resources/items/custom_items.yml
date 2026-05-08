@@ -1,0 +1,56 @@
+# items/custom_items.yml
+#
+# shops.yml で "$キー buyPrice sellPrice" と書いたときに参照されるカスタムアイテム定義。
+#
+# フォーマット:
+#   キー名:
+#     id: マテリアル名 (小文字 or 大文字どちらでも可)
+#     name: '表示名 (&カラーコード対応)'
+#     lore: ['説明文1', '説明文2']   # リスト形式
+#     enchantments:
+#       エンチャント名: レベル       # 旧来の Bukkit 名 (例: DIG_SPEED) または
+#                                    # minecraft: キー名 (例: efficiency) どちらでも可
+
+pickaxe_normal:
+  id: diamond_pickaxe
+  name: '&a普通のエンチャントツルハシ'
+  lore: ['&7すごく普通。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+
+pickaxe_normal_f:
+  id: diamond_pickaxe
+  name: '&a幸運のエンチャントツルハシ'
+  lore: ['&7お金稼ぎの効率が上がります。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+    FORTUNE: 3
+
+pickaxe_plus1:
+  id: diamond_pickaxe
+  name: '&a幸運+のエンチャントツルハシ'
+  lore: ['&7お金稼ぎの効率が更に上がります。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+    FORTUNE: 5
+
+pickaxe_plus2:
+  id: diamond_pickaxe
+  name: '&a幸運++のエンチャントツルハシ'
+  lore: ['&7お金稼ぎの効率がそこそこ上がります。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+    FORTUNE: 7
+
+pickaxe_plus3:
+  id: diamond_pickaxe
+  name: '&a幸運+++のエンチャントツルハシ'
+  lore: ['&7お金稼ぎの効率がかなり上がります。']
+  enchantments:
+    DIG_SPEED: 5
+    UNBREAKING: 3
+    FORTUNE: 10

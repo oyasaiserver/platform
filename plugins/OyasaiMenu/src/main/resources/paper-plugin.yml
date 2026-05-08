@@ -1,0 +1,25 @@
+name: OyasaiMenu
+version: '1.0.0'
+main: com.github.sahyuya.oyasaiMenu.OyasaiMenu
+api-version: '1.21'
+description: GUIベースの統合フロントエンドメニュープラグイン
+author: sahyuya
+
+# paper-plugin.yml では commands: セクションを書いても効果がない。
+# コマンドの登録は OyasaiMenu.kt の lifecycleManager で行う。
+
+# softdepend: 存在しなくてもプラグインは起動できる任意依存
+dependencies:
+  server:
+    LuckPerms:
+      load: BEFORE
+      required: false
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+    TokenManager:
+      load: BEFORE
+      required: false
+    Vault:
+      load: BEFORE
+      required: false

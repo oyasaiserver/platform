@@ -1,0 +1,27 @@
+# items/templates.yml - 再利用可能アイテムテンプレート集
+# メニューYAML で "extends: <テンプレートID>" と書くと継承できる
+
+templates:
+  back_button:
+    icon: ARROW
+    name: "&c← 戻る"
+    lore:
+      - "&7前のメニューに戻ります"
+
+  close_button:
+    icon: BARRIER
+    name: "&c✕ 閉じる"
+    lore:
+      - "&7メニューを閉じます"
+
+  spacer:
+    icon: BLACK_STAINED_GLASS_PANE
+    name: " "
+
+  info_panel:
+    icon: BOOK
+    name: "&7情報"
+    lore:
+      - "&8このアイテムはクリックできません"
+
+# 使用していないので消去予定

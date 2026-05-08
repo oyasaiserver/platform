@@ -1,0 +1,80 @@
+# SocialLikes メニュー
+# 画像5参照: 黄緑ガラス
+# 下から上: 建築一覧(38,col2)→自分の建築(29,col2)→SLメニュー(20,col2)→近く(11,col2)→空き地TP(2,col2)→バイオーム(3,col3)
+title: "&aSocialLikes"
+glass: LIME_STAINED_GLASS_PANE
+nav_active: 49
+
+items:
+  build_list:
+    slot: 40
+    icon: OAK_SIGN
+    name: "&a建築一覧"
+    lore:
+      - "&7/slbuild"
+      - ""
+      - "&eクリックで実行"
+    actions:
+      - {player_cmd: "slbuild"}
+      - {close: true}
+
+  my_builds:
+    slot: 31
+    icon: BIRCH_SIGN
+    name: "&b自分の建築を見る"
+    lore:
+      - "&7/sluser"
+      - ""
+      - "&eクリックで実行"
+    actions:
+      - {player_cmd: "sluser %player%"}
+      - {close: true}
+
+  sl_menu:
+    slot: 22
+    icon: OAK_HANGING_SIGN
+    enchanted: true
+    name: "&eSocialLikesメニュー"
+    lore:
+      - "&7/slmenu"
+      - ""
+      - "&eクリックで開く"
+    actions:
+      - {player_cmd: "slmenu"}
+      - {close: true}
+
+  near:
+    slot: 13
+    icon: SPYGLASS
+    name: "&6近くの建築を探す"
+    lore:
+      - "&7/slnear"
+      - ""
+      - "&eクリックで実行"
+    actions:
+      - {player_cmd: "slnear"}
+      - {close: true}
+
+  vtp:
+    slot: 4
+    icon: COMPASS
+    enchanted: true
+    name: "&d空き地へテレポート"
+    lore:
+      - "&7/vtp"
+      - ""
+      - "&eクリックで実行"
+    actions:
+      - {player_cmd: "vtp"}
+      - {close: true}
+
+  vtp_biome:
+    slot: 5
+    icon: RECOVERY_COMPASS
+    name: "&5バイオーム指定でテレポート"
+    lore:
+      - "&7バイオームを指定して空き地へ"
+      - ""
+      - "&eクリックでメニューを開く"
+    actions:
+      - {open_popup: "vtpbiome"}

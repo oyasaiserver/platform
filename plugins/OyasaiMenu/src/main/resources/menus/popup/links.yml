@@ -1,0 +1,71 @@
+# リンク集メニュー
+# 画像9参照: ピンクガラス、col8 下から上 (wiki→Discord→WebMAP→JMS→MinePortal)
+title: "&dリンク集"
+glass: PINK_STAINED_GLASS_PANE
+nav_active: 53
+
+items:
+  wiki:
+    slot: 44
+    icon: COD_BUCKET
+    enchanted: true
+    name: "&bおやさいWiki"
+    lore:
+      - "&7http://wiki.oyasai.io/"
+      - ""
+      - "&eクリックでURLを表示"
+    actions:
+      - {url: "http://wiki.oyasai.io/"}
+      - {close: true}
+
+  discord:
+    slot: 35
+    icon: SALMON_BUCKET
+    enchanted: true
+    name: "&9Discordサーバー"
+    lore:
+      - "&7https://discord.gg/rgKayZPW6X"
+      - ""
+      - "&eクリックでURLを表示"
+    actions:
+      - {url: "https://discord.gg/rgKayZPW6X"}
+      - {close: true}
+
+  webmap:
+    slot: 26
+    icon: TROPICAL_FISH_BUCKET
+    enchanted: true
+    name: "&aおやさい鯖 Web MAP"
+    lore:
+      - "&7http://oyasai.io:8100"
+      - ""
+      - "&eクリックでURLを表示"
+    actions:
+      - {url: "http://oyasai.io:8100"}
+      - {close: true}
+
+  vote_jms:
+    slot: 17
+    icon: PUFFERFISH_BUCKET
+    enchanted: true
+    name: "&6投票 (JMS)"
+    lore:
+      - "&7https://minecraft.jp/servers/oyasai.io/vote"
+      - ""
+      - "&eクリックでURLを表示"
+    actions:
+      - {url: "https://minecraft.jp/servers/oyasai.io/vote"}
+      - {close: true}
+
+  vote_mineportal:
+    slot: 8
+    icon: AXOLOTL_BUCKET
+    enchanted: true
+    name: "&d投票 (MinePortal)"
+    lore:
+      - "&7https://mineportal.jp/servers/clrfqwdka0000lgansuxtj9mi"
+      - ""
+      - "&eクリックでURLを表示"
+    actions:
+      - {url: "https://mineportal.jp/servers/clrfqwdka0000lgansuxtj9mi"}
+      - {close: true}

@@ -1,0 +1,39 @@
+# op-macro-templates.yml
+#
+# OPプレイヤーがログインした際に自動配布されるマクロテンプレートを定義します。
+# マクロIDは "_op_<キー名>" 形式で付与されます (例: _op_worldsettings)。
+# 既に同じIDのマクロを持っているプレイヤーには再配布しません。
+#
+# commands フォーマット:
+#   - コマンド文字列 (先頭スラッシュなし)
+#   - "wait 1s" / "wait 0.5s" でウェイト挿入可
+#
+# このファイルを編集後は /om reload でリロードできます。
+# ただし再配布は既にIDがないプレイヤーのみです (ログイン時に再チェック)。
+
+templates:
+
+  worldsettings:
+    name: "ワールド設定"
+    cooldown: 5
+    commands:
+      - "gamerule doDaylightCycle false"
+      - "gamerule doWeatherCycle false"
+      - "gamerule doMobSpawning false"
+      - "gamerule randomTickSpeed 0"
+      - "rg flag __global__ coral-fade deny"
+      - "gamerule playersNetherPortalDefaultDelay 100000000"
+      - "gamerule playersNetherPortalCreativeDelay 100000000"
+
+  dayclear:
+    name: "快晴"
+    cooldown: 3
+    commands:
+      - "time set day"
+      - "weather clear"
+
+  clearlag:
+    name: "エンティティクリア"
+    cooldown: 10
+    commands:
+      - "kill @e[type=!player,type=!armor_stand,type=!item_frame]"
