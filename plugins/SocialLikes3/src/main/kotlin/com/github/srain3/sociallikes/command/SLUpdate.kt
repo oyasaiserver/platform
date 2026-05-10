@@ -64,35 +64,22 @@ object SLUpdate : CommandExecutor {
       player.sendMessage("WorldEdit読み込み失敗")
       return
     }
-
     val actor = BukkitAdapter.adapt(player)
     val localSession = we.sessionManager.get(actor as SessionOwner)
-
-    //    val clipboardHolder = localSession.existingClipboard ?: run {
-    //      actor.printError(TextComponent.of("Your clipboard is empty."))
-    //      return
-    //    }
-    //
-    //    val clipboard = clipboardHolder.getClipboards().firstOrNull() ?: run {
-    //      actor.printError(TextComponent.of("Your clipboard is empty."))
-    //      return
-    //    }
     val region = localSession.selection
+
     region.forEach { blockVector3 ->
       val block =
           player.world.getBlockAt(blockVector3.x(), blockVector3.y(), blockVector3.z()).state
       if (block !is Sign) return@forEach
-      //      player.sendMessage(Tools.socialLikesLOGO + "&eアップデート中... Type:${block.type} Location:
-      // ${blockVector3.x()}, ${blockVector3.y()}, ${blockVector3.z()}".color())
+
       var id =
           block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: Integer.MIN_VALUE
       var susp = false
       if (isSLSign(block)) {
         val data = Data.getSLData(id)
-
         if (data != null) updateSLSign(data, block) else susp = true
       } else if (isLegacySLSign(block)) {
-
         id =
             block
                 .getSide(Side.FRONT)
