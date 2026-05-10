@@ -19,6 +19,7 @@ export const secretKeys = [
   "TLS_CA_PEM",
   "TLS_CERT_PEM",
   "TLS_KEY_PEM",
+  "VELOCITY_FORWARDING_SECRET",
   // keep-sorted end
 ] as const;
 

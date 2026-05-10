@@ -92,7 +92,7 @@ jobs:
       - name: Start Proxy
         if: inputs.start-proxy
         # It's free, feel free to increase
-        timeout-minutes: 20
+        timeout-minutes: 30
         run: |
           docker logs -f minecraft-main &
           nix run .#bore-cli -- local 25565 \

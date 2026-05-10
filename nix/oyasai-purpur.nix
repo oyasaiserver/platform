@@ -2,9 +2,10 @@
   lib,
   jre,
   writeShellApplication,
+  writeTextFile,
+  formats,
   coreutils,
   purpurServers,
-  writeTextFile,
 }:
 
 {
@@ -13,6 +14,7 @@
   plugins ? [ ],
   icon ? null,
   properties ? { },
+  paperConfig ? null,
   passthru ? { },
 }:
 
@@ -23,6 +25,9 @@ let
     name = "server.properties";
     text = lib.generators.toKeyValue { } properties;
   };
+
+  paperGlobalYml =
+    if paperConfig != null then (formats.yaml { }).generate "paper-global.yml" paperConfig else null;
 in
 writeShellApplication {
   inherit name passthru;
@@ -51,6 +56,11 @@ writeShellApplication {
     # Cleaner to inject as `--add-plugin` but doesn't work with Plugman well :(
     ${lib.optionalString (plugins != [ ]) ''
       cp --no-preserve=ownership,mode ${lib.concatStringsSep " " plugins} plugins
+    ''}
+
+    ${lib.optionalString (paperConfig != null) ''
+      mkdir -p config
+      cp --no-preserve=ownership,mode ${paperGlobalYml} config/paper-global.yml
     ''}
 
     # Sighs. Doesn't take rcon password as a envvar.

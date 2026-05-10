@@ -38,6 +38,13 @@ let
       # keep-sorted end
     };
 
+    paperConfig = {
+      proxies.velocity = {
+        enabled = true;
+        online-mode = true;
+      };
+    };
+
     plugins = with oyasai-plugin-registry.forVersion version; [
       # keep-sorted start
       advancedban
