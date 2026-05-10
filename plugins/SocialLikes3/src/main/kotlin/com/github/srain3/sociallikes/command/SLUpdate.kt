@@ -11,13 +11,12 @@ import com.github.srain3.sociallikes.datas.Data
 import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.session.SessionOwner
-import com.sk89q.worldedit.util.formatting.text.TextComponent
+import java.util.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.block.Sign
 import org.bukkit.block.sign.Side
-import java.util.*
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -36,7 +35,7 @@ object SLUpdate : CommandExecutor {
   ): Boolean {
     if (command.name != "slupdate") return false
     if (sender !is Player) return false
-    if (args.isNotEmpty() && args[0] == "region"){
+    if (args.isNotEmpty() && args[0] == "region") {
       updateAllInRegion(sender)
       return true
     }
@@ -59,7 +58,7 @@ object SLUpdate : CommandExecutor {
     return true
   }
 
-  fun updateAllInRegion(player: Player){
+  fun updateAllInRegion(player: Player) {
     val we = WorldEdit.getInstance()
     if (we == null) {
       player.sendMessage("WorldEdit読み込み失敗")
@@ -69,54 +68,58 @@ object SLUpdate : CommandExecutor {
     val actor = BukkitAdapter.adapt(player)
     val localSession = we.sessionManager.get(actor as SessionOwner)
 
-//    val clipboardHolder = localSession.existingClipboard ?: run {
-//      actor.printError(TextComponent.of("Your clipboard is empty."))
-//      return
-//    }
-//
-//    val clipboard = clipboardHolder.getClipboards().firstOrNull() ?: run {
-//      actor.printError(TextComponent.of("Your clipboard is empty."))
-//      return
-//    }
+    //    val clipboardHolder = localSession.existingClipboard ?: run {
+    //      actor.printError(TextComponent.of("Your clipboard is empty."))
+    //      return
+    //    }
+    //
+    //    val clipboard = clipboardHolder.getClipboards().firstOrNull() ?: run {
+    //      actor.printError(TextComponent.of("Your clipboard is empty."))
+    //      return
+    //    }
     val region = localSession.selection
     region.forEach { blockVector3 ->
-      val block = player.world.getBlockAt(blockVector3.x(), blockVector3.y(), blockVector3.z()).state
+      val block =
+          player.world.getBlockAt(blockVector3.x(), blockVector3.y(), blockVector3.z()).state
       if (block !is Sign) return@forEach
-//      player.sendMessage(Tools.socialLikesLOGO + "&eアップデート中... Type:${block.type} Location: ${blockVector3.x()}, ${blockVector3.y()}, ${blockVector3.z()}".color())
-      var id = block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: Integer.MIN_VALUE
+      //      player.sendMessage(Tools.socialLikesLOGO + "&eアップデート中... Type:${block.type} Location:
+      // ${blockVector3.x()}, ${blockVector3.y()}, ${blockVector3.z()}".color())
+      var id =
+          block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: Integer.MIN_VALUE
       var susp = false
-      if (isSLSign(block)){
+      if (isSLSign(block)) {
         val data = Data.getSLData(id)
 
-        if (data!=null)updateSLSign(data, block)
-        else susp = true
-
-      } else if (isLegacySLSign(block)){
+        if (data != null) updateSLSign(data, block) else susp = true
+      } else if (isLegacySLSign(block)) {
 
         id =
-          block
-            .getSide(Side.FRONT)
-            .line(0)
-            .style()
-            .color()
-            ?.asHexString()
-            ?.substring(1)
-            ?.toIntOrNull(16)?: Integer.MIN_VALUE
+            block
+                .getSide(Side.FRONT)
+                .line(0)
+                .style()
+                .color()
+                ?.asHexString()
+                ?.substring(1)
+                ?.toIntOrNull(16) ?: Integer.MIN_VALUE
         id = -id
         val data = Data.getSLData(id)
-        if(data!=null) updateLegacySLSign(data, block)
-        else susp = true
-
+        if (data != null) updateLegacySLSign(data, block) else susp = true
       } else return@forEach
       val result =
-        if(!susp) Component.text("アップデートしました！ ").color(TextColor.color(0x55FF55))
-        else  Component.text("不審な看板を検知。スキップしました。 ").color(TextColor.color(0xFF5555))
-      val message = Component.text(Tools.socialLikesLOGO)
-      .append(result)
-      .append(Component.text("ID: ${if(id==Integer.MIN_VALUE) "不明" else id}, ").color(TextColor.color(0xAAAAAA)))
-        .append(Component.text("Location: ${block.world.name} / ${block.x}, ${block.y}, ${block.z}").color(TextColor.color(0xAAAAAA)))
-      .clickEvent(
-        ClickEvent.runCommand("/minecraft:tp ${block.x} ${block.y} ${block.z}"))
+          if (!susp) Component.text("アップデートしました！ ").color(TextColor.color(0x55FF55))
+          else Component.text("不審な看板を検知。スキップしました。 ").color(TextColor.color(0xFF5555))
+      val message =
+          Component.text(Tools.socialLikesLOGO)
+              .append(result)
+              .append(
+                  Component.text("ID: ${if(id==Integer.MIN_VALUE) "不明" else id}, ")
+                      .color(TextColor.color(0xAAAAAA)))
+              .append(
+                  Component.text(
+                          "Location: ${block.world.name} / ${block.x}, ${block.y}, ${block.z}")
+                      .color(TextColor.color(0xAAAAAA)))
+              .clickEvent(ClickEvent.runCommand("/minecraft:tp ${block.x} ${block.y} ${block.z}"))
       player.sendMessage(message)
     }
   }

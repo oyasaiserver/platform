@@ -183,7 +183,7 @@ object Events : Listener {
     if (block !is Sign) return
 
     // 表面の1行目をカラーコードを外して取得、SL3の看板のみ中へ進む
-      if (isSLSign(block)) {
+    if (isSLSign(block)) {
       // クリックイベントをキャンセルし、埋め込まれたIDからSLDataを取得する。取得できない場合何もしない
       e.isCancelled = true
       if (!Data.loading) {

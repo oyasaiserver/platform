@@ -2,11 +2,11 @@ package com.github.srain3.sociallikes
 
 import com.fren_gor.ultimateAdvancementAPI.UltimateAdvancementAPI
 import com.github.srain3.sociallikes.Events.idKey
-import com.github.srain3.sociallikes.command.SLUpdate
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.discord.SLDiscord
 import java.io.File
+import kotlin.collections.set
 import me.realized.tokenmanager.api.TokenManager
 import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
@@ -20,7 +20,6 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
-import kotlin.collections.set
 
 object Tools {
   /** JavaPluginクラス(Main) */
@@ -137,26 +136,26 @@ object Tools {
     return oldSlSignRegex.containsMatchIn(unColorFrontL0)
   }
 
-  fun updateSLSign(currentSLData: SLData, block: BlockState){
+  fun updateSLSign(currentSLData: SLData, block: BlockState) {
     val newData =
-      SLData(
-        currentSLData.id,
-        block.location,
-        currentSLData.time,
-        currentSLData.owner,
-        currentSLData.title,
-        currentSLData.likes,
-        currentSLData.likesWithTimestamp,
-        currentSLData.check,
-        currentSLData.comment,
-        block.world.name,
-        currentSLData.discordTextID,
-      )
+        SLData(
+            currentSLData.id,
+            block.location,
+            currentSLData.time,
+            currentSLData.owner,
+            currentSLData.title,
+            currentSLData.likes,
+            currentSLData.likesWithTimestamp,
+            currentSLData.check,
+            currentSLData.comment,
+            block.world.name,
+            currentSLData.discordTextID,
+        )
     Data.delID(currentSLData, true)
     Data.save(newData)
     if (currentSLData.loc.world != null) {
       val state = currentSLData.loc.block.state
-      if (state is Sign&&state.location!=block.location) {
+      if (state is Sign && state.location != block.location) {
         state.block.blockData = Material.AIR.createBlockData()
         state.update()
       }
@@ -168,29 +167,29 @@ object Tools {
   fun updateLegacySLSign(currentSLData: SLData, block: BlockState) {
     if (block !is Sign) return
     var id =
-      block
-        .getSide(Side.FRONT)
-        .line(0)
-        .style()
-        .color()
-        ?.asHexString()
-        ?.substring(1)
-        ?.toIntOrNull(16) ?: return
+        block
+            .getSide(Side.FRONT)
+            .line(0)
+            .style()
+            .color()
+            ?.asHexString()
+            ?.substring(1)
+            ?.toIntOrNull(16) ?: return
     id = -id
     val newData =
-      SLData(
-        currentSLData.id,
-        block.location,
-        currentSLData.time,
-        currentSLData.owner,
-        currentSLData.title,
-        currentSLData.likes,
-        currentSLData.likesWithTimestamp,
-        currentSLData.check,
-        currentSLData.comment,
-        block.world.name,
-        currentSLData.discordTextID,
-      )
+        SLData(
+            currentSLData.id,
+            block.location,
+            currentSLData.time,
+            currentSLData.owner,
+            currentSLData.title,
+            currentSLData.likes,
+            currentSLData.likesWithTimestamp,
+            currentSLData.check,
+            currentSLData.comment,
+            block.world.name,
+            currentSLData.discordTextID,
+        )
     Data.delID(currentSLData, true)
     Data.save(newData)
     // 看板の装飾
@@ -198,15 +197,14 @@ object Tools {
     block.setLine(1, "&a".color() + currentSLData.title)
     block.setLine(2, "&f${Bukkit.getOfflinePlayer(currentSLData.owner).name}".color())
     block.setLine(
-      3,
-      "&7Likes&8: &6${currentSLData.likes.count()}${if(currentSLData.check){" &e✓"}else{""}}".color(),
+        3,
+        "&7Likes&8: &6${currentSLData.likes.count()}${if(currentSLData.check){" &e✓"}else{""}}"
+            .color(),
     )
 
     block.isWaxed = true
     block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
     block.update()
-
-
   }
 
   /** AdvancementAPI */
