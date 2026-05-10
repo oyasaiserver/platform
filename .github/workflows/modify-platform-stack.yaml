@@ -89,6 +89,22 @@ jobs:
           nix run .#oyasai-infra -- \
             terraform_io::delete_workspace \
             ${{ inputs.stack }}
+      - name: Debug containers NOMERGE
+        if: inputs.start-proxy
+        working-directory: .
+        run: |
+          echo "=== Waiting 90s for minecraft-main to start ==="
+          sleep 90
+          echo "=== docker ps ==="
+          docker ps -a
+          echo "=== minecraft-main logs (last 80) ==="
+          docker logs --tail 80 minecraft-main 2>&1 || echo "(no logs)"
+          echo "=== velocity logs ==="
+          docker logs velocity 2>&1 || echo "(no logs)"
+          echo "=== paper-global.yml ==="
+          docker cp minecraft-main:/data/config/paper-global.yml - 2>/dev/null | tar -xOf - paper-global.yml || echo "(could not read)"
+          echo "=== server.properties ==="
+          docker cp minecraft-main:/data/server.properties - 2>/dev/null | tar -xOf - server.properties | grep -E "online-mode|velocity|rcon" || echo "(could not read)"
       - name: Start Proxy
         if: inputs.start-proxy
         # It's free, feel free to increase
