@@ -61,13 +61,16 @@ let
 
   final = writeShellApplication {
     inherit name;
+
     runtimeInputs = [ coreutils ];
+
     text = ''
       cp --no-preserve=ownership,mode ${velocityToml} velocity.toml
 
       MEMORY="''${MEMORY:-512M}"
       exec ${lib.getExe package} -Xmx"''${MEMORY}" -Xms"''${MEMORY}" "$@"
     '';
+
     passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       docker = oyasaiDockerTools.buildLayeredImage {
         inherit name;

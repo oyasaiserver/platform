@@ -6,6 +6,7 @@
   formats,
   coreutils,
   purpurServers,
+  gnused
 }:
 
 {
@@ -34,12 +35,13 @@ writeShellApplication {
 
   runtimeInputs = [
     coreutils
+    jre
     gnused
   ];
 
   text = ''
-    # Technically not required but prepopulate the cache to minimize
-    # non-determinism.
+    # Technically not required but prepopulate the cache to ensure
+    # reproducability.
     mkdir -p cache
     cp --no-preserve=ownership,mode ${package.vanillaJar} cache/mojang_${version}.jar
 
@@ -58,6 +60,7 @@ writeShellApplication {
       cp --no-preserve=ownership,mode ${lib.concatStringsSep " " plugins} plugins
     ''}
 
+    # Doesn't have cli flag
     ${lib.optionalString (paperConfig != null) ''
       mkdir -p config
       cp --no-preserve=ownership,mode ${paperGlobalYml} config/paper-global.yml

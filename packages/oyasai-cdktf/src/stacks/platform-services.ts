@@ -96,8 +96,14 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         init: true,
         networksAdvanced: [network],
         ports: ports({
-          tcp: [8100, 8192, 25575],
-          udp: [19132],
+          tcp: [
+            8100, // Bluemap
+            8192, // Votifier
+            25575 // Rcon
+          ],
+          udp: [
+            19132 // Bedrock
+          ],
         }),
         env: envs({
           MEMORY: this.isMaster
