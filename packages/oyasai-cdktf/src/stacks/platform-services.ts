@@ -103,7 +103,10 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           tcp: [
             8100, // Bluemap
             8192, // Votifier
-            25575, // Rcon
+            25575 // Rcon
+          ],
+          udp: [
+            19132 // Bedrock
           ],
         }),
         env: envs({

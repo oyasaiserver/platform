@@ -9,6 +9,7 @@
   formats,
   coreutils,
   purpurServers,
+  gnused
 }:
 
 {
@@ -36,12 +37,13 @@ let
 
     runtimeInputs = [
       coreutils
+      jre
       gnused
     ];
 
     text = ''
       # Technically not required but prepopulate the cache to ensure
-      # reproducibility.
+      # reproducability.
       mkdir -p cache
       cp --no-preserve=ownership,mode ${package.vanillaJar} cache/mojang_${version}.jar
 
@@ -66,6 +68,7 @@ let
         cp --no-preserve=ownership,mode ${paperGlobalYml} config/paper-global.yml
       ''}
 
+      # Doesn't have cli flag
       ${lib.optionalString (paperConfig != null) ''
         mkdir -p config
         cp --no-preserve=ownership,mode ${paperGlobalYml} config/paper-global.yml
