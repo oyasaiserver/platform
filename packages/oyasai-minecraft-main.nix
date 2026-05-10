@@ -42,8 +42,6 @@ let
       proxies.velocity = {
         enabled = true;
         online-mode = true;
-        # NOMERGE
-        secret = "PAPER_VELOCITY_SECRET_PLACEHOLDER";
       };
     };
 

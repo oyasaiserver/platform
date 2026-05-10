@@ -5,7 +5,6 @@
   writeTextFile,
   formats,
   coreutils,
-  gnused,
   purpurServers,
 }:
 
@@ -35,7 +34,6 @@ writeShellApplication {
 
   runtimeInputs = [
     coreutils
-    jre
     gnused
   ];
 
@@ -63,9 +61,6 @@ writeShellApplication {
     ${lib.optionalString (paperConfig != null) ''
       mkdir -p config
       cp --no-preserve=ownership,mode ${paperGlobalYml} config/paper-global.yml
-      if [ -n "''${PAPER_VELOCITY_SECRET:-}" ]; then
-        sed -i "s/PAPER_VELOCITY_SECRET_PLACEHOLDER/''${PAPER_VELOCITY_SECRET}/" config/paper-global.yml
-      fi
     ''}
 
     # Sighs. Doesn't take rcon password as a envvar.
