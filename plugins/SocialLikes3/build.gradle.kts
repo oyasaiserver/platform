@@ -4,6 +4,7 @@ dependencies {
   compileOnly(libs.discordsrv)
   compileOnly(libs.luckperms.api)
   compileOnly(libs.tokenmanager) { isTransitive = false }
+  compileOnly(libs.fawe.bukkit)
   implementation(libs.kotlin.stdlib)
   implementation(libs.inventoryframework)
   implementation(libs.anvilgui)

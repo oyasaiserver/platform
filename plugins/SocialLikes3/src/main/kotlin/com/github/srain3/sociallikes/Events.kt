@@ -2,8 +2,14 @@ package com.github.srain3.sociallikes
 
 import com.fren_gor.ultimateAdvancementAPI.advancement.display.AdvancementFrameType
 import com.github.srain3.sociallikes.Tools.color
+import com.github.srain3.sociallikes.Tools.isLegacySLSign
+import com.github.srain3.sociallikes.Tools.isSLSign
+import com.github.srain3.sociallikes.Tools.oldSlSignRegex
 import com.github.srain3.sociallikes.Tools.plugin
+import com.github.srain3.sociallikes.Tools.slSignRegex
 import com.github.srain3.sociallikes.Tools.unColor
+import com.github.srain3.sociallikes.Tools.updateLegacySLSign
+import com.github.srain3.sociallikes.Tools.updateSLSign
 import com.github.srain3.sociallikes.api.LikeEvent
 import com.github.srain3.sociallikes.command.SLUpdate
 import com.github.srain3.sociallikes.datas.Data
@@ -165,12 +171,6 @@ object Events : Listener {
   /** このPluginの看板内部データKey */
   val idKey = NamespacedKey(plugin, "SocialLikes_ID")
 
-  /** (SocialLikes)←これの判定用 */
-  private val slSignRegex = Regex("""\(SocialLikes\)""")
-
-  /** \[SocialLikes]←これの判定用(エルちゃん(カイザー)製SL看板用) */
-  private val oldSlSignRegex = Regex("""\[SocialLikes]""")
-
   /** 運営チェックマーク */
   val checkMarkRegex = Regex("""✓""")
 
@@ -183,8 +183,7 @@ object Events : Listener {
     if (block !is Sign) return
 
     // 表面の1行目をカラーコードを外して取得、SL3の看板のみ中へ進む
-    val unColorFrontL0 = block.getSide(Side.FRONT).getLine(0).unColor()
-    if (slSignRegex.containsMatchIn(unColorFrontL0)) {
+    if (isSLSign(block)) {
       // クリックイベントをキャンセルし、埋め込まれたIDからSLDataを取得する。取得できない場合何もしない
       e.isCancelled = true
       if (!Data.loading) {
@@ -199,33 +198,9 @@ object Events : Listener {
       // SLUpdateモードなら処理を行う、それ以外はreturn
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
-          val newData =
-              SLData(
-                  data.id,
-                  block.location,
-                  data.time,
-                  data.owner,
-                  data.title,
-                  data.likes,
-                  data.likesWithTimestamp,
-                  data.check,
-                  data.comment,
-                  block.world.name,
-                  data.discordTextID,
-              )
-          Data.delID(data, true)
-          Data.save(newData)
-          if (data.loc.world != null) {
-            val state = data.loc.block.state
-            if (state is Sign) {
-              state.block.blockData = Material.AIR.createBlockData()
-              state.update()
-            }
-          }
+          updateSLSign(data, block)
           e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
           SLUpdate.switch[e.player.uniqueId] = false
-          // Discordへ反映
-          SLDiscord.changeSLDataToMsg(newData)
         }
         return
       }
@@ -316,7 +291,7 @@ object Events : Listener {
         }
       }
       block.update()
-    } else if (oldSlSignRegex.containsMatchIn(unColorFrontL0)) {
+    } else if (isLegacySLSign(block)) {
       // 旧Like看板の場合
       // クリックイベントをキャンセルし、埋め込まれたIDからSLDataを取得する。取得できない場合何もしない
       e.isCancelled = true
@@ -342,35 +317,7 @@ object Events : Listener {
       // SLUpdateモードなら処理を行う、それ以外はreturn
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
-          val newData =
-              SLData(
-                  data.id,
-                  block.location,
-                  data.time,
-                  data.owner,
-                  data.title,
-                  data.likes,
-                  data.likesWithTimestamp,
-                  data.check,
-                  data.comment,
-                  block.world.name,
-                  data.discordTextID,
-              )
-          Data.delID(data, true)
-          Data.save(newData)
-          // 看板の装飾
-          block.setLine(0, Tools.socialLikesLOGO)
-          block.setLine(1, "&a".color() + data.title)
-          block.setLine(2, "&f${Bukkit.getOfflinePlayer(data.owner).name}".color())
-          block.setLine(
-              3,
-              "&7Likes&8: &6${data.likes.count()}${if(data.check){" &e✓"}else{""}}".color(),
-          )
-
-          block.isWaxed = true
-          block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
-          block.update()
-
+          updateLegacySLSign(data, block)
           e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
           SLUpdate.switch[e.player.uniqueId] = false
         } else {
