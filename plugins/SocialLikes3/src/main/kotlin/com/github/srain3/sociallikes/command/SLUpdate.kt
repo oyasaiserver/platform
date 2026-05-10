@@ -36,7 +36,7 @@ object SLUpdate : CommandExecutor {
   ): Boolean {
     if (command.name != "slupdate") return false
     if (sender !is Player) return false
-    if (args.size > 1 && args[1] == "region"){
+    if (args.isNotEmpty() && args[0] == "region"){
       updateAllInRegion(sender)
       return true
     }
@@ -60,7 +60,6 @@ object SLUpdate : CommandExecutor {
   }
 
   fun updateAllInRegion(player: Player){
-    //FAWEから選択範囲のブロックリストを取得
     val we = WorldEdit.getInstance()
     if (we == null) {
       player.sendMessage("WorldEdit読み込み失敗")
@@ -70,27 +69,29 @@ object SLUpdate : CommandExecutor {
     val actor = BukkitAdapter.adapt(player)
     val localSession = we.sessionManager.get(actor as SessionOwner)
 
-    val clipboardHolder = localSession.existingClipboard ?: run {
-      actor.printError(TextComponent.of("Your clipboard is empty."))
-      return
-    }
-
-    val clipboard = clipboardHolder.getClipboards().firstOrNull() ?: run {
-      actor.printError(TextComponent.of("Your clipboard is empty."))
-      return
-    }
-    val region = clipboard.region
-    player.sendMessage("${region.width}x${region.height}x${region.length}")
+//    val clipboardHolder = localSession.existingClipboard ?: run {
+//      actor.printError(TextComponent.of("Your clipboard is empty."))
+//      return
+//    }
+//
+//    val clipboard = clipboardHolder.getClipboards().firstOrNull() ?: run {
+//      actor.printError(TextComponent.of("Your clipboard is empty."))
+//      return
+//    }
+    val region = localSession.selection
     region.forEach { blockVector3 ->
-      val block = player.world.getBlockAt(blockVector3.x(), blockVector3.y(), blockVector3.z())
-      if (block !is Sign) return
-      var id = block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: return
-      if (isSLSign(block.state)){
+      val block = player.world.getBlockAt(blockVector3.x(), blockVector3.y(), blockVector3.z()).state
+      if (block !is Sign) return@forEach
+//      player.sendMessage(Tools.socialLikesLOGO + "&eアップデート中... Type:${block.type} Location: ${blockVector3.x()}, ${blockVector3.y()}, ${blockVector3.z()}".color())
+      var id = block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: Integer.MIN_VALUE
+      var susp = false
+      if (isSLSign(block)){
+        val data = Data.getSLData(id)
 
-        val data = Data.getSLData(id) ?: return
-        updateSLSign(data, block)
+        if (data!=null)updateSLSign(data, block)
+        else susp = true
 
-      } else if (isLegacySLSign(block.state)){
+      } else if (isLegacySLSign(block)){
 
         id =
           block
@@ -100,20 +101,22 @@ object SLUpdate : CommandExecutor {
             .color()
             ?.asHexString()
             ?.substring(1)
-            ?.toIntOrNull(16) ?: return
+            ?.toIntOrNull(16)?: Integer.MIN_VALUE
         id = -id
-        val data = Data.getSLData(id) ?: return
-        updateLegacySLSign(data, block.state)
+        val data = Data.getSLData(id)
+        if(data!=null) updateLegacySLSign(data, block)
+        else susp = true
 
-      } else return
-
+      } else return@forEach
+      val result =
+        if(!susp) Component.text("アップデートしました！ ").color(TextColor.color(0x55FF55))
+        else  Component.text("不審な看板を検知。スキップしました。 ").color(TextColor.color(0xFF5555))
       val message = Component.text(Tools.socialLikesLOGO)
-      .append(Component.text("アップデートしました！ ").color(TextColor.color(0x55FF55)))
-      .append(Component.text("Location: ${block.world} / ${block.x}, ${block.y}, ${block.z}").color(TextColor.color(0xAAAAAA)))
-      .append(Component.text("ID: ${id}").color(TextColor.color(0xAAAAAA)))
-      .hoverEvent(Component.text("クリックで ${id} にテレポート"))
+      .append(result)
+      .append(Component.text("ID: ${if(id==Integer.MIN_VALUE) "不明" else id}, ").color(TextColor.color(0xAAAAAA)))
+        .append(Component.text("Location: ${block.world.name} / ${block.x}, ${block.y}, ${block.z}").color(TextColor.color(0xAAAAAA)))
       .clickEvent(
-        ClickEvent.runCommand("/minecraft:execute in ${block.world} run minecraft:tp ${block.x} ${block.y} ${block.z}"))
+        ClickEvent.runCommand("/minecraft:tp ${block.x} ${block.y} ${block.z}"))
       player.sendMessage(message)
     }
   }

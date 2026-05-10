@@ -156,7 +156,7 @@ object Tools {
     Data.save(newData)
     if (currentSLData.loc.world != null) {
       val state = currentSLData.loc.block.state
-      if (state is Sign) {
+      if (state is Sign&&state.location!=block.location) {
         state.block.blockData = Material.AIR.createBlockData()
         state.update()
       }
