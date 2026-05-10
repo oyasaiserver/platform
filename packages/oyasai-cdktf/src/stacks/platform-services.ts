@@ -138,11 +138,12 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     new Container(this, this.t("velocity-container"), {
       image: images.velocity,
       name: "velocity",
+      dependsOn: [minecraftMainContainer],
       restart: "unless-stopped",
       networksAdvanced: [network],
       ports: ports({
-        tcp: [25565], // Java
-        udp: [19132], // Bedrock
+        tcp: [25565],
+        udp: [],
       }),
       env: envs({
         VELOCITY_FORWARDING_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),

@@ -66,6 +66,11 @@ let
         cp --no-preserve=ownership,mode ${paperGlobalYml} config/paper-global.yml
       ''}
 
+      ${lib.optionalString (paperConfig != null) ''
+        mkdir -p config
+        cp --no-preserve=ownership,mode ${paperGlobalYml} config/paper-global.yml
+      ''}
+
       # Sighs. Doesn't take rcon password as a envvar.
       {
         cat ${serverProperties}
