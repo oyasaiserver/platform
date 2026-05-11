@@ -12,7 +12,7 @@ let
     name = "oyasai-minecraft-main";
     version = "1.21.10";
 
-    icon = ../assets/icon.png;
+    icon = ../assets/icon-64x64.png;
 
     properties = ''
       allow-flight=true
