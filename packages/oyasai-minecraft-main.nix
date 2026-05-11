@@ -10,7 +10,7 @@
 let
   final = oyasaiPurpur rec {
     name = "oyasai-minecraft-main";
-    version = "1.21.8";
+    version = "1.21.10";
 
     icon = ../assets/icon.png;
 
