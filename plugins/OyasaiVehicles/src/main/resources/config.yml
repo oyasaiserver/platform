@@ -1,2 +1,15 @@
 totalEntityLimit:
-  default: 1500
+  oyasaivehicles1500: 1500
+  default: 1000
+upgradeCostLimit: -1
+vehicleSizeLimit: 100
+vehicleTuning:
+  car:
+    overspeedFriction: 0.995
+    coastFriction: 0.99
+    turnFriction: 0.9965
+    brakeMultiplier: 1.12
+  aircraft:
+    coastFriction: 0.9925
+    turnFriction: 0.99
+    brakeMultiplier: 1.15

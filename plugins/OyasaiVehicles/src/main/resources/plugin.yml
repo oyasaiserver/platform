@@ -1,25 +1,26 @@
 name: OyasaiVehicles
-description: "おやさい鯖くるまプラグイン"
+description: "おやさい鯖独自の乗り物系PL"
+author: Srain3
 website: "https://github.com/oyasaiserver"
-main: io.oyasai.OyasaiVehicles
+main: io.oyasaiserver.OyasaiVehicles
 api-version: "1.21.8"
-version: ${version}
+version: "1.3.3"
 
 commands:
   realvehicle:
     description: "OyasaiVehicles総合"
-    aliases: [rvmenu]
+    aliases: [ rvmenu ]
   milepoint:
     description: "マイルポイント"
   carbuilder2:
     description: "CarBuilder2"
-    aliases: [cbmenu]
+    aliases: [ cbmenu ]
   aircraftbuilder:
     description: "AircraftBuilder"
-    aliases: [acmenu]
+    aliases: [ acmenu ]
   timeattack:
     description: "タイムアタック"
-    aliases: [ta]
+    aliases: [ ta ]
 
 permissions:
   oyasaivehicles.admin:
@@ -63,3 +64,4 @@ permissions:
   oyasaivehicles.vip.car.smoke:
     description: "寄付者限定機能: 車のドリフト時の煙カスタム"
     default: false
+
