@@ -18,12 +18,20 @@ updates:
       default-days: 14
     schedule:
       interval: "weekly"
+    groups:
+      all:
+        patterns:
+          - "*"
   - package-ecosystem: "nix"
     directory: "/"
     cooldown:
       default-days: 14
     schedule:
       interval: "weekly"
+    groups:
+      all:
+        patterns:
+          - "*"
   - package-ecosystem: "gradle"
     directory: "/"
     cooldown:
@@ -34,6 +42,7 @@ updates:
       all:
         patterns:
           - "*"
+        exclude-patterns:
+          - "gradle-wrapper"
     ignore:
       - dependency-name: "*purpur-api*"
-      - dependency-name: "gradle-wrapper"

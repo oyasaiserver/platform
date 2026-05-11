@@ -13,6 +13,7 @@ export * as appConnectionFlyio from './app-connection-flyio';
 export * as appConnectionGcp from './app-connection-gcp';
 export * as appConnectionGithub from './app-connection-github';
 export * as appConnectionGitlab from './app-connection-gitlab';
+export * as appConnectionHashicorpVault from './app-connection-hashicorp-vault';
 export * as appConnectionLdap from './app-connection-ldap';
 export * as appConnectionMssql from './app-connection-mssql';
 export * as appConnectionMysql from './app-connection-mysql';

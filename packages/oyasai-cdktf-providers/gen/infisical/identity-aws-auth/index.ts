@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface IdentityAwsAuthConfig extends cdktf.TerraformMetaArguments {
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#access_token_max_ttl IdentityAwsAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#access_token_max_ttl IdentityAwsAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default:0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#access_token_num_uses_limit IdentityAwsAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#access_token_num_uses_limit IdentityAwsAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address..
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#access_token_trusted_ips IdentityAwsAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#access_token_trusted_ips IdentityAwsAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityAwsAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#access_token_ttl IdentityAwsAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#access_token_ttl IdentityAwsAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * List of trusted AWS account IDs that are allowed to authenticate with Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#allowed_account_ids IdentityAwsAuth#allowed_account_ids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#allowed_account_ids IdentityAwsAuth#allowed_account_ids}
   */
   readonly allowedAccountIds?: string[];
   /**
   * List of trusted IAM principal ARNs that are allowed to authenticate with Infisical. The values should take one of three forms: `arn:aws:iam::123456789012:user/MyUserName`, `arn:aws:iam::123456789012:role/MyRoleName`, or `arn:aws:iam::123456789012:*`. Using a wildcard in this case allows any IAM principal in the account `123456789012` to authenticate with Infisical under the identity
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#allowed_principal_arns IdentityAwsAuth#allowed_principal_arns}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#allowed_principal_arns IdentityAwsAuth#allowed_principal_arns}
   */
   readonly allowedPrincipalArns?: string[];
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#identity_id IdentityAwsAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#identity_id IdentityAwsAuth#identity_id}
   */
   readonly identityId: string;
   /**
   *  The endpoint URL for the AWS STS API. This value should be adjusted based on the AWS region you are operating in (e.g. `https://sts.us-east-1.amazonaws.com/`); refer to the list of regional STS endpoints [here](https://docs.aws.amazon.com/general/latest/gr/sts.html).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#sts_endpoint IdentityAwsAuth#sts_endpoint}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#sts_endpoint IdentityAwsAuth#sts_endpoint}
   */
   readonly stsEndpoint?: string;
 }
 export interface IdentityAwsAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#ip_address IdentityAwsAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#ip_address IdentityAwsAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -174,7 +174,7 @@ export class IdentityAwsAuthAccessTokenTrustedIpsList extends cdktf.ComplexList 
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth infisical_identity_aws_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth infisical_identity_aws_auth}
 */
 export class IdentityAwsAuth extends cdktf.TerraformResource {
 
@@ -190,7 +190,7 @@ export class IdentityAwsAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityAwsAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityAwsAuth to import
-  * @param importFromId The id of the existing IdentityAwsAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityAwsAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityAwsAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -202,7 +202,7 @@ export class IdentityAwsAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/identity_aws_auth infisical_identity_aws_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/identity_aws_auth infisical_identity_aws_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -213,7 +213,7 @@ export class IdentityAwsAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_aws_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.18'
+        providerVersion: '0.16.22'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

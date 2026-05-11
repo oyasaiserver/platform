@@ -13,6 +13,7 @@ Object.defineProperty(exports, 'appConnectionFlyio', { get: function () { return
 Object.defineProperty(exports, 'appConnectionGcp', { get: function () { return require('./app-connection-gcp'); } });
 Object.defineProperty(exports, 'appConnectionGithub', { get: function () { return require('./app-connection-github'); } });
 Object.defineProperty(exports, 'appConnectionGitlab', { get: function () { return require('./app-connection-gitlab'); } });
+Object.defineProperty(exports, 'appConnectionHashicorpVault', { get: function () { return require('./app-connection-hashicorp-vault'); } });
 Object.defineProperty(exports, 'appConnectionLdap', { get: function () { return require('./app-connection-ldap'); } });
 Object.defineProperty(exports, 'appConnectionMssql', { get: function () { return require('./app-connection-mssql'); } });
 Object.defineProperty(exports, 'appConnectionMysql', { get: function () { return require('./app-connection-mysql'); } });

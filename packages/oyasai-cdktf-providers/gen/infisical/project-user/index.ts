@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user
+// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface ProjectUserConfig extends cdktf.TerraformMetaArguments {
   /**
   * The id of the project
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#project_id ProjectUser#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#project_id ProjectUser#project_id}
   */
   readonly projectId: string;
   /**
   * The roles assigned to the project user
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#roles ProjectUser#roles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#roles ProjectUser#roles}
   */
   readonly roles: ProjectUserRoles[] | cdktf.IResolvable;
   /**
   * The usename of the user. By default its the email
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#username ProjectUser#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#username ProjectUser#username}
   */
   readonly username: string;
 }
@@ -30,43 +30,43 @@ export interface ProjectUserRoles {
   /**
   * The id of the custom role slug
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#custom_role_id ProjectUser#custom_role_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#custom_role_id ProjectUser#custom_role_id}
   */
   readonly customRoleId?: string;
   /**
   * Flag to indicate the assigned role is temporary or not. When is_temporary is true fields temporary_mode, temporary_range and temporary_access_start_time is required.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#is_temporary ProjectUser#is_temporary}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#is_temporary ProjectUser#is_temporary}
   */
   readonly isTemporary?: boolean | cdktf.IResolvable;
   /**
   * The slug of the role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#role_slug ProjectUser#role_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#role_slug ProjectUser#role_slug}
   */
   readonly roleSlug: string;
   /**
   * ISO time for which temporary access will end. Computed based on temporary_range and temporary_access_start_time
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#temporary_access_end_time ProjectUser#temporary_access_end_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#temporary_access_end_time ProjectUser#temporary_access_end_time}
   */
   readonly temporaryAccessEndTime?: string;
   /**
   * ISO time for which temporary access should begin. The current time is used by default.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#temporary_access_start_time ProjectUser#temporary_access_start_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#temporary_access_start_time ProjectUser#temporary_access_start_time}
   */
   readonly temporaryAccessStartTime?: string;
   /**
   * Type of temporary access given. Types: relative. Default: relative
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#temporary_mode ProjectUser#temporary_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#temporary_mode ProjectUser#temporary_mode}
   */
   readonly temporaryMode?: string;
   /**
   * TTL for the temporary time. Eg: 1m, 1h, 1d. Default: 1h
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#temporary_range ProjectUser#temporary_range}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#temporary_range ProjectUser#temporary_range}
   */
   readonly temporaryRange?: string;
 }
@@ -427,7 +427,7 @@ export class ProjectUserUserOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user infisical_project_user}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user infisical_project_user}
 */
 export class ProjectUser extends cdktf.TerraformResource {
 
@@ -443,7 +443,7 @@ export class ProjectUser extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ProjectUser resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ProjectUser to import
-  * @param importFromId The id of the existing ProjectUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ProjectUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ProjectUser to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -455,7 +455,7 @@ export class ProjectUser extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_user infisical_project_user} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_user infisical_project_user} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -466,7 +466,7 @@ export class ProjectUser extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_project_user',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.18'
+        providerVersion: '0.16.22'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

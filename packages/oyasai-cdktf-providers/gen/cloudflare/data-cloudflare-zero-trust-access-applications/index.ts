@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,49 +10,49 @@ export interface DataCloudflareZeroTrustAccessApplicationsConfig extends cdktf.T
   /**
   * The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#account_id DataCloudflareZeroTrustAccessApplications#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#account_id DataCloudflareZeroTrustAccessApplications#account_id}
   */
   readonly accountId?: string;
   /**
   * The aud of the app.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#aud DataCloudflareZeroTrustAccessApplications#aud}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#aud DataCloudflareZeroTrustAccessApplications#aud}
   */
   readonly aud?: string;
   /**
   * The domain of the app.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#domain DataCloudflareZeroTrustAccessApplications#domain}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#domain DataCloudflareZeroTrustAccessApplications#domain}
   */
   readonly domain?: string;
   /**
   * True for only exact string matches against passed name/domain query parameters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#exact DataCloudflareZeroTrustAccessApplications#exact}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#exact DataCloudflareZeroTrustAccessApplications#exact}
   */
   readonly exact?: boolean | cdktf.IResolvable;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#max_items DataCloudflareZeroTrustAccessApplications#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#max_items DataCloudflareZeroTrustAccessApplications#max_items}
   */
   readonly maxItems?: number;
   /**
   * The name of the app.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#name DataCloudflareZeroTrustAccessApplications#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#name DataCloudflareZeroTrustAccessApplications#name}
   */
   readonly name?: string;
   /**
   * Search for apps by other listed query parameters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#search DataCloudflareZeroTrustAccessApplications#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#search DataCloudflareZeroTrustAccessApplications#search}
   */
   readonly search?: string;
   /**
   * The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#zone_id DataCloudflareZeroTrustAccessApplications#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#zone_id DataCloudflareZeroTrustAccessApplications#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -149,7 +149,7 @@ export interface DataCloudflareZeroTrustAccessApplicationsResultDestinations {
   /**
   * A MCP server id configured in ai-controls. Access will secure the MCP server if accessed through a MCP portal.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#mcp_server_id DataCloudflareZeroTrustAccessApplications#mcp_server_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#mcp_server_id DataCloudflareZeroTrustAccessApplications#mcp_server_id}
   */
   readonly mcpServerId?: string;
 }
@@ -440,6 +440,70 @@ export class DataCloudflareZeroTrustAccessApplicationsResultLandingPageDesignOut
   // title - computed: true, optional: false, required: false
   public get title() {
     return this.getStringAttribute('title');
+  }
+}
+export interface DataCloudflareZeroTrustAccessApplicationsResultMfaConfig {
+}
+
+export function dataCloudflareZeroTrustAccessApplicationsResultMfaConfigToTerraform(struct?: DataCloudflareZeroTrustAccessApplicationsResultMfaConfig): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustAccessApplicationsResultMfaConfigToHclTerraform(struct?: DataCloudflareZeroTrustAccessApplicationsResultMfaConfig): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustAccessApplicationsResultMfaConfigOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustAccessApplicationsResultMfaConfig | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustAccessApplicationsResultMfaConfig | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // allowed_authenticators - computed: true, optional: false, required: false
+  public get allowedAuthenticators() {
+    return this.getListAttribute('allowed_authenticators');
+  }
+
+  // mfa_disabled - computed: true, optional: false, required: false
+  public get mfaDisabled() {
+    return this.getBooleanAttribute('mfa_disabled');
+  }
+
+  // session_duration - computed: true, optional: false, required: false
+  public get sessionDuration() {
+    return this.getStringAttribute('session_duration');
   }
 }
 export interface DataCloudflareZeroTrustAccessApplicationsResultPoliciesApprovalGroups {
@@ -3751,6 +3815,70 @@ export class DataCloudflareZeroTrustAccessApplicationsResultPoliciesIncludeList 
     return new DataCloudflareZeroTrustAccessApplicationsResultPoliciesIncludeOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
+export interface DataCloudflareZeroTrustAccessApplicationsResultPoliciesMfaConfig {
+}
+
+export function dataCloudflareZeroTrustAccessApplicationsResultPoliciesMfaConfigToTerraform(struct?: DataCloudflareZeroTrustAccessApplicationsResultPoliciesMfaConfig): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustAccessApplicationsResultPoliciesMfaConfigToHclTerraform(struct?: DataCloudflareZeroTrustAccessApplicationsResultPoliciesMfaConfig): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustAccessApplicationsResultPoliciesMfaConfigOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustAccessApplicationsResultPoliciesMfaConfig | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustAccessApplicationsResultPoliciesMfaConfig | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // allowed_authenticators - computed: true, optional: false, required: false
+  public get allowedAuthenticators() {
+    return this.getListAttribute('allowed_authenticators');
+  }
+
+  // mfa_disabled - computed: true, optional: false, required: false
+  public get mfaDisabled() {
+    return this.getBooleanAttribute('mfa_disabled');
+  }
+
+  // session_duration - computed: true, optional: false, required: false
+  public get sessionDuration() {
+    return this.getStringAttribute('session_duration');
+  }
+}
 export interface DataCloudflareZeroTrustAccessApplicationsResultPoliciesRequireAnyValidServiceToken {
 }
 
@@ -5406,6 +5534,12 @@ export class DataCloudflareZeroTrustAccessApplicationsResultPoliciesOutputRefere
     return this.getBooleanAttribute('isolation_required');
   }
 
+  // mfa_config - computed: true, optional: false, required: false
+  private _mfaConfig = new DataCloudflareZeroTrustAccessApplicationsResultPoliciesMfaConfigOutputReference(this, "mfa_config");
+  public get mfaConfig() {
+    return this._mfaConfig;
+  }
+
   // name - computed: true, optional: false, required: false
   public get name() {
     return this.getStringAttribute('name');
@@ -6720,6 +6854,12 @@ export class DataCloudflareZeroTrustAccessApplicationsResultOutputReference exte
     return this.getStringAttribute('logo_url');
   }
 
+  // mfa_config - computed: true, optional: false, required: false
+  private _mfaConfig = new DataCloudflareZeroTrustAccessApplicationsResultMfaConfigOutputReference(this, "mfa_config");
+  public get mfaConfig() {
+    return this._mfaConfig;
+  }
+
   // name - computed: true, optional: false, required: false
   public get name() {
     return this.getStringAttribute('name');
@@ -6825,7 +6965,7 @@ export class DataCloudflareZeroTrustAccessApplicationsResultList extends cdktf.C
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications cloudflare_zero_trust_access_applications}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications cloudflare_zero_trust_access_applications}
 */
 export class DataCloudflareZeroTrustAccessApplications extends cdktf.TerraformDataSource {
 
@@ -6841,7 +6981,7 @@ export class DataCloudflareZeroTrustAccessApplications extends cdktf.TerraformDa
   * Generates CDKTF code for importing a DataCloudflareZeroTrustAccessApplications resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustAccessApplications to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustAccessApplications that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustAccessApplications that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustAccessApplications to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -6853,7 +6993,7 @@ export class DataCloudflareZeroTrustAccessApplications extends cdktf.TerraformDa
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/data-sources/zero_trust_access_applications cloudflare_zero_trust_access_applications} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_access_applications cloudflare_zero_trust_access_applications} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -6864,7 +7004,7 @@ export class DataCloudflareZeroTrustAccessApplications extends cdktf.TerraformDa
       terraformResourceType: 'cloudflare_zero_trust_access_applications',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.0'
+        providerVersion: '5.19.1'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
