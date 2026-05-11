@@ -1,0 +1,12 @@
+{
+  "bkcommonlib": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "bkcommonlib"
+    },
+    "1.21.10": {
+      "type": "url",
+      "url": "https://..."
+    }
+  }
+}
