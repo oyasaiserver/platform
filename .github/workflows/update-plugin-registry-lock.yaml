@@ -31,7 +31,7 @@ jobs:
 
       - name: Update lock.json
         working-directory: packages/oyasai-plugin-registry
-        run: nix run "path:$GITHUB_WORKSPACE#oyasai-plugin-registry.update"
+        run: nix run .#oyasai-plugin-registry.update
 
       - name: Open PR
         env:
