@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   oyasai-plugins,
+  writeShellApplication,
 }:
 
 let
@@ -13,6 +14,14 @@ let
     src = ./.;
 
     passthru = {
+      update = writeShellApplication {
+        name = "plugin-registry-update";
+        runtimeInputs = [ final ];
+        text = ''
+          <${./registry.json} plugin-registry-lock >lock.json
+        '';
+      };
+
       forVersion = (
         version:
         let
