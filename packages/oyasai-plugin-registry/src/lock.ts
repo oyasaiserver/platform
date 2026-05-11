@@ -1,9 +1,8 @@
 #!/usr/bin/env node --enable-source-maps
 import { ok } from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { writeFile } from "node:fs/promises";
-import { stdout } from "node:process";
-import registry from "../registry.json" with { type: "json" };
+import { stderr, stdin } from "node:process";
+import { json } from "node:stream/consumers";
 
 type RegistryEntry =
   | { type: "modrinth"; slug: string }
@@ -78,22 +77,24 @@ async function computeHash(url: string): Promise<string> {
   return `${hashAlgo}-${digest}`;
 }
 
-const lock: LockFile = {};
+if (import.meta.main) {
+  const registry = (await json(stdin)) as Record<
+    string,
+    Record<string, RegistryEntry>
+  >;
 
-for (const [id, versions] of Object.entries(registry)) {
-  for (const [version, entry] of Object.entries(versions)) {
-    stdout.write(`lock  ${id}@${version} ... `);
-    const url = await resolveStableUrl(id, version, entry);
-    const hash = await computeHash(url);
-    lock[id] ??= {};
-    lock[id][version] = { url, hash };
-    console.log("done");
+  const lock: LockFile = {};
+
+  for (const [id, versions] of Object.entries(registry)) {
+    for (const [version, entry] of Object.entries(versions)) {
+      stderr.write(`lock  ${id}@${version} ... `);
+      const url = await resolveStableUrl(id, version, entry);
+      const hash = await computeHash(url);
+      lock[id] ??= {};
+      lock[id][version] = { url, hash };
+      stderr.write("done\n");
+    }
   }
+
+  console.log(JSON.stringify(lock, null, 2));
 }
-
-await writeFile(
-  new URL("../lock.json", import.meta.url),
-  JSON.stringify(lock, null, 2) + "\n",
-);
-
-console.log("\nlock.json updated");
