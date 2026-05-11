@@ -1,3 +1,3 @@
 # `cloudflare_zero_trust_access_ai_controls_mcp_server`
 
-Refer to the Terraform Registry for docs: [`cloudflare_zero_trust_access_ai_controls_mcp_server`](https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.0/docs/resources/zero_trust_access_ai_controls_mcp_server).
+Refer to the Terraform Registry for docs: [`cloudflare_zero_trust_access_ai_controls_mcp_server`](https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_ai_controls_mcp_server).

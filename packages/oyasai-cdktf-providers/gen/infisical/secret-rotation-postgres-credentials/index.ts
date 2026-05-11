@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials
+// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,73 +10,73 @@ export interface SecretRotationPostgresCredentialsConfig extends cdktf.Terraform
   /**
   * Whether secrets should be automatically rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#auto_rotation_enabled SecretRotationPostgresCredentials#auto_rotation_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#auto_rotation_enabled SecretRotationPostgresCredentials#auto_rotation_enabled}
   */
   readonly autoRotationEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the connection to use for the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#connection_id SecretRotationPostgresCredentials#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#connection_id SecretRotationPostgresCredentials#connection_id}
   */
   readonly connectionId: string;
   /**
   * The description of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#description SecretRotationPostgresCredentials#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#description SecretRotationPostgresCredentials#description}
   */
   readonly description?: string;
   /**
   * The slug of the project environment to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#environment SecretRotationPostgresCredentials#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#environment SecretRotationPostgresCredentials#environment}
   */
   readonly environment: string;
   /**
   * The name of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#name SecretRotationPostgresCredentials#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#name SecretRotationPostgresCredentials#name}
   */
   readonly name: string;
   /**
   * Parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#parameters SecretRotationPostgresCredentials#parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#parameters SecretRotationPostgresCredentials#parameters}
   */
   readonly parameters: SecretRotationPostgresCredentialsParameters;
   /**
   * The ID of the Infisical project to create the secret rotation in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#project_id SecretRotationPostgresCredentials#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#project_id SecretRotationPostgresCredentials#project_id}
   */
   readonly projectId: string;
   /**
   * At which UTC time the rotation should occur.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#rotate_at_utc SecretRotationPostgresCredentials#rotate_at_utc}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#rotate_at_utc SecretRotationPostgresCredentials#rotate_at_utc}
   */
   readonly rotateAtUtc?: SecretRotationPostgresCredentialsRotateAtUtc;
   /**
   * How many days to wait between each rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#rotation_interval SecretRotationPostgresCredentials#rotation_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#rotation_interval SecretRotationPostgresCredentials#rotation_interval}
   */
   readonly rotationInterval?: number;
   /**
   * The folder path to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#secret_path SecretRotationPostgresCredentials#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#secret_path SecretRotationPostgresCredentials#secret_path}
   */
   readonly secretPath: string;
   /**
   * Secret mappings to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#secrets_mapping SecretRotationPostgresCredentials#secrets_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#secrets_mapping SecretRotationPostgresCredentials#secrets_mapping}
   */
   readonly secretsMapping: SecretRotationPostgresCredentialsSecretsMapping;
   /**
   * Temporary parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#temporary_parameters SecretRotationPostgresCredentials#temporary_parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#temporary_parameters SecretRotationPostgresCredentials#temporary_parameters}
   */
   readonly temporaryParameters?: SecretRotationPostgresCredentialsTemporaryParameters;
 }
@@ -84,13 +84,13 @@ export interface SecretRotationPostgresCredentialsParameters {
   /**
   * The username of the first login to rotate passwords for. This user must already exists in your database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#username1 SecretRotationPostgresCredentials#username1}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#username1 SecretRotationPostgresCredentials#username1}
   */
   readonly username1: string;
   /**
   * The username of the second login to rotate passwords for. This user must already exists in your database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#username2 SecretRotationPostgresCredentials#username2}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#username2 SecretRotationPostgresCredentials#username2}
   */
   readonly username2: string;
 }
@@ -209,13 +209,13 @@ export interface SecretRotationPostgresCredentialsRotateAtUtc {
   /**
   * The hour at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#hours SecretRotationPostgresCredentials#hours}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#hours SecretRotationPostgresCredentials#hours}
   */
   readonly hours?: number;
   /**
   * The minute at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#minutes SecretRotationPostgresCredentials#minutes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#minutes SecretRotationPostgresCredentials#minutes}
   */
   readonly minutes?: number;
 }
@@ -340,13 +340,13 @@ export interface SecretRotationPostgresCredentialsSecretsMapping {
   /**
   * The name of the secret that the generated password will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#password SecretRotationPostgresCredentials#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#password SecretRotationPostgresCredentials#password}
   */
   readonly password: string;
   /**
   * The name of the secret that the active username will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#username SecretRotationPostgresCredentials#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#username SecretRotationPostgresCredentials#username}
   */
   readonly username: string;
 }
@@ -522,7 +522,7 @@ export class SecretRotationPostgresCredentialsTemporaryParametersOutputReference
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials infisical_secret_rotation_postgres_credentials}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials infisical_secret_rotation_postgres_credentials}
 */
 export class SecretRotationPostgresCredentials extends cdktf.TerraformResource {
 
@@ -538,7 +538,7 @@ export class SecretRotationPostgresCredentials extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretRotationPostgresCredentials resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretRotationPostgresCredentials to import
-  * @param importFromId The id of the existing SecretRotationPostgresCredentials that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretRotationPostgresCredentials that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretRotationPostgresCredentials to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -550,7 +550,7 @@ export class SecretRotationPostgresCredentials extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/secret_rotation_postgres_credentials infisical_secret_rotation_postgres_credentials} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_rotation_postgres_credentials infisical_secret_rotation_postgres_credentials} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -561,7 +561,7 @@ export class SecretRotationPostgresCredentials extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_rotation_postgres_credentials',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.18'
+        providerVersion: '0.16.22'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

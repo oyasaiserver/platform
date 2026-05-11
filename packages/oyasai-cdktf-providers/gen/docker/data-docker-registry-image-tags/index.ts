@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image_tags
+// https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/data-sources/registry_image_tags
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface DataDockerRegistryImageTagsConfig extends cdktf.TerraformMetaAr
   /**
   * If `true`, the verification of TLS certificates of the server/registry is disabled. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image_tags#insecure_skip_verify DataDockerRegistryImageTags#insecure_skip_verify}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/data-sources/registry_image_tags#insecure_skip_verify DataDockerRegistryImageTags#insecure_skip_verify}
   */
   readonly insecureSkipVerify?: boolean | cdktf.IResolvable;
   /**
   * The name of the Docker image repository, including any tag or digest. For example, `alpine:latest`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image_tags#name DataDockerRegistryImageTags#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/data-sources/registry_image_tags#name DataDockerRegistryImageTags#name}
   */
   readonly name: string;
   /**
   * If `true`, only stable semantic version tags are returned. Prerelease tags such as `1.2.3-rc.1` are excluded as well as any other tags that do not conform to the semantic versioning specification. Defaults to `false`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image_tags#strict_semver DataDockerRegistryImageTags#strict_semver}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/data-sources/registry_image_tags#strict_semver DataDockerRegistryImageTags#strict_semver}
   */
   readonly strictSemver?: boolean | cdktf.IResolvable;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image_tags docker_registry_image_tags}
+* Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/data-sources/registry_image_tags docker_registry_image_tags}
 */
 export class DataDockerRegistryImageTags extends cdktf.TerraformDataSource {
 
@@ -44,7 +44,7 @@ export class DataDockerRegistryImageTags extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataDockerRegistryImageTags resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataDockerRegistryImageTags to import
-  * @param importFromId The id of the existing DataDockerRegistryImageTags that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image_tags#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataDockerRegistryImageTags that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/data-sources/registry_image_tags#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataDockerRegistryImageTags to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -56,7 +56,7 @@ export class DataDockerRegistryImageTags extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.2.0/docs/data-sources/registry_image_tags docker_registry_image_tags} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/data-sources/registry_image_tags docker_registry_image_tags} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -67,7 +67,7 @@ export class DataDockerRegistryImageTags extends cdktf.TerraformDataSource {
       terraformResourceType: 'docker_registry_image_tags',
       terraformGeneratorMetadata: {
         providerName: 'docker',
-        providerVersion: '4.2.0'
+        providerVersion: '4.3.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

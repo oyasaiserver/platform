@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege
+// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,61 +10,61 @@ export interface ProjectIdentitySpecificPrivilegeConfig extends cdktf.TerraformM
   /**
   * The identity id to create identity specific privilege
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#identity_id ProjectIdentitySpecificPrivilege#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#identity_id ProjectIdentitySpecificPrivilege#identity_id}
   */
   readonly identityId: string;
   /**
   * Flag to indicate the assigned specific privilege is temporary or not. When is_temporary is true fields temporary_mode, temporary_range and temporary_access_start_time is required.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#is_temporary ProjectIdentitySpecificPrivilege#is_temporary}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#is_temporary ProjectIdentitySpecificPrivilege#is_temporary}
   */
   readonly isTemporary?: boolean | cdktf.IResolvable;
   /**
   * (DEPRECATED, USE permissions_v2. Refer to the migration guide in https://infisical.com/docs/internals/permissions#migrating-from-permission-v1-to-permission-v2) The permissions assigned to the project identity specific privilege
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#permission ProjectIdentitySpecificPrivilege#permission}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#permission ProjectIdentitySpecificPrivilege#permission}
   */
   readonly permission?: ProjectIdentitySpecificPrivilegePermission;
   /**
-  * The permissions assigned to the project identity specific privilege. Refer to the documentation here https://infisical.com/docs/internals/permissions for its usage.
+  * The permissions assigned to the project identity specific privilege. Refer to the documentation here https://infisical.com/docs/internals/permissions/project-permissions for its usage.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#permissions_v2 ProjectIdentitySpecificPrivilege#permissions_v2}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#permissions_v2 ProjectIdentitySpecificPrivilege#permissions_v2}
   */
   readonly permissionsV2?: ProjectIdentitySpecificPrivilegePermissionsV2[] | cdktf.IResolvable;
   /**
   * The slug of the project to create identity specific privilege
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#project_slug ProjectIdentitySpecificPrivilege#project_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#project_slug ProjectIdentitySpecificPrivilege#project_slug}
   */
   readonly projectSlug: string;
   /**
   * The slug for the new privilege
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#slug ProjectIdentitySpecificPrivilege#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#slug ProjectIdentitySpecificPrivilege#slug}
   */
   readonly slug?: string;
   /**
   * ISO time for which temporary access will end. Computed based on temporary_range and temporary_access_start_time
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#temporary_access_end_time ProjectIdentitySpecificPrivilege#temporary_access_end_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#temporary_access_end_time ProjectIdentitySpecificPrivilege#temporary_access_end_time}
   */
   readonly temporaryAccessEndTime?: string;
   /**
   * ISO time for which temporary access should begin. The current time is used by default.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#temporary_access_start_time ProjectIdentitySpecificPrivilege#temporary_access_start_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#temporary_access_start_time ProjectIdentitySpecificPrivilege#temporary_access_start_time}
   */
   readonly temporaryAccessStartTime?: string;
   /**
   * Type of temporary access given. Types: relative. Default: relative
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#temporary_mode ProjectIdentitySpecificPrivilege#temporary_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#temporary_mode ProjectIdentitySpecificPrivilege#temporary_mode}
   */
   readonly temporaryMode?: string;
   /**
   * TTL for the temporary time. Eg: 1m, 1h, 1d. Default: 1h
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#temporary_range ProjectIdentitySpecificPrivilege#temporary_range}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#temporary_range ProjectIdentitySpecificPrivilege#temporary_range}
   */
   readonly temporaryRange?: string;
 }
@@ -72,13 +72,13 @@ export interface ProjectIdentitySpecificPrivilegePermissionConditions {
   /**
   * The environment slug this permission should allow.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#environment ProjectIdentitySpecificPrivilege#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#environment ProjectIdentitySpecificPrivilege#environment}
   */
   readonly environment: string;
   /**
   * The secret path this permission should be scoped to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#secret_path ProjectIdentitySpecificPrivilege#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#secret_path ProjectIdentitySpecificPrivilege#secret_path}
   */
   readonly secretPath?: string;
 }
@@ -200,19 +200,19 @@ export interface ProjectIdentitySpecificPrivilegePermission {
   /**
   * Describe what action an entity can take. Enum: create,edit,delete,read
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#actions ProjectIdentitySpecificPrivilege#actions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#actions ProjectIdentitySpecificPrivilege#actions}
   */
   readonly actions: string[];
   /**
   * The conditions to scope permissions
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#conditions ProjectIdentitySpecificPrivilege#conditions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#conditions ProjectIdentitySpecificPrivilege#conditions}
   */
   readonly conditions: ProjectIdentitySpecificPrivilegePermissionConditions;
   /**
   * Describe what action an entity can take. Enum: role,member,groups,settings,integrations,webhooks,service-tokens,environments,tags,audit-logs,ip-allowlist,workspace,secrets,secret-rollback,secret-approval,secret-rotation,identity,certificate-authorities,certificates,certificate-policies,kms,pki-alerts,pki-collections
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#subject ProjectIdentitySpecificPrivilege#subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#subject ProjectIdentitySpecificPrivilege#subject}
   */
   readonly subject: string;
 }
@@ -357,25 +357,25 @@ export interface ProjectIdentitySpecificPrivilegePermissionsV2 {
   /**
   * Describe what actions an entity can take.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#action ProjectIdentitySpecificPrivilege#action}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#action ProjectIdentitySpecificPrivilege#action}
   */
   readonly action: string[];
   /**
   * When specified, only matching conditions will be allowed to access given resource. Refer to the documentation in https://infisical.com/docs/internals/permissions#conditions for the complete list of supported properties and operators.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#conditions ProjectIdentitySpecificPrivilege#conditions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#conditions ProjectIdentitySpecificPrivilege#conditions}
   */
   readonly conditions?: string;
   /**
   * Whether rule forbids. Set this to true if permission forbids.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#inverted ProjectIdentitySpecificPrivilege#inverted}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#inverted ProjectIdentitySpecificPrivilege#inverted}
   */
   readonly inverted?: boolean | cdktf.IResolvable;
   /**
   * Describe the entity the permission pertains to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#subject ProjectIdentitySpecificPrivilege#subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#subject ProjectIdentitySpecificPrivilege#subject}
   */
   readonly subject: string;
 }
@@ -572,7 +572,7 @@ export class ProjectIdentitySpecificPrivilegePermissionsV2List extends cdktf.Com
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege infisical_project_identity_specific_privilege}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege infisical_project_identity_specific_privilege}
 */
 export class ProjectIdentitySpecificPrivilege extends cdktf.TerraformResource {
 
@@ -588,7 +588,7 @@ export class ProjectIdentitySpecificPrivilege extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ProjectIdentitySpecificPrivilege resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ProjectIdentitySpecificPrivilege to import
-  * @param importFromId The id of the existing ProjectIdentitySpecificPrivilege that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ProjectIdentitySpecificPrivilege that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ProjectIdentitySpecificPrivilege to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -600,7 +600,7 @@ export class ProjectIdentitySpecificPrivilege extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.18/docs/resources/project_identity_specific_privilege infisical_project_identity_specific_privilege} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/project_identity_specific_privilege infisical_project_identity_specific_privilege} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -611,7 +611,7 @@ export class ProjectIdentitySpecificPrivilege extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_project_identity_specific_privilege',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.18'
+        providerVersion: '0.16.22'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

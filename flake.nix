@@ -12,7 +12,10 @@
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
     gradle2nix = {
       url = "github:oyasaiserver/gradle2nix?ref=v2";
       inputs.nixpkgs.follows = "nixpkgs";
