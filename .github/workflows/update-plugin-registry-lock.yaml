@@ -1,0 +1,61 @@
+name: Update plugin registry lock
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
+        with:
+          key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
+          path: "~/.cache/nix"
+      - uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f
+        with:
+          extra_nix_config: |
+            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
+            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - name: Configure Cloudflare R2 credentials
+        run: |
+          sudo -i aws configure set aws_access_key_id "${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}"
+          sudo -i aws configure set aws_secret_access_key "${{ secrets.CLOUDFLARE_SECRET_ACCESS_KEY }}"
+      - uses: ./packages/nix-copy-action
+        with:
+          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
+          signing-key: ${{ secrets.NIX_CACHE_SIGNING_KEY }}
+
+      - name: Update lock.json
+        working-directory: packages/oyasai-plugin-registry
+        run: nix run "path:$GITHUB_WORKSPACE#oyasai-plugin-registry.update"
+
+      - name: Open PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet packages/oyasai-plugin-registry/lock.json; then
+            echo "lock.json unchanged, nothing to do"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          branch="update/plugin-registry-lock-$(date +%Y%m%d-%H%M%S)"
+
+          git checkout -b "$branch"
+          git add packages/oyasai-plugin-registry/lock.json
+
+          git commit -m "chore(oyasai-plugin-registry): update lock.json"
+
+          git push origin "$branch"
+
+          gh pr create \
+            --title "chore(oyasai-plugin-registry): update lock.json" \
+            --body "Automated update of plugin registry lock file." \
+            --base master \
+            --head "$branch"

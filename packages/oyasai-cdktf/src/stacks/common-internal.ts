@@ -8,6 +8,7 @@ import { BranchDefault } from "@oyasaiserver/cdktf-providers/github/branch-defau
 import { GithubProvider } from "@oyasaiserver/cdktf-providers/github/provider";
 import { Repository } from "@oyasaiserver/cdktf-providers/github/repository";
 import { RepositoryRuleset } from "@oyasaiserver/cdktf-providers/github/repository-ruleset";
+import { WorkflowRepositoryPermissions } from "@oyasaiserver/cdktf-providers/github/workflow-repository-permissions";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
 import type { Construct } from "constructs";
 import { DAY_IN_SECONDS } from "../helpers.ts";
@@ -213,6 +214,16 @@ export class CommonInternal extends OyasaiTerraformStack {
         repository: platformRepository.name,
         secretName: "CLOUDFLARE_SECRET_ACCESS_KEY",
         value: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
+      },
+    );
+
+    new WorkflowRepositoryPermissions(
+      this,
+      this.t("platform-workflow-repository-permission"),
+      {
+        repository: platformRepository.name,
+        defaultWorkflowPermissions: "write",
+        canApprovePullRequestReviews: true,
       },
     );
   }
