@@ -13,6 +13,7 @@
           [
             # keep-sorted start
             awscli2
+            dune
             gradle
             infisical
             jdk
