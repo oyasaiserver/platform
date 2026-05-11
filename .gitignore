@@ -404,7 +404,7 @@ cdktf.log
 .wrangler
 
 # Local dependencies
-!**/static/*.jar
+!**/static/**/*.jar
 !**/gen/**/*.jar
 !**/libs/*.jar
 
