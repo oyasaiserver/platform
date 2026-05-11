@@ -127,8 +127,8 @@
   },
   "lwc": {
     "1.21.10": {
-      "id": 69551,
-      "type": "spiget"
+      "slug": "lwc",
+      "type": "modrinth"
     }
   },
   "minepacks": {
