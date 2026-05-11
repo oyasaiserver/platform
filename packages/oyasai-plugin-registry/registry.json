@@ -175,8 +175,11 @@
   },
   "nuvotifier": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 13449
+      "type": "github",
+      "owner": "NuVotifier",
+      "repo": "NuVotifier",
+      "tag": "v2.7.3",
+      "name": "nuvotifier.jar"
     }
   },
   "openinv": {
@@ -214,8 +217,11 @@
   },
   "protocollib": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 1997
+      "type": "github",
+      "owner": "dmulloy2",
+      "repo": "ProtocolLib",
+      "tag": "5.4.0",
+      "name": "ProtocolLib.jar"
     }
   },
   "pvparena": {

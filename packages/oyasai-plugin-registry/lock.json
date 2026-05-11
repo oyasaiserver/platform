@@ -157,7 +157,7 @@
   },
   "nuvotifier": {
     "1.21.8": {
-      "url": "https://release-assets.githubusercontent.com/github-production-release-asset/44453405/9fb03b00-de0d-11eb-8e76-53b8d19ecb18?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-05-11T01%3A27%3A12Z&rscd=attachment%3B+filename%3Dnuvotifier.jar&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-05-11T00%3A26%3A21Z&ske=2026-05-11T01%3A27%3A12Z&sks=b&skv=2018-11-09&sig=eLIJZG7NG9a5O1XVt%2FffqmrUr9QnioBgjFFjDDJYnAc%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc3ODQ1OTcxMywibmJmIjoxNzc4NDU5NDEzLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.W8_Vz6FRbnQgTign0STZX3gRw4-LOon49ee6-bpuz08&response-content-disposition=attachment%3B%20filename%3Dnuvotifier.jar&response-content-type=application%2Foctet-stream",
+      "url": "https://github.com/NuVotifier/NuVotifier/releases/download/v2.7.3/nuvotifier.jar",
       "hash": "sha256-X+VFfpunmJ3JRG9SKmkOTodyNrovxekO1m+tM9PGnzk="
     }
   },
@@ -187,7 +187,7 @@
   },
   "protocollib": {
     "1.21.8": {
-      "url": "https://release-assets.githubusercontent.com/github-production-release-asset/26688026/fe1f680e-67d3-4f5a-9f85-cff5f9ce0d10?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-05-11T01%3A05%3A12Z&rscd=attachment%3B+filename%3DProtocolLib.jar&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-05-11T00%3A04%3A24Z&ske=2026-05-11T01%3A05%3A12Z&sks=b&skv=2018-11-09&sig=hW5YFp3xiS%2B3hlTwPZg8%2BDcn8Cj7ladi1BYH%2BQnow7A%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc3ODQ1OTcxNSwibmJmIjoxNzc4NDU5NDE1LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.g1s7fen_seHyQWU9-EsoyxjUujtKmWVReJUm26wH34E&response-content-disposition=attachment%3B%20filename%3DProtocolLib.jar&response-content-type=application%2Foctet-stream",
+      "url": "https://github.com/dmulloy2/ProtocolLib/releases/download/5.4.0/ProtocolLib.jar",
       "hash": "sha256-7i56ubU4by0QMIHE0QjmGxA13yymkrU9biQJ+x9crM8="
     }
   },
