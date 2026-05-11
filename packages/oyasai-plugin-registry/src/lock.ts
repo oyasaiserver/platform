@@ -1,5 +1,4 @@
 #!/usr/bin/env node --enable-source-maps
-import { ModrinthV2Client } from "@xmcl/modrinth";
 import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 
@@ -27,16 +26,17 @@ async function resolveStableUrl(
       return `https://github.com/${entry.owner}/${entry.repo}/releases/download/${entry.tag}/${entry.name}`;
 
     case "modrinth": {
-      const client = new ModrinthV2Client();
-      const project = await client.getProject(entry.slug);
-      const versions = await client.getProjectVersions(project.id, {
-        gameVersions: [version],
-        loaders: ["paper", "spigot", "bukkit"],
+      const params = new URLSearchParams({
+        game_versions: JSON.stringify([version]),
+        loaders: JSON.stringify(["paper", "spigot", "bukkit"]),
       });
-      const url = versions
-        .flatMap((v) => v.files)
-        .map((f) => f.url)
-        .at(0);
+      const res = await fetch(
+        `https://api.modrinth.com/v2/project/${entry.slug}/version?${params}`,
+      );
+      const versions = (await res.json()) as Array<{
+        files: Array<{ url: string }>;
+      }>;
+      const url = versions.flatMap((v) => v.files).map((f) => f.url).at(0);
       if (!url) throw new Error(`No modrinth URL for ${id}@${version}`);
       return url;
     }
