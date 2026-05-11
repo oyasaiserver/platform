@@ -1,12 +1,335 @@
 {
+  "advancedban": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 8695
+    }
+  },
+  "arceon": {
+    "1.21.8": {
+      "type": "static",
+      "name": "Arceon.jar"
+    }
+  },
   "bkcommonlib": {
     "1.21.8": {
       "type": "modrinth",
       "slug": "bkcommonlib"
-    },
-    "1.21.10": {
+    }
+  },
+  "bluemap": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "bluemap"
+    }
+  },
+  "chestcommands": {
+    "1.21.8": {
       "type": "url",
-      "url": "https://..."
+      "url": "https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar"
+    }
+  },
+  "coreprotect": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "coreprotect"
+    }
+  },
+  "crackshotguns": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 48301
+    }
+  },
+  "decentholograms": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "decentholograms"
+    }
+  },
+  "discordsrv": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "discordsrv"
+    }
+  },
+  "essentialsx": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "essentialsx"
+    }
+  },
+  "essentialsxchat": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "essentialsx-chat-module"
+    }
+  },
+  "essentialsxspawn": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "essentialsx-spawn"
+    }
+  },
+  "ezedits": {
+    "1.21.8": {
+      "type": "static",
+      "name": "ezEdits.jar"
+    }
+  },
+  "fastasyncvoxelsniper": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "fastasyncvoxelsniper"
+    }
+  },
+  "fastasyncworldedit": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "fastasyncworldedit"
+    }
+  },
+  "floodgate": {
+    "1.21.8": {
+      "type": "url",
+      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot"
+    }
+  },
+  "geyser": {
+    "1.21.8": {
+      "type": "url",
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot"
+    }
+  },
+  "gsit": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 62325
+    }
+  },
+  "imageonmap": {
+    "1.21.8": {
+      "type": "github",
+      "owner": "okocraft",
+      "repo": "ImageOnMap",
+      "tag": "5.1.1",
+      "name": "ImageOnMap-5.1.1.jar"
+    }
+  },
+  "inventoryshop": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 47694
+    }
+  },
+  "joincommands": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 51758
+    }
+  },
+  "luckperms": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "luckperms"
+    }
+  },
+  "lunachat": {
+    "1.21.8": {
+      "type": "github",
+      "owner": "f1w3",
+      "repo": "LunaChat",
+      "tag": "v3.0.16-fix",
+      "name": "LunaChat.jar"
+    }
+  },
+  "lwc": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 69551
+    }
+  },
+  "minepacks": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 19286
+    }
+  },
+  "multiversecore": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "multiverse-core"
+    }
+  },
+  "multiverseprotals": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "multiverse-portals"
+    }
+  },
+  "mycommand": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 22272
+    }
+  },
+  "nuvotifier": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 13449
+    }
+  },
+  "openinv": {
+    "1.21.8": {
+      "type": "github",
+      "owner": "JiKoo",
+      "repo": "OpenInv",
+      "tag": "5.1.14",
+      "name": "OpenInv.jar"
+    }
+  },
+  "oyasaivehicles": {
+    "1.21.8": {
+      "type": "static",
+      "name": "OyasaiVehicles.jar"
+    }
+  },
+  "particlehats": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 1007
+    }
+  },
+  "placeholderapi": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "placeholderapi"
+    }
+  },
+  "plugmanx": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "plugmanx"
+    }
+  },
+  "protocollib": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 1997
+    }
+  },
+  "pvparena": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 16584
+    }
+  },
+  "signshop": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 10997
+    }
+  },
+  "simpleelevator": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 44462
+    }
+  },
+  "skinsrestorer": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "skinsrestorer"
+    }
+  },
+  "skript": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 114544
+    }
+  },
+  "slotmachine": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 22023
+    }
+  },
+  "tab": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "tab-was-taken"
+    }
+  },
+  "terra": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "terra"
+    }
+  },
+  "tntruneloaded": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 53359
+    }
+  },
+  "tokenmanager": {
+    "1.21.8": {
+      "type": "static",
+      "name": "TokenManager.jar"
+    }
+  },
+  "vault": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 34315
+    }
+  },
+  "veinminer": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "veinminer"
+    }
+  },
+  "venturechat": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 771
+    }
+  },
+  "viaversion": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "viaversion"
+    }
+  },
+  "worldborder": {
+    "1.21.8": {
+      "type": "github",
+      "owner": "PryPurity",
+      "repo": "WorldBorder",
+      "tag": "v2.1.5",
+      "name": "WorldBorder.jar"
+    }
+  },
+  "worldeditsui": {
+    "1.21.8": {
+      "type": "github",
+      "owner": "kennytv",
+      "repo": "WorldEditSUI",
+      "tag": "1.7.4",
+      "name": "WorldEditSUI-1.7.4.jar"
+    }
+  },
+  "worldguard": {
+    "1.21.8": {
+      "type": "modrinth",
+      "slug": "worldguard"
+    }
+  },
+  "zvoteparty": {
+    "1.21.8": {
+      "type": "spiget",
+      "id": 95603
     }
   }
 }

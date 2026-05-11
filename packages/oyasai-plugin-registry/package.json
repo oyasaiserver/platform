@@ -6,7 +6,7 @@
     "./*": "./src/*.ts"
   },
   "bin": {
-    "plugin-registry-download-helper": "scripts/download-helper.ts"
+    "plugin-registry-lock": "scripts/lock.ts"
   },
   "scripts": {
     "build": "tsc"

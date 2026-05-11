@@ -1,12 +1,296 @@
 {
+  "advancedban": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/8695.jar",
+      "hash": "sha256-e0llrauKgRDij8wUYDvnFIJzwuVDAU2RXd9EpjkDHdg="
+    }
+  },
   "bkcommonlib": {
     "1.21.8": {
-      "url": "https://...",
-      "hash": ""
-    },
-    "1.21.10": {
-      "url": "https://...",
-      "hash": ""
+      "url": "https://cdn.modrinth.com/data/rTg6ckWb/versions/yZdQcJiN/BKCommonLib-1.21.11-v1-1957.jar",
+      "hash": "sha256-N2UyWsc33Xrp88RdHDHnVDoa7EbYMVRbcUW9xZLGtXY="
+    }
+  },
+  "bluemap": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/nTnTxZjy/bluemap-5.16-spigot.jar",
+      "hash": "sha256-ox5s+64I2ogtRrL8PECSd4SrF/cNvk/rXQdVfcRdZaE="
+    }
+  },
+  "chestcommands": {
+    "1.21.8": {
+      "url": "https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar",
+      "hash": "sha256-RBGAcGhhGruwZ6WKY01w1+PNjK9H63RTA2WSrhiW86Y="
+    }
+  },
+  "coreprotect": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/HD2IvrxS/CoreProtect-CE-23.1.jar",
+      "hash": "sha256-gTCCtOxR2AJuHW6Kih3Dx+aL9LqXdN0d0DxfqFiOouI="
+    }
+  },
+  "crackshotguns": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/48301.jar",
+      "hash": "sha256-Hd7DJB+7JNf9JhCc+VzeA52e7fqxyEhqAgz8sIoXoTY="
+    }
+  },
+  "decentholograms": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/w02MKsTg/versions/nGwsH27P/DecentHolograms-2.10.0.jar",
+      "hash": "sha256-Hfe6Po6zqPvjm1pN3Huf2t51PizeMaz20U0uC/vAJ30="
+    }
+  },
+  "discordsrv": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/UmLGoGij/versions/ATlquwiT/DiscordSRV-Build-1.30.5.jar",
+      "hash": "sha256-7y+h8usUbHx3QStxkKfdM/H8kSgmg/5FQHc5VUyK7+8="
+    }
+  },
+  "essentialsx": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/hXiIvTyT/versions/Oa9ZDzZq/EssentialsX-2.21.2.jar",
+      "hash": "sha256-C3WQJvAvPFR8MohvNmbbPB+Uz/c+FBrlZIMT/Q0L38Y="
+    }
+  },
+  "essentialsxchat": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/2qgyQbO1/versions/BdLUtz0O/EssentialsXChat-2.21.2.jar",
+      "hash": "sha256-Htc5MloULVLqyUg+r90yBLUeqnVWIV8D6QY739wACds="
+    }
+  },
+  "essentialsxspawn": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/sYpvDxGJ/versions/RVbLg2Am/EssentialsXSpawn-2.21.2.jar",
+      "hash": "sha256-CnobRGh7bZ2E+vQkNgsuBKKr9FDi2ZmPJ7K6RwZ0a4Y="
+    }
+  },
+  "fastasyncvoxelsniper": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/D7XBSI1y/versions/IT60kfto/fastasyncvoxelsniper-3.2.3.jar",
+      "hash": "sha256-KfTmZUrMb4Q4ojRpq/MC3gV0nIOoO362Ca6smC1tqdA="
+    }
+  },
+  "fastasyncworldedit": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/MOe9fY3h/FastAsyncWorldEdit-Bukkit-2.15.0.jar",
+      "hash": "sha256-rPJn1wubCG7h0VIIXt8bSOByn2cYDqvcII01a6Uz13E="
+    }
+  },
+  "floodgate": {
+    "1.21.8": {
+      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/132/downloads/spigot",
+      "hash": "sha256-ZR31ephvY1BqEcLyxrJxR+3snFkJT6ffzCGhMdqKEDA="
+    }
+  },
+  "geyser": {
+    "1.21.8": {
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1144/downloads/spigot",
+      "hash": "sha256-eItmoEzZNCdlb6opfQyNxtyMki9kQLrtxhs9NIYmxz8="
+    }
+  },
+  "gsit": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/62325.jar",
+      "hash": "sha256-W/eF7qR22PfZFKD+Uy357YQ/vGcq/34VXKeysm/HgQU="
+    }
+  },
+  "imageonmap": {
+    "1.21.8": {
+      "url": "https://github.com/okocraft/ImageOnMap/releases/download/5.1.1/ImageOnMap-5.1.1.jar",
+      "hash": "sha256-uRacoOUtqrd5I4/yStqdv6h6h5TuOBYMpfC+K8Jf9vk="
+    }
+  },
+  "inventoryshop": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/47694.jar",
+      "hash": "sha256-wkotPB9a/eS5RtCRxN5Eyjbpt8Q+VGCFBtK7qRAVrTs="
+    }
+  },
+  "joincommands": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/51758.jar",
+      "hash": "sha256-nvbcJR9gp3CFlY+bxe+iBxeDVi21YoOY7YIjsCRgwu0="
+    }
+  },
+  "luckperms": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/OrIs0S6b/LuckPerms-Bukkit-5.5.17.jar",
+      "hash": "sha256-1bFgo5cag3LMWDW81VXjfBqmHp3TBVmSGl9CGhG/l90="
+    }
+  },
+  "lunachat": {
+    "1.21.8": {
+      "url": "https://github.com/f1w3/LunaChat/releases/download/v3.0.16-fix/LunaChat.jar",
+      "hash": "sha256-0yGJMl1/F/BpWOBGJ27f+QXrkoyrdYVdIuWfVHyNESc="
+    }
+  },
+  "lwc": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/69551.jar",
+      "hash": "sha256-yz6uEMcMj4PpilLFaSL+gwAOXKg0sC8LiB/ylbaXmD0="
+    }
+  },
+  "minepacks": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/19286.jar",
+      "hash": "sha256-c6iTUMEOJH8umayVwgErcMGUoq35Yhs9EJtG5dl2xYs="
+    }
+  },
+  "multiversecore": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/g7LecP9j/multiverse-core-5.6.2.jar",
+      "hash": "sha256-eRpm3vsjQix3HMG5ctohChzuk3SmGAGuhnnuP06Y4vw="
+    }
+  },
+  "multiverseprotals": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/8VMk6P0I/versions/BguzNJ3r/multiverse-portals-5.2.2.jar",
+      "hash": "sha256-RZa2a5rKhidf7lu9Jn7VkhpzCThic7GnP5olJJdHqA4="
+    }
+  },
+  "mycommand": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/22272.jar",
+      "hash": "sha256-PuYVL4huBX3+d4l+jlnrtKjRmj5e93ZQqIKshuqyBIE="
+    }
+  },
+  "nuvotifier": {
+    "1.21.8": {
+      "url": "https://release-assets.githubusercontent.com/github-production-release-asset/44453405/9fb03b00-de0d-11eb-8e76-53b8d19ecb18?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-05-11T01%3A27%3A12Z&rscd=attachment%3B+filename%3Dnuvotifier.jar&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-05-11T00%3A26%3A21Z&ske=2026-05-11T01%3A27%3A12Z&sks=b&skv=2018-11-09&sig=eLIJZG7NG9a5O1XVt%2FffqmrUr9QnioBgjFFjDDJYnAc%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc3ODQ1OTcxMywibmJmIjoxNzc4NDU5NDEzLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.W8_Vz6FRbnQgTign0STZX3gRw4-LOon49ee6-bpuz08&response-content-disposition=attachment%3B%20filename%3Dnuvotifier.jar&response-content-type=application%2Foctet-stream",
+      "hash": "sha256-X+VFfpunmJ3JRG9SKmkOTodyNrovxekO1m+tM9PGnzk="
+    }
+  },
+  "openinv": {
+    "1.21.8": {
+      "url": "https://github.com/JiKoo/OpenInv/releases/download/5.1.14/OpenInv.jar",
+      "hash": "sha256-x43CSG3nB9rlNHB84LBp8kGOfl4VYDagY8eOU7fZE10="
+    }
+  },
+  "particlehats": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/1007.jar",
+      "hash": "sha256-y6fHiK6+KDsRyknAQw4/2dmi99vrONURQKaItDZ0Jw0="
+    }
+  },
+  "placeholderapi": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/lKEzGugV/versions/UmbIiI5H/PlaceholderAPI-2.12.2.jar",
+      "hash": "sha256-/3avIMes8yf/Kij7Lb1mlOP5RlA+cmNaX3tssuZPwBQ="
+    }
+  },
+  "plugmanx": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/yro4niHu/versions/hrMAp7Ww/PlugManX-3.0.4.jar",
+      "hash": "sha256-LLb7Ddfm9YZ7ypv6PwN1HW2J1rlJ6LbTdAUHtVrmqcA="
+    }
+  },
+  "protocollib": {
+    "1.21.8": {
+      "url": "https://release-assets.githubusercontent.com/github-production-release-asset/26688026/fe1f680e-67d3-4f5a-9f85-cff5f9ce0d10?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-05-11T01%3A05%3A12Z&rscd=attachment%3B+filename%3DProtocolLib.jar&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-05-11T00%3A04%3A24Z&ske=2026-05-11T01%3A05%3A12Z&sks=b&skv=2018-11-09&sig=hW5YFp3xiS%2B3hlTwPZg8%2BDcn8Cj7ladi1BYH%2BQnow7A%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc3ODQ1OTcxNSwibmJmIjoxNzc4NDU5NDE1LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.g1s7fen_seHyQWU9-EsoyxjUujtKmWVReJUm26wH34E&response-content-disposition=attachment%3B%20filename%3DProtocolLib.jar&response-content-type=application%2Foctet-stream",
+      "hash": "sha256-7i56ubU4by0QMIHE0QjmGxA13yymkrU9biQJ+x9crM8="
+    }
+  },
+  "pvparena": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/16584.jar",
+      "hash": "sha256-E5VqmZxsQSU0R0PkI5xo1fbWFsqEWoiROLuV2XeojXc="
+    }
+  },
+  "signshop": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/10997.jar",
+      "hash": "sha256-03yhix//U+qsK6DHOL2NKVZysx950zcKIGy5NPeXN5M="
+    }
+  },
+  "simpleelevator": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/44462.jar",
+      "hash": "sha256-89M4auYqHG58fHevk3YizR6yoEBZUeZAOzp8/jGY0vg="
+    }
+  },
+  "skinsrestorer": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/2PjHGlwd/SkinsRestorer.jar",
+      "hash": "sha256-ZeHxBpXNl4+k/Q0ufnxKB4Y6MQlNFvha7imO/vMd4dc="
+    }
+  },
+  "skript": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/114544.jar",
+      "hash": "sha256-UVMsIkQ9k06S5LF9+tg6vvoiPZStHf+Aau1T1LYyzCQ="
+    }
+  },
+  "slotmachine": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/22023.jar",
+      "hash": "sha256-qg+XVjITD4WzBQMDrNi4h5jX+p7oH07KamobDvSmk2k="
+    }
+  },
+  "tab": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/FewsxQmS/TAB%20v6.0.2%20-%20Vanilla.jar",
+      "hash": "sha256-f0oPW9dAjYlDYaHEkhqNxDfnzRjVBYp2yoM7/f5We2g="
+    }
+  },
+  "terra": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/FIlZB9L0/versions/Ufl71nST/Terra-bukkit-6.6.6-BETA%2B451683aff-shaded.jar",
+      "hash": "sha256-I5ldaidUM9Oh8WMZmhiVFUvTs1tP6UBCx/QWXN8K8RU="
+    }
+  },
+  "tntruneloaded": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/53359.jar",
+      "hash": "sha256-q5WZRSugDcI/xW6bYbmu62RUfJBUepbJUu0+G/4LV0A="
+    }
+  },
+  "vault": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/34315.jar",
+      "hash": "sha256-prXtl/Q6XPW7rwCnyM0jxa/JvQA/hJh1r4s25s930B0="
+    }
+  },
+  "veinminer": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/OhduvhIc/versions/xyKcAltm/veinminer-paper-2.6.0.jar",
+      "hash": "sha256-wmoAptiUYbpLlJ+OGTwG1tA3tWKEAleLbpWX5bkunLY="
+    }
+  },
+  "venturechat": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/771.jar",
+      "hash": "sha256-32ycX8HDvPG/IZAYXJWYjMc2HhdN1u7qUQl0smVCRN0="
+    }
+  },
+  "viaversion": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/LXloXgE7/ViaVersion-5.9.2-SNAPSHOT.jar",
+      "hash": "sha256-fDgVnXd4S8+r/cC+OxQDaamhdtWRiV6tfx4T5Af+Uw4="
+    }
+  },
+  "worldborder": {
+    "1.21.8": {
+      "url": "https://github.com/PryPurity/WorldBorder/releases/download/v2.1.5/WorldBorder.jar",
+      "hash": "sha256-n8w7xj+ii6vHJJTRKbiu3wNK4kdhu2bRCuGatPmW3io="
+    }
+  },
+  "worldeditsui": {
+    "1.21.8": {
+      "url": "https://github.com/kennytv/WorldEditSUI/releases/download/1.7.4/WorldEditSUI-1.7.4.jar",
+      "hash": "sha256-cAbPnllEx14bV8wZ3IjtF/wXmg4oNU/aQkqjKpWqw9g="
+    }
+  },
+  "worldguard": {
+    "1.21.8": {
+      "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/PO4MKx7e/worldguard-bukkit-7.0.14-dist.jar",
+      "hash": "sha256-cHJVq3EGnNqY3RIX7R8W+I8+QFBeFkFnlPMtDiZm69M="
+    }
+  },
+  "zvoteparty": {
+    "1.21.8": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/95603.jar",
+      "hash": "sha256-lm4CuTn7f/5uIDE7OA1rwP/XJ3ClbiqYUTitjuMf1ic="
     }
   }
 }
