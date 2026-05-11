@@ -1,6 +1,6 @@
-package io.oyasaiserver.anybuilder.carbuilder2.command
+package io.oyasai.anybuilder.carbuilder2.command
 
-import io.oyasaiserver.anybuilder.common.command.BuilderCommandBase
+import io.oyasai.anybuilder.common.command.BuilderCommandBase
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 
@@ -9,7 +9,12 @@ import org.bukkit.command.CommandSender
 
 object CarBuilder2Command : BuilderCommandBase() {
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        return handleCarBuilder2Command(sender, command, label, args)
-    }
+  override fun onCommand(
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>
+  ): Boolean {
+    return handleCarBuilder2Command(sender, command, label, args)
+  }
 }

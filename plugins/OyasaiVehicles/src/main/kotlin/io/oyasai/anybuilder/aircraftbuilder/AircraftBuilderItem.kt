@@ -1,9 +1,8 @@
-package io.oyasaiserver.anybuilder.aircraftbuilder
+package io.oyasai.anybuilder.aircraftbuilder
 
-import io.oyasaiserver.anybuilder.aircraftbuilder.data.AircraftBuilderBaseCache
-import io.oyasaiserver.anybuilder.common.BuilderItemSupport
-import io.oyasaiserver.vehicle.air.AircraftVehicle
-import org.bukkit.Material
+import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderBaseCache
+import io.oyasai.anybuilder.common.BuilderItemSupport
+import io.oyasai.vehicle.air.AircraftVehicle
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 
@@ -19,53 +18,48 @@ object AircraftBuilderItem {
   private val costRegex: Regex = Regex("Cost: -?[0-9]+")
   private val costLimitRegex: Regex = Regex("CostLimit: [0-9]+")
 
-  private val statSpecs = listOf(
-    BuilderItemSupport.VehicleStatSpec("最高速", topSpeedRegex, 68, strict = true),
-    BuilderItemSupport.VehicleStatSpec("パワー", powerMaxRegex, 64, strict = true),
-    BuilderItemSupport.VehicleStatSpec("ブレーキ", brakeMaxRegex, 128, strict = true)
-  )
+  private val statSpecs =
+      listOf(
+          BuilderItemSupport.VehicleStatSpec("最高速", topSpeedRegex, 68, strict = true),
+          BuilderItemSupport.VehicleStatSpec("パワー", powerMaxRegex, 64, strict = true),
+          BuilderItemSupport.VehicleStatSpec("ブレーキ", brakeMaxRegex, 128, strict = true))
 
   private fun readStats(meta: ItemMeta?): List<Int> {
     val stats = BuilderItemSupport.readVehicleStatValues(meta, statSpecs)
     return listOf(
-      stats[0].coerceIn(1, TOP_SPEED_MAX),
-      stats[1].coerceIn(1, POWER_MAX),
-      stats[2].coerceIn(1, BRAKE_MAX)
-    )
+        stats[0].coerceIn(1, TOP_SPEED_MAX),
+        stats[1].coerceIn(1, POWER_MAX),
+        stats[2].coerceIn(1, BRAKE_MAX))
   }
 
   fun buyItem(name: String, playerName: String?): ItemStack? {
     val data = AircraftBuilderBaseCache.getBaseData(name) ?: return null
     return BuilderItemSupport.buildMinecartItem(
-      data.name,
-      playerName,
-      20831,
-      listOf("AC: ${data.name}", "Cost: 0", "最高速: 68", "パワー: 64", "ブレーキ: 128", "Mode: Normal")
-    )
+        data.name,
+        playerName,
+        20831,
+        listOf("AC: ${data.name}", "Cost: 0", "最高速: 68", "パワー: 64", "ブレーキ: 128", "Mode: Normal"))
   }
 
-    fun eventCarItem(name: String, costLimit: Int): ItemStack? {
-        val item = this.buyItem(name, null) ?: return null
-        BuilderItemSupport.appendLoreLine(item, "CostLimit: $costLimit")
-        BuilderItemSupport.renameItem(item, "Event用の$name")
-        return item
-    }
+  fun eventCarItem(name: String, costLimit: Int): ItemStack? {
+    val item = this.buyItem(name, null) ?: return null
+    BuilderItemSupport.appendLoreLine(item, "CostLimit: $costLimit")
+    BuilderItemSupport.renameItem(item, "Event用の$name")
+    return item
+  }
 
-    fun setAircraftStats(item: ItemStack, topSpeed: Int, power: Int, brake: Int): Boolean {
-        return BuilderItemSupport.replaceLoreLines(
-            item,
-            listOf(
-                BuilderItemSupport.LoreLineReplacement(topSpeedRegex, "最高速: $topSpeed"),
-                BuilderItemSupport.LoreLineReplacement(powerMaxRegex, "パワー: $power"),
-                BuilderItemSupport.LoreLineReplacement(brakeMaxRegex, "ブレーキ: $brake")
-            ),
-            costRegex = costRegex,
-            costValue = BuilderItemSupport.getCostFromStats(
-                listOf(topSpeed, power, brake),
-                listOf(68, 64, 128)
-            ) ?: 0
-        )
-    }
+  fun setAircraftStats(item: ItemStack, topSpeed: Int, power: Int, brake: Int): Boolean {
+    return BuilderItemSupport.replaceLoreLines(
+        item,
+        listOf(
+            BuilderItemSupport.LoreLineReplacement(topSpeedRegex, "最高速: $topSpeed"),
+            BuilderItemSupport.LoreLineReplacement(powerMaxRegex, "パワー: $power"),
+            BuilderItemSupport.LoreLineReplacement(brakeMaxRegex, "ブレーキ: $brake")),
+        costRegex = costRegex,
+        costValue =
+            BuilderItemSupport.getCostFromStats(listOf(topSpeed, power, brake), listOf(68, 64, 128))
+                ?: 0)
+  }
 
   fun getACNormalVehicle(meta: ItemMeta?): AircraftVehicle {
     val stats = readStats(meta)
@@ -95,11 +89,11 @@ object AircraftBuilderItem {
   }
 
   fun changeCarVehicleInt(item: ItemStack, str: String, value: Int): Boolean {
-    val rules = mapOf(
-      "パワー" to BuilderItemSupport.VehicleIntRule(powerMaxRegex, POWER_MAX),
-      "最高速" to BuilderItemSupport.VehicleIntRule(topSpeedRegex, TOP_SPEED_MAX),
-      "ブレーキ" to BuilderItemSupport.VehicleIntRule(brakeMaxRegex, BRAKE_MAX)
-    )
+    val rules =
+        mapOf(
+            "パワー" to BuilderItemSupport.VehicleIntRule(powerMaxRegex, POWER_MAX),
+            "最高速" to BuilderItemSupport.VehicleIntRule(topSpeedRegex, TOP_SPEED_MAX),
+            "ブレーキ" to BuilderItemSupport.VehicleIntRule(brakeMaxRegex, BRAKE_MAX))
     return BuilderItemSupport.changeVehicleInt(item, str, value, rules, costRegex, ::getCarVCCost)
   }
 }

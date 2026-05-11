@@ -1,6 +1,6 @@
-package io.oyasaiserver.anybuilder.aircraftbuilder.command
+package io.oyasai.anybuilder.aircraftbuilder.command
 
-import io.oyasaiserver.anybuilder.common.command.BuilderCommandBase
+import io.oyasai.anybuilder.common.command.BuilderCommandBase
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 
@@ -9,7 +9,12 @@ import org.bukkit.command.CommandSender
 
 object AircraftBuilderCommand : BuilderCommandBase() {
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        return handleAircraftBuilderCommand(sender, command, label, args)
-    }
+  override fun onCommand(
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<out String>
+  ): Boolean {
+    return handleAircraftBuilderCommand(sender, command, label, args)
+  }
 }
