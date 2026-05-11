@@ -215,7 +215,7 @@ fun AircraftBuilderCommand.handleAircraftBuilderSetting(
       if (args.size < 3) return
       var size = args[2].toDoubleOrNull() ?: 7.0
       if (sizeLimit < size) {
-        size = sizeLimit
+        size = sizeLimit.toDouble()
         sender.sendMessage("[AircraftBuilder] Size exceeds limit. Set to $sizeLimit")
       }
       vehicleData.config.setBodySize(size)

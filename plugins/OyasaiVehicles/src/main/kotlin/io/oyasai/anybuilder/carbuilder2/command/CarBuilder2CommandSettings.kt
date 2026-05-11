@@ -61,7 +61,7 @@ fun CarBuilder2Command.handleCarBuilder2Settings(
       var size = args[3].toDoubleOrNull() ?: oldSize
       val auto = args.getOrNull(4)?.equals("auto", ignoreCase = true) == true
       if (sizeLimit < size) {
-        size = sizeLimit
+        size = sizeLimit.toDouble()
         sender.sendMessage("[CarBuilder2] Size exceeds limit. Set to $sizeLimit")
       }
       config.setSize(baseDataType, size)
