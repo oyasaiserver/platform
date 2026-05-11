@@ -144,11 +144,11 @@
     "mc-monitor": {
       "flake": false,
       "locked": {
-        "lastModified": 1773144417,
-        "narHash": "sha256-EKsASQZ84D5S+eUEh8yUqhhdfFib4XtnGltN/hIpHMc=",
+        "lastModified": 1777226614,
+        "narHash": "sha256-JXdoxMmUHpWYhDUNhUvThb90lzvd1ZxgWtoy1KMH1jw=",
         "owner": "itzg",
         "repo": "mc-monitor",
-        "rev": "fcb19bdeb0a3d564d03156b9528c2d6bd7afb294",
+        "rev": "41925abbcb206c7da8498aa3aefa7b878711408e",
         "type": "github"
       },
       "original": {
