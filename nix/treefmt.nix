@@ -7,6 +7,12 @@
       enable = true;
       excludes = [ "plugins/*" ];
     };
+    json-sort-cli = {
+      enable = true;
+      autofix = true;
+      end-of-line = "lf";
+      excludes = [ "*lock.json" ];
+    };
     jsonfmt.enable = true;
     just.enable = true;
     keep-sorted.enable = true;

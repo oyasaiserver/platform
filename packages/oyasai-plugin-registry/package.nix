@@ -17,21 +17,17 @@ let
       forVersion = (
         version:
         let
-          fromRegistry = lib.pipe registry [
-            (lib.filterAttrs (id: versions: lib.hasAttr version versions))
-            (lib.mapAttrs (
-              id: versions:
-              let
-                definition = versions.${version};
-              in
-              if definition.type == "static" then
-                ./static + "/${version}/${definition.name}"
-              else
-                fetchurl lock.${id}.${version}
-            ))
+          staticDir = ./static + "/${version}";
+          fromStatic = lib.pipe (builtins.readDir staticDir) [
+            (lib.filterAttrs (_: t: t == "regular"))
+            (lib.mapAttrs' (name: _: lib.nameValuePair (lib.removeSuffix ".jar" name) (staticDir + "/${name}")))
           ];
         in
-        fromRegistry // oyasai-plugins
+        lib.pipe registry [
+          (lib.filterAttrs (_: versions: lib.hasAttr version versions))
+          (lib.mapAttrs (id: _: fetchurl lock.${id}.${version}))
+          (fromRegistry: fromRegistry // fromStatic // oyasai-plugins)
+        ]
       );
     };
   };

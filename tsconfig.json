@@ -1,25 +1,25 @@
 {
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
     "composite": true,
-    "target": "es2022",
+    "erasableSyntaxOnly": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
     "lib": ["esnext"],
     "module": "nodenext",
     "moduleDetection": "force",
     "moduleResolution": "nodenext",
-    "allowImportingTsExtensions": true,
-    "rewriteRelativeImportExtensions": true,
-    "allowJs": true,
-    "strict": true,
+    "noEmit": true,
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "erasableSyntaxOnly": true,
     "noUncheckedSideEffectImports": true,
+    "rewriteRelativeImportExtensions": true,
     "skipLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "types": ["node"],
     "useUnknownInCatchVariables": true,
-    "types": ["node"]
+    "verbatimModuleSyntax": true
   }
 }

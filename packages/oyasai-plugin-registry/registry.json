@@ -1,26 +1,20 @@
 {
   "advancedban": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 8695
-    }
-  },
-  "arceon": {
-    "1.21.8": {
-      "type": "static",
-      "name": "Arceon.jar"
+      "id": 8695,
+      "type": "spiget"
     }
   },
   "bkcommonlib": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "bkcommonlib"
+      "slug": "bkcommonlib",
+      "type": "modrinth"
     }
   },
   "bluemap": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "bluemap"
+      "slug": "bluemap",
+      "type": "modrinth"
     }
   },
   "chestcommands": {
@@ -31,62 +25,56 @@
   },
   "coreprotect": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "coreprotect"
+      "slug": "coreprotect",
+      "type": "modrinth"
     }
   },
   "crackshotguns": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 48301
+      "id": 48301,
+      "type": "spiget"
     }
   },
   "decentholograms": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "decentholograms"
+      "slug": "decentholograms",
+      "type": "modrinth"
     }
   },
   "discordsrv": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "discordsrv"
+      "slug": "discordsrv",
+      "type": "modrinth"
     }
   },
   "essentialsx": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "essentialsx"
+      "slug": "essentialsx",
+      "type": "modrinth"
     }
   },
   "essentialsxchat": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "essentialsx-chat-module"
+      "slug": "essentialsx-chat-module",
+      "type": "modrinth"
     }
   },
   "essentialsxspawn": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "essentialsx-spawn"
-    }
-  },
-  "ezedits": {
-    "1.21.8": {
-      "type": "static",
-      "name": "ezEdits.jar"
+      "slug": "essentialsx-spawn",
+      "type": "modrinth"
     }
   },
   "fastasyncvoxelsniper": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "fastasyncvoxelsniper"
+      "slug": "fastasyncvoxelsniper",
+      "type": "modrinth"
     }
   },
   "fastasyncworldedit": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "fastasyncworldedit"
+      "slug": "fastasyncworldedit",
+      "type": "modrinth"
     }
   },
   "floodgate": {
@@ -103,239 +91,227 @@
   },
   "gsit": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 62325
+      "id": 62325,
+      "type": "spiget"
     }
   },
   "imageonmap": {
     "1.21.8": {
-      "type": "github",
+      "name": "ImageOnMap-5.1.1.jar",
       "owner": "okocraft",
       "repo": "ImageOnMap",
       "tag": "5.1.1",
-      "name": "ImageOnMap-5.1.1.jar"
+      "type": "github"
     }
   },
   "inventoryshop": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 47694
+      "id": 47694,
+      "type": "spiget"
     }
   },
   "joincommands": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 51758
+      "id": 51758,
+      "type": "spiget"
     }
   },
   "luckperms": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "luckperms"
+      "slug": "luckperms",
+      "type": "modrinth"
     }
   },
   "lunachat": {
     "1.21.8": {
-      "type": "github",
+      "name": "LunaChat.jar",
       "owner": "f1w3",
       "repo": "LunaChat",
       "tag": "v3.0.16-fix",
-      "name": "LunaChat.jar"
+      "type": "github"
     }
   },
   "lwc": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 69551
+      "id": 69551,
+      "type": "spiget"
     }
   },
   "minepacks": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 19286
+      "id": 19286,
+      "type": "spiget"
     }
   },
   "multiversecore": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "multiverse-core"
+      "slug": "multiverse-core",
+      "type": "modrinth"
     }
   },
   "multiverseprotals": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "multiverse-portals"
+      "slug": "multiverse-portals",
+      "type": "modrinth"
     }
   },
   "mycommand": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 22272
+      "id": 22272,
+      "type": "spiget"
     }
   },
   "nuvotifier": {
     "1.21.8": {
-      "type": "github",
+      "name": "nuvotifier.jar",
       "owner": "NuVotifier",
       "repo": "NuVotifier",
       "tag": "v2.7.3",
-      "name": "nuvotifier.jar"
+      "type": "github"
     }
   },
   "openinv": {
     "1.21.8": {
-      "type": "github",
+      "name": "OpenInv.jar",
       "owner": "JiKoo",
       "repo": "OpenInv",
       "tag": "5.1.14",
-      "name": "OpenInv.jar"
-    }
-  },
-  "oyasaivehicles": {
-    "1.21.8": {
-      "type": "static",
-      "name": "OyasaiVehicles.jar"
+      "type": "github"
     }
   },
   "particlehats": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 1007
+      "id": 1007,
+      "type": "spiget"
     }
   },
   "placeholderapi": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "placeholderapi"
+      "slug": "placeholderapi",
+      "type": "modrinth"
     }
   },
   "plugmanx": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "plugmanx"
+      "slug": "plugmanx",
+      "type": "modrinth"
     }
   },
   "protocollib": {
     "1.21.8": {
-      "type": "github",
+      "name": "ProtocolLib.jar",
       "owner": "dmulloy2",
       "repo": "ProtocolLib",
       "tag": "5.4.0",
-      "name": "ProtocolLib.jar"
+      "type": "github"
     }
   },
   "pvparena": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 16584
+      "id": 16584,
+      "type": "spiget"
     }
   },
   "signshop": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 10997
+      "id": 10997,
+      "type": "spiget"
     }
   },
   "simpleelevator": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 44462
+      "id": 44462,
+      "type": "spiget"
     }
   },
   "skinsrestorer": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "skinsrestorer"
+      "slug": "skinsrestorer",
+      "type": "modrinth"
     }
   },
   "skript": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 114544
+      "id": 114544,
+      "type": "spiget"
     }
   },
   "slotmachine": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 22023
+      "id": 22023,
+      "type": "spiget"
     }
   },
   "tab": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "tab-was-taken"
+      "slug": "tab-was-taken",
+      "type": "modrinth"
     }
   },
   "terra": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "terra"
+      "slug": "terra",
+      "type": "modrinth"
     }
   },
   "tntruneloaded": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 53359
-    }
-  },
-  "tokenmanager": {
-    "1.21.8": {
-      "type": "static",
-      "name": "TokenManager.jar"
+      "id": 53359,
+      "type": "spiget"
     }
   },
   "vault": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 34315
+      "id": 34315,
+      "type": "spiget"
     }
   },
   "veinminer": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "veinminer"
+      "slug": "veinminer",
+      "type": "modrinth"
     }
   },
   "venturechat": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 771
+      "id": 771,
+      "type": "spiget"
     }
   },
   "viaversion": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "viaversion"
+      "slug": "viaversion",
+      "type": "modrinth"
     }
   },
   "worldborder": {
     "1.21.8": {
-      "type": "github",
+      "name": "WorldBorder.jar",
       "owner": "PryPurity",
       "repo": "WorldBorder",
       "tag": "v2.1.5",
-      "name": "WorldBorder.jar"
+      "type": "github"
     }
   },
   "worldeditsui": {
     "1.21.8": {
-      "type": "github",
+      "name": "WorldEditSUI-1.7.4.jar",
       "owner": "kennytv",
       "repo": "WorldEditSUI",
       "tag": "1.7.4",
-      "name": "WorldEditSUI-1.7.4.jar"
+      "type": "github"
     }
   },
   "worldguard": {
     "1.21.8": {
-      "type": "modrinth",
-      "slug": "worldguard"
+      "slug": "worldguard",
+      "type": "modrinth"
     }
   },
   "zvoteparty": {
     "1.21.8": {
-      "type": "spiget",
-      "id": 95603
+      "id": 95603,
+      "type": "spiget"
     }
   }
 }

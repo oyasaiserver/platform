@@ -1,5 +1,5 @@
 {
+  "exclude": ["cdktf.out"],
   "extends": "../../tsconfig.json",
-  "include": ["**/*"],
-  "exclude": ["cdktf.out"]
+  "include": ["**/*"]
 }

@@ -1,15 +1,16 @@
 #!/usr/bin/env node --enable-source-maps
+import { ok } from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
+import { stdout } from "node:process";
+import registry from "../registry.json" with { type: "json" };
 
 type RegistryEntry =
   | { type: "modrinth"; slug: string }
   | { type: "spiget"; id: number }
   | { type: "github"; owner: string; repo: string; tag: string; name: string }
-  | { type: "url"; url: string }
-  | { type: "static"; name: string };
+  | { type: "url"; url: string };
 
-type Registry = Record<string, Record<string, RegistryEntry>>;
 type LockEntry = { url: string; hash: string };
 type LockFile = Record<string, Record<string, LockEntry>>;
 
@@ -17,11 +18,8 @@ async function resolveStableUrl(
   id: string,
   version: string,
   entry: RegistryEntry,
-): Promise<string | null> {
+): Promise<string> {
   switch (entry.type) {
-    case "static":
-      return null;
-
     case "github":
       return `https://github.com/${entry.owner}/${entry.repo}/releases/download/${entry.tag}/${entry.name}`;
 
@@ -30,64 +28,62 @@ async function resolveStableUrl(
         game_versions: JSON.stringify([version]),
         loaders: JSON.stringify(["paper", "spigot", "bukkit"]),
       });
-      const res = await fetch(
+      const response = await fetch(
         `https://api.modrinth.com/v2/project/${entry.slug}/version?${params}`,
       );
-      const versions = (await res.json()) as Array<{
-        files: Array<{ url: string }>;
-      }>;
-      const url = versions.flatMap((v) => v.files).map((f) => f.url).at(0);
-      if (!url) throw new Error(`No modrinth URL for ${id}@${version}`);
+      const versions = (await response.json()) as {
+        files: { url: string }[];
+      }[];
+      const url = versions
+        .flatMap((v) => v.files)
+        .map((f) => f.url)
+        .at(0);
+      ok(url, `No modrinth URL for ${id}@${version}`);
       return url;
     }
 
     case "spiget": {
-      const res = await fetch(
+      const { url } = await fetch(
         `https://api.spiget.org/v2/resources/${entry.id}/download`,
         { redirect: "follow" },
       );
-      return res.url;
+      return url;
     }
 
     case "url": {
       // Follow redirects to get a stable, non-"latest" URL
-      const res = await fetch(entry.url, {
+      const { url } = await fetch(entry.url, {
         method: "HEAD",
         redirect: "follow",
       });
-      return res.url;
+      return url;
     }
   }
 }
 
-const ZIP_MAGIC = [0x50, 0x4b, 0x03, 0x04];
+// File magic number for zip files, best effort.
+const zipMagic = [0x50, 0x4b, 0x03, 0x04] as const;
+
+const hashAlgo = "sha256" as const;
 
 async function computeHash(url: string): Promise<string> {
-  const res = await fetch(url);
-  const buffer = await res.arrayBuffer();
+  const response = await fetch(url);
+  const buffer = await response.arrayBuffer();
   const bytes = new Uint8Array(buffer);
-  if (!ZIP_MAGIC.every((b, i) => bytes[i] === b)) {
-    throw new Error(`Expected a JAR (ZIP) file but got wrong magic bytes at ${url}`);
-  }
-  const digest = createHash("sha256").update(bytes).digest("base64");
-  return `sha256-${digest}`;
+  ok(
+    zipMagic.every((b, i) => bytes[i] === b),
+    `Expected a JAR (ZIP) file but got wrong magic bytes at ${url}`,
+  );
+  const digest = createHash(hashAlgo).update(bytes).digest("base64");
+  return `${hashAlgo}-${digest}`;
 }
-
-const registry = JSON.parse(
-  await readFile(new URL("../registry.json", import.meta.url), "utf-8"),
-) as Registry;
 
 const lock: LockFile = {};
 
 for (const [id, versions] of Object.entries(registry)) {
   for (const [version, entry] of Object.entries(versions)) {
-    process.stdout.write(`lock  ${id}@${version} ... `);
+    stdout.write(`lock  ${id}@${version} ... `);
     const url = await resolveStableUrl(id, version, entry);
-    if (url == null) {
-      console.log("static, skipped");
-      continue;
-    }
-
     const hash = await computeHash(url);
     lock[id] ??= {};
     lock[id][version] = { url, hash };
@@ -99,4 +95,5 @@ await writeFile(
   new URL("../lock.json", import.meta.url),
   JSON.stringify(lock, null, 2) + "\n",
 );
+
 console.log("\nlock.json updated");
