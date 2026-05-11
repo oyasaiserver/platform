@@ -783,18 +783,18 @@
       "hash": "sha256-nHaC7LSU1b7CVpD2VkJ4Jh9HfTUdGrRPL5AB6kAIqBg="
     }
   },
-  "net.kyori:adventure-api:4.24.0": {
-    "adventure-api-4.24.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-api/4.24.0/adventure-api-4.24.0.jar",
-      "hash": "sha256-2MHWbbD7rwhOgXmz8lQdn/ZEAqeIEHCnHos8JsJtOE4="
+  "net.kyori:adventure-api:4.25.0": {
+    "adventure-api-4.25.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-api/4.25.0/adventure-api-4.25.0.jar",
+      "hash": "sha256-jigb8TV/+Rr5eDpsJCdrSD2BVKezyrWwTpCea/XnLJ0="
     },
-    "adventure-api-4.24.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-api/4.24.0/adventure-api-4.24.0.module",
-      "hash": "sha256-c06XRjLjZiH+7Ze3ThrLSXl+pzw3EUR8p+LGBLmLEFU="
+    "adventure-api-4.25.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-api/4.25.0/adventure-api-4.25.0.module",
+      "hash": "sha256-BjX3/6StwHdpvwspz563yZXxKZujomtzPCTdf3Oor5M="
     },
-    "adventure-api-4.24.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-api/4.24.0/adventure-api-4.24.0.pom",
-      "hash": "sha256-eG4PXAYZB2RwjAVpqFTsfjHG/gcZO0Rfg4l1Uorbt30="
+    "adventure-api-4.25.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-api/4.25.0/adventure-api-4.25.0.pom",
+      "hash": "sha256-b3Z3Bs6f0+j5f8LKtz2lWlr+f10Z1ajK1tObp2Flgcg="
     }
   },
   "net.kyori:adventure-bom:4.26.1": {
@@ -807,14 +807,14 @@
       "hash": "sha256-KWshlV/2W4tQiYtKfVnLGDcDAHqjG/dhfVKRMuUnUiM="
     }
   },
-  "net.kyori:adventure-bom:4.24.0": {
-    "adventure-bom-4.24.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-bom/4.24.0/adventure-bom-4.24.0.module",
-      "hash": "sha256-ElMB4ouFj88PjnGC2uoUXQqOHXy/zPTEOXsjHUpQYkw="
+  "net.kyori:adventure-bom:4.25.0": {
+    "adventure-bom-4.25.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-bom/4.25.0/adventure-bom-4.25.0.module",
+      "hash": "sha256-ZXB+cllrTsIQtPlc51rMzGiTygCpTCxGutBZTRNMnac="
     },
-    "adventure-bom-4.24.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-bom/4.24.0/adventure-bom-4.24.0.pom",
-      "hash": "sha256-1+utxlvrCvSg9UpTNWc7z/YwqRH1QKD0TH/38CxPOIU="
+    "adventure-bom-4.25.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-bom/4.25.0/adventure-bom-4.25.0.pom",
+      "hash": "sha256-ehLL6JgsuuaSAmmusLzSwPb3JqMq4O5WpiHxpGINDxM="
     }
   },
   "net.kyori:adventure-key:4.26.1": {
@@ -831,18 +831,18 @@
       "hash": "sha256-UyMAkH0veoQYwywtiJlK2+ZKovETAzb59R6A0dEMvKk="
     }
   },
-  "net.kyori:adventure-key:4.24.0": {
-    "adventure-key-4.24.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-key/4.24.0/adventure-key-4.24.0.jar",
-      "hash": "sha256-1PIfQoHonas0WpAEVnZoeUgZ+cxIPq/4v9ZMV0lKkVA="
+  "net.kyori:adventure-key:4.25.0": {
+    "adventure-key-4.25.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-key/4.25.0/adventure-key-4.25.0.jar",
+      "hash": "sha256-zsjwq/ZC3w5ie/Wp//bxfLtiDqb+BfIWK5bK0VZNiFc="
     },
-    "adventure-key-4.24.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-key/4.24.0/adventure-key-4.24.0.module",
-      "hash": "sha256-0gI7+Of0qK+PCK5DpIPMOk8261sVrG8l0Nh0HZa6EvA="
+    "adventure-key-4.25.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-key/4.25.0/adventure-key-4.25.0.module",
+      "hash": "sha256-x3iPHqcXJE05SOzGhubp3Be62mnVmqN1ZtNtjHv72eo="
     },
-    "adventure-key-4.24.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-key/4.24.0/adventure-key-4.24.0.pom",
-      "hash": "sha256-SIhAxvEcX0+ObfLgYWcusVi4dJNUGz5hipSKoRXZ0TE="
+    "adventure-key-4.25.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-key/4.25.0/adventure-key-4.25.0.pom",
+      "hash": "sha256-oD8SgnVBVxGKPVppORHZIzZdCDMaghHg3MEwvQgrWOY="
     }
   },
   "net.kyori:adventure-text-logger-slf4j:4.26.1": {
@@ -859,18 +859,18 @@
       "hash": "sha256-LpgSt+02k9mGBeQv/mIdQuHjtF5EwvNxXtiKKs0TTmI="
     }
   },
-  "net.kyori:adventure-text-logger-slf4j:4.24.0": {
-    "adventure-text-logger-slf4j-4.24.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-logger-slf4j/4.24.0/adventure-text-logger-slf4j-4.24.0.jar",
-      "hash": "sha256-IuMKbpKnDgpELrZMkGUkp3bzwwPiheGDzyt8Q1+QqBw="
+  "net.kyori:adventure-text-logger-slf4j:4.25.0": {
+    "adventure-text-logger-slf4j-4.25.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-logger-slf4j/4.25.0/adventure-text-logger-slf4j-4.25.0.jar",
+      "hash": "sha256-ux6XEd+J/JTRJyzJfdytnBEISk3tBBqObJ72rioaFcw="
     },
-    "adventure-text-logger-slf4j-4.24.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-logger-slf4j/4.24.0/adventure-text-logger-slf4j-4.24.0.module",
-      "hash": "sha256-wqz29Ezc3OpasWJUoi5oR8ctmKUQW1ivXfWDh59oKws="
+    "adventure-text-logger-slf4j-4.25.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-logger-slf4j/4.25.0/adventure-text-logger-slf4j-4.25.0.module",
+      "hash": "sha256-fs6A5RPgpK1nv+LU6v361yzT1wrhdCZCUmxXoG7/SDY="
     },
-    "adventure-text-logger-slf4j-4.24.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-logger-slf4j/4.24.0/adventure-text-logger-slf4j-4.24.0.pom",
-      "hash": "sha256-d0TIFm0AFD3jVhhoFrSERT0vxrS8uaDZQ0HyqIOknMw="
+    "adventure-text-logger-slf4j-4.25.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-logger-slf4j/4.25.0/adventure-text-logger-slf4j-4.25.0.pom",
+      "hash": "sha256-zBsHR4P9abfyqFUTcuMfDjR0+DlsWPFIKuoAgO+oObE="
     }
   },
   "net.kyori:adventure-text-minimessage:4.26.1": {
@@ -887,18 +887,18 @@
       "hash": "sha256-I8/VHJcSj6jNuMdxFhOSTMA4f46YZJh43Ie4SFaC+Og="
     }
   },
-  "net.kyori:adventure-text-minimessage:4.24.0": {
-    "adventure-text-minimessage-4.24.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-minimessage/4.24.0/adventure-text-minimessage-4.24.0.jar",
-      "hash": "sha256-en9E3Dt4N5uRj5Hc44v/JqCWO/4wOj/hbJHTClxeI+U="
+  "net.kyori:adventure-text-minimessage:4.25.0": {
+    "adventure-text-minimessage-4.25.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-minimessage/4.25.0/adventure-text-minimessage-4.25.0.jar",
+      "hash": "sha256-GY8nxvkeXjJxZAZQhp/v3WgW17MQtIz6UptfWOSpKaQ="
     },
-    "adventure-text-minimessage-4.24.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-minimessage/4.24.0/adventure-text-minimessage-4.24.0.module",
-      "hash": "sha256-avCNo6rbj+hz4Q+qUVc1ybN6LWWCbLGJhzWm4ZeJPXY="
+    "adventure-text-minimessage-4.25.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-minimessage/4.25.0/adventure-text-minimessage-4.25.0.module",
+      "hash": "sha256-dhPZ10ZYM1pj2mYRH2vf30w4dX/GIwR50N4fxT1bhRs="
     },
-    "adventure-text-minimessage-4.24.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-minimessage/4.24.0/adventure-text-minimessage-4.24.0.pom",
-      "hash": "sha256-4BPr7EgImiEaIx5RluvxFNWw5lOBK94GO2RPX89ETqQ="
+    "adventure-text-minimessage-4.25.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-minimessage/4.25.0/adventure-text-minimessage-4.25.0.pom",
+      "hash": "sha256-cyzIAKcimO4b575KW9UWQBJhezWI0UF7UuQkbUdoly4="
     }
   },
   "net.kyori:adventure-text-serializer-gson:4.26.1": {
@@ -915,18 +915,18 @@
       "hash": "sha256-08rRApPx95VLmlYJRGnDVmPuoIdtuwlgUUQfczau95U="
     }
   },
-  "net.kyori:adventure-text-serializer-gson:4.24.0": {
-    "adventure-text-serializer-gson-4.24.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-gson/4.24.0/adventure-text-serializer-gson-4.24.0.jar",
-      "hash": "sha256-JBTDzl/+G34x3oaWjr0+nypQ41STmydliO0s1kxDGCE="
+  "net.kyori:adventure-text-serializer-gson:4.25.0": {
+    "adventure-text-serializer-gson-4.25.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-gson/4.25.0/adventure-text-serializer-gson-4.25.0.jar",
+      "hash": "sha256-kx9nlZ1G4P5Vtkq5Fk4xtXi3kjV4f2nUcrYoZfl7ckU="
     },
-    "adventure-text-serializer-gson-4.24.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-gson/4.24.0/adventure-text-serializer-gson-4.24.0.module",
-      "hash": "sha256-LIxWNeQnjlirNfFCQD61u1+sBXiDYpB8VTpa9p8DNN0="
+    "adventure-text-serializer-gson-4.25.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-gson/4.25.0/adventure-text-serializer-gson-4.25.0.module",
+      "hash": "sha256-mShJEiK1WIC26DkBj8EFrpwiZNMgiQMjS7o9rtVgX0w="
     },
-    "adventure-text-serializer-gson-4.24.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-gson/4.24.0/adventure-text-serializer-gson-4.24.0.pom",
-      "hash": "sha256-TUCD1oj9+/RoW6QHPZouJPlqCdImOd+mMTQ34V2Rejk="
+    "adventure-text-serializer-gson-4.25.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-gson/4.25.0/adventure-text-serializer-gson-4.25.0.pom",
+      "hash": "sha256-iakLX3YZMvXNCptIL2Rut7TsF8dIlnv/k5i591juAyA="
     }
   },
   "net.kyori:adventure-text-serializer-json:4.26.1": {
@@ -943,18 +943,18 @@
       "hash": "sha256-V2t6GjAzfixlFtXlsg4OMZ874IuH6234Iqdnh1OpFoI="
     }
   },
-  "net.kyori:adventure-text-serializer-json:4.24.0": {
-    "adventure-text-serializer-json-4.24.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-json/4.24.0/adventure-text-serializer-json-4.24.0.jar",
-      "hash": "sha256-/2qANEy/FNanUZR8r525Zp3QdArqyMxVXJuGSP9XcbI="
+  "net.kyori:adventure-text-serializer-json:4.25.0": {
+    "adventure-text-serializer-json-4.25.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-json/4.25.0/adventure-text-serializer-json-4.25.0.jar",
+      "hash": "sha256-SCtKohjXyHn89X5dD5zATbS01LVnnrmbcn9hBO1/uYI="
     },
-    "adventure-text-serializer-json-4.24.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-json/4.24.0/adventure-text-serializer-json-4.24.0.module",
-      "hash": "sha256-aqvU2ZfRWJl/Uf2Phue7b1+iKNcB+gkRAITn9d9OZ7k="
+    "adventure-text-serializer-json-4.25.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-json/4.25.0/adventure-text-serializer-json-4.25.0.module",
+      "hash": "sha256-guKd0oBJaMnF/pspbxDsUrpFT6AsKytFwSgUXqPXfAY="
     },
-    "adventure-text-serializer-json-4.24.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-json/4.24.0/adventure-text-serializer-json-4.24.0.pom",
-      "hash": "sha256-SxTq6y0vN6TfeA/1YgxLM2arJeexk7qYvkgLxz1XgxQ="
+    "adventure-text-serializer-json-4.25.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-json/4.25.0/adventure-text-serializer-json-4.25.0.pom",
+      "hash": "sha256-p9M2cSIfPqHWpJry4f49Vw6OCEMPYt8VCHyTm9IjhZE="
     }
   },
   "net.kyori:adventure-text-serializer-legacy:4.26.1": {
@@ -971,18 +971,18 @@
       "hash": "sha256-JC4/tXRmwrW3lcvMPi6C7ICXNselyvPzACLf0IpFQLA="
     }
   },
-  "net.kyori:adventure-text-serializer-legacy:4.24.0": {
-    "adventure-text-serializer-legacy-4.24.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-legacy/4.24.0/adventure-text-serializer-legacy-4.24.0.jar",
-      "hash": "sha256-QO1Tr+Kn1mi4FK3WneFaz0vajp+VHE5dTiJNd3BUaF4="
+  "net.kyori:adventure-text-serializer-legacy:4.25.0": {
+    "adventure-text-serializer-legacy-4.25.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-legacy/4.25.0/adventure-text-serializer-legacy-4.25.0.jar",
+      "hash": "sha256-BvFSXr8X+080w08bUmKt5nJwXBFj9qSLaKTgMU36ahM="
     },
-    "adventure-text-serializer-legacy-4.24.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-legacy/4.24.0/adventure-text-serializer-legacy-4.24.0.module",
-      "hash": "sha256-uwBv4g+J/qOEZM/dz/SCvDXAGhI5wt8DEP6NBgHNGU4="
+    "adventure-text-serializer-legacy-4.25.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-legacy/4.25.0/adventure-text-serializer-legacy-4.25.0.module",
+      "hash": "sha256-AVec+FDUBBQ3GCV9cym3/KODgXBEP8oWnowgPwMnMU4="
     },
-    "adventure-text-serializer-legacy-4.24.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-legacy/4.24.0/adventure-text-serializer-legacy-4.24.0.pom",
-      "hash": "sha256-WLFnVzl0ZXM+9deg6toSxPG1e+28BZqGv9+JgECwxjc="
+    "adventure-text-serializer-legacy-4.25.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-legacy/4.25.0/adventure-text-serializer-legacy-4.25.0.pom",
+      "hash": "sha256-NXbSfnn4+yAZfpr0oo9b/YrI6BQJlnlMArI1rd37YxM="
     }
   },
   "net.kyori:adventure-text-serializer-plain:4.26.1": {
@@ -999,18 +999,18 @@
       "hash": "sha256-uhg5th3wyaMs9OLwm0vBvSDSNHfCMsxX67wCC6nfGso="
     }
   },
-  "net.kyori:adventure-text-serializer-plain:4.24.0": {
-    "adventure-text-serializer-plain-4.24.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-plain/4.24.0/adventure-text-serializer-plain-4.24.0.jar",
-      "hash": "sha256-flKpjlkNCI/we+H4sOdZhkcXRm/TXbGGL7tuu0GyRds="
+  "net.kyori:adventure-text-serializer-plain:4.25.0": {
+    "adventure-text-serializer-plain-4.25.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-plain/4.25.0/adventure-text-serializer-plain-4.25.0.jar",
+      "hash": "sha256-lFN1egpsDdnktfzSVOgqfqhn9MvkA3cWf0QMQexgUu4="
     },
-    "adventure-text-serializer-plain-4.24.0.module": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-plain/4.24.0/adventure-text-serializer-plain-4.24.0.module",
-      "hash": "sha256-3ir7UDVDHLvHI6WgSBYGB99yHeiHLTgeG7mICCRocfg="
+    "adventure-text-serializer-plain-4.25.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-plain/4.25.0/adventure-text-serializer-plain-4.25.0.module",
+      "hash": "sha256-mVude/RMSiHELTPFr3eK9X7rJH40fRUy5HtwmsVBsfg="
     },
-    "adventure-text-serializer-plain-4.24.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-plain/4.24.0/adventure-text-serializer-plain-4.24.0.pom",
-      "hash": "sha256-/pRYAmrIQoPR20OQFZd8wI2yGZ4j/zJqtyBFsgCjcrU="
+    "adventure-text-serializer-plain-4.25.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/net/kyori/adventure-text-serializer-plain/4.25.0/adventure-text-serializer-plain-4.25.0.pom",
+      "hash": "sha256-FaJA8MaaBORkMop+Wa+LK28hhWL63+2fIFa7t+G1gR4="
     }
   },
   "net.kyori:examination-api:1.3.0": {
@@ -1729,20 +1729,6 @@
       "hash": "sha256-mn4e3huQFzBSwebtck+w8OvMiP9oLQI/DJs0PhN3p/8="
     }
   },
-  "org.jetbrains:annotations:26.0.2": {
-    "annotations-26.0.2.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/26.0.2/annotations-26.0.2.jar",
-      "hash": "sha256-IDe+N4mA07qTM+l5VfOyzeOSqhJNBMpzzi7uZlcZkpc="
-    },
-    "annotations-26.0.2.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/26.0.2/annotations-26.0.2.module",
-      "hash": "sha256-vvC4NSst/Uy3FV7MKjkie/FqPghme6vsZQx2sau/zss="
-    },
-    "annotations-26.0.2.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/26.0.2/annotations-26.0.2.pom",
-      "hash": "sha256-fr7Oreja2nyxfv8+AUkiw5Ai0qN44+LSRh8o8Bb/x/c="
-    }
-  },
   "org.jetbrains:annotations:23.0.0": {
     "annotations-23.0.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/23.0.0/annotations-23.0.0.pom",
@@ -2313,18 +2299,18 @@
       "hash": "sha256-2FMadGyYj39o7V8YjN6pRQBq6pk+xd+eUk4NJ9YUkdo="
     }
   },
-  "org.purpurmc.purpur:purpur-api:1.21.8-R0.1-SNAPSHOT": {
-    "purpur-api-1.21.8-R0.1-SNAPSHOT.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/org/purpurmc/purpur/purpur-api/1.21.8-R0.1-SNAPSHOT/purpur-api-1.21.8-R0.1-20250919.015234-19.jar",
-      "hash": "sha256-Zu/2oq1NPVu6eiaeB8gSNw49KIMRlex6NfCUhAvlyFY="
+  "org.purpurmc.purpur:purpur-api:1.21.10-R0.1-SNAPSHOT": {
+    "purpur-api-1.21.10-R0.1-SNAPSHOT.jar": {
+      "url": "https://repo.purpurmc.org/snapshots/org/purpurmc/purpur/purpur-api/1.21.10-R0.1-SNAPSHOT/purpur-api-1.21.10-R0.1-20251211.024244-28.jar",
+      "hash": "sha256-6hTzrocg22mHyo8pYVABIiZ9pwJfzB75i1MCX1dvpoU="
     },
-    "purpur-api-1.21.8-R0.1-SNAPSHOT.module": {
-      "url": "https://repo.purpurmc.org/snapshots/org/purpurmc/purpur/purpur-api/1.21.8-R0.1-SNAPSHOT/purpur-api-1.21.8-R0.1-20250919.015234-19.module",
-      "hash": "sha256-YMuB76yFwsw7FJimCw5TUJZWzwXvrEvfXyZHC3Dzny4="
+    "purpur-api-1.21.10-R0.1-SNAPSHOT.module": {
+      "url": "https://repo.purpurmc.org/snapshots/org/purpurmc/purpur/purpur-api/1.21.10-R0.1-SNAPSHOT/purpur-api-1.21.10-R0.1-20251211.024244-28.module",
+      "hash": "sha256-JU3TDx227B5qj4f3QneF3tQkpYnVwK+HOLpLqQ/SmpU="
     },
-    "purpur-api-1.21.8-R0.1-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/org/purpurmc/purpur/purpur-api/1.21.8-R0.1-SNAPSHOT/purpur-api-1.21.8-R0.1-20250919.015234-19.pom",
-      "hash": "sha256-GkNi3BDG+CijiJbVgPVT+7s7sRFWtB25umk2HnImcbk="
+    "purpur-api-1.21.10-R0.1-SNAPSHOT.pom": {
+      "url": "https://repo.purpurmc.org/snapshots/org/purpurmc/purpur/purpur-api/1.21.10-R0.1-SNAPSHOT/purpur-api-1.21.10-R0.1-20251211.024244-28.pom",
+      "hash": "sha256-UmVbBB338QE+SZd00iP3G20C5UxGQQ9TNhBFvA9BT8I="
     }
   },
   "org.slf4j:slf4j-api:2.0.16": {

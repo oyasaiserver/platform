@@ -1,102 +1,96 @@
 {
   "advancedban": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 8695,
       "type": "spiget"
     }
   },
   "bkcommonlib": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "bkcommonlib",
       "type": "modrinth"
     }
   },
   "bluemap": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "bluemap",
       "type": "modrinth"
     }
   },
   "chestcommands": {
-    "1.21.8": {
+    "1.21.10": {
       "type": "url",
       "url": "https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar"
     }
   },
   "coreprotect": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "coreprotect",
       "type": "modrinth"
     }
   },
   "crackshotguns": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 48301,
       "type": "spiget"
     }
   },
   "decentholograms": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "decentholograms",
       "type": "modrinth"
     }
   },
   "discordsrv": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "discordsrv",
       "type": "modrinth"
     }
   },
   "essentialsx": {
-    "1.21.8": {
-      "slug": "essentialsx",
-      "type": "modrinth"
+    "1.21.10": {
+      "type": "url",
+      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.22.0-dev+111-c38c925.jar"
     }
   },
   "essentialsxchat": {
-    "1.21.8": {
-      "slug": "essentialsx-chat-module",
-      "type": "modrinth"
+    "1.21.10": {
+      "type": "url",
+      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXChat-2.22.0-dev+111-c38c925.jar"
     }
   },
   "essentialsxspawn": {
-    "1.21.8": {
-      "slug": "essentialsx-spawn",
-      "type": "modrinth"
-    }
-  },
-  "fastasyncvoxelsniper": {
-    "1.21.8": {
-      "slug": "fastasyncvoxelsniper",
-      "type": "modrinth"
+    "1.21.10": {
+      "type": "url",
+      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXSpawn-2.22.0-dev+111-c38c925.jar"
     }
   },
   "fastasyncworldedit": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "fastasyncworldedit",
       "type": "modrinth"
     }
   },
   "floodgate": {
-    "1.21.8": {
+    "1.21.10": {
       "type": "url",
       "url": "https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot"
     }
   },
   "geyser": {
-    "1.21.8": {
+    "1.21.10": {
       "type": "url",
       "url": "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot"
     }
   },
   "gsit": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 62325,
       "type": "spiget"
     }
   },
   "imageonmap": {
-    "1.21.8": {
+    "1.21.10": {
       "name": "ImageOnMap-5.1.1.jar",
       "owner": "okocraft",
       "repo": "ImageOnMap",
@@ -105,25 +99,25 @@
     }
   },
   "inventoryshop": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 47694,
       "type": "spiget"
     }
   },
   "joincommands": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 51758,
       "type": "spiget"
     }
   },
   "luckperms": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "luckperms",
       "type": "modrinth"
     }
   },
   "lunachat": {
-    "1.21.8": {
+    "1.21.10": {
       "name": "LunaChat.jar",
       "owner": "f1w3",
       "repo": "LunaChat",
@@ -132,37 +126,37 @@
     }
   },
   "lwc": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 69551,
       "type": "spiget"
     }
   },
   "minepacks": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 19286,
       "type": "spiget"
     }
   },
   "multiversecore": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "multiverse-core",
       "type": "modrinth"
     }
   },
   "multiverseprotals": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "multiverse-portals",
       "type": "modrinth"
     }
   },
   "mycommand": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 22272,
       "type": "spiget"
     }
   },
   "nuvotifier": {
-    "1.21.8": {
+    "1.21.10": {
       "name": "nuvotifier.jar",
       "owner": "NuVotifier",
       "repo": "NuVotifier",
@@ -171,7 +165,7 @@
     }
   },
   "openinv": {
-    "1.21.8": {
+    "1.21.10": {
       "name": "OpenInv.jar",
       "owner": "JiKoo",
       "repo": "OpenInv",
@@ -180,25 +174,25 @@
     }
   },
   "particlehats": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 1007,
       "type": "spiget"
     }
   },
   "placeholderapi": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "placeholderapi",
       "type": "modrinth"
     }
   },
   "plugmanx": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "plugmanx",
       "type": "modrinth"
     }
   },
   "protocollib": {
-    "1.21.8": {
+    "1.21.10": {
       "name": "ProtocolLib.jar",
       "owner": "dmulloy2",
       "repo": "ProtocolLib",
@@ -207,85 +201,79 @@
     }
   },
   "pvparena": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 16584,
       "type": "spiget"
     }
   },
   "signshop": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 10997,
       "type": "spiget"
     }
   },
   "simpleelevator": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 44462,
       "type": "spiget"
     }
   },
   "skinsrestorer": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "skinsrestorer",
       "type": "modrinth"
     }
   },
   "skript": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 114544,
       "type": "spiget"
     }
   },
   "slotmachine": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 22023,
       "type": "spiget"
     }
   },
   "tab": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "tab-was-taken",
       "type": "modrinth"
     }
   },
-  "terra": {
-    "1.21.8": {
-      "slug": "terra",
-      "type": "modrinth"
-    }
-  },
   "tntruneloaded": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 53359,
       "type": "spiget"
     }
   },
   "vault": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 34315,
       "type": "spiget"
     }
   },
   "veinminer": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "veinminer",
       "type": "modrinth"
     }
   },
   "venturechat": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 771,
       "type": "spiget"
     }
   },
   "viaversion": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "viaversion",
       "type": "modrinth"
     }
   },
   "worldborder": {
-    "1.21.8": {
+    "1.21.10": {
       "name": "WorldBorder.jar",
       "owner": "PryPurity",
       "repo": "WorldBorder",
@@ -294,7 +282,7 @@
     }
   },
   "worldeditsui": {
-    "1.21.8": {
+    "1.21.10": {
       "name": "WorldEditSUI-1.7.4.jar",
       "owner": "kennytv",
       "repo": "WorldEditSUI",
@@ -303,13 +291,13 @@
     }
   },
   "worldguard": {
-    "1.21.8": {
+    "1.21.10": {
       "slug": "worldguard",
       "type": "modrinth"
     }
   },
   "zvoteparty": {
-    "1.21.8": {
+    "1.21.10": {
       "id": 95603,
       "type": "spiget"
     }
