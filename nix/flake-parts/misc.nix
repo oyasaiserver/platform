@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   perSystem =
-    { system, inputs', ... }:
+    { system, ... }:
     {
       _module.args = {
         pkgs = import inputs.nixpkgs {
@@ -13,6 +13,5 @@
           ];
         };
       };
-      packages = { inherit (inputs'.tools.packages) nix-flake-check-changed nix-grep-to-build; };
     };
 }

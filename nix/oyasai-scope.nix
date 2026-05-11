@@ -50,8 +50,9 @@ lib.makeScope pkgs.newScope (
   in
   {
     inherit inputs oyasaiTerraformProviders;
-    inherit (inputs.gradle2nix.packages.${system}) gradle2nix;
     inherit (pkgs) bore-cli;
+    inherit (inputs.gradle2nix.packages.${system}) gradle2nix;
+    inherit (inputs.tools.packages.${system}) nix-flake-check-changed nix-grep-to-build npm-list;
 
     terraform = pkgs.terraform.withPlugins (_: oyasaiTerraformProviders);
     nodejs = pkgs.nodejs_24;

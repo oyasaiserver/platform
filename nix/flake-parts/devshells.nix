@@ -21,6 +21,7 @@
             nodejs
             terraform
             typescript-language-server
+            npm-list
             # keep-sorted end
           ];
       };
