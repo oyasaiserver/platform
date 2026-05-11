@@ -34,7 +34,6 @@ updates:
       all:
         patterns:
           - "*"
-        exclude-patterns:
-          - "gradle-wrapper"
     ignore:
       - dependency-name: "*purpur-api*"
+      - dependency-name: "gradle-wrapper"
