@@ -87,5 +87,6 @@ jobs:
         # It's free, feel free to increase
         timeout-minutes: 20
         run: |
+          docker logs -f minecraft-main &
           nix run .#bore-cli -- local 25565 \
             --to bore.pub

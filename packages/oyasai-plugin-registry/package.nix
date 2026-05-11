@@ -11,7 +11,6 @@ let
 
   final = package-lock2nix.mkNpmModule {
     src = ./.;
-    buildInputs = [ oyasai-plugins ];
 
     passthru = {
       forVersion = (
