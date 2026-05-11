@@ -89,7 +89,6 @@ let
       sociallikes3
       socialvotes
       tab
-      terra
       tntruneloaded
       tokenmanager
       tpswitch
