@@ -6,7 +6,7 @@
     "./*": "./src/*.ts"
   },
   "bin": {
-    "plugin-registry-lock": "scripts/lock.ts"
+    "plugin-registry-lock": "src/lock.ts"
   },
   "scripts": {
     "build": "tsc"
