@@ -37,13 +37,14 @@ let
       rcon.port=25575
     '';
 
-    plugins = with (oyasai-plugin-registry.forVersion version); [
+    plugins = with oyasai-plugin-registry.forVersion version; [
       # keep-sorted start
       advancedban
       arceon
       bkcommonlib
       bluemap
       chestcommands
+      citiesskymine
       coreprotect
       crackshotguns
       decentholograms
