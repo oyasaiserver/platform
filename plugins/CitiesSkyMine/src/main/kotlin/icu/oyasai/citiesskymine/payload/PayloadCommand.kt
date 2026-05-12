@@ -127,8 +127,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val placement =
         buildPlacement(placementColumns, buildingTurns, context.viewTurns, placementOptions.side)
     val placementBounds = buildPlacementBounds(context, placementColumns, placement)
-    val undoSnapshot =
-        captureUndoSnapshot(sender, context, placementColumns, placement, blockCount)
+    val undoSnapshot = captureUndoSnapshot(sender, context, placementColumns, placement, blockCount)
 
     try {
       createEditSession(context.world, context.actor).use { editSession ->
@@ -138,8 +137,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           val (px, pz) = placedColumnPosition(column, placement)
           val from = context.origin.add(px, column.yMin, pz)
           val to = context.origin.add(px, column.yMin + column.height, pz)
-          val pattern =
-              patterns.getOrPut(column.block) { BlockPattern(blockState(column.block)) }
+          val pattern = patterns.getOrPut(column.block) { BlockPattern(blockState(column.block)) }
           editSession.setBlocks(CuboidRegion(weWorld, from, to) as Region, pattern)
         }
         Operations.complete(editSession.commit())
@@ -234,7 +232,23 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     if (!hasSide) suggestions.addAll(listOf("L", "R"))
     if (!hasRotation && !hasSide) {
       suggestions.addAll(
-          listOf("0L", "0R", "1L", "1R", "2L", "2R", "3L", "3R", "L0", "R0", "L1", "R1", "L2", "R2", "L3", "R3"))
+          listOf(
+              "0L",
+              "0R",
+              "1L",
+              "1R",
+              "2L",
+              "2R",
+              "3L",
+              "3R",
+              "L0",
+              "R0",
+              "L1",
+              "R1",
+              "L2",
+              "R2",
+              "L3",
+              "R3"))
     }
     if (!hasHollow) suggestions.addAll(listOf("hollow", "solid"))
     return suggestions.filter { it.startsWith(args.last(), ignoreCase = true) }
@@ -507,9 +521,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun compressPlacementBlocks(blocks: Map<BlockPos, PayloadBlock>): List<PlacementColumn> {
     val grouped = HashMap<Long, MutableList<BlockRunSource>>()
     for ((pos, block) in blocks) {
-      grouped
-          .getOrPut(xzKey(pos.x, pos.z)) { ArrayList() }
-          .add(BlockRunSource(pos.y, block))
+      grouped.getOrPut(xzKey(pos.x, pos.z)) { ArrayList() }.add(BlockRunSource(pos.y, block))
     }
 
     val result = ArrayList<PlacementColumn>()
@@ -801,7 +813,10 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         anchorZ = frontZ * anchorFront + rightZ * anchorRight)
   }
 
-  private fun placedColumnPosition(column: PlacementColumn, placement: PlacementPlan): Pair<Int, Int> {
+  private fun placedColumnPosition(
+      column: PlacementColumn,
+      placement: PlacementPlan
+  ): Pair<Int, Int> {
     val (rx, rz) = rotate(column.x, column.z, placement.buildingTurns)
     return (rx - placement.anchorX) to (rz - placement.anchorZ)
   }

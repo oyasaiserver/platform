@@ -29,8 +29,10 @@ import org.bukkit.plugin.java.JavaPlugin
 class Main : JavaPlugin() {
   lateinit var playerDataStore: PlayerDataStore
     private set
+
   lateinit var undoManager: CsmUndoManager
     private set
+
   lateinit var access: CsmAccessController
     private set
 
@@ -89,8 +91,7 @@ class Main : JavaPlugin() {
         DebugStickCommand(this, debugStickMemoryStore ?: DebugStickMemoryStore(this))
     val brushPresetHandler = BrushPresetCommand(this)
     val undoHandler =
-        CsmUndoCommand(
-            this, payloadHandler, windowHandler, rcHandler, riHandler, hbHandler)
+        CsmUndoCommand(this, payloadHandler, windowHandler, rcHandler, riHandler, hbHandler)
     val csmHandler =
         CitiesSkyMineCommand(
             this,

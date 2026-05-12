@@ -138,7 +138,8 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm intersection <...>", "交差点を生成")
     MessageUtil.helpEntry(sender, "/csm facade <...>", "ファサードを生成")
     MessageUtil.helpEntry(sender, "/csm payload load <payload> [0-3] [L|R]", "payloadをFAWEで配置")
-    MessageUtil.helpEntry(sender, "/csm undo [payload|window|road|intersection|facade]", "直近のCSM操作を取り消し")
+    MessageUtil.helpEntry(
+        sender, "/csm undo [payload|window|road|intersection|facade]", "直近のCSM操作を取り消し")
     MessageUtil.helpEntry(sender, "/csm payload undo [last]", "payload配置を復元")
     MessageUtil.helpEntry(
         sender, "/csm window [width] [height] [frame] [glass] [backing]", "正面方向に窓を生成")
@@ -146,8 +147,7 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm preset <save|load|list|delete|名前>", "ブラシプリセットを管理")
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
     MessageUtil.send(
-        sender,
-        "<gray>Shortcuts: /.rc, /.ri, /.hb, /.pl, /.win, /.ds, /.brp, /.undo</gray>")
+        sender, "<gray>Shortcuts: /.rc, /.ri, /.hb, /.pl, /.win, /.ds, /.brp, /.undo</gray>")
   }
 
   private fun showInfo(sender: CommandSender) {

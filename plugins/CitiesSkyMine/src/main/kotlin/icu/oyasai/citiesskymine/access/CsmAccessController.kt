@@ -19,7 +19,7 @@ class CsmAccessController(private val plugin: Main) {
     WINDOW("window", "citiesskymine.window"),
     DEBUGSTICK("debugstick", "citiesskymine.debugstick"),
     PRESET("preset", "citiesskymine.preset"),
-    UNDO("undo", "citiesskymine.undo");
+    UNDO("undo", "citiesskymine.undo")
   }
 
   fun require(sender: CommandSender, command: CommandKey): Boolean {
@@ -61,7 +61,8 @@ class CsmAccessController(private val plugin: Main) {
       return commandMatches(
           command, plugin.config.getStringList("access.command-blocks.allowed-commands"))
     }
-    return commandMatches(command, plugin.config.getStringList("access.non-player.allowed-commands"))
+    return commandMatches(
+        command, plugin.config.getStringList("access.non-player.allowed-commands"))
   }
 
   private fun rolesFor(player: Player): Set<String> {

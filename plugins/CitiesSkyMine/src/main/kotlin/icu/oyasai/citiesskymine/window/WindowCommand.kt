@@ -72,7 +72,8 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val fillMaterial = windowFillMaterial()
     val fillTargets =
         if (plugin.config.getBoolean("window.fill-air-around-glass", true)) {
-          fillTargets(base, lateralPositive, facing, leftOffset, rightOffset, height, windowTargetKeys)
+          fillTargets(
+              base, lateralPositive, facing, leftOffset, rightOffset, height, windowTargetKeys)
         } else {
           emptyList()
         }
@@ -221,8 +222,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   }
 
   private fun windowFillMaterial(): Material =
-      materialFromConfig("window.fill", Material.SMOOTH_QUARTZ)
-          .takeIf { it.isBlock && !it.isAir }
+      materialFromConfig("window.fill", Material.SMOOTH_QUARTZ).takeIf { it.isBlock && !it.isAir }
           ?: Material.SMOOTH_QUARTZ
 
   private fun windowDefaults(player: Player): WindowDefaults {
@@ -370,9 +370,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val world = BukkitAdapter.adapt(player.world)
       val selector =
           CuboidRegionSelector(
-              world,
-              BlockVector3.at(minX, minY, minZ),
-              BlockVector3.at(maxX, maxY, maxZ))
+              world, BlockVector3.at(minX, minY, minZ), BlockVector3.at(maxX, maxY, maxZ))
       val session = WorldEdit.getInstance().sessionManager.get(actor)
       session.setRegionSelector(world, selector)
       session.dispatchCUISelection(actor)

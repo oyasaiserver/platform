@@ -32,14 +32,17 @@ class BrushPresetCommand(private val plugin: Main) : CommandExecutor, TabComplet
 
     val sub = args.getOrNull(0)?.lowercase()
     return when (sub) {
-      null, "help" -> {
+      null,
+      "help" -> {
         showHelp(sender, label)
         true
       }
       "save" -> handleSave(sender, label, args)
       "load" -> handleLoad(sender, label, args.getOrNull(1))
       "list" -> handleList(sender)
-      "delete", "del", "remove" -> handleDelete(sender, label, args.getOrNull(1))
+      "delete",
+      "del",
+      "remove" -> handleDelete(sender, label, args.getOrNull(1))
       else -> handleLoad(sender, label, args[0])
     }
   }
@@ -52,13 +55,18 @@ class BrushPresetCommand(private val plugin: Main) : CommandExecutor, TabComplet
   ): List<String> {
     if (sender !is Player) return emptyList()
     return when (args.size) {
-      1 -> (listOf("save", "load", "list", "delete", "help") + presetNames(sender))
-          .filter { it.startsWith(args[0], ignoreCase = true) }
-      2 -> when (args[0].lowercase()) {
-        "load", "delete", "del", "remove" ->
-            presetNames(sender).filter { it.startsWith(args[1], ignoreCase = true) }
-        else -> emptyList()
-      }
+      1 ->
+          (listOf("save", "load", "list", "delete", "help") + presetNames(sender)).filter {
+            it.startsWith(args[0], ignoreCase = true)
+          }
+      2 ->
+          when (args[0].lowercase()) {
+            "load",
+            "delete",
+            "del",
+            "remove" -> presetNames(sender).filter { it.startsWith(args[1], ignoreCase = true) }
+            else -> emptyList()
+          }
       else -> emptyList()
     }
   }
@@ -70,10 +78,12 @@ class BrushPresetCommand(private val plugin: Main) : CommandExecutor, TabComplet
       return true
     }
 
-    val key = normalizeName(rawName) ?: run {
-      MessageUtil.error(player, "プリセット名は英数字・_・- の1-32文字で指定してください。")
-      return true
-    }
+    val key =
+        normalizeName(rawName)
+            ?: run {
+              MessageUtil.error(player, "プリセット名は英数字・_・- の1-32文字で指定してください。")
+              return true
+            }
 
     val command = args.drop(2).joinToString(" ").trimStart()
     val validationError = validateCommand(command)
@@ -175,9 +185,9 @@ class BrushPresetCommand(private val plugin: Main) : CommandExecutor, TabComplet
     }
 
     val allowedCommands =
-        plugin.config
-            .getStringList("brush-preset.allowed-commands")
-            .ifEmpty { DEFAULT_ALLOWED_COMMANDS }
+        plugin.config.getStringList("brush-preset.allowed-commands").ifEmpty {
+          DEFAULT_ALLOWED_COMMANDS
+        }
     if (allowedCommands.none { allowed -> matchesAllowedCommand(command, allowed) }) {
       return "許可されていないコマンドです。"
     }

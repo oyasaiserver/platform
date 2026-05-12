@@ -60,7 +60,8 @@ class CsmUndoCommand(
       args: Array<String>
   ): List<String> {
     return when (args.size) {
-      1 -> (SOURCE_IDS + listOf("last", "help")).filter { it.startsWith(args[0], ignoreCase = true) }
+      1 ->
+          (SOURCE_IDS + listOf("last", "help")).filter { it.startsWith(args[0], ignoreCase = true) }
       2 ->
           if (Source.fromId(args[0]) != null) {
             listOf("last").filter { it.startsWith(args[1], ignoreCase = true) }
@@ -130,7 +131,8 @@ class CsmUndoCommand(
   private fun showHelp(sender: CommandSender, label: String) {
     MessageUtil.header(sender, "CSM Undo")
     MessageUtil.helpEntry(sender, "/$label", "自分の直近CSM操作を取り消し")
-    MessageUtil.helpEntry(sender, "/$label <payload|window|road|intersection|facade>", "対象を指定して取り消し")
+    MessageUtil.helpEntry(
+        sender, "/$label <payload|window|road|intersection|facade>", "対象を指定して取り消し")
     MessageUtil.helpEntry(sender, "/$label payload last", "最後に保存されたpayload配置を取り消し")
   }
 
