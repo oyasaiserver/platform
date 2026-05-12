@@ -1,6 +1,9 @@
 package icu.oyasai.citiesskymine.facade
 
 import com.sk89q.worldedit.EditSession
+import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.undo.CsmUndoManager
 import java.io.File
 import java.util.*
 import org.bukkit.command.Command
@@ -8,9 +11,8 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
 
-class HaussmannCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCompleter {
+class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
   private val lastEdit = HashMap<UUID, EditSession>()
 
@@ -24,10 +26,11 @@ class HaussmannCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCom
       sender.sendMessage("§cプレイヤーのみ使用可能です")
       return true
     }
+    if (!plugin.access.require(sender, CommandKey.FACADE)) return true
     when (args.getOrNull(0)?.lowercase()) {
       "build" -> doBuild(sender, args)
       "schem" -> doSchem(sender, args)
-      "undo" -> doUndo(sender)
+      "undo" -> undo(sender)
       else -> showHelp(sender)
     }
     return true
@@ -42,6 +45,7 @@ class HaussmannCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCom
     val es = FacadeGenerator.generate(player, bays, palette)
     if (es != null) {
       lastEdit[player.uniqueId] = es
+      plugin.undoManager.record(player, CsmUndoManager.Source.FACADE)
       player.sendMessage("§a生成完了！")
     }
   }
@@ -72,6 +76,7 @@ class HaussmannCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCom
       val es = SchematicFacadeGenerator.pasteFull(player, schemFile)
       if (es != null) {
         lastEdit[player.uniqueId] = es
+        plugin.undoManager.record(player, CsmUndoManager.Source.FACADE)
         player.sendMessage("§a貼り付け完了！")
       }
       return
@@ -83,21 +88,30 @@ class HaussmannCommand(private val plugin: JavaPlugin) : CommandExecutor, TabCom
     val es = SchematicFacadeGenerator.generate(player, schemFile, bays, pattern)
     if (es != null) {
       lastEdit[player.uniqueId] = es
+      plugin.undoManager.record(player, CsmUndoManager.Source.FACADE)
       player.sendMessage("§a生成完了！")
     }
   }
 
   // ── /hb undo ─────────────────────────────────────────────────────────
 
-  private fun doUndo(player: Player) {
+  fun undo(player: Player): Boolean {
     val es =
         lastEdit.remove(player.uniqueId)
             ?: run {
               player.sendMessage("§cアンドゥする操作がありません")
-              return
+              return false
             }
-    FacadeGenerator.undo(player, es)
-    player.sendMessage("§aアンドゥ完了")
+    return try {
+      FacadeGenerator.undo(player, es)
+      player.sendMessage("§aアンドゥ完了")
+      plugin.undoManager.takeLatest(player, CsmUndoManager.Source.FACADE)
+      true
+    } catch (e: Exception) {
+      lastEdit[player.uniqueId] = es
+      player.sendMessage("§cアンドゥに失敗しました: ${e.message}")
+      false
+    }
   }
 
   // ── help ─────────────────────────────────────────────────────────────

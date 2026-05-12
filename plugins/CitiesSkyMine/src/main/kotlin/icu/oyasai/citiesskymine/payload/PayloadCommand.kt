@@ -9,8 +9,11 @@ import com.sk89q.worldedit.regions.CuboidRegion
 import com.sk89q.worldedit.regions.Region
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector
 import com.sk89q.worldedit.world.block.BaseBlock
+import com.sk89q.worldedit.world.block.BlockState
 import com.sk89q.worldedit.world.block.BlockTypes
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.undo.CsmUndoManager
 import icu.oyasai.citiesskymine.util.MessageUtil
 import java.io.ByteArrayInputStream
 import java.math.BigInteger
@@ -50,7 +53,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
 
     if (sub == "undo") {
-      return handleUndo(sender, args)
+      undo(sender, args.getOrNull(1)?.equals("last", ignoreCase = true) == true)
+      return true
     }
 
     if (sub != "load" && sub != "load64") {
@@ -63,10 +67,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       return true
     }
 
-    if (!sender.hasPermission("citiesskymine.payload")) {
-      MessageUtil.error(sender, "このコマンドを使用する権限がありません。")
-      return true
-    }
+    val commandKey = if (sub == "load64") CommandKey.LOAD64 else CommandKey.LOAD
+    if (!plugin.access.require(sender, commandKey)) return true
 
     val context =
         placementContext(sender)
@@ -77,7 +79,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     val payload = args[1]
     val maxColumns = plugin.config.getInt("limits.max-columns-csm", 100_000)
-    val columns =
+    val decodedColumns =
         try {
           decodeColumns(payload, forceBase64 = sub == "load64", maxColumns = maxColumns)
         } catch (e: Exception) {
@@ -85,15 +87,18 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           return true
         }
 
-    if (maxColumns > 0 && columns.size > maxColumns) {
-      MessageUtil.error(sender, "柱数が上限 ($maxColumns) を超えています: ${columns.size}")
+    if (maxColumns > 0 && decodedColumns.size > maxColumns) {
+      MessageUtil.error(sender, "柱数が上限 ($maxColumns) を超えています: ${decodedColumns.size}")
       return true
     }
 
-    val blockCount = columns.sumOf { it.height.toLong() + 1L }
-    val maxBlocks = plugin.config.getLong("limits.max-blocks-csm", 2_000_000L)
-    if (maxBlocks > 0 && blockCount > maxBlocks) {
-      MessageUtil.error(sender, "ブロック数が上限 ($maxBlocks) を超えています: $blockCount")
+    val sourceBlockCount = countSourceBlocks(decodedColumns)
+    val maxSourceBlocks =
+        plugin.config.getLong(
+            "limits.max-source-blocks-csm",
+            plugin.config.getLong("limits.max-blocks-csm", 2_000_000L))
+    if (maxSourceBlocks > 0 && sourceBlockCount > maxSourceBlocks) {
+      MessageUtil.error(sender, "復元元ブロック数が上限 ($maxSourceBlocks) を超えています: $sourceBlockCount")
       return true
     }
 
@@ -101,22 +106,38 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         parsePlacementOptions(args, defaultPlacementOptions())
             ?: run {
               MessageUtil.error(
-                  sender, "配置指定は 0, 1, 2, 3 と L/R を指定してください。例: /csm payload load <payload> 2 R")
+                  sender,
+                  "配置指定は 0, 1, 2, 3 と L/R と hollow/solid を指定してください。例: /csm payload load <payload> 1 L hollow")
               return true
             }
-    val turns = (context.turns + placementOptions.extraTurns).floorMod(4)
-    val placement = buildPlacement(columns, turns, placementOptions.side)
-    val placementBounds = buildPlacementBounds(context, columns, placement)
-    val pattern = BlockPattern(BlockTypes.STONE_BRICKS!!.defaultState)
-    val undoSnapshot = captureUndoSnapshot(sender, context, columns, placement, blockCount)
+    val placementColumns =
+        if (placementOptions.hollow) {
+          hollowPlacementColumns(decodedColumns)
+        } else {
+          decodedColumns.map { PlacementColumn(it.x, it.z, it.yMin, it.height, PayloadBlock.WALL) }
+        }
+    val blockCount = countPlacementBlocks(placementColumns)
+    val maxBlocks = plugin.config.getLong("limits.max-blocks-csm", 2_000_000L)
+    if (maxBlocks > 0 && blockCount > maxBlocks) {
+      MessageUtil.error(sender, "ブロック数が上限 ($maxBlocks) を超えています: $blockCount")
+      return true
+    }
+
+    val buildingTurns = placementOptions.buildingTurns.floorMod(4)
+    val placement =
+        buildPlacement(placementColumns, buildingTurns, context.viewTurns, placementOptions.side)
+    val placementBounds = buildPlacementBounds(context, placementColumns, placement)
+    val undoSnapshot = captureUndoSnapshot(sender, context, placementColumns, placement, blockCount)
 
     try {
       createEditSession(context.world, context.actor).use { editSession ->
         val weWorld = BukkitAdapter.adapt(context.world)
-        for (column in columns) {
+        val patterns = HashMap<PayloadBlock, BlockPattern>()
+        for (column in placementColumns) {
           val (px, pz) = placedColumnPosition(column, placement)
           val from = context.origin.add(px, column.yMin, pz)
           val to = context.origin.add(px, column.yMin + column.height, pz)
+          val pattern = patterns.getOrPut(column.block) { BlockPattern(blockState(column.block)) }
           editSession.setBlocks(CuboidRegion(weWorld, from, to) as Region, pattern)
         }
         Operations.complete(editSession.commit())
@@ -140,7 +161,10 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     MessageUtil.success(
         sender,
-        "CitiesSkyMine payload を配置しました: ${columns.size} columns / $blockCount blocks / rotation $turns / side ${placementOptions.side.code}")
+        "CitiesSkyMine payload を配置しました: ${placementColumns.size} columns / $blockCount blocks / rotation $buildingTurns / side ${placementOptions.side.code} / ${if (placementOptions.hollow) "hollow" else "solid"}")
+    if (placementOptions.hollow) {
+      MessageUtil.info(sender, "hollow: $sourceBlockCount -> $blockCount blocks")
+    }
     if (selectionApplied && placementBounds != null) {
       MessageUtil.info(
           sender,
@@ -148,6 +172,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
     if (undoSnapshot != null) {
       rememberUndo(undoSnapshot)
+      plugin.undoManager.record(sender, CsmUndoManager.Source.PAYLOAD)
       MessageUtil.info(sender, "/csm payload undo でこの配置を復元できます。")
     } else {
       MessageUtil.warn(sender, "この配置は undo 保存上限を超えたため、/csm payload undo 対象外です。")
@@ -175,21 +200,15 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       3 ->
           if (args[0].equals("load", ignoreCase = true) ||
               args[0].equals("load64", ignoreCase = true)) {
-            listOf("0", "1", "2", "3", "L", "R", "0L", "0R", "1L", "1R", "2L", "2R", "3L", "3R")
-                .filter { it.startsWith(args[2], ignoreCase = true) }
+            placementSuggestions(args)
           } else {
             emptyList()
           }
-      4 ->
+      4,
+      5 ->
           if (args[0].equals("load", ignoreCase = true) ||
               args[0].equals("load64", ignoreCase = true)) {
-            if (parseExtraTurns(args[2]) != null) {
-              listOf("L", "R").filter { it.startsWith(args[3], ignoreCase = true) }
-            } else if (parsePlacementSide(args[2]) != null) {
-              listOf("0", "1", "2", "3").filter { it.startsWith(args[3]) }
-            } else {
-              emptyList()
-            }
+            placementSuggestions(args)
           } else {
             emptyList()
           }
@@ -197,33 +216,70 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
   }
 
+  private fun placementSuggestions(args: Array<String>): List<String> {
+    var hasRotation = false
+    var hasSide = false
+    var hasHollow = false
+    for (raw in args.drop(2).dropLast(1)) {
+      val token = parsePlacementToken(raw) ?: continue
+      hasRotation = hasRotation || token.buildingTurns != null
+      hasSide = hasSide || token.side != null
+      hasHollow = hasHollow || token.hollow != null
+    }
+
+    val suggestions = ArrayList<String>()
+    if (!hasRotation) suggestions.addAll(listOf("0", "1", "2", "3"))
+    if (!hasSide) suggestions.addAll(listOf("L", "R"))
+    if (!hasRotation && !hasSide) {
+      suggestions.addAll(
+          listOf(
+              "0L",
+              "0R",
+              "1L",
+              "1R",
+              "2L",
+              "2R",
+              "3L",
+              "3R",
+              "L0",
+              "R0",
+              "L1",
+              "R1",
+              "L2",
+              "R2",
+              "L3",
+              "R3"))
+    }
+    if (!hasHollow) suggestions.addAll(listOf("hollow", "solid"))
+    return suggestions.filter { it.startsWith(args.last(), ignoreCase = true) }
+  }
+
   private fun showHelp(sender: CommandSender) {
     MessageUtil.header(sender, "CitiesSkyMine")
     MessageUtil.helpEntry(sender, "/csm payload load <payload>", "Base997/Base64 payloadを復元して配置")
     MessageUtil.helpEntry(sender, "/csm payload load64 <payload>", "Base64 payloadを復元して配置")
-    MessageUtil.helpEntry(sender, "/csm payload load <payload> [0-3] [L|R]", "追加回転と左右方向を指定。省略時は設定値")
+    MessageUtil.helpEntry(
+        sender,
+        "/csm payload load <payload> [0-3] [L|R] [hollow|solid]",
+        "建物回転、プレイヤー基準の左右、hollowを指定")
     MessageUtil.helpEntry(sender, "/csm payload undo", "同じ実行元の直前CSM配置を復元")
     MessageUtil.helpEntry(sender, "/csm payload undo last", "最後に保存されたCSM配置を復元")
   }
 
-  private fun handleUndo(sender: CommandSender, args: Array<String>): Boolean {
-    if (!sender.hasPermission("citiesskymine.payload")) {
-      MessageUtil.error(sender, "このコマンドを使用する権限がありません。")
-      return true
-    }
+  fun undo(sender: CommandSender, useLast: Boolean): Boolean {
+    if (!plugin.access.require(sender, CommandKey.PAYLOAD)) return false
 
-    val snapshot =
-        takeUndoSnapshot(sender, args.getOrNull(1)?.equals("last", ignoreCase = true) == true)
+    val snapshot = takeUndoSnapshot(sender, useLast)
     if (snapshot == null) {
       MessageUtil.error(sender, "復元できるCSM配置がありません。")
-      return true
+      return false
     }
 
     val world = Bukkit.getWorld(snapshot.worldId)
     if (world == null) {
       MessageUtil.error(sender, "復元先ワールドが読み込まれていません: ${snapshot.worldName}")
       putUndoSnapshot(snapshot)
-      return true
+      return false
     }
 
     val actor = sender as? Player
@@ -242,10 +298,11 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     } catch (e: Exception) {
       putUndoSnapshot(snapshot)
       MessageUtil.error(sender, "undo に失敗しました: ${e.message}")
-      return true
+      return false
     }
 
     MessageUtil.success(sender, "CSM配置を復元しました: ${snapshot.blocks} blocks")
+    plugin.undoManager.takeLatest(sender, CsmUndoManager.Source.PAYLOAD)
     return true
   }
 
@@ -256,7 +313,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         PlacementContext(
             world = sender.world,
             origin = BlockVector3.at(loc.blockX, loc.blockY, loc.blockZ),
-            turns = yawTurns(loc.yaw),
+            viewTurns = yawTurns(loc.yaw),
             actor = sender)
       }
       is BlockCommandSender -> {
@@ -265,7 +322,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         PlacementContext(
             world = block.world,
             origin = BlockVector3.at(loc.blockX, loc.blockY + 1, loc.blockZ),
-            turns = blockTurns(block.blockData as? Directional),
+            viewTurns = blockTurns(block.blockData as? Directional),
             actor = null)
       }
       else -> null
@@ -286,7 +343,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun captureUndoSnapshot(
       sender: CommandSender,
       context: PlacementContext,
-      columns: List<Column>,
+      columns: List<PlacementColumn>,
       placement: PlacementPlan,
       blockCount: Long
   ): UndoSnapshot? {
@@ -393,31 +450,238 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
   }
 
+  private fun countSourceBlocks(columns: List<Column>): Long =
+      columns.sumOf { it.height.toLong() + 1L }
+
+  private fun countPlacementBlocks(columns: List<PlacementColumn>): Long =
+      columns.sumOf { it.height.toLong() + 1L }
+
+  private fun hollowPlacementColumns(columns: List<Column>): List<PlacementColumn> {
+    if (columns.isEmpty()) return emptyList()
+
+    val index = buildColumnIndex(columns)
+    val roofLowering = buildRoofLoweringPlan(columns, index)
+    val shape = VirtualShape(index, roofLowering.removedBlocks, roofLowering.roofFloors)
+    val blocks = HashMap<BlockPos, PayloadBlock>()
+    for (column in columns) {
+      val yMax = column.yMin + column.height
+      for (y in column.yMin..yMax) {
+        val pos = BlockPos(column.x, y, column.z)
+        if (pos in roofLowering.removedBlocks) continue
+
+        if (pos in roofLowering.roofFloors) {
+          blocks[pos] = PayloadBlock.ROOF_FLOOR
+          continue
+        }
+        if (!isSurfaceBlock(shape, column.x, y, column.z)) continue
+
+        val horizontalInterior = hasHorizontalNeighbors(shape, column.x, y, column.z)
+        val hasBelow = containsBlock(shape, column.x, y - 1, column.z)
+        when {
+          !hasBelow && horizontalInterior -> {
+            // 床の内側は貼らない。外周だけを床枠として残す。
+          }
+          else -> {
+            blocks.putIfAbsent(pos, PayloadBlock.WALL)
+          }
+        }
+      }
+    }
+    for (pos in roofLowering.roofFloors) {
+      blocks[pos] = PayloadBlock.ROOF_FLOOR
+    }
+
+    return compressPlacementBlocks(blocks)
+  }
+
+  private fun buildRoofLoweringPlan(
+      columns: List<Column>,
+      index: Map<Long, List<YRange>>
+  ): RoofLoweringPlan {
+    val removedBlocks = HashSet<BlockPos>()
+    val roofFloors = HashSet<BlockPos>()
+    for (column in columns) {
+      val yMax = column.yMin + column.height
+      for (y in column.yMin..yMax) {
+        if (!isSurfaceBlock(index, column.x, y, column.z)) continue
+        if (containsBlock(index, column.x, y + 1, column.z)) continue
+        if (!containsBlock(index, column.x, y - 1, column.z)) continue
+        if (!hasHorizontalNeighbors(index, column.x, y, column.z)) continue
+
+        val loweredY = y - 1
+        if (isFloorInterior(index, column.x, loweredY, column.z)) continue
+
+        removedBlocks.add(BlockPos(column.x, y, column.z))
+        roofFloors.add(BlockPos(column.x, loweredY, column.z))
+      }
+    }
+    return RoofLoweringPlan(removedBlocks, roofFloors)
+  }
+
+  private fun compressPlacementBlocks(blocks: Map<BlockPos, PayloadBlock>): List<PlacementColumn> {
+    val grouped = HashMap<Long, MutableList<BlockRunSource>>()
+    for ((pos, block) in blocks) {
+      grouped.getOrPut(xzKey(pos.x, pos.z)) { ArrayList() }.add(BlockRunSource(pos.y, block))
+    }
+
+    val result = ArrayList<PlacementColumn>()
+    for ((key, entries) in grouped) {
+      entries.sortWith(compareBy<BlockRunSource> { it.y }.thenBy { it.block.ordinal })
+      val x = xFromKey(key)
+      val z = zFromKey(key)
+      var start = entries[0].y
+      var previous = entries[0].y
+      var block = entries[0].block
+      for (i in 1 until entries.size) {
+        val entry = entries[i]
+        if (entry.y == previous && entry.block == block) continue
+        if (entry.y == previous + 1 && entry.block == block) {
+          previous = entry.y
+          continue
+        }
+        result.add(PlacementColumn(x, z, start, previous - start, block))
+        start = entry.y
+        previous = entry.y
+        block = entry.block
+      }
+      result.add(PlacementColumn(x, z, start, previous - start, block))
+    }
+    result.sortWith(
+        compareBy<PlacementColumn> { it.x }
+            .thenBy { it.z }
+            .thenBy { it.yMin }
+            .thenBy { it.height }
+            .thenBy { it.block.ordinal })
+    return result
+  }
+
+  private fun buildColumnIndex(columns: List<Column>): Map<Long, List<YRange>> {
+    val raw = HashMap<Long, MutableList<YRange>>()
+    for (column in columns) {
+      raw.getOrPut(xzKey(column.x, column.z)) { ArrayList() }
+          .add(YRange(column.yMin, column.yMin + column.height))
+    }
+
+    val merged = HashMap<Long, List<YRange>>(raw.size)
+    for ((key, ranges) in raw) {
+      ranges.sortBy { it.min }
+      val compact = ArrayList<YRange>()
+      var current = ranges[0]
+      for (i in 1 until ranges.size) {
+        val next = ranges[i]
+        if (next.min <= current.max + 1) {
+          current = YRange(current.min, maxOf(current.max, next.max))
+        } else {
+          compact.add(current)
+          current = next
+        }
+      }
+      compact.add(current)
+      merged[key] = compact
+    }
+    return merged
+  }
+
+  private fun isSurfaceBlock(index: Map<Long, List<YRange>>, x: Int, y: Int, z: Int): Boolean =
+      !containsBlock(index, x + 1, y, z) ||
+          !containsBlock(index, x - 1, y, z) ||
+          !containsBlock(index, x, y, z + 1) ||
+          !containsBlock(index, x, y, z - 1) ||
+          !containsBlock(index, x, y + 1, z) ||
+          !containsBlock(index, x, y - 1, z)
+
+  private fun isSurfaceBlock(shape: VirtualShape, x: Int, y: Int, z: Int): Boolean =
+      !containsBlock(shape, x + 1, y, z) ||
+          !containsBlock(shape, x - 1, y, z) ||
+          !containsBlock(shape, x, y, z + 1) ||
+          !containsBlock(shape, x, y, z - 1) ||
+          !containsBlock(shape, x, y + 1, z) ||
+          !containsBlock(shape, x, y - 1, z)
+
+  private fun isFloorInterior(index: Map<Long, List<YRange>>, x: Int, y: Int, z: Int): Boolean =
+      containsBlock(index, x, y, z) &&
+          !containsBlock(index, x, y - 1, z) &&
+          hasHorizontalNeighbors(index, x, y, z)
+
+  private fun hasHorizontalNeighbors(
+      index: Map<Long, List<YRange>>,
+      x: Int,
+      y: Int,
+      z: Int
+  ): Boolean =
+      containsBlock(index, x + 1, y, z) &&
+          containsBlock(index, x - 1, y, z) &&
+          containsBlock(index, x, y, z + 1) &&
+          containsBlock(index, x, y, z - 1)
+
+  private fun hasHorizontalNeighbors(shape: VirtualShape, x: Int, y: Int, z: Int): Boolean =
+      containsBlock(shape, x + 1, y, z) &&
+          containsBlock(shape, x - 1, y, z) &&
+          containsBlock(shape, x, y, z + 1) &&
+          containsBlock(shape, x, y, z - 1)
+
+  private fun containsBlock(index: Map<Long, List<YRange>>, x: Int, y: Int, z: Int): Boolean {
+    val ranges = index[xzKey(x, z)] ?: return false
+    var low = 0
+    var high = ranges.lastIndex
+    while (low <= high) {
+      val mid = (low + high).ushr(1)
+      val range = ranges[mid]
+      when {
+        y < range.min -> high = mid - 1
+        y > range.max -> low = mid + 1
+        else -> return true
+      }
+    }
+    return false
+  }
+
+  private fun containsBlock(shape: VirtualShape, x: Int, y: Int, z: Int): Boolean {
+    val pos = BlockPos(x, y, z)
+    if (pos in shape.roofFloors) return true
+    return pos !in shape.removedBlocks && containsBlock(shape.index, x, y, z)
+  }
+
+  private fun xzKey(x: Int, z: Int): Long = (x.toLong() shl 32) xor (z.toLong() and 0xffffffffL)
+
+  private fun xFromKey(key: Long): Int = (key shr 32).toInt()
+
+  private fun zFromKey(key: Long): Int = key.toInt()
+
+  private fun blockState(block: PayloadBlock): BlockState =
+      when (block) {
+        PayloadBlock.WALL -> BlockTypes.STONE_BRICKS!!.defaultState
+        PayloadBlock.ROOF_FLOOR -> BlockTypes.SMOOTH_STONE!!.defaultState
+      }
+
   private fun defaultPlacementOptions(): PlacementOptions {
-    val extraTurns = plugin.config.getInt("csm.default-rotation", 2).floorMod(4)
+    val buildingTurns = plugin.config.getInt("csm.default-rotation", 0).floorMod(4)
     val side =
         parsePlacementSide(plugin.config.getString("csm.default-side")) ?: PlacementSide.RIGHT
-    return PlacementOptions(extraTurns, side)
+    val hollow = plugin.config.getBoolean("csm.hollow-on-load", true)
+    return PlacementOptions(buildingTurns, side, hollow)
   }
 
   private fun parsePlacementOptions(
       args: Array<String>,
       defaults: PlacementOptions
   ): PlacementOptions? {
-    var extraTurns = defaults.extraTurns
+    var buildingTurns = defaults.buildingTurns
     var side = defaults.side
+    var hollow = defaults.hollow
     var hasRotation = false
     var hasSide = false
+    var hasHollow = false
 
-    if (args.size > 4) {
+    if (args.size > 5) {
       return null
     }
 
     for (i in 2 until args.size) {
       val token = parsePlacementToken(args[i]) ?: return null
-      if (token.extraTurns != null) {
+      if (token.buildingTurns != null) {
         if (hasRotation) return null
-        extraTurns = token.extraTurns
+        buildingTurns = token.buildingTurns
         hasRotation = true
       }
       if (token.side != null) {
@@ -425,14 +689,19 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         side = token.side
         hasSide = true
       }
+      if (token.hollow != null) {
+        if (hasHollow) return null
+        hollow = token.hollow
+        hasHollow = true
+      }
     }
 
-    return PlacementOptions(extraTurns.floorMod(4), side)
+    return PlacementOptions(buildingTurns.floorMod(4), side, hollow)
   }
 
   private fun parsePlacementToken(raw: String?): PlacementToken? {
     if (raw == null) {
-      return PlacementToken(null, null)
+      return PlacementToken(null, null, null)
     }
 
     val token = raw.trim().uppercase()
@@ -442,12 +711,17 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     val extraTurns = parseExtraTurns(token)
     if (extraTurns != null) {
-      return PlacementToken(extraTurns, null)
+      return PlacementToken(extraTurns, null, null)
     }
 
     val side = parsePlacementSide(token)
     if (side != null) {
-      return PlacementToken(null, side)
+      return PlacementToken(null, side, null)
+    }
+
+    val hollow = parseHollowMode(token)
+    if (hollow != null) {
+      return PlacementToken(null, null, hollow)
     }
 
     if (token.length == 2) {
@@ -456,10 +730,10 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val secondTurns = parseExtraTurns(token.substring(1, 2))
       val secondSide = parsePlacementSide(token.substring(1, 2))
       if (firstTurns != null && secondSide != null) {
-        return PlacementToken(firstTurns, secondSide)
+        return PlacementToken(firstTurns, secondSide, null)
       }
       if (firstSide != null && secondTurns != null) {
-        return PlacementToken(secondTurns, firstSide)
+        return PlacementToken(secondTurns, firstSide, null)
       }
     }
 
@@ -489,53 +763,67 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
   }
 
+  private fun parseHollowMode(raw: String?): Boolean? {
+    return when (raw?.trim()?.uppercase()) {
+      "H",
+      "HOLLOW" -> true
+      "S",
+      "SOLID" -> false
+      else -> null
+    }
+  }
+
   private fun buildPlacement(
-      columns: List<Column>,
-      turns: Int,
+      columns: List<PlacementColumn>,
+      buildingTurns: Int,
+      viewTurns: Int,
       side: PlacementSide
   ): PlacementPlan {
-    val (frontX, frontZ) = rotate(0, 1, turns)
-    val leftX = frontZ
-    val leftZ = -frontX
-    var maxFront: Int? = null
-    var maxLeft: Int? = null
-    var minLeft: Int? = null
+    val (frontX, frontZ) = rotate(0, 1, viewTurns)
+    val rightX = -frontZ
+    val rightZ = frontX
+    var minFront: Int? = null
+    var maxRight: Int? = null
+    var minRight: Int? = null
 
     for (column in columns) {
-      val (rx, rz) = rotate(column.x, column.z, turns)
+      val (rx, rz) = rotate(column.x, column.z, buildingTurns)
       val front = rx * frontX + rz * frontZ
-      val left = rx * leftX + rz * leftZ
-      if (maxFront == null || front > maxFront) {
-        maxFront = front
+      val right = rx * rightX + rz * rightZ
+      if (minFront == null || front < minFront) {
+        minFront = front
       }
-      if (maxLeft == null || left > maxLeft) {
-        maxLeft = left
+      if (maxRight == null || right > maxRight) {
+        maxRight = right
       }
-      if (minLeft == null || left < minLeft) {
-        minLeft = left
+      if (minRight == null || right < minRight) {
+        minRight = right
       }
     }
 
-    val anchorFront = (maxFront ?: 0) + 1
-    val anchorLeft =
+    val anchorFront = (minFront ?: 0) - 1
+    val anchorRight =
         when (side) {
-          PlacementSide.LEFT -> minLeft ?: 0
-          PlacementSide.RIGHT -> maxLeft ?: 0
+          PlacementSide.LEFT -> minRight ?: 0
+          PlacementSide.RIGHT -> maxRight ?: 0
         }
     return PlacementPlan(
-        turns = turns.floorMod(4),
-        anchorX = frontX * anchorFront + leftX * anchorLeft,
-        anchorZ = frontZ * anchorFront + leftZ * anchorLeft)
+        buildingTurns = buildingTurns.floorMod(4),
+        anchorX = frontX * anchorFront + rightX * anchorRight,
+        anchorZ = frontZ * anchorFront + rightZ * anchorRight)
   }
 
-  private fun placedColumnPosition(column: Column, placement: PlacementPlan): Pair<Int, Int> {
-    val (rx, rz) = rotate(column.x, column.z, placement.turns)
+  private fun placedColumnPosition(
+      column: PlacementColumn,
+      placement: PlacementPlan
+  ): Pair<Int, Int> {
+    val (rx, rz) = rotate(column.x, column.z, placement.buildingTurns)
     return (rx - placement.anchorX) to (rz - placement.anchorZ)
   }
 
   private fun buildPlacementBounds(
       context: PlacementContext,
-      columns: List<Column>,
+      columns: List<PlacementColumn>,
       placement: PlacementPlan
   ): PlacementBounds? {
     if (columns.isEmpty()) {
@@ -745,13 +1033,38 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private data class PlacementContext(
       val world: World,
       val origin: BlockVector3,
-      val turns: Int,
+      val viewTurns: Int,
       val actor: Player?
   )
 
   private data class Column(val x: Int, val z: Int, val yMin: Int, val height: Int)
 
-  private data class PlacementPlan(val turns: Int, val anchorX: Int, val anchorZ: Int)
+  private data class PlacementColumn(
+      val x: Int,
+      val z: Int,
+      val yMin: Int,
+      val height: Int,
+      val block: PayloadBlock
+  )
+
+  private data class BlockPos(val x: Int, val y: Int, val z: Int)
+
+  private data class BlockRunSource(val y: Int, val block: PayloadBlock)
+
+  private data class YRange(val min: Int, val max: Int)
+
+  private data class RoofLoweringPlan(
+      val removedBlocks: Set<BlockPos>,
+      val roofFloors: Set<BlockPos>
+  )
+
+  private data class VirtualShape(
+      val index: Map<Long, List<YRange>>,
+      val removedBlocks: Set<BlockPos>,
+      val roofFloors: Set<BlockPos>
+  )
+
+  private data class PlacementPlan(val buildingTurns: Int, val anchorX: Int, val anchorZ: Int)
 
   private data class PlacementBounds(
       val minX: Int,
@@ -762,13 +1075,26 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val maxZ: Int
   )
 
-  private data class PlacementOptions(val extraTurns: Int, val side: PlacementSide)
+  private data class PlacementOptions(
+      val buildingTurns: Int,
+      val side: PlacementSide,
+      val hollow: Boolean
+  )
 
-  private data class PlacementToken(val extraTurns: Int?, val side: PlacementSide?)
+  private data class PlacementToken(
+      val buildingTurns: Int?,
+      val side: PlacementSide?,
+      val hollow: Boolean?
+  )
 
   private enum class PlacementSide(val code: String) {
     LEFT("L"),
     RIGHT("R")
+  }
+
+  private enum class PayloadBlock {
+    WALL,
+    ROOF_FLOOR
   }
 
   private data class UndoSnapshot(

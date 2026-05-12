@@ -1,6 +1,8 @@
 package icu.oyasai.citiesskymine.road
 
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.undo.CsmUndoManager
 import kotlin.math.round
 import org.bukkit.Location
 import org.bukkit.command.Command
@@ -21,6 +23,7 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
       sender.sendMessage("§cプレイヤーのみ使用できます。")
       return true
     }
+    if (!plugin.access.require(sender, CommandKey.INTERSECTION)) return true
     val player = sender
     val session = plugin.getIntersectionSession(player)
 
@@ -34,7 +37,7 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
       "here" -> handleHere(player, session)
       "set" -> handleSet(player, session, args)
       "build" -> handleBuild(player, session)
-      "undo" -> handleUndo(player, session)
+      "undo" -> undo(player)
       "status" -> handleStatus(player, session)
       else -> sendHelp(player)
     }
@@ -165,6 +168,7 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
                 plugin,
                 Runnable {
                   session.lastEditSession = editSession
+                  plugin.undoManager.record(player, CsmUndoManager.Source.INTERSECTION)
                   player.sendMessage("§a[RI] 交差点の設置が完了しました。")
                 })
           } catch (e: Exception) {
@@ -178,20 +182,24 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
         })
   }
 
-  private fun handleUndo(player: Player, session: IntersectionSession) {
+  fun undo(player: Player): Boolean {
+    val session = plugin.getIntersectionSession(player)
     val editSession =
         session.lastEditSession
             ?: run {
               player.sendMessage("§c[RI] 取り消す操作がありません。")
-              return
+              return false
             }
     try {
       IntersectionBuilder.undo(player, player.world, editSession)
       session.lastEditSession = null
       player.sendMessage("§a[RI] 交差点の設置を取り消しました。")
+      plugin.undoManager.takeLatest(player, CsmUndoManager.Source.INTERSECTION)
     } catch (e: Exception) {
       player.sendMessage("§c[RI] アンドゥに失敗しました: ${e.message}")
+      return false
     }
+    return true
   }
 
   private fun handleStatus(player: Player, session: IntersectionSession) {
