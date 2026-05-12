@@ -9,7 +9,7 @@
 
 let
   final = oyasaiPurpur rec {
-    name = "oyasai-minecraft-main";
+    name = "oyasai-minecraft-axiom";
     version = "1.21.8";
 
     icon = ../assets/icon.png;
@@ -18,92 +18,39 @@ let
     properties = ''
       allow-flight=true
       allow-nether=false
-      difficulty=normal
+      difficulty=peaceful
       enable-command-block=true
-      enable-jmx-monitoring=true
+      enable-rcon=true
       enforce-secure-profile=false
       generate-structures=false
-      level-name=lifeworld
+      gamemode=creative
+      level-name=axiom
       max-players=70
-      motd=§l§r                 §b§lOyasai§f§lServer§7 [v${version}]§r\n§l§f            建築勢は集合だ！建築！建築！建築！！！
+      motd=§b§lOyasai§f§lServer§7 AXIOM
       network-compression-threshold=96
       online-mode=false
       pvp=false
+      rcon.port=25575
       server-port=25565
-      simulation-distance=16
+      simulation-distance=10
       spawn-animals=false
       spawn-npcs=false
       spawn-protection=0
       sync-chunk-writes=false
-      view-distance=32
-      enable-rcon=true
-      rcon.port=25575
+      view-distance=16
     '';
 
     plugins = with (oyasai-plugin-registry.forVersion version); [
       # keep-sorted start
-      advancedban
       arceon
-      bkcommonlib
-      bluemap
-      chestcommands
+      axiompaper
       coreprotect
-      crackshotguns
-      decentholograms
-      discordsrv
-      dynamicprofile
-      entitypose
-      essentialsx
-      essentialsxchat
-      essentialsxspawn
       ezedits
       fastasyncvoxelsniper
       fastasyncworldedit
-      gsit
-      imageonmap
-      inventoryshop
-      joincommands
       luckperms
-      lunachat
-      lwc
-      minepacks
-      multiversecore
-      multiverseprotals
-      mycommand
-      mypet
-      nuvotifier
-      openinv
-      oyasaiadmintools
-      oyasaipets
-      oyasaiutilities
-      oyasaivehicles
-      painttools
-      particlehats
-      placeholderapi
-      plugmanx
-      protocollib
-      pvparena
-      signshop
-      simpleelevator
-      skinsrestorer
-      skript
-      slotmachine
-      sociallikes3
-      socialvotes
-      tab
-      terra
-      tntruneloaded
-      tokenmanager
-      tpswitch
-      vault
-      veinminer
-      venturechat
-      vertex
-      viaversion
-      worldborder
       worldeditsui
       worldguard
-      zvoteparty
       # keep-sorted end
     ];
 

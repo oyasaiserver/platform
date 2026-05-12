@@ -223,9 +223,26 @@
       "type": "url",
       "url": "https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot"
     },
+    "floodgatevelocity": {
+      "type": "url",
+      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity"
+    },
     "geyser": {
       "type": "url",
       "url": "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot"
+    },
+    "geyservelocity": {
+      "type": "url",
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity"
+    },
+    "luckpermsvelocity": {
+      "type": "modrinth",
+      "slug": "luckperms",
+      "loaders": "velocity"
+    },
+    "axiompaper": {
+      "type": "modrinth",
+      "slug": "axiom-paper-plugin"
     },
     "chestcommands": {
       "type": "url",

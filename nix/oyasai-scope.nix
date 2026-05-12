@@ -75,6 +75,7 @@ lib.makeScope pkgs.newScope (
       );
 
     oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
+    oyasaiVelocity = callPackage ./oyasai-velocity.nix { };
 
     oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
   }

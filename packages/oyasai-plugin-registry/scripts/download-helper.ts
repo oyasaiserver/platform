@@ -20,6 +20,9 @@ const args = parseArgs({
     version: {
       type: "string",
     },
+    loaders: {
+      type: "string",
+    },
     // spigot
     id: {
       type: "string",
@@ -59,9 +62,13 @@ async function toDownloadUrl(definition: any): Promise<URL> {
     case "modrinth": {
       const client = new ModrinthV2Client();
       const project = await client.getProject(definition.slug);
+      const loaders = (definition.loaders ?? "paper,spigot,bukkit")
+        .split(",")
+        .map((loader: string) => loader.trim())
+        .filter(Boolean);
       const projectVersions = await client.getProjectVersions(project.id, {
         gameVersions: [definition.version],
-        loaders: ["paper", "spigot", "bukkit"],
+        loaders,
       });
       const url = projectVersions
         .flatMap((version) => version.files)

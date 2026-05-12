@@ -3,6 +3,7 @@
   jre,
   writeShellApplication,
   coreutils,
+  yq-go,
   purpurServers,
   writeTextFile,
 }:
@@ -14,6 +15,7 @@
   icon ? null,
   # Can make this an attrset
   properties ? "",
+  velocityForwarding ? false,
   passthru ? { },
 }:
 
@@ -28,11 +30,39 @@ in
 writeShellApplication {
   inherit name passthru;
 
-  runtimeInputs = [ coreutils ];
+  runtimeInputs = [
+    coreutils
+    yq-go
+  ];
 
   text = ''
     echo "eula=true" > eula.txt
     cp --no-preserve=ownership,mode ${serverProperties} server.properties
+
+    ${lib.optionalString velocityForwarding ''
+      if [ -z "''${VELOCITY_FORWARDING_SECRET:-}" ]; then
+        echo "VELOCITY_FORWARDING_SECRET is required" >&2
+        exit 1
+      fi
+
+      mkdir -p config
+      if [ -f config/paper-global.yml ]; then
+        yq --inplace '
+          .proxies.velocity.enabled = true |
+          .proxies.velocity.online-mode = true |
+          .proxies.velocity.secret = strenv(VELOCITY_FORWARDING_SECRET)
+        ' config/paper-global.yml
+      else
+        {
+          echo "proxies:"
+          echo "  velocity:"
+          echo "    enabled: true"
+          echo "    online-mode: true"
+          printf '    secret: "%s"\n' "''${VELOCITY_FORWARDING_SECRET}"
+        } > config/paper-global.yml
+      fi
+      chmod 600 config/paper-global.yml
+    ''}
 
     mkdir -p cache
     cp --no-preserve=ownership,mode ${package.vanillaJar} cache/mojang_${version}.jar
