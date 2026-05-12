@@ -1,9 +1,9 @@
 package io.oyasai.anybuilder.carbuilder2.presentation
 
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2SmokeGUI
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2DisplayType
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityType
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2DisplayType
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityType
 import java.util.LinkedHashSet
 import kotlin.math.abs
 import kotlin.math.min

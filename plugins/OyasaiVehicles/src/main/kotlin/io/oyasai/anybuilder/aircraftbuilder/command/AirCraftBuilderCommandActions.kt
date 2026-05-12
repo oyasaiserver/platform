@@ -4,10 +4,10 @@ import com.sk89q.worldedit.WorldEdit
 import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderGUI
 import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderItem
 import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderSpawn
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderBaseCache
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderBaseData
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderConfig
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderSchematic
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseCache
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderConfig
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderSchematic
 import io.oyasai.canCreateAircraftBuilder
 import io.oyasai.canUseAircraftBuilder
 import io.oyasai.getEntityLimitByPermission

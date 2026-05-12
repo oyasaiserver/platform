@@ -1,8 +1,8 @@
 package io.oyasai.anybuilder.carbuilder2.controller
 
 import io.oyasai.VehicleMenuCommand
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityList
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityList
 import io.oyasai.anybuilder.carbuilder2.physics.computeVelocity
 import io.oyasai.anybuilder.carbuilder2.physics.computeVerticalMotion
 import io.oyasai.anybuilder.carbuilder2.physics.computeYawDelta

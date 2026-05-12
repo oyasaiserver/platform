@@ -1,6 +1,6 @@
 package io.oyasai.anybuilder.aircraftbuilder.command
 
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderBaseData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseData
 import io.oyasai.anybuilder.common.BuilderInfoCommon
 import io.oyasai.canUseAircraftBuilder
 import org.bukkit.command.CommandSender

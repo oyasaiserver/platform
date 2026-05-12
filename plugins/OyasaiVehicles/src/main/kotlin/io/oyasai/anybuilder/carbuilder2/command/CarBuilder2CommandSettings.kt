@@ -1,9 +1,9 @@
 package io.oyasai.anybuilder.carbuilder2.command
 
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseCache
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseDataType
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2Config
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseCache
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseDataType
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2Config
 import io.oyasai.vehicle.base.VehicleBalanceSettings.sizeLimit
 import java.util.Locale
 import org.bukkit.command.CommandSender

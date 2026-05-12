@@ -3,8 +3,8 @@ package io.oyasai.anybuilder.carbuilder2.event
 import io.oyasai.VehicleGarageService
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2Item
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2Spawn
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseCache
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityList
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseCache
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityList
 import io.oyasai.anybuilder.common.event.VehicleEventListenerBase
 import io.oyasai.canRideCarBuilder2OrAdmin
 import java.util.*

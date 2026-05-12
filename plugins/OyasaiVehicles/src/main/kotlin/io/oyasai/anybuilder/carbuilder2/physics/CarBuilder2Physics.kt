@@ -1,7 +1,7 @@
 package io.oyasai.anybuilder.carbuilder2.physics
 
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityList
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityList
 import io.oyasai.toolbox.ControlKey
 import io.oyasai.toolbox.Tools
 import io.oyasai.toolbox.UnderBlockPattern

@@ -1,7 +1,7 @@
 package io.oyasai.anybuilder.carbuilder2.layout
 
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityType
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityType
 import java.util.LinkedHashMap
 import kotlin.math.PI
 import kotlin.math.sin

@@ -1,7 +1,7 @@
 package io.oyasai.anybuilder.carbuilder2.command
 
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseDataType
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseDataType
 import io.oyasai.anybuilder.common.BuilderInfoCommon
 import io.oyasai.canUseCarBuilder2
 import org.bukkit.command.CommandSender

@@ -2,8 +2,8 @@ package io.oyasai.anybuilder.aircraftbuilder.command
 
 import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderGUI
 import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderSpawn
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderBaseCache
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderBaseData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseCache
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseData
 import io.oyasai.anybuilder.common.command.BuilderCommandRouter
 import io.oyasai.canRideAircraftBuilderOrAdmin
 import io.oyasai.canUseAircraftBuilder

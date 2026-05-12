@@ -1,7 +1,7 @@
 package io.oyasai.anybuilder.carbuilder2
 
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseDataType
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseDataType
 import io.oyasai.anybuilder.common.spawn.BuilderSpawnSupport
 import kotlin.math.max
 import kotlin.math.min

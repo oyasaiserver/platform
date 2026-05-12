@@ -1,7 +1,7 @@
 package io.oyasai.anybuilder.aircraftbuilder.lifecycle
 
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityData
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityList
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityList
 import io.oyasai.anybuilder.common.EntityLifecycleCommon
 import io.oyasai.toolbox.Tools
 import org.bukkit.Material

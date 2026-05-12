@@ -1,7 +1,7 @@
 package io.oyasai.race
 
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2Item
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityList
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityList
 import io.oyasai.toolbox.CustomYaml
 import io.oyasai.toolbox.Tools
 import io.oyasai.toolbox.Tools.color

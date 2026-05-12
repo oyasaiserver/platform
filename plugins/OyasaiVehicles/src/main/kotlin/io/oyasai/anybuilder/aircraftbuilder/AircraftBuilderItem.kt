@@ -1,6 +1,6 @@
 package io.oyasai.anybuilder.aircraftbuilder
 
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderBaseCache
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseCache
 import io.oyasai.anybuilder.common.BuilderItemSupport
 import io.oyasai.vehicle.air.AircraftVehicle
 import org.bukkit.inventory.ItemStack

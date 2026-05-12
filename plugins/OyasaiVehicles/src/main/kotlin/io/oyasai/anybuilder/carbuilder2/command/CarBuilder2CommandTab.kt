@@ -1,6 +1,6 @@
 package io.oyasai.anybuilder.carbuilder2.command
 
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseCache
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseCache
 import io.oyasai.anybuilder.common.command.BuilderCommandTabSupport
 import io.oyasai.canCreateCarBuilder2
 import io.oyasai.canRideCarBuilder2OrAdmin

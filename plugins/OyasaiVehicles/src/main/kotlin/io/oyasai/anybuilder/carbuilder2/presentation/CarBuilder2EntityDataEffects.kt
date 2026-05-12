@@ -1,7 +1,7 @@
 package io.oyasai.anybuilder.carbuilder2.presentation
 
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityType
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityType
 import io.oyasai.toolbox.ControlKey
 import kotlin.math.abs
 import kotlin.math.max

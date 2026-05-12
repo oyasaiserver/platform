@@ -1,8 +1,8 @@
 package io.oyasai.anybuilder.aircraftbuilder
 
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderBaseData
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityData
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityList
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityList
 import io.oyasai.anybuilder.common.spawn.BuilderSpawnSupport
 import io.oyasai.anybuilder.runtime.ArmorStandSpawner
 import io.oyasai.getEntityLimitByPermission

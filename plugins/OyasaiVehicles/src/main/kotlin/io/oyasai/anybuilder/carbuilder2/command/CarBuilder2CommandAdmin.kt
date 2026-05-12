@@ -2,7 +2,7 @@ package io.oyasai.anybuilder.carbuilder2.command
 
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2Item
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2Spawn
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseData
 import io.oyasai.hasOyasaiAdminPermission
 import io.oyasai.toolbox.Tools
 import java.util.Locale

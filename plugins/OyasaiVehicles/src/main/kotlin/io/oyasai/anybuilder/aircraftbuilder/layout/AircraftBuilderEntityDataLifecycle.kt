@@ -1,6 +1,6 @@
 package io.oyasai.anybuilder.aircraftbuilder.layout
 
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityData
 import org.bukkit.util.Transformation
 import org.joml.Vector3f
 

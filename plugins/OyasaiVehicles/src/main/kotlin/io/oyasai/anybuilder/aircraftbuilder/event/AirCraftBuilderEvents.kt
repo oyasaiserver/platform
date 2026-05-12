@@ -3,8 +3,8 @@ package io.oyasai.anybuilder.aircraftbuilder.event
 import io.oyasai.VehicleGarageService
 import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderItem
 import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderSpawn
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderBaseCache
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityList
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderBaseCache
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityList
 import io.oyasai.anybuilder.common.event.VehicleEventListenerBase
 import io.oyasai.canRideAircraftBuilderOrAdmin
 import java.util.*

@@ -2,8 +2,8 @@ package io.oyasai.anybuilder.carbuilder2
 
 import io.oyasai.anybuilder.carbuilder2.command.CarBuilder2Command
 import io.oyasai.anybuilder.carbuilder2.command.CarBuilder2CommandTab
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseCache
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityList
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseCache
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityList
 import io.oyasai.anybuilder.carbuilder2.event.CarBuilder2Events
 import io.oyasai.anybuilder.common.command.BuilderLifecycle
 

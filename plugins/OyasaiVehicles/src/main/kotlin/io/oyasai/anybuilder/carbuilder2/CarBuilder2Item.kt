@@ -1,6 +1,6 @@
 package io.oyasai.anybuilder.carbuilder2
 
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseCache
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseCache
 import io.oyasai.anybuilder.common.BuilderItemSupport
 import io.oyasai.vehicle.car.CarNormalVehicle
 import io.oyasai.vehicle.car.CarProVehicle

@@ -1,7 +1,7 @@
 package io.oyasai.anybuilder.aircraftbuilder.presentation
 
 import io.oyasai.VehicleMenuCommand
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityData
 import io.oyasai.toolbox.ControlKey
 import io.oyasai.toolbox.Tools
 import org.bukkit.Sound

@@ -1,9 +1,9 @@
 package io.oyasai
 
 import io.oyasai.anybuilder.aircraftbuilder.AircraftBuilderItem
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityList
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityList
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2Item
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityList
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityList
 import io.oyasai.toolbox.CustomYaml
 import io.oyasai.toolbox.legacyTextComponent
 import io.oyasai.toolbox.translateColors

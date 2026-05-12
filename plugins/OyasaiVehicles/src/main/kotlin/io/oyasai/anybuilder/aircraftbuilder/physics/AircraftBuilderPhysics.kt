@@ -1,6 +1,6 @@
 package io.oyasai.anybuilder.aircraftbuilder.physics
 
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityData
 import io.oyasai.toolbox.ControlKey
 import org.bukkit.util.Vector
 

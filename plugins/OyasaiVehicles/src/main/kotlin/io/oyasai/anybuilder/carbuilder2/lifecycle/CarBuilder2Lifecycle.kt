@@ -1,7 +1,7 @@
 package io.oyasai.anybuilder.carbuilder2.lifecycle
 
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2EntityList
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityList
 import io.oyasai.anybuilder.common.EntityLifecycleCommon
 import io.oyasai.toolbox.Tools
 import org.bukkit.Bukkit

@@ -1,7 +1,7 @@
 package io.oyasai.anybuilder.aircraftbuilder.controller
 
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityData
-import io.oyasai.anybuilder.aircraftbuilder.data.AircraftBuilderEntityList
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityData
+import io.oyasai.anybuilder.aircraftbuilder.model.AircraftBuilderEntityList
 import io.oyasai.anybuilder.aircraftbuilder.physics.computeVelocity
 import io.oyasai.anybuilder.aircraftbuilder.physics.computeVerticalMotion
 import io.oyasai.anybuilder.aircraftbuilder.physics.computeYawDelta

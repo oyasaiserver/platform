@@ -3,9 +3,9 @@ package io.oyasai.anybuilder.carbuilder2.command
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2GUI
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2Item
 import io.oyasai.anybuilder.carbuilder2.CarBuilder2Spawn
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseCache
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseData
-import io.oyasai.anybuilder.carbuilder2.data.CarBuilder2BaseDataType
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseCache
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseDataType
 import io.oyasai.anybuilder.common.command.BuilderCommandRouter
 import io.oyasai.canRideCarBuilder2OrAdmin
 import io.oyasai.canUseCarBuilder2

@@ -1,6 +1,10 @@
 package io.oyasai.anybuilder.carbuilder2
 
-import io.oyasai.anybuilder.carbuilder2.data.*
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2BaseDataType
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityData
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityList
+import io.oyasai.anybuilder.carbuilder2.model.CarBuilder2EntityType
 import io.oyasai.anybuilder.common.spawn.BuilderSpawnSupport
 import io.oyasai.anybuilder.runtime.ArmorStandSpawner
 import io.oyasai.getEntityLimitByPermission
@@ -53,7 +57,7 @@ object CarBuilder2Spawn {
 
     val displayMap =
         mutableMapOf<
-            CarBuilder2EntityType, MutableMap<Pair<Int, Vector>, MutableSet<BlockDisplay>>>()
+          CarBuilder2EntityType, MutableMap<Pair<Int, Vector>, MutableSet<BlockDisplay>>>()
 
     displayMap[CarBuilder2EntityType.Body] =
         mutableMapOf(
@@ -107,17 +111,18 @@ object CarBuilder2Spawn {
         }
 
     val cEntity =
-        CarBuilder2EntityData(
-            seatMap,
-            bodyArmorStandList,
-            displayMap,
-            vehicle,
-            owner?.uniqueId,
-            spawnPlayer,
-            data,
-            carMode == "Real",
-            yaw,
-            item)
+      CarBuilder2EntityData(
+        seatMap,
+        bodyArmorStandList,
+        displayMap,
+        vehicle,
+        owner?.uniqueId,
+        spawnPlayer,
+        data,
+        carMode == "Real",
+        yaw,
+        item
+      )
 
     CarBuilder2EntityList.addEntity(cEntity)
     BuilderSpawnSupport.rememberTrialSpawn(owner, spawnPlayer, oldSpawnCarData, cEntity)
