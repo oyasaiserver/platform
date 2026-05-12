@@ -10,30 +10,49 @@ depend:
 commands:
   csm:
     description: "CitiesSkyMine 統合コマンド"
-    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|undo|window|debugstick>"
-    permission: citiesskymine.use
-    permission-message: "このコマンドはOP権限が必要です。"
+    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|undo|window|debugstick|preset>"
   rc:
     description: "道路カーブを生成するコマンド"
     usage: "/rc <help|set|build|undo|reset|status|debugline|smoothline|version>"
-    permission: citiesskymine.road
-    permission-message: "このコマンドはOP権限が必要です。"
+  ".rc":
+    description: "道路カーブを生成するショートカット"
+    usage: "/.rc <help|set|build|undo|reset|status|debugline|smoothline|version>"
   ri:
     description: "交差点を自動生成するコマンド"
     usage: "/ri <here|set|build|undo|status|help>"
-    permission: citiesskymine.road
-    permission-message: "このコマンドはOP権限が必要です。"
+  ".ri":
+    description: "交差点を自動生成するショートカット"
+    usage: "/.ri <here|set|build|undo|status|help>"
   hb:
     description: "オスマン様式ファサードを生成するコマンド"
     usage: "/hb <build|schem|undo|help> [options]"
-    permission: citiesskymine.build
-    permission-message: "このコマンドはOP権限が必要です。"
+  ".hb":
+    description: "オスマン様式ファサードを生成するショートカット"
+    usage: "/.hb <build|schem|undo|help> [options]"
+  ".pl":
+    description: "CitiesSkyMine payload 配置ショートカット"
+    usage: "/.pl <load|load64|undo> <payload> [0-3] [L|R]"
+  ".win":
+    description: "窓生成ショートカット"
+    usage: "/.win [width] [height] [frame] [glass] [backing]"
+  ".ds":
+    description: "debug-stick 互換ショートカット"
+    usage: "/.ds <select|cycle>"
+  ".brp":
+    description: "ブラシプリセットショートカット"
+    usage: "/.brp <save|load|list|delete|名前>"
+  ".undo":
+    description: "CSM 全体 undo ショートカット"
+    usage: "/.undo [payload|window|road|intersection|facade]"
 
 permissions:
   citiesskymine.*:
     description: "CitiesSkyMine の全権限"
     default: op
     children:
+      citiesskymine.role.admin: true
+      citiesskymine.role.takumi: true
+      citiesskymine.role.builder: true
       citiesskymine.use: true
       citiesskymine.admin: true
       citiesskymine.road: true
@@ -41,24 +60,41 @@ permissions:
       citiesskymine.payload: true
       citiesskymine.window: true
       citiesskymine.debugstick: true
+      citiesskymine.preset: true
+      citiesskymine.undo: true
+  citiesskymine.role.admin:
+    description: "CSM アドミンロール"
+    default: op
+  citiesskymine.role.takumi:
+    description: "CSM たくみロール"
+    default: false
+  citiesskymine.role.builder:
+    description: "CSM 建築士ロール"
+    default: false
   citiesskymine.use:
-    description: "CitiesSkyMine 統合コマンドの使用権限"
-    default: op
+    description: "旧形式: CitiesSkyMine 統合コマンドの使用権限"
+    default: false
   citiesskymine.admin:
-    description: "CitiesSkyMine 管理コマンドの使用権限"
-    default: op
+    description: "旧形式: CitiesSkyMine 管理コマンドの使用権限"
+    default: false
   citiesskymine.road:
-    description: "道路生成コマンドの使用権限"
-    default: op
+    description: "旧形式: 道路生成コマンドの使用権限"
+    default: false
   citiesskymine.build:
-    description: "建築生成コマンドの使用権限"
-    default: op
+    description: "旧形式: 建築生成コマンドの使用権限"
+    default: false
   citiesskymine.payload:
-    description: "payload 配置コマンドの使用権限"
-    default: op
+    description: "旧形式: payload 配置コマンドの使用権限"
+    default: false
   citiesskymine.window:
-    description: "窓生成コマンドの使用権限"
-    default: op
+    description: "旧形式: 窓生成コマンドの使用権限"
+    default: false
   citiesskymine.debugstick:
-    description: "debug-stick 互換コマンドの使用権限"
-    default: op
+    description: "旧形式: debug-stick 互換コマンドの使用権限"
+    default: false
+  citiesskymine.preset:
+    description: "旧形式: ブラシプリセットコマンドの使用権限"
+    default: false
+  citiesskymine.undo:
+    description: "旧形式: CSM 全体 undo コマンドの使用権限"
+    default: false

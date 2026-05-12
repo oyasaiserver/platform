@@ -1,10 +1,12 @@
 package icu.oyasai.citiesskymine
 
+import icu.oyasai.citiesskymine.access.CsmAccessController
 import icu.oyasai.citiesskymine.command.CitiesSkyMineCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickMemoryStore
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
 import icu.oyasai.citiesskymine.payload.PayloadCommand
+import icu.oyasai.citiesskymine.preset.BrushPresetCommand
 import icu.oyasai.citiesskymine.road.IntersectionCommand
 import icu.oyasai.citiesskymine.road.IntersectionPreview
 import icu.oyasai.citiesskymine.road.IntersectionSession
@@ -15,6 +17,8 @@ import icu.oyasai.citiesskymine.road.RoadSession
 import icu.oyasai.citiesskymine.road.RoadSettings
 import icu.oyasai.citiesskymine.road.WaypointListener
 import icu.oyasai.citiesskymine.storage.PlayerDataStore
+import icu.oyasai.citiesskymine.undo.CsmUndoCommand
+import icu.oyasai.citiesskymine.undo.CsmUndoManager
 import icu.oyasai.citiesskymine.window.WindowCommand
 import java.util.HashMap
 import java.util.UUID
@@ -24,6 +28,10 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class Main : JavaPlugin() {
   lateinit var playerDataStore: PlayerDataStore
+    private set
+  lateinit var undoManager: CsmUndoManager
+    private set
+  lateinit var access: CsmAccessController
     private set
 
   private val sessions = HashMap<UUID, RoadSession>()
@@ -46,34 +54,72 @@ class Main : JavaPlugin() {
     }
 
     playerDataStore = PlayerDataStore(this)
+    undoManager = CsmUndoManager()
+    access = CsmAccessController(this)
     debugStickMemoryStore = DebugStickMemoryStore(this).also { it.load() }
 
     val rcHandler = RoadCurveCommand(this)
     val rcCmd = getCommand("rc")
     rcCmd?.setExecutor(rcHandler)
     rcCmd?.tabCompleter = rcHandler
+    val dotRcCmd = getCommand(".rc")
+    dotRcCmd?.setExecutor(rcHandler)
+    dotRcCmd?.tabCompleter = rcHandler
     server.pluginManager.registerEvents(WaypointListener(this), this)
 
     val riHandler = IntersectionCommand(this)
     val riCmd = getCommand("ri")
     riCmd?.setExecutor(riHandler)
     riCmd?.tabCompleter = riHandler
+    val dotRiCmd = getCommand(".ri")
+    dotRiCmd?.setExecutor(riHandler)
+    dotRiCmd?.tabCompleter = riHandler
 
     val hbHandler = HaussmannCommand(this)
     val hbCmd = getCommand("hb")
     hbCmd?.setExecutor(hbHandler)
     hbCmd?.tabCompleter = hbHandler
+    val dotHbCmd = getCommand(".hb")
+    dotHbCmd?.setExecutor(hbHandler)
+    dotHbCmd?.tabCompleter = hbHandler
 
     val payloadHandler = PayloadCommand(this)
     val windowHandler = WindowCommand(this)
     val debugStickHandler =
         DebugStickCommand(this, debugStickMemoryStore ?: DebugStickMemoryStore(this))
+    val brushPresetHandler = BrushPresetCommand(this)
+    val undoHandler =
+        CsmUndoCommand(
+            this, payloadHandler, windowHandler, rcHandler, riHandler, hbHandler)
     val csmHandler =
         CitiesSkyMineCommand(
-            this, rcHandler, riHandler, hbHandler, payloadHandler, windowHandler, debugStickHandler)
+            this,
+            rcHandler,
+            riHandler,
+            hbHandler,
+            payloadHandler,
+            windowHandler,
+            debugStickHandler,
+            brushPresetHandler,
+            undoHandler)
     val csmCmd = getCommand("csm")
     csmCmd?.setExecutor(csmHandler)
     csmCmd?.tabCompleter = csmHandler
+    val dotPayloadCmd = getCommand(".pl")
+    dotPayloadCmd?.setExecutor(payloadHandler)
+    dotPayloadCmd?.tabCompleter = payloadHandler
+    val dotWindowCmd = getCommand(".win")
+    dotWindowCmd?.setExecutor(windowHandler)
+    dotWindowCmd?.tabCompleter = windowHandler
+    val dotDebugStickCmd = getCommand(".ds")
+    dotDebugStickCmd?.setExecutor(debugStickHandler)
+    dotDebugStickCmd?.tabCompleter = debugStickHandler
+    val dotBrushPresetCmd = getCommand(".brp")
+    dotBrushPresetCmd?.setExecutor(brushPresetHandler)
+    dotBrushPresetCmd?.tabCompleter = brushPresetHandler
+    val dotUndoCmd = getCommand(".undo")
+    dotUndoCmd?.setExecutor(undoHandler)
+    dotUndoCmd?.tabCompleter = undoHandler
 
     logger.info("CitiesSkyMine enabled")
   }

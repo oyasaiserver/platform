@@ -1,6 +1,7 @@
 package icu.oyasai.citiesskymine.debugstick
 
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
 import icu.oyasai.citiesskymine.util.MessageUtil
 import net.kyori.adventure.text.Component
 import org.bukkit.GameMode
@@ -25,10 +26,7 @@ class DebugStickCommand(private val plugin: Main, memoryStore: DebugStickMemoryS
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
       return true
     }
-    if (!sender.hasPermission("citiesskymine.debugstick")) {
-      MessageUtil.error(sender, "このコマンドを使用する権限がありません。")
-      return true
-    }
+    if (!plugin.access.require(sender, CommandKey.DEBUGSTICK)) return true
     if (!plugin.config.getBoolean("debug-stick.enabled", true)) {
       MessageUtil.error(sender, "デバッグ棒互換コマンドは無効です。")
       return true

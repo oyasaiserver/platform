@@ -1,6 +1,12 @@
 package icu.oyasai.citiesskymine.window
 
+import com.sk89q.worldedit.WorldEdit
+import com.sk89q.worldedit.bukkit.BukkitAdapter
+import com.sk89q.worldedit.math.BlockVector3
+import com.sk89q.worldedit.regions.selector.CuboidRegionSelector
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.undo.CsmUndoManager
 import icu.oyasai.citiesskymine.util.MessageUtil
 import java.util.LinkedHashMap
 import java.util.UUID
@@ -32,13 +38,11 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
       return true
     }
-    if (!sender.hasPermission("citiesskymine.window")) {
-      MessageUtil.error(sender, "このコマンドを使用する権限がありません。")
-      return true
-    }
+    if (!plugin.access.require(sender, CommandKey.WINDOW)) return true
 
     if (args.getOrNull(0)?.equals("undo", ignoreCase = true) == true) {
-      return handleUndo(sender, args.getOrNull(1)?.equals("last", ignoreCase = true) == true)
+      undo(sender, args.getOrNull(1)?.equals("last", ignoreCase = true) == true)
+      return true
     }
 
     val defaults = windowDefaults(sender)
@@ -55,13 +59,6 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       return true
     }
 
-    val maxBlocks = plugin.config.getInt("limits.max-blocks-window", 512)
-    val operationBlocks = width * height * 3
-    if (maxBlocks > 0 && operationBlocks > maxBlocks) {
-      MessageUtil.error(sender, "生成ブロック数が上限 ($maxBlocks) を超えています: $operationBlocks")
-      return true
-    }
-
     val materials = parsed.materials
     saveWindowDefaults(sender, width, height, materials)
 
@@ -70,8 +67,27 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val base = sender.location.block.getRelative(facing)
     val leftOffset = -(width / 2)
     val rightOffset = leftOffset + width - 1
-    val targets = targetBlocks(base, lateralPositive, facing, leftOffset, rightOffset, height)
-    rememberUndo(sender.uniqueId, WindowUndoSnapshot(sender.uniqueId, targets.map { it.state }))
+    val windowTargets = targetBlocks(base, lateralPositive, facing, leftOffset, rightOffset, height)
+    val windowTargetKeys = windowTargets.mapTo(HashSet()) { blockKey(it) }
+    val fillMaterial = windowFillMaterial()
+    val fillTargets =
+        if (plugin.config.getBoolean("window.fill-air-around-glass", true)) {
+          fillTargets(base, lateralPositive, facing, leftOffset, rightOffset, height, windowTargetKeys)
+        } else {
+          emptyList()
+        }
+
+    val operationBlocks = windowTargets.size + fillTargets.size
+    val maxBlocks = plugin.config.getInt("limits.max-blocks-window", 512)
+    if (maxBlocks > 0 && operationBlocks > maxBlocks) {
+      MessageUtil.error(sender, "生成ブロック数が上限 ($maxBlocks) を超えています: $operationBlocks")
+      return true
+    }
+
+    rememberUndo(
+        sender.uniqueId,
+        WindowUndoSnapshot(sender.uniqueId, (windowTargets + fillTargets).map { it.state }))
+    plugin.undoManager.record(sender, CsmUndoManager.Source.WINDOW)
 
     for (y in 0 until height) {
       for (offset in leftOffset..rightOffset) {
@@ -81,10 +97,35 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         blockAt(base, lateralPositive, offset, facing, 2, y).setType(materials.backing, false)
       }
     }
+    val filledBlocks = ArrayList<Block>()
+    for (block in fillTargets) {
+      if (!block.type.isAir) continue
+      block.setType(fillMaterial, false)
+      filledBlocks.add(block)
+    }
+
+    val selectionApplied =
+        if (plugin.config.getBoolean("window.select-after-fill", true)) {
+          selectStackRegion(
+              sender,
+              base,
+              lateralPositive,
+              facing,
+              leftOffset,
+              rightOffset,
+              height,
+              includeBelow = filledBlocks.any { it.y < base.y },
+              includeAbove = filledBlocks.any { it.y >= base.y + height })
+        } else {
+          false
+        }
 
     MessageUtil.success(
         sender,
-        "窓を生成しました: ${width}x$height / frame=${materials.frame.key.key} / glass=${materials.glass.key.key} / backing=${materials.backing.key.key} / /csm window undo で復元できます")
+        "窓を生成しました: ${width}x$height / frame=${materials.frame.key.key} / glass=${materials.glass.key.key} / backing=${materials.backing.key.key} / fill=${filledBlocks.size} / /csm window undo で復元できます")
+    if (selectionApplied) {
+      MessageUtil.info(sender, "横方向 stack 用に窓範囲を選択しました。")
+    }
     return true
   }
 
@@ -179,6 +220,11 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     return configured?.let { Material.matchMaterial(it) } ?: fallback
   }
 
+  private fun windowFillMaterial(): Material =
+      materialFromConfig("window.fill", Material.SMOOTH_QUARTZ)
+          .takeIf { it.isBlock && !it.isAir }
+          ?: Material.SMOOTH_QUARTZ
+
   private fun windowDefaults(player: Player): WindowDefaults {
     val store = plugin.playerDataStore
     return WindowDefaults(
@@ -252,17 +298,105 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     return byLocation.values.toList()
   }
 
-  private fun handleUndo(player: Player, useLast: Boolean): Boolean {
+  private fun fillTargets(
+      base: Block,
+      lateralPositive: BlockFace,
+      front: BlockFace,
+      leftOffset: Int,
+      rightOffset: Int,
+      height: Int,
+      occupied: Set<String>
+  ): List<Block> {
+    val byLocation = LinkedHashMap<String, Block>()
+    for (y in 0 until height) {
+      for (offset in leftOffset..rightOffset) {
+        val glassBlock = blockAt(base, lateralPositive, offset, front, 1, y)
+        val candidates =
+            listOf(
+                glassBlock.getRelative(BlockFace.UP),
+                glassBlock.getRelative(BlockFace.DOWN),
+                glassBlock.getRelative(lateralPositive),
+                glassBlock.getRelative(lateralPositive.oppositeFace))
+        for (candidate in candidates) {
+          val key = blockKey(candidate)
+          if (key in occupied || !candidate.type.isAir) continue
+          byLocation[key] = candidate
+        }
+      }
+    }
+    return byLocation.values.toList()
+  }
+
+  private fun selectStackRegion(
+      player: Player,
+      base: Block,
+      lateralPositive: BlockFace,
+      front: BlockFace,
+      leftOffset: Int,
+      rightOffset: Int,
+      height: Int,
+      includeBelow: Boolean,
+      includeAbove: Boolean
+  ): Boolean {
+    val startY = if (includeBelow) -1 else 0
+    val endY = if (includeAbove) height else height - 1
+    val blocks = ArrayList<Block>()
+    for (y in startY..endY) {
+      for (offset in leftOffset..rightOffset) {
+        for (depth in 0..2) {
+          blocks.add(blockAt(base, lateralPositive, offset, front, depth, y))
+        }
+      }
+    }
+    if (blocks.isEmpty()) return false
+
+    var minX = Int.MAX_VALUE
+    var minY = Int.MAX_VALUE
+    var minZ = Int.MAX_VALUE
+    var maxX = Int.MIN_VALUE
+    var maxY = Int.MIN_VALUE
+    var maxZ = Int.MIN_VALUE
+    for (block in blocks) {
+      minX = minOf(minX, block.x)
+      minY = minOf(minY, block.y)
+      minZ = minOf(minZ, block.z)
+      maxX = maxOf(maxX, block.x)
+      maxY = maxOf(maxY, block.y)
+      maxZ = maxOf(maxZ, block.z)
+    }
+
+    return try {
+      val actor = BukkitAdapter.adapt(player)
+      val world = BukkitAdapter.adapt(player.world)
+      val selector =
+          CuboidRegionSelector(
+              world,
+              BlockVector3.at(minX, minY, minZ),
+              BlockVector3.at(maxX, maxY, maxZ))
+      val session = WorldEdit.getInstance().sessionManager.get(actor)
+      session.setRegionSelector(world, selector)
+      session.dispatchCUISelection(actor)
+      true
+    } catch (e: Exception) {
+      MessageUtil.warn(player, "窓範囲の選択に失敗しました: ${e.message}")
+      false
+    }
+  }
+
+  private fun blockKey(block: Block): String = "${block.world.uid}:${block.x}:${block.y}:${block.z}"
+
+  fun undo(player: Player, useLast: Boolean): Boolean {
     val snapshot = takeUndo(if (useLast) lastUndoKey else player.uniqueId)
     if (snapshot == null) {
       MessageUtil.error(player, "復元できる窓生成履歴がありません。")
-      return true
+      return false
     }
 
     for (state in snapshot.states) {
       state.update(true, false)
     }
     MessageUtil.success(player, "窓生成を復元しました: ${snapshot.states.size} blocks")
+    plugin.undoManager.takeLatest(player, CsmUndoManager.Source.WINDOW)
     return true
   }
 

@@ -1,6 +1,7 @@
 package icu.oyasai.citiesskymine.road
 
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -14,7 +15,7 @@ class WaypointListener(private val plugin: Main) : Listener {
   @EventHandler
   fun onInteract(event: PlayerInteractEvent) {
     val player = event.player
-    if (!player.hasPermission("citiesskymine.road")) return
+    if (!plugin.access.canUse(player, CommandKey.ROAD)) return
     if (event.hand != EquipmentSlot.HAND) return
     if (event.action != Action.RIGHT_CLICK_BLOCK) return
     if (player.inventory.itemInMainHand.type != Material.BONE) return

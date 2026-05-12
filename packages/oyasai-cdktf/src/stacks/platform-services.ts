@@ -52,9 +52,12 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
       mariadb: imageIds.mariadb,
-      mysqlBackup: imageIds["mysql-backup"],
-      minecraftMain: imageIds["oyasai-minecraft-main"],
+      minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
       minecraftBackup: imageIds["mc-backup"],
+      minecraftLobby: imageIds["oyasai-minecraft-lobby"],
+      minecraftMain: imageIds["oyasai-minecraft-main"],
+      mysqlBackup: imageIds["mysql-backup"],
+      velocity: imageIds["oyasai-velocity"],
     } as const;
 
     const network = new Network(this, this.t("network"), {
@@ -94,10 +97,18 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         destroyGraceSeconds: 2 * 60,
         init: true,
         networksAdvanced: [network],
-        ports: ports({
-          tcp: [8100, 8192, 25565, 25575],
-          udp: [19132],
-        }),
+        ports: [
+          ...ports({
+            tcp: [8100, 8192],
+            udp: [],
+          }),
+          {
+            internal: 25575,
+            external: 25575,
+            ip: "127.0.0.1",
+            protocol: "tcp",
+          },
+        ],
         env: envs({
           MEMORY: this.isMaster
             ? // On-prem has 64GB but looks like 28GB is the most stable because
@@ -107,6 +118,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
               // so limiting to 10GB.
               "10G",
           RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
+          VELOCITY_FORWARDING_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),
         }),
         volumes: [
           {
@@ -116,6 +128,88 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         ],
       },
     );
+
+    const minecraftLobbyContainer = new Container(
+      this,
+      this.t("minecraft-lobby-container"),
+      {
+        image: images.minecraftLobby,
+        name: "minecraft-lobby",
+        restart: "unless-stopped",
+        tty: true,
+        stdinOpen: true,
+        destroyGraceSeconds: 2 * 60,
+        init: true,
+        networksAdvanced: [network],
+        env: envs({
+          MEMORY: this.isMaster ? "1G" : "1G",
+          VELOCITY_FORWARDING_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),
+        }),
+        volumes: [
+          {
+            containerPath: "/data",
+            hostPath: join(this.workdir, "minecraft-lobby"),
+          },
+        ],
+      },
+    );
+
+    const minecraftAxiomContainer = new Container(
+      this,
+      this.t("minecraft-axiom-container"),
+      {
+        image: images.minecraftAxiom,
+        name: "minecraft-axiom",
+        dependsOn: [mariadbContainer],
+        restart: "unless-stopped",
+        tty: true,
+        stdinOpen: true,
+        destroyGraceSeconds: 2 * 60,
+        init: true,
+        networksAdvanced: [network],
+        env: envs({
+          MEMORY: this.isMaster ? "8G" : "2G",
+          RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
+          VELOCITY_FORWARDING_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),
+        }),
+        volumes: [
+          {
+            containerPath: "/data",
+            hostPath: join(this.workdir, "minecraft-axiom"),
+          },
+        ],
+      },
+    );
+
+    new Container(this, this.t("velocity-container"), {
+      image: images.velocity,
+      name: "velocity",
+      dependsOn: [
+        minecraftAxiomContainer,
+        minecraftLobbyContainer,
+        minecraftMainContainer,
+      ],
+      restart: "unless-stopped",
+      tty: true,
+      stdinOpen: true,
+      destroyGraceSeconds: 30,
+      init: true,
+      networksAdvanced: [network],
+      ports: ports({
+        tcp: [25565],
+        udp: [19132],
+      }),
+      env: envs({
+        MEMORY: this.isMaster ? "1G" : "512M",
+        VELOCITY_FORWARDING_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),
+      }),
+      volumes: [
+        {
+          containerPath: "/data",
+          hostPath: join(this.workdir, "velocity"),
+        },
+      ],
+    });
 
     if (this.isMaster) {
       const cloudflareBaseUrl = `https://${secrets.get("CLOUDFLARE_ACCOUNT_ID")}.r2.cloudflarestorage.com`;
@@ -145,6 +239,37 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         volumes: [
           {
             hostPath: join(this.workdir, "minecraft-main"),
+            containerPath: "/data",
+            readOnly: true,
+          },
+        ],
+      });
+
+      new Container(this, this.t("minecraft-axiom-backup-container"), {
+        name: "minecraft-axiom-backup",
+        dependsOn: [minecraftAxiomContainer],
+        image: images.minecraftBackup,
+        networksAdvanced: [network],
+        restart: "unless-stopped",
+        env: envs({
+          // keep-sorted start
+          AWS_ACCESS_KEY_ID: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
+          AWS_SECRET_ACCESS_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
+          BACKUP_INTERVAL: "6h",
+          BACKUP_METHOD: "restic",
+          EXCLUDES: "*.jar,cache,logs,*.tmp,bluemap",
+          PRUNE_RESTIC_RETENTION:
+            "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
+          RCON_HOST: "minecraft-axiom",
+          RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
+          RESTIC_PASSWORD: secrets.get("RESTIC_PASSWORD"),
+          RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/minecraft-axiom-backup`,
+          RESTIC_VERBOSE: true,
+          // keep-sorted end
+        }),
+        volumes: [
+          {
+            hostPath: join(this.workdir, "minecraft-axiom"),
             containerPath: "/data",
             readOnly: true,
           },

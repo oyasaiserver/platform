@@ -1,6 +1,8 @@
 package icu.oyasai.citiesskymine.road
 
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.undo.CsmUndoManager
 import org.bukkit.Material
 import org.bukkit.block.data.type.Stairs
 import org.bukkit.command.Command
@@ -25,6 +27,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       sender.sendMessage("§cプレイヤーのみ使用できます。")
       return true
     }
+    if (!plugin.access.require(sender, CommandKey.ROAD)) return true
     val player = sender
     val session = plugin.getSession(player)
 
@@ -37,7 +40,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       "help" -> sendHelp(player)
       "reset" -> handleReset(player, session)
       "build" -> handleBuild(player, session)
-      "undo" -> handleUndo(player, session)
+      "undo" -> undo(player)
       "set" -> handleSet(player, session, args)
       "status" -> handleStatus(player, session)
       "debugline" -> handleDebugLine(player, session, args)
@@ -134,6 +137,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
             val editSession = RoadBuilder.build(player, world, path, session.settings)
             session.lastEditSession = editSession
             session.lastSmoothSession = null
+            plugin.undoManager.record(player, CsmUndoManager.Source.ROAD)
             plugin.server.scheduler.runTask(
                 plugin, Runnable { player.sendMessage("§a[RC] 道路の設置が完了しました。") })
           } catch (e: Exception) {
@@ -147,14 +151,15 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
         })
   }
 
-  private fun handleUndo(player: Player, session: RoadSession) {
+  fun undo(player: Player): Boolean {
+    val session = plugin.getSession(player)
     val (editSession, isSmooth) =
         when {
           session.lastSmoothSession != null -> session.lastSmoothSession!! to true
           session.lastEditSession != null -> session.lastEditSession!! to false
           else -> {
             player.sendMessage("§c[RC] 取り消す操作がありません。")
-            return
+            return false
           }
         }
     try {
@@ -166,9 +171,12 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
         session.lastEditSession = null
         player.sendMessage("§a[RC] 道路の設置を取り消しました。")
       }
+      plugin.undoManager.takeLatest(player, CsmUndoManager.Source.ROAD)
     } catch (e: Exception) {
       player.sendMessage("§c[RC] アンドゥに失敗しました: ${e.message}")
+      return false
     }
+    return true
   }
 
   private fun handleSmoothLines(player: Player, session: RoadSession) {
@@ -193,6 +201,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
           try {
             val result = WhiteLineSmoother.smooth(world, path, session.settings)
             session.lastSmoothSession = result.editSession
+            plugin.undoManager.record(player, CsmUndoManager.Source.ROAD)
             plugin.server.scheduler.runTask(
                 plugin,
                 Runnable {
