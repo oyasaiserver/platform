@@ -1,5 +1,6 @@
 limits:
   max-blocks-csm: 2000000
+  max-source-blocks-csm: 2000000
   max-columns-csm: 100000
   max-undo-blocks-csm: 2000000
   max-undo-snapshots-csm: 4
@@ -12,11 +13,94 @@ window:
   frame: IRON_TRAPDOOR
   glass: WHITE_STAINED_GLASS
   backing: DRIED_KELP_BLOCK
+  fill-air-around-glass: true
+  fill: SMOOTH_QUARTZ
+  select-after-fill: true
 
 csm:
-  default-rotation: 2
+  default-rotation: 0
   default-side: R
   select-after-load: true
+  hollow-on-load: true
+
+access:
+  enabled: true
+  op-bypass: true
+  console-bypass: true
+  legacy-permissions-bypass: true
+  roles:
+    admin:
+      display-name: "アドミン"
+      permission: "citiesskymine.role.admin"
+      inherits:
+        - takumi
+    takumi:
+      display-name: "たくみ"
+      permission: "citiesskymine.role.takumi"
+      inherits:
+        - builder
+    builder:
+      display-name: "建築士"
+      permission: "citiesskymine.role.builder"
+      inherits: []
+  commands:
+    reload:
+      - admin
+    road:
+      - builder
+      - takumi
+      - admin
+    intersection:
+      - builder
+      - takumi
+      - admin
+    facade:
+      - builder
+      - takumi
+      - admin
+    payload:
+      - takumi
+      - admin
+    load:
+      - takumi
+      - admin
+    load64:
+      - takumi
+      - admin
+    window:
+      - builder
+      - takumi
+      - admin
+    debugstick:
+      - takumi
+      - admin
+    preset:
+      - builder
+      - takumi
+      - admin
+    undo:
+      - builder
+      - takumi
+      - admin
+  command-blocks:
+    allowed-commands:
+      - payload
+      - load
+      - load64
+      - undo
+  non-player:
+    allowed-commands: []
+
+brush-preset:
+  max-presets-per-player: 20
+  max-command-length: 200
+  load-cooldown-ticks: 20
+  allowed-commands:
+    - "//br "
+    - "//brush "
+    - "//mask "
+    - "//gmask "
+    - "//replace "
 
 debug-stick:
   enabled: true
