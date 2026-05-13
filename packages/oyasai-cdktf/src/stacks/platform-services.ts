@@ -132,6 +132,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           AWS_SECRET_ACCESS_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
           BACKUP_INTERVAL: "6h",
           BACKUP_METHOD: "restic",
+          BACKUP_NAME: minecraftMainContainer.name,
           EXCLUDES: [
             // keep-sorted start
             "*.hprof", // Spark profiles - they are huge.
@@ -150,6 +151,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
             "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
           RCON_HOST: "minecraft-main",
           RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
+          RESTIC_ADDITIONAL_TAGS: "", // Set to an empty string to disable additional tags.
           RESTIC_PASSWORD: secrets.get("RESTIC_PASSWORD"),
           RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/minecraft-main-backup`,
           RESTIC_VERBOSE: true,
