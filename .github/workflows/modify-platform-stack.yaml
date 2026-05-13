@@ -64,9 +64,6 @@ jobs:
           extra_nix_config: |
             extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
             extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
-      - name: Install aws cli
-        run: |
-          nix profile add nixpkgs#awscli2
       - name: Configure Cloudflare R2 credentials
         run: |
           sudo -i aws configure set aws_access_key_id "${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}"
@@ -98,23 +95,25 @@ jobs:
           nix run nixpkgs#restic -- restore latest --target "$WORKDIR" --verbose
           # Rename /data (restic's restored prefix) to the expected volume mount name
           mv "$WORKDIR/data" "$WORKDIR/minecraft-main"
-      # - name: Restore MariaDB from master backup
-      #   if: inputs.restore-from-master
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ env.CLOUDFLARE_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ env.CLOUDFLARE_SECRET_ACCESS_KEY }}
-      #   run: |
-      #     WORKDIR="/opt/platform/$ENVIRONMENT"
-      #     sudo install -d -o "$USER" -m 755 "$WORKDIR/mariadb"
-      #     ENDPOINT="https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com"
-      #     # Find the latest dump in master's bucket
-      #     LATEST=$(aws s3 ls "s3://oyasai-master-platform/mariadb-backup/" \
-      #       --endpoint-url "$ENDPOINT" \
-      #       | sort | tail -1 | awk '{print $4}')
-      #     # Use .sql.gz extension so MariaDB docker-entrypoint-initdb.d imports it
-      #     aws s3 cp "s3://oyasai-master-platform/mariadb-backup/$LATEST" \
-      #       "$WORKDIR/mariadb/restore.sql.gz" \
-      #       --endpoint-url "$ENDPOINT"
+      - name: Restore MariaDB from master backup
+        if: inputs.restore-from-master
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.CLOUDFLARE_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.CLOUDFLARE_SECRET_ACCESS_KEY }}
+        run: |
+          WORKDIR="/opt/platform/$ENVIRONMENT"
+          sudo install -d -o "$USER" -m 755 "$WORKDIR/mariadb"
+          ENDPOINT="https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          # Find and download the latest dump from master's bucket
+          LATEST=$(aws s3 ls "s3://oyasai-master-platform/mariadb-backup/" \
+            --endpoint-url "$ENDPOINT" \
+            | sort | tail -1 | awk '{print $4}')
+          aws s3 cp "s3://oyasai-master-platform/mariadb-backup/$LATEST" \
+            /tmp/mariadb-restore.tgz \
+            --endpoint-url "$ENDPOINT"
+          # Extract individual per-database .sql files; docker-entrypoint-initdb.d
+          # processes these natively on first MariaDB start
+          tar xzf /tmp/mariadb-restore.tgz -C "$WORKDIR/mariadb"
       - name: Create TF Workspace
         if: inputs.operation == 'deploy'
         run: |
