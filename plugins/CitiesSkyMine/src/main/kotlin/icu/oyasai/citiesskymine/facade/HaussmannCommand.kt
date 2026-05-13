@@ -1,11 +1,9 @@
 package icu.oyasai.citiesskymine.facade
 
-import com.sk89q.worldedit.EditSession
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
-import icu.oyasai.citiesskymine.undo.CsmUndoManager
+import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.io.File
-import java.util.*
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -13,8 +11,6 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
-
-  private val lastEdit = HashMap<UUID, EditSession>()
 
   override fun onCommand(
       sender: CommandSender,
@@ -30,7 +26,7 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     when (args.getOrNull(0)?.lowercase()) {
       "build" -> doBuild(sender, args)
       "schem" -> doSchem(sender, args)
-      "undo" -> undo(sender)
+      "undo" -> sender.sendMessage("§e取り消しは FAWE の //undo を使ってください。")
       else -> showHelp(sender)
     }
     return true
@@ -42,11 +38,17 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     val bays = args.getOrNull(1)?.toIntOrNull()?.coerceIn(1, 40) ?: 4
     val palette = FacadePalette.from(args.getOrNull(2) ?: "cream")
     player.sendMessage("§7プロシージャル生成中... (${bays}ベイ, ${palette.id})")
-    val es = FacadeGenerator.generate(player, bays, palette)
-    if (es != null) {
-      lastEdit[player.uniqueId] = es
-      plugin.undoManager.record(player, CsmUndoManager.Source.FACADE)
-      player.sendMessage("§a生成完了！")
+    val result =
+        try {
+          CsmEditSession.run(player, plugin.logger) { editSession ->
+            FacadeGenerator.generateInto(player, editSession, bays, palette)
+          }
+        } catch (e: Exception) {
+          player.sendMessage("§c生成に失敗しました: ${e.message}")
+          return
+        }
+    if (result.changed) {
+      sendUndoResult(player, result.undoRecorded, "生成")
     }
   }
 
@@ -73,11 +75,17 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
     if (sub == "full") {
       player.sendMessage("§7スキマティック全体を貼り付け中...")
-      val es = SchematicFacadeGenerator.pasteFull(player, schemFile)
-      if (es != null) {
-        lastEdit[player.uniqueId] = es
-        plugin.undoManager.record(player, CsmUndoManager.Source.FACADE)
-        player.sendMessage("§a貼り付け完了！")
+      val result =
+          try {
+            CsmEditSession.run(player, plugin.logger) { editSession ->
+              SchematicFacadeGenerator.pasteFullInto(player, editSession, schemFile)
+            }
+          } catch (e: Exception) {
+            player.sendMessage("§c貼り付けに失敗しました: ${e.message}")
+            return
+          }
+      if (result.changed) {
+        sendUndoResult(player, result.undoRecorded, "貼り付け")
       }
       return
     }
@@ -85,32 +93,25 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     val bays = sub.toIntOrNull()?.coerceIn(1, 60) ?: 4
     val pattern = args.getOrNull(2)?.lowercase() ?: "regular"
     player.sendMessage("§7スキマティック生成中... (${bays}ベイ, パターン:${pattern})")
-    val es = SchematicFacadeGenerator.generate(player, schemFile, bays, pattern)
-    if (es != null) {
-      lastEdit[player.uniqueId] = es
-      plugin.undoManager.record(player, CsmUndoManager.Source.FACADE)
-      player.sendMessage("§a生成完了！")
+    val result =
+        try {
+          CsmEditSession.run(player, plugin.logger) { editSession ->
+            SchematicFacadeGenerator.generateInto(player, editSession, schemFile, bays, pattern)
+          }
+        } catch (e: Exception) {
+          player.sendMessage("§c生成に失敗しました: ${e.message}")
+          return
+        }
+    if (result.changed) {
+      sendUndoResult(player, result.undoRecorded, "生成")
     }
   }
 
-  // ── /hb undo ─────────────────────────────────────────────────────────
-
-  fun undo(player: Player): Boolean {
-    val es =
-        lastEdit.remove(player.uniqueId)
-            ?: run {
-              player.sendMessage("§cアンドゥする操作がありません")
-              return false
-            }
-    return try {
-      FacadeGenerator.undo(player, es)
-      player.sendMessage("§aアンドゥ完了")
-      plugin.undoManager.takeLatest(player, CsmUndoManager.Source.FACADE)
-      true
-    } catch (e: Exception) {
-      lastEdit[player.uniqueId] = es
-      player.sendMessage("§cアンドゥに失敗しました: ${e.message}")
-      false
+  private fun sendUndoResult(player: Player, undoRecorded: Boolean, label: String) {
+    if (undoRecorded) {
+      player.sendMessage("§a${label}完了！ §7//undo で取り消せます。")
+    } else {
+      player.sendMessage("§e${label}は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
     }
   }
 
@@ -125,7 +126,7 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
             §e/hb schem full §7— スキマティック全体を1棟貼り付け
             §e/hb schem §7<ベイ数> §7[pattern] [ファイルパス]
               §7pattern: regular(3幅) / wide(4幅) / grand(4幅左)
-            §e/hb undo §7— 直前の生成を取り消す
+            §e//undo §7— 直前の生成をFAWEで取り消す
         """
             .trimIndent())
   }
@@ -141,7 +142,7 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     val a0 = args.getOrNull(0)?.lowercase() ?: ""
     val a1 = args.getOrNull(1)?.lowercase() ?: ""
     return when (args.size) {
-      1 -> listOf("build", "schem", "undo", "help").filter { it.startsWith(a0) }
+      1 -> listOf("build", "schem", "help").filter { it.startsWith(a0) }
       2 ->
           when (a0) {
             "build" -> listOf("2", "3", "4", "5", "6", "8", "10")

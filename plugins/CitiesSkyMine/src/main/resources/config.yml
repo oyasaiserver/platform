@@ -2,10 +2,9 @@ limits:
   max-blocks-csm: 2000000
   max-source-blocks-csm: 2000000
   max-columns-csm: 100000
-  max-undo-blocks-csm: 2000000
-  max-undo-snapshots-csm: 4
   max-blocks-window: 512
-  max-undo-snapshots-window: 8
+  max-blocks-slab-stairs: 200000
+  max-blocks-stack: 2000000
 
 window:
   default-width: 2
@@ -16,6 +15,11 @@ window:
   fill-air-around-glass: true
   fill: SMOOTH_QUARTZ
   select-after-fill: true
+
+slab-stairs:
+  slab: STONE_BRICK_SLAB
+  stair: STONE_BRICK_STAIRS
+  full: STONE_BRICKS
 
 csm:
   default-rotation: 0
@@ -71,14 +75,26 @@ access:
       - builder
       - takumi
       - admin
+    slabstairs:
+      - builder
+      - takumi
+      - admin
+    stack:
+      - builder
+      - takumi
+      - admin
+    selection:
+      - builder
+      - takumi
+      - admin
+    config:
+      - builder
+      - takumi
+      - admin
     debugstick:
       - takumi
       - admin
     preset:
-      - builder
-      - takumi
-      - admin
-    undo:
       - builder
       - takumi
       - admin
@@ -87,7 +103,6 @@ access:
       - payload
       - load
       - load64
-      - undo
   non-player:
     allowed-commands: []
 

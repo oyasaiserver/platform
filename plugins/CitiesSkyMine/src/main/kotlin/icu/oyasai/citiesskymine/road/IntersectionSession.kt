@@ -1,6 +1,5 @@
 package icu.oyasai.citiesskymine.road
 
-import com.sk89q.worldedit.EditSession
 import org.bukkit.Location
 import org.bukkit.scheduler.BukkitTask
 
@@ -19,7 +18,4 @@ class IntersectionSession {
 
   // ── プレビュー ──
   var previewTask: BukkitTask? = null
-
-  // ── アンドゥ ──
-  var lastEditSession: EditSession? = null
 }

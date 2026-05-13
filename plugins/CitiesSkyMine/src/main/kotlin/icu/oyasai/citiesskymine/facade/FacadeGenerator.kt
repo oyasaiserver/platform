@@ -1,7 +1,6 @@
 package icu.oyasai.citiesskymine.facade
 
 import com.sk89q.worldedit.EditSession
-import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
 import org.bukkit.Material
@@ -55,51 +54,33 @@ object FacadeGenerator {
   /**
    * Generates a Haussmann-style facade starting at the player's target block. The targeted block
    * face determines orientation.
-   *
-   * @return the EditSession (caller stores it for undo)
    */
-  fun generate(player: Player, bays: Int, palette: FacadePalette): EditSession? {
+  fun generateInto(
+      player: Player,
+      editSession: EditSession,
+      bays: Int,
+      palette: FacadePalette
+  ): Boolean {
     val hit =
         player.rayTraceBlocks(20.0)
             ?: run {
               player.sendMessage("§cブロックを見てください (20ブロック以内)")
-              return null
+              return false
             }
     val block =
         hit.hitBlock
             ?: run {
               player.sendMessage("§cブロックが見つかりません")
-              return null
+              return false
             }
     val face = hit.hitBlockFace ?: BlockFace.SOUTH
 
     val (right, back) = faceVectors(face)
     val origin = BlockVector3.at(block.x, block.y, block.z)
-    val weWorld = BukkitAdapter.adapt(player.world)
-    val es =
-        WorldEdit.getInstance()
-            .newEditSessionBuilder()
-            .world(weWorld)
-            .actor(BukkitAdapter.adapt(player))
-            .build()
-
-    val ctx = FacadeCtx(es, origin, right, back)
+    val ctx = FacadeCtx(editSession, origin, right, back)
     buildFacade(ctx, palette.mats(), bays)
 
-    es.close()
-    return es
-  }
-
-  fun undo(player: Player, lastEs: EditSession) {
-    val weWorld = BukkitAdapter.adapt(player.world)
-    val undoEs =
-        WorldEdit.getInstance()
-            .newEditSessionBuilder()
-            .world(weWorld)
-            .actor(BukkitAdapter.adapt(player))
-            .build()
-    lastEs.undo(undoEs)
-    undoEs.close()
+    return true
   }
 
   // -----------------------------------------------------------------------

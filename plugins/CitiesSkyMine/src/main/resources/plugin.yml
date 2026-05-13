@@ -10,40 +10,49 @@ depend:
 commands:
   csm:
     description: "CitiesSkyMine 統合コマンド"
-    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|undo|window|debugstick|preset>"
+    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|stack|selection|config|debugstick|preset>"
   rc:
     description: "道路カーブを生成するコマンド"
-    usage: "/rc <help|set|build|undo|reset|status|debugline|smoothline|version>"
+    usage: "/rc <help|set|build|reset|status|debugline|smoothline|version>"
   ".rc":
     description: "道路カーブを生成するショートカット"
-    usage: "/.rc <help|set|build|undo|reset|status|debugline|smoothline|version>"
+    usage: "/.rc <help|set|build|reset|status|debugline|smoothline|version>"
   ri:
     description: "交差点を自動生成するコマンド"
-    usage: "/ri <here|set|build|undo|status|help>"
+    usage: "/ri <here|set|build|status|help>"
   ".ri":
     description: "交差点を自動生成するショートカット"
-    usage: "/.ri <here|set|build|undo|status|help>"
+    usage: "/.ri <here|set|build|status|help>"
   hb:
     description: "オスマン様式ファサードを生成するコマンド"
-    usage: "/hb <build|schem|undo|help> [options]"
+    usage: "/hb <build|schem|help> [options]"
   ".hb":
     description: "オスマン様式ファサードを生成するショートカット"
-    usage: "/.hb <build|schem|undo|help> [options]"
+    usage: "/.hb <build|schem|help> [options]"
   ".pl":
     description: "CitiesSkyMine payload 配置ショートカット"
-    usage: "/.pl <load|load64|undo> <payload> [0-3] [L|R]"
+    usage: "/.pl <load|load64> <payload> [0-3] [L|R]"
   ".win":
     description: "窓生成ショートカット"
     usage: "/.win [width] [height] [frame] [glass] [backing]"
+  ".ss":
+    description: "SlabStairs 生成ショートカット"
+    usage: "/.ss [build] [slab] [stair] [full]"
+  ".ns":
+    description: "選択範囲をプレイヤー視点基準で複製するショートカット"
+    usage: "/.ns <forward|back|left|right|up|down...> <times> [skip-blocks...]"
+  ".sel":
+    description: "WorldEdit 選択範囲の保存・復元ショートカット"
+    usage: "/.sel <save|list|delete|p|name>"
+  ".cf":
+    description: "CitiesSkyMine 個人設定GUI"
+    usage: "/.cf"
   ".ds":
     description: "debug-stick 互換ショートカット"
     usage: "/.ds <select|cycle>"
   ".brp":
     description: "ブラシプリセットショートカット"
     usage: "/.brp <save|load|list|delete|名前>"
-  ".undo":
-    description: "CSM 全体 undo ショートカット"
-    usage: "/.undo [payload|window|road|intersection|facade]"
 
 permissions:
   citiesskymine.*:
@@ -59,9 +68,12 @@ permissions:
       citiesskymine.build: true
       citiesskymine.payload: true
       citiesskymine.window: true
+      citiesskymine.slabstairs: true
+      citiesskymine.stack: true
+      citiesskymine.selection: true
+      citiesskymine.config: true
       citiesskymine.debugstick: true
       citiesskymine.preset: true
-      citiesskymine.undo: true
   citiesskymine.role.admin:
     description: "CSM アドミンロール"
     default: op
@@ -89,12 +101,21 @@ permissions:
   citiesskymine.window:
     description: "旧形式: 窓生成コマンドの使用権限"
     default: false
+  citiesskymine.slabstairs:
+    description: "旧形式: SlabStairs 生成コマンドの使用権限"
+    default: false
+  citiesskymine.stack:
+    description: "旧形式: 選択範囲複製コマンドの使用権限"
+    default: false
+  citiesskymine.selection:
+    description: "旧形式: WorldEdit 選択範囲保存コマンドの使用権限"
+    default: false
+  citiesskymine.config:
+    description: "旧形式: 個人設定GUIの使用権限"
+    default: false
   citiesskymine.debugstick:
     description: "旧形式: debug-stick 互換コマンドの使用権限"
     default: false
   citiesskymine.preset:
     description: "旧形式: ブラシプリセットコマンドの使用権限"
-    default: false
-  citiesskymine.undo:
-    description: "旧形式: CSM 全体 undo コマンドの使用権限"
     default: false

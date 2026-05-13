@@ -17,9 +17,12 @@ class CsmAccessController(private val plugin: Main) {
     LOAD("load", "citiesskymine.payload"),
     LOAD64("load64", "citiesskymine.payload"),
     WINDOW("window", "citiesskymine.window"),
+    SLAB_STAIRS("slabstairs", "citiesskymine.slabstairs"),
+    STACK("stack", "citiesskymine.stack"),
+    SELECTION("selection", "citiesskymine.selection"),
+    CONFIG("config", "citiesskymine.config"),
     DEBUGSTICK("debugstick", "citiesskymine.debugstick"),
-    PRESET("preset", "citiesskymine.preset"),
-    UNDO("undo", "citiesskymine.undo")
+    PRESET("preset", "citiesskymine.preset")
   }
 
   fun require(sender: CommandSender, command: CommandKey): Boolean {
@@ -135,8 +138,11 @@ class CsmAccessController(private val plugin: Main) {
             CommandKey.LOAD to listOf("takumi", "admin"),
             CommandKey.LOAD64 to listOf("takumi", "admin"),
             CommandKey.WINDOW to listOf("builder", "takumi", "admin"),
+            CommandKey.SLAB_STAIRS to listOf("builder", "takumi", "admin"),
+            CommandKey.STACK to listOf("builder", "takumi", "admin"),
+            CommandKey.SELECTION to listOf("builder", "takumi", "admin"),
+            CommandKey.CONFIG to listOf("builder", "takumi", "admin"),
             CommandKey.DEBUGSTICK to listOf("takumi", "admin"),
-            CommandKey.PRESET to listOf("builder", "takumi", "admin"),
-            CommandKey.UNDO to listOf("builder", "takumi", "admin"))
+            CommandKey.PRESET to listOf("builder", "takumi", "admin"))
   }
 }

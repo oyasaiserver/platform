@@ -26,6 +26,9 @@ class PlayerDataStore(private val plugin: Main) {
   fun getBoolean(player: Player, path: String): Boolean? =
       if (data(player).isBoolean(path)) data(player).getBoolean(path) else null
 
+  fun getKeys(player: Player, path: String): Set<String> =
+      data(player).getConfigurationSection(path)?.getKeys(false).orEmpty()
+
   fun set(player: Player, path: String, value: Any?) {
     val yaml = data(player)
     yaml.set(path, value)

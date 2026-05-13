@@ -1,27 +1,26 @@
 package icu.oyasai.citiesskymine.road
 
 import com.sk89q.worldedit.EditSession
-import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
 import kotlin.math.*
 import org.bukkit.Material
-import org.bukkit.World
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Bisected
 import org.bukkit.block.data.type.Stairs
 
 object WhiteLineSmoother {
 
-  data class SmoothResult(val editSession: EditSession, val affectedBlocks: Int)
+  data class SmoothResult(val affectedBlocks: Int)
 
-  fun smooth(world: World, path: List<PathPoint>, settings: RoadSettings): SmoothResult {
+  fun smooth(
+      editSession: EditSession,
+      path: List<PathPoint>,
+      settings: RoadSettings
+  ): SmoothResult {
     val lineData = settings.lineMaterial.createBlockData()
     require(lineData is Stairs) { "白線素材には階段ブロックを設定してください。" }
-    if (path.isEmpty()) return SmoothResult(emptyEditSession(world), 0)
-
-    val editSession =
-        WorldEdit.getInstance().newEditSessionBuilder().world(BukkitAdapter.adapt(world)).build()
+    if (path.isEmpty()) return SmoothResult(0)
 
     val slots = buildOffsetSlots(settings).filter { it.zone.isLine() }
     var affected = 0
@@ -36,8 +35,9 @@ object WhiteLineSmoother {
         val prevVec = prev?.vectorTo(pos)
         val nextVec = next?.let { pos.vectorTo(it) }
 
-        val blockState = world.getBlockAt(pos.x, pos.y, pos.z)
-        if (!isLineMaterial(blockState.type, settings.lineMaterial)) continue
+        val target = BlockVector3.at(pos.x, pos.y, pos.z)
+        val blockState = editSession.getBlock(target)
+        if (!isLineMaterial(blockState.blockType.id(), settings.lineMaterial)) continue
         val orientation =
             zigzagOrientations[i]
                 ?: resolveOrientation(prevVec, nextVec, slot.offset, block.heading)
@@ -49,28 +49,16 @@ object WhiteLineSmoother {
               isWaterlogged = false
             }
 
-        editSession.setBlock(BlockVector3.at(pos.x, pos.y, pos.z), BukkitAdapter.adapt(data))
+        editSession.setBlock(target, BukkitAdapter.adapt(data))
         affected++
       }
     }
 
-    editSession.close()
-    return SmoothResult(editSession, affected)
+    return SmoothResult(affected)
   }
 
-  private fun emptyEditSession(world: World): EditSession {
-    val es =
-        WorldEdit.getInstance().newEditSessionBuilder().world(BukkitAdapter.adapt(world)).build()
-    es.close()
-    return es
-  }
-
-  private fun isLineMaterial(target: Material, line: Material): Boolean {
-    if (target == line) return true
-    val targetData = target.createBlockData()
-    val lineData = line.createBlockData()
-    return targetData.material == lineData.material
-  }
+  private fun isLineMaterial(targetId: String, line: Material): Boolean =
+      targetId.equals(line.key.toString(), ignoreCase = true)
 
   private fun resolveOrientation(
       prev: Vec?,

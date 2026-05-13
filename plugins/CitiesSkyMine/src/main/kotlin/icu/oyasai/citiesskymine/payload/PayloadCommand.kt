@@ -2,27 +2,22 @@ package icu.oyasai.citiesskymine.payload
 
 import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
-import com.sk89q.worldedit.function.operation.Operations
 import com.sk89q.worldedit.function.pattern.BlockPattern
 import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.CuboidRegion
 import com.sk89q.worldedit.regions.Region
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector
-import com.sk89q.worldedit.world.block.BaseBlock
 import com.sk89q.worldedit.world.block.BlockState
 import com.sk89q.worldedit.world.block.BlockTypes
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
-import icu.oyasai.citiesskymine.undo.CsmUndoManager
 import icu.oyasai.citiesskymine.util.MessageUtil
+import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.io.ByteArrayInputStream
 import java.math.BigInteger
 import java.util.Base64
-import java.util.LinkedHashMap
-import java.util.UUID
 import java.util.zip.InflaterInputStream
 import kotlin.math.roundToInt
-import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Directional
@@ -37,8 +32,6 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
   private val base997Alphabet = buildBase997Alphabet()
   private val base997Index = base997Alphabet.withIndex().associate { it.value to it.index }
-  private val undoSnapshots = object : LinkedHashMap<String, UndoSnapshot>(8, 0.75f, true) {}
-  private var lastUndoKey: String? = null
 
   override fun onCommand(
       sender: CommandSender,
@@ -53,7 +46,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
 
     if (sub == "undo") {
-      undo(sender, args.getOrNull(1)?.equals("last", ignoreCase = true) == true)
+      MessageUtil.info(sender, "payload 配置の取り消しは FAWE の //undo を使ってください。")
       return true
     }
 
@@ -103,7 +96,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
 
     val placementOptions =
-        parsePlacementOptions(args, defaultPlacementOptions())
+        parsePlacementOptions(args, defaultPlacementOptions(context.actor))
             ?: run {
               MessageUtil.error(
                   sender,
@@ -122,26 +115,30 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       MessageUtil.error(sender, "ブロック数が上限 ($maxBlocks) を超えています: $blockCount")
       return true
     }
+    context.actor?.let { savePlacementDefaults(it, placementOptions) }
 
     val buildingTurns = placementOptions.buildingTurns.floorMod(4)
     val placement =
         buildPlacement(placementColumns, buildingTurns, context.viewTurns, placementOptions.side)
     val placementBounds = buildPlacementBounds(context, placementColumns, placement)
-    val undoSnapshot = captureUndoSnapshot(sender, context, placementColumns, placement, blockCount)
+    var faweUndoRecorded = false
 
     try {
-      createEditSession(context.world, context.actor).use { editSession ->
-        val weWorld = BukkitAdapter.adapt(context.world)
-        val patterns = HashMap<PayloadBlock, BlockPattern>()
-        for (column in placementColumns) {
-          val (px, pz) = placedColumnPosition(column, placement)
-          val from = context.origin.add(px, column.yMin, pz)
-          val to = context.origin.add(px, column.yMin + column.height, pz)
-          val pattern = patterns.getOrPut(column.block) { BlockPattern(blockState(column.block)) }
-          editSession.setBlocks(CuboidRegion(weWorld, from, to) as Region, pattern)
-        }
-        Operations.complete(editSession.commit())
-      }
+      val result =
+          CsmEditSession.run(context.world, context.actor, plugin.logger) { editSession ->
+            val weWorld = BukkitAdapter.adapt(context.world)
+            val patterns = HashMap<PayloadBlock, BlockPattern>()
+            for (column in placementColumns) {
+              val (px, pz) = placedColumnPosition(column, placement)
+              val from = context.origin.add(px, column.yMin, pz)
+              val to = context.origin.add(px, column.yMin + column.height, pz)
+              val pattern =
+                  patterns.getOrPut(column.block) { BlockPattern(blockState(column.block)) }
+              editSession.setBlocks(CuboidRegion(weWorld, from, to) as Region, pattern)
+            }
+            true
+          }
+      faweUndoRecorded = result.undoRecorded
     } catch (e: Exception) {
       MessageUtil.error(sender, "配置に失敗しました: ${e.message}")
       return true
@@ -170,12 +167,12 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           sender,
           "配置範囲を選択しました: ${placementBounds.minX},${placementBounds.minY},${placementBounds.minZ} -> ${placementBounds.maxX},${placementBounds.maxY},${placementBounds.maxZ}")
     }
-    if (undoSnapshot != null) {
-      rememberUndo(undoSnapshot)
-      plugin.undoManager.record(sender, CsmUndoManager.Source.PAYLOAD)
-      MessageUtil.info(sender, "/csm payload undo でこの配置を復元できます。")
+    if (context.actor == null) {
+      MessageUtil.warn(sender, "プレイヤー実行ではないため、FAWE の //undo 履歴には登録していません。")
+    } else if (faweUndoRecorded) {
+      MessageUtil.info(sender, "FAWE の //undo でこの配置を取り消せます。")
     } else {
-      MessageUtil.warn(sender, "この配置は undo 保存上限を超えたため、/csm payload undo 対象外です。")
+      MessageUtil.warn(sender, "配置は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
     }
     return true
   }
@@ -187,16 +184,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       args: Array<String>
   ): List<String> {
     return when (args.size) {
-      1 ->
-          listOf("load", "load64", "undo", "help").filter {
-            it.startsWith(args[0], ignoreCase = true)
-          }
-      2 ->
-          if (args[0].equals("undo", ignoreCase = true)) {
-            listOf("last").filter { it.startsWith(args[1], ignoreCase = true) }
-          } else {
-            emptyList()
-          }
+      1 -> listOf("load", "load64", "help").filter { it.startsWith(args[0], ignoreCase = true) }
       3 ->
           if (args[0].equals("load", ignoreCase = true) ||
               args[0].equals("load64", ignoreCase = true)) {
@@ -262,48 +250,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         sender,
         "/csm payload load <payload> [0-3] [L|R] [hollow|solid]",
         "建物回転、プレイヤー基準の左右、hollowを指定")
-    MessageUtil.helpEntry(sender, "/csm payload undo", "同じ実行元の直前CSM配置を復元")
-    MessageUtil.helpEntry(sender, "/csm payload undo last", "最後に保存されたCSM配置を復元")
-  }
-
-  fun undo(sender: CommandSender, useLast: Boolean): Boolean {
-    if (!plugin.access.require(sender, CommandKey.PAYLOAD)) return false
-
-    val snapshot = takeUndoSnapshot(sender, useLast)
-    if (snapshot == null) {
-      MessageUtil.error(sender, "復元できるCSM配置がありません。")
-      return false
-    }
-
-    val world = Bukkit.getWorld(snapshot.worldId)
-    if (world == null) {
-      MessageUtil.error(sender, "復元先ワールドが読み込まれていません: ${snapshot.worldName}")
-      putUndoSnapshot(snapshot)
-      return false
-    }
-
-    val actor = sender as? Player
-    try {
-      createEditSession(world, actor).use { editSession ->
-        val weWorld = BukkitAdapter.adapt(world)
-        for (column in snapshot.columns) {
-          for (run in column.runs) {
-            val from = BlockVector3.at(column.x, run.yMin, column.z)
-            val to = BlockVector3.at(column.x, run.yMin + run.length - 1, column.z)
-            editSession.setBlocks(CuboidRegion(weWorld, from, to) as Region, run.block)
-          }
-        }
-        Operations.complete(editSession.commit())
-      }
-    } catch (e: Exception) {
-      putUndoSnapshot(snapshot)
-      MessageUtil.error(sender, "undo に失敗しました: ${e.message}")
-      return false
-    }
-
-    MessageUtil.success(sender, "CSM配置を復元しました: ${snapshot.blocks} blocks")
-    plugin.undoManager.takeLatest(sender, CsmUndoManager.Source.PAYLOAD)
-    return true
+    MessageUtil.helpEntry(sender, "//undo", "直前のpayload配置をFAWEで取り消し")
   }
 
   private fun placementContext(sender: CommandSender): PlacementContext? {
@@ -324,127 +271,6 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             origin = BlockVector3.at(loc.blockX, loc.blockY + 1, loc.blockZ),
             viewTurns = blockTurns(block.blockData as? Directional),
             actor = null)
-      }
-      else -> null
-    }
-  }
-
-  private fun createEditSession(world: World, actor: Player?) =
-      WorldEdit.getInstance()
-          .newEditSessionBuilder()
-          .apply {
-            world(BukkitAdapter.adapt(world))
-            if (actor != null) {
-              actor(BukkitAdapter.adapt(actor))
-            }
-          }
-          .build()
-
-  private fun captureUndoSnapshot(
-      sender: CommandSender,
-      context: PlacementContext,
-      columns: List<PlacementColumn>,
-      placement: PlacementPlan,
-      blockCount: Long
-  ): UndoSnapshot? {
-    val maxUndoBlocks = plugin.config.getLong("limits.max-undo-blocks-csm", 2_000_000L)
-    if (maxUndoBlocks > 0 && blockCount > maxUndoBlocks) {
-      return null
-    }
-
-    val key = undoKey(sender) ?: return null
-    val undoColumns = ArrayList<UndoColumn>(columns.size)
-    createEditSession(context.world, null).use { editSession ->
-      for (column in columns) {
-        val (px, pz) = placedColumnPosition(column, placement)
-        val worldX = context.origin.x() + px
-        val worldZ = context.origin.z() + pz
-        val yMin = context.origin.y() + column.yMin
-        val yMax = yMin + column.height
-        val runs = captureColumnRuns(editSession, worldX, worldZ, yMin, yMax)
-        undoColumns.add(UndoColumn(worldX, worldZ, runs))
-      }
-    }
-
-    return UndoSnapshot(
-        key = key,
-        worldId = context.world.uid,
-        worldName = context.world.name,
-        columns = undoColumns,
-        blocks = blockCount,
-        createdAt = System.currentTimeMillis())
-  }
-
-  private fun captureColumnRuns(
-      editSession: com.sk89q.worldedit.EditSession,
-      x: Int,
-      z: Int,
-      yMin: Int,
-      yMax: Int
-  ): List<UndoRun> {
-    val runs = ArrayList<UndoRun>()
-    var runStart = yMin
-    var current = editSession.getFullBlock(x, yMin, z)
-    for (y in (yMin + 1)..yMax) {
-      val block = editSession.getFullBlock(x, y, z)
-      if (block == current) {
-        continue
-      }
-      runs.add(UndoRun(runStart, y - runStart, current))
-      runStart = y
-      current = block
-    }
-    runs.add(UndoRun(runStart, yMax - runStart + 1, current))
-    return runs
-  }
-
-  private fun rememberUndo(snapshot: UndoSnapshot) {
-    synchronized(undoSnapshots) {
-      undoSnapshots[snapshot.key] = snapshot
-      lastUndoKey = snapshot.key
-      trimUndoSnapshots()
-    }
-  }
-
-  private fun takeUndoSnapshot(sender: CommandSender, useLast: Boolean): UndoSnapshot? {
-    synchronized(undoSnapshots) {
-      val key = if (useLast) lastUndoKey else undoKey(sender)
-      val snapshot = key?.let { undoSnapshots.remove(it) } ?: return null
-      if (lastUndoKey == key) {
-        lastUndoKey = undoSnapshots.entries.lastOrNull()?.key
-      }
-      return snapshot
-    }
-  }
-
-  private fun putUndoSnapshot(snapshot: UndoSnapshot) {
-    synchronized(undoSnapshots) {
-      undoSnapshots[snapshot.key] = snapshot
-      lastUndoKey = snapshot.key
-      trimUndoSnapshots()
-    }
-  }
-
-  private fun trimUndoSnapshots() {
-    val maxSnapshots = plugin.config.getInt("limits.max-undo-snapshots-csm", 4)
-    if (maxSnapshots <= 0) {
-      return
-    }
-    while (undoSnapshots.size > maxSnapshots) {
-      val firstKey = undoSnapshots.entries.firstOrNull()?.key ?: break
-      undoSnapshots.remove(firstKey)
-      if (lastUndoKey == firstKey) {
-        lastUndoKey = undoSnapshots.entries.lastOrNull()?.key
-      }
-    }
-  }
-
-  private fun undoKey(sender: CommandSender): String? {
-    return when (sender) {
-      is Player -> "player:${sender.uniqueId}"
-      is BlockCommandSender -> {
-        val loc = sender.block.location
-        "block:${sender.block.world.uid}:${loc.blockX}:${loc.blockY}:${loc.blockZ}"
       }
       else -> null
     }
@@ -654,12 +480,29 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         PayloadBlock.ROOF_FLOOR -> BlockTypes.SMOOTH_STONE!!.defaultState
       }
 
-  private fun defaultPlacementOptions(): PlacementOptions {
-    val buildingTurns = plugin.config.getInt("csm.default-rotation", 0).floorMod(4)
+  private fun defaultPlacementOptions(player: Player?): PlacementOptions {
+    val buildingTurns =
+        player?.let { plugin.playerDataStore.getInt(it, "payload.rotation") }
+            ?: plugin.config.getInt("csm.default-rotation", 0)
     val side =
-        parsePlacementSide(plugin.config.getString("csm.default-side")) ?: PlacementSide.RIGHT
-    val hollow = plugin.config.getBoolean("csm.hollow-on-load", true)
+        player
+            ?.let { plugin.playerDataStore.getString(it, "payload.side") }
+            ?.let { parsePlacementSide(it) }
+            ?: parsePlacementSide(plugin.config.getString("csm.default-side"))
+            ?: PlacementSide.RIGHT
+    val hollow =
+        player?.let { plugin.playerDataStore.getBoolean(it, "payload.hollow") }
+            ?: plugin.config.getBoolean("csm.hollow-on-load", true)
     return PlacementOptions(buildingTurns, side, hollow)
+  }
+
+  private fun savePlacementDefaults(player: Player, options: PlacementOptions) {
+    plugin.playerDataStore.setMany(
+        player,
+        mapOf(
+            "payload.rotation" to options.buildingTurns.floorMod(4),
+            "payload.side" to options.side.code,
+            "payload.hollow" to options.hollow))
   }
 
   private fun parsePlacementOptions(
@@ -1096,19 +939,6 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     WALL,
     ROOF_FLOOR
   }
-
-  private data class UndoSnapshot(
-      val key: String,
-      val worldId: UUID,
-      val worldName: String,
-      val columns: List<UndoColumn>,
-      val blocks: Long,
-      val createdAt: Long
-  )
-
-  private data class UndoColumn(val x: Int, val z: Int, val runs: List<UndoRun>)
-
-  private data class UndoRun(val yMin: Int, val length: Int, val block: BaseBlock)
 
   private class ByteReader(private val data: ByteArray) {
     private var pos = 0
