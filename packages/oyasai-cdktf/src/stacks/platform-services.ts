@@ -127,12 +127,25 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         networksAdvanced: [network],
         restart: "unless-stopped",
         env: envs({
-          // keep-sorted start
+          // keep-sorted start block=yes
           AWS_ACCESS_KEY_ID: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
           AWS_SECRET_ACCESS_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
           BACKUP_INTERVAL: "6h",
           BACKUP_METHOD: "restic",
-          EXCLUDES: "*.jar,cache,logs,*.tmp,bluemap",
+          EXCLUDES: [
+            // keep-sorted start
+            "*.hprof", // Spark profiles - they are huge.
+            "*.jar",
+            "*.tmp",
+            "archive",
+            "bluemap",
+            "cache",
+            "crash-reports",
+            "debug",
+            "logs",
+            "versions",
+            // keep-sorted end
+          ].join(","),
           PRUNE_RESTIC_RETENTION:
             "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
           RCON_HOST: "minecraft-main",
