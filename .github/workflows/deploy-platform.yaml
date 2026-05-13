@@ -34,3 +34,4 @@ jobs:
       operation: deploy
       cancel-in-progress: ${{ inputs.environment != 'master' }}
       start-proxy: ${{ inputs.start-proxy }}
+      restore-from-master: ${{ inputs.environment != 'master' }}
