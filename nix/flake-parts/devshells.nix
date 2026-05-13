@@ -20,6 +20,7 @@
             nixd
             nodejs
             npm-list
+            restic
             terraform
             typescript-language-server
             # keep-sorted end
