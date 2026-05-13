@@ -8,7 +8,9 @@ import { PlatformServices } from "./stacks/platform-services.ts";
 
 function synth() {
   const app = new App();
+
   const environment = mustEnv("ENVIRONMENT");
+  const oyasaiImageId = mustEnv("OYASAI_IMAGE_ID");
 
   const commonInfra = new CommonInfra(app, "common-infra");
 
@@ -21,10 +23,13 @@ function synth() {
     { commonInfra },
   );
 
-  new PlatformServices(app, `platform-${environment}-services`, environment, {
-    commonInfra,
-    platformInfra,
-  });
+  new PlatformServices(
+    app,
+    `platform-${environment}-services`,
+    environment,
+    { commonInfra, platformInfra },
+    { oyasaiImageId },
+  );
 
   app.synth();
 }

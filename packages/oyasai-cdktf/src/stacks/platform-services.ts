@@ -4,6 +4,7 @@ import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
 import { LocalBackend } from "cdktf";
 import { Construct } from "constructs";
+import { ok } from "node:assert";
 import { join } from "node:path";
 import { envs, ports } from "../helpers.ts";
 import { createSecrets } from "../secrets.ts";
@@ -11,9 +12,13 @@ import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
 import type { PlatformInfra } from "./platform-infra.ts";
 
-type Props = Readonly<{
+type StackDependencies = Readonly<{
   commonInfra: CommonInfra;
   platformInfra: PlatformInfra;
+}>;
+
+type Config = Readonly<{
+  oyasaiImageId: string;
 }>;
 
 export class PlatformServices extends OyasaiPlatformTerraformStack {
@@ -23,7 +28,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     scope: Construct,
     id: string,
     environment: string,
-    { commonInfra, platformInfra }: Props,
+    { commonInfra, platformInfra }: StackDependencies,
+    { oyasaiImageId }: Config,
   ) {
     super(scope, id, environment);
 
@@ -49,20 +55,22 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       });
     }
 
-    const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
-    const images = {
-      mariadb: imageIds.mariadb,
-      mysqlBackup: imageIds["mysql-backup"],
-      minecraftMain: imageIds["oyasai-minecraft-main"],
-      minecraftBackup: imageIds["mc-backup"],
-    } as const;
+    function oyasaiImage(name: string): string {
+      // Special case for situation where we want to synth but don't deploy.
+      if (oyasaiImageId === "<nodeploy>") {
+        return oyasaiImageId;
+      }
+      const parsed = JSON.parse(oyasaiImageId);
+      ok(name in parsed, `Image ${name} not found`);
+      return parsed[name];
+    }
 
     const network = new Network(this, this.t("network"), {
       name: "network",
     });
 
     const mariadbContainer = new Container(this, this.t("mariadb-container"), {
-      image: images.mariadb,
+      image: oyasaiImage("mariadb"),
       name: "mariadb",
       restart: "unless-stopped",
       env: envs({
@@ -85,7 +93,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       this,
       this.t("minecraft-main-container"),
       {
-        image: images.minecraftMain,
+        image: oyasaiImage("oyasai-minecraft-main"),
         name: "minecraft-main",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
@@ -124,7 +132,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       new Container(this, this.t("minecraft-backup-container"), {
         name: "minecraft-main-backup",
         dependsOn: [minecraftMainContainer],
-        image: images.minecraftBackup,
+        image: oyasaiImage("mc-backup"),
         networksAdvanced: [network],
         restart: "unless-stopped",
         env: envs({
@@ -170,7 +178,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       new Container(this, this.t("mariadb-backup-container"), {
         name: "mariadb-backup",
         dependsOn: [mariadbContainer],
-        image: images.mysqlBackup,
+        image: oyasaiImage("mysql-backup"),
         restart: "unless-stopped",
         networksAdvanced: [network],
         command: ["dump"],
