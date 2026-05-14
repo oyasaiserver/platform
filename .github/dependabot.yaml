@@ -32,6 +32,8 @@ updates:
       all:
         patterns:
           - "*"
+    commit-message:
+      prefix: "build"
   - package-ecosystem: "gradle"
     directory: "/"
     cooldown:
