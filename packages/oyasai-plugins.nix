@@ -48,9 +48,12 @@ let
 
     passthru = lib.mapAttrs' (
       name: _:
+      let
+        filename = "${name}.jar";
+      in
       lib.nameValuePair (lib.toLower name) (
-        runCommand name { } ''
-          cp ${final}/${name}.jar $out
+        runCommand filename { } ''
+          cp ${final}/${filename} $out
         ''
       )
     ) (builtins.readDir ../plugins);
