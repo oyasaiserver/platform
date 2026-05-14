@@ -107,7 +107,10 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
               // so limiting to 10GB.
               "10G",
           RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
-          DISCORDSRV_TOKEN: secrets.get("DISCORDSRV_TOKEN"),
+
+          ...(this.isMaster && {
+            DISCORDSRV_TOKEN: secrets.get("DISCORDSRV_TOKEN"),
+          }),
         }),
         volumes: [
           {
