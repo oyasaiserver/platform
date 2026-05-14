@@ -12,8 +12,7 @@
   version,
   plugins ? [ ],
   icon ? null,
-  # Can make this an attrset
-  properties ? "",
+  properties ? { },
   passthru ? { },
 }:
 
@@ -22,7 +21,7 @@ let
 
   serverProperties = writeTextFile {
     name = "server.properties";
-    text = properties;
+    text = lib.generators.toKeyValue { } properties;
   };
 in
 writeShellApplication {
@@ -31,9 +30,6 @@ writeShellApplication {
   runtimeInputs = [ coreutils ];
 
   text = ''
-    echo "eula=true" > eula.txt
-    cp --no-preserve=ownership,mode ${serverProperties} server.properties
-
     mkdir -p cache
     cp --no-preserve=ownership,mode ${package.vanillaJar} cache/mojang_${version}.jar
 
@@ -42,22 +38,18 @@ writeShellApplication {
     ''}
 
     mkdir -p plugins
-    rm -rf plugins/.paper-remapped
-    rm -f plugins/*.jar
 
-    ${lib.concatMapStringsSep "\n" (
-      k:
-      "cp --no-preserve=ownership,mode ${k} ${
-        # HOTFIX come up with a better way - shun 2026-04
-        if (lib.hasSuffix ".jar" k) then "plugins" else "plugins/${builtins.baseNameOf k}.jar"
-      }"
-    ) plugins}
-
-    if [ -n "''${RCON_PASSWORD:-}" ]; then
-      printf '\nrcon.password=%s\n' "''${RCON_PASSWORD}" >> server.properties
-    fi
+    # Sighs. Doesn't take rcon password as a envvar.
+    {
+      cat ${serverProperties}
+      if [[ -n "''${RCON_PASSWORD:-}" ]]; then
+        printf 'enable-rcon=true\nrcon.password=%s\n' "''${RCON_PASSWORD}"
+      fi
+    } > server.properties
 
     MEMORY="''${MEMORY:-2G}"
-    exec ${lib.getExe package} -Xmx"''${MEMORY}" -Xms"''${MEMORY}" "$@"
+    exec ${lib.getExe package} -Xmx"''${MEMORY}" -Xms"''${MEMORY}" -Dcom.mojang.eula.agree=true \
+      ${lib.concatMapStringsSep " " (k: "--add-plugin ${k}") plugins} \
+      "$@"
   '';
 }
