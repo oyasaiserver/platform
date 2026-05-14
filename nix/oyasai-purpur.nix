@@ -38,6 +38,8 @@ writeShellApplication {
     ''}
 
     mkdir -p plugins
+    rm -rf plugins/.paper-remapped
+    rm -f plugins/*.jar
 
     # Sighs. Doesn't take rcon password as a envvar.
     {
@@ -49,7 +51,7 @@ writeShellApplication {
 
     MEMORY="''${MEMORY:-2G}"
     exec ${lib.getExe package} -Xmx"''${MEMORY}" -Xms"''${MEMORY}" -Dcom.mojang.eula.agree=true \
-      ${lib.concatMapStringsSep " " (k: "--add-plugin ${k}") plugins} \
+      -- ${lib.concatMapStringsSep " " (k: "--add-plugin ${k}") plugins} \
       "$@"
   '';
 }

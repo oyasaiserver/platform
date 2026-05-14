@@ -47,24 +47,6 @@
       "type": "modrinth"
     }
   },
-  "essentialsx": {
-    "1.21.10": {
-      "type": "url",
-      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.22.0-dev+111-c38c925.jar"
-    }
-  },
-  "essentialsxchat": {
-    "1.21.10": {
-      "type": "url",
-      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXChat-2.22.0-dev+111-c38c925.jar"
-    }
-  },
-  "essentialsxspawn": {
-    "1.21.10": {
-      "type": "url",
-      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXSpawn-2.22.0-dev+111-c38c925.jar"
-    }
-  },
   "fastasyncworldedit": {
     "1.21.10": {
       "slug": "fastasyncworldedit",
