@@ -50,8 +50,14 @@ writeShellApplication {
     } > server.properties
 
     MEMORY="''${MEMORY:-2G}"
-    exec ${lib.getExe package} -Xmx"''${MEMORY}" -Xms"''${MEMORY}" -Dcom.mojang.eula.agree=true \
-      -- ${lib.concatMapStringsSep " " (k: "--add-plugin ${k}") plugins} \
+
+    exec ${jre}/bin/java \
+      -Xmx"''${MEMORY}" \
+      -Xms"''${MEMORY}" \
+      -Dcom.mojang.eula.agree=true \
+      -jar "${package}/lib/minecraft/server.jar" \
+      ${lib.concatMapStringsSep " " (k: "--add-plugin ${k}") plugins} \
+      nogui \
       "$@"
   '';
 }
