@@ -14,28 +14,29 @@ let
 
     icon = ../assets/icon-64x64.png;
 
-    properties = ''
-      allow-flight=true
-      allow-nether=false
-      difficulty=normal
-      enable-command-block=true
-      enable-jmx-monitoring=true
-      enforce-secure-profile=false
-      generate-structures=false
-      level-name=lifeworld
-      max-players=70
-      motd=§l§r                 §b§lOyasai§f§lServer§7 [v${version}]§r\n§l§f            建築勢は集合だ！建築！建築！建築！！！
-      network-compression-threshold=96
-      pvp=false
-      simulation-distance=16
-      spawn-animals=false
-      spawn-npcs=false
-      spawn-protection=0
-      sync-chunk-writes=false
-      view-distance=32
-      enable-rcon=true
-      rcon.port=25575
-    '';
+    properties = {
+      # keep-sorted start
+      allow-flight = true;
+      allow-nether = false;
+      difficulty = "normal";
+      enable-command-block = true;
+      enable-jmx-monitoring = true;
+      enable-rcon = true;
+      enforce-secure-profile = false;
+      generate-structures = false;
+      level-name = "lifeworld";
+      max-players = 70;
+      motd = "§l§r                 §b§lOyasai§f§lServer§7 [v${version}]§r\\n§l§f            建築勢は集合だ！建築！建築！建築！！！";
+      network-compression-threshold = 96;
+      pvp = false;
+      simulation-distance = 16;
+      spawn-animals = false;
+      spawn-npcs = false;
+      spawn-protection = 0;
+      sync-chunk-writes = false;
+      view-distance = 32;
+      # keep-sorted end
+    };
 
     plugins = with oyasai-plugin-registry.forVersion version; [
       # keep-sorted start

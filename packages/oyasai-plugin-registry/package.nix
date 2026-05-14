@@ -33,7 +33,7 @@ let
         in
         lib.pipe registry [
           (lib.filterAttrs (_: versions: lib.hasAttr version versions))
-          (lib.mapAttrs (id: _: fetchurl lock.${id}.${version}))
+          (lib.mapAttrs (id: _: fetchurl (lock.${id}.${version} // { name = "${id}.jar"; })))
           (fromRegistry: fromRegistry // fromStatic // oyasai-plugins)
         ]
       );
