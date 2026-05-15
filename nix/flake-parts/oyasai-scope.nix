@@ -13,10 +13,16 @@
         let
           oyasaiScope = pkgs.callPackage ../oyasai-scope.nix { inherit inputs; };
           availableOnSystem = lib.meta.availableOn { inherit system; };
+          packages = lib.filterAttrs (_: v: lib.isDerivation v && availableOnSystem v) oyasaiScope;
         in
         {
           oyasai.scope = oyasaiScope;
-          packages = lib.filterAttrs (_: v: lib.isDerivation v && availableOnSystem v) oyasaiScope;
+
+          inherit packages;
+          checks = lib.foldlAttrs (
+            acc: name: package:
+            acc // lib.mapAttrs' (k: v: lib.nameValuePair "${name}-${k}" v) package.oyasai-tests or { }
+          ) { } packages;
         };
     }
   );
