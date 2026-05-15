@@ -17,12 +17,6 @@
       "type": "modrinth"
     }
   },
-  "chestcommands": {
-    "1.21.10": {
-      "type": "url",
-      "url": "https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar"
-    }
-  },
   "coreprotect": {
     "1.21.10": {
       "slug": "coreprotect",

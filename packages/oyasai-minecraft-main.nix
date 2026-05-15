@@ -44,7 +44,6 @@ let
       arceon
       bkcommonlib
       bluemap
-      chestcommands
       citiesskymine
       coreprotect
       crackshotguns
@@ -74,6 +73,7 @@ let
       nuvotifier
       openinv
       oyasaiadmintools
+      oyasaimenu
       oyasaipets
       oyasaiutilities
       oyasaivehicles

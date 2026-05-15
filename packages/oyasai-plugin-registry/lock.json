@@ -17,12 +17,6 @@
       "hash": "sha256-ox5s+64I2ogtRrL8PECSd4SrF/cNvk/rXQdVfcRdZaE="
     }
   },
-  "chestcommands": {
-    "1.21.10": {
-      "url": "https://repo.codemc.io/repository/maven-public/me/filoghost/chestcommands/chestcommands-plugin/4.0.5/chestcommands-plugin-4.0.5.jar",
-      "hash": "sha256-RBGAcGhhGruwZ6WKY01w1+PNjK9H63RTA2WSrhiW86Y="
-    }
-  },
   "coreprotect": {
     "1.21.10": {
       "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/HD2IvrxS/CoreProtect-CE-23.1.jar",
