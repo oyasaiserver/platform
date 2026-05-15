@@ -1,4 +1,4 @@
-{ prettier-plugins, ktfmt }:
+{ prettier-plugins }:
 {
   programs = {
     # keep-sorted start block=yes
@@ -16,6 +16,7 @@
     jsonfmt.enable = true;
     just.enable = true;
     keep-sorted.enable = true;
+    ktfmt.enable = true;
     mdformat = {
       enable = true;
       settings = {
@@ -59,11 +60,4 @@
     # keep-sorted end
   };
   settings.global.excludes = [ "*/gen/*" ];
-  settings.formatter.ktfmt = {
-    command = "${ktfmt}/bin/ktfmt";
-    includes = [
-      "*.kt"
-      "*.kts"
-    ];
-  };
 }

@@ -2,7 +2,11 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 apply(plugin = "com.diffplug.spotless")
 
+tasks.register("fmt") { dependsOn("spotlessApply") }
+
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+  // Enforced via treefmt
+  isEnforceCheck = false
   kotlin {
     target("plugins/**/*.kt")
     ktfmt()
