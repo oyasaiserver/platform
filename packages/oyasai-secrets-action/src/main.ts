@@ -83,7 +83,7 @@ async function main() {
 
   for (const { secretKey, secretValue } of secrets) {
     setSecret(secretValue);
-    if (!secretFilter.has(secretKey)) {
+    if (secretFilter.has(secretKey)) {
       exportVariable(secretKey, secretValue);
     }
   }

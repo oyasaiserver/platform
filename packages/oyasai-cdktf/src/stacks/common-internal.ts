@@ -3,7 +3,6 @@ import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
 import { R2BucketLifecycle } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket-lifecycle";
 import { R2CustomDomain } from "@oyasaiserver/cdktf-providers/cloudflare/r2-custom-domain";
 import { ActionsOrganizationVariable } from "@oyasaiserver/cdktf-providers/github/actions-organization-variable";
-import { ActionsSecret } from "@oyasaiserver/cdktf-providers/github/actions-secret";
 import { BranchDefault } from "@oyasaiserver/cdktf-providers/github/branch-default";
 import { GithubProvider } from "@oyasaiserver/cdktf-providers/github/provider";
 import { Repository } from "@oyasaiserver/cdktf-providers/github/repository";
@@ -189,31 +188,6 @@ export class CommonInternal extends OyasaiTerraformStack {
         variableName: "NIX_CACHE_SUBSTITUTER",
         value: `s3://${nixCacheBucket.name}?endpoint=${secrets.get("CLOUDFLARE_ACCOUNT_ID")}.r2.cloudflarestorage.com&compression=zstd`,
         visibility: "all",
-      },
-    );
-
-    // TODO: inject via OIDC? But that sounds too permissive... - shun 2026 04
-    new ActionsSecret(this, this.t("nix-cache-signing-key-actions-secret"), {
-      repository: platformRepository.name,
-      secretName: "NIX_CACHE_SIGNING_KEY",
-      value: secrets.get("NIX_CACHE_SIGNING_KEY"),
-    });
-    new ActionsSecret(
-      this,
-      this.t("platform-cloudflare-access-key-id-actions-secret"),
-      {
-        repository: platformRepository.name,
-        secretName: "CLOUDFLARE_ACCESS_KEY_ID",
-        value: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
-      },
-    );
-    new ActionsSecret(
-      this,
-      this.t("platform-cloudflare-secret-access-key-actions-secret"),
-      {
-        repository: platformRepository.name,
-        secretName: "CLOUDFLARE_SECRET_ACCESS_KEY",
-        value: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
       },
     );
 
