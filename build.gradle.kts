@@ -1,7 +1,24 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+apply(plugin = "com.diffplug.spotless")
+
+tasks.register("fmt") { dependsOn("spotlessApply") }
+
+configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+  // Enforced via treefmt
+  isEnforceCheck = false
+  kotlin {
+    target("plugins/**/*.kt")
+    ktfmt()
+  }
+  kotlinGradle {
+    target("*.gradle.kts", "plugins/**/*.gradle.kts")
+    ktfmt()
+  }
+}
+
 tasks.register<JavaExec>("lock") {
-  val gradle2nixHome = rootDir.resolve("packages/gradle2nix-gradle-plugin/gen")
+  val gradle2nixHome = rootDir.resolve("packages/gradle-plugins/gen/gradle2nix")
   classpath = files(fileTree(gradle2nixHome.resolve("lib")) { include("*.jar") })
   mainClass = "org.nixos.gradle2nix.MainKt"
   jvmArgs("-Dorg.nixos.gradle2nix.share=${gradle2nixHome.resolve("share")}")
@@ -12,6 +29,7 @@ buildscript {
   dependencies {
     classpath(libs.kotlin.plugin)
     classpath(libs.shadow.plugin)
+    classpath(libs.spotless.plugin)
   }
 
   repositories { mavenCentral() }
@@ -19,6 +37,7 @@ buildscript {
 
 allprojects {
   repositories {
+    maven(rootDir.resolve("packages/gradle-plugins/gen/ktfmt").toURI())
     mavenCentral()
     maven("https://nexus.frengor.com/repository/public/")
     maven("https://repo.purpurmc.org/snapshots")
@@ -35,7 +54,6 @@ subprojects {
   apply(plugin = "org.jetbrains.kotlin.jvm")
   apply(plugin = "com.gradleup.shadow")
   apply(plugin = "java-library")
-
   afterEvaluate {
     tasks.withType<Jar>().configureEach {
       if (name == "jar") {
