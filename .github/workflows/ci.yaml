@@ -13,6 +13,9 @@ jobs:
 
   nix-flake-check:
     runs-on: ${{ matrix.os }}
+    permissions:
+      id-token: write
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -30,15 +33,24 @@ jobs:
           extra_nix_config: |
             extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
             extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - uses: ./packages/oyasai-secrets-action
+        with:
+          env-slug: common
+          project-slug: platform
+          identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
+          secrets: |
+            CLOUDFLARE_ACCESS_KEY_ID
+            CLOUDFLARE_SECRET_ACCESS_KEY
+            NIX_CACHE_SIGNING_KEY
       - name: Configure Cloudflare R2 credentials
         run: |
-          sudo -i aws configure set aws_access_key_id "${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}"
-          sudo -i aws configure set aws_secret_access_key "${{ secrets.CLOUDFLARE_SECRET_ACCESS_KEY }}"
+          sudo -i aws configure set aws_access_key_id "$CLOUDFLARE_ACCESS_KEY_ID"
+          sudo -i aws configure set aws_secret_access_key "$CLOUDFLARE_SECRET_ACCESS_KEY"
       - name: Setup Nix S3 cache
         uses: ./packages/nix-copy-action
         with:
           endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
+          signing-key: "${{ env.NIX_CACHE_SIGNING_KEY }}"
       - run: nix run .#nix-flake-check-changed
 
   nix-flake-health:
@@ -56,6 +68,9 @@ jobs:
 
   nix-devshell:
     runs-on: ${{ matrix.os }}
+    permissions:
+      id-token: write
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -73,15 +88,24 @@ jobs:
           extra_nix_config: |
             extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
             extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - uses: ./packages/oyasai-secrets-action
+        with:
+          env-slug: common
+          project-slug: platform
+          identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
+          secrets: |
+            CLOUDFLARE_ACCESS_KEY_ID
+            CLOUDFLARE_SECRET_ACCESS_KEY
+            NIX_CACHE_SIGNING_KEY
       - name: Configure Cloudflare R2 credentials
         run: |
-          sudo -i aws configure set aws_access_key_id "${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}"
-          sudo -i aws configure set aws_secret_access_key "${{ secrets.CLOUDFLARE_SECRET_ACCESS_KEY }}"
+          sudo -i aws configure set aws_access_key_id "$CLOUDFLARE_ACCESS_KEY_ID"
+          sudo -i aws configure set aws_secret_access_key "$CLOUDFLARE_SECRET_ACCESS_KEY"
       - name: Setup Nix S3 cache
         uses: ./packages/nix-copy-action
         with:
           endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
+          signing-key: "${{ env.NIX_CACHE_SIGNING_KEY }}"
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
 
   push-to-ghcr:

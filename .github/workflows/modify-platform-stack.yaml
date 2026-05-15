@@ -45,24 +45,32 @@ jobs:
           extra_nix_config: |
             extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
             extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
-      - name: Configure Cloudflare R2 credentials
-        run: |
-          sudo -i aws configure set aws_access_key_id "${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}"
-          sudo -i aws configure set aws_secret_access_key "${{ secrets.CLOUDFLARE_SECRET_ACCESS_KEY }}"
-      - name: Setup Nix S3 cache
-        uses: ./packages/nix-copy-action
-        with:
-          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
-      - name: Compute docker image names
-        run: |
-          nix build .#all-docker-tags.json
-          echo "OYASAI_IMAGE_ID=$(<result tee /dev/stderr)" >> "$GITHUB_ENV"
       - uses: ./packages/oyasai-secrets-action
         with:
           env-slug: common
           project-slug: platform
           identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
+          secrets: |
+            CLOUDFLARE_ACCESS_KEY_ID
+            CLOUDFLARE_SECRET_ACCESS_KEY
+            TF_API_TOKEN
+            TF_TOKEN_app_terraform_io
+            CLOUDFLARE_API_TOKEN
+            NIX_CACHE_SIGNING_KEY
+            INFISICAL_TOKEN
+      - name: Configure Cloudflare R2 credentials
+        run: |
+          sudo -i aws configure set aws_access_key_id "$CLOUDFLARE_ACCESS_KEY_ID"
+          sudo -i aws configure set aws_secret_access_key "$CLOUDFLARE_SECRET_ACCESS_KEY"
+      - name: Setup Nix S3 cache
+        uses: ./packages/nix-copy-action
+        with:
+          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
+          signing-key: "${{ env.NIX_CACHE_SIGNING_KEY }}"
+      - name: Compute docker image names
+        run: |
+          nix build .#all-docker-tags.json
+          echo "OYASAI_IMAGE_ID=$(<result tee /dev/stderr)" >> "$GITHUB_ENV"
       - name: Create TF Workspace
         if: inputs.operation == 'deploy'
         run: |

@@ -5,6 +5,7 @@ jobs:
   push-to-ghcr:
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: read
       packages: write
     steps:
@@ -14,15 +15,24 @@ jobs:
           path: "~/.cache/nix"
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f
+      - uses: ./packages/oyasai-secrets-action
+        with:
+          env-slug: common
+          project-slug: platform
+          identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
+          secrets: |
+            CLOUDFLARE_ACCESS_KEY_ID
+            CLOUDFLARE_SECRET_ACCESS_KEY
+            NIX_CACHE_SIGNING_KEY
       - name: Configure Cloudflare R2 credentials
         run: |
-          sudo -i aws configure set aws_access_key_id "${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}"
-          sudo -i aws configure set aws_secret_access_key "${{ secrets.CLOUDFLARE_SECRET_ACCESS_KEY }}"
+          sudo -i aws configure set aws_access_key_id "$CLOUDFLARE_ACCESS_KEY_ID"
+          sudo -i aws configure set aws_secret_access_key "$CLOUDFLARE_SECRET_ACCESS_KEY"
       - name: Setup Nix S3 cache
         uses: ./packages/nix-copy-action
         with:
           endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: "${{ secrets.NIX_CACHE_SIGNING_KEY }}"
+          signing-key: "${{ env.NIX_CACHE_SIGNING_KEY }}"
       - uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
         with:
           registry: ghcr.io

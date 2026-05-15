@@ -23,6 +23,9 @@ inputs:
     description: Path within the project to fetch secrets from.
     required: false
     default: "/"
+  secrets:
+    description: Newline-separated list of secret names to inject.
+    required: true
 
 runs:
   using: node24
