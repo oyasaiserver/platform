@@ -124,7 +124,7 @@ jobs:
           java-version: "25"
           cache: gradle
       - run: |
-          ./gradlew build --parallel
+          ./gradlew build --parallel --configuration-cache
           ./gradlew fmt
           ./gradlew lock
 
