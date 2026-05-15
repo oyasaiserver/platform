@@ -5,11 +5,11 @@ apply(plugin = "com.diffplug.spotless")
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
   kotlin {
     target("plugins/**/*.kt")
-    ktfmt("0.51")
+    ktfmt()
   }
   kotlinGradle {
     target("*.gradle.kts", "plugins/**/*.gradle.kts")
-    ktfmt("0.51")
+    ktfmt()
   }
 }
 
@@ -33,6 +33,7 @@ buildscript {
 
 allprojects {
   repositories {
+    maven(rootDir.resolve("packages/ktfmt-plugin/gen").toURI())
     mavenCentral()
     maven("https://nexus.frengor.com/repository/public/")
     maven("https://repo.purpurmc.org/snapshots")
