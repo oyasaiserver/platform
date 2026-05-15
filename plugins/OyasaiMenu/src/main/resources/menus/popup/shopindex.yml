@@ -14,7 +14,7 @@ items:
       - ""
       - "&eクリックで開く"
     actions:
-      - {open_shop: "blocks",}
+      - {open_shop: "blocks"}
 
   decorations:
     slot: 30
@@ -25,7 +25,7 @@ items:
       - ""
       - "&eクリックで開く"
     actions:
-      - {open_shop: "decorations",}
+      - {open_shop: "decorations"}
 
   ores:
     slot: 21
@@ -36,7 +36,7 @@ items:
       - ""
       - "&eクリックで開く"
     actions:
-      - {open_shop: "ores",}
+      - {open_shop: "ores"}
 
   tools:
     slot: 12
@@ -47,7 +47,7 @@ items:
       - ""
       - "&eクリックで開く"
     actions:
-      - {open_shop: "tools",}
+      - {open_shop: "tools"}
 
   pointshop:
     slot: 3

@@ -1,7 +1,6 @@
 blocks:
-  name: "&1ブロック"
-  rows: 6
-  command: "blocks"
+  name: '&1ブロック'
+  command: 'blocks'
   items:
     - oak_log 5 1
     - oak_wood 5 1
@@ -427,8 +426,7 @@ blocks:
     - budding_amethyst 10 1
 
 decorations:
-  name: "&1装飾"
-  rows: 6
+  name: '&1装飾'
   items:
     - oak_sign 10 1
     - spruce_sign 10 1
@@ -442,6 +440,30 @@ decorations:
     - crimson_sign 10 1
     - warped_sign 10 1
     - bamboo_sign 10 1
+    - oak_hanging_sign 10 1
+    - spruce_hanging_sign 10 1
+    - birch_hanging_sign 10 1
+    - jungle_hanging_sign 10 1
+    - acacia_hanging_sign 10 1
+    - dark_oak_hanging_sign 10 1
+    - mangrove_hanging_sign 10 1
+    - cherry_hanging_sign 10 1
+    - pale_oak_hanging_sign 10 1
+    - crimson_hanging_sign 10 1
+    - warped_hanging_sign 10 1
+    - bamboo_hanging_sign 10 1
+    - oak_shelf 10 1
+    - spruce_shelf 10 1
+    - birch_shelf 10 1
+    - jungle_shelf 10 1
+    - acacia_shelf 10 1
+    - dark_oak_shelf 10 1
+    - mangrove_shelf 10 1
+    - cherry_shelf 10 1
+    - pale_oak_shelf 10 1
+    - bamboo_shelf 10 1
+    - crimson_shelf 10 1
+    - warped_shelf 10 1
     - oak_fence 10 1
     - spruce_fence 10 1
     - birch_fence 10 1
@@ -479,18 +501,6 @@ decorations:
     - crimson_door 10 1
     - warped_door 10 1
     - bamboo_door 10 1
-    - oak_hanging_sign 10 1
-    - spruce_hanging_sign 10 1
-    - birch_hanging_sign 10 1
-    - jungle_hanging_sign 10 1
-    - acacia_hanging_sign 10 1
-    - dark_oak_hanging_sign 10 1
-    - mangrove_hanging_sign 10 1
-    - cherry_hanging_sign 10 1
-    - pale_oak_hanging_sign 10 1
-    - crimson_hanging_sign 10 1
-    - warped_hanging_sign 10 1
-    - bamboo_hanging_sign 10 1
     - oak_trapdoor 10 1
     - spruce_trapdoor 10 1
     - birch_trapdoor 10 1
@@ -538,7 +548,7 @@ decorations:
     - iron_trapdoor 10 1
     - heavy_weighted_pressure_plate 10 1
     - light_weighted_pressure_plate 10 1
-    - chain 10 1
+    - iron_chain 10 1
     - waxed_copper_door 10 1
     - waxed_exposed_copper_door 10 1
     - waxed_weathered_copper_door 10 1
@@ -547,6 +557,31 @@ decorations:
     - waxed_exposed_copper_trapdoor 10 1
     - waxed_weathered_copper_trapdoor 10 1
     - waxed_oxidized_copper_trapdoor 10 1
+    - copper_torch 10 1
+    - waxed_copper_chest 10 1
+    - waxed_exposed_copper_chest 10 1
+    - waxed_weathered_copper_chest 10 1
+    - waxed_oxidized_copper_chest 10 1
+    - waxed_copper_lantern 10 1
+    - waxed_exposed_copper_lantern 10 1
+    - waxed_weathered_copper_lantern 10 1
+    - waxed_oxidized_copper_lantern 10 1
+    - waxed_lightning_rod 10 1
+    - waxed_exposed_lightning_rod 10 1
+    - waxed_weathered_lightning_rod 10 1
+    - waxed_oxidized_lightning_rod 10 1
+    - waxed_copper_golem_statue 10 1
+    - waxed_exposed_copper_golem_statue 10 1
+    - waxed_weathered_copper_golem_statue 10 1
+    - waxed_oxidized_copper_golem_statue 10 1
+    - waxed_copper_bars 10 1
+    - waxed_exposed_copper_bars 10 1
+    - waxed_weathered_copper_bars 10 1
+    - waxed_oxidized_copper_bars 10 1
+    - waxed_copper_chain 10 1
+    - waxed_exposed_copper_chain 10 1
+    - waxed_weathered_copper_chain 10 1
+    - waxed_oxidized_copper_chain 10 1
     - white_carpet 10 1
     - light_gray_carpet 10 1
     - gray_carpet 10 1
@@ -860,8 +895,7 @@ decorations:
     - cake 10 1
 
 ores:
-  name: "&1鉱石"
-  rows: 4
+  name: '&1鉱石'
   items:
     - diamond 50 5
     - gold_ingot 50 5
@@ -910,8 +944,7 @@ ores:
     - netherite_block 2160000 216000
 
 tools:
-  name: "&1ツール"
-  rows: 3
+  name: '&1ツール'
   items:
     - $pickaxe_normal 500000 0
     - $pickaxe_normal_f 700000 0

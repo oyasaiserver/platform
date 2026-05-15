@@ -16,7 +16,7 @@ items:
       - ""
       - "&eクリックで開く"
     actions:
-      - {open_macro: true,}
+      - {open_macro: true}
 
   empty1:
     slot: 7

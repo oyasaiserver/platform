@@ -7,17 +7,17 @@ data class PointShopCategory(
     val displayName: String,
     val items: Map<String, PointShopItem>
 ) {
-  val itemsPerPage: Int = 45
-  val itemList: List<PointShopItem> =
-      items.entries.sortedBy { it.key.toIntOrNull() ?: Int.MAX_VALUE }.map { it.value }
-  val pageCount: Int
-    get() = maxOf(1, (itemList.size + itemsPerPage - 1) / itemsPerPage)
+    val itemsPerPage: Int = 45
+    val itemList: List<PointShopItem> = items.entries
+        .sortedBy { it.key.toIntOrNull() ?: Int.MAX_VALUE }
+        .map { it.value }
+    val pageCount: Int get() = maxOf(1, (itemList.size + itemsPerPage - 1) / itemsPerPage)
 
-  fun getPage(page: Int): List<PointShopItem> {
-    val start = page * itemsPerPage
-    val end = minOf(start + itemsPerPage, itemList.size)
-    return if (start >= itemList.size) emptyList() else itemList.subList(start, end)
-  }
+    fun getPage(page: Int): List<PointShopItem> {
+        val start = page * itemsPerPage
+        val end   = minOf(start + itemsPerPage, itemList.size)
+        return if (start >= itemList.size) emptyList() else itemList.subList(start, end)
+    }
 }
 
 data class PointShopItem(
@@ -32,4 +32,7 @@ data class PointShopItem(
     val customTexture: String? = null
 )
 
-data class PlayerPointShopState(val categoryId: String, val page: Int = 0)
+data class PlayerPointShopState(
+    val categoryId: String,
+    val page: Int = 0
+)

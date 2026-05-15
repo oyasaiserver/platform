@@ -16,7 +16,7 @@ items:
       - "&eクリックでURLを表示"
     actions:
       - {url: "http://wiki.oyasai.io/"}
-      - {close: true,}
+      - {close: true}
 
   discord:
     slot: 35
@@ -29,7 +29,7 @@ items:
       - "&eクリックでURLを表示"
     actions:
       - {url: "https://discord.gg/rgKayZPW6X"}
-      - {close: true,}
+      - {close: true}
 
   webmap:
     slot: 26
@@ -42,7 +42,7 @@ items:
       - "&eクリックでURLを表示"
     actions:
       - {url: "http://oyasai.io:8100"}
-      - {close: true,}
+      - {close: true}
 
   vote_jms:
     slot: 17
@@ -55,7 +55,7 @@ items:
       - "&eクリックでURLを表示"
     actions:
       - {url: "https://minecraft.jp/servers/oyasai.io/vote"}
-      - {close: true,}
+      - {close: true}
 
   vote_mineportal:
     slot: 8

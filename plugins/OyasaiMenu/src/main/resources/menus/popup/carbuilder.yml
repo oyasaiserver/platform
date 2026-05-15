@@ -15,7 +15,7 @@ items:
       - ""
       - "&eクリックで開く"
     actions:
-      - {player_cmd: "rvmenu",}
+      - {player_cmd: "rvmenu"}
 
   empty1:
     slot: 5

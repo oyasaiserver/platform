@@ -16,7 +16,7 @@ items:
       - "&eクリックで実行"
     actions:
       - {player_cmd: "slbuild"}
-      - {close: true,}
+      - {close: true}
 
   my_builds:
     slot: 31
@@ -28,7 +28,7 @@ items:
       - "&eクリックで実行"
     actions:
       - {player_cmd: "sluser %player%"}
-      - {close: true,}
+      - {close: true}
 
   sl_menu:
     slot: 22
@@ -41,7 +41,7 @@ items:
       - "&eクリックで開く"
     actions:
       - {player_cmd: "slmenu"}
-      - {close: true,}
+      - {close: true}
 
   near:
     slot: 13
@@ -53,7 +53,7 @@ items:
       - "&eクリックで実行"
     actions:
       - {player_cmd: "slnear"}
-      - {close: true,}
+      - {close: true}
 
   vtp:
     slot: 4
@@ -66,7 +66,7 @@ items:
       - "&eクリックで実行"
     actions:
       - {player_cmd: "vtp"}
-      - {close: true,}
+      - {close: true}
 
   vtp_biome:
     slot: 5
