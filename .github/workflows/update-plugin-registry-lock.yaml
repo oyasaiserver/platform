@@ -7,6 +7,7 @@ jobs:
   update:
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: write
       pull-requests: write
     steps:
@@ -20,14 +21,23 @@ jobs:
           extra_nix_config: |
             extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
             extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - uses: ./packages/oyasai-secrets-action
+        with:
+          env-slug: common
+          project-slug: platform
+          identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
+          secrets: |
+            CLOUDFLARE_ACCESS_KEY_ID
+            CLOUDFLARE_SECRET_ACCESS_KEY
+            NIX_CACHE_SIGNING_KEY
       - name: Configure Cloudflare R2 credentials
         run: |
-          sudo -i aws configure set aws_access_key_id "${{ secrets.CLOUDFLARE_ACCESS_KEY_ID }}"
-          sudo -i aws configure set aws_secret_access_key "${{ secrets.CLOUDFLARE_SECRET_ACCESS_KEY }}"
+          sudo -i aws configure set aws_access_key_id "$CLOUDFLARE_ACCESS_KEY_ID"
+          sudo -i aws configure set aws_secret_access_key "$CLOUDFLARE_SECRET_ACCESS_KEY"
       - uses: ./packages/nix-copy-action
         with:
           endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: ${{ secrets.NIX_CACHE_SIGNING_KEY }}
+          signing-key: ${{ env.NIX_CACHE_SIGNING_KEY }}
 
       - name: Update lock.json
         working-directory: packages/oyasai-plugin-registry

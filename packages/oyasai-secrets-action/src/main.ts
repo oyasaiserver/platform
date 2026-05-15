@@ -1,3 +1,4 @@
+import { EOL } from "node:os";
 import {
   exportVariable,
   getIDToken,
@@ -57,11 +58,20 @@ async function main() {
   const envSlug = getInput("env-slug", { required: true });
   const projectSlug = getInput("project-slug", { required: true });
   const secretPath = getInput("secret-path");
+  const secretsInput = getInput("secrets", { required: true });
+  const secretFilter = new Set(
+    secretsInput
+      .split(EOL)
+      .map((s) => s.trim())
+      .filter(Boolean),
+  );
 
   const infisicalToken = await oidcLogin(domain, identityId, oidcAudience);
 
   setSecret(infisicalToken);
-  exportVariable("INFISICAL_TOKEN", infisicalToken);
+  if (secretFilter.has("INFISICAL_TOKEN")) {
+    exportVariable("INFISICAL_TOKEN", infisicalToken);
+  }
 
   const secrets = await getSecrets({
     domain,
@@ -73,7 +83,9 @@ async function main() {
 
   for (const { secretKey, secretValue } of secrets) {
     setSecret(secretValue);
-    exportVariable(secretKey, secretValue);
+    if (secretFilter.has(secretKey)) {
+      exportVariable(secretKey, secretValue);
+    }
   }
 }
 
