@@ -5,3 +5,4 @@
 **/gen/**   linguist-generated=true
 *lock.json  linguist-generated=true
 gradle.lock linguist-generated=true
+*generated* linguist-generated=true

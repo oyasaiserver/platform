@@ -20,6 +20,7 @@
             nixd
             nodejs
             npm-list
+            nvfetcher
             restic
             terraform
             typescript-language-server
