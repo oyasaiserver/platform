@@ -122,7 +122,7 @@ jobs:
         with:
           distribution: temurin
           java-version: "25"
-      - uses: gradle/actions/setup-gradle@11d4d83c63a6ce61b32d8a9c4faddbdb04fe9917
+          cache: gradle
       - run: |
           ./gradlew build --parallel
           ./gradlew fmt
