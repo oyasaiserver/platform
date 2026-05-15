@@ -1,13 +1,11 @@
 package icu.oyasai.citiesskymine.road
 
 import com.sk89q.worldedit.EditSession
-import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
 import kotlin.math.*
 import org.bukkit.Location
 import org.bukkit.World
-import org.bukkit.entity.Player
 
 object IntersectionBuilder {
 
@@ -19,21 +17,13 @@ object IntersectionBuilder {
    * 2. 中央ディスク（半径 = totalHW）: 道路素材で上書き → 白線の重複/途切れを解消
    * 3. コーナーフィレット（隣り合う腕の間ギャップ）: 歩道素材で丸め
    */
-  fun build(
-      player: Player,
+  fun buildInto(
+      editSession: EditSession,
       world: World,
       center: Location,
       session: IntersectionSession,
       settings: RoadSettings
-  ): EditSession {
-    val weWorld = BukkitAdapter.adapt(world)
-    val editSession =
-        WorldEdit.getInstance()
-            .newEditSessionBuilder()
-            .world(weWorld)
-            .actor(BukkitAdapter.adapt(player))
-            .build()
-
+  ) {
     val cx = center.blockX.toDouble()
     val cy = center.blockY.toDouble()
     val cz = center.blockZ.toDouble()
@@ -86,21 +76,6 @@ object IntersectionBuilder {
         }
       }
     }
-
-    editSession.close()
-    return editSession
-  }
-
-  fun undo(player: Player, world: World, editSession: EditSession) {
-    val weWorld = BukkitAdapter.adapt(world)
-    val undoSession =
-        WorldEdit.getInstance()
-            .newEditSessionBuilder()
-            .world(weWorld)
-            .actor(BukkitAdapter.adapt(player))
-            .build()
-    editSession.undo(undoSession)
-    undoSession.close()
   }
 
   // ──────────────────────────────────────────────────

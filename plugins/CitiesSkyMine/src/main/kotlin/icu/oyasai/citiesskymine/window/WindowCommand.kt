@@ -6,16 +6,15 @@ import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
-import icu.oyasai.citiesskymine.undo.CsmUndoManager
 import icu.oyasai.citiesskymine.util.MessageUtil
+import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.util.LinkedHashMap
-import java.util.UUID
 import kotlin.math.roundToInt
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
-import org.bukkit.block.BlockState
 import org.bukkit.block.data.Bisected
+import org.bukkit.block.data.BlockData
 import org.bukkit.block.data.type.TrapDoor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -24,9 +23,6 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
-
-  private val undoSnapshots = object : LinkedHashMap<UUID, WindowUndoSnapshot>(8, 0.75f, true) {}
-  private var lastUndoKey: UUID? = null
 
   override fun onCommand(
       sender: CommandSender,
@@ -41,7 +37,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     if (!plugin.access.require(sender, CommandKey.WINDOW)) return true
 
     if (args.getOrNull(0)?.equals("undo", ignoreCase = true) == true) {
-      undo(sender, args.getOrNull(1)?.equals("last", ignoreCase = true) == true)
+      MessageUtil.info(sender, "窓生成の取り消しは FAWE の //undo を使ってください。")
       return true
     }
 
@@ -85,24 +81,46 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       return true
     }
 
-    rememberUndo(
-        sender.uniqueId,
-        WindowUndoSnapshot(sender.uniqueId, (windowTargets + fillTargets).map { it.state }))
-    plugin.undoManager.record(sender, CsmUndoManager.Source.WINDOW)
-
+    val placements = ArrayList<WindowPlacement>()
     for (y in 0 until height) {
       for (offset in leftOffset..rightOffset) {
         val frameFace = trapdoorFace(offset, leftOffset, rightOffset, facing, lateralPositive)
-        placeFrame(blockAt(base, lateralPositive, offset, facing, 0, y), materials.frame, frameFace)
-        blockAt(base, lateralPositive, offset, facing, 1, y).setType(materials.glass, false)
-        blockAt(base, lateralPositive, offset, facing, 2, y).setType(materials.backing, false)
+        placements.add(
+            WindowPlacement(
+                blockAt(base, lateralPositive, offset, facing, 0, y),
+                frameData(materials.frame, frameFace)))
+        placements.add(
+            WindowPlacement(
+                blockAt(base, lateralPositive, offset, facing, 1, y),
+                materials.glass.createBlockData()))
+        placements.add(
+            WindowPlacement(
+                blockAt(base, lateralPositive, offset, facing, 2, y),
+                materials.backing.createBlockData()))
       }
     }
     val filledBlocks = ArrayList<Block>()
     for (block in fillTargets) {
       if (!block.type.isAir) continue
-      block.setType(fillMaterial, false)
+      placements.add(WindowPlacement(block, fillMaterial.createBlockData()))
       filledBlocks.add(block)
+    }
+
+    var faweUndoRecorded = false
+    try {
+      val result =
+          CsmEditSession.run(sender, plugin.logger) { editSession ->
+            for (placement in placements) {
+              editSession.setBlock(
+                  BlockVector3.at(placement.block.x, placement.block.y, placement.block.z),
+                  BukkitAdapter.adapt(placement.data))
+            }
+            true
+          }
+      faweUndoRecorded = result.undoRecorded
+    } catch (e: Exception) {
+      MessageUtil.error(sender, "窓生成に失敗しました: ${e.message}")
+      return true
     }
 
     val selectionApplied =
@@ -123,7 +141,12 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     MessageUtil.success(
         sender,
-        "窓を生成しました: ${width}x$height / frame=${materials.frame.key.key} / glass=${materials.glass.key.key} / backing=${materials.backing.key.key} / fill=${filledBlocks.size} / /csm window undo で復元できます")
+        "窓を生成しました: ${width}x$height / frame=${materials.frame.key.key} / glass=${materials.glass.key.key} / backing=${materials.backing.key.key} / fill=${filledBlocks.size}")
+    if (faweUndoRecorded) {
+      MessageUtil.info(sender, "FAWE の //undo でこの窓生成を取り消せます。")
+    } else {
+      MessageUtil.warn(sender, "窓生成は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
+    }
     if (selectionApplied) {
       MessageUtil.info(sender, "横方向 stack 用に窓範囲を選択しました。")
     }
@@ -136,13 +159,6 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       alias: String,
       args: Array<String>
   ): List<String> {
-    if (args.getOrNull(0)?.equals("undo", ignoreCase = true) == true) {
-      return when (args.size) {
-        2 -> listOf("last").filter { it.startsWith(args[1], ignoreCase = true) }
-        else -> emptyList()
-      }
-    }
-
     val materialSuggestions =
         listOf(
             "IRON_TRAPDOOR",
@@ -156,7 +172,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     return when (args.size) {
       1 ->
-          (listOf("undo", "2", "3", "4", "5", "6") + materialSuggestions).filter {
+          (listOf("2", "3", "4", "5", "6") + materialSuggestions).filter {
             it.startsWith(args[0], ignoreCase = true)
           }
       2 ->
@@ -266,15 +282,14 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           ?.let { Material.matchMaterial(it) }
           ?.takeIf { it.isBlock }
 
-  private fun placeFrame(block: Block, material: Material, facing: BlockFace) {
-    block.setType(material, false)
+  private fun frameData(material: Material, facing: BlockFace): BlockData {
     val data = material.createBlockData()
     if (data is TrapDoor) {
       data.facing = facing
       data.isOpen = true
       data.half = Bisected.Half.BOTTOM
-      block.setBlockData(data, false)
     }
+    return data
   }
 
   private fun targetBlocks(
@@ -383,53 +398,6 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
   private fun blockKey(block: Block): String = "${block.world.uid}:${block.x}:${block.y}:${block.z}"
 
-  fun undo(player: Player, useLast: Boolean): Boolean {
-    val snapshot = takeUndo(if (useLast) lastUndoKey else player.uniqueId)
-    if (snapshot == null) {
-      MessageUtil.error(player, "復元できる窓生成履歴がありません。")
-      return false
-    }
-
-    for (state in snapshot.states) {
-      state.update(true, false)
-    }
-    MessageUtil.success(player, "窓生成を復元しました: ${snapshot.states.size} blocks")
-    plugin.undoManager.takeLatest(player, CsmUndoManager.Source.WINDOW)
-    return true
-  }
-
-  private fun rememberUndo(key: UUID, snapshot: WindowUndoSnapshot) {
-    synchronized(undoSnapshots) {
-      undoSnapshots[key] = snapshot
-      lastUndoKey = key
-      trimUndoSnapshots()
-    }
-  }
-
-  private fun takeUndo(key: UUID?): WindowUndoSnapshot? {
-    synchronized(undoSnapshots) {
-      val snapshot = key?.let { undoSnapshots.remove(it) } ?: return null
-      if (lastUndoKey == key) {
-        lastUndoKey = undoSnapshots.entries.lastOrNull()?.key
-      }
-      return snapshot
-    }
-  }
-
-  private fun trimUndoSnapshots() {
-    val maxSnapshots = plugin.config.getInt("limits.max-undo-snapshots-window", 8)
-    if (maxSnapshots <= 0) {
-      return
-    }
-    while (undoSnapshots.size > maxSnapshots) {
-      val first = undoSnapshots.entries.firstOrNull()?.key ?: break
-      undoSnapshots.remove(first)
-      if (lastUndoKey == first) {
-        lastUndoKey = undoSnapshots.entries.lastOrNull()?.key
-      }
-    }
-  }
-
   private fun blockAt(
       base: Block,
       lateralPositive: BlockFace,
@@ -504,5 +472,5 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val backing: Material
   )
 
-  private data class WindowUndoSnapshot(val playerId: UUID, val states: List<BlockState>)
+  private data class WindowPlacement(val block: Block, val data: BlockData)
 }

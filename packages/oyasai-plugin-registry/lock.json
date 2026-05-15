@@ -49,20 +49,20 @@
   },
   "essentialsx": {
     "1.21.10": {
-      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.22.0-dev+111-c38c925.jar",
-      "hash": "sha256-YBtiG7CqIqZlNG+gu1nCvFSJaej0oA+dFerzrRsbymg="
+      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsX-2.22.0-dev+112-5baf239.jar",
+      "hash": "sha256-X7xAnAFPbVxLMvi4rTS/vXSsZ9wb0YT+lj6m1Htg5oU="
     }
   },
   "essentialsxchat": {
     "1.21.10": {
-      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXChat-2.22.0-dev+111-c38c925.jar",
-      "hash": "sha256-LmdXELUmQYjPff+PBp26OmPKrGDIYuC7jGNEBOGc3r4="
+      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXChat-2.22.0-dev+112-5baf239.jar",
+      "hash": "sha256-byhmaH+KoVjk88XFCxHX7k7jt7qenuDtJkHYkWRaN4k="
     }
   },
   "essentialsxspawn": {
     "1.21.10": {
-      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXSpawn-2.22.0-dev+111-c38c925.jar",
-      "hash": "sha256-0Pdqd37MZCP/3I8I8kNllcDD6ZDXBLZtdIHPS6/AsoA="
+      "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXSpawn-2.22.0-dev+112-5baf239.jar",
+      "hash": "sha256-TVCKrAe29k8Fh/xIH+FeXQoWc89iiv69up3KF7L75Y4="
     }
   },
   "fastasyncworldedit": {
@@ -79,8 +79,8 @@
   },
   "geyser": {
     "1.21.10": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1144/downloads/spigot",
-      "hash": "sha256-eItmoEzZNCdlb6opfQyNxtyMki9kQLrtxhs9NIYmxz8="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1147/downloads/spigot",
+      "hash": "sha256-/cvkMBdav/ac0iSrWqn7DlBCBhXiT118/Akr9+jZkgc="
     }
   },
   "gsit": {

@@ -1,37 +1,15 @@
 package icu.oyasai.citiesskymine.road
 
 import com.sk89q.worldedit.EditSession
-import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
 import kotlin.math.*
 import org.bukkit.Material
-import org.bukkit.World
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Bisected
 import org.bukkit.block.data.type.Stairs
-import org.bukkit.entity.Player
 
 object RoadBuilder {
-
-  /** 道路を FAWE EditSession でブロック設置し、アンドゥ用に EditSession を返す。 */
-  fun build(
-      player: Player,
-      world: World,
-      path: List<PathPoint>,
-      settings: RoadSettings
-  ): EditSession {
-    val weWorld = BukkitAdapter.adapt(world)
-    val editSession =
-        WorldEdit.getInstance()
-            .newEditSessionBuilder()
-            .world(weWorld)
-            .actor(BukkitAdapter.adapt(player))
-            .build()
-    buildInto(editSession, path, settings)
-    editSession.close()
-    return editSession
-  }
 
   /** 既存の EditSession に道路ブロックを追加する。 交差点の腕など、複数パスを同一セッションで扱う場合に使用する。 */
   internal fun buildInto(editSession: EditSession, path: List<PathPoint>, settings: RoadSettings) {
@@ -79,19 +57,6 @@ object RoadBuilder {
     // 3. 取り除いた角セルを埋める
     fillRemovedCornersWithNeighbors(
         pendingCornerFill, settings, hasLane, hasSidewalk, editSession, placed, occupancy)
-  }
-
-  /** 直前の設置をアンドゥする。 */
-  fun undo(player: Player, world: World, editSession: EditSession) {
-    val weWorld = BukkitAdapter.adapt(world)
-    val undoSession =
-        WorldEdit.getInstance()
-            .newEditSessionBuilder()
-            .world(weWorld)
-            .actor(BukkitAdapter.adapt(player))
-            .build()
-    editSession.undo(undoSession)
-    undoSession.close()
   }
 
   // heading(ラジアン) を最近傍のカーディナル方向へ変換。

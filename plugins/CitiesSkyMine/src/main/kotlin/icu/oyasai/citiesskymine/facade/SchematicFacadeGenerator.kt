@@ -1,8 +1,6 @@
 package icu.oyasai.citiesskymine.facade
 
 import com.sk89q.worldedit.EditSession
-import com.sk89q.worldedit.WorldEdit
-import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.extent.clipboard.Clipboard
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats
 import com.sk89q.worldedit.math.BlockVector3
@@ -57,16 +55,22 @@ object SchematicFacadeGenerator {
 
   // ── generate: tile N bays from the selected pattern ──────────────────
 
-  fun generate(player: Player, schemFile: File, bays: Int, patternId: String): EditSession? {
+  fun generateInto(
+      player: Player,
+      editSession: EditSession,
+      schemFile: File,
+      bays: Int,
+      patternId: String
+  ): Boolean {
     val pat = A.PATTERNS.firstOrNull { it.id == patternId } ?: A.PATTERNS[0]
-    val clip = load(schemFile, player) ?: return null
-    val (right, back, origin, es) = setup(player) ?: return null
+    val clip = load(schemFile, player) ?: return false
+    val (right, back, origin) = setup(player) ?: return false
 
     for (i in 0 until bays) {
       val srcX0 = pat.bayX0 + (i % pat.maxAvailBays) * pat.bayWidth
       pasteSlab(
           clip,
-          es,
+          editSession,
           origin,
           right,
           back,
@@ -79,34 +83,19 @@ object SchematicFacadeGenerator {
           worldX = i * pat.bayWidth)
     }
 
-    es.close()
-    return es
+    return true
   }
 
   // ── pasteFull: paste the whole schematic once ─────────────────────────
 
-  fun pasteFull(player: Player, schemFile: File): EditSession? {
-    val clip = load(schemFile, player) ?: return null
-    val (right, back, origin, es) = setup(player) ?: return null
+  fun pasteFullInto(player: Player, editSession: EditSession, schemFile: File): Boolean {
+    val clip = load(schemFile, player) ?: return false
+    val (right, back, origin) = setup(player) ?: return false
 
-    pasteSlab(clip, es, origin, right, back, 0, 130, A.Y0, 38, A.DZ_FRONT, A.DZ_BACK, worldX = 0)
+    pasteSlab(
+        clip, editSession, origin, right, back, 0, 130, A.Y0, 38, A.DZ_FRONT, A.DZ_BACK, worldX = 0)
 
-    es.close()
-    return es
-  }
-
-  // ── undo ──────────────────────────────────────────────────────────────
-
-  fun undo(player: Player, lastEs: EditSession) {
-    val weWorld = BukkitAdapter.adapt(player.world)
-    val undoEs =
-        WorldEdit.getInstance()
-            .newEditSessionBuilder()
-            .world(weWorld)
-            .actor(BukkitAdapter.adapt(player))
-            .build()
-    lastEs.undo(undoEs)
-    undoEs.close()
+    return true
   }
 
   // ── internals ─────────────────────────────────────────────────────────
@@ -114,8 +103,7 @@ object SchematicFacadeGenerator {
   private data class SetupResult(
       val right: BlockVector3,
       val back: BlockVector3,
-      val origin: BlockVector3,
-      val es: EditSession,
+      val origin: BlockVector3
   )
 
   private fun setup(player: Player): SetupResult? {
@@ -134,13 +122,7 @@ object SchematicFacadeGenerator {
     val face = hit.hitBlockFace ?: BlockFace.SOUTH
     val (right, back) = faceVectors(face)
     val origin = BlockVector3.at(block.x, block.y, block.z)
-    val es =
-        WorldEdit.getInstance()
-            .newEditSessionBuilder()
-            .world(BukkitAdapter.adapt(player.world))
-            .actor(BukkitAdapter.adapt(player))
-            .build()
-    return SetupResult(right, back, origin, es)
+    return SetupResult(right, back, origin)
   }
 
   @Suppress("DEPRECATION")

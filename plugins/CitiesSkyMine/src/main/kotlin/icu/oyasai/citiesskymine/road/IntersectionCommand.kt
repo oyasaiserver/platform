@@ -2,7 +2,7 @@ package icu.oyasai.citiesskymine.road
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
-import icu.oyasai.citiesskymine.undo.CsmUndoManager
+import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import kotlin.math.round
 import org.bukkit.Location
 import org.bukkit.command.Command
@@ -37,7 +37,7 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
       "here" -> handleHere(player, session)
       "set" -> handleSet(player, session, args)
       "build" -> handleBuild(player, session)
-      "undo" -> undo(player)
+      "undo" -> player.sendMessage("§e[RI] 取り消しは FAWE の //undo を使ってください。")
       "status" -> handleStatus(player, session)
       else -> sendHelp(player)
     }
@@ -154,22 +154,30 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
               player.sendMessage("§c[RI] まず §f/ri here §cで交差点の中心を設定してください。")
               return
             }
-    val roadSettings = plugin.getSession(player).settings
+    val roadSettings = plugin.getSession(player).settings.copy()
+    val buildSession = snapshot(session)
     player.sendMessage("§a[RI] 交差点を生成中…")
     val world = player.world
+    val buildCenter = center.clone()
 
     plugin.server.scheduler.runTaskAsynchronously(
         plugin,
         Runnable {
           try {
-            val editSession =
-                IntersectionBuilder.build(player, world, center, session, roadSettings)
+            val result =
+                CsmEditSession.run(world, player, plugin.logger) { editSession ->
+                  IntersectionBuilder.buildInto(
+                      editSession, world, buildCenter, buildSession, roadSettings)
+                  true
+                }
             plugin.server.scheduler.runTask(
                 plugin,
                 Runnable {
-                  session.lastEditSession = editSession
-                  plugin.undoManager.record(player, CsmUndoManager.Source.INTERSECTION)
-                  player.sendMessage("§a[RI] 交差点の設置が完了しました。")
+                  if (result.undoRecorded) {
+                    player.sendMessage("§a[RI] 交差点の設置が完了しました。§7//undo で取り消せます。")
+                  } else {
+                    player.sendMessage("§e[RI] 交差点の設置は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
+                  }
                 })
           } catch (e: Exception) {
             plugin.server.scheduler.runTask(
@@ -182,25 +190,14 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
         })
   }
 
-  fun undo(player: Player): Boolean {
-    val session = plugin.getIntersectionSession(player)
-    val editSession =
-        session.lastEditSession
-            ?: run {
-              player.sendMessage("§c[RI] 取り消す操作がありません。")
-              return false
-            }
-    try {
-      IntersectionBuilder.undo(player, player.world, editSession)
-      session.lastEditSession = null
-      player.sendMessage("§a[RI] 交差点の設置を取り消しました。")
-      plugin.undoManager.takeLatest(player, CsmUndoManager.Source.INTERSECTION)
-    } catch (e: Exception) {
-      player.sendMessage("§c[RI] アンドゥに失敗しました: ${e.message}")
-      return false
-    }
-    return true
-  }
+  private fun snapshot(session: IntersectionSession): IntersectionSession =
+      IntersectionSession().also {
+        it.arms = session.arms
+        it.armLength = session.armLength
+        it.cornerRadius = session.cornerRadius
+        it.rotationDeg = session.rotationDeg
+        it.center = session.center?.clone()
+      }
 
   private fun handleStatus(player: Player, session: IntersectionSession) {
     val s = plugin.getSession(player).settings
@@ -227,13 +224,13 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
     player.sendMessage("§f/ri set cornerradius <n> §7コーナーの丸め量")
     player.sendMessage("§f/ri set rotation <deg>   §7全体を手動回転（度）")
     player.sendMessage("§f/ri build                §7交差点ブロックを設置")
-    player.sendMessage("§f/ri undo                 §7最後の設置を取り消し")
+    player.sendMessage("§f//undo                   §7最後の交差点生成をFAWEで取り消し")
     player.sendMessage("§f/ri status               §7現在の設定を表示")
     player.sendMessage("§8道幅・歩道幅・素材は /rc set の設定を共有します。")
   }
 
   companion object {
-    private val SUBCOMMANDS = listOf("help", "here", "set", "build", "undo", "status")
+    private val SUBCOMMANDS = listOf("help", "here", "set", "build", "status")
     private val SET_PARAMS = listOf("arms", "armlength", "cornerradius", "rotation")
   }
 }

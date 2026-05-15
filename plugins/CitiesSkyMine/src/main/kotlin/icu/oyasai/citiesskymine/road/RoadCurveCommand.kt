@@ -2,7 +2,7 @@ package icu.oyasai.citiesskymine.road
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
-import icu.oyasai.citiesskymine.undo.CsmUndoManager
+import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import org.bukkit.Material
 import org.bukkit.block.data.type.Stairs
 import org.bukkit.command.Command
@@ -40,7 +40,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       "help" -> sendHelp(player)
       "reset" -> handleReset(player, session)
       "build" -> handleBuild(player, session)
-      "undo" -> undo(player)
+      "undo" -> player.sendMessage("§e[RC] 取り消しは FAWE の //undo を使ってください。")
       "set" -> handleSet(player, session, args)
       "status" -> handleStatus(player, session)
       "debugline" -> handleDebugLine(player, session, args)
@@ -129,17 +129,27 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
     player.sendMessage("§a[RC] 道路を生成中…（${path.size} サンプル点）")
     val world = player.world
+    val buildPath = path.toList()
+    val buildSettings = session.settings.copy()
 
     plugin.server.scheduler.runTaskAsynchronously(
         plugin,
         Runnable {
           try {
-            val editSession = RoadBuilder.build(player, world, path, session.settings)
-            session.lastEditSession = editSession
-            session.lastSmoothSession = null
-            plugin.undoManager.record(player, CsmUndoManager.Source.ROAD)
+            val result =
+                CsmEditSession.run(world, player, plugin.logger) { editSession ->
+                  RoadBuilder.buildInto(editSession, buildPath, buildSettings)
+                  true
+                }
             plugin.server.scheduler.runTask(
-                plugin, Runnable { player.sendMessage("§a[RC] 道路の設置が完了しました。") })
+                plugin,
+                Runnable {
+                  if (result.undoRecorded) {
+                    player.sendMessage("§a[RC] 道路の設置が完了しました。§7//undo で取り消せます。")
+                  } else {
+                    player.sendMessage("§e[RC] 道路の設置は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
+                  }
+                })
           } catch (e: Exception) {
             plugin.server.scheduler.runTask(
                 plugin,
@@ -149,34 +159,6 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
                 })
           }
         })
-  }
-
-  fun undo(player: Player): Boolean {
-    val session = plugin.getSession(player)
-    val (editSession, isSmooth) =
-        when {
-          session.lastSmoothSession != null -> session.lastSmoothSession!! to true
-          session.lastEditSession != null -> session.lastEditSession!! to false
-          else -> {
-            player.sendMessage("§c[RC] 取り消す操作がありません。")
-            return false
-          }
-        }
-    try {
-      RoadBuilder.undo(player, player.world, editSession)
-      if (isSmooth) {
-        session.lastSmoothSession = null
-        player.sendMessage("§a[RC] 白線スムージングの変更を取り消しました。")
-      } else {
-        session.lastEditSession = null
-        player.sendMessage("§a[RC] 道路の設置を取り消しました。")
-      }
-      plugin.undoManager.takeLatest(player, CsmUndoManager.Source.ROAD)
-    } catch (e: Exception) {
-      player.sendMessage("§c[RC] アンドゥに失敗しました: ${e.message}")
-      return false
-    }
-    return true
   }
 
   private fun handleSmoothLines(player: Player, session: RoadSession) {
@@ -194,18 +176,33 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
     player.sendMessage("§a[RC] 白線スムージングを実行中…（${path.size} サンプル点）")
     val world = player.world
+    val smoothPath = path.toList()
+    val smoothSettings = session.settings.copy()
 
     plugin.server.scheduler.runTaskAsynchronously(
         plugin,
         Runnable {
           try {
-            val result = WhiteLineSmoother.smooth(world, path, session.settings)
-            session.lastSmoothSession = result.editSession
-            plugin.undoManager.record(player, CsmUndoManager.Source.ROAD)
+            var affectedBlocks = 0
+            val result =
+                CsmEditSession.run(world, player, plugin.logger) { editSession ->
+                  val smoothResult =
+                      WhiteLineSmoother.smooth(editSession, smoothPath, smoothSettings)
+                  affectedBlocks = smoothResult.affectedBlocks
+                  affectedBlocks > 0
+                }
             plugin.server.scheduler.runTask(
                 plugin,
                 Runnable {
-                  player.sendMessage("§a[RC] 白線スムージング完了: §f${result.affectedBlocks} ブロック")
+                  val undoText =
+                      if (result.undoRecorded) {
+                        " §7//undo で取り消せます。"
+                      } else if (!result.changed) {
+                        " §7変更対象はありませんでした。"
+                      } else {
+                        " §eFAWE undo 履歴への登録に失敗しました。"
+                      }
+                  player.sendMessage("§a[RC] 白線スムージング完了: §f${affectedBlocks} ブロック$undoText")
                 })
           } catch (e: IllegalArgumentException) {
             plugin.server.scheduler.runTask(
@@ -370,7 +367,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     player.sendMessage("§fBone§7 を持ってブロック右クリック → 通過点追加（2点目から自動プレビュー）")
     player.sendMessage("§f/rc build     §7道路ブロックを設置")
     player.sendMessage("§f/rc smoothline §7白線を階段でスムージング")
-    player.sendMessage("§f/rc undo      §7最後の設置を取り消し")
+    player.sendMessage("§f//undo        §7最後の道路生成をFAWEで取り消し")
     player.sendMessage("§f/rc reset     §7通過点をリセット・プレビュー停止")
     player.sendMessage("§f/rc status    §7現在の設定を表示")
     player.sendMessage("§f/rc set <param> <val> [<param> <val> ...]  §7設定変更（複数一括可・プレビュー即時反映）")
@@ -387,8 +384,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
   companion object {
     private val SUBCOMMANDS =
-        listOf(
-            "help", "reset", "build", "smoothline", "undo", "set", "status", "debugline", "version")
+        listOf("help", "reset", "build", "smoothline", "set", "status", "debugline", "version")
     private val SET_PARAMS =
         listOf(
             "radius",
