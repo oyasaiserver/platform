@@ -104,6 +104,32 @@ jobs:
         env:
           NIX_CACHE_SUBSTITUTER: ${{ vars.NIX_CACHE_SUBSTITUTER }}
 
+  # TODO: sync with README
+  non-nix-development:
+    runs-on: ${{ matrix.os }}
+    permissions:
+      id-token: write
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/setup-java@b622de1dfa918ecc0ab28f40cd42e3c3752cd6c5
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@11d4d83c63a6ce61b32d8a9c4faddbdb04fe9917
+      - run: |
+          ./gradlew build --parallel
+          ./gradlew fmt
+          ./gradlew lock
+
+          git diff --exit-code
+
   push-to-ghcr:
     uses: ./.github/workflows/push-to-ghcr.yaml
     secrets: inherit
