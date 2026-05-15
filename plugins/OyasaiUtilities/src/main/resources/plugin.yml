@@ -30,9 +30,6 @@ commands:
   tpdata:
     description: "全てのプレイヤーのTP履歴を表示"
     permission: oyasaiutilities.tpdata
-  menu:
-    description: "メニューを開く(ChestCommandsへのフック)"
-    aliases: [omu, om]
 permissions:
   oyasaiutilities.timerbar:
     description: "TimerBarコマンドの使用権限"

@@ -3,7 +3,6 @@ package icu.oyasai.utilities
 import icu.oyasai.utilities.adminbp.AdminBP
 import icu.oyasai.utilities.creative_management.CreativeManagement
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
-import icu.oyasai.utilities.menu_gui.MenuCommand
 import icu.oyasai.utilities.notnbt.NotNBTEvent
 import icu.oyasai.utilities.ore_reappears.OreReappears
 import icu.oyasai.utilities.oresmelter.OreSmelter
@@ -27,7 +26,6 @@ class Main : JavaPlugin() {
     server.getPluginCommand("oresmelter")?.setExecutor(OreSmelter) // OreSmelterのコマンド
     server.getPluginCommand("uuid")?.setExecutor(GetUUIDCmd) // GetUUIDのコマンド
     server.getPluginCommand("timerbar")?.setExecutor(TimerCmd) // TimerBarのコマンド
-    server.getPluginCommand("menu")?.setExecutor(MenuCommand) // Menuのコマンド
     server.getPluginCommand("back")?.setExecutor(BackForwardCmd) // back コマンド
     server.getPluginCommand("forward")?.setExecutor(BackForwardCmd) // forward コマンド
 
