@@ -79,6 +79,16 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           hostPath: join(this.workdir, "mariadb"),
         },
       ],
+      healthcheck: {
+        test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root --password=\"$MARIADB_ROOT_PASSWORD\" --silent"],
+        interval: "10s",
+        timeout: "5s",
+        retries: 30,
+        startPeriod: "30s",
+      },
+      wait: true,
+      // NOMERGE
+      waitTimeout: 600,
     });
 
     const minecraftMainContainer = new Container(

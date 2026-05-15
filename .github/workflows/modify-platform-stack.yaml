@@ -20,6 +20,10 @@ on:
         type: boolean
         required: false
         default: false
+      restore-from-master:
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   run:
@@ -36,6 +40,21 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - name: Free Disk Space
+        if: inputs.restore-from-master
+        uses: endersonmenezes/free-disk-space@0ccff0c25686603b5721b1202f9fe8964a34bea5
+        with:
+          remove_android: true
+          remove_dotnet: true
+          remove_haskell: true
+          remove_tool_cache: true
+          remove_swap: true
+          remove_packages: "azure-cli google-cloud-cli microsoft-edge-stable google-chrome-stable firefox postgresql* temurin-* *llvm* mysql* dotnet-sdk-*"
+          remove_packages_one_command: true
+          remove_folders: "/usr/share/swift /usr/share/miniconda /usr/share/az* /usr/local/lib/node_modules /usr/local/share/chromium /usr/local/share/powershell /usr/local/julia /usr/local/aws-sam-cli /usr/share/gradle"
+          rm_cmd: "rmz"
+          rmz_version: "3.1.1"
+          testing: false
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
         with:
           key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
@@ -63,6 +82,38 @@ jobs:
           env-slug: common
           project-slug: platform
           identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
+      - name: Restore Minecraft world from master backup
+        if: inputs.restore-from-master
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.CLOUDFLARE_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.CLOUDFLARE_SECRET_ACCESS_KEY }}
+          RESTIC_REPOSITORY: "s3:https://${{ env.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com/oyasai-master-platform/minecraft-main-backup"
+        run: |
+          WORKDIR="/opt/platform/$ENVIRONMENT"
+          sudo install -d -o "$USER" -m 755 "$WORKDIR"
+          # Restore into $WORKDIR; restic recreates the /data prefix from the snapshot
+          nix run nixpkgs#restic -- restore latest --target "$WORKDIR" --verbose
+          # Rename /data (restic's restored prefix) to the expected volume mount name
+          mv "$WORKDIR/data" "$WORKDIR/minecraft-main"
+      - name: Restore MariaDB from master backup
+        if: inputs.restore-from-master
+        env:
+          AWS_ACCESS_KEY_ID: ${{ env.CLOUDFLARE_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.CLOUDFLARE_SECRET_ACCESS_KEY }}
+        run: |
+          WORKDIR="/opt/platform/$ENVIRONMENT"
+          sudo install -d -o "$USER" -m 755 "$WORKDIR/mariadb"
+          ENDPOINT="https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          # Find and download the latest dump from master's bucket
+          LATEST=$(aws s3 ls "s3://oyasai-master-platform/mariadb-backup/" \
+            --endpoint-url "$ENDPOINT" \
+            | sort | tail -1 | awk '{print $4}')
+          aws s3 cp "s3://oyasai-master-platform/mariadb-backup/$LATEST" \
+            /tmp/mariadb-restore.tgz \
+            --endpoint-url "$ENDPOINT"
+          # Extract individual per-database .sql files; docker-entrypoint-initdb.d
+          # processes these natively on first MariaDB start
+          tar xzf /tmp/mariadb-restore.tgz -C "$WORKDIR/mariadb"
       - name: Create TF Workspace
         if: inputs.operation == 'deploy'
         run: |
@@ -85,8 +136,11 @@ jobs:
       - name: Start Proxy
         if: inputs.start-proxy
         # It's free, feel free to increase
-        timeout-minutes: 20
+        # timeout-minutes: 20 NOMERGE
         run: |
           docker logs -f minecraft-main &
-          nix run .#bore-cli -- local 25565 \
-            --to bore.pub
+          while true; do
+            nix run .#bore-cli -- local 25565 --to bore.pub
+            echo "bore disconnected, reconnecting in 5s..."
+            sleep 5
+          done
