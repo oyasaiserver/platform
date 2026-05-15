@@ -104,6 +104,34 @@ jobs:
         env:
           NIX_CACHE_SUBSTITUTER: ${{ vars.NIX_CACHE_SUBSTITUTER }}
 
+  non-nix-development:
+    runs-on: ${{ matrix.os }}
+    permissions:
+      id-token: write
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/setup-java@b622de1dfa918ecc0ab28f40cd42e3c3752cd6c5
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: gradle
+      - run: |
+          ./gradlew build --parallel
+          ./gradlew fmt
+          ./gradlew lock
+
+          if git status --porcelain | grep . ; then
+            >&2 echo "Gradle-native workflow is drifting from Nix".
+            exit 1
+          fi
+
   push-to-ghcr:
     uses: ./.github/workflows/push-to-ghcr.yaml
     secrets: inherit

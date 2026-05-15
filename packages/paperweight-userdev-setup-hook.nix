@@ -26,17 +26,18 @@ let
         in
         ''
           dir="$GRADLE_USER_HOME/caches/paperweight-userdev/v2/work/vanillaServerDownloads_${cacheKey}"
-
           mkdir -p "$dir"
 
-          cp ${vanillaServerJar}/lib/minecraft/server.jar "$dir/vanillaServer.jar"
-          cp ${fetchurl mappings} "$dir/mojangServerMappings.txt"
+          serverJar="$dir/vanillaServer.jar"
+          mappings="$dir/mojangServerMappings.txt"
 
-          serverJarHash=$(sha256sum "$dir/vanillaServer.jar" | cut -d' ' -f1)
-          mappingsHash=$(sha256sum "$dir/mojangServerMappings.txt" | cut -d' ' -f1)
+          cp ${vanillaServerJar}/lib/minecraft/server.jar "$serverJar"
+          cp ${fetchurl mappings} "$mappings"
 
-          jq -n --arg h1 "$serverJarHash" --arg h2 "$mappingsHash" \
-            '{ outputHashes: [$h1, $h2], lastUsed: 0 }' \
+          jq -n \
+            --arg serverJarHash "$(sha256sum "$serverJar" | cut -d' ' -f1)" \
+            --arg mappingsHash "$(sha256sum "$mappings" | cut -d' ' -f1)" \
+            '{ outputHashes: [$serverJarHash, $mappingsHash], lastUsed: 0 }' \
             >"$dir/metadata.json"
         ''
       ) mojang-server-mappings}

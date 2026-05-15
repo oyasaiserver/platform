@@ -59,6 +59,7 @@ async function main() {
   const projectSlug = getInput("project-slug", { required: true });
   const secretPath = getInput("secret-path");
   const secretsInput = getInput("secrets", { required: true });
+
   const secretFilter = new Set(
     secretsInput
       .split(EOL)
