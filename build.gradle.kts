@@ -18,7 +18,7 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
 }
 
 tasks.register<JavaExec>("lock") {
-  val gradle2nixHome = rootDir.resolve("packages/gradle2nix-gradle-plugin/gen")
+  val gradle2nixHome = rootDir.resolve("packages/gradle-plugins/gen/gradle2nix")
   classpath = files(fileTree(gradle2nixHome.resolve("lib")) { include("*.jar") })
   mainClass = "org.nixos.gradle2nix.MainKt"
   jvmArgs("-Dorg.nixos.gradle2nix.share=${gradle2nixHome.resolve("share")}")
@@ -37,7 +37,7 @@ buildscript {
 
 allprojects {
   repositories {
-    maven(rootDir.resolve("packages/ktfmt-plugin/gen").toURI())
+    maven(rootDir.resolve("packages/gradle-plugins/gen/ktfmt").toURI())
     mavenCentral()
     maven("https://nexus.frengor.com/repository/public/")
     maven("https://repo.purpurmc.org/snapshots")
