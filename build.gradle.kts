@@ -1,5 +1,18 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+apply(plugin = "com.diffplug.spotless")
+
+configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+  kotlin {
+    target("plugins/**/*.kt")
+    ktfmt("0.51")
+  }
+  kotlinGradle {
+    target("*.gradle.kts", "plugins/**/*.gradle.kts")
+    ktfmt("0.51")
+  }
+}
+
 tasks.register<JavaExec>("lock") {
   val gradle2nixHome = rootDir.resolve("packages/gradle2nix-gradle-plugin/gen")
   classpath = files(fileTree(gradle2nixHome.resolve("lib")) { include("*.jar") })
@@ -12,6 +25,7 @@ buildscript {
   dependencies {
     classpath(libs.kotlin.plugin)
     classpath(libs.shadow.plugin)
+    classpath(libs.spotless.plugin)
   }
 
   repositories { mavenCentral() }
@@ -35,7 +49,6 @@ subprojects {
   apply(plugin = "org.jetbrains.kotlin.jvm")
   apply(plugin = "com.gradleup.shadow")
   apply(plugin = "java-library")
-
   afterEvaluate {
     tasks.withType<Jar>().configureEach {
       if (name == "jar") {
