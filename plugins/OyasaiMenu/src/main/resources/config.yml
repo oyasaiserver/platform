@@ -1,0 +1,56 @@
+# OyasaiMenu メインコンフィグ config.yml
+
+menu:
+  default: root
+
+macro:
+  max-per-player: 10
+  cooldown-seconds: 3
+  min-delay-ticks: 1
+
+  # 権限ごとのマクロ最大数。複数権限を持つ場合は最大値が採用される。
+  max-per-permission:
+    navis.takumi: 10
+    navis.blue: 20
+    navis.white: 30
+
+  # 1マクロあたりの最大コマンド数 (デフォルト)
+  max-commands-per-macro: 10
+
+  # 権限ごとの1マクロあたり最大コマンド数。複数権限を持つ場合は最大値が採用される。
+  max-commands-per-permission:
+    navis.takumi: 10
+    navis.blue: 20
+    navis.white: 30
+
+  # コマンドブラックリスト
+  # - コマンド名 (例: "warp") → /warp ** を許可
+  # - パーミッションノード (例: "fawe.select") → そのパーミッションを持つプレイヤーは
+  #   ブラックリスト検査を全スキップ (FAWE 等を使えるプレイヤー向け)
+  # - 空リストにすると全コマンドを許可 (ブラックリスト無効)
+  command-blacklist:
+  # - "warp"
+  # - "home"
+  # - "spawn"
+  # - "tpa"
+  # - "msg"
+  # - "r"
+  # パーミッションノードの例 (コメントアウト解除で有効化):
+  # - "fawe.select"      # FAWEを使えるプレイヤーは全コマンド許可
+  # - "oyasaimenu.macro.bypass"  # 独自バイパス権限
+
+placeholders:
+  server-name: "OyasaiServer"
+
+# ============================
+# クールダウン設定
+# ============================
+cooldown:
+  click-ms: 100
+  command-ms: 300
+
+# ============================
+# 販売ホワイトリスト設定
+# ============================
+sell-whitelist:
+  enabled: true

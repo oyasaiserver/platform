@@ -1,0 +1,332 @@
+# ユーティリティメニュー
+title: "&9ユーティリティ"
+glass: BLUE_STAINED_GLASS_PANE
+nav_active: 51
+
+items:
+  header_warp:
+    slot: 0
+    icon: CYAN_CANDLE
+    name: "&bワープ"
+    lore: ["&7ワープ先を選択"]
+  header_life:
+    slot: 9
+    icon: LIGHT_BLUE_CANDLE
+    name: "&b生活機能"
+    lore: ["&7便利コマンド"]
+  header_mode:
+    slot: 18
+    icon: BLUE_CANDLE
+    name: "&9モード変更"
+    lore: ["&7ゲームモードを切り替え"]
+  header_personal:
+    slot: 27
+    icon: PURPLE_CANDLE
+    name: "&5個人設定"
+    lore: ["&7個人設定"]
+  header_other:
+    slot: 36
+    icon: MAGENTA_CANDLE
+    name: "&dその他"
+    lore: ["&7その他の便利機能"]
+
+  spawn:
+    slot: 1
+    icon: RED_BED
+    name: "&cスポーン"
+    lore: ["&7/spawn"]
+    actions:
+      - {player_cmd: "spawn"}
+      - {close: true}
+  warp_shigen:
+    slot: 2
+    icon: OAK_LOG
+    name: "&a資源ワールド"
+    lore: ["&7/warp shigen"]
+    actions:
+      - {player_cmd: "warp shigen"}
+      - {close: true}
+  warp_shop:
+    slot: 3
+    icon: EMERALD
+    name: "&eおやさい商店街"
+    lore: ["&7/warp shop"]
+    actions:
+      - {player_cmd: "warp shop"}
+      - {close: true}
+  warp_pvp:
+    slot: 4
+    icon: IRON_SWORD
+    name: "&7PVPワールド"
+    lore: ["&7/warp pvp"]
+    actions:
+      - {player_cmd: "warp pvp"}
+      - {close: true}
+  warp_casino:
+    slot: 5
+    icon: GOLD_INGOT
+    name: "&6カジノ"
+    lore: ["&7/warp casino"]
+    actions:
+      - {player_cmd: "warp casino"}
+      - {close: true}
+  warp_endertt:
+    slot: 6
+    icon: EXPERIENCE_BOTTLE
+    name: "&aエンダーマントラップ"
+    lore:
+      - "&7エンチャントもできます"
+      - "&7/warp endertt"
+    actions:
+      - {player_cmd: "warp endertt"}
+      - {close: true,}
+
+  craft:
+    slot: 10
+    icon: CRAFTING_TABLE
+    name: "&f作業台"
+    lore: ["&7/craft"]
+    actions:
+      - {player_cmd: "craft"}
+      - {close: true}
+  ec:
+    slot: 11
+    icon: ENDER_CHEST
+    name: "&5エンダーチェスト"
+    lore: ["&7/ec"]
+    actions:
+      - {player_cmd: "ec"}
+      - {close: true}
+  bp:
+    slot: 12
+    icon: CHEST
+    name: "&6バックパック"
+    lore: ["&7/bp"]
+    actions:
+      - {player_cmd: "bp"}
+      - {close: true}
+  trash:
+    slot: 13
+    icon: PLAYER_HEAD
+    texture: "6ffb912612a06e7ebf865be50ce9ff609195efd19bbe497c61e228c73ef7757"
+    name: "&cゴミ箱"
+    lore: ["&7/d or /trash"]
+    actions:
+      - {player_cmd: "trash"}
+      - {close: true}
+  anvil:
+    slot: 14
+    icon: ANVIL
+    name: "&7金床"
+    lore: ["&7/anvil"]
+    actions:
+      - {player_cmd: "anvil"}
+      - {close: true}
+  grindstone:
+    slot: 15
+    icon: GRINDSTONE
+    name: "&f砥石"
+    lore: ["&7/grindstone"]
+    actions:
+      - {player_cmd: "grindstone"}
+      - {close: true}
+  loom:
+    slot: 16
+    icon: LOOM
+    name: "&d機織り機"
+    lore: ["&7/loom"]
+    actions:
+      - {player_cmd: "loom"}
+      - {close: true,}
+
+  fly:
+    slot: 19
+    icon: FEATHER
+    name: "&bfly 切り替え"
+    lore: ["&7/fly"]
+    required_permission: "essentials.fly"
+    fallback_icon: FEATHER
+    fallback_name: "&bfly 切り替え"
+    fallback_lore: ["&c※ポイント購入 or 上級者以上のランクが必要"]
+    actions:
+      - {player_cmd: "fly"}
+      - {close: true}
+  redbull:
+    slot: 20
+    icon: PLAYER_HEAD
+    texture: "766844d5e84f649451a87dacca7a73beaa04eea847d438de26c2d44d1e949de"
+    name: "&6レッドブルを飲む"
+    lore:
+      - "&7flyを強制的に有効にします"
+      - "&7/fly onも同じ効果を持ちます"
+    actions:
+      - {player_cmd: "redbull"}
+      - {close: true}
+    required_permission: "essentials.fly"
+    fallback_icon: PLAYER_HEAD
+    fallback_texture: "766844d5e84f649451a87dacca7a73beaa04eea847d438de26c2d44d1e949de"
+    fallback_name: "&6レッドブルを飲む"
+    fallback_lore:
+      - "&c20Pを消費してflyを有効にします"
+      - "&7ワールド移動後にflyが無効になる場合があります"
+    fallback_actions:
+      - {player_cmd: "redbull"}
+      - {close: true}
+  gms:
+    slot: 21
+    icon: GRASS_BLOCK
+    name: "&aサバイバルモード"
+    lore: ["&7/gms"]
+    required_permission: "essentials.gamemode.survival"
+    fallback_item:
+      id: COPPER_GOLEM_STATUE
+      count: 1
+      components:
+        "minecraft:block_state":
+          copper_golem_pose: star
+    fallback_name: "&aサバイバルモード"
+    fallback_lore: ["&cゲームモードを切り替える権限を持っていません"]
+    actions:
+      - {player_cmd: "gms"}
+      - {close: true}
+  gmc:
+    slot: 22
+    icon: GOLDEN_HELMET
+    name: "&eクリエイティブモード"
+    lore: ["&7/gmc"]
+    required_permission: "essentials.gamemode.creative"
+    fallback_item:
+      id: EXPOSED_COPPER_GOLEM_STATUE
+      count: 1
+      components:
+        "minecraft:block_state":
+          copper_golem_pose: star
+    fallback_name: "&eクリエイティブモード"
+    fallback_lore: ["&c※ポイント購入 or 匠以上のランクが必要"]
+    actions:
+      - {player_cmd: "gmc"}
+      - {close: true}
+  gmsp:
+    slot: 23
+    icon: VEX_SPAWN_EGG
+    name: "&7スペクテイターモード"
+    lore: ["&7/gmsp"]
+    required_permission: "essentials.gamemode.spectator"
+    fallback_item:
+      id: WEATHERED_COPPER_GOLEM_STATUE
+      count: 1
+      components:
+        "minecraft:block_state":
+          copper_golem_pose: star
+    fallback_name: "&7スペクテイターモード"
+    fallback_lore: ["&c※建築士以上のランクが必要"]
+    actions:
+      - {player_cmd: "gmsp"}
+      - {close: true}
+  afk:
+    slot: 24
+    icon: ARMOR_STAND
+    name: "&7AFK"
+    lore: ["&7/afk"]
+    actions:
+      - {player_cmd: "afk"}
+      - {close: true}
+  annnai:
+    slot: 25
+    icon: PURPLE_GLAZED_TERRACOTTA
+    name: "&d案内モード"
+    lore:
+      - "&7/annnaimode <player> をチャット欄に入力"
+      - "&7JAVAではチャットをクリックで途中まで自動入力されます"
+    actions:
+      - {suggest_command: "/annnaimode ",}
+
+  language:
+    slot: 28
+    icon: FILLED_MAP
+    enchanted: true
+    name: "&bLanguage"
+    lore: ["&7全メニューを英語版に切り替える (準備中)"]
+  tpset_open:
+    slot: 29
+    icon: GLOW_INK_SAC
+    name: "&a/tpset open"
+    lore:
+      - "&7他プレイヤーが常時テレポートできます"
+      - "&7/tpset ng <player> でブラックリスト設定"
+    actions:
+      - {player_cmd: "tpset open"}
+      - {close: true}
+  tpset_close:
+    slot: 30
+    icon: INK_SAC
+    name: "&c/tpset close"
+    lore:
+      - "&7他プレイヤーのテレポートを拒否します"
+      - "&7/tpset ok <player> でホワイトリスト設定"
+    actions:
+      - {player_cmd: "tpset close"}
+      - {close: true}
+  tpset_mode:
+    slot: 31
+    icon: SQUID_SPAWN_EGG
+    name: "&e/tpset mode"
+    lore: ["&7現在のTP許可設定を確認する"]
+    actions:
+      - {player_cmd: "tpset mode"}
+      - {close: true,}
+
+  getmenu:
+    slot: 37
+    icon: BOOK
+    name: "&fメニュー本を再入手"
+    lore: ["&7/getmenu"]
+    actions:
+      - {player_cmd: "getmenu"}
+      - {close: true}
+  tpaccept:
+    slot: 38
+    icon: LIME_SHULKER_BOX
+    name: "&aTP申請を許可"
+    lore: ["&7/tpaccept"]
+    actions:
+      - {player_cmd: "tpaccept"}
+      - {close: true}
+  tpdeny:
+    slot: 39
+    icon: RED_SHULKER_BOX
+    name: "&cTP申請を拒否"
+    lore: ["&7/tpdeny"]
+    actions:
+      - {player_cmd: "tpdeny"}
+      - {close: true}
+  startpaint:
+    slot: 40
+    icon: FLOWER_BANNER_PATTERN
+    enchanted: true
+    name: "&dお絵かきツール"
+    lore:
+      - "&7額縁に飾って染料で右クリックでお絵かき"
+      - "&c※ポイントショップで「表現の自由」が必要"
+    actions:
+      - {player_cmd: "startpaint"}
+      - {console_cmd: "give %player% item_frame 1"}
+      - {close: true}
+  getdye:
+    slot: 41
+    icon: PURPLE_SHULKER_BOX
+    enchanted: true
+    name: "&5カラーパレット入手"
+    lore: ["&c※「表現の自由」が必要"]
+    actions:
+      - {player_cmd: "getdye"}
+      - {close: true}
+  item_frame_get:
+    slot: 42
+    icon: ITEM_FRAME
+    enchanted: true
+    name: "&fアイテムフレーム入手"
+    lore: ["&c※「表現の自由」が必要"]
+    actions:
+      - {console_cmd: "give %player% item_frame 1"}
+      - {close: true}

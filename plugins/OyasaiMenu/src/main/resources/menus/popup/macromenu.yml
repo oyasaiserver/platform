@@ -1,0 +1,32 @@
+# マクロメニュー
+# 画像8参照: 紫ガラス、col7 row4 (slot43) にエンチャントCRAFTER
+title: "&5マクロ"
+glass: PURPLE_STAINED_GLASS_PANE
+nav_active: 52
+
+items:
+  macro_open:
+    slot: 43
+    icon: CRAFTER
+    enchanted: true
+    name: "&5マクロを設定・実行"
+    lore:
+      - "&7コマンドマクロを管理します"
+      - "&7/macro でも開けます"
+      - ""
+      - "&eクリックで開く"
+    actions:
+      - {open_macro: true,}
+
+  empty1:
+    slot: 7
+    icon: AIR
+  empty2:
+    slot: 16
+    icon: AIR
+  empty3:
+    slot: 25
+    icon: AIR
+  empty4:
+    slot: 34
+    icon: AIR

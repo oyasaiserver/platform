@@ -1,0 +1,84 @@
+# チャンネルメニュー
+# op_only: true のアイテムはOPのみ表示される
+# fallback_icon: 非OPに表示するアイコン (省略するとガラスで埋まる)
+title: "&cチャンネルメニュー"
+glass: RED_STAINED_GLASS_PANE
+nav_active: 46
+
+items:
+  global:
+    slot: 37
+    icon: NAME_TAG
+    name: "&aグローバルチャンネル"
+    lore:
+      - "&7全員が見えるチャンネル"
+      - ""
+      - "&eクリックで参加"
+    actions:
+      - {player_cmd: "leave 2"}
+      - {player_cmd: "leave 3"}
+      - {player_cmd: "join Global"}
+      - {console_cmd: 'tellraw %player% [{"bold":true,"color":"yellow","text":"グローバルチャット"}]'}
+      - {player_cmd: "chwho Global"}
+      - {close: true,}
+
+  channel2:
+    slot: 28
+    icon: NAME_TAG
+    name: "&bチャンネル 2"
+    lore:
+      - "&7チャンネル2"
+      - ""
+      - "&eクリックで参加"
+    actions:
+      - {player_cmd: "leave Global"}
+      - {player_cmd: "leave 3"}
+      - {player_cmd: "join 2"}
+      - {console_cmd: 'tellraw %player% [{"bold":true,"color":"aqua","text":"チャンネル2"}]'}
+      - {player_cmd: "chwho 2"}
+      - {close: true,}
+
+  channel3:
+    slot: 19
+    icon: NAME_TAG
+    name: "&9チャンネル 3"
+    lore:
+      - "&7チャンネル3"
+      - ""
+      - "&eクリックで参加"
+    actions:
+      - {player_cmd: "leave Global"}
+      - {player_cmd: "leave 2"}
+      - {player_cmd: "join 3"}
+      - {console_cmd: 'tellraw %player% [{"bold":true,"color":"blue","text":"チャンネル3"}]'}
+      - {player_cmd: "chwho 3"}
+      - {close: true,}
+
+  members:
+    slot: 10
+    icon: ENDER_EYE
+    name: "&dチャンネルメンバーを確認"
+    lore:
+      - "&7各チャンネルの参加者を確認します"
+      - ""
+      - "&eクリックで確認"
+    actions:
+      - {player_cmd: "chwho Global"}
+      - {player_cmd: "chwho 2"}
+      - {player_cmd: "chwho 3"}
+      - {close: true,}
+
+  staff_channel:
+    slot: 1
+    icon: COMMAND_BLOCK
+    name: "&4[OP] スタッフチャンネル"
+    op_only: true
+    fallback_icon: AIR
+    fallback_name: " "
+    lore:
+      - "&cスタッフチャンネルに遷移します"
+      - ""
+      - "&eクリックで参加"
+    actions:
+      - {op_player_cmd: "ch st"}
+      - {close: true}

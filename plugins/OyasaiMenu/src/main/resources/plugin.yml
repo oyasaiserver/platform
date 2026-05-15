@@ -1,0 +1,55 @@
+name: OyasaiMenu
+version: "1.0.0"
+main: com.github.sahyuya.oyasaiMenu.OyasaiMenu
+api-version: "1.21"
+description: GUIベースの統合フロントエンドメニュープラグイン
+softdepend:
+  - LuckPerms
+  - PlaceholderAPI
+  - TokenManager
+  - Vault
+
+commands:
+  menu:
+    description: メニューを開く
+    aliases: [mn]
+    permission: oyasaimenu.use
+  shop:
+    description: ショップメニューを開く
+    aliases: [sh]
+    permission: oyasaimenu.use
+  pointshop:
+    description: ポイントショップを開く
+    aliases: [ps]
+    permission: oyasaimenu.use
+  sell:
+    description: アイテムを売る
+    permission: oyasaimenu.use
+  macro:
+    description: マクロを管理する
+    aliases: [mcr]
+    permission: oyasaimenu.macro
+
+  adminmenu:
+    description: 管理者メニューを開く
+    aliases: [admenu]
+    permission: oyasaimenu.admin
+  menuedit:
+    description: お知らせ・ショップを管理する
+    permission: oyasaimenu.admin
+  oyasaimenu:
+    description: OyasaiMenu管理コマンド
+    permission: oyasaimenu.admin
+
+permissions:
+  oyasaimenu.use:
+    description: OyasaiMenuを使用する権限
+    # 公開前なので一時的OP限定
+    default: op
+  oyasaimenu.macro:
+    description: マクロ機能を使用する権限
+    # 公開前なので一時的OP限定
+    default: op
+  oyasaimenu.admin:
+    description: OyasaiMenuの管理者用権限
+    default: op

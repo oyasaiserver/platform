@@ -1,0 +1,272 @@
+# VTPバイオーム指定メニュー (SocialLikes > バイオーム指定の3段階目)
+# リカバリーコンパスからアクセスする専用メニュー
+title: "&5バイオーム指定テレポート"
+glass: LIME_STAINED_GLASS_PANE
+nav_active: 49
+
+items:
+  snowyplains:
+    slot: 0
+    icon: SNOW
+    name: "&f雪原 (Snowy Plains)"
+    lore: ["/vtp SNOWY_PLAINS"]
+    actions:
+      - {player_cmd: "vtp SNOWY_PLAINS"}
+      - {close: true,}
+
+  snowytaiga:
+    slot: 1
+    icon: PLAYER_HEAD
+    texture: "9739f8fb6c5f2171ea4ae24973e1974e1fd707d7088d4db08625d555ee2937d3"
+    name: "&f雪のタイガ (Snowy Taiga)"
+    lore: ["/vtp SNOWY_TAIGA"]
+    actions:
+      - {player_cmd: "vtp SNOWY_TAIGA"}
+      - {close: true,}
+
+  snowyslopes:
+    slot: 2
+    icon: SNOW_BLOCK
+    name: "&f雪の斜面 (Snowy Slopes)"
+    lore: ["/vtp SNOWY_SLOPES"]
+    actions:
+      - {player_cmd: "vtp SNOWY_SLOPES"}
+      - {close: true,}
+
+  icespikes:
+    slot: 3
+    icon: PACKED_ICE
+    name: "&9氷樹 (Ice Spikes)"
+    lore: ["/vtp ICE_SPIKES"]
+    actions:
+      - {player_cmd: "vtp ICE_SPIKES"}
+      - {close: true,}
+
+  jaggedpeaks:
+    slot: 4
+    icon: PLAYER_HEAD
+    texture: "ef74c2e4c0b222e42e8cddf3ba8f6b546c5103ada2c9c15461abc3fa3f42509"
+    name: "&b尖った山頂 (Jagged Peaks)"
+    lore: ["/vtp JAGGED_PEAKS"]
+    actions:
+      - {player_cmd: "vtp JAGGED_PEAKS"}
+      - {close: true,}
+
+  stonypeaks:
+    slot: 5
+    icon: PLAYER_HEAD
+    texture: "2a643c5cca38d324bf81488db7e53f7785818cbfe20e9f732ae01fb2dac75ae6"
+    name: "&7石だらけの山頂 (Stony Peaks)"
+    lore: ["/vtp STONY_PEAKS"]
+    actions:
+      - {player_cmd: "vtp STONY_PEAKS"}
+      - {close: true,}
+
+  windsweptsavanna:
+    slot: 6
+    icon: COARSE_DIRT
+    name: "&7吹きさらしのサバンナ (Windswept Savanna)"
+    lore: ["/vtp WINDSWEPT_SAVANNA"]
+    actions:
+      - {player_cmd: "vtp WINDSWEPT_SAVANNA"}
+      - {close: true,}
+
+  meadow:
+    slot: 7
+    icon: PLAYER_HEAD
+    texture: "430f395c5ad5bc18df180b2f19d26126425d9485c3fa61e32c8621d920434388"
+    name: "&2草地 (Meadow)"
+    lore: ["/vtp MEADOW"]
+    actions:
+      - {player_cmd: "vtp MEADOW"}
+      - {close: true,}
+
+  plains:
+    slot: 9
+    icon: GRASS_BLOCK
+    name: "&a平原 (Plains)"
+    lore: ["/vtp PLAINS"]
+    actions:
+      - {player_cmd: "vtp PLAINS"}
+      - {close: true,}
+
+  sunflowerplains:
+    slot: 10
+    icon: SUNFLOWER
+    name: "&eヒマワリ平原 (Sunflower Plains)"
+    lore: ["/vtp SUNFLOWER_PLAINS"]
+    actions:
+      - {player_cmd: "vtp SUNFLOWER_PLAINS"}
+      - {close: true,}
+
+  flowerforest:
+    slot: 11
+    icon: RED_TULIP
+    name: "&a花の森 (Flower Forest)"
+    lore: ["/vtp FLOWER_FOREST"]
+    actions:
+      - {player_cmd: "vtp FLOWER_FOREST"}
+      - {close: true,}
+
+  desert:
+    slot: 12
+    icon: SAND
+    name: "&e砂漠 (Desert)"
+    lore: ["/vtp DESERT"]
+    actions:
+      - {player_cmd: "vtp DESERT"}
+      - {close: true,}
+
+  badlands:
+    slot: 13
+    icon: RED_SAND
+    name: "&6荒野 (Badlands)"
+    lore: ["/vtp BADLANDS"]
+    actions:
+      - {player_cmd: "vtp BADLANDS"}
+      - {close: true,}
+
+  erodedbadlands:
+    slot: 14
+    icon: TERRACOTTA
+    name: "&cメサ (Eroded Badlands)"
+    lore: ["/vtp ERODED_BADLANDS"]
+    actions:
+      - {player_cmd: "vtp ERODED_BADLANDS"}
+      - {close: true,}
+
+  forest:
+    slot: 18
+    icon: OAK_SAPLING
+    name: "&2森林 (Forest)"
+    lore: ["/vtp FOREST"]
+    actions:
+      - {player_cmd: "vtp FOREST"}
+      - {close: true,}
+
+  birchforest:
+    slot: 19
+    icon: BIRCH_SAPLING
+    name: "&2シラカバの森 (Birch Forest)"
+    lore: ["/vtp BIRCH_FOREST"]
+    actions:
+      - {player_cmd: "vtp BIRCH_FOREST"}
+      - {close: true,}
+
+  taiga:
+    slot: 20
+    icon: SPRUCE_SAPLING
+    name: "&2タイガ (Taiga)"
+    lore: ["/vtp TAIGA"]
+    actions:
+      - {player_cmd: "vtp TAIGA"}
+      - {close: true,}
+
+  darkforest:
+    slot: 21
+    icon: DARK_OAK_SAPLING
+    name: "&2暗い森 (Dark Forest)"
+    lore: ["/vtp DARK_FOREST"]
+    actions:
+      - {player_cmd: "vtp DARK_FOREST"}
+      - {close: true,}
+
+  savanna:
+    slot: 22
+    icon: ACACIA_SAPLING
+    name: "&6サバンナ (Savanna)"
+    lore: ["/vtp SAVANNA"]
+    actions:
+      - {player_cmd: "vtp SAVANNA"}
+      - {close: true,}
+
+  jungle:
+    slot: 23
+    icon: JUNGLE_SAPLING
+    name: "&2ジャングル (Jungle)"
+    lore: ["/vtp JUNGLE"]
+    actions:
+      - {player_cmd: "vtp JUNGLE"}
+      - {close: true,}
+
+  bamboojungle:
+    slot: 24
+    icon: BAMBOO
+    name: "&a竹林 (Bamboo Jungle)"
+    lore: ["/vtp BAMBOO_JUNGLE"]
+    actions:
+      - {player_cmd: "vtp BAMBOO_JUNGLE"}
+      - {close: true,}
+
+  cherrygrove:
+    slot: 25
+    icon: CHERRY_SAPLING
+    name: "&dサクラの林 (Cherry Grove)"
+    lore: ["/vtp CHERRY_GROVE"]
+    actions:
+      - {player_cmd: "vtp CHERRY_GROVE"}
+      - {close: true,}
+
+  beach:
+    slot: 27
+    icon: PLAYER_HEAD
+    texture: "6904e20a427c0da09db01663c101091cf07f71357f9d2167af64cd84f2709b38"
+    name: "&e砂浜 (Beach)"
+    lore: ["/vtp BEACH"]
+    actions:
+      - {player_cmd: "vtp BEACH"}
+      - {close: true,}
+
+  warmocean:
+    slot: 28
+    icon: fire_coral
+    name: "&b暖かい海 (Warm Ocean)"
+    lore: ["/vtp WARM_OCEAN"]
+    actions:
+      - {player_cmd: "vtp WARM_OCEAN"}
+      - {close: true,}
+
+  oldgrowthpinetaiga:
+    slot: 29
+    icon: PODZOL
+    name: "&2マツの原生林 (Old Growth Pine Taiga)"
+    lore: ["/vtp OLD_GROWTH_PINE_TAIGA"]
+    actions:
+      - {player_cmd: "vtp OLD_GROWTH_PINE_TAIGA"}
+      - {close: true,}
+
+  swamp:
+    slot: 30
+    icon: PLAYER_HEAD
+    texture: "7a5f11db0112774676466db581db8668fb4be63b2f74a9f5c306c817a08d745f"
+    name: "&2沼地 (Swamp)"
+    lore: ["/vtp SWAMP"]
+    actions:
+      - {player_cmd: "vtp SWAMP"}
+      - {close: true,}
+
+  mangroveswamp:
+    slot: 31
+    icon: MANGROVE_LOG
+    name: "&2マングローブの沼地 (Mangrove Swamp)"
+    lore: ["/vtp MANGROVE_SWAMP"]
+    actions:
+      - {player_cmd: "vtp MANGROVE_SWAMP"}
+      - {close: true,}
+
+  mushroomfields:
+    slot: 32
+    icon: MYCELIUM
+    name: "&5キノコ島 (Mushroom Fields)"
+    lore: ["/vtp MUSHROOM_FIELDS"]
+    actions:
+      - {player_cmd: "vtp MUSHROOM_FIELDS"}
+      - {close: true,}
+
+  back:
+    slot: 36
+    icon: ARROW
+    name: "&c← 戻る"
+    lore: ["&7SocialLikesメニューに戻ります"]
+    actions:
+      - {open_popup: "sociallikes"}
