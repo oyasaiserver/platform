@@ -46,12 +46,10 @@ jobs:
         run: |
           sudo -i aws configure set aws_access_key_id "$CLOUDFLARE_ACCESS_KEY_ID"
           sudo -i aws configure set aws_secret_access_key "$CLOUDFLARE_SECRET_ACCESS_KEY"
-      - name: Setup Nix S3 cache
-        uses: ./packages/nix-copy-action
-        with:
-          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: "${{ env.NIX_CACHE_SIGNING_KEY }}"
       - run: nix run .#nix-flake-check-changed
+      - run: nix run .#nix-copy-to-s3
+        env:
+          NIX_CACHE_SUBSTITUTER: ${{ vars.NIX_CACHE_SUBSTITUTER }}
 
   nix-flake-health:
     runs-on: ubuntu-latest
@@ -101,12 +99,10 @@ jobs:
         run: |
           sudo -i aws configure set aws_access_key_id "$CLOUDFLARE_ACCESS_KEY_ID"
           sudo -i aws configure set aws_secret_access_key "$CLOUDFLARE_SECRET_ACCESS_KEY"
-      - name: Setup Nix S3 cache
-        uses: ./packages/nix-copy-action
-        with:
-          endpoint: ${{ vars.NIX_CACHE_SUBSTITUTER }}
-          signing-key: "${{ env.NIX_CACHE_SIGNING_KEY }}"
       - uses: nicknovitski/nix-develop@5da6ac475f1ffbcf54ee562fa3056646e146be95
+      - run: nix run .#nix-copy-to-s3
+        env:
+          NIX_CACHE_SUBSTITUTER: ${{ vars.NIX_CACHE_SUBSTITUTER }}
 
   push-to-ghcr:
     uses: ./.github/workflows/push-to-ghcr.yaml
