@@ -57,7 +57,7 @@ object CarBuilder2Spawn {
 
     val displayMap =
         mutableMapOf<
-          CarBuilder2EntityType, MutableMap<Pair<Int, Vector>, MutableSet<BlockDisplay>>>()
+            CarBuilder2EntityType, MutableMap<Pair<Int, Vector>, MutableSet<BlockDisplay>>>()
 
     displayMap[CarBuilder2EntityType.Body] =
         mutableMapOf(
@@ -111,18 +111,17 @@ object CarBuilder2Spawn {
         }
 
     val cEntity =
-      CarBuilder2EntityData(
-        seatMap,
-        bodyArmorStandList,
-        displayMap,
-        vehicle,
-        owner?.uniqueId,
-        spawnPlayer,
-        data,
-        carMode == "Real",
-        yaw,
-        item
-      )
+        CarBuilder2EntityData(
+            seatMap,
+            bodyArmorStandList,
+            displayMap,
+            vehicle,
+            owner?.uniqueId,
+            spawnPlayer,
+            data,
+            carMode == "Real",
+            yaw,
+            item)
 
     CarBuilder2EntityList.addEntity(cEntity)
     BuilderSpawnSupport.rememberTrialSpawn(owner, spawnPlayer, oldSpawnCarData, cEntity)
