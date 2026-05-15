@@ -53,7 +53,11 @@ lib.makeScope pkgs.newScope (
     inherit (pkgs) bore-cli;
     inherit (inputs.gradle2nix.packages.${system}) gradle2nix;
     inherit (inputs.tools.packages.${system}) nix-flake-check-changed nix-grep-to-build npm-list;
-    inherit (inputs.nix-minecraft.legacyPackages.${system}) purpurServers;
+    inherit (inputs.nix-minecraft.legacyPackages.${system})
+      purpurServers
+      neoforgeServers
+      vanillaServers
+      ;
 
     terraform = pkgs.terraform.withPlugins (_: oyasaiTerraformProviders);
     nodejs = pkgs.nodejs_24;

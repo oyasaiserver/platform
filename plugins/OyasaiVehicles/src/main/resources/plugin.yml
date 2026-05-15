@@ -1,0 +1,65 @@
+name: OyasaiVehicles
+description: "おやさい鯖くるまプラグイン"
+website: "https://github.com/oyasaiserver"
+main: io.oyasai.OyasaiVehicles
+api-version: "1.21.8"
+version: ${version}
+
+commands:
+  realvehicle:
+    description: "OyasaiVehicles総合"
+    aliases: [rvmenu]
+  milepoint:
+    description: "マイルポイント"
+  carbuilder2:
+    description: "CarBuilder2"
+    aliases: [cbmenu]
+  aircraftbuilder:
+    description: "AircraftBuilder"
+    aliases: [acmenu]
+  timeattack:
+    description: "タイムアタック"
+    aliases: [ta]
+
+permissions:
+  oyasaivehicles.admin:
+    description: "管理者向けの総合権限"
+    default: op
+    children:
+      oyasaivehicles.carbuilder2.use: true
+      oyasaivehicles.carbuilder2.use.create: true
+      oyasaivehicles.carbuilder2.use.ride: true
+      oyasaivehicles.aircraftbuilder.use: true
+      oyasaivehicles.aircraftbuilder.use.create: true
+      oyasaivehicles.aircraftbuilder.use.ride: true
+      oyasaivehicles.vehicle.unlimited: true
+  oyasaivehicles.vehicle.unlimited:
+    description: "同時にスポーンできる購入車両の上限を無視する権限"
+    default: false
+  oyasaivehicles.carbuilder2.use:
+    description: "CarBuilder2 を利用する権限"
+    default: false
+    children:
+      oyasaivehicles.carbuilder2.use.create: true
+      oyasaivehicles.carbuilder2.use.ride: true
+  oyasaivehicles.carbuilder2.use.create:
+    description: "CarBuilder2 を作成・編集する権限"
+    default: false
+  oyasaivehicles.carbuilder2.use.ride:
+    description: "CarBuilder2 の試乗・乗車権限"
+    default: false
+  oyasaivehicles.aircraftbuilder.use:
+    description: "AircraftBuilder を利用する権限"
+    default: false
+    children:
+      oyasaivehicles.aircraftbuilder.use.create: true
+      oyasaivehicles.aircraftbuilder.use.ride: true
+  oyasaivehicles.aircraftbuilder.use.create:
+    description: "AircraftBuilder を作成・編集する権限"
+    default: false
+  oyasaivehicles.aircraftbuilder.use.ride:
+    description: "AircraftBuilder の試乗・乗車権限"
+    default: false
+  oyasaivehicles.vip.car.smoke:
+    description: "寄付者限定機能: 車のドリフト時の煙カスタム"
+    default: false

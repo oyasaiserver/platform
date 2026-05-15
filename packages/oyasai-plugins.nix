@@ -6,6 +6,7 @@
   buildGradlePackage,
   lib,
   runCommand,
+  paperweight-userdev-setup-hook,
 }:
 let
   final = buildGradlePackage {
@@ -24,6 +25,8 @@ let
       };
 
     lockFile = ../gradle.lock;
+
+    nativeBuildInputs = [ paperweight-userdev-setup-hook ];
 
     gradleBuildFlags = [
       "build"
