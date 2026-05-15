@@ -10,7 +10,7 @@ data class MenuDefinition(
 )
 
 /**
- * @param icon          Material.AIR を指定するとそのスロットは空欄になる
+ * @param icon Material.AIR を指定するとそのスロットは空欄になる
  * @param customTexture icon=CUSTOM_HEAD のとき使用するテクスチャハッシュ (64文字16進)
  */
 data class MenuItemDefinition(
@@ -24,27 +24,27 @@ data class MenuItemDefinition(
 )
 
 enum class ActionType {
-    OPEN_MENU,
-    RUN_COMMAND,
-    RUN_PLAYER_COMMAND,
-    CHECK_PERMISSION,
-    MESSAGE,
-    CLOSE_MENU,
-    MACRO_EXECUTE,
-    PLACEHOLDER_TEXT,
-    SOUND,
-    BROADCAST,
-    OPEN_SHOP,
-    OPEN_POINT_SHOP,
-    OPEN_UTILITY,
-    OPEN_MACRO,
-    OPEN_INFO,
-    OPEN_CHANNEL,
-    OPEN_SOCIALLIKES,
-    OPEN_CARBUILDER,
-    OPEN_LINKS,
-    OPEN_SELL,
-    UNKNOWN
+  OPEN_MENU,
+  RUN_COMMAND,
+  RUN_PLAYER_COMMAND,
+  CHECK_PERMISSION,
+  MESSAGE,
+  CLOSE_MENU,
+  MACRO_EXECUTE,
+  PLACEHOLDER_TEXT,
+  SOUND,
+  BROADCAST,
+  OPEN_SHOP,
+  OPEN_POINT_SHOP,
+  OPEN_UTILITY,
+  OPEN_MACRO,
+  OPEN_INFO,
+  OPEN_CHANNEL,
+  OPEN_SOCIALLIKES,
+  OPEN_CARBUILDER,
+  OPEN_LINKS,
+  OPEN_SELL,
+  UNKNOWN
 }
 
 data class MenuAction(
@@ -53,13 +53,10 @@ data class MenuAction(
     val success: List<MenuAction> = emptyList(),
     val fail: List<MenuAction> = emptyList()
 ) {
-    fun getString(key: String, default: String = ""): String = params[key]?.toString() ?: default
+  fun getString(key: String, default: String = ""): String = params[key]?.toString() ?: default
 }
 
-data class PlayerMenuState(
-    val menuId: String,
-    val page: Int = 0
-)
+data class PlayerMenuState(val menuId: String, val page: Int = 0)
 
 data class PlayerMacro(
     val id: String,

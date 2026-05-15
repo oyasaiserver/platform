@@ -7,20 +7,23 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
 object GuiUtil {
-    fun makeItem(mat: Material, name: String, lore: List<String> = emptyList()): ItemStack {
-        val item = ItemStack(mat)
-        val meta = item.itemMeta ?: return item
-        meta.displayName(comp(name))
-        if (lore.isNotEmpty()) meta.lore(lore.map { comp(it) })
-        item.itemMeta = meta
-        return item
-    }
-    fun colorizeComponent(text: String): Component = LegacyComponentSerializer.legacyAmpersand()
-        .deserialize(text).decoration(TextDecoration.ITALIC, false)
+  fun makeItem(mat: Material, name: String, lore: List<String> = emptyList()): ItemStack {
+    val item = ItemStack(mat)
+    val meta = item.itemMeta ?: return item
+    meta.displayName(comp(name))
+    if (lore.isNotEmpty()) meta.lore(lore.map { comp(it) })
+    item.itemMeta = meta
+    return item
+  }
 
-    fun comp(text: String): Component = colorizeComponent(text)
+  fun colorizeComponent(text: String): Component =
+      LegacyComponentSerializer.legacyAmpersand()
+          .deserialize(text)
+          .decoration(TextDecoration.ITALIC, false)
 
-    fun colorize(text: String): String = text.replace('&', '\u00A7')
+  fun comp(text: String): Component = colorizeComponent(text)
 
-    fun c(text: String): String = colorize(text)
+  fun colorize(text: String): String = text.replace('&', '\u00A7')
+
+  fun c(text: String): String = colorize(text)
 }

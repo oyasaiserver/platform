@@ -11,225 +11,225 @@
 #                      シュルカーボックスを開くなどGUIが干渉するアイテムに使用する
 
 point1:
-  name: '&cポイントショップ'
+  name: "&cポイントショップ"
   items:
-    '0':
+    "0":
       icon: GLASS
-      name: '&c&l%player%の酸素ボンベ'
+      name: "&c&l%player%の酸素ボンベ"
       lore:
-        - '&b水中建築のお供に'
-        - 'headで被って使用'
-        - '※中級者以上'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&b水中建築のお供に"
+        - "headで被って使用"
+        - "※中級者以上"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 30
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
         - 'minecraft:give %player% glass[custom_name="%player%の酸素ボンベ",lore=[{text:"headで被ってお使い下さい"}],enchantments={aqua_affinity:1,respiration:10}] 1'
 
-    '1':
+    "1":
       icon: ELYTRA
       lore:
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 800
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% minecraft:elytra 1'
+        - "minecraft:give %player% minecraft:elytra 1"
 
-    '2':
+    "2":
       icon: ENCHANTED_BOOK
       lore:
-        - '&7効率強化 V'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&7効率強化 V"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 300
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% minecraft:enchanted_book[stored_enchantments={efficiency:5}] 1'
+        - "minecraft:give %player% minecraft:enchanted_book[stored_enchantments={efficiency:5}] 1"
 
-    '3':
+    "3":
       icon: ENCHANTED_BOOK
       lore:
-        - '&7効率強化 III'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&7効率強化 III"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 50
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={efficiency:3}] 1'
+        - "minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={efficiency:3}] 1"
 
-    '4':
+    "4":
       icon: ENCHANTED_BOOK
       lore:
-        - '&7耐久力 III'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&7耐久力 III"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 150
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={unbreaking:3}] 1'
+        - "minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={unbreaking:3}] 1"
 
-    '5':
+    "5":
       icon: ENCHANTED_BOOK
       lore:
-        - '&7耐久力 II'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&7耐久力 II"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 35
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={unbreaking:2}] 1'
+        - "minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={unbreaking:2}] 1"
 
-    '6':
+    "6":
       icon: ENCHANTED_BOOK
       lore:
-        - '&7シルクタッチ'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&7シルクタッチ"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 200
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={silk_touch:1}] 1'
+        - "minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={silk_touch:1}] 1"
 
-    '7':
+    "7":
       icon: ENCHANTED_BOOK
       lore:
-        - '&7入れ食い III'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&7入れ食い III"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 70
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={lure:3}] 1'
+        - "minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={lure:3}] 1"
 
-    '8':
+    "8":
       icon: ENCHANTED_BOOK
       lore:
-        - '&7幸運 III'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&7幸運 III"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 150
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={fortune:3}] 1'
+        - "minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={fortune:3}] 1"
 
-    '9':
+    "9":
       icon: ENCHANTED_BOOK
       lore:
-        - '&7修繕'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&7修繕"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 400
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={mending:1}] 1'
+        - "minecraft:give %player% minecraft:enchanted_book[minecraft:stored_enchantments={mending:1}] 1"
 
-    '10':
+    "10":
       icon: FEATHER
-      name: '&c&l１日FLY券'
+      name: "&c&l１日FLY券"
       lore:
-        - '&b僥倖・・・！'
-        - '１日FLY券・・・！！'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&b僥倖・・・！"
+        - "１日FLY券・・・！！"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 20
-      message: '&bTM &8» &3%price%&fP&7使用しました・・・！'
+      message: "&bTM &8» &3%price%&fP&7使用しました・・・！"
       commands:
-        - 'buyfly %player%'
+        - "buyfly %player%"
 
-    '11':
+    "11":
       icon: GRASS_BLOCK
-      name: '&c&l永久クリエイティブモード'
+      name: "&c&l永久クリエイティブモード"
       lore:
-        - '&b誤購入に注意▶匠,二重購入'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&b誤購入に注意▶匠,二重購入"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 4300
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'buycr %player%'
+        - "buycr %player%"
 
-    '12':
+    "12":
       icon: MAP
-      name: '&c&l表現の自由'
+      name: "&c&l表現の自由"
       lore:
-        - '&bこの権利を購入すれば、/menuから'
-        - '&bいつでも無料でCanvasを入手できる'
-        - 'Srain3作'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&bこの権利を購入すれば、/menuから"
+        - "&bいつでも無料でCanvasを入手できる"
+        - "Srain3作"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 10
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'getpt %player%'
-        - 'give %player% item_frame 1'
-        - 'buycanvas %player%'
-      close-on-purchase: true  # シュルカーボックスを開くためGUIを閉じる
+        - "getpt %player%"
+        - "give %player% item_frame 1"
+        - "buycanvas %player%"
+      close-on-purchase: true # シュルカーボックスを開くためGUIを閉じる
 
-    '13':
+    "13":
       icon: EMERALD
-      name: '&c&l¥100,000'
+      name: "&c&l¥100,000"
       lore:
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 98
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
-        - 'eco give %player% 100000'
+        - "eco give %player% 100000"
 
-    '14':
+    "14":
       icon: COOKED_BEEF
-      name: '&6★ 魔法のペットフード'
+      name: "&6★ 魔法のペットフード"
       lore:
-        - '&e右クリックで与える'
-        - ''
-        - '&d所持:&3%tokens%&fP'
-        - '&a価格:&3%price%&fP'
+        - "&e右クリックで与える"
+        - ""
+        - "&d所持:&3%tokens%&fP"
+        - "&a価格:&3%price%&fP"
       cost: 30
-      message: '&bTM &8» &3%price%&fP&7使用しました'
+      message: "&bTM &8» &3%price%&fP&7使用しました"
       commands:
         - 'minecraft:give %player% minecraft:cooked_beef[minecraft:custom_name={text:"★ 魔法のペットフード",color:"gold"},minecraft:lore=[{text:"右クリックで与える",color:"yellow"}],minecraft:enchantments={"minecraft:unbreaking":1},minecraft:tooltip_display={hidden_components:["minecraft:enchantments"]}] 1'
 
-    '15':
+    "15":
       icon: CUSTOM_HEAD
       texture: "766844d5e84f649451a87dacca7a73beaa04eea847d438de26c2d44d1e949de"
-      name: '&6&lRed Bull'
+      name: "&6&lRed Bull"
       lore:
-        - '&b🪽翼を授ける🪽'
-        - '&c※一日フライ券を購入していない場合、'
-        - '&c20ポイントを消費してflyを有効化します'
-        - '&7(上級者以上は消費しません)'
-        - ''
-        - '&d所持:&6%balance%'
-        - '&a価格:&3231&f円'
+        - "&b🪽翼を授ける🪽"
+        - "&c※一日フライ券を購入していない場合、"
+        - "&c20ポイントを消費してflyを有効化します"
+        - "&7(上級者以上は消費しません)"
+        - ""
+        - "&d所持:&6%balance%"
+        - "&a価格:&3231&f円"
       cost: 0
       commands:
-        - 'buyredbull %player%'
+        - "buyredbull %player%"
 
-    '16':
+    "16":
       icon: BLUE_SHULKER_BOX
-      name: '&6&lRed Bull ✧12本詰め合わせ✧'
+      name: "&6&lRed Bull ✧12本詰め合わせ✧"
       lore:
-        - '&b🪽翼を授ける🪽'
-        - '&c※一日フライ券を購入していない場合、'
-        - '&c20ポイントを消費してflyを有効化します'
-        - '&7(上級者以上は消費しません)'
-        - ''
-        - '&d所持:&6%balance%'
-        - '&a価格:&32480&f円'
+        - "&b🪽翼を授ける🪽"
+        - "&c※一日フライ券を購入していない場合、"
+        - "&c20ポイントを消費してflyを有効化します"
+        - "&7(上級者以上は消費しません)"
+        - ""
+        - "&d所持:&6%balance%"
+        - "&a価格:&32480&f円"
       cost: 0
       commands:
-        - 'buyredbullset %player%'
+        - "buyredbullset %player%"

@@ -1,6 +1,6 @@
 blocks:
-  name: '&1ブロック'
-  command: 'blocks'
+  name: "&1ブロック"
+  command: "blocks"
   items:
     - oak_log 5 1
     - oak_wood 5 1
@@ -426,7 +426,7 @@ blocks:
     - budding_amethyst 10 1
 
 decorations:
-  name: '&1装飾'
+  name: "&1装飾"
   items:
     - oak_sign 10 1
     - spruce_sign 10 1
@@ -895,7 +895,7 @@ decorations:
     - cake 10 1
 
 ores:
-  name: '&1鉱石'
+  name: "&1鉱石"
   items:
     - diamond 50 5
     - gold_ingot 50 5
@@ -944,7 +944,7 @@ ores:
     - netherite_block 2160000 216000
 
 tools:
-  name: '&1ツール'
+  name: "&1ツール"
   items:
     - $pickaxe_normal 500000 0
     - $pickaxe_normal_f 700000 0

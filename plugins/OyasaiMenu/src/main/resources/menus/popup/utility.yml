@@ -50,10 +50,10 @@ items:
     slot: 3
     icon: EMERALD
     name: "&eおやさい商店街"
-    lore: [ "&7/warp shop" ]
+    lore: ["&7/warp shop"]
     actions:
-      - { player_cmd: "warp shop" }
-      - { close: true }
+      - {player_cmd: "warp shop"}
+      - {close: true}
   warp_pvp:
     slot: 4
     icon: IRON_SWORD
@@ -68,8 +68,8 @@ items:
     name: "&6カジノ"
     lore: ["&7/warp casino"]
     actions:
-      - { player_cmd: "warp casino" }
-      - { close: true }
+      - {player_cmd: "warp casino"}
+      - {close: true}
   warp_endertt:
     slot: 6
     icon: EXPERIENCE_BOTTLE
@@ -78,8 +78,8 @@ items:
       - "&7エンチャントもできます"
       - "&7/warp endertt"
     actions:
-      - { player_cmd: "warp endertt" }
-      - { close: true }
+      - {player_cmd: "warp endertt"}
+      - {close: true,}
 
   craft:
     slot: 10
@@ -103,8 +103,8 @@ items:
     name: "&6バックパック"
     lore: ["&7/bp"]
     actions:
-      - { player_cmd: "bp" }
-      - { close: true }
+      - {player_cmd: "bp"}
+      - {close: true}
   trash:
     slot: 13
     icon: PLAYER_HEAD
@@ -112,8 +112,8 @@ items:
     name: "&cゴミ箱"
     lore: ["&7/d or /trash"]
     actions:
-      - { player_cmd: "trash" }
-      - { close: true }
+      - {player_cmd: "trash"}
+      - {close: true}
   anvil:
     slot: 14
     icon: ANVIL
@@ -137,7 +137,7 @@ items:
     lore: ["&7/loom"]
     actions:
       - {player_cmd: "loom"}
-      - {close: true}
+      - {close: true,}
 
   fly:
     slot: 19
@@ -147,7 +147,7 @@ items:
     required_permission: "essentials.fly"
     fallback_icon: FEATHER
     fallback_name: "&bfly 切り替え"
-    fallback_lore: [ "&c※ポイント購入 or 上級者以上のランクが必要" ]
+    fallback_lore: ["&c※ポイント購入 or 上級者以上のランクが必要"]
     actions:
       - {player_cmd: "fly"}
       - {close: true}
@@ -160,8 +160,8 @@ items:
       - "&7flyを強制的に有効にします"
       - "&7/fly onも同じ効果を持ちます"
     actions:
-      - { player_cmd: "redbull" }
-      - { close: true }
+      - {player_cmd: "redbull"}
+      - {close: true}
     required_permission: "essentials.fly"
     fallback_icon: PLAYER_HEAD
     fallback_texture: "766844d5e84f649451a87dacca7a73beaa04eea847d438de26c2d44d1e949de"
@@ -170,8 +170,8 @@ items:
       - "&c20Pを消費してflyを有効にします"
       - "&7ワールド移動後にflyが無効になる場合があります"
     fallback_actions:
-      - { player_cmd: "redbull" }
-      - { close: true }
+      - {player_cmd: "redbull"}
+      - {close: true}
   gms:
     slot: 21
     icon: GRASS_BLOCK
@@ -185,7 +185,7 @@ items:
         "minecraft:block_state":
           copper_golem_pose: star
     fallback_name: "&aサバイバルモード"
-    fallback_lore: [ "&cゲームモードを切り替える権限を持っていません" ]
+    fallback_lore: ["&cゲームモードを切り替える権限を持っていません"]
     actions:
       - {player_cmd: "gms"}
       - {close: true}
@@ -219,7 +219,7 @@ items:
         "minecraft:block_state":
           copper_golem_pose: star
     fallback_name: "&7スペクテイターモード"
-    fallback_lore: [ "&c※建築士以上のランクが必要" ]
+    fallback_lore: ["&c※建築士以上のランクが必要"]
     actions:
       - {player_cmd: "gmsp"}
       - {close: true}
@@ -239,7 +239,7 @@ items:
       - "&7/annnaimode <player> をチャット欄に入力"
       - "&7JAVAではチャットをクリックで途中まで自動入力されます"
     actions:
-      - {suggest_command: "/annnaimode "}
+      - {suggest_command: "/annnaimode ",}
 
   language:
     slot: 28
@@ -274,7 +274,7 @@ items:
     lore: ["&7現在のTP許可設定を確認する"]
     actions:
       - {player_cmd: "tpset mode"}
-      - {close: true}
+      - {close: true,}
 
   getmenu:
     slot: 37

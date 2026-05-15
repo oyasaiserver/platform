@@ -29,15 +29,15 @@ macro:
   #   ブラックリスト検査を全スキップ (FAWE 等を使えるプレイヤー向け)
   # - 空リストにすると全コマンドを許可 (ブラックリスト無効)
   command-blacklist:
-    # - "warp"
-    # - "home"
-    # - "spawn"
-    # - "tpa"
-    # - "msg"
-    # - "r"
-    # パーミッションノードの例 (コメントアウト解除で有効化):
-    # - "fawe.select"      # FAWEを使えるプレイヤーは全コマンド許可
-    # - "oyasaimenu.macro.bypass"  # 独自バイパス権限
+  # - "warp"
+  # - "home"
+  # - "spawn"
+  # - "tpa"
+  # - "msg"
+  # - "r"
+  # パーミッションノードの例 (コメントアウト解除で有効化):
+  # - "fawe.select"      # FAWEを使えるプレイヤーは全コマンド許可
+  # - "oyasaimenu.macro.bypass"  # 独自バイパス権限
 
 placeholders:
   server-name: "OyasaiServer"
