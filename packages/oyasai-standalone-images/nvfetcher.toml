@@ -1,0 +1,17 @@
+[mariadb]
+docker.os = "linux"
+docker.arch = "amd64"
+fetch.docker = "mariadb"
+src.manual = "10.4.28"
+
+[mc-backup]
+docker.os = "linux"
+docker.arch = "amd64"
+fetch.docker = "itzg/mc-backup"
+src.container = "itzg/mc-backup"
+
+[mysql-backup]
+docker.os = "linux"
+docker.arch = "amd64"
+fetch.docker = "databack/mysql-backup"
+src.manual = "1.4.0"
