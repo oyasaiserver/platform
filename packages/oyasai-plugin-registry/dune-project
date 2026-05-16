@@ -1,0 +1,7 @@
+(lang dune 3.23)
+
+(name oyasai-plugin-registry)
+
+(package
+ (name oyasai-plugin-registry)
+ (depends (ocaml (= 5.5.0)) relocatable core))

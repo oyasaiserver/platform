@@ -70,6 +70,8 @@ lib.makeScope pkgs.newScope (
       overrideScope = pl2nixOverlay;
     };
 
+    dune2nix = callPackage inputs.dune2nix.lib.dune2nix { overrideScope = final: prev: { }; };
+
     buildGradlePackage =
       args:
       inputs.gradle2nix.builders.${system}.buildGradlePackage (

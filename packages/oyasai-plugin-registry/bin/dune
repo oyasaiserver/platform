@@ -1,0 +1,4 @@
+(executable
+ (public_name oyasai-plugin-registry)
+ (name main)
+ (libraries oyasai_plugin_registry core))

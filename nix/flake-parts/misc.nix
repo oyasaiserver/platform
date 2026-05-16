@@ -7,7 +7,10 @@
         pkgs = import inputs.nixpkgs {
           inherit system;
           config.allowUnfree = true;
-          overlays = [ (import ../oyasai-overlay.nix { inherit inputs; }) ];
+          overlays = [
+            inputs.dune2nix.overlays.dune
+            (import ../oyasai-overlay.nix { inherit inputs; })
+          ];
         };
       };
     };

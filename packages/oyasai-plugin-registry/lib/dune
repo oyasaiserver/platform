@@ -1,0 +1,2 @@
+(library
+ (name oyasai_plugin_registry))

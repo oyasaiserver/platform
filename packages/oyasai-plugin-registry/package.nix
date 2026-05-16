@@ -1,5 +1,5 @@
 {
-  package-lock2nix,
+  dune2nix,
   lib,
   fetchurl,
   oyasai-plugins,
@@ -9,9 +9,11 @@
 let
   registry = builtins.fromJSON (builtins.readFile ./registry.json);
   lock = builtins.fromJSON (builtins.readFile ./lock.json);
-
-  final = package-lock2nix.mkNpmModule {
+  final = dune2nix.mkDuneProject {
     src = ./.;
+
+    DUNE_CACHE = "enabled";
+    duneSeparateDeps = true;
 
     passthru = {
       update = writeShellApplication {
