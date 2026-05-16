@@ -8,7 +8,6 @@ import com.github.sahyuya.oyasaiMenu.model.PlayerMenuState
 import com.github.sahyuya.oyasaiMenu.util.CustomHead
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
-import com.github.sahyuya.oyasaiMenu.util.PermissionCondition
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -98,7 +97,7 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     val inv = Bukkit.createInventory(null, menuDef.size, comp(title))
     menuDef.items.values.forEach { itemDef ->
       if (itemDef.icon.isAir) return@forEach
-      if (!PermissionCondition.matches(player, itemDef.permission)) return@forEach
+      if (itemDef.permission != null && !player.hasPermission(itemDef.permission)) return@forEach
       if (itemDef.slot < menuDef.size) inv.setItem(itemDef.slot, buildItemStack(player, itemDef))
     }
     if (menuDef.id == "root") {

@@ -1,6 +1,5 @@
 package com.github.sahyuya.oyasaiMenu.model
 
-import com.github.sahyuya.oyasaiMenu.util.PermissionCondition
 import org.bukkit.Material
 
 data class PopupMenuDef(
@@ -48,7 +47,7 @@ data class PopupItem(
    * - opOnly のみの場合は isOp チェック
    */
   fun isVisibleTo(player: org.bukkit.entity.Player): Boolean {
-    if (requiredPermission != null) return PermissionCondition.matches(player, requiredPermission)
+    if (requiredPermission != null) return player.hasPermission(requiredPermission)
     if (opOnly) return player.isOp
     return true
   }

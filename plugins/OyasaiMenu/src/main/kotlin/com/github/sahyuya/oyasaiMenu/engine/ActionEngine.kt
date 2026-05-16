@@ -6,12 +6,7 @@ import com.github.sahyuya.oyasaiMenu.model.MenuAction
 import com.github.sahyuya.oyasaiMenu.model.PlayerMenuState
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
-import com.github.sahyuya.oyasaiMenu.util.PermissionCondition
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.event.ClickEvent
-import net.kyori.adventure.text.event.HoverEvent
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextDecoration
+import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -177,74 +172,6 @@ class ActionEngine(private val plugin: OyasaiMenu) {
           Bukkit.getScheduler()
               .runTaskLater(plugin, Runnable { plugin.sellEngine.openSellMenu(player) }, 1L)
 
-      ActionType.PLAYER_CMD -> {
-        val cmd =
-            applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
-        if (cmd.isNotEmpty()) player.performCommand(cmd)
-      }
-
-      ActionType.CONSOLE_CMD -> {
-        val cmd =
-            applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
-        if (cmd.isNotEmpty()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd)
-      }
-
-      ActionType.OP_PLAYER_CMD -> {
-        val cmd =
-            applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
-        if (cmd.isNotEmpty()) {
-          val wasOp = player.isOp
-          try {
-            player.isOp = true
-            player.performCommand(cmd)
-          } finally {
-            player.isOp = wasOp
-          }
-        }
-      }
-
-      ActionType.URL -> {
-        val url = action.getString("url")
-        if (url.isNotEmpty()) player.sendMessage(c("&e$url\n&7URLをクリックまたはコピーしてアクセスしてください。"))
-      }
-
-      ActionType.CHAT_PASTE -> {
-        val text = action.getString("text")
-        if (text.isNotEmpty()) player.sendMessage(c("&7チャット欄にコピーして使用してください: &f$text"))
-      }
-
-      ActionType.SUGGEST_COMMAND -> {
-        val cmd =
-            applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
-        if (cmd.isNotEmpty()) {
-          val msg =
-              Component.text()
-                  .decoration(TextDecoration.ITALIC, false)
-                  .append(Component.text("▶ ").color(NamedTextColor.GREEN))
-                  .append(
-                      Component.text(cmd)
-                          .color(NamedTextColor.YELLOW)
-                          .clickEvent(ClickEvent.suggestCommand(cmd))
-                          .hoverEvent(
-                              HoverEvent.showText(
-                                  Component.text("クリックでコマンドをチャット欄に入力")
-                                      .color(NamedTextColor.GRAY)
-                                      .decoration(TextDecoration.ITALIC, false))))
-                  .build()
-          player.sendMessage(msg)
-        }
-      }
-
-      ActionType.OPEN_POPUP -> {
-        val popupId = action.getString("target")
-        if (popupId.isNotEmpty()) {
-          Bukkit.getScheduler()
-              .runTaskLater(plugin, Runnable { plugin.popupMenuEngine.open(player, popupId) }, 1L)
-        }
-      }
-
-      ActionType.CLOSE -> player.closeInventory()
-
       ActionType.UNKNOWN -> plugin.logger.warning("未知のアクション: player=${player.name}")
     }
   }
@@ -258,7 +185,14 @@ class ActionEngine(private val plugin: OyasaiMenu) {
    * softdepend なので try-catch で安全に呼び出す。
    */
   private fun checkPermission(player: Player, permission: String): Boolean {
-    return PermissionCondition.matches(player, permission)
+    if (permission.isEmpty()) return true
+    return runCatching {
+          val lp = LuckPermsProvider.get()
+          val user =
+              lp.userManager.getUser(player.uniqueId) ?: return player.hasPermission(permission)
+          user.cachedData.permissionData.checkPermission(permission).asBoolean()
+        }
+        .getOrElse { player.hasPermission(permission) }
   }
 
   // ============================
