@@ -27,7 +27,10 @@ in
 writeShellApplication {
   inherit name passthru;
 
-  runtimeInputs = [ coreutils ];
+  runtimeInputs = [
+    coreutils
+    jre
+  ];
 
   text = ''
     mkdir -p cache
@@ -51,9 +54,15 @@ writeShellApplication {
 
     MEMORY="''${MEMORY:-2G}"
 
-    exec ${jre}/bin/java \
+    exec java \
       -Xmx"''${MEMORY}" \
       -Xms"''${MEMORY}" \
+      -XX:+UseZGC \
+      -XX:+AlwaysPreTouch \
+      -XX:+DisableExplicitGC \
+      -XX:+PerfDisableSharedMem \
+      -XX:-OmitStackTraceInFastThrow \
+      -Dfile.encoding=UTF-8 \
       -Dcom.mojang.eula.agree=true \
       -jar "${package}/lib/minecraft/server.jar" \
       ${lib.concatMapStringsSep " " (k: "--add-plugin ${k}") plugins} \
