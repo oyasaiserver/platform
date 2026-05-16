@@ -44,6 +44,15 @@ enum class ActionType {
   OPEN_CARBUILDER,
   OPEN_LINKS,
   OPEN_SELL,
+  // 新アクション
+  PLAYER_CMD,
+  CONSOLE_CMD,
+  OP_PLAYER_CMD,
+  URL,
+  CHAT_PASTE,
+  SUGGEST_COMMAND,
+  OPEN_POPUP,
+  CLOSE,
   UNKNOWN
 }
 

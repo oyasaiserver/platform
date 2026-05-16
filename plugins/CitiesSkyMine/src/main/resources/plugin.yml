@@ -6,6 +6,8 @@ api-version: "1.21"
 version: "0.2.0"
 depend:
   - FastAsyncWorldEdit
+softdepend:
+  - LuckPerms
 
 commands:
   csm:
@@ -53,6 +55,11 @@ commands:
   ".brp":
     description: "ブラシプリセットショートカット"
     usage: "/.brp <save|load|list|delete|名前>"
+  ".gm":
+    description: "ChestGUI メーカー (OP限定)"
+    usage: "/.gm <new <id>|edit <id> [canvas|preview|commit|revert|info|title|name|lore|perm|action|clearslot]|list>"
+    permission: citiesskymine.guimaker
+    permission-message: "このコマンドはOPのみ使用できます。"
 
 permissions:
   citiesskymine.*:
@@ -74,6 +81,7 @@ permissions:
       citiesskymine.config: true
       citiesskymine.debugstick: true
       citiesskymine.preset: true
+      citiesskymine.guimaker: true
   citiesskymine.role.admin:
     description: "CSM アドミンロール"
     default: op
@@ -119,3 +127,6 @@ permissions:
   citiesskymine.preset:
     description: "旧形式: ブラシプリセットコマンドの使用権限"
     default: false
+  citiesskymine.guimaker:
+    description: "GuiMaker OP限定コマンドの使用権限"
+    default: op

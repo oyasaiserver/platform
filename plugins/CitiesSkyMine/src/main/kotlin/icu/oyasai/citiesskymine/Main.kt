@@ -3,6 +3,8 @@ package icu.oyasai.citiesskymine
 import icu.oyasai.citiesskymine.access.CsmAccessController
 import icu.oyasai.citiesskymine.command.CitiesSkyMineCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
+import icu.oyasai.citiesskymine.guimaker.GuiEditorEngine
+import icu.oyasai.citiesskymine.guimaker.GuiMakerCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickMemoryStore
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
@@ -136,6 +138,13 @@ class Main : JavaPlugin() {
     val dotBrushPresetCmd = getCommand(".brp")
     dotBrushPresetCmd?.setExecutor(brushPresetHandler)
     dotBrushPresetCmd?.tabCompleter = brushPresetHandler
+
+    val guiEditorEngine = GuiEditorEngine(this)
+    server.pluginManager.registerEvents(guiEditorEngine, this)
+    val gmHandler = GuiMakerCommand(this, guiEditorEngine)
+    val gmCmd = getCommand(".gm")
+    gmCmd?.setExecutor(gmHandler)
+    gmCmd?.tabCompleter = gmHandler
 
     logger.info("CitiesSkyMine enabled")
   }

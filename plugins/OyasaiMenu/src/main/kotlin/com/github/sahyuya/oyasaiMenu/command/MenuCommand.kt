@@ -9,6 +9,13 @@ import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
 class MenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCompleter {
+  companion object {
+    private val POPUP_ALIASES =
+        mapOf(
+            "u" to "utility",
+            "utility" to "utility")
+  }
+
   override fun onCommand(
       sender: CommandSender,
       command: Command,
@@ -25,8 +32,17 @@ class MenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       player.sendMessage(c("&cこのコマンドを使う権限がありません。"))
       return false
     }
-    val defaultId = plugin.config.getString("menu.default", "root") ?: "root"
-    plugin.menuEngine.openMenu(player, defaultId)
+    val requested = args.getOrNull(0)?.takeIf { it.isNotBlank() }
+    val popupId = requested?.lowercase()?.let { POPUP_ALIASES[it] }
+    if (popupId != null) {
+      plugin.popupMenuEngine.open(player, popupId)
+      return true
+    }
+
+    val menuId = requested
+        ?: plugin.config.getString("menu.default", "root")
+        ?: "root"
+    plugin.menuEngine.openMenu(player, menuId)
     return true
   }
 
@@ -37,6 +53,8 @@ class MenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       args: Array<out String>
   ): List<String>? {
     if (!sender.hasPermission("oyasaimenu.admin")) return emptyList()
-    return emptyList()
+    if (args.size != 1) return emptyList()
+    val prefix = args[0]
+    return POPUP_ALIASES.keys.filter { it.startsWith(prefix, ignoreCase = true) }
   }
 }
