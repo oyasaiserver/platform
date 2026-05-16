@@ -6,6 +6,10 @@ import icu.oyasai.citiesskymine.config.ConfigGuiCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickMemoryStore
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
+import icu.oyasai.citiesskymine.guimaker.GuiEditorEngine
+import icu.oyasai.citiesskymine.guimaker.GuiMakerCommand
+import icu.oyasai.citiesskymine.menu.CsmMenuCommand
+import icu.oyasai.citiesskymine.menu.CsmMenuEngine
 import icu.oyasai.citiesskymine.payload.PayloadCommand
 import icu.oyasai.citiesskymine.preset.BrushPresetCommand
 import icu.oyasai.citiesskymine.road.IntersectionCommand
@@ -136,6 +140,21 @@ class Main : JavaPlugin() {
     val dotBrushPresetCmd = getCommand(".brp")
     dotBrushPresetCmd?.setExecutor(brushPresetHandler)
     dotBrushPresetCmd?.tabCompleter = brushPresetHandler
+
+    val csmMenuEngine = CsmMenuEngine(this)
+    csmMenuEngine.reload()
+    server.pluginManager.registerEvents(csmMenuEngine, this)
+    val csmMenuHandler = CsmMenuCommand(this, csmMenuEngine)
+    val csmMenuCmd = getCommand(".csmenu")
+    csmMenuCmd?.setExecutor(csmMenuHandler)
+    csmMenuCmd?.tabCompleter = csmMenuHandler
+
+    val guiEditorEngine = GuiEditorEngine(this)
+    server.pluginManager.registerEvents(guiEditorEngine, this)
+    val gmHandler = GuiMakerCommand(this, guiEditorEngine, csmMenuEngine)
+    val gmCmd = getCommand(".gm")
+    gmCmd?.setExecutor(gmHandler)
+    gmCmd?.tabCompleter = gmHandler
 
     logger.info("CitiesSkyMine enabled")
   }
