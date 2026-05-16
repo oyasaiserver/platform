@@ -8,6 +8,7 @@ depend:
   - FastAsyncWorldEdit
 softdepend:
   - LuckPerms
+  - PlaceholderAPI
 
 commands:
   csm:
@@ -55,6 +56,9 @@ commands:
   ".brp":
     description: "ブラシプリセットショートカット"
     usage: "/.brp <save|load|list|delete|名前>"
+  ".csmenu":
+    description: "CsmMenu — CitiesSkyMine 独自メニューエンジン (OyasaiMenu フォーク)"
+    usage: "/.csmenu <menu-id|reload>"
   ".gm":
     description: "ChestGUI メーカー (OP限定)"
     usage: "/.gm <new <id>|edit <id> [canvas|preview|commit|revert|info|title|name|lore|perm|action|clearslot]|list>"

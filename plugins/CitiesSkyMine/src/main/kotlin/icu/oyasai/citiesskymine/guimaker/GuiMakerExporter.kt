@@ -13,8 +13,11 @@ object GuiMakerExporter {
   private fun draftFile(plugin: Main, menuId: String): File =
       File(plugin.dataFolder, "guimaker/$menuId.yml").also { it.parentFile.mkdirs() }
 
+  // OyasaiMenu の menus/ ではなく CitiesSkyMine 自身の menus/ に書き出す。
+  // CsmMenuEngine がこのフォルダを読み込む。
+  // [TODO: OyasaiMenu 統合] 統合後は OyasaiMenu の menus/ に書き出すよう変更する。
   private fun liveFile(plugin: Main, menuId: String): File =
-      File(plugin.dataFolder.parentFile, "OyasaiMenu/menus/$menuId.yml")
+      File(plugin.dataFolder, "menus/$menuId.yml")
 
   // ── 公開 API ──────────────────────────────────────────────
 
@@ -26,9 +29,12 @@ object GuiMakerExporter {
   fun hasDraft(plugin: Main, menuId: String): Boolean = draftFile(plugin, menuId).exists()
 
   fun commit(plugin: Main, session: GuiEditorSession): Result<String> = runCatching {
-    liveFile(plugin, session.menuId).parentFile.mkdirs()
-    writeYaml(liveFile(plugin, session.menuId), session)
-    "OyasaiMenu/menus/${session.menuId}.yml"
+    liveFile(plugin, session.menuId)
+        .also { it.parentFile.mkdirs() }
+        .let { file ->
+          writeYaml(file, session)
+          file.relativeTo(plugin.dataFolder.parentFile).path
+        }
   }
 
   fun revertDraft(plugin: Main, session: GuiEditorSession) {

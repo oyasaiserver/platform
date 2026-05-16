@@ -1,6 +1,7 @@
 package icu.oyasai.citiesskymine.guimaker
 
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.menu.CsmMenuEngine
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
@@ -10,8 +11,11 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
-class GuiMakerCommand(private val plugin: Main, private val engine: GuiEditorEngine) :
-    CommandExecutor, TabCompleter {
+class GuiMakerCommand(
+    private val plugin: Main,
+    private val engine: GuiEditorEngine,
+    private val menuEngine: CsmMenuEngine
+) : CommandExecutor, TabCompleter {
 
   companion object {
     private val ROOT_SUBCOMMANDS = listOf("new", "edit", "list", "ui", "help")
@@ -304,7 +308,7 @@ class GuiMakerCommand(private val plugin: Main, private val engine: GuiEditorEng
     val result = GuiMakerExporter.commit(plugin, session)
     if (result.isSuccess) {
       sender.sendMessage(comp("&e[GuiMaker] &aコミットしました: &f${result.getOrNull()}"))
-      sender.performCommand("oyasaimenu reload")
+      menuEngine.reload()
     } else {
       sender.sendMessage(comp("&e[GuiMaker] &cコミット失敗: ${result.exceptionOrNull()?.message}"))
     }
