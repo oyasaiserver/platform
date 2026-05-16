@@ -178,17 +178,20 @@ class ActionEngine(private val plugin: OyasaiMenu) {
               .runTaskLater(plugin, Runnable { plugin.sellEngine.openSellMenu(player) }, 1L)
 
       ActionType.PLAYER_CMD -> {
-        val cmd = applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
+        val cmd =
+            applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
         if (cmd.isNotEmpty()) player.performCommand(cmd)
       }
 
       ActionType.CONSOLE_CMD -> {
-        val cmd = applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
+        val cmd =
+            applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
         if (cmd.isNotEmpty()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd)
       }
 
       ActionType.OP_PLAYER_CMD -> {
-        val cmd = applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
+        val cmd =
+            applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
         if (cmd.isNotEmpty()) {
           val wasOp = player.isOp
           try {
@@ -211,7 +214,8 @@ class ActionEngine(private val plugin: OyasaiMenu) {
       }
 
       ActionType.SUGGEST_COMMAND -> {
-        val cmd = applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
+        val cmd =
+            applyPlaceholders(player, action.getString("command")).replace("%player%", player.name)
         if (cmd.isNotEmpty()) {
           val msg =
               Component.text()
@@ -234,7 +238,8 @@ class ActionEngine(private val plugin: OyasaiMenu) {
       ActionType.OPEN_POPUP -> {
         val popupId = action.getString("target")
         if (popupId.isNotEmpty()) {
-          Bukkit.getScheduler().runTaskLater(plugin, Runnable { plugin.popupMenuEngine.open(player, popupId) }, 1L)
+          Bukkit.getScheduler()
+              .runTaskLater(plugin, Runnable { plugin.popupMenuEngine.open(player, popupId) }, 1L)
         }
       }
 

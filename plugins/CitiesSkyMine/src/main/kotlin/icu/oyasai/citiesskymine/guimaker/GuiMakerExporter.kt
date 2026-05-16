@@ -52,15 +52,17 @@ object GuiMakerExporter {
     val ids = mutableSetOf<String>()
     val draftDir = File(plugin.dataFolder, "guimaker")
     if (draftDir.exists()) {
-      draftDir.walkTopDown().filter { it.isFile && it.extension == "yml" }.forEach {
-        ids.add(it.toRelativeString(draftDir).removeSuffix(".yml"))
-      }
+      draftDir
+          .walkTopDown()
+          .filter { it.isFile && it.extension == "yml" }
+          .forEach { ids.add(it.toRelativeString(draftDir).removeSuffix(".yml")) }
     }
     val liveDir = File(plugin.dataFolder.parentFile, "OyasaiMenu/menus")
     if (liveDir.exists()) {
-      liveDir.walkTopDown().filter { it.isFile && it.extension == "yml" }.forEach {
-        ids.add(it.toRelativeString(liveDir).removeSuffix(".yml"))
-      }
+      liveDir
+          .walkTopDown()
+          .filter { it.isFile && it.extension == "yml" }
+          .forEach { ids.add(it.toRelativeString(liveDir).removeSuffix(".yml")) }
     }
     return ids.sorted()
   }
@@ -140,12 +142,12 @@ object GuiMakerExporter {
               .map { map ->
                 GuiActionDef(
                     type = map["type"]?.toString() ?: "UNKNOWN",
-                    params =
-                        map.filterKeys { it != "type" }.mapValues { it.value.toString() })
+                    params = map.filterKeys { it != "type" }.mapValues { it.value.toString() })
               }
               .toMutableList()
 
-      val def = GuiSlotDef(
+      val def =
+          GuiSlotDef(
               name = sec.getString("name", "") ?: "",
               lore = sec.getStringList("lore").toMutableList(),
               permission = sec.getString("permission"),
@@ -156,21 +158,45 @@ object GuiMakerExporter {
       val item = ItemStack(mat)
       val meta = item.itemMeta
       if (meta != null) {
-        if (def.name.isNotEmpty()) meta.displayName(
-            LegacyComponentSerializer.legacyAmpersand().deserialize(def.name)
-                .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false))
-        if (def.lore.isNotEmpty()) meta.lore(def.lore.map {
-          LegacyComponentSerializer.legacyAmpersand().deserialize(it)
-              .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
-        })
+        if (def.name.isNotEmpty())
+            meta.displayName(
+                LegacyComponentSerializer.legacyAmpersand()
+                    .deserialize(def.name)
+                    .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false))
+        if (def.lore.isNotEmpty())
+            meta.lore(
+                def.lore.map {
+                  LegacyComponentSerializer.legacyAmpersand()
+                      .deserialize(it)
+                      .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
+                })
         val pdc = meta.persistentDataContainer
-        pdc.set(org.bukkit.NamespacedKey(plugin, "gm_name"),    org.bukkit.persistence.PersistentDataType.STRING, def.name)
-        pdc.set(org.bukkit.NamespacedKey(plugin, "gm_lore"),    org.bukkit.persistence.PersistentDataType.STRING, def.lore.joinToString("\n"))
-        pdc.set(org.bukkit.NamespacedKey(plugin, "gm_perm"),    org.bukkit.persistence.PersistentDataType.STRING, def.permission ?: "")
-        val actStr = def.actions.joinToString("\n") { a ->
-          a.type + if (a.params.isEmpty()) "" else " " + a.params.entries.joinToString(" ") { (k, v) -> "$k=${v.replace(" ","\\s")}" }
-        }
-        pdc.set(org.bukkit.NamespacedKey(plugin, "gm_actions"), org.bukkit.persistence.PersistentDataType.STRING, actStr)
+        pdc.set(
+            org.bukkit.NamespacedKey(plugin, "gm_name"),
+            org.bukkit.persistence.PersistentDataType.STRING,
+            def.name)
+        pdc.set(
+            org.bukkit.NamespacedKey(plugin, "gm_lore"),
+            org.bukkit.persistence.PersistentDataType.STRING,
+            def.lore.joinToString("\n"))
+        pdc.set(
+            org.bukkit.NamespacedKey(plugin, "gm_perm"),
+            org.bukkit.persistence.PersistentDataType.STRING,
+            def.permission ?: "")
+        val actStr =
+            def.actions.joinToString("\n") { a ->
+              a.type +
+                  if (a.params.isEmpty()) ""
+                  else
+                      " " +
+                          a.params.entries.joinToString(" ") { (k, v) ->
+                            "$k=${v.replace(" ","\\s")}"
+                          }
+            }
+        pdc.set(
+            org.bukkit.NamespacedKey(plugin, "gm_actions"),
+            org.bukkit.persistence.PersistentDataType.STRING,
+            actStr)
         item.itemMeta = meta
       }
       tempInv.setItem(slot, item)
@@ -178,6 +204,5 @@ object GuiMakerExporter {
     session.canvasInventory = tempInv
   }
 
-  private fun rawMaterial(item: ItemStack): Material? =
-      item.type.takeIf { it != Material.AIR }
+  private fun rawMaterial(item: ItemStack): Material? = item.type.takeIf { it != Material.AIR }
 }

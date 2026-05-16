@@ -10,10 +10,7 @@ import org.bukkit.entity.Player
 
 class MenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCompleter {
   companion object {
-    private val POPUP_ALIASES =
-        mapOf(
-            "u" to "utility",
-            "utility" to "utility")
+    private val POPUP_ALIASES = mapOf("u" to "utility", "utility" to "utility")
   }
 
   override fun onCommand(
@@ -39,9 +36,7 @@ class MenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       return true
     }
 
-    val menuId = requested
-        ?: plugin.config.getString("menu.default", "root")
-        ?: "root"
+    val menuId = requested ?: plugin.config.getString("menu.default", "root") ?: "root"
     plugin.menuEngine.openMenu(player, menuId)
     return true
   }

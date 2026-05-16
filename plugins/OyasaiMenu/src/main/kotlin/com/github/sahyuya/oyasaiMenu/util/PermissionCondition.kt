@@ -24,10 +24,13 @@ object PermissionCondition {
   private fun hasLuckPermsGroup(player: Player, group: String): Boolean =
       runCatching {
             val lp = LuckPermsProvider.get()
-            val user = lp.userManager.getUser(player.uniqueId) ?: return player.hasPermission("group.$group")
+            val user =
+                lp.userManager.getUser(player.uniqueId)
+                    ?: return player.hasPermission("group.$group")
             user.primaryGroup.equals(group, ignoreCase = true) ||
-                user.getInheritedGroups(QueryOptions.nonContextual())
-                    .any { it.name.equals(group, ignoreCase = true) }
+                user.getInheritedGroups(QueryOptions.nonContextual()).any {
+                  it.name.equals(group, ignoreCase = true)
+                }
           }
           .getOrElse { player.hasPermission("group.$group") }
 }
