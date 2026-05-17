@@ -151,6 +151,24 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
     return PopupMenuDef(id = id, title = title, glass = glass, navActive = navActive, items = items)
   }
 
+  /**
+     * ConfigurationSection を再帰的に Map<String, Any> に変換する。
+     * YamlConfiguration の getValues(deep=true) はドット区切りでフラット化するため、
+     * このメソッドでネスト構造を維持したまま変換する。
+     */
+    private fun sectionToMap(sec: ConfigurationSection): Map<String, Any> {
+        val result = linkedMapOf<String, Any>()
+        sec.getKeys(false).forEach { key ->
+            val subSec = sec.getConfigurationSection(key)
+            if (subSec != null) {
+                result[key] = sectionToMap(subSec)
+            } else {
+                sec.get(key)?.let { result[key] = it }
+            }
+        }
+        return result
+    }
+
   private fun parseItemSpec(
       sec: ConfigurationSection?,
       popupId: String,
@@ -171,19 +189,32 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
               plugin.logger.warning("Popup $popupId '$itemKey': 不明な item.id '$id'")
               return null
             }
-    val blockState = linkedMapOf<String, String>()
-    val components = sec.getConfigurationSection("components")
-    val blockStateSec =
-        components?.getConfigurationSection("minecraft:block_state")
-            ?: components?.getConfigurationSection("block_state")
-            ?: sec.getConfigurationSection("block_state")
-    blockStateSec?.getKeys(false)?.forEach { stateKey ->
-      blockState[stateKey] = blockStateSec.getString(stateKey) ?: return@forEach
-    }
+    val blockState     = linkedMapOf<String, String>()
+        val rawComponents  = linkedMapOf<String, Any>()
+
+        val componentsSec = sec.getConfigurationSection("components")
+        componentsSec?.getKeys(false)?.forEach { compKey ->
+            val normalizedKey = if (compKey.startsWith("minecraft:")) compKey else "minecraft:$compKey"
+            val compSec = componentsSec.getConfigurationSection(compKey)
+            val compData: Any = if (compSec != null) sectionToMap(compSec) else (componentsSec.get(compKey) ?: return@forEach)
+            rawComponents[normalizedKey] = compData
+
+            if (normalizedKey == "minecraft:block_state" && compData is Map<*, *>) {
+                @Suppress("UNCHECKED_CAST")
+                (compData as Map<String, Any>).forEach { (k, v) -> blockState[k] = v.toString() }
+            }
+        }
+
+        val blockStateSec = sec.getConfigurationSection("block_state")
+        blockStateSec?.getKeys(false)?.forEach { stateKey ->
+            blockState[stateKey] = blockStateSec.getString(stateKey) ?: return@forEach
+        }
     return PopupItemSpec(
         material = material,
         amount = sec.getInt("count", sec.getInt("amount", 1)).coerceIn(1, 64),
-        blockState = blockState)
+        blockState = blockState,
+        rawComponents = rawComponents
+    )
   }
 
   private fun parseAction(map: Map<String, Any>): PopupAction? =
