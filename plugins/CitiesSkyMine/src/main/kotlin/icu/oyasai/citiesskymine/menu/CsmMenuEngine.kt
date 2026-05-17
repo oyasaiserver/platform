@@ -1,6 +1,7 @@
 package icu.oyasai.citiesskymine.menu
 
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.util.ItemVisuals
 import java.util.UUID
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
@@ -98,6 +99,7 @@ class CsmMenuEngine(private val plugin: Main) : Listener {
     meta.displayName(comp(applyPlaceholders(player, itemDef.name)))
     if (itemDef.lore.isNotEmpty())
         meta.lore(itemDef.lore.map { comp(applyPlaceholders(player, it)) })
+    ItemVisuals.applyEnchantVisual(meta, itemDef.enchanted)
     item.itemMeta = meta
     return item
   }

@@ -87,6 +87,7 @@ class MenuLoader(private val plugin: OyasaiMenu) {
     val name = section.getString("name", "") ?: ""
     val lore = section.getStringList("lore")
     val permission = section.getString("permission")
+    val enchanted = section.getBoolean("enchanted", false)
     val actions = if (section.contains("actions")) parseActions(section, "actions") else emptyList()
 
     return MenuItemDefinition(
@@ -96,7 +97,8 @@ class MenuLoader(private val plugin: OyasaiMenu) {
         lore = lore,
         actions = actions,
         permission = permission,
-        customTexture = customTexture)
+        customTexture = customTexture,
+        enchanted = enchanted)
   }
 
   @Suppress("UNCHECKED_CAST")

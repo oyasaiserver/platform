@@ -1,6 +1,7 @@
-package icu.oyasai.citiesskymine.guimaker
+package com.github.sahyuya.oyasaiMenu.guimaker
 
-import icu.oyasai.citiesskymine.Main
+import com.github.sahyuya.oyasaiMenu.OyasaiMenu
+import com.github.sahyuya.oyasaiMenu.util.ItemVisuals
 import java.io.File
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
@@ -10,38 +11,30 @@ import org.bukkit.inventory.ItemStack
 
 object GuiMakerExporter {
 
-  private fun draftFile(plugin: Main, menuId: String): File =
+  private fun draftFile(plugin: OyasaiMenu, menuId: String): File =
       File(plugin.dataFolder, "guimaker/$menuId.yml").also { it.parentFile.mkdirs() }
 
-  // OyasaiMenu の menus/ ではなく CitiesSkyMine 自身の menus/ に書き出す。
-  // CsmMenuEngine がこのフォルダを読み込む。
-  // [TODO: OyasaiMenu 統合] 統合後は OyasaiMenu の menus/ に書き出すよう変更する。
-  private fun liveFile(plugin: Main, menuId: String): File =
+  private fun liveFile(plugin: OyasaiMenu, menuId: String): File =
       File(plugin.dataFolder, "menus/$menuId.yml")
 
   // ── 公開 API ──────────────────────────────────────────────
 
-  fun exportDraft(plugin: Main, session: GuiEditorSession) {
+  fun exportDraft(plugin: OyasaiMenu, session: GuiEditorSession) {
     runCatching { writeYaml(draftFile(plugin, session.menuId), session) }
         .onFailure { plugin.logger.warning("[GuiMaker] ドラフト保存失敗: ${it.message}") }
   }
 
-  fun hasDraft(plugin: Main, menuId: String): Boolean = draftFile(plugin, menuId).exists()
+  fun hasDraft(plugin: OyasaiMenu, menuId: String): Boolean = draftFile(plugin, menuId).exists()
 
-  fun commit(plugin: Main, session: GuiEditorSession): Result<String> = runCatching {
-    liveFile(plugin, session.menuId)
-        .also { it.parentFile.mkdirs() }
-        .let { file ->
-          writeYaml(file, session)
-          file.relativeTo(plugin.dataFolder.parentFile).path
-        }
+  fun commit(plugin: OyasaiMenu, session: GuiEditorSession): Result<String> = runCatching {
+    saveSessionToFile(plugin, session, liveFile(plugin, session.menuId))
   }
 
-  fun revertDraft(plugin: Main, session: GuiEditorSession) {
+  fun revertDraft(plugin: OyasaiMenu, session: GuiEditorSession) {
     draftFile(plugin, session.menuId).delete()
   }
 
-  fun loadIntoSession(plugin: Main, session: GuiEditorSession): Boolean {
+  fun loadIntoSession(plugin: OyasaiMenu, session: GuiEditorSession): Boolean {
     val draft = draftFile(plugin, session.menuId)
     val live = liveFile(plugin, session.menuId)
     val file =
@@ -50,11 +43,22 @@ object GuiMakerExporter {
           live.exists() -> live
           else -> return false
         }
+    return loadFileIntoSession(plugin, file, session)
+  }
+
+  fun saveSessionToFile(plugin: OyasaiMenu, session: GuiEditorSession, file: File): String {
+    file.parentFile.mkdirs()
+    writeYaml(file, session)
+    return file.relativeTo(plugin.dataFolder.parentFile).path
+  }
+
+  fun loadFileIntoSession(plugin: OyasaiMenu, file: File, session: GuiEditorSession): Boolean {
+    if (!file.exists()) return false
     parseYamlIntoSession(plugin, file, session)
     return true
   }
 
-  fun listMenuIds(plugin: Main): List<String> {
+  fun listMenuIds(plugin: OyasaiMenu): List<String> {
     val ids = mutableSetOf<String>()
     val draftDir = File(plugin.dataFolder, "guimaker")
     if (draftDir.exists()) {
@@ -63,7 +67,7 @@ object GuiMakerExporter {
           .filter { it.isFile && it.extension == "yml" }
           .forEach { ids.add(it.toRelativeString(draftDir).removeSuffix(".yml")) }
     }
-    val liveDir = File(plugin.dataFolder.parentFile, "OyasaiMenu/menus")
+    val liveDir = File(plugin.dataFolder, "menus")
     if (liveDir.exists()) {
       liveDir
           .walkTopDown()
@@ -111,6 +115,7 @@ object GuiMakerExporter {
           }
       if (lore.isNotEmpty()) yaml.set("$key.lore", lore)
       def?.permission?.let { yaml.set("$key.permission", it) }
+      if (def?.enchanted == true) yaml.set("$key.enchanted", true)
 
       if (def != null && def.actions.isNotEmpty()) {
         val actionList =
@@ -125,7 +130,7 @@ object GuiMakerExporter {
     yaml.save(file)
   }
 
-  private fun parseYamlIntoSession(plugin: Main, file: File, session: GuiEditorSession) {
+  private fun parseYamlIntoSession(plugin: OyasaiMenu, file: File, session: GuiEditorSession) {
     val yaml = YamlConfiguration.loadConfiguration(file)
     session.menuTitle = yaml.getString("menu.title", "&8${session.menuId}") ?: "&8${session.menuId}"
     session.menuSize = (((yaml.getInt("menu.size", 54) + 8) / 9) * 9).coerceIn(9, 54)
@@ -157,6 +162,7 @@ object GuiMakerExporter {
               name = sec.getString("name", "") ?: "",
               lore = sec.getStringList("lore").toMutableList(),
               permission = sec.getString("permission"),
+              enchanted = sec.getBoolean("enchanted", false),
               actions = actions)
       session.slots[slot] = def
 
@@ -176,6 +182,7 @@ object GuiMakerExporter {
                       .deserialize(it)
                       .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
                 })
+        ItemVisuals.applyEnchantVisual(meta, def.enchanted)
         val pdc = meta.persistentDataContainer
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_name"),
@@ -189,6 +196,10 @@ object GuiMakerExporter {
             org.bukkit.NamespacedKey(plugin, "gm_perm"),
             org.bukkit.persistence.PersistentDataType.STRING,
             def.permission ?: "")
+        pdc.set(
+            org.bukkit.NamespacedKey(plugin, "gm_enchanted"),
+            org.bukkit.persistence.PersistentDataType.STRING,
+            if (def.enchanted) "1" else "")
         val actStr =
             def.actions.joinToString("\n") { a ->
               a.type +

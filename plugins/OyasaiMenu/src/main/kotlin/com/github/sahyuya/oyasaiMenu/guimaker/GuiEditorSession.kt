@@ -1,4 +1,4 @@
-package icu.oyasai.citiesskymine.guimaker
+package com.github.sahyuya.oyasaiMenu.guimaker
 
 import org.bukkit.inventory.Inventory
 
@@ -8,6 +8,7 @@ data class GuiSlotDef(
     var name: String = "",
     var lore: MutableList<String> = mutableListOf(),
     var permission: String? = null,
+    var enchanted: Boolean = false,
     val actions: MutableList<GuiActionDef> = mutableListOf()
 )
 
@@ -22,6 +23,7 @@ class GuiEditorSession(
   var contextSlot: Int = -1
   var soundVolume: Float = 1.0f
   var favRegistering: Boolean = false // お気に入り登録モード中
+  var templateEditTarget: GuiTemplateEntry? = null
 }
 
 sealed class PendingInput(val slot: Int) {
