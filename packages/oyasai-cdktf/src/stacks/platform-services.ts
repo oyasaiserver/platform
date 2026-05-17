@@ -98,6 +98,9 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           tcp: [8100, 8192, 25565, 25575],
           udp: [19132],
         }),
+        // Pin container to P-cores only (logical CPUs 0–11) to avoid latency
+        // spikes caused by the main tick thread being scheduled on E-cores.
+        cpuSet: "0-11",
         env: envs({
           MEMORY: this.isMaster
             ? // On-prem has 64GB but looks like 28GB is the most stable because
