@@ -33,16 +33,25 @@ writeShellApplication {
   ];
 
   text = ''
+    # Technically not required but prepopulate the cache to minimize
+    # non-determinism.
     mkdir -p cache
     cp --no-preserve=ownership,mode ${package.vanillaJar} cache/mojang_${version}.jar
 
+    # Server icon
     ${lib.optionalString (icon != null) ''
       cp --no-preserve=ownership,mode ${icon} server-icon.png
     ''}
 
+    # Plugins
     mkdir -p plugins
     rm -rf plugins/.paper-remapped
     rm -f plugins/*.jar
+
+    # Cleaner to inject as `--add-plugin` but doesn't work with Plugman well :(
+    ${lib.optionalString (plugins != [ ]) ''
+      cp --no-preserve=ownership,mode ${lib.concatStringsSep " " plugins} plugins
+    ''}
 
     # Sighs. Doesn't take rcon password as a envvar.
     {
@@ -65,7 +74,6 @@ writeShellApplication {
       -Dfile.encoding=UTF-8 \
       -Dcom.mojang.eula.agree=true \
       -jar "${package}/lib/minecraft/server.jar" \
-      ${lib.concatMapStringsSep " " (k: "--add-plugin ${k}") plugins} \
       nogui \
       "$@"
   '';
