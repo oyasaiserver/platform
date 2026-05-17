@@ -40,6 +40,11 @@ commands:
   oyasaimenu:
     description: OyasaiMenu管理コマンド
     permission: oyasaimenu.admin
+  guimaker:
+    description: ChestGUI メーカー (OP限定)
+    usage: "/guimaker <new <id>|edit <id> [canvas|preview|commit|revert|info|title|name|lore|perm|action|clearslot]|list>"
+    permission: oyasaimenu.guimaker
+    permission-message: "このコマンドはOPのみ使用できます。"
 
 permissions:
   oyasaimenu.use:
@@ -52,4 +57,7 @@ permissions:
     default: op
   oyasaimenu.admin:
     description: OyasaiMenuの管理者用権限
+    default: op
+  oyasaimenu.guimaker:
+    description: GuiMaker OP限定コマンドの使用権限
     default: op

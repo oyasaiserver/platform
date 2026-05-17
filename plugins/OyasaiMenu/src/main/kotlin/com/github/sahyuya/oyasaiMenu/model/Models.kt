@@ -20,20 +20,29 @@ data class MenuItemDefinition(
     val lore: List<String> = emptyList(),
     val actions: List<MenuAction> = emptyList(),
     val permission: String? = null,
-    val customTexture: String? = null
+    val customTexture: String? = null,
+    val enchanted: Boolean = false
 )
 
 enum class ActionType {
   OPEN_MENU,
+  OPEN_POPUP,
   RUN_COMMAND,
   RUN_PLAYER_COMMAND,
+  CONSOLE_CMD,
+  PLAYER_CMD,
+  OP_PLAYER_CMD,
   CHECK_PERMISSION,
   MESSAGE,
   CLOSE_MENU,
+  CLOSE,
   MACRO_EXECUTE,
   PLACEHOLDER_TEXT,
   SOUND,
   BROADCAST,
+  URL,
+  CHAT_PASTE,
+  SUGGEST_COMMAND,
   OPEN_SHOP,
   OPEN_POINT_SHOP,
   OPEN_UTILITY,

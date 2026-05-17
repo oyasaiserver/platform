@@ -8,6 +8,8 @@ import com.github.sahyuya.oyasaiMenu.model.PlayerMenuState
 import com.github.sahyuya.oyasaiMenu.util.CustomHead
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
+import com.github.sahyuya.oyasaiMenu.util.ItemVisuals
+import com.github.sahyuya.oyasaiMenu.util.PlayerAccess
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -84,6 +86,7 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     val menuDef = plugin.menuLoader.getMenu(state.menuId) ?: return
     val itemDef = menuDef.items.values.find { it.slot == slot } ?: return
     if (itemDef.icon.isAir) return
+    if (!PlayerAccess.hasRequirement(player, itemDef.permission)) return
     plugin.actionEngine.executeActions(player, itemDef.actions, state)
   }
 
@@ -97,7 +100,7 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     val inv = Bukkit.createInventory(null, menuDef.size, comp(title))
     menuDef.items.values.forEach { itemDef ->
       if (itemDef.icon.isAir) return@forEach
-      if (itemDef.permission != null && !player.hasPermission(itemDef.permission)) return@forEach
+      if (!PlayerAccess.hasRequirement(player, itemDef.permission)) return@forEach
       if (itemDef.slot < menuDef.size) inv.setItem(itemDef.slot, buildItemStack(player, itemDef))
     }
     if (menuDef.id == "root") {
@@ -132,6 +135,7 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     meta.displayName(comp(applyPlaceholders(player, itemDef.name)))
     val lore = itemDef.lore.map { comp(applyPlaceholders(player, it)) }
     if (lore.isNotEmpty()) meta.lore(lore)
+    ItemVisuals.applyEnchantVisual(meta, itemDef.enchanted)
     item.itemMeta = meta
     return item
   }

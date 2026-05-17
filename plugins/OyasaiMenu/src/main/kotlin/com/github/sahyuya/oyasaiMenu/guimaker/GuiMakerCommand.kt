@@ -1,25 +1,22 @@
-package icu.oyasai.citiesskymine.guimaker
+package com.github.sahyuya.oyasaiMenu.guimaker
 
-import icu.oyasai.citiesskymine.Main
-import icu.oyasai.citiesskymine.menu.CsmMenuEngine
+import com.github.sahyuya.oyasaiMenu.OyasaiMenu
+import java.util.UUID
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
-class GuiMakerCommand(
-    private val plugin: Main,
-    private val engine: GuiEditorEngine,
-    private val menuEngine: CsmMenuEngine
-) : CommandExecutor, TabCompleter {
+class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEditorEngine) :
+    CommandExecutor, TabCompleter {
 
   companion object {
-    private val ROOT_SUBCOMMANDS = listOf("new", "edit", "list", "ui", "help")
-    private val UI_SCREENS = GuiMakerUiSkinDefinitions.screenDefs.keys.toList()
+    private val ROOT_SUBCOMMANDS = listOf("new", "edit", "list", "ui", "template", "help")
     private val EDIT_SUBCOMMANDS =
         listOf(
             "canvas",
@@ -36,20 +33,6 @@ class GuiMakerCommand(
             "action",
             "clearactions",
             "clearslot")
-    private val ACTION_TYPES =
-        listOf(
-            "OPEN_MENU",
-            "OPEN_POPUP",
-            "PLAYER_CMD",
-            "CONSOLE_CMD",
-            "OP_PLAYER_CMD",
-            "MESSAGE",
-            "BROADCAST",
-            "URL",
-            "CHAT_PASTE",
-            "SUGGEST_COMMAND",
-            "SOUND",
-            "CLOSE")
     private val MENU_ID_PATTERN = Regex("[a-zA-Z0-9_.-]+(?:/[a-zA-Z0-9_.-]+)*")
   }
 
@@ -73,6 +56,7 @@ class GuiMakerCommand(
       "edit" -> handleEdit(sender, args)
       "list" -> handleList(sender)
       "ui" -> handleUi(sender, args)
+      "template" -> handleTemplate(sender, args)
       "help",
       null -> printHelp(sender)
       else -> printHelp(sender)
@@ -99,7 +83,7 @@ class GuiMakerCommand(
         return EDIT_SUBCOMMANDS.filter { it.startsWith(args[2], ignoreCase = true) }
       }
       if (args.size == 5 && args[2].equals("action", ignoreCase = true)) {
-        return ACTION_TYPES.filter { it.startsWith(args[4], ignoreCase = true) }
+        return GuiActionCatalog.types.filter { it.startsWith(args[4], ignoreCase = true) }
       }
     }
     if (args[0].equals("ui", ignoreCase = true)) {
@@ -108,7 +92,19 @@ class GuiMakerCommand(
             it.startsWith(args[1], ignoreCase = true)
           }
       if (args.size == 3 && args[1].equals("edit", ignoreCase = true)) {
-        return UI_SCREENS.filter { it.startsWith(args[2], ignoreCase = true) }
+        return engine.uiScreenNames().filter { it.startsWith(args[2], ignoreCase = true) }
+      }
+    }
+    if (args[0].equals("template", ignoreCase = true)) {
+      if (args.size == 2)
+          return listOf("approve").filter { it.startsWith(args[1], ignoreCase = true) }
+      if (args.size == 3 && args[1].equals("approve", ignoreCase = true)) {
+        return Bukkit.getOnlinePlayers()
+            .map { it.name }
+            .filter { it.startsWith(args[2], ignoreCase = true) }
+      }
+      if (args.size == 4 && args[1].equals("approve", ignoreCase = true)) {
+        return listOf("menu", "block").filter { it.startsWith(args[3], ignoreCase = true) }
       }
     }
     return emptyList()
@@ -118,7 +114,7 @@ class GuiMakerCommand(
     val menuId =
         args.getOrNull(1)
             ?: run {
-              sender.sendMessage(comp("&c使用方法: /.gm new <menu-id>"))
+              sender.sendMessage(comp("&c使用方法: /guimaker new <menu-id>"))
               return
             }
     if (!validateMenuId(sender, menuId)) return
@@ -132,7 +128,7 @@ class GuiMakerCommand(
     val menuId =
         args.getOrNull(1)
             ?: run {
-              sender.sendMessage(comp("&c使用方法: /.gm edit <menu-id> [操作]"))
+              sender.sendMessage(comp("&c使用方法: /guimaker edit <menu-id> [操作]"))
               return
             }
     if (!validateMenuId(sender, menuId)) return
@@ -141,7 +137,7 @@ class GuiMakerCommand(
     val session =
         resolveSession(sender, menuId)
             ?: run {
-              sender.sendMessage(comp("&cメニュー '$menuId' が見つかりません。新規作成は /.gm new $menuId です。"))
+              sender.sendMessage(comp("&cメニュー '$menuId' が見つかりません。新規作成は /guimaker new $menuId です。"))
               return
             }
 
@@ -173,11 +169,13 @@ class GuiMakerCommand(
       "name" -> {
         val slot =
             parseSlot(
-                sender, session, args.getOrNull(3), "&c使用方法: /.gm edit $menuId name <slot> <text>")
-                ?: return
+                sender,
+                session,
+                args.getOrNull(3),
+                "&c使用方法: /guimaker edit $menuId name <slot> <text>") ?: return
         val text = args.drop(4).joinToString(" ")
         if (text.isBlank()) {
-          sender.sendMessage(comp("&c使用方法: /.gm edit $menuId name <slot> <text>"))
+          sender.sendMessage(comp("&c使用方法: /guimaker edit $menuId name <slot> <text>"))
           return
         }
         engine.cmdSetName(sender, session, slot, text)
@@ -185,11 +183,13 @@ class GuiMakerCommand(
       "lore" -> {
         val slot =
             parseSlot(
-                sender, session, args.getOrNull(3), "&c使用方法: /.gm edit $menuId lore <slot> <text>")
-                ?: return
+                sender,
+                session,
+                args.getOrNull(3),
+                "&c使用方法: /guimaker edit $menuId lore <slot> <text>") ?: return
         val text = args.drop(4).joinToString(" ")
         if (text.isBlank()) {
-          sender.sendMessage(comp("&c使用方法: /.gm edit $menuId lore <slot> <text>"))
+          sender.sendMessage(comp("&c使用方法: /guimaker edit $menuId lore <slot> <text>"))
           return
         }
         engine.cmdAddLore(sender, session, slot, text)
@@ -197,8 +197,10 @@ class GuiMakerCommand(
       "clearlore" -> {
         val slot =
             parseSlot(
-                sender, session, args.getOrNull(3), "&c使用方法: /.gm edit $menuId clearlore <slot>")
-                ?: return
+                sender,
+                session,
+                args.getOrNull(3),
+                "&c使用方法: /guimaker edit $menuId clearlore <slot>") ?: return
         engine.cmdClearLore(sender, session, slot)
       }
       "perm" -> {
@@ -207,7 +209,7 @@ class GuiMakerCommand(
                 sender,
                 session,
                 args.getOrNull(3),
-                "&c使用方法: /.gm edit $menuId perm <slot> [permission]") ?: return
+                "&c使用方法: /guimaker edit $menuId perm <slot> [permission]") ?: return
         engine.cmdSetPerm(sender, session, slot, args.getOrNull(4)?.takeIf { it.isNotBlank() })
       }
       "action" -> {
@@ -216,14 +218,15 @@ class GuiMakerCommand(
                 sender,
                 session,
                 args.getOrNull(3),
-                "&c使用方法: /.gm edit $menuId action <slot> <type> [value]") ?: return
+                "&c使用方法: /guimaker edit $menuId action <slot> <type> [value]") ?: return
         val type =
             args.getOrNull(4)?.uppercase()
                 ?: run {
-                  sender.sendMessage(comp("&c使用方法: /.gm edit $menuId action <slot> <type> [value]"))
+                  sender.sendMessage(
+                      comp("&c使用方法: /guimaker edit $menuId action <slot> <type> [value]"))
                   return
                 }
-        if (type !in ACTION_TYPES) {
+        if (type !in GuiActionCatalog.types) {
           sender.sendMessage(comp("&c不明なアクションタイプです: &f$type"))
           return
         }
@@ -237,15 +240,19 @@ class GuiMakerCommand(
       "clearactions" -> {
         val slot =
             parseSlot(
-                sender, session, args.getOrNull(3), "&c使用方法: /.gm edit $menuId clearactions <slot>")
-                ?: return
+                sender,
+                session,
+                args.getOrNull(3),
+                "&c使用方法: /guimaker edit $menuId clearactions <slot>") ?: return
         engine.cmdClearActions(sender, session, slot)
       }
       "clearslot" -> {
         val slot =
             parseSlot(
-                sender, session, args.getOrNull(3), "&c使用方法: /.gm edit $menuId clearslot <slot>")
-                ?: return
+                sender,
+                session,
+                args.getOrNull(3),
+                "&c使用方法: /guimaker edit $menuId clearslot <slot>") ?: return
         engine.cmdClearSlot(sender, session, slot)
       }
       else -> {
@@ -259,13 +266,14 @@ class GuiMakerCommand(
     when (args.getOrNull(1)?.lowercase()) {
       "list" ->
           sender.sendMessage(
-              comp("&e[GuiMaker] &f編集可能なUI画面: &a${UI_SCREENS.joinToString("&7, &a")}"))
+              comp("&e[GuiMaker] &f編集可能なUI画面: &a${engine.uiScreenNames().joinToString("&7, &a")}"))
       "edit" -> {
         val screen =
             args.getOrNull(2)
                 ?: run {
                   sender.sendMessage(
-                      comp("&c使用方法: /.gm ui edit <screen>  画面: ${UI_SCREENS.joinToString(", ")}"))
+                      comp(
+                          "&c使用方法: /guimaker ui edit <screen>  画面: ${engine.uiScreenNames().joinToString(", ")}"))
                   return
                 }
         engine.openUiSkinEditor(sender, screen)
@@ -273,10 +281,10 @@ class GuiMakerCommand(
       "silent" -> engine.toggleUiSilent(sender)
       else -> {
         sender.sendMessage(comp("&e[GuiMaker] UIスキン設定"))
-        sender.sendMessage(comp("&7/.gm ui list            &f- 編集可能な画面を一覧"))
-        sender.sendMessage(comp("&7/.gm ui edit <screen>  &f- 指定した画面のアイコンとレイアウトを変更"))
-        sender.sendMessage(comp("&7/.gm ui silent         &f- 編集時のチャットログをミュート切替"))
-        sender.sendMessage(comp("&7利用可能: &a${UI_SCREENS.joinToString("&7, &a")}"))
+        sender.sendMessage(comp("&7/guimaker ui list            &f- 編集可能な画面を一覧"))
+        sender.sendMessage(comp("&7/guimaker ui edit <screen>  &f- 指定した画面のアイコンとレイアウトを変更"))
+        sender.sendMessage(comp("&7/guimaker ui silent         &f- 編集時のチャットログをミュート切替"))
+        sender.sendMessage(comp("&7利用可能: &a${engine.uiScreenNames().joinToString("&7, &a")}"))
       }
     }
   }
@@ -288,6 +296,50 @@ class GuiMakerCommand(
       return
     }
     sender.sendMessage(comp("&e[GuiMaker] &fメニュー: &a${ids.joinToString("&7, &a")}"))
+  }
+
+  private fun handleTemplate(sender: Player, args: Array<String>) {
+    when (args.getOrNull(1)?.lowercase()) {
+      "approve" -> approveTemplate(sender, args)
+      else -> {
+        sender.sendMessage(comp("&e[GuiMaker] テンプレート管理"))
+        sender.sendMessage(
+            comp(
+                "&7/guimaker template approve <player|uuid> <menu|block> <template-id> [official-id]"))
+        sender.sendMessage(comp("&7個人テンプレートを公式テンプレートとして shared フォルダへ保存します。"))
+      }
+    }
+  }
+
+  private fun approveTemplate(sender: Player, args: Array<String>) {
+    val ownerRaw =
+        args.getOrNull(2)
+            ?: run {
+              sender.sendMessage(
+                  comp(
+                      "&c使用方法: /guimaker template approve <player|uuid> <menu|block> <template-id> [official-id]"))
+              return
+            }
+    val kind =
+        GuiTemplateKind.parse(args.getOrNull(3))
+            ?: run {
+              sender.sendMessage(comp("&c種類は menu または block を指定してください。"))
+              return
+            }
+    val sourceId =
+        args.getOrNull(4)
+            ?: run {
+              sender.sendMessage(comp("&c承認するテンプレートIDを指定してください。"))
+              return
+            }
+    val officialId = args.getOrNull(5) ?: sourceId
+    val owner = resolveOwnerUuid(ownerRaw)
+    val result = GuiTemplateStore.approvePersonalTemplate(plugin, owner, kind, sourceId, officialId)
+    if (result.isSuccess) {
+      sender.sendMessage(comp("&e[GuiMaker] &a公式テンプレートに承認しました: &f${result.getOrNull()}"))
+    } else {
+      sender.sendMessage(comp("&e[GuiMaker] &c承認失敗: ${result.exceptionOrNull()?.message}"))
+    }
   }
 
   private fun resolveSession(sender: Player, menuId: String): GuiEditorSession? {
@@ -304,11 +356,12 @@ class GuiMakerCommand(
   }
 
   private fun commit(sender: Player, session: GuiEditorSession) {
+    if (engine.saveTemplateEdit(sender, session)) return
     engine.rebuildSlotsFromInventory(session)
     val result = GuiMakerExporter.commit(plugin, session)
     if (result.isSuccess) {
       sender.sendMessage(comp("&e[GuiMaker] &aコミットしました: &f${result.getOrNull()}"))
-      menuEngine.reload()
+      plugin.reload()
     } else {
       sender.sendMessage(comp("&e[GuiMaker] &cコミット失敗: ${result.exceptionOrNull()?.message}"))
     }
@@ -347,6 +400,12 @@ class GuiMakerCommand(
     return valid
   }
 
+  private fun resolveOwnerUuid(raw: String): UUID =
+      runCatching { UUID.fromString(raw) }
+          .getOrElse {
+            Bukkit.getPlayerExact(raw)?.uniqueId ?: Bukkit.getOfflinePlayer(raw).uniqueId
+          }
+
   private fun parseSlot(
       sender: Player,
       session: GuiEditorSession,
@@ -367,13 +426,14 @@ class GuiMakerCommand(
 
   private fun printHelp(sender: Player) {
     sender.sendMessage(comp("&e===== GuiMaker ====="))
-    sender.sendMessage(comp("&7/.gm new <id>                         &f- 新規メニューを作成"))
-    sender.sendMessage(comp("&7/.gm edit <id> [canvas]               &f- 編集キャンバスを開く"))
-    sender.sendMessage(comp("&7/.gm edit <id> preview                &f- 現在の編集内容をプレビュー"))
-    sender.sendMessage(comp("&7/.gm edit <id> commit                 &f- OyasaiMenu に反映"))
-    sender.sendMessage(comp("&7/.gm edit <id> revert                 &f- ドラフトを破棄"))
-    sender.sendMessage(comp("&7/.gm edit <id> info                   &f- 編集状況を表示"))
-    sender.sendMessage(comp("&e--- /.gm edit <id> <操作> ---"))
+    sender.sendMessage(comp("&7/guimaker new <id>                         &f- 新規メニューを作成"))
+    sender.sendMessage(comp("&7/guimaker edit <id> [canvas]               &f- 編集キャンバスを開く"))
+    sender.sendMessage(comp("&7/guimaker edit <id> preview                &f- 現在の編集内容をプレビュー"))
+    sender.sendMessage(comp("&7/guimaker edit <id> commit                 &f- OyasaiMenu に反映"))
+    sender.sendMessage(comp("&7/guimaker edit <id> revert                 &f- ドラフトを破棄"))
+    sender.sendMessage(comp("&7/guimaker edit <id> info                   &f- 編集状況を表示"))
+    sender.sendMessage(comp("&7/guimaker template approve ...            &f- 公式テンプレートとして承認"))
+    sender.sendMessage(comp("&e--- /guimaker edit <id> <操作> ---"))
     sender.sendMessage(comp("&7title [text] / name <s> <text> / lore <s> <text>"))
     sender.sendMessage(comp("&7perm <s> [perm] / action <s> <type> [value]"))
     sender.sendMessage(comp("&7clearlore <s> / clearactions <s> / clearslot <s>"))

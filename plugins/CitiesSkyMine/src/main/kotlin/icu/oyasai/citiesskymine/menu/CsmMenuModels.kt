@@ -47,6 +47,7 @@ data class CsmItemDef(
     val lore: List<String> = emptyList(),
     val actions: List<CsmMenuAction> = emptyList(),
     val permission: String? = null,
+    val enchanted: Boolean = false,
 )
 
 /**

@@ -6,7 +6,12 @@ import com.github.sahyuya.oyasaiMenu.model.MenuAction
 import com.github.sahyuya.oyasaiMenu.model.PlayerMenuState
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
-import net.luckperms.api.LuckPermsProvider
+import com.github.sahyuya.oyasaiMenu.util.PlayerAccess
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -55,14 +60,39 @@ class ActionEngine(private val plugin: OyasaiMenu) {
                 1L)
       }
 
-      ActionType.RUN_COMMAND -> {
+      ActionType.OPEN_POPUP -> {
+        val target = action.getString("target")
+        if (target.isEmpty()) {
+          plugin.logger.warning("open_popup にターゲットが未指定。")
+          return
+        }
+        Bukkit.getScheduler()
+            .runTaskLater(plugin, Runnable { plugin.popupMenuEngine.open(player, target) }, 1L)
+      }
+
+      ActionType.RUN_COMMAND,
+      ActionType.CONSOLE_CMD -> {
         val cmd = applyPlaceholders(player, action.getString("command"))
         if (cmd.isNotEmpty()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd)
       }
 
-      ActionType.RUN_PLAYER_COMMAND -> {
+      ActionType.RUN_PLAYER_COMMAND,
+      ActionType.PLAYER_CMD -> {
         val cmd = applyPlaceholders(player, action.getString("command"))
-        if (cmd.isNotEmpty()) player.performCommand(cmd)
+        if (cmd.isNotEmpty()) player.performCommand(cmd.removePrefix("/"))
+      }
+
+      ActionType.OP_PLAYER_CMD -> {
+        val cmd = applyPlaceholders(player, action.getString("command"))
+        if (cmd.isNotEmpty()) {
+          val wasOp = player.isOp
+          try {
+            player.isOp = true
+            player.performCommand(cmd.removePrefix("/"))
+          } finally {
+            player.isOp = wasOp
+          }
+        }
       }
 
       ActionType.MESSAGE -> {
@@ -70,7 +100,8 @@ class ActionEngine(private val plugin: OyasaiMenu) {
         player.sendMessage(c(text))
       }
 
-      ActionType.CLOSE_MENU -> player.closeInventory()
+      ActionType.CLOSE_MENU,
+      ActionType.CLOSE -> player.closeInventory()
 
       ActionType.CHECK_PERMISSION -> {
         // 成功なら success リスト、失敗なら fail リストを再帰実行
@@ -95,6 +126,63 @@ class ActionEngine(private val plugin: OyasaiMenu) {
 
       ActionType.BROADCAST -> {
         Bukkit.broadcast(comp(applyPlaceholders(player, action.getString("text"))))
+      }
+
+      ActionType.URL -> {
+        val url = applyPlaceholders(player, action.getString("url"))
+        if (url.isNotEmpty()) {
+          player.sendMessage(
+              Component.text(url)
+                  .color(NamedTextColor.AQUA)
+                  .decoration(TextDecoration.ITALIC, false)
+                  .clickEvent(ClickEvent.openUrl(url))
+                  .hoverEvent(
+                      HoverEvent.showText(
+                          Component.text("クリックで開く")
+                              .color(NamedTextColor.GRAY)
+                              .decoration(TextDecoration.ITALIC, false))))
+        }
+      }
+
+      ActionType.CHAT_PASTE -> {
+        val text = applyPlaceholders(player, action.getString("text"))
+        if (text.isNotEmpty()) {
+          player.sendMessage(
+              Component.text()
+                  .decoration(TextDecoration.ITALIC, false)
+                  .append(Component.text("クリックでコピー: ").color(NamedTextColor.GRAY))
+                  .append(
+                      Component.text(text)
+                          .color(NamedTextColor.WHITE)
+                          .clickEvent(ClickEvent.copyToClipboard(text))
+                          .hoverEvent(
+                              HoverEvent.showText(
+                                  Component.text("クリックでクリップボードにコピー")
+                                      .color(NamedTextColor.GRAY)
+                                      .decoration(TextDecoration.ITALIC, false))))
+                  .build())
+        }
+      }
+
+      ActionType.SUGGEST_COMMAND -> {
+        val cmd = applyPlaceholders(player, action.getString("command"))
+        if (cmd.isNotEmpty()) {
+          val normalized = cmd.removePrefix("/")
+          player.sendMessage(
+              Component.text()
+                  .decoration(TextDecoration.ITALIC, false)
+                  .append(Component.text("▶ ").color(NamedTextColor.GREEN))
+                  .append(
+                      Component.text(normalized)
+                          .color(NamedTextColor.YELLOW)
+                          .clickEvent(ClickEvent.suggestCommand(normalized))
+                          .hoverEvent(
+                              HoverEvent.showText(
+                                  Component.text("クリックでコマンドをチャット欄に入力")
+                                      .color(NamedTextColor.GRAY)
+                                      .decoration(TextDecoration.ITALIC, false))))
+                  .build())
+        }
       }
 
       ActionType.PLACEHOLDER_TEXT -> {
@@ -185,14 +273,7 @@ class ActionEngine(private val plugin: OyasaiMenu) {
    * softdepend なので try-catch で安全に呼び出す。
    */
   private fun checkPermission(player: Player, permission: String): Boolean {
-    if (permission.isEmpty()) return true
-    return runCatching {
-          val lp = LuckPermsProvider.get()
-          val user =
-              lp.userManager.getUser(player.uniqueId) ?: return player.hasPermission(permission)
-          user.cachedData.permissionData.checkPermission(permission).asBoolean()
-        }
-        .getOrElse { player.hasPermission(permission) }
+    return PlayerAccess.hasRequirement(player, permission)
   }
 
   // ============================
