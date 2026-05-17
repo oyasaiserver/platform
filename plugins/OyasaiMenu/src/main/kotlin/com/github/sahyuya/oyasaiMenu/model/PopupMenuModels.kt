@@ -74,5 +74,6 @@ enum class PopupActionType {
 data class PopupItemSpec(
     val material: Material,
     val amount: Int = 1,
-    val blockState: Map<String, String> = emptyMap()
+    val blockState: Map<String, String> = emptyMap(),
+    val rawComponents: Map<String, Any> = emptyMap()
 )
