@@ -1,21 +1,7 @@
 # Everything, unless specified otherwise, is owned by this group.
 * @shunueda
 
-# Everyone can edit Gradle files. It's necessary for plugin development and it's
-# relatively low risk: most errors are caught in CI.
+# Don't require reviews for plugins
 /gradle/libs.versions.toml
 /gradle.lock
-
-# Each person is responsible for their own plugins. Clear the owners so that
-# each can specify individually
 /plugins/
-
-# keep-sorted start
-/plugins/CitiesSkyMine @marzipan99
-/plugins/DynamicProfile @takucan
-/plugins/OyasaiAdminTools @takucan
-/plugins/OyasaiPets @marzipan99
-/plugins/OyasaiUtilities @takucan
-/plugins/TPswitch @takucan
-/plugins/Vertex @shunueda
-# keep-sorted end
