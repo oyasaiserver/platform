@@ -19,8 +19,8 @@
   },
   "coreprotect": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/HD2IvrxS/CoreProtect-CE-23.1.jar",
-      "hash": "sha256-gTCCtOxR2AJuHW6Kih3Dx+aL9LqXdN0d0DxfqFiOouI="
+      "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/6W2ad1iI/CoreProtect-CE-23.2.jar",
+      "hash": "sha256-LXi76LC049bJW334AiyzMTLI0YrMUxlcJz7tPisEkls="
     }
   },
   "crackshotguns": {
@@ -73,8 +73,8 @@
   },
   "geyser": {
     "1.21.10": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1147/downloads/spigot",
-      "hash": "sha256-/cvkMBdav/ac0iSrWqn7DlBCBhXiT118/Akr9+jZkgc="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1148/downloads/spigot",
+      "hash": "sha256-gCAXFRy3cKJv1bLH73Q0CftJffuCLsIG/l3ofcqCWWE="
     }
   },
   "gsit": {
@@ -188,7 +188,7 @@
   "signshop": {
     "1.21.10": {
       "url": "https://cdn.spiget.org/file/spiget-resources/10997.jar",
-      "hash": "sha256-03yhix//U+qsK6DHOL2NKVZysx950zcKIGy5NPeXN5M="
+      "hash": "sha256-6QlXZ9+cpuKzFo0EOg9bh2nhZwEcZpZEpvnL+hzUxJ4="
     }
   },
   "simpleelevator": {
@@ -247,8 +247,8 @@
   },
   "viaversion": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/LXloXgE7/ViaVersion-5.9.2-SNAPSHOT.jar",
-      "hash": "sha256-fDgVnXd4S8+r/cC+OxQDaamhdtWRiV6tfx4T5Af+Uw4="
+      "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/bpOs8Bc5/ViaVersion-5.9.2-SNAPSHOT.jar",
+      "hash": "sha256-+Dax9wDEcn/o97AfSDh4qMfUhWLjd1wHdEDo3m5g6Hs="
     }
   },
   "worldborder": {
