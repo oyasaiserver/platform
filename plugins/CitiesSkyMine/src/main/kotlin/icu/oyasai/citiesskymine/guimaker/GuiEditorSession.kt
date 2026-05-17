@@ -8,6 +8,7 @@ data class GuiSlotDef(
     var name: String = "",
     var lore: MutableList<String> = mutableListOf(),
     var permission: String? = null,
+    var enchanted: Boolean = false,
     val actions: MutableList<GuiActionDef> = mutableListOf()
 )
 

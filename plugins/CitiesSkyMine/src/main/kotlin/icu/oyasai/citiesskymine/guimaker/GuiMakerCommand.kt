@@ -19,7 +19,6 @@ class GuiMakerCommand(
 
   companion object {
     private val ROOT_SUBCOMMANDS = listOf("new", "edit", "list", "ui", "help")
-    private val UI_SCREENS = GuiMakerUiSkinDefinitions.screenDefs.keys.toList()
     private val EDIT_SUBCOMMANDS =
         listOf(
             "canvas",
@@ -36,20 +35,6 @@ class GuiMakerCommand(
             "action",
             "clearactions",
             "clearslot")
-    private val ACTION_TYPES =
-        listOf(
-            "OPEN_MENU",
-            "OPEN_POPUP",
-            "PLAYER_CMD",
-            "CONSOLE_CMD",
-            "OP_PLAYER_CMD",
-            "MESSAGE",
-            "BROADCAST",
-            "URL",
-            "CHAT_PASTE",
-            "SUGGEST_COMMAND",
-            "SOUND",
-            "CLOSE")
     private val MENU_ID_PATTERN = Regex("[a-zA-Z0-9_.-]+(?:/[a-zA-Z0-9_.-]+)*")
   }
 
@@ -99,7 +84,7 @@ class GuiMakerCommand(
         return EDIT_SUBCOMMANDS.filter { it.startsWith(args[2], ignoreCase = true) }
       }
       if (args.size == 5 && args[2].equals("action", ignoreCase = true)) {
-        return ACTION_TYPES.filter { it.startsWith(args[4], ignoreCase = true) }
+        return GuiActionCatalog.types.filter { it.startsWith(args[4], ignoreCase = true) }
       }
     }
     if (args[0].equals("ui", ignoreCase = true)) {
@@ -108,7 +93,7 @@ class GuiMakerCommand(
             it.startsWith(args[1], ignoreCase = true)
           }
       if (args.size == 3 && args[1].equals("edit", ignoreCase = true)) {
-        return UI_SCREENS.filter { it.startsWith(args[2], ignoreCase = true) }
+        return engine.uiScreenNames().filter { it.startsWith(args[2], ignoreCase = true) }
       }
     }
     return emptyList()
@@ -223,7 +208,7 @@ class GuiMakerCommand(
                   sender.sendMessage(comp("&c使用方法: /.gm edit $menuId action <slot> <type> [value]"))
                   return
                 }
-        if (type !in ACTION_TYPES) {
+        if (type !in GuiActionCatalog.types) {
           sender.sendMessage(comp("&c不明なアクションタイプです: &f$type"))
           return
         }
@@ -259,13 +244,14 @@ class GuiMakerCommand(
     when (args.getOrNull(1)?.lowercase()) {
       "list" ->
           sender.sendMessage(
-              comp("&e[GuiMaker] &f編集可能なUI画面: &a${UI_SCREENS.joinToString("&7, &a")}"))
+              comp("&e[GuiMaker] &f編集可能なUI画面: &a${engine.uiScreenNames().joinToString("&7, &a")}"))
       "edit" -> {
         val screen =
             args.getOrNull(2)
                 ?: run {
                   sender.sendMessage(
-                      comp("&c使用方法: /.gm ui edit <screen>  画面: ${UI_SCREENS.joinToString(", ")}"))
+                      comp(
+                          "&c使用方法: /.gm ui edit <screen>  画面: ${engine.uiScreenNames().joinToString(", ")}"))
                   return
                 }
         engine.openUiSkinEditor(sender, screen)
@@ -276,7 +262,7 @@ class GuiMakerCommand(
         sender.sendMessage(comp("&7/.gm ui list            &f- 編集可能な画面を一覧"))
         sender.sendMessage(comp("&7/.gm ui edit <screen>  &f- 指定した画面のアイコンとレイアウトを変更"))
         sender.sendMessage(comp("&7/.gm ui silent         &f- 編集時のチャットログをミュート切替"))
-        sender.sendMessage(comp("&7利用可能: &a${UI_SCREENS.joinToString("&7, &a")}"))
+        sender.sendMessage(comp("&7利用可能: &a${engine.uiScreenNames().joinToString("&7, &a")}"))
       }
     }
   }

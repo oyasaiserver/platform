@@ -1,12 +1,12 @@
 package icu.oyasai.citiesskymine.guimaker
 
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.util.ItemVisuals
 import java.util.Locale
 import java.util.UUID
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -20,6 +20,7 @@ import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.AsyncPlayerChatEvent
+import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemFlag
@@ -29,20 +30,12 @@ import org.bukkit.persistence.PersistentDataType
 
 class GuiEditorEngine(private val plugin: Main) : Listener {
 
-  data class PermissionGroupChoice(
-      val name: String,
-      val displayName: String,
-      val category: String,
-      val weight: Int
-  ) {
-    val value: String = "lpgroup:$name"
-  }
-
   // ── PDC keys (アイテム本位の永続データ) ────────────────────
   private val KEY_NAME by lazy { NamespacedKey(plugin, "gm_name") }
   private val KEY_LORE by lazy { NamespacedKey(plugin, "gm_lore") }
   private val KEY_PERM by lazy { NamespacedKey(plugin, "gm_perm") }
   private val KEY_ACTIONS by lazy { NamespacedKey(plugin, "gm_actions") }
+  private val KEY_ENCHANTED by lazy { NamespacedKey(plugin, "gm_enchanted") }
   private val KEY_FUNC by lazy { NamespacedKey(plugin, "gm_func") }
   private val KEY_SCREEN by lazy { NamespacedKey(plugin, "gm_screen") }
   private val KEY_SKIN_ITEM by lazy { NamespacedKey(plugin, "gm_skin_item") }
@@ -51,13 +44,26 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
   private val playerFavorites: MutableMap<UUID, MutableList<GuiActionDef>> = mutableMapOf()
   private val uiSkinSilentPlayers: MutableSet<UUID> = mutableSetOf()
 
-  private val uiSkinStore = GuiMakerUiSkinStore(plugin)
+  private val uiScreenCatalog = GuiMakerUiSkinDefinitions.load(plugin)
+  private val uiSkinStore = GuiMakerUiSkinStore(plugin, uiScreenCatalog)
   private val SOUND_CATEGORIES =
       setOf("ui", "entity", "block", "item", "music", "ambient", "weather", "event")
-  private val UI_SKIN_RESTORE_SLOTS = GuiMakerUiSkinDefinitions.restoreSlots
-  private val UI_SCREEN_DEFS = GuiMakerUiSkinDefinitions.screenDefs
+  private val soundPickFixedLabels =
+      mapOf(
+          36 to "前のページ",
+          37 to "音量 -0.25",
+          39 to "音量",
+          40 to "カテゴリへ戻る",
+          41 to "音量 +0.25",
+          42 to "手入力",
+          43 to "音量リセット",
+          44 to "次のページ")
+  private val UI_SKIN_RESTORE_SLOTS = uiScreenCatalog.restoreSlots
+  private val UI_SCREEN_DEFS = uiScreenCatalog.screenDefs
 
   fun getSession(player: Player): GuiEditorSession? = sessions[player.uniqueId]
+
+  fun uiScreenNames(): List<String> = UI_SCREEN_DEFS.keys.toList()
 
   private fun getFavorites(playerId: UUID): MutableList<GuiActionDef> =
       playerFavorites.getOrPut(playerId) { loadFavoritesFromDisk(playerId) }
@@ -116,6 +122,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     // 見た目を更新
     if (def.name.isNotEmpty()) meta.displayName(comp(def.name))
     if (def.lore.isNotEmpty()) meta.lore(def.lore.map { comp(it) }) else meta.lore(emptyList())
+    ItemVisuals.applyEnchantVisual(meta, def.enchanted)
 
     // PDC に書き込む（アイテムと一緒に移動する）
     val pdc = meta.persistentDataContainer
@@ -123,6 +130,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     pdc.set(KEY_LORE, PersistentDataType.STRING, def.lore.joinToString("\n"))
     pdc.set(KEY_PERM, PersistentDataType.STRING, def.permission ?: "")
     pdc.set(KEY_ACTIONS, PersistentDataType.STRING, serializeActions(def.actions))
+    pdc.set(KEY_ENCHANTED, PersistentDataType.STRING, if (def.enchanted) "1" else "")
 
     newItem.itemMeta = meta
     inv.setItem(slot, newItem)
@@ -142,6 +150,9 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
                     ?.filter { it.isNotEmpty() }
                     ?.toMutableList() ?: mutableListOf(),
             permission = pdc.get(KEY_PERM, PersistentDataType.STRING)?.takeIf { it.isNotEmpty() },
+            enchanted =
+                pdc.get(KEY_ENCHANTED, PersistentDataType.STRING)?.takeIf { it.isNotEmpty() } ==
+                    "1",
         )
     def.actions.addAll(deserializeActions(pdc.get(KEY_ACTIONS, PersistentDataType.STRING) ?: ""))
     return def
@@ -271,6 +282,13 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
             "&eロア編集",
             "&f現在: &e${def?.lore?.size ?: 0}行",
             "&7並べ替え・編集・削除を行います"))
+    inv.setItem(
+        13,
+        makeItem(
+            if (def?.enchanted == true) Material.ENCHANTED_BOOK else Material.BOOK,
+            if (def?.enchanted == true) "&dエンチャント表示: ON" else "&7エンチャント表示: OFF",
+            "&7クリックでON/OFFを切り替えます",
+            "&7実画面のアイテムに光る表示を付けます"))
 
     inv.setItem(18, makeItem(Material.BLUE_CANDLE, "&9条件と動作", "&7表示権限とクリック時の動作を編集します"))
     val permCurrent = def?.permission ?: "&8(なし)"
@@ -340,23 +358,24 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     // Row 2: コマンド系カテゴリ + アイテム
     inv.setItem(18, makeItem(Material.COMMAND_BLOCK, "&6コマンド系", "&7クリック時にコマンドを実行します"))
     inv.setItem(
-        19, makeItem(Material.STICK, "&eプレイヤーCmd", "&7PLAYER_CMD", "&7プレイヤーとして実行 &8(%player%)"))
+        19, makeItem(Material.STICK, "&eプレイヤーコマンド", "&7PLAYER_CMD", "&7プレイヤーとして実行 &8(%player%)"))
     inv.setItem(
-        20, makeItem(Material.REDSTONE, "&6コンソールCmd", "&7CONSOLE_CMD", "&7コンソールとして実行 &8(%player%)"))
+        20,
+        makeItem(Material.REDSTONE, "&6コンソールコマンド", "&7CONSOLE_CMD", "&7コンソールとして実行 &8(%player%)"))
     inv.setItem(21, makeItem(Material.NETHER_STAR, "&cOPコマンド", "&7OP_PLAYER_CMD", "&7一時OP権限で実行"))
     inv.setItem(
-        22, makeItem(Material.COMMAND_BLOCK, "&aコマンド候補", "&7SUGGEST_COMMAND", "&7クリックでチャット欄に入力"))
+        22, makeItem(Material.COMMAND_BLOCK, "&aコマンドを提案", "&7SUGGEST_COMMAND", "&7クリックでチャット欄に入力"))
 
     // Row 3: メッセージ系カテゴリ + アイテム
     inv.setItem(27, makeItem(Material.PAPER, "&fメッセージ系", "&7チャットへ情報を表示します"))
     inv.setItem(28, makeItem(Material.PAPER, "&fメッセージ送信", "&7MESSAGE", "&7プレイヤーにメッセージ"))
     inv.setItem(29, makeItem(Material.BEACON, "&9ブロードキャスト", "&7BROADCAST", "&7サーバー全員に送る"))
-    inv.setItem(30, makeItem(Material.MAP, "&eURL送信", "&7URL", "&7URLをチャットに表示"))
-    inv.setItem(31, makeItem(Material.WRITABLE_BOOK, "&fチャット貼り付け", "&7CHAT_PASTE", "&7コピー用テキスト"))
+    inv.setItem(30, makeItem(Material.MAP, "&eURL", "&7URL", "&7URLをチャットに表示"))
+    inv.setItem(31, makeItem(Material.WRITABLE_BOOK, "&fチャットペースト", "&7CHAT_PASTE", "&7コピー用テキスト"))
 
     // Row 4: その他カテゴリ + アイテム
     inv.setItem(36, makeItem(Material.NOTE_BLOCK, "&bその他", "&7補助アクション"))
-    inv.setItem(37, makeItem(Material.NOTE_BLOCK, "&b効果音", "&7SOUND", "&7サウンドGUIで選択"))
+    inv.setItem(37, makeItem(Material.NOTE_BLOCK, "&bサウンドを再生", "&7SOUND", "&7サウンドGUIで選択"))
 
     fillMain(inv, Material.BLUE_STAINED_GLASS_PANE)
     applyEditorBar(player, inv, session, "&fスロット編集に戻る", "&7スロット $slot の編集へ戻ります")
@@ -433,7 +452,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
         makeItem(
             Material.WRITABLE_BOOK,
             "&e値を編集",
-            "&7対象: &f${actionParamLabel(action.type)}",
+            "&7対象: &f${GuiActionCatalog.paramLabel(action.type)}",
             "&7クリックで値を変更します"))
     inv.setItem(12, makeItem(Material.ARROW, "&b上へ移動", "&7実行順を1つ前にします"))
     inv.setItem(14, makeItem(Material.ARROW, "&b下へ移動", "&7実行順を1つ後ろにします"))
@@ -532,7 +551,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
   // ── Permission Picker (LuckPerms groups) ────────────────────
 
   private fun openPermissionPicker(player: Player, session: GuiEditorSession, canvasSlot: Int) {
-    val allGroups = collectPermissionGroups()
+    val allGroups = GuiPermissionCatalog.collectGroups()
     val gridSlots = (10..16).toList() + (19..25).toList() + (28..34).toList()
     val slotToGroup =
         allGroups.take(gridSlots.size).mapIndexed { i, g -> gridSlots[i] to g }.toMap()
@@ -551,15 +570,15 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
             "&7LuckPerms グループから選択します",
             "&7選択値は lpgroup:<group> として保存されます"))
 
-    inv.setItem(9, makeItem(permissionCategoryMaterial("プレイヤーランク"), "&7プレイヤーランク"))
-    inv.setItem(18, makeItem(permissionCategoryMaterial("建築ランク"), "&7建築ランク / 特別ロール"))
-    inv.setItem(27, makeItem(permissionCategoryMaterial("スタッフ"), "&7スタッフ / その他"))
+    inv.setItem(9, makeItem(GuiPermissionCatalog.categoryMaterial("プレイヤーランク"), "&7プレイヤーランク"))
+    inv.setItem(18, makeItem(GuiPermissionCatalog.categoryMaterial("建築ランク"), "&7建築ランク / 特別ロール"))
+    inv.setItem(27, makeItem(GuiPermissionCatalog.categoryMaterial("スタッフ"), "&7スタッフ / その他"))
 
     for ((rawSlot, group) in slotToGroup) {
       inv.setItem(
           rawSlot,
           makeItem(
-              permissionGroupMaterial(group),
+              GuiPermissionCatalog.groupMaterial(group),
               "&f${group.displayName}",
               "&7グループ: &f${group.name}",
               "&7カテゴリ: &f${group.category}",
@@ -582,7 +601,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
       category: String,
       page: Int = 0
   ) {
-    val groups = collectPermissionGroups().filter { it.category == category }
+    val groups = GuiPermissionCatalog.collectGroups().filter { it.category == category }
     val gridSlots = (10..16).toList() + (19..25).toList() + (28..34).toList()
     val pageSize = gridSlots.size
     val maxPage = ((groups.size - 1).coerceAtLeast(0)) / pageSize
@@ -598,7 +617,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     inv.setItem(
         0,
         makeItem(
-            permissionCategoryMaterial(category),
+            GuiPermissionCatalog.categoryMaterial(category),
             "&b$category",
             "&7LuckPerms グループを選択します",
             "&7選択後、このグループ所属者だけに表示します"))
@@ -606,7 +625,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
       inv.setItem(
           rawSlot,
           makeItem(
-              permissionGroupMaterial(group),
+              GuiPermissionCatalog.groupMaterial(group),
               "&f${group.displayName}",
               "&7group: &f${group.name}",
               "&7保存値: &f${group.value}",
@@ -1034,6 +1053,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
       "名前を設定" -> openColorPicker(player, session, slot, "NAME")
       "ロアを追加" -> openColorPicker(player, session, slot, "LORE")
       "ロア編集" -> openLoreManageMenu(player, session, slot)
+      "エンチャント切替" -> toggleSlotEnchant(player, session, slot)
       "権限を設定" -> openPermissionPicker(player, session, slot)
       "アクションを追加" -> openActionTypeMenu(player, session, slot)
       "アクション管理" -> openActionManageMenu(player, session, slot)
@@ -1214,43 +1234,31 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     })
         return
 
-    val (type, prompt) =
-        when (funcLabelAt("action_type", event.rawSlot)) {
-          "メニューを開く" -> {
-            openMenuPicker(player, session, slot)
-            return
-          }
-          "ポップアップ" -> {
-            openPopupPicker(player, session, slot)
-            return
-          }
-          "メニューを閉じる" -> {
-            finishActionOrFav(
-                player,
-                session,
-                slot,
-                null,
-                GuiActionDef("CLOSE"),
-                "&e[GuiMaker] &aCLOSE を追加しました。") {
-                  openContextMenu(player, session, slot)
-                }
-            return
-          }
-          "サウンドを再生" -> {
-            session.soundVolume = 1.0f
-            openSoundCategoryPicker(player, session, slot)
-            return
-          }
-          "プレイヤーコマンド" -> "PLAYER_CMD" to "プレイヤーとして実行するコマンドを入力 (/ 不要, %player% 使用可):"
-          "コンソールコマンド" -> "CONSOLE_CMD" to "コンソールとして実行するコマンドを入力 (/ 不要, %player% 使用可):"
-          "OPコマンド" -> "OP_PLAYER_CMD" to "OP権限で実行するコマンドを入力 (/ 不要):"
-          "コマンドを提案" -> "SUGGEST_COMMAND" to "コマンド候補を入力 (/ 不要):"
-          "メッセージ送信" -> "MESSAGE" to "送信するメッセージを入力 (&カラーコード対応):"
-          "ブロードキャスト" -> "BROADCAST" to "ブロードキャストするメッセージを入力:"
-          "URL" -> "URL" to "URLを入力してください:"
-          "チャット貼り付け" -> "CHAT_PASTE" to "チャット欄に表示するテキストを入力:"
-          else -> return
-        }
+    val funcLabel = funcLabelAt("action_type", event.rawSlot)
+    when (funcLabel) {
+      "メニューを開く" -> {
+        openMenuPicker(player, session, slot)
+        return
+      }
+      "ポップアップ" -> {
+        openPopupPicker(player, session, slot)
+        return
+      }
+      "メニューを閉じる" -> {
+        finishActionOrFav(
+            player, session, slot, null, GuiActionDef("CLOSE"), "&e[GuiMaker] &aCLOSE を追加しました。") {
+              openContextMenu(player, session, slot)
+            }
+        return
+      }
+      "サウンドを再生",
+      "効果音" -> {
+        session.soundVolume = 1.0f
+        openSoundCategoryPicker(player, session, slot)
+        return
+      }
+    }
+    val (type, prompt) = GuiActionCatalog.textInputChoice(funcLabel) ?: return
     player.closeInventory()
     session.pendingInput = PendingInput.ActionParam(slot, type)
     msg(player, "&e[GuiMaker] &f$prompt")
@@ -1421,7 +1429,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
       openSoundCategoryPicker(player, session, canvasSlot, actionIndex)
     })
         return
-    val funcLabel = funcLabelAt("sound_pick", event.rawSlot)
+    val funcLabel = funcLabelAt("sound_pick", event.rawSlot) ?: soundPickFixedLabels[event.rawSlot]
     if (handleSoundVolumeClick(funcLabel, player, session) {
       openSoundPicker(player, session, canvasSlot, category, page, actionIndex)
     })
@@ -1770,6 +1778,17 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
 
   // ── Chat ───────────────────────────────────────────────────
 
+  @EventHandler(priority = EventPriority.LOWEST)
+  fun onCommandWhilePendingInput(event: PlayerCommandPreprocessEvent) {
+    val player = event.player
+    val session = sessions[player.uniqueId] ?: return
+    if (session.pendingInput == null) return
+
+    event.isCancelled = true
+    session.pendingInput = null
+    msg(player, "&e[GuiMaker] &c入力待ちをキャンセルしました。もう一度GUIから操作してください。")
+  }
+
   @Suppress("DEPRECATION")
   @EventHandler(priority = EventPriority.LOWEST)
   fun onChat(event: AsyncPlayerChatEvent) {
@@ -1816,23 +1835,11 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
                   msg(player, "&e[GuiMaker] &a権限を設定: &f${def.permission ?: "(なし)"}")
                 }
                 is PendingInput.ActionParam -> {
-                  val params =
-                      when (pending.actionType) {
-                        "OPEN_MENU",
-                        "OPEN_POPUP" -> mapOf("target" to text)
-                        "PLAYER_CMD",
-                        "CONSOLE_CMD",
-                        "OP_PLAYER_CMD",
-                        "SUGGEST_COMMAND" -> mapOf("command" to text)
-                        "MESSAGE",
-                        "BROADCAST",
-                        "CHAT_PASTE" -> mapOf("text" to text)
-                        "SOUND" ->
-                            mapOf("sound" to text, "volume" to formatVolume(session.soundVolume))
-                        "URL" -> mapOf("url" to text)
-                        else -> emptyMap()
-                      }
-                  val action = GuiActionDef(pending.actionType, params)
+                  val action =
+                      GuiActionDef(
+                          pending.actionType,
+                          GuiActionCatalog.params(
+                              pending.actionType, text, formatVolume(session.soundVolume)))
                   val successMsg =
                       "&e[GuiMaker] &a${pending.actionType} を${if (pending.actionIndex == null) "追加" else "更新"}: &f$text"
                   finishActionOrFav(
@@ -1888,23 +1895,9 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
       type: String,
       value: String
   ) {
-    val params =
-        when (type.uppercase()) {
-          "OPEN_MENU",
-          "OPEN_POPUP" -> mapOf("target" to value)
-          "PLAYER_CMD",
-          "CONSOLE_CMD",
-          "OP_PLAYER_CMD",
-          "SUGGEST_COMMAND" -> mapOf("command" to value)
-          "MESSAGE",
-          "BROADCAST",
-          "CHAT_PASTE" -> mapOf("text" to value)
-          "SOUND" -> mapOf("sound" to value)
-          "URL" -> mapOf("url" to value)
-          "CLOSE" -> emptyMap()
-          else -> mapOf("value" to value)
-        }
-    addActionToSlot(session, slot, GuiActionDef(type.uppercase(), params))
+    val actionType = type.uppercase()
+    addActionToSlot(
+        session, slot, GuiActionDef(actionType, GuiActionCatalog.params(actionType, value)))
     applyPdcToItem(session, slot)
     GuiMakerExporter.exportDraft(plugin, session)
     msg(player, "&e[GuiMaker] &aslot $slot アクション追加: &f${type.uppercase()} $value")
@@ -1947,6 +1940,15 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     else actions.add(action)
   }
 
+  private fun toggleSlotEnchant(player: Player, session: GuiEditorSession, slot: Int) {
+    val def = session.slots.getOrPut(slot) { GuiSlotDef() }
+    def.enchanted = !def.enchanted
+    applyPdcToItem(session, slot)
+    GuiMakerExporter.exportDraft(plugin, session)
+    msg(player, "&e[GuiMaker] &aエンチャント表示: &f${if (def.enchanted) "ON" else "OFF"}")
+    openContextMenu(player, session, slot)
+  }
+
   private fun startActionValueEdit(
       player: Player,
       session: GuiEditorSession,
@@ -1968,7 +1970,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
       else -> {
         player.closeInventory()
         session.pendingInput = PendingInput.ActionParam(slot, action.type, actionIndex)
-        msg(player, "&e[GuiMaker] &f${actionParamPrompt(action.type)}")
+        msg(player, "&e[GuiMaker] &f${GuiActionCatalog.paramPrompt(action.type)}")
       }
     }
   }
@@ -1983,7 +1985,9 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     else action.params.forEach { (key, value) -> lore.add("&7$key: &f$value") }
     lore.addAll(extraLore)
     return makeItem(
-        actionMaterial(action.type), "&d${index + 1}. ${action.type}", *lore.toTypedArray())
+        GuiActionCatalog.material(action.type),
+        "&d${index + 1}. ${action.type}",
+        *lore.toTypedArray())
   }
 
   private fun makeLoreItem(index: Int, line: String, vararg extraLore: String): ItemStack {
@@ -1991,133 +1995,6 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     lore.addAll(extraLore)
     return makeItem(Material.PAPER, "&e${index + 1}. ロア行", *lore.toTypedArray())
   }
-
-  private fun actionMaterial(type: String): Material =
-      when (type) {
-        "OPEN_MENU" -> Material.ENDER_CHEST
-        "OPEN_POPUP" -> Material.CHORUS_FRUIT
-        "PLAYER_CMD",
-        "SUGGEST_COMMAND" -> Material.STICK
-        "CONSOLE_CMD" -> Material.REDSTONE
-        "OP_PLAYER_CMD" -> Material.NETHER_STAR
-        "MESSAGE",
-        "BROADCAST",
-        "CHAT_PASTE" -> Material.PAPER
-        "URL" -> Material.MAP
-        "SOUND" -> Material.NOTE_BLOCK
-        "CLOSE" -> Material.OAK_DOOR
-        else -> Material.COMMAND_BLOCK
-      }
-
-  private fun actionParamLabel(type: String): String =
-      when (type) {
-        "OPEN_MENU",
-        "OPEN_POPUP" -> "target"
-        "PLAYER_CMD",
-        "CONSOLE_CMD",
-        "OP_PLAYER_CMD",
-        "SUGGEST_COMMAND" -> "command"
-        "MESSAGE",
-        "BROADCAST",
-        "CHAT_PASTE" -> "text"
-        "SOUND" -> "sound"
-        "URL" -> "url"
-        "CLOSE" -> "(なし)"
-        else -> "value"
-      }
-
-  private fun actionParamPrompt(type: String): String =
-      when (type) {
-        "PLAYER_CMD" -> "プレイヤーとして実行するコマンドを入力 (/ 不要, %player% 使用可):"
-        "CONSOLE_CMD" -> "コンソールとして実行するコマンドを入力 (/ 不要, %player% 使用可):"
-        "OP_PLAYER_CMD" -> "OP権限で実行するコマンドを入力 (/ 不要):"
-        "SUGGEST_COMMAND" -> "コマンド候補を入力 (/ 不要):"
-        "MESSAGE" -> "送信するメッセージを入力 (&カラーコード対応):"
-        "BROADCAST" -> "ブロードキャストするメッセージを入力:"
-        "URL" -> "URLを入力してください:"
-        "CHAT_PASTE" -> "チャット欄に表示するテキストを入力:"
-        else -> "${actionParamLabel(type)} を入力:"
-      }
-
-  private fun collectPermissionGroups(): List<PermissionGroupChoice> =
-      runCatching {
-            LuckPermsProvider.get().groupManager.loadedGroups.map { group ->
-              val name = group.name.lowercase(Locale.ROOT)
-              PermissionGroupChoice(
-                  name = name,
-                  displayName = groupDisplayName(name, group.displayName),
-                  category = groupCategory(name),
-                  weight = group.weight.orElse(0))
-            }
-          }
-          .getOrElse { emptyList() }
-          .distinctBy { it.name }
-          .sortedWith(
-              compareBy<PermissionGroupChoice> {
-                    groupCategoryOrder().indexOf(it.category).takeIf { i -> i >= 0 } ?: 999
-                  }
-                  .thenByDescending { it.weight }
-                  .thenBy { it.name })
-
-  private fun groupCategoryOrder(): List<String> =
-      listOf("プレイヤーランク", "建築ランク", "特別ロール", "スタッフ", "その他")
-
-  private fun groupCategory(name: String): String =
-      when (name.lowercase(Locale.ROOT)) {
-        "default",
-        "shokyu",
-        "beginner",
-        "member",
-        "chukyu",
-        "jokyu" -> "プレイヤーランク"
-        "builder",
-        "takumi" -> "建築ランク"
-        "fly",
-        "white",
-        "blue" -> "特別ロール"
-        "admin",
-        "owner",
-        "staff",
-        "mod",
-        "moderator" -> "スタッフ"
-        else -> "その他"
-      }
-
-  private fun groupDisplayName(name: String, lpDisplayName: String?): String =
-      when (name.lowercase(Locale.ROOT)) {
-        "default" -> "初期"
-        "shokyu",
-        "beginner" -> "初級者"
-        "chukyu" -> "中級者"
-        "jokyu" -> "上級者"
-        "builder" -> "建築士"
-        "takumi" -> "たくみ"
-        "fly" -> "Fly"
-        "white" -> "White"
-        "blue" -> "Blue"
-        "mod",
-        "moderator" -> "Moderator"
-        "admin" -> "Admin"
-        else -> lpDisplayName?.takeIf { it.isNotBlank() } ?: name
-      }
-
-  private fun permissionCategoryMaterial(category: String): Material =
-      when (category) {
-        "プレイヤーランク" -> Material.EMERALD
-        "建築ランク" -> Material.BRICKS
-        "特別ロール" -> Material.FEATHER
-        "スタッフ" -> Material.NETHER_STAR
-        else -> Material.PAPER
-      }
-
-  private fun permissionGroupMaterial(group: PermissionGroupChoice): Material =
-      when (group.category) {
-        "プレイヤーランク" -> Material.EMERALD
-        "建築ランク" -> if (group.name == "takumi") Material.DIAMOND_PICKAXE else Material.BRICKS
-        "特別ロール" -> if (group.name == "fly") Material.FEATHER else Material.LAPIS_LAZULI
-        "スタッフ" -> Material.NETHER_STAR
-        else -> Material.PAPER
-      }
 
   private fun soundKey(sound: Sound): String = sound.getKey().key
 
@@ -2237,7 +2114,7 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
   }
 
   private fun screenDefaultGlass(screenName: String): Material =
-      GuiMakerUiSkinDefinitions.screenDefaultGlass(screenName)
+      uiScreenCatalog.screenDefaultGlass(screenName)
 
   private fun shortMaterialName(material: Material): String {
     val name = material.name
@@ -2443,40 +2320,92 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
       return
     }
     val snapshot = snapshotUiSkinData(holder, editorInv) ?: return
-    val defs = UI_SCREEN_DEFS[holder.screenName] ?: return
-    val picker = UiSkinBlockPickerHolder(holder.screenName, snapshot)
-    val inv =
-        Bukkit.createInventory(picker, 54, comp("&9GuiMaker &8- UIブロック: &f${holder.screenName}"))
+    openUiSkinBlockPicker(player, holder.screenName, snapshot, allScreens = false, page = 0)
+  }
 
-    defs.entries
-        .sortedBy { it.key }
-        .forEach { (slot, pair) ->
-          val (label, defaultMat) = pair
-          inv.setItem(slot, uiSkinBlockPickerItem(holder.screenName, label, defaultMat, slot))
-        }
+  private fun openUiSkinBlockPicker(
+      player: Player,
+      screenName: String,
+      returnData: UiSkinData,
+      allScreens: Boolean,
+      page: Int
+  ) {
+    val entries = uiSkinBlockPickerEntries(screenName, allScreens)
+    val gridSlots = (0..44).toList()
+    val pageSize = gridSlots.size
+    val maxPage = ((entries.size - 1).coerceAtLeast(0)) / pageSize
+    val safePage = page.coerceIn(0, maxPage)
+    val visible = entries.drop(safePage * pageSize).take(pageSize)
+    val picker = UiSkinBlockPickerHolder(screenName, returnData, allScreens, safePage)
+    val inv = Bukkit.createInventory(picker, 54, comp("&9GuiMaker &8- UIブロック: &f$screenName"))
+
+    visible.forEachIndexed { index, entry ->
+      inv.setItem(
+          gridSlots[index],
+          uiSkinBlockPickerItem(
+              screenName, entry.label, entry.material, entry.defaultSlot, entry.sourceScreen))
+    }
     inv.setItem(
-        45, makeItem(Material.BOOK, "&eUIブロック", "&7この画面で使える機能ブロック一覧です", "&7クリックでインベントリに追加します"))
-    inv.setItem(49, makeItem(Material.ARROW, "&fUI編集に戻る", "&7現在の編集状態に戻ります"))
+        45,
+        makeItem(
+            Material.BOOK,
+            if (allScreens) "&e全UIブロック" else "&eこの画面のUIブロック",
+            "&7クリックでインベントリに追加します",
+            "&7${safePage + 1}/${maxPage + 1} ページ"))
+    inv.setItem(48, makeItem(Material.ARROW, "&e前のページ", "&7一覧を戻します"))
+    inv.setItem(
+        49,
+        makeItem(
+            if (allScreens) Material.CHEST else Material.ENDER_CHEST,
+            if (allScreens) "&bこの画面の一覧" else "&b全機能ブロック一覧",
+            "&7中央ボタンで一覧を切り替えます"))
+    inv.setItem(50, makeItem(Material.ARROW, "&e次のページ", "&7一覧を進めます"))
     inv.setItem(53, makeItem(Material.ARROW, "&fUI編集に戻る", "&7現在の編集状態に戻ります"))
     player.openInventory(inv)
+  }
+
+  private data class UiSkinPickerEntry(
+      val sourceScreen: String,
+      val defaultSlot: Int,
+      val label: String,
+      val material: Material
+  )
+
+  private fun uiSkinBlockPickerEntries(
+      screenName: String,
+      allScreens: Boolean
+  ): List<UiSkinPickerEntry> {
+    val source =
+        if (allScreens) UI_SCREEN_DEFS
+        else mapOf(screenName to (UI_SCREEN_DEFS[screenName] ?: emptyMap()))
+    return source
+        .flatMap { (sourceScreen, defs) ->
+          defs.entries.map { (slot, pair) ->
+            UiSkinPickerEntry(sourceScreen, slot, pair.first, pair.second)
+          }
+        }
+        .distinctBy { it.sourceScreen to it.label }
+        .sortedWith(compareBy<UiSkinPickerEntry> { it.sourceScreen }.thenBy { it.defaultSlot })
   }
 
   private fun uiSkinBlockPickerItem(
       screenName: String,
       funcLabel: String,
       material: Material,
-      defaultSlot: Int
+      defaultSlot: Int,
+      sourceScreen: String
   ): ItemStack {
+    val compatible = sourceScreen == screenName
     val item =
         makeItem(
             material,
-            "&b$funcLabel",
-            "&8screen $screenName / slot $defaultSlot",
-            "&7クリックでインベントリに追加",
+            if (compatible) "&b$funcLabel" else "&7$funcLabel",
+            "&8screen $sourceScreen / slot $defaultSlot",
+            if (compatible) "&7クリックでインベントリに追加" else "&8別画面用: この画面には配置できません",
             "&7UI編集画面の上段へ置くと機能ブロックとして保存されます")
     val meta = item.itemMeta!!
     meta.persistentDataContainer.set(KEY_FUNC, PersistentDataType.STRING, funcLabel)
-    meta.persistentDataContainer.set(KEY_SCREEN, PersistentDataType.STRING, screenName)
+    meta.persistentDataContainer.set(KEY_SCREEN, PersistentDataType.STRING, sourceScreen)
     meta.persistentDataContainer.set(KEY_SKIN_ITEM, PersistentDataType.STRING, "1")
     item.itemMeta = meta
     return item
@@ -2492,7 +2421,20 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     if (event.clickedInventory != event.inventory) return
 
     when (event.rawSlot) {
-      49,
+      48 -> {
+        openUiSkinBlockPicker(
+            player, holder.screenName, holder.returnData, holder.allScreens, holder.page - 1)
+        return
+      }
+      49 -> {
+        openUiSkinBlockPicker(player, holder.screenName, holder.returnData, !holder.allScreens, 0)
+        return
+      }
+      50 -> {
+        openUiSkinBlockPicker(
+            player, holder.screenName, holder.returnData, holder.allScreens, holder.page + 1)
+        return
+      }
       53 -> {
         openUiSkinEditor(player, holder.screenName, holder.returnData)
         return
@@ -2849,11 +2791,12 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
   }
 
   private fun decorateItem(base: ItemStack, def: GuiSlotDef?): ItemStack {
-    if (def == null || (def.name.isEmpty() && def.lore.isEmpty())) return base.clone()
     val item = base.clone()
+    if (def == null) return item
     val meta = item.itemMeta ?: return item
     if (def.name.isNotEmpty()) meta.displayName(comp(def.name))
     if (def.lore.isNotEmpty()) meta.lore(def.lore.map { comp(it) })
+    ItemVisuals.applyEnchantVisual(meta, def.enchanted)
     item.itemMeta = meta
     return item
   }
@@ -3040,8 +2983,12 @@ class GuiEditorEngine(private val plugin: Main) : Listener {
     override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
   }
 
-  inner class UiSkinBlockPickerHolder(val screenName: String, val returnData: UiSkinData) :
-      InventoryHolder {
+  inner class UiSkinBlockPickerHolder(
+      val screenName: String,
+      val returnData: UiSkinData,
+      val allScreens: Boolean,
+      val page: Int
+  ) : InventoryHolder {
     override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
   }
 }

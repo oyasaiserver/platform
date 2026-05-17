@@ -73,13 +73,15 @@ class CsmMenuLoader(private val plugin: Main) {
     val lore = section.getStringList("lore")
     val permission = section.getString("permission")
     val actions = parseActions(section)
+    val enchanted = section.getBoolean("enchanted", false)
     return CsmItemDef(
         slot = slot,
         icon = icon,
         name = name,
         lore = lore,
         actions = actions,
-        permission = permission)
+        permission = permission,
+        enchanted = enchanted)
   }
 
   @Suppress("UNCHECKED_CAST")

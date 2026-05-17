@@ -1,6 +1,7 @@
 package icu.oyasai.citiesskymine.guimaker
 
 import icu.oyasai.citiesskymine.Main
+import icu.oyasai.citiesskymine.util.ItemVisuals
 import java.io.File
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
@@ -111,6 +112,7 @@ object GuiMakerExporter {
           }
       if (lore.isNotEmpty()) yaml.set("$key.lore", lore)
       def?.permission?.let { yaml.set("$key.permission", it) }
+      if (def?.enchanted == true) yaml.set("$key.enchanted", true)
 
       if (def != null && def.actions.isNotEmpty()) {
         val actionList =
@@ -157,6 +159,7 @@ object GuiMakerExporter {
               name = sec.getString("name", "") ?: "",
               lore = sec.getStringList("lore").toMutableList(),
               permission = sec.getString("permission"),
+              enchanted = sec.getBoolean("enchanted", false),
               actions = actions)
       session.slots[slot] = def
 
@@ -176,6 +179,7 @@ object GuiMakerExporter {
                       .deserialize(it)
                       .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
                 })
+        ItemVisuals.applyEnchantVisual(meta, def.enchanted)
         val pdc = meta.persistentDataContainer
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_name"),
@@ -189,6 +193,10 @@ object GuiMakerExporter {
             org.bukkit.NamespacedKey(plugin, "gm_perm"),
             org.bukkit.persistence.PersistentDataType.STRING,
             def.permission ?: "")
+        pdc.set(
+            org.bukkit.NamespacedKey(plugin, "gm_enchanted"),
+            org.bukkit.persistence.PersistentDataType.STRING,
+            if (def.enchanted) "1" else "")
         val actStr =
             def.actions.joinToString("\n") { a ->
               a.type +
