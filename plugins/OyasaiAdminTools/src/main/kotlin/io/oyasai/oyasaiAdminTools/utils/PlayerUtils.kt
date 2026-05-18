@@ -44,9 +44,8 @@ object PlayerUtils {
     val spaceGamertag = gamertag.replace("_", " ")
     val spaceUUID = fetchUUIDFromXUID(spaceGamertag)
     if (underscoreUUID != null && spaceUUID != null) {
-      Bukkit.getLogger().warning(
-        "[AdminTools] Both gamertags exist. '${gamertag}', '${spaceGamertag}'"
-      )
+      Bukkit.getLogger()
+          .warning("[AdminTools] Both gamertags exist. '${gamertag}', '${spaceGamertag}'")
       return null
     }
     return underscoreUUID ?: spaceUUID
