@@ -79,8 +79,8 @@
   },
   "gsit": {
     "1.21.10": {
-      "url": "https://cdn.spiget.org/file/spiget-resources/62325.jar",
-      "hash": "sha256-W/eF7qR22PfZFKD+Uy357YQ/vGcq/34VXKeysm/HgQU="
+      "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/UZnBkQYH/GSit-3.3.3.jar",
+      "hash": "sha256-aIRj13zbjtlGrILBfdqDRHV5BLKqH3ipcNkZucYP4Fk="
     }
   },
   "imageonmap": {
@@ -205,8 +205,8 @@
   },
   "skript": {
     "1.21.10": {
-      "url": "https://cdn.spiget.org/file/spiget-resources/114544.jar",
-      "hash": "sha256-UVMsIkQ9k06S5LF9+tg6vvoiPZStHf+Aau1T1LYyzCQ="
+      "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/uA0AEenw/Skript-2.15.2.jar",
+      "hash": "sha256-C9T40P5CaDbWnI9FLyYAIs0lboBnFnyCgC12Blmo/Hw="
     }
   },
   "slotmachine": {
