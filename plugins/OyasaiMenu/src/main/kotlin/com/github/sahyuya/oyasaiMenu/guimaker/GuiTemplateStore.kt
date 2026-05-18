@@ -8,6 +8,7 @@ import java.nio.file.StandardCopyOption
 import java.util.UUID
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
@@ -111,6 +112,27 @@ object GuiTemplateStore {
     val path = entry.file.relativeTo(plugin.dataFolder.parentFile).path
     require(entry.file.delete()) { "テンプレートを削除できませんでした: ${entry.id}" }
     path
+  }
+
+  fun ensureSharedBlockTemplate(
+      plugin: OyasaiMenu,
+      id: String,
+      material: Material,
+      def: GuiSlotDef
+  ): Result<String> = runCatching {
+    val safeId = sanitizeId(id)
+    val file = sharedFile(plugin, GuiTemplateKind.BLOCK, safeId)
+    if (file.exists()) return@runCatching file.relativeTo(plugin.dataFolder.parentFile).path
+    val session = GuiEditorSession("official/$safeId", "&8公式ブロック", 54)
+    val inv = Bukkit.createInventory(null, 54)
+    inv.setItem(0, buildBlockItem(material, def))
+    session.canvasInventory = inv
+    session.slots[0] =
+        def.copy(
+            lore = def.lore.toMutableList(),
+            actions = def.actions.toMutableList(),
+            extras = def.extras.toMutableMap())
+    saveBlockTemplateToFile(plugin, file, session, 0, inv.getItem(0) ?: ItemStack(material))
   }
 
   fun listTemplates(plugin: OyasaiMenu, player: Player): List<GuiTemplateEntry> =

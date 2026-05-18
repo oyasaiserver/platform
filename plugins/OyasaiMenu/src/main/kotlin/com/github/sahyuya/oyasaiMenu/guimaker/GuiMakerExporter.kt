@@ -1,7 +1,9 @@
 package com.github.sahyuya.oyasaiMenu.guimaker
 
 import com.github.sahyuya.oyasaiMenu.OyasaiMenu
+import com.github.sahyuya.oyasaiMenu.model.PopupAction
 import com.github.sahyuya.oyasaiMenu.model.PopupActionType
+import com.github.sahyuya.oyasaiMenu.model.PopupMenuDef
 import com.github.sahyuya.oyasaiMenu.util.ItemVisuals
 import java.io.File
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
@@ -142,7 +144,11 @@ object GuiMakerExporter {
         when {
           draft.exists() -> draft
           live.exists() -> live
-          else -> return false
+          else -> {
+            val loaded = plugin.popupMenuLoader.getPopup(session.menuId) ?: return false
+            parseLoadedPopupIntoSession(plugin, loaded, session)
+            return true
+          }
         }
     parsePopupYamlIntoSession(plugin, file, session)
     return true
@@ -444,6 +450,124 @@ object GuiMakerExporter {
       tempInv.setItem(slot, item)
     }
     session.canvasInventory = tempInv
+  }
+
+  private fun parseLoadedPopupIntoSession(
+      plugin: OyasaiMenu,
+      popup: PopupMenuDef,
+      session: GuiEditorSession
+  ) {
+    session.surface = GuiEditableSurface.POPUP
+    session.menuTitle = popup.title
+    session.menuSize = 54
+    session.popupMeta = PopupEditorMeta(glass = popup.glass.name, navActive = popup.navActive)
+    session.slots.clear()
+
+    val tempInv = Bukkit.createInventory(null, 54)
+    popup.items.forEach { popupItem ->
+      val slot = popupItem.slot.takeIf { it in 0..44 } ?: return@forEach
+      if (popupItem.icon == Material.AIR) return@forEach
+      val def =
+          GuiSlotDef(
+              name = popupItem.name,
+              lore = popupItem.lore.toMutableList(),
+              permission = popupItem.requiredPermission,
+              enchanted = popupItem.enchanted,
+              actions = popupItem.actions.map { popupActionDef(it) }.toMutableList())
+      def.extras["popup.key"] = popupItem.key
+      popupItem.customTexture?.let { def.extras["texture"] = it }
+      if (popupItem.opOnly) def.extras["op_only"] = "true"
+      popupItem.fallbackIcon?.let {
+        def.extras["fallback_icon"] = popupMaterialName(it, popupItem.fallbackTexture)
+      }
+      popupItem.fallbackTexture?.let { def.extras["fallback_texture"] = it }
+      popupItem.fallbackName.takeIf { it.isNotBlank() }?.let { def.extras["fallback_name"] = it }
+      if (popupItem.fallbackLore.isNotEmpty()) {
+        def.extras["fallback_lore"] = popupItem.fallbackLore.joinToString("\n")
+      }
+      if (popupItem.fallbackActions.isNotEmpty()) {
+        def.extras["fallback_actions"] =
+            serializeActions(popupItem.fallbackActions.map { popupActionDef(it) })
+      }
+      session.slots[slot] = def
+      setSessionItem(plugin, tempInv, slot, popupItem.icon, def)
+    }
+    session.canvasInventory = tempInv
+  }
+
+  private fun popupActionDef(action: PopupAction): GuiActionDef =
+      when (action.type) {
+        PopupActionType.PLAYER_CMD -> GuiActionDef("PLAYER_CMD", mapOf("command" to action.value))
+        PopupActionType.CONSOLE_CMD -> GuiActionDef("CONSOLE_CMD", mapOf("command" to action.value))
+        PopupActionType.OP_PLAYER_CMD ->
+            GuiActionDef("OP_PLAYER_CMD", mapOf("command" to action.value))
+        PopupActionType.URL -> GuiActionDef("URL", mapOf("url" to action.value))
+        PopupActionType.CHAT_PASTE -> GuiActionDef("CHAT_PASTE", mapOf("text" to action.value))
+        PopupActionType.SUGGEST_COMMAND ->
+            GuiActionDef("SUGGEST_COMMAND", mapOf("command" to action.value))
+        PopupActionType.OPEN_POPUP -> GuiActionDef("OPEN_POPUP", mapOf("target" to action.value))
+        PopupActionType.OPEN_SPECIAL ->
+            GuiActionDef("OPEN_SPECIAL", mapOf("target" to action.value))
+        PopupActionType.OPEN_SHOP -> GuiActionDef("OPEN_SHOP", mapOf("category" to action.value))
+        PopupActionType.OPEN_SELL -> GuiActionDef("OPEN_SELL")
+        PopupActionType.OPEN_MACRO -> GuiActionDef("OPEN_MACRO")
+        PopupActionType.OPEN_POINT_SHOP ->
+            GuiActionDef("OPEN_POINT_SHOP", mapOf("category" to action.value))
+        PopupActionType.OPEN_MENU -> GuiActionDef("OPEN_MENU", mapOf("target" to action.value))
+        PopupActionType.CLOSE -> GuiActionDef("CLOSE")
+      }
+
+  private fun setSessionItem(
+      plugin: OyasaiMenu,
+      inv: org.bukkit.inventory.Inventory,
+      slot: Int,
+      mat: Material,
+      def: GuiSlotDef
+  ) {
+    val item = ItemStack(mat)
+    val meta = item.itemMeta
+    if (meta != null) {
+      if (def.name.isNotEmpty())
+          meta.displayName(
+              LegacyComponentSerializer.legacyAmpersand()
+                  .deserialize(def.name)
+                  .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false))
+      if (def.lore.isNotEmpty())
+          meta.lore(
+              def.lore.map {
+                LegacyComponentSerializer.legacyAmpersand()
+                    .deserialize(it)
+                    .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
+              })
+      ItemVisuals.applyEnchantVisual(meta, def.enchanted)
+      val pdc = meta.persistentDataContainer
+      pdc.set(
+          org.bukkit.NamespacedKey(plugin, "gm_name"),
+          org.bukkit.persistence.PersistentDataType.STRING,
+          def.name)
+      pdc.set(
+          org.bukkit.NamespacedKey(plugin, "gm_lore"),
+          org.bukkit.persistence.PersistentDataType.STRING,
+          def.lore.joinToString("\n"))
+      pdc.set(
+          org.bukkit.NamespacedKey(plugin, "gm_perm"),
+          org.bukkit.persistence.PersistentDataType.STRING,
+          def.permission ?: "")
+      pdc.set(
+          org.bukkit.NamespacedKey(plugin, "gm_enchanted"),
+          org.bukkit.persistence.PersistentDataType.STRING,
+          if (def.enchanted) "1" else "")
+      pdc.set(
+          org.bukkit.NamespacedKey(plugin, "gm_actions"),
+          org.bukkit.persistence.PersistentDataType.STRING,
+          serializeActions(def.actions))
+      pdc.set(
+          org.bukkit.NamespacedKey(plugin, "gm_extra"),
+          org.bukkit.persistence.PersistentDataType.STRING,
+          serializeExtras(def.extras))
+      item.itemMeta = meta
+    }
+    inv.setItem(slot, item)
   }
 
   private fun rawMaterial(item: ItemStack): Material? = item.type.takeIf { it != Material.AIR }

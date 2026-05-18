@@ -19,17 +19,17 @@ screens:
     slots:
       4: {label: "編集対象", material: ENDER_CHEST}
       44: {label: "新規作成", material: WRITABLE_BOOK}
-      45: {label: "編集ハブへ戻る", material: ARROW}
       48: {label: "前のページ", material: ARROW}
       50: {label: "次のページ", material: ARROW}
+      53: {label: "編集ハブへ戻る", material: ARROW}
 
   ui_screen_list:
     default-glass: YELLOW_STAINED_GLASS_PANE
     slots:
       4: {label: "GUI Maker UI", material: ITEM_FRAME}
-      45: {label: "編集ハブへ戻る", material: ARROW}
       48: {label: "前のページ", material: ARROW}
       50: {label: "次のページ", material: ARROW}
+      53: {label: "編集ハブへ戻る", material: ARROW}
 
   special_surface:
     default-glass: LIGHT_BLUE_STAINED_GLASS_PANE
@@ -38,7 +38,7 @@ screens:
       13: {label: "確認ボタンメニュー", material: LIME_CONCRETE}
       15: {label: "可変コマンドメニュー", material: REPEATER}
       31: {label: "通常GUIへ配置", material: ENDER_CHEST}
-      45: {label: "編集ハブへ戻る", material: ARROW}
+      53: {label: "編集ハブへ戻る", material: ARROW}
 
   popup_settings:
     default-glass: PURPLE_STAINED_GLASS_PANE
@@ -48,7 +48,6 @@ screens:
       12: {label: "Nav Active -", material: ARROW}
       14: {label: "Nav Active +", material: ARROW}
       20: {label: "タイトル", material: NAME_TAG}
-      45: {label: "キャンバスへ戻る", material: ARROW}
       48: {label: "反映", material: LIME_CONCRETE_POWDER}
       53: {label: "キャンバスへ戻る", material: ARROW}
 
@@ -113,6 +112,7 @@ screens:
       12: {label: "上へ移動", material: ARROW}
       14: {label: "下へ移動", material: ARROW}
       22: {label: "現在の値", material: BOOK}
+      31: {label: "詳細パラメータを編集", material: WRITABLE_BOOK}
       37: {label: "アクションを追加", material: COMMAND_BLOCK}
       43: {label: "このアクションを削除", material: BARRIER}
 

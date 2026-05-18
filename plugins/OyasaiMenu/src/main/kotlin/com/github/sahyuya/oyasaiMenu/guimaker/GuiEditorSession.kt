@@ -51,5 +51,7 @@ sealed class PendingInput(val slot: Int) {
   class ActionParam(slot: Int, val actionType: String, val actionIndex: Int? = null) :
       PendingInput(slot)
 
+  class ActionRawParams(slot: Int, val actionIndex: Int) : PendingInput(slot)
+
   class MenuTitle(val color: String = "") : PendingInput(-1)
 }
