@@ -79,8 +79,8 @@
   },
   "gsit": {
     "1.21.10": {
-      "id": 62325,
-      "type": "spiget"
+      "slug": "gsit",
+      "type": "modrinth"
     }
   },
   "imageonmap": {
@@ -220,8 +220,8 @@
   },
   "skript": {
     "1.21.10": {
-      "id": 114544,
-      "type": "spiget"
+      "slug": "skript",
+      "type": "modrinth"
     }
   },
   "slotmachine": {

@@ -57,9 +57,9 @@ writeShellApplication {
     {
       cat ${serverProperties}
       if [[ -n "''${RCON_PASSWORD:-}" ]]; then
-        printf 'enable-rcon=true\nrcon.password=%s\n' "''${RCON_PASSWORD}"
+        printf 'rcon.password=%s\n' "''${RCON_PASSWORD}"
       fi
-    } > server.properties
+    } >server.properties
 
     MEMORY="''${MEMORY:-2G}"
 
