@@ -16,7 +16,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
     CommandExecutor, TabCompleter {
 
   companion object {
-    private val ROOT_SUBCOMMANDS = listOf("new", "edit", "list", "ui", "template", "help")
+    private val ROOT_SUBCOMMANDS =
+        listOf("hub", "new", "edit", "list", "popup", "special", "ui", "template", "help")
     private val EDIT_SUBCOMMANDS =
         listOf(
             "canvas",
@@ -34,6 +35,7 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
             "clearactions",
             "clearslot")
     private val MENU_ID_PATTERN = Regex("[a-zA-Z0-9_.-]+(?:/[a-zA-Z0-9_.-]+)*")
+    private val POPUP_ID_PATTERN = Regex("[a-zA-Z0-9_.-]+")
   }
 
   override fun onCommand(
@@ -52,13 +54,16 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
     }
 
     when (args.getOrNull(0)?.lowercase()) {
+      "hub" -> engine.openHub(sender)
       "new" -> handleNew(sender, args)
       "edit" -> handleEdit(sender, args)
       "list" -> handleList(sender)
+      "popup" -> handlePopup(sender, args)
+      "special" -> engine.openSpecialSurfaceHub(sender)
       "ui" -> handleUi(sender, args)
       "template" -> handleTemplate(sender, args)
-      "help",
-      null -> printHelp(sender)
+      "help" -> printHelp(sender)
+      null -> engine.openHub(sender)
       else -> printHelp(sender)
     }
     return true
@@ -95,6 +100,22 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
         return engine.uiScreenNames().filter { it.startsWith(args[2], ignoreCase = true) }
       }
     }
+    if (args[0].equals("popup", ignoreCase = true)) {
+      if (args.size == 2)
+          return listOf("list", "edit", "new", "set").filter {
+            it.startsWith(args[1], ignoreCase = true)
+          }
+      if (args.size == 3 && args[1].equals("edit", ignoreCase = true)) {
+        return GuiMakerExporter.listPopupIds(plugin).filter {
+          it.startsWith(args[2], ignoreCase = true)
+        }
+      }
+      if (args.size == 4 && args[1].equals("set", ignoreCase = true)) {
+        return listOf("glass", "nav_active", "title").filter {
+          it.startsWith(args[3], ignoreCase = true)
+        }
+      }
+    }
     if (args[0].equals("template", ignoreCase = true)) {
       if (args.size == 2)
           return listOf("approve").filter { it.startsWith(args[1], ignoreCase = true) }
@@ -123,6 +144,89 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
     val session = engine.newSession(sender, menuId)
     engine.openCanvas(sender, session)
     sender.sendMessage(comp("&e[GuiMaker] &a新規メニュー '&f$menuId&a' を作成しました。"))
+  }
+
+  private fun handlePopup(sender: Player, args: Array<String>) {
+    when (args.getOrNull(1)?.lowercase()) {
+      null,
+      "list" -> engine.openPopupMenuList(sender)
+      "edit" -> {
+        val popupId =
+            args.getOrNull(2)
+                ?: run {
+                  sender.sendMessage(comp("&c使用方法: /guimaker popup edit <popup-id>"))
+                  return
+                }
+        if (!validatePopupId(sender, popupId)) return
+        val session =
+            PopupMenuAdapter.load(plugin, popupId)
+                ?: run {
+                  sender.sendMessage(
+                      comp("&cPopup '$popupId' が見つかりません。新規作成は /guimaker popup new $popupId です。"))
+                  return
+                }
+        engine.sessions[sender.uniqueId] = session
+        engine.openCanvas(sender, session)
+        sender.sendMessage(comp("&e[GuiMaker] &aPopup '&f$popupId&a' を専用エディタで開きました。"))
+      }
+      "new" -> {
+        val popupId =
+            args.getOrNull(2)
+                ?: run {
+                  sender.sendMessage(comp("&c使用方法: /guimaker popup new <popup-id>"))
+                  return
+                }
+        if (!validatePopupId(sender, popupId)) return
+        val session = PopupMenuAdapter.newSession(plugin, popupId)
+        engine.sessions[sender.uniqueId] = session
+        engine.openCanvas(sender, session)
+        sender.sendMessage(comp("&e[GuiMaker] &a新規Popup '&f$popupId&a' を作成しました。"))
+      }
+      "set" -> handlePopupSet(sender, args)
+      else -> {
+        sender.sendMessage(comp("&e[GuiMaker] Popup編集"))
+        sender.sendMessage(comp("&7/guimaker popup list"))
+        sender.sendMessage(comp("&7/guimaker popup edit <id>"))
+        sender.sendMessage(comp("&7/guimaker popup new <id>"))
+        sender.sendMessage(comp("&7/guimaker popup set <id> glass|nav_active|title <value>"))
+      }
+    }
+  }
+
+  private fun handlePopupSet(sender: Player, args: Array<String>) {
+    val popupId =
+        args.getOrNull(2)
+            ?: run {
+              sender.sendMessage(
+                  comp("&c使用方法: /guimaker popup set <id> glass|nav_active|title <value>"))
+              return
+            }
+    if (!validatePopupId(sender, popupId)) return
+    val field = args.getOrNull(3)?.lowercase()
+    val value = args.drop(4).joinToString(" ")
+    if (field == null || value.isBlank()) {
+      sender.sendMessage(comp("&c使用方法: /guimaker popup set <id> glass|nav_active|title <value>"))
+      return
+    }
+    val session =
+        PopupMenuAdapter.load(plugin, popupId)
+            ?: run {
+              sender.sendMessage(comp("&cPopup '$popupId' が見つかりません。"))
+              return
+            }
+    val meta = session.popupMeta ?: PopupEditorMeta().also { session.popupMeta = it }
+    when (field) {
+      "glass" -> meta.glass = value.uppercase()
+      "nav_active" -> meta.navActive = value.toIntOrNull() ?: -1
+      "title" -> session.menuTitle = value
+      else -> {
+        sender.sendMessage(comp("&c不明なPopup設定です: &f$field"))
+        return
+      }
+    }
+    engine.sessions[sender.uniqueId] = session
+    GuiMakerExporter.exportDraft(plugin, session)
+    sender.sendMessage(comp("&e[GuiMaker] &aPopup設定をドラフト保存しました: &f${session.displayId}"))
   }
 
   private fun handleEdit(sender: Player, args: Array<String>) {
@@ -233,7 +337,7 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
           return
         }
         val value = args.drop(5).joinToString(" ")
-        if (type != "CLOSE" && value.isBlank()) {
+        if (type !in setOf("CLOSE", "OPEN_SELL", "OPEN_MACRO") && value.isBlank()) {
           sender.sendMessage(comp("&c$type には値が必要です。"))
           return
         }
@@ -266,6 +370,7 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
 
   private fun handleUi(sender: Player, args: Array<String>) {
     when (args.getOrNull(1)?.lowercase()) {
+      null -> engine.openUiScreenList(sender)
       "list" ->
           sender.sendMessage(
               comp("&e[GuiMaker] &f編集可能なUI画面: &a${engine.uiScreenNames().joinToString("&7, &a")}"))
@@ -302,6 +407,9 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
 
   private fun handleTemplate(sender: Player, args: Array<String>) {
     when (args.getOrNull(1)?.lowercase()) {
+      null -> {
+        engine.openTemplateLibrary(sender)
+      }
       "approve" -> approveTemplate(sender, args)
       else -> {
         sender.sendMessage(comp("&e[GuiMaker] テンプレート管理"))
@@ -409,6 +517,12 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
     return false
   }
 
+  private fun validatePopupId(sender: Player, popupId: String): Boolean {
+    val valid = popupId.matches(POPUP_ID_PATTERN)
+    if (!valid) sender.sendMessage(comp("&cPopup IDには英数字・_・-・. のみ使用できます。"))
+    return valid
+  }
+
   private fun resolveOwnerUuid(raw: String): UUID =
       runCatching { UUID.fromString(raw) }
           .getOrElse {
@@ -435,8 +549,12 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
 
   private fun printHelp(sender: Player) {
     sender.sendMessage(comp("&e===== GuiMaker ====="))
+    sender.sendMessage(comp("&7/guimaker                                 &f- 編集ハブを開く"))
     sender.sendMessage(comp("&7/guimaker new <id>                         &f- 新規メニューを作成"))
     sender.sendMessage(comp("&7/guimaker edit <id> [canvas]               &f- 編集キャンバスを開く"))
+    sender.sendMessage(comp("&7/guimaker popup list|edit|new              &f- Popup専用エディタ"))
+    sender.sendMessage(comp("&7/guimaker ui                               &f- GUI Maker UI編集"))
+    sender.sendMessage(comp("&7/guimaker special                          &f- 特殊メニュー入口"))
     sender.sendMessage(comp("&7/guimaker edit <id> preview                &f- 現在の編集内容をプレビュー"))
     sender.sendMessage(comp("&7/guimaker edit <id> commit                 &f- OyasaiMenu に反映"))
     sender.sendMessage(comp("&7/guimaker edit <id> revert                 &f- ドラフトを破棄"))

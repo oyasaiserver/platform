@@ -9,14 +9,24 @@ data class GuiSlotDef(
     var lore: MutableList<String> = mutableListOf(),
     var permission: String? = null,
     var enchanted: Boolean = false,
-    val actions: MutableList<GuiActionDef> = mutableListOf()
+    val actions: MutableList<GuiActionDef> = mutableListOf(),
+    val extras: MutableMap<String, String> = mutableMapOf()
 )
+
+enum class GuiEditableSurface {
+  NORMAL,
+  POPUP
+}
+
+data class PopupEditorMeta(var glass: String = "GRAY_STAINED_GLASS_PANE", var navActive: Int = -1)
 
 class GuiEditorSession(
     val menuId: String,
     var menuTitle: String = "&8メニュー",
     var menuSize: Int = 54
 ) {
+  var surface: GuiEditableSurface = GuiEditableSurface.NORMAL
+  var popupMeta: PopupEditorMeta? = null
   val slots: MutableMap<Int, GuiSlotDef> = mutableMapOf()
   var pendingInput: PendingInput? = null
   var canvasInventory: Inventory? = null
@@ -24,6 +34,9 @@ class GuiEditorSession(
   var soundVolume: Float = 1.0f
   var favRegistering: Boolean = false // お気に入り登録モード中
   var templateEditTarget: GuiTemplateEntry? = null
+
+  val displayId: String
+    get() = if (surface == GuiEditableSurface.POPUP) "popup/$menuId" else menuId
 }
 
 sealed class PendingInput(val slot: Int) {

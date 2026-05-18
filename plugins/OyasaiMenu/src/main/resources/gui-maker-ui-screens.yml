@@ -3,6 +3,55 @@ fallback-glass: GRAY_STAINED_GLASS_PANE
 restore-slots: [47, 48, 50, 51]
 
 screens:
+  hub:
+    default-glass: GRAY_STAINED_GLASS_PANE
+    slots:
+      10: {label: "通常GUI", material: ENDER_CHEST}
+      12: {label: "Popupメニュー", material: CHORUS_FRUIT}
+      14: {label: "特殊メニュー", material: ENDER_EYE}
+      16: {label: "GUI Maker UI", material: ITEM_FRAME}
+      31: {label: "テンプレート / 公式ブロック", material: NETHER_STAR}
+      49: {label: "ヘルプ", material: BOOK}
+      53: {label: "閉じる", material: BARRIER}
+
+  surface_list:
+    default-glass: LIME_STAINED_GLASS_PANE
+    slots:
+      4: {label: "編集対象", material: ENDER_CHEST}
+      44: {label: "新規作成", material: WRITABLE_BOOK}
+      45: {label: "編集ハブへ戻る", material: ARROW}
+      48: {label: "前のページ", material: ARROW}
+      50: {label: "次のページ", material: ARROW}
+
+  ui_screen_list:
+    default-glass: YELLOW_STAINED_GLASS_PANE
+    slots:
+      4: {label: "GUI Maker UI", material: ITEM_FRAME}
+      45: {label: "編集ハブへ戻る", material: ARROW}
+      48: {label: "前のページ", material: ARROW}
+      50: {label: "次のページ", material: ARROW}
+
+  special_surface:
+    default-glass: LIGHT_BLUE_STAINED_GLASS_PANE
+    slots:
+      11: {label: "オンラインプレイヤー一覧", material: PLAYER_HEAD}
+      13: {label: "確認ボタンメニュー", material: LIME_CONCRETE}
+      15: {label: "可変コマンドメニュー", material: REPEATER}
+      31: {label: "通常GUIへ配置", material: ENDER_CHEST}
+      45: {label: "編集ハブへ戻る", material: ARROW}
+
+  popup_settings:
+    default-glass: PURPLE_STAINED_GLASS_PANE
+    slots:
+      4: {label: "Popup専用設定", material: CHORUS_FRUIT}
+      10: {label: "背景ガラス", material: GRAY_STAINED_GLASS_PANE}
+      12: {label: "Nav Active -", material: ARROW}
+      14: {label: "Nav Active +", material: ARROW}
+      20: {label: "タイトル", material: NAME_TAG}
+      45: {label: "キャンバスへ戻る", material: ARROW}
+      48: {label: "反映", material: LIME_CONCRETE_POWDER}
+      53: {label: "キャンバスへ戻る", material: ARROW}
+
   context:
     default-glass: BLUE_STAINED_GLASS_PANE
     slots:
@@ -31,6 +80,9 @@ screens:
       11: {label: "ポップアップ", material: CHORUS_FRUIT}
       12: {label: "メニューを閉じる", material: OAK_DOOR}
       13: {label: "特殊メニュー", material: ENDER_EYE}
+      14: {label: "ショップ", material: CHEST}
+      15: {label: "ポイントショップ", material: NETHER_STAR}
+      16: {label: "一括売却", material: GOLD_INGOT}
       18: {label: "コマンド系カテゴリ", material: COMMAND_BLOCK}
       19: {label: "プレイヤーコマンド", material: COMMAND_BLOCK}
       20: {label: "コンソールコマンド", material: COMPARATOR}
