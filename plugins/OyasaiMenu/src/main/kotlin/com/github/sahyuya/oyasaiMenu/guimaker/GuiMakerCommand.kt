@@ -118,6 +118,7 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
               return
             }
     if (!validateMenuId(sender, menuId)) return
+    if (!validateEditableMenuId(sender, menuId)) return
 
     val session = engine.newSession(sender, menuId)
     engine.openCanvas(sender, session)
@@ -132,6 +133,7 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
               return
             }
     if (!validateMenuId(sender, menuId)) return
+    if (!validateEditableMenuId(sender, menuId)) return
 
     val operation = args.getOrNull(2)?.lowercase() ?: "canvas"
     val session =
@@ -398,6 +400,13 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
       sender.sendMessage(comp("&cIDには英数字・_・-・. と階層用の / のみ使用できます。'.' または '..' 単独の階層は使えません。"))
     }
     return valid
+  }
+
+  private fun validateEditableMenuId(sender: Player, menuId: String): Boolean {
+    if (GuiMakerExporter.isEditableMenuId(menuId)) return true
+    sender.sendMessage(comp("&cこのIDは通常GUIメーカーの編集対象外です: &f$menuId"))
+    sender.sendMessage(comp("&7popup/* や shop/shops などは形式が違うため、専用エディタが必要です。"))
+    return false
   }
 
   private fun resolveOwnerUuid(raw: String): UUID =

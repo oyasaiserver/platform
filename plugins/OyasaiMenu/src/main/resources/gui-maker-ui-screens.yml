@@ -30,11 +30,13 @@ screens:
       10: {label: "メニューを開く", material: ENDER_CHEST}
       11: {label: "ポップアップ", material: CHORUS_FRUIT}
       12: {label: "メニューを閉じる", material: OAK_DOOR}
+      13: {label: "特殊メニュー", material: ENDER_EYE}
       18: {label: "コマンド系カテゴリ", material: COMMAND_BLOCK}
       19: {label: "プレイヤーコマンド", material: COMMAND_BLOCK}
       20: {label: "コンソールコマンド", material: COMPARATOR}
       21: {label: "OPコマンド", material: NETHER_STAR}
       22: {label: "コマンドを提案", material: BOOK}
+      23: {label: "可変コマンド", material: REPEATER}
       27: {label: "メッセージ系カテゴリ", material: PAPER}
       28: {label: "メッセージ送信", material: PAPER}
       29: {label: "ブロードキャスト", material: BEACON}
@@ -165,6 +167,15 @@ screens:
     slots:
       0: {label: "通常メニュー (情報)", material: ENDER_CHEST}
       4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      44: {label: "IDを手入力", material: WRITABLE_BOOK}
+
+  special_pick:
+    default-glass: LIGHT_BLUE_STAINED_GLASS_PANE
+    slots:
+      0: {label: "特殊メニュー (情報)", material: ENDER_EYE}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      20: {label: "オンラインプレイヤー", material: PLAYER_HEAD}
+      24: {label: "確認メニュー", material: LIME_CONCRETE}
       44: {label: "IDを手入力", material: WRITABLE_BOOK}
 
   favorites:

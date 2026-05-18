@@ -12,7 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration
  *
  * 変更点:
  * - テンプレート機能 (templates.yml / extends キー) を完全削除 templates.yml は不要になったため安全に削除可能
- * - root.yml をスキャン対象から除外 root メニューは MenuEngine の rootFallback で処理するため不要 root.yml ファイルは安全に削除可能
+ * - root.yml も通常メニューとしてロードする。初回起動時は同梱の menus/root.yml を展開する
  * - icon: CUSTOM_HEAD → Material.PLAYER_HEAD + customTexture 保持
  * - icon: AIR → Material.AIR として保持 (MenuEngine 側でスキップ)
  */
@@ -28,6 +28,7 @@ class MenuLoader(private val plugin: OyasaiMenu) {
       menusDir.mkdirs()
       plugin.logger.info("menus/ を作成しました。")
     }
+    ensureBundledMenu(menusDir, "root.yml")
     scanDirectory(menusDir, "", setOf("custom_items.yml", "shops.yml", "pointshop.yml"))
     plugin.logger.info("${menus.size} 個のメニューをロードしました。")
   }
@@ -36,6 +37,21 @@ class MenuLoader(private val plugin: OyasaiMenu) {
 
   fun getMenuCount(): Int = menus.size
 
+  private fun ensureBundledMenu(menusDir: File, fileName: String) {
+    val requestedId = fileName.substringBeforeLast(".")
+    val existing =
+        menusDir.listFiles()?.any {
+          it.isFile &&
+              it.nameWithoutExtension.equals(requestedId, ignoreCase = true) &&
+              it.extension.equals("yml", ignoreCase = true)
+        } == true
+    if (existing) return
+    val target = File(menusDir, fileName)
+    if (target.exists()) return
+    runCatching { plugin.saveResource("menus/$fileName", false) }
+        .onFailure { plugin.logger.warning("menus/$fileName の展開失敗。手動で配置してください。") }
+  }
+
   private fun scanDirectory(dir: File, prefix: String, skipFiles: Set<String> = emptySet()) {
     dir.listFiles()
         ?.sortedBy { it.name }
@@ -43,8 +59,13 @@ class MenuLoader(private val plugin: OyasaiMenu) {
           if (file.isDirectory) {
             if (file.name == "popup") return@forEach
             scanDirectory(file, "$prefix${file.name}/", skipFiles)
-          } else if (file.extension == "yml" && file.name !in skipFiles) {
-            val menuId = "$prefix${file.nameWithoutExtension}"
+          } else if (file.extension.equals("yml", ignoreCase = true) &&
+              file.name.lowercase() !in skipFiles) {
+            val id =
+                if (prefix.isEmpty() && file.nameWithoutExtension.equals("root", ignoreCase = true))
+                    "root"
+                else file.nameWithoutExtension
+            val menuId = "$prefix$id"
             runCatching { menus[menuId] = loadMenuFile(file, menuId) }
                 .onFailure { plugin.logger.warning("メニューロード失敗: $menuId → ${it.message}") }
           }

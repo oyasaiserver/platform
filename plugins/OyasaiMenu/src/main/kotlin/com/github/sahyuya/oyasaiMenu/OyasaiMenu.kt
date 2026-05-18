@@ -35,6 +35,8 @@ class OyasaiMenu : JavaPlugin(), Listener {
   lateinit var macroEngine: MacroEngine
   lateinit var adminEngine: AdminEngine
   lateinit var guiEditorEngine: GuiEditorEngine
+  lateinit var parameterCommandEngine: ParameterCommandEngine
+  lateinit var specialMenuEngine: SpecialMenuEngine
 
   override fun onEnable() {
     saveDefaultConfig()
@@ -59,6 +61,8 @@ class OyasaiMenu : JavaPlugin(), Listener {
     macroEngine = MacroEngine(this)
     adminEngine = AdminEngine(this)
     guiEditorEngine = GuiEditorEngine(this)
+    parameterCommandEngine = ParameterCommandEngine(this)
+    specialMenuEngine = SpecialMenuEngine(this)
 
     menuLoader.loadAll()
     shopLoader.loadAll()
@@ -101,6 +105,8 @@ class OyasaiMenu : JavaPlugin(), Listener {
             macroEngine,
             adminEngine,
             guiEditorEngine,
+            parameterCommandEngine,
+            specialMenuEngine,
             announcementManager,
             this)
         .forEach { server.pluginManager.registerEvents(it, this) }

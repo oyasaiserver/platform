@@ -395,6 +395,7 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
           player.sendMessage(msg)
         }
         PopupActionType.OPEN_POPUP -> open(player, action.value)
+        PopupActionType.OPEN_SPECIAL -> plugin.specialMenuEngine.open(player, action.value)
         PopupActionType.OPEN_SHOP -> {
           val cat = action.value
           if (cat.isEmpty()) open(player, "shopindex") else plugin.shopEngine.openShop(player, cat)

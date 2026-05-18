@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemStack
 
 object GuiMakerExporter {
 
+  private val blockedLiveFileNames = setOf("custom_items.yml", "shops.yml", "pointshop.yml")
+
   private fun draftFile(plugin: OyasaiMenu, menuId: String): File =
       File(plugin.dataFolder, "guimaker/$menuId.yml").also { it.parentFile.mkdirs() }
 
@@ -35,6 +37,7 @@ object GuiMakerExporter {
   }
 
   fun loadIntoSession(plugin: OyasaiMenu, session: GuiEditorSession): Boolean {
+    if (!isEditableMenuId(session.menuId)) return false
     val draft = draftFile(plugin, session.menuId)
     val live = liveFile(plugin, session.menuId)
     val file =
@@ -64,18 +67,29 @@ object GuiMakerExporter {
     if (draftDir.exists()) {
       draftDir
           .walkTopDown()
-          .filter { it.isFile && it.extension == "yml" }
-          .forEach { ids.add(it.toRelativeString(draftDir).removeSuffix(".yml")) }
+          .filter { it.isFile && it.extension.equals("yml", ignoreCase = true) }
+          .forEach {
+            val id = it.toRelativeString(draftDir).removeYamlSuffix()
+            if (isEditableMenuId(id)) ids.add(id)
+          }
     }
     val liveDir = File(plugin.dataFolder, "menus")
     if (liveDir.exists()) {
       liveDir
           .walkTopDown()
-          .filter { it.isFile && it.extension == "yml" }
-          .forEach { ids.add(it.toRelativeString(liveDir).removeSuffix(".yml")) }
+          .filter { isEditableLiveMenuFile(liveDir, it) }
+          .forEach {
+            val id = it.toRelativeString(liveDir).removeYamlSuffix()
+            if (isEditableMenuId(id)) ids.add(id)
+          }
     }
     return ids.sorted()
   }
+
+  fun isEditableMenuId(menuId: String): Boolean =
+      !menuId.startsWith("popup/") &&
+          menuId.split('/').none { it == "." || it == ".." } &&
+          "${menuId.substringAfterLast('/')}.yml".lowercase() !in blockedLiveFileNames
 
   // ── 内部処理 ──────────────────────────────────────────────
 
@@ -222,4 +236,14 @@ object GuiMakerExporter {
   }
 
   private fun rawMaterial(item: ItemStack): Material? = item.type.takeIf { it != Material.AIR }
+
+  private fun isEditableLiveMenuFile(liveDir: File, file: File): Boolean {
+    if (!file.isFile || !file.extension.equals("yml", ignoreCase = true)) return false
+    if (file.name.lowercase() in blockedLiveFileNames) return false
+    val relative = file.toRelativeString(liveDir)
+    return !relative.startsWith("popup${File.separator}") && !relative.startsWith("popup/")
+  }
+
+  private fun String.removeYamlSuffix(): String =
+      removeSuffix(".yml").removeSuffix(".YML").removeSuffix(".yaml").removeSuffix(".YAML")
 }

@@ -234,6 +234,8 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
             PopupAction(PopupActionType.SUGGEST_COMMAND, map["suggest_command"].toString())
         map.containsKey("open_popup") ->
             PopupAction(PopupActionType.OPEN_POPUP, map["open_popup"].toString())
+        map.containsKey("open_special") ->
+            PopupAction(PopupActionType.OPEN_SPECIAL, map["open_special"].toString())
         map.containsKey("open_shop") ->
             PopupAction(PopupActionType.OPEN_SHOP, map["open_shop"].toString())
         map.containsKey("open_sell") -> PopupAction(PopupActionType.OPEN_SELL, "")

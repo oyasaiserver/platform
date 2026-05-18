@@ -1,0 +1,311 @@
+# Root menu. This file is intentionally editable by /guimaker edit root.
+menu:
+  title: "&8✦ おやさい鯖 メニュー ✦"
+  size: 54
+
+items:
+  welcome_00:
+    slot: 0
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_01:
+    slot: 1
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_02:
+    slot: 2
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_03:
+    slot: 3
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_04:
+    slot: 4
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_05:
+    slot: 5
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_06:
+    slot: 6
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_07:
+    slot: 7
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_08:
+    slot: 8
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_09:
+    slot: 9
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_10:
+    slot: 10
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_11:
+    slot: 11
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_12:
+    slot: 12
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_13:
+    slot: 13
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_14:
+    slot: 14
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_15:
+    slot: 15
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_16:
+    slot: 16
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_17:
+    slot: 17
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_18:
+    slot: 18
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_19:
+    slot: 19
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_20:
+    slot: 20
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_21:
+    slot: 21
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_22:
+    slot: 22
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_23:
+    slot: 23
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_24:
+    slot: 24
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_25:
+    slot: 25
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_26:
+    slot: 26
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_27:
+    slot: 27
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_28:
+    slot: 28
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_29:
+    slot: 29
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_30:
+    slot: 30
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_31:
+    slot: 31
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_32:
+    slot: 32
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_33:
+    slot: 33
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_34:
+    slot: 34
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_35:
+    slot: 35
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_36:
+    slot: 36
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_37:
+    slot: 37
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_38:
+    slot: 38
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_39:
+    slot: 39
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_40:
+    slot: 40
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_41:
+    slot: 41
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_42:
+    slot: 42
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_43:
+    slot: 43
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  welcome_44:
+    slot: 44
+    icon: GRAY_STAINED_GLASS_PANE
+    name: "%announcement_title%"
+    lore: ["%announcement_body%"]
+  profile:
+    slot: 45
+    icon: PLAYER_HEAD
+    name: "&f%player%"
+    lore:
+      - "&7オンライン: &e%online%&f人"
+      - "&7TPS: &a%tps%"
+      - "&7DP: &b%dp_level%"
+      - "&7所持金: &6%money%"
+      - "&7ポイント: &3%tokens%&fP"
+      - ""
+      - "&eクリックで自分のプロフィールへ"
+    actions:
+      - type: PLAYER_CMD
+        command: "dp"
+
+  channel:
+    slot: 46
+    icon: RED_CONCRETE_POWDER
+    name: "&cチャンネルメニュー"
+    lore: ["&7チャットチャンネルを切り替えます", "&7メンバー確認もここから"]
+    actions:
+      - type: OPEN_POPUP
+        target: "channel"
+  sell:
+    slot: 47
+    icon: ORANGE_CONCRETE_POWDER
+    name: "&6一括売却"
+    lore: ["&7アイテムを一括で売却します", "&7ショップでも買取可のアイテムのみ換金"]
+    actions:
+      - type: OPEN_POPUP
+        target: "sellmenu"
+  shop:
+    slot: 48
+    icon: YELLOW_CONCRETE_POWDER
+    name: "&eサーバーショップ"
+    lore: ["&7ブロック・鉱石・ツール等を", "&7購入・売却できます"]
+    actions:
+      - type: OPEN_POPUP
+        target: "shopindex"
+  sociallikes:
+    slot: 49
+    icon: LIME_CONCRETE_POWDER
+    name: "&aSocialLikes"
+    lore: ["&7建築を投稿・閲覧したり", "&7空き地へテレポートできます"]
+    actions:
+      - type: OPEN_POPUP
+        target: "sociallikes"
+  carbuilder:
+    slot: 50
+    icon: CYAN_CONCRETE_POWDER
+    name: "&bCarBuilder"
+    lore: ["&7ユーザー車両建造プラグイン", "&7スポーン、カスタム、車両設定など"]
+    actions:
+      - type: OPEN_POPUP
+        target: "carbuilder"
+  utility:
+    slot: 51
+    icon: BLUE_CONCRETE_POWDER
+    name: "&9ユーティリティ"
+    lore: ["&7ワープ・各種コマンドの", "&7ショートカット集です"]
+    actions:
+      - type: OPEN_POPUP
+        target: "utility"
+  macro:
+    slot: 52
+    icon: PURPLE_CONCRETE_POWDER
+    name: "&5マクロ"
+    lore: ["&7コマンドを登録・実行できる", "&7マクロ機能を管理します"]
+    actions:
+      - type: OPEN_POPUP
+        target: "macromenu"
+  links:
+    slot: 53
+    icon: PINK_CONCRETE_POWDER
+    name: "&dリンク集"
+    lore: ["&7Wiki・Discord・WebMAP など", "&7各種リンクを表示します"]
+    actions:
+      - type: OPEN_POPUP
+        target: "links"

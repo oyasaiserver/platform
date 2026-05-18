@@ -1,5 +1,5 @@
 # announcements.yml
-# 総合メニュー (root) の上部エリア (スロット 0〜44) に表示するお知らせ。
+# menus/root.yml の %announcement_title% / %announcement_body% に差し込まれるお知らせ。
 # title: アイテム表示名 (&カラーコード対応)
 # body:  Lore テキスト行 (リスト形式)
 
