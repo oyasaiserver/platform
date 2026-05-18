@@ -5,3 +5,6 @@
 /gradle/libs.versions.toml
 /gradle.lock
 /plugins/
+
+# Internal, dev docs
+/docs

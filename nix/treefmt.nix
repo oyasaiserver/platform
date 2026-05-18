@@ -59,5 +59,8 @@
     };
     # keep-sorted end
   };
-  settings.global.excludes = [ "*/gen/*" ];
+  settings.global.excludes = [
+    "*/gen/*"
+    "docs/*"
+  ];
 }
