@@ -73,8 +73,8 @@
   },
   "geyser": {
     "1.21.10": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1148/downloads/spigot",
-      "hash": "sha256-gCAXFRy3cKJv1bLH73Q0CftJffuCLsIG/l3ofcqCWWE="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1149/downloads/spigot",
+      "hash": "sha256-jAqULFLL3DrZABShxcsNMZfyhox/p3pE2J1ScygIBW8="
     }
   },
   "gsit": {
