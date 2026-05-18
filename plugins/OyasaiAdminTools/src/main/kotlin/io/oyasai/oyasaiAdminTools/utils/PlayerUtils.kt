@@ -11,15 +11,19 @@ import org.bukkit.Bukkit
 object PlayerUtils {
 
   fun resolveUUID(playerName: String): UUID? {
-    if (playerName.startsWith(".")) {
-      return resolveOfflineUUID(playerName)
-    }
-    val onlineUUID = resolveOnlineUUID(playerName)
-    if (onlineUUID != null) {
-      return onlineUUID
+    val onlinePlayer = Bukkit.getPlayerExact(playerName)
+    if (onlinePlayer != null) {
+      return onlinePlayer.uniqueId
     }
 
-    return resolveOfflineUUID(playerName)
+    if (playerName.startsWith(".")) {
+      val offlinePlayer = Bukkit.getOfflinePlayer(playerName)
+      if (offlinePlayer.hasPlayedBefore()) {
+        return offlinePlayer.uniqueId
+      }
+      return fetchBedrockUUID(playerName)
+    }
+    return resolveOnlineUUID(playerName)
   }
 
   private fun resolveOnlineUUID(playerName: String): UUID? {
@@ -30,16 +34,27 @@ object PlayerUtils {
     }
   }
 
-  private fun resolveOfflineUUID(playerName: String): UUID? {
-    if (playerName.startsWith(".")) {
-      return fetchBedrockUUID(playerName)
-    }
-    return null
-  }
-
   private fun fetchBedrockUUID(playerName: String): UUID? {
     val gamertag = playerName.substring(1)
-    val url = "https://api.geysermc.org/v2/xbox/xuid/$gamertag"
+    if (!gamertag.contains("_")) {
+      return fetchUUIDFromXUID(gamertag)
+    }
+
+    val underscoreUUID = fetchUUIDFromXUID(gamertag)
+    val spaceGamertag = gamertag.replace("_", " ")
+    val spaceUUID = fetchUUIDFromXUID(spaceGamertag)
+    if (underscoreUUID != null && spaceUUID != null) {
+      Bukkit.getLogger().warning(
+        "[AdminTools] Both gamertags exist. '${gamertag}', '${spaceGamertag}'"
+      )
+      return null
+    }
+    return underscoreUUID ?: spaceUUID
+  }
+
+  private fun fetchUUIDFromXUID(gamertag: String): UUID? {
+    val encodedGamertag = gamertag.replace(" ", "%20")
+    val url = "https://api.geysermc.org/v2/xbox/xuid/$encodedGamertag"
 
     return try {
       val client = HttpClient.newHttpClient()
