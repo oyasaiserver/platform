@@ -218,8 +218,7 @@ class ActionEngine(private val plugin: OyasaiMenu) {
         runDelayed {
           val catId =
               if (category.isEmpty())
-                  plugin.pointShopLoader.getAllCategories().keys.firstOrNull()
-                      ?: return@runDelayed
+                  plugin.pointShopLoader.getAllCategories().keys.firstOrNull() ?: return@runDelayed
               else category
           plugin.pointShopEngine.openShop(player, catId)
         }

@@ -348,7 +348,10 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
   }
 
   private fun countInInventory(player: Player, item: ShopItem): Int =
-      player.inventory.contents.filterNotNull().filter { matchesShopItem(it, item) }.sumOf { it.amount }
+      player.inventory.contents
+          .filterNotNull()
+          .filter { matchesShopItem(it, item) }
+          .sumOf { it.amount }
 
   private fun removeFromInventory(player: Player, item: ShopItem, quantity: Int): Int {
     var remaining = quantity

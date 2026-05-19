@@ -327,8 +327,7 @@ class MacroEngine(private val plugin: OyasaiMenu) : Listener {
 
     val holder = MacroListHolder(curPage, isEditMode)
     val inv =
-        Bukkit.createInventory(
-            holder, 54, comp("&6コマンドマクロ &8| &f${curPage + 1}&8/&f${pageCount}"))
+        Bukkit.createInventory(holder, 54, comp("&6コマンドマクロ &8| &f${curPage + 1}&8/&f${pageCount}"))
     holder.attach(inv)
 
     macros.drop(curPage * maxPerPage).take(maxPerPage).forEachIndexed { i, macro ->
