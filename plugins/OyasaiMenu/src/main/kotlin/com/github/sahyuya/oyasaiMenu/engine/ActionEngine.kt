@@ -70,6 +70,23 @@ class ActionEngine(private val plugin: OyasaiMenu) {
             .runTaskLater(plugin, Runnable { plugin.popupMenuEngine.open(player, target) }, 1L)
       }
 
+      ActionType.OPEN_SPECIAL -> {
+        val target = action.getString("target")
+        if (target.isEmpty()) {
+          plugin.logger.warning("open_special にターゲットが未指定。")
+          return
+        }
+        Bukkit.getScheduler()
+            .runTaskLater(
+                plugin, Runnable { plugin.specialMenuEngine.open(player, target, action) }, 1L)
+      }
+
+      ActionType.PARAM_COMMAND -> {
+        Bukkit.getScheduler()
+            .runTaskLater(
+                plugin, Runnable { plugin.parameterCommandEngine.open(player, action) }, 1L)
+      }
+
       ActionType.RUN_COMMAND,
       ActionType.CONSOLE_CMD -> {
         val cmd = applyPlaceholders(player, action.getString("command"))

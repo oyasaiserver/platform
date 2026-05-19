@@ -4,6 +4,7 @@ import com.github.sahyuya.oyasaiMenu.OyasaiMenu
 import com.github.sahyuya.oyasaiMenu.manager.EconomyManager
 import com.github.sahyuya.oyasaiMenu.manager.TokenCurrencyManager
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
+import java.util.UUID
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -16,6 +17,20 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 
 object NavBar {
+
+  private const val PLAYER_STATS_CACHE_TTL_MILLIS = 1000L
+  private const val PLAYER_STATS_CACHE_SWEEP_MILLIS = 60_000L
+
+  private data class PlayerStatsSnapshot(
+      val createdAtMillis: Long,
+      val onlinePlayers: Int,
+      val tps: String,
+      val dpLevel: String,
+      val balance: String,
+      val tokens: String
+  )
+
+  private val playerStatsCache: MutableMap<UUID, PlayerStatsSnapshot> = mutableMapOf()
 
   data class NavEntry(
       val slot: Int,
@@ -123,26 +138,51 @@ object NavBar {
     val meta = skull.itemMeta as SkullMeta
     meta.owningPlayer = player
     meta.displayName(comp("&f${player.name}"))
-
-    // PlaceholderAPI 経由で %dp_level% を取得
-    val dpLevel =
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-          runCatching { PlaceholderAPI.setPlaceholders(player, "%dp_level%") }.getOrElse { "---" }
-        } else "---"
+    val stats = playerStats(player, plugin)
 
     meta.lore(
         listOf(
-            comp("&7オンライン: &e${Bukkit.getOnlinePlayers().size}&f人"),
-            comp("&7TPS: &a${String.format("%.1f", Bukkit.getTPS()[0])}"),
-            comp("&7DP: &b$dpLevel"),
-            comp(
-                "&7所持金: &6${if (EconomyManager.isAvailable) EconomyManager.format(EconomyManager.getBalance(player)) else "---"}"),
-            comp(
-                "&7ポイント: &3${if (TokenCurrencyManager.isAvailable) "${TokenCurrencyManager.format(TokenCurrencyManager.getTokens(player))}&fP" else "---"}"),
+            comp("&7オンライン: &e${stats.onlinePlayers}&f人"),
+            comp("&7TPS: &a${stats.tps}"),
+            comp("&7DP: &b${stats.dpLevel}"),
+            comp("&7所持金: &6${stats.balance}"),
+            comp("&7ポイント: &3${stats.tokens}"),
             comp(""),
             comp("&eクリックで自分のプロフィールへ")))
     skull.itemMeta = meta
     return skull
+  }
+
+  private fun playerStats(player: Player, plugin: OyasaiMenu): PlayerStatsSnapshot {
+    val now = System.currentTimeMillis()
+    playerStatsCache[player.uniqueId]?.let {
+      if (now - it.createdAtMillis < PLAYER_STATS_CACHE_TTL_MILLIS) return it
+    }
+
+    playerStatsCache.entries.removeIf {
+      now - it.value.createdAtMillis > PLAYER_STATS_CACHE_SWEEP_MILLIS
+    }
+
+    val dpLevel =
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+          runCatching { PlaceholderAPI.setPlaceholders(player, "%dp_level%") }.getOrElse { "---" }
+        } else "---"
+    val snapshot =
+        PlayerStatsSnapshot(
+            createdAtMillis = now,
+            onlinePlayers = Bukkit.getOnlinePlayers().size,
+            tps = String.format("%.1f", plugin.menuEngine.getCachedTps()),
+            dpLevel = dpLevel,
+            balance =
+                if (EconomyManager.isAvailable)
+                    EconomyManager.format(EconomyManager.getBalance(player))
+                else "---",
+            tokens =
+                if (TokenCurrencyManager.isAvailable)
+                    "${TokenCurrencyManager.format(TokenCurrencyManager.getTokens(player))}&fP"
+                else "---")
+    playerStatsCache[player.uniqueId] = snapshot
+    return snapshot
   }
 
   /** スロット 0〜44 の空きを指定ガラスで埋める (既存アイテムは上書きしない) */

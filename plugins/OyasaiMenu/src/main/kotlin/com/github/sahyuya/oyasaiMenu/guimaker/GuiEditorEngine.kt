@@ -1,6 +1,9 @@
 package com.github.sahyuya.oyasaiMenu.guimaker
 
 import com.github.sahyuya.oyasaiMenu.OyasaiMenu
+import com.github.sahyuya.oyasaiMenu.engine.NavBar
+import com.github.sahyuya.oyasaiMenu.model.ActionType
+import com.github.sahyuya.oyasaiMenu.model.MenuAction
 import com.github.sahyuya.oyasaiMenu.util.ItemVisuals
 import java.util.Locale
 import java.util.UUID
@@ -19,6 +22,7 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryAction
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.inventory.Inventory
@@ -36,6 +40,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
   private val KEY_PERM by lazy { NamespacedKey(plugin, "gm_perm") }
   private val KEY_ACTIONS by lazy { NamespacedKey(plugin, "gm_actions") }
   private val KEY_ENCHANTED by lazy { NamespacedKey(plugin, "gm_enchanted") }
+  private val KEY_EXTRA by lazy { NamespacedKey(plugin, "gm_extra") }
   private val KEY_FUNC by lazy { NamespacedKey(plugin, "gm_func") }
   private val KEY_SCREEN by lazy { NamespacedKey(plugin, "gm_screen") }
   private val KEY_SKIN_ITEM by lazy { NamespacedKey(plugin, "gm_skin_item") }
@@ -62,6 +67,8 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
   private val UI_SCREEN_DEFS = uiScreenCatalog.screenDefs
   private val TEMPLATE_GRID_SLOTS = (19..25).toList() + (28..34).toList() + (37..43).toList()
   private val TEMPLATE_BLOCK_EDIT_SLOT = 22
+  private val HUB_BACK_SLOT = 53
+  private val POPUP_RESERVED_BACK_SLOT = 53
 
   private enum class TemplateCategory(val displayName: String) {
     ALL("すべて"),
@@ -91,9 +98,193 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     fun next(): TemplateSortMode = entries[(ordinal + 1) % entries.size]
   }
 
+  private data class SpecialBlockPreset(
+      val id: String,
+      val material: Material,
+      val name: String,
+      val lore: List<String>,
+      val actions: List<GuiActionDef>
+  )
+
   fun getSession(player: Player): GuiEditorSession? = sessions[player.uniqueId]
 
   fun uiScreenNames(): List<String> = UI_SCREEN_DEFS.keys.toList()
+
+  fun openHub(player: Player) {
+    val inv = Bukkit.createInventory(HubHolder(), 54, comp("&8GuiMaker 編集ハブ"))
+    fillMain(inv, Material.GRAY_STAINED_GLASS_PANE)
+    inv.setItem(
+        10,
+        makeItem(Material.ENDER_CHEST, "&a通常GUI", "&7menus/*.yml を編集します", "&7自由配置・アクション・権限・lore"))
+    inv.setItem(
+        12,
+        makeItem(
+            Material.CHORUS_FRUIT,
+            "&dPopupメニュー",
+            "&7menus/popup/*.yml を専用形式で編集します",
+            "&745-53 はナビバー予約としてロックします"))
+    inv.setItem(
+        14,
+        makeItem(Material.ENDER_EYE, "&b特殊メニュー", "&7オンラインプレイヤー・確認・可変コマンドなど", "&7コード駆動メニューの入口です"))
+    inv.setItem(
+        16,
+        makeItem(
+            Material.ITEM_FRAME,
+            "&eGUI Maker UI",
+            "&7gui-maker-ui-screens.yml をGUIから編集します",
+            "&7現在の /guimaker ui edit の入口です"))
+    inv.setItem(
+        31,
+        makeItem(
+            Material.NETHER_STAR,
+            "&6テンプレート / 公式ブロック",
+            "&7通常GUI編集中のテンプレート管理を開きます",
+            "&7未編集中の場合は root の編集から入ります"))
+    inv.setItem(49, makeItem(Material.BOOK, "&fヘルプ", "&7コマンド一覧をチャットに表示します"))
+    inv.setItem(53, makeItem(Material.BARRIER, "&c閉じる"))
+    applyUiSkin(inv, "hub")
+    player.openInventory(inv)
+  }
+
+  fun openNormalMenuList(player: Player, page: Int = 0) {
+    val ids = NormalMenuAdapter.listIds(plugin)
+    openSurfaceList(
+        player,
+        SurfaceListHolder(GuiEditableSurface.NORMAL, page),
+        "&8通常GUI編集",
+        Material.ENDER_CHEST,
+        ids,
+        page)
+  }
+
+  fun openPopupMenuList(player: Player, page: Int = 0) {
+    val ids = PopupMenuAdapter.listIds(plugin)
+    openSurfaceList(
+        player,
+        SurfaceListHolder(GuiEditableSurface.POPUP, page),
+        "&8Popup編集",
+        Material.CHORUS_FRUIT,
+        ids,
+        page)
+  }
+
+  fun openUiScreenList(player: Player, page: Int = 0) {
+    val screens = uiScreenNames()
+    val inv = Bukkit.createInventory(UiScreenListHolder(page), 54, comp("&8GUI Maker UI編集"))
+    fillMain(inv, Material.YELLOW_STAINED_GLASS_PANE)
+    inv.setItem(4, makeItem(Material.ITEM_FRAME, "&eGUI Maker UI", "&7編集画面を選択してください"))
+    val grid = listGridSlots()
+    val maxPage = ((screens.size - 1).coerceAtLeast(0)) / grid.size
+    val safePage = page.coerceIn(0, maxPage)
+    screens.drop(safePage * grid.size).take(grid.size).forEachIndexed { index, screen ->
+      inv.setItem(grid[index], makeItem(Material.ITEM_FRAME, "&e$screen", "&7クリックでこの画面のUIを編集"))
+    }
+    inv.setItem(HUB_BACK_SLOT, makeItem(Material.ARROW, "&f編集ハブへ戻る"))
+    inv.setItem(48, makeItem(Material.ARROW, "&e前のページ", "&7${safePage + 1}/${maxPage + 1}"))
+    inv.setItem(50, makeItem(Material.ARROW, "&e次のページ", "&7${safePage + 1}/${maxPage + 1}"))
+    applyUiSkin(inv, "ui_screen_list")
+    player.openInventory(inv)
+  }
+
+  fun openSpecialSurfaceHub(player: Player) {
+    val inv = Bukkit.createInventory(SpecialSurfaceHubHolder(), 54, comp("&8特殊メニュー"))
+    fillMain(inv, Material.LIGHT_BLUE_STAINED_GLASS_PANE)
+    inv.setItem(
+        11,
+        makeItem(
+            Material.PLAYER_HEAD,
+            "&bオンラインプレイヤー一覧",
+            "&7OP限定のコード駆動メニュー",
+            "&a左クリック&7: 呼び出しブロックを編集",
+            "&e右クリック&7: プレビュー"))
+    inv.setItem(
+        13,
+        makeItem(
+            Material.LIME_CONCRETE,
+            "&a確認ボタンメニュー",
+            "&7コマンド実行前の確認画面",
+            "&a左クリック&7: 呼び出しブロックを編集",
+            "&e右クリック&7: サンプル確認を開く"))
+    inv.setItem(
+        15,
+        makeItem(
+            Material.REPEATER,
+            "&e可変コマンドメニュー",
+            "&7{amount} などの入力枠を持つコマンド",
+            "&a左クリック&7: ブロックを編集",
+            "&e右クリック&7: 使い方を表示"))
+    inv.setItem(HUB_BACK_SLOT, makeItem(Material.ARROW, "&f編集ハブへ戻る"))
+    inv.setItem(31, makeItem(Material.ENDER_CHEST, "&a通常GUIへ配置", "&7特殊メニューを呼ぶボタンを作る入口"))
+    applyUiSkin(inv, "special_surface")
+    player.openInventory(inv)
+  }
+
+  fun openTemplateLibrary(player: Player) {
+    ensureOfficialTemplateBlocks()
+    val session =
+        getSession(player)
+            ?: NormalMenuAdapter.load(plugin, "root")?.also { sessions[player.uniqueId] = it }
+            ?: createTemplateWorkspaceSession().also { sessions[player.uniqueId] = it }
+    openTemplateHub(player, session)
+  }
+
+  private fun createTemplateWorkspaceSession(): GuiEditorSession {
+    val session = GuiEditorSession("guimaker_template_workspace", "&8テンプレート編集ワークスペース", 54)
+    session.canvasInventory = Bukkit.createInventory(null, 54)
+    return session
+  }
+
+  private fun ensureOfficialTemplateBlocks() {
+    specialBlockPresets().forEach { preset ->
+      val def =
+          GuiSlotDef(
+              name = preset.name,
+              lore = preset.lore.toMutableList(),
+              actions = preset.actions.map { it.copy(params = it.params.toMap()) }.toMutableList())
+      GuiTemplateStore.ensureSharedBlockTemplate(
+          plugin, "special/${preset.id}", preset.material, def)
+    }
+  }
+
+  private fun specialBlockPresets(): List<SpecialBlockPreset> =
+      listOf(
+          SpecialBlockPreset(
+              id = "online_players",
+              material = Material.PLAYER_HEAD,
+              name = "&bオンラインプレイヤー一覧",
+              lore = listOf("&7OP限定のオンラインプレイヤー一覧を開きます", "&7クリックしたプレイヤーへ /tp します"),
+              actions = listOf(GuiActionDef("OPEN_SPECIAL", mapOf("target" to "online_players")))),
+          SpecialBlockPreset(
+              id = "confirm_command",
+              material = Material.LIME_CONCRETE,
+              name = "&a確認ボタンメニュー",
+              lore = listOf("&7実行前に確認ボタンを表示します", "&7command はアクション詳細から確認してください"),
+              actions =
+                  listOf(
+                      GuiActionDef(
+                          "OPEN_SPECIAL",
+                          mapOf(
+                              "target" to "confirm",
+                              "command" to "say GuiMaker confirm sample",
+                              "mode" to "player")))),
+          SpecialBlockPreset(
+              id = "parameter_command",
+              material = Material.REPEATER,
+              name = "&e可変コマンドメニュー",
+              lore = listOf("&7{amount} の値をGUIで増減して実行します", "&7例: //stack {amount}"),
+              actions =
+                  listOf(
+                      GuiActionDef(
+                          "PARAM_COMMAND",
+                          mapOf(
+                              "command" to "//stack {amount}",
+                              "mode" to "op",
+                              "confirm" to "true",
+                              "param.amount.type" to "int",
+                              "param.amount.default" to "10",
+                              "param.amount.min" to "1",
+                              "param.amount.max" to "100",
+                              "param.amount.step" to "1")))))
 
   private fun getFavorites(playerId: UUID): MutableList<GuiActionDef> =
       playerFavorites.getOrPut(playerId) { loadFavoritesFromDisk(playerId) }
@@ -132,6 +323,59 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
+  private fun openSurfaceList(
+      player: Player,
+      holder: SurfaceListHolder,
+      title: String,
+      material: Material,
+      ids: List<String>,
+      page: Int
+  ) {
+    val inv = Bukkit.createInventory(holder, 54, comp(title))
+    fillMain(
+        inv,
+        if (holder.surface == GuiEditableSurface.POPUP) Material.PURPLE_STAINED_GLASS_PANE
+        else Material.LIME_STAINED_GLASS_PANE)
+    val grid = listGridSlots()
+    val maxPage = ((ids.size - 1).coerceAtLeast(0)) / grid.size
+    val safePage = page.coerceIn(0, maxPage)
+    inv.setItem(
+        4,
+        makeItem(
+            material,
+            if (holder.surface == GuiEditableSurface.POPUP) "&dPopupメニュー" else "&a通常GUI",
+            "&7編集対象を選択してください",
+            "&7${ids.size} 件"))
+    ids.drop(safePage * grid.size).take(grid.size).forEachIndexed { index, id ->
+      val draft =
+          when (holder.surface) {
+            GuiEditableSurface.POPUP -> PopupMenuAdapter.hasDraft(plugin, id)
+            GuiEditableSurface.NORMAL -> NormalMenuAdapter.hasDraft(plugin, id)
+          }
+      inv.setItem(
+          grid[index],
+          makeItem(
+              material,
+              if (holder.surface == GuiEditableSurface.POPUP) "&d$id" else "&a$id",
+              "&7ID: &f${if (holder.surface == GuiEditableSurface.POPUP) "popup/$id" else id}",
+              "&7ドラフト: ${if (draft) "&aあり" else "&8なし"}",
+              "&7クリックで編集"))
+    }
+    if (holder.surface == GuiEditableSurface.POPUP) {
+      inv.setItem(44, makeItem(Material.WRITABLE_BOOK, "&f新規Popup", "&7/guimaker popup new <id>"))
+    } else {
+      inv.setItem(44, makeItem(Material.WRITABLE_BOOK, "&f新規通常GUI", "&7/guimaker new <id>"))
+    }
+    inv.setItem(HUB_BACK_SLOT, makeItem(Material.ARROW, "&f編集ハブへ戻る"))
+    inv.setItem(48, makeItem(Material.ARROW, "&e前のページ", "&7${safePage + 1}/${maxPage + 1}"))
+    inv.setItem(50, makeItem(Material.ARROW, "&e次のページ", "&7${safePage + 1}/${maxPage + 1}"))
+    applyUiSkin(inv, "surface_list")
+    player.openInventory(inv)
+  }
+
+  private fun listGridSlots(): List<Int> =
+      (10..16).toList() + (19..25).toList() + (28..34).toList() + (37..43).toList()
+
   fun newSession(player: Player, menuId: String): GuiEditorSession {
     val session = GuiEditorSession(menuId)
     sessions[player.uniqueId] = session
@@ -161,6 +405,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     pdc.set(KEY_PERM, PersistentDataType.STRING, def.permission ?: "")
     pdc.set(KEY_ACTIONS, PersistentDataType.STRING, serializeActions(def.actions))
     pdc.set(KEY_ENCHANTED, PersistentDataType.STRING, if (def.enchanted) "1" else "")
+    pdc.set(KEY_EXTRA, PersistentDataType.STRING, serializeExtras(def.extras))
 
     newItem.itemMeta = meta
     inv.setItem(slot, newItem)
@@ -183,6 +428,9 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
             enchanted =
                 pdc.get(KEY_ENCHANTED, PersistentDataType.STRING)?.takeIf { it.isNotEmpty() } ==
                     "1",
+            extras =
+                deserializeExtras(pdc.get(KEY_EXTRA, PersistentDataType.STRING) ?: "")
+                    .toMutableMap(),
         )
     def.actions.addAll(deserializeActions(pdc.get(KEY_ACTIONS, PersistentDataType.STRING) ?: ""))
     return def
@@ -193,6 +441,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     val inv = session.canvasInventory ?: return
     session.slots.clear()
     for (slot in 0 until inv.size) {
+      if (session.surface == GuiEditableSurface.POPUP && slot in 45..53) continue
       val item = inv.getItem(slot) ?: continue
       if (item.type == Material.AIR) continue
       val def = readPdcFromItem(item) ?: continue
@@ -232,6 +481,24 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
+  private fun serializeExtras(extras: Map<String, String>): String =
+      extras.entries.joinToString("\n") { (key, value) ->
+        "$key=${value.replace(" ", "\\s").replace("\n", "\\n")}"
+      }
+
+  private fun deserializeExtras(raw: String): Map<String, String> {
+    if (raw.isBlank()) return emptyMap()
+    return raw.lines()
+        .mapNotNull { line ->
+          val eq = line.indexOf('=')
+          if (eq < 0) null
+          else
+              line.substring(0, eq) to
+                  line.substring(eq + 1).replace("\\s", " ").replace("\\n", "\n")
+        }
+        .toMap()
+  }
+
   // ── Canvas ─────────────────────────────────────────────────
 
   fun openCanvas(player: Player, session: GuiEditorSession) {
@@ -244,9 +511,11 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     session.canvasInventory?.let { old ->
       for (i in 0 until old.size.coerceAtMost(inv.size)) {
         val item = old.getItem(i) ?: continue
+        if (session.surface == GuiEditableSurface.POPUP && i in 45..53) continue
         inv.setItem(i, decorateItem(item, session.slots[i]))
       }
     }
+    if (session.surface == GuiEditableSurface.POPUP) applyPopupReservedSlots(inv, session)
     session.canvasInventory = inv
     player.openInventory(inv)
   }
@@ -256,9 +525,14 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
   fun openPreview(player: Player, session: GuiEditorSession) {
     rebuildSlotsFromInventory(session)
     val previewSession = GuiEditorSession(session.menuId, session.menuTitle, session.menuSize)
+    previewSession.surface = session.surface
+    previewSession.popupMeta = session.popupMeta?.copy()
     session.slots.forEach { (slot, def) ->
       previewSession.slots[slot] =
-          def.copy(lore = def.lore.toMutableList(), actions = def.actions.toMutableList())
+          def.copy(
+              lore = def.lore.toMutableList(),
+              actions = def.actions.toMutableList(),
+              extras = def.extras.toMutableMap())
     }
     session.canvasInventory?.let { canvas ->
       val snapshot = Bukkit.createInventory(null, session.menuSize)
@@ -275,11 +549,18 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
       for (i in 0 until canvas.size.coerceAtMost(inv.size)) {
         val item = canvas.getItem(i) ?: continue
         if (item.type == Material.AIR) continue
+        if (previewSession.surface == GuiEditableSurface.POPUP && i in 45..53) continue
         inv.setItem(i, decorateItem(item, previewSession.slots[i]))
       }
     }
+    if (previewSession.surface == GuiEditableSurface.POPUP)
+        applyPopupReservedSlots(inv, previewSession)
     player.openInventory(inv)
-    msg(player, "&7[Preview] &fクリックでアクションをテストできます。編集に戻るには /guimaker edit ${session.menuId} canvas")
+    msg(
+        player,
+        if (session.surface == GuiEditableSurface.POPUP)
+            "&7[Preview] &f編集に戻るには /guimaker popup edit ${session.menuId}"
+        else "&7[Preview] &fクリックでアクションをテストできます。編集に戻るには /guimaker edit ${session.menuId} canvas")
   }
 
   // ── Context Menu (54-slot PlayStation Style) ───────────────
@@ -386,6 +667,12 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     inv.setItem(10, makeItem(Material.ENDER_CHEST, "&aメニューを開く", "&7OPEN_MENU", "&7既存メニューをGUIで選択"))
     inv.setItem(11, makeItem(Material.CHORUS_FRUIT, "&dポップアップ", "&7OPEN_POPUP", "&7ポップアップをGUIで選択"))
     inv.setItem(12, makeItem(Material.OAK_DOOR, "&fメニューを閉じる", "&7CLOSE", "&7クリックで即追加"))
+    inv.setItem(
+        13, makeItem(Material.ENDER_EYE, "&b特殊メニュー", "&7OPEN_SPECIAL", "&7online_players など"))
+    inv.setItem(14, makeItem(Material.CHEST, "&eショップ", "&7OPEN_SHOP", "&7ショップカテゴリを開きます"))
+    inv.setItem(
+        15, makeItem(Material.NETHER_STAR, "&6ポイントショップ", "&7OPEN_POINT_SHOP", "&7ポイントショップカテゴリ"))
+    inv.setItem(16, makeItem(Material.GOLD_INGOT, "&6一括売却", "&7OPEN_SELL", "&7売却メニューを開きます"))
 
     // Row 2: コマンド系カテゴリ + アイテム
     inv.setItem(18, makeItem(Material.COMMAND_BLOCK, "&6コマンド系", "&7クリック時にコマンドを実行します"))
@@ -397,6 +684,9 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     inv.setItem(21, makeItem(Material.NETHER_STAR, "&cOPコマンド", "&7OP_PLAYER_CMD", "&7一時OP権限で実行"))
     inv.setItem(
         22, makeItem(Material.COMMAND_BLOCK, "&aコマンドを提案", "&7SUGGEST_COMMAND", "&7クリックでチャット欄に入力"))
+    inv.setItem(
+        23,
+        makeItem(Material.REPEATER, "&e可変コマンド", "&7PARAM_COMMAND", "&7{amount} などの入力枠を持つOP限定コマンド"))
 
     // Row 3: メッセージ系カテゴリ + アイテム
     inv.setItem(27, makeItem(Material.PAPER, "&fメッセージ系", "&7チャットへ情報を表示します"))
@@ -497,6 +787,13 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
                 .map { "&7${it.key}: &f${it.value}" }
                 .ifEmpty { listOf("&8パラメータなし") }
                 .toTypedArray()))
+    inv.setItem(
+        31,
+        makeItem(
+            Material.WRITABLE_BOOK,
+            "&e詳細パラメータを編集",
+            "&7key=value 形式で複数指定します",
+            "&7例: &fcommand=\"//stack {amount}\" confirm=true mode=op"))
 
     // Row 4: 追加・削除
     inv.setItem(37, makeItem(Material.COMMAND_BLOCK, "&aアクションを追加", "&7新しいアクションを末尾に追加します"))
@@ -868,6 +1165,45 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     player.openInventory(inv)
   }
 
+  private fun openSpecialMenuPicker(
+      player: Player,
+      session: GuiEditorSession,
+      canvasSlot: Int,
+      actionIndex: Int? = null
+  ) {
+    val entries =
+        listOf(
+            SpecialMenuChoice(
+                "online_players",
+                Material.PLAYER_HEAD,
+                "&bオンラインプレイヤー",
+                listOf("&7オンラインプレイヤー一覧を開きます", "&7クリックで /tp <player>")),
+            SpecialMenuChoice(
+                "confirm",
+                Material.LIME_CONCRETE,
+                "&a確認メニュー",
+                listOf("&7実行前の確認画面です", "&7手入力で command を指定してください")))
+    val gridSlots = listOf(20, 24)
+    val slotToId = entries.mapIndexed { i, entry -> gridSlots[i] to entry.id }.toMap()
+    val inv =
+        Bukkit.createInventory(
+            SpecialMenuPickHolder(session, canvasSlot, actionIndex, slotToId),
+            54,
+            comp("&9GuiMaker &8- &b特殊メニュー"))
+    placeItemPreview(inv, session, canvasSlot)
+    inv.setItem(0, makeItem(Material.ENDER_EYE, "&b特殊メニュー", "&7コード生成メニューを選択します"))
+    entries.forEachIndexed { i, entry ->
+      inv.setItem(
+          gridSlots[i],
+          makeItem(entry.material, entry.name, "&7ID: &f${entry.id}", *entry.lore.toTypedArray()))
+    }
+    inv.setItem(44, makeItem(Material.WRITABLE_BOOK, "&fIDを手入力", "&7一覧にない特殊メニューIDを直接入力"))
+    fillMain(inv, Material.LIGHT_BLUE_STAINED_GLASS_PANE)
+    applyEditorBar(player, inv, session, "&fアクション選択に戻る", "&7アクション種類の選択へ戻ります")
+    applyUiSkin(inv, "special_pick")
+    player.openInventory(inv)
+  }
+
   // ── Favorites Manager ──────────────────────────────────────
 
   private fun openFavoritesManage(player: Player, session: GuiEditorSession, canvasSlot: Int) {
@@ -957,6 +1293,10 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
   fun onInventoryClick(event: InventoryClickEvent) {
     val player = event.whoClicked as? Player ?: return
     when (val holder = event.inventory.holder) {
+      is HubHolder -> handleHubClick(event, player)
+      is SurfaceListHolder -> handleSurfaceListClick(event, player, holder)
+      is UiScreenListHolder -> handleUiScreenListClick(event, player, holder)
+      is SpecialSurfaceHubHolder -> handleSpecialSurfaceHubClick(event, player)
       is CanvasHolder -> handleCanvasClick(event, player, holder.session)
       is ContextHolder -> handleContextClick(event, player, holder.session, holder.slot)
       is LoreManageHolder ->
@@ -1009,6 +1349,9 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
       is MenuIdPickHolder ->
           handleMenuPickClick(
               event, player, holder.session, holder.canvasSlot, holder.actionIndex, holder.slotToId)
+      is SpecialMenuPickHolder ->
+          handleSpecialMenuPickClick(
+              event, player, holder.session, holder.canvasSlot, holder.actionIndex, holder.slotToId)
       is FavManageHolder -> handleFavManageClick(event, player, holder.session, holder.canvasSlot)
       is ConfirmHolder ->
           handleConfirmClick(
@@ -1016,8 +1359,19 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
       is PreviewHolder -> handlePreviewClick(event, player, holder.session)
       is UiSkinHolder -> handleUiSkinEditorClick(event, player, holder)
       is UiSkinBlockPickerHolder -> handleUiSkinBlockPickerClick(event, player, holder)
+      is PopupSettingsHolder -> handlePopupSettingsClick(event, player, holder)
       is TemplateHubHolder -> handleTemplateHubClick(event, player, holder)
       is TemplateDeleteConfirmHolder -> handleTemplateDeleteConfirmClick(event, player, holder)
+    }
+  }
+
+  @EventHandler(priority = EventPriority.HIGH)
+  fun onInventoryDrag(event: InventoryDragEvent) {
+    val holder = event.inventory.holder as? CanvasHolder ?: return
+    if (holder.session.surface != GuiEditableSurface.POPUP) return
+    if (event.rawSlots.any { it in 45..53 }) {
+      event.isCancelled = true
+      (event.whoClicked as? Player)?.let { msg(it, "&e[GuiMaker] &cPopup の slot 45-53 はナビバー予約です。") }
     }
   }
 
@@ -1046,6 +1400,160 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
+  private fun handleHubClick(event: InventoryClickEvent, player: Player) {
+    event.isCancelled = true
+    if (event.clickedInventory != event.inventory) return
+    when (funcLabelAt("hub", event.rawSlot)) {
+      "通常GUI" -> openNormalMenuList(player)
+      "Popupメニュー" -> openPopupMenuList(player)
+      "特殊メニュー" -> openSpecialSurfaceHub(player)
+      "GUI Maker UI" -> openUiScreenList(player)
+      "テンプレート / 公式ブロック" -> {
+        openTemplateLibrary(player)
+      }
+      "ヘルプ" -> {
+        player.closeInventory()
+        Bukkit.getScheduler()
+            .runTaskLater(plugin, Runnable { player.performCommand("guimaker help") }, 1L)
+      }
+      "閉じる" -> player.closeInventory()
+    }
+  }
+
+  private fun handleSurfaceListClick(
+      event: InventoryClickEvent,
+      player: Player,
+      holder: SurfaceListHolder
+  ) {
+    event.isCancelled = true
+    if (event.clickedInventory != event.inventory) return
+    val ids =
+        when (holder.surface) {
+          GuiEditableSurface.NORMAL -> NormalMenuAdapter.listIds(plugin)
+          GuiEditableSurface.POPUP -> PopupMenuAdapter.listIds(plugin)
+        }
+    val grid = listGridSlots()
+    val maxPage = ((ids.size - 1).coerceAtLeast(0)) / grid.size
+    when (funcLabelAt("surface_list", event.rawSlot)) {
+      "編集ハブへ戻る" -> openHub(player)
+      "前のページ" ->
+          when (holder.surface) {
+            GuiEditableSurface.NORMAL ->
+                openNormalMenuList(player, holder.page.coerceAtLeast(0) - 1)
+            GuiEditableSurface.POPUP -> openPopupMenuList(player, holder.page.coerceAtLeast(0) - 1)
+          }
+      "次のページ" ->
+          when (holder.surface) {
+            GuiEditableSurface.NORMAL ->
+                openNormalMenuList(player, holder.page.coerceAtLeast(0) + 1)
+            GuiEditableSurface.POPUP -> openPopupMenuList(player, holder.page.coerceAtLeast(0) + 1)
+          }
+      "新規作成" -> {
+        player.closeInventory()
+        val command =
+            if (holder.surface == GuiEditableSurface.POPUP) "guimaker popup new <id>"
+            else "guimaker new <id>"
+        msg(player, "&e[GuiMaker] &f新規作成: &a/$command")
+      }
+      else -> {
+        val gridIndex = grid.indexOf(event.rawSlot)
+        if (gridIndex < 0) return
+        val id = ids.getOrNull(holder.page.coerceIn(0, maxPage) * grid.size + gridIndex) ?: return
+        val session =
+            when (holder.surface) {
+              GuiEditableSurface.NORMAL -> NormalMenuAdapter.load(plugin, id)
+              GuiEditableSurface.POPUP -> PopupMenuAdapter.load(plugin, id)
+            }
+                ?: run {
+                  msg(player, "&e[GuiMaker] &c読み込みに失敗しました: &f$id")
+                  return
+                }
+        sessions[player.uniqueId] = session
+        openCanvas(player, session)
+        msg(player, "&e[GuiMaker] &a${session.displayId} を開きました。")
+      }
+    }
+  }
+
+  private fun handleUiScreenListClick(
+      event: InventoryClickEvent,
+      player: Player,
+      holder: UiScreenListHolder
+  ) {
+    event.isCancelled = true
+    if (event.clickedInventory != event.inventory) return
+    val screens = uiScreenNames()
+    val grid = listGridSlots()
+    when (funcLabelAt("ui_screen_list", event.rawSlot)) {
+      "編集ハブへ戻る" -> openHub(player)
+      "前のページ" -> openUiScreenList(player, holder.page.coerceAtLeast(0) - 1)
+      "次のページ" -> openUiScreenList(player, holder.page.coerceAtLeast(0) + 1)
+      else -> {
+        val index = grid.indexOf(event.rawSlot)
+        if (index < 0) return
+        val safePage = holder.page.coerceIn(0, ((screens.size - 1).coerceAtLeast(0)) / grid.size)
+        val screen = screens.getOrNull(safePage * grid.size + index) ?: return
+        openUiSkinEditor(player, screen)
+      }
+    }
+  }
+
+  private fun handleSpecialSurfaceHubClick(event: InventoryClickEvent, player: Player) {
+    event.isCancelled = true
+    if (event.clickedInventory != event.inventory) return
+    when (funcLabelAt("special_surface", event.rawSlot)) {
+      "オンラインプレイヤー一覧" ->
+          if (event.isRightClick) plugin.specialMenuEngine.open(player, "online_players")
+          else openSpecialBlockEditor(player, "online_players")
+      "確認ボタンメニュー" ->
+          if (event.isRightClick)
+              plugin.specialMenuEngine.openConfirmCommand(
+                  player, "say GuiMaker confirm sample", "player")
+          else openSpecialBlockEditor(player, "confirm_command")
+      "可変コマンドメニュー" ->
+          if (event.isRightClick) {
+            player.closeInventory()
+            msg(player, "&e[GuiMaker] &f可変コマンドはアクション種別 &aPARAM_COMMAND &fで配置します。")
+            msg(player, "&7例: &f/guimaker edit root action 10 PARAM_COMMAND \"//stack {amount}\"")
+          } else {
+            openSpecialBlockEditor(player, "parameter_command")
+          }
+      "通常GUIへ配置" -> openNormalMenuList(player)
+      "編集ハブへ戻る" -> openHub(player)
+    }
+  }
+
+  private fun openSpecialBlockEditor(player: Player, presetId: String) {
+    val preset =
+        specialBlockPresets().firstOrNull { it.id == presetId }
+            ?: run {
+              msg(player, "&e[GuiMaker] &c特殊ブロックが見つかりません: &f$presetId")
+              return
+            }
+    ensureOfficialTemplateBlocks()
+    val session = GuiEditorSession("special_blocks/${preset.id}", "&8特殊ブロック: ${preset.id}", 54)
+    val def =
+        GuiSlotDef(
+            name = preset.name,
+            lore = preset.lore.toMutableList(),
+            actions = preset.actions.map { it.copy(params = it.params.toMap()) }.toMutableList())
+    session.contextSlot = TEMPLATE_BLOCK_EDIT_SLOT
+    session.templateEditTarget =
+        GuiTemplateStore.listTemplates(plugin, player).firstOrNull {
+          it.scope == GuiTemplateScope.SHARED &&
+              it.kind == GuiTemplateKind.BLOCK &&
+              it.id == "special/${preset.id}"
+        }
+    session.canvasInventory = Bukkit.createInventory(null, session.menuSize)
+    session.canvasInventory?.setItem(
+        TEMPLATE_BLOCK_EDIT_SLOT, GuiTemplateStore.buildBlockItem(preset.material, def))
+    session.slots[TEMPLATE_BLOCK_EDIT_SLOT] = def
+    sessions[player.uniqueId] = session
+    applyPdcToItem(session, TEMPLATE_BLOCK_EDIT_SLOT)
+    msg(player, "&e[GuiMaker] &a特殊ブロック編集を開始しました: &f${preset.id}")
+    openContextMenu(player, session, TEMPLATE_BLOCK_EDIT_SLOT)
+  }
+
   // ── Canvas Click ────────────────────────────────────────────
 
   private fun handleCanvasClick(
@@ -1059,6 +1567,15 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     }
     val slot = event.rawSlot
     if (slot >= session.menuSize) return
+    if (session.surface == GuiEditableSurface.POPUP && slot in 45..53) {
+      event.isCancelled = true
+      if (slot == POPUP_RESERVED_BACK_SLOT) {
+        openPopupSettings(player, session)
+        return
+      }
+      msg(player, "&e[GuiMaker] &cPopup の slot 45-53 はナビバー予約です。")
+      return
+    }
 
     when (event.click) {
       ClickType.RIGHT,
@@ -1233,6 +1750,12 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
             }
     when (funcLabelAt("action_edit", event.rawSlot)) {
       "値を編集" -> startActionValueEdit(player, session, slot, actionIndex, action)
+      "詳細パラメータを編集" -> {
+        player.closeInventory()
+        session.pendingInput = PendingInput.ActionRawParams(slot, actionIndex)
+        msg(player, "&e[GuiMaker] &f詳細パラメータを key=value 形式で入力してください。")
+        msg(player, "&7例: &fcommand=\"//stack {amount}\" confirm=true mode=op")
+      }
       "上へ移動" -> {
         if (actionIndex > 0) {
           java.util.Collections.swap(actions, actionIndex, actionIndex - 1)
@@ -1280,6 +1803,34 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
       }
       "ポップアップ" -> {
         openPopupPicker(player, session, slot)
+        return
+      }
+      "特殊メニュー" -> {
+        openSpecialMenuPicker(player, session, slot)
+        return
+      }
+      "ショップ" -> {
+        player.closeInventory()
+        session.pendingInput = PendingInput.ActionParam(slot, "OPEN_SHOP")
+        msg(player, "&e[GuiMaker] &fショップカテゴリIDを入力:")
+        return
+      }
+      "ポイントショップ" -> {
+        player.closeInventory()
+        session.pendingInput = PendingInput.ActionParam(slot, "OPEN_POINT_SHOP")
+        msg(player, "&e[GuiMaker] &fポイントショップカテゴリIDを入力:")
+        return
+      }
+      "一括売却" -> {
+        finishActionOrFav(
+            player,
+            session,
+            slot,
+            null,
+            GuiActionDef("OPEN_SELL"),
+            "&e[GuiMaker] &aOPEN_SELL を追加しました。") {
+              openContextMenu(player, session, slot)
+            }
         return
       }
       "メニューを閉じる" -> {
@@ -1582,7 +2133,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
         session.pendingInput = PendingInput.ActionParam(canvasSlot, "OPEN_POPUP", actionIndex)
         msg(player, "&e[GuiMaker] &fポップアップIDを入力:")
       }
-      null -> {
+      else -> {
         val id = slotToId[event.rawSlot] ?: return
         finishActionOrFav(
             player,
@@ -1594,7 +2145,6 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
               openContextMenu(player, session, canvasSlot)
             }
       }
-      else -> {}
     }
   }
 
@@ -1634,6 +2184,49 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
       else -> {}
     }
   }
+
+  private fun handleSpecialMenuPickClick(
+      event: InventoryClickEvent,
+      player: Player,
+      session: GuiEditorSession,
+      canvasSlot: Int,
+      actionIndex: Int?,
+      slotToId: Map<Int, String>
+  ) {
+    event.isCancelled = true
+    if (event.clickedInventory != event.inventory) return
+    if (handleEditorBarClick(event.rawSlot, player, session) {
+      if (actionIndex == null) openActionTypeMenu(player, session, canvasSlot)
+      else openActionEditMenu(player, session, canvasSlot, actionIndex)
+    })
+        return
+    when (funcLabelAt("special_pick", event.rawSlot)) {
+      "IDを手入力" -> {
+        player.closeInventory()
+        session.pendingInput = PendingInput.ActionParam(canvasSlot, "OPEN_SPECIAL", actionIndex)
+        msg(player, "&e[GuiMaker] &f特殊メニューIDを入力:")
+      }
+      else -> {
+        val id = slotToId[event.rawSlot] ?: return
+        finishActionOrFav(
+            player,
+            session,
+            canvasSlot,
+            actionIndex,
+            GuiActionDef("OPEN_SPECIAL", mapOf("target" to id)),
+            "&e[GuiMaker] &aOPEN_SPECIAL ($id) を${if (actionIndex == null) "追加" else "更新"}しました。") {
+              openContextMenu(player, session, canvasSlot)
+            }
+      }
+    }
+  }
+
+  private data class SpecialMenuChoice(
+      val id: String,
+      val material: Material,
+      val name: String,
+      val lore: List<String>
+  )
 
   // ── Confirm Click ───────────────────────────────────────────
 
@@ -1790,6 +2383,9 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
                 player,
                 action.params["sound"] ?: "ui.button.click",
                 action.params["volume"]?.toFloatOrNull() ?: 1.0f)
+        "PARAM_COMMAND" ->
+            plugin.parameterCommandEngine.open(
+                player, MenuAction(ActionType.PARAM_COMMAND, action.params))
         "CLOSE" -> player.closeInventory()
         "OPEN_MENU" ->
             Bukkit.getScheduler()
@@ -1807,6 +2403,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
                       player.performCommand("menu ${action.params["target"] ?: return@Runnable}")
                     },
                     1L)
+        "OPEN_SPECIAL" -> plugin.specialMenuEngine.open(player, action.params["target"] ?: "", null)
         "URL" -> player.sendMessage(comp("&e${action.params["url"] ?: ""}"))
         "CHAT_PASTE" -> player.sendMessage(comp("&7: &f${action.params["text"] ?: ""}"))
         "SUGGEST_COMMAND" -> player.sendMessage(comp("&a▶ &e${action.params["command"] ?: ""}"))
@@ -1820,11 +2417,12 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
   fun onCommandWhilePendingInput(event: PlayerCommandPreprocessEvent) {
     val player = event.player
     val session = sessions[player.uniqueId] ?: return
-    if (session.pendingInput == null) return
+    val pending = session.pendingInput ?: return
 
     event.isCancelled = true
     session.pendingInput = null
-    msg(player, "&e[GuiMaker] &c入力待ちをキャンセルしました。もう一度GUIから操作してください。")
+    Bukkit.getScheduler()
+        .runTask(plugin, Runnable { handlePendingInput(player, session, pending, event.message) })
   }
 
   @Suppress("DEPRECATION")
@@ -1836,64 +2434,161 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
 
     event.isCancelled = true
     session.pendingInput = null
-    val text = event.message
+    val text = normalizeTypedInput(event.message)
 
     Bukkit.getScheduler()
-        .runTask(
-            plugin,
-            Runnable {
-              when (pending) {
-                is PendingInput.ItemName -> {
-                  val full = pending.color + text
-                  session.slots.getOrPut(pending.slot) { GuiSlotDef() }.name = full
-                  applyPdcToItem(session, pending.slot)
-                  msg(player, "&e[GuiMaker] &a名前を設定: &f$full")
+        .runTask(plugin, Runnable { handlePendingInput(player, session, pending, text) })
+  }
+
+  private fun handlePendingInput(
+      player: Player,
+      session: GuiEditorSession,
+      pending: PendingInput,
+      rawText: String
+  ) {
+    val text = normalizeTypedInput(rawText)
+    when (pending) {
+      is PendingInput.ItemName -> {
+        val full = pending.color + text
+        session.slots.getOrPut(pending.slot) { GuiSlotDef() }.name = full
+        applyPdcToItem(session, pending.slot)
+        msg(player, "&e[GuiMaker] &a名前を設定: &f$full")
+      }
+      is PendingInput.LoreLine -> {
+        val full = pending.color + text
+        session.slots.getOrPut(pending.slot) { GuiSlotDef() }.lore.add(full)
+        applyPdcToItem(session, pending.slot)
+        msg(player, "&e[GuiMaker] &aロア行を追加: &f$full")
+      }
+      is PendingInput.LoreEdit -> {
+        val full = pending.color + text
+        val lore = session.slots.getOrPut(pending.slot) { GuiSlotDef() }.lore
+        if (pending.lineIndex in lore.indices) {
+          lore[pending.lineIndex] = full
+          applyPdcToItem(session, pending.slot)
+          msg(player, "&e[GuiMaker] &aロア行 ${pending.lineIndex + 1} を更新: &f$full")
+        } else {
+          msg(player, "&e[GuiMaker] &cロア行が見つかりません。")
+        }
+      }
+      is PendingInput.Permission -> {
+        val def = session.slots.getOrPut(pending.slot) { GuiSlotDef() }
+        def.permission = text.ifBlank { null }
+        applyPdcToItem(session, pending.slot)
+        msg(player, "&e[GuiMaker] &a権限を設定: &f${def.permission ?: "(なし)"}")
+      }
+      is PendingInput.ActionParam -> {
+        val existingParams =
+            pending.actionIndex
+                ?.let { session.slots[pending.slot]?.actions?.getOrNull(it)?.params }
+                .orEmpty()
+        val actionParams =
+            existingParams.toMutableMap().also {
+              it.putAll(
+                  GuiActionCatalog.params(
+                      pending.actionType, text, formatVolume(session.soundVolume)))
+            }
+        val action = GuiActionDef(pending.actionType, actionParams)
+        val successMsg =
+            "&e[GuiMaker] &a${pending.actionType} を${if (pending.actionIndex == null) "追加" else "更新"}: &f$text"
+        finishActionOrFav(player, session, pending.slot, pending.actionIndex, action, successMsg) {
+          openContextMenu(player, session, pending.slot)
+        }
+        return
+      }
+      is PendingInput.ActionRawParams -> {
+        val actions = session.slots[pending.slot]?.actions
+        val current = actions?.getOrNull(pending.actionIndex)
+        if (actions == null || current == null) {
+          msg(player, "&e[GuiMaker] &c編集対象のアクションが見つかりません。")
+          openContextMenu(player, session, pending.slot)
+          return
+        }
+        val parsed =
+            parseKeyValuePairs(text)
+                ?: run {
+                  msg(
+                      player,
+                      "&e[GuiMaker] &c形式が正しくありません。例: command=\"//stack {amount}\" confirm=true")
+                  openActionEditMenu(player, session, pending.slot, pending.actionIndex)
+                  return
                 }
-                is PendingInput.LoreLine -> {
-                  val full = pending.color + text
-                  session.slots.getOrPut(pending.slot) { GuiSlotDef() }.lore.add(full)
-                  applyPdcToItem(session, pending.slot)
-                  msg(player, "&e[GuiMaker] &aロア行を追加: &f$full")
-                }
-                is PendingInput.LoreEdit -> {
-                  val full = pending.color + text
-                  val lore = session.slots.getOrPut(pending.slot) { GuiSlotDef() }.lore
-                  if (pending.lineIndex in lore.indices) {
-                    lore[pending.lineIndex] = full
-                    applyPdcToItem(session, pending.slot)
-                    msg(player, "&e[GuiMaker] &aロア行 ${pending.lineIndex + 1} を更新: &f$full")
-                  } else {
-                    msg(player, "&e[GuiMaker] &cロア行が見つかりません。")
-                  }
-                }
-                is PendingInput.Permission -> {
-                  val def = session.slots.getOrPut(pending.slot) { GuiSlotDef() }
-                  def.permission = text.ifBlank { null }
-                  applyPdcToItem(session, pending.slot)
-                  msg(player, "&e[GuiMaker] &a権限を設定: &f${def.permission ?: "(なし)"}")
-                }
-                is PendingInput.ActionParam -> {
-                  val action =
-                      GuiActionDef(
-                          pending.actionType,
-                          GuiActionCatalog.params(
-                              pending.actionType, text, formatVolume(session.soundVolume)))
-                  val successMsg =
-                      "&e[GuiMaker] &a${pending.actionType} を${if (pending.actionIndex == null) "追加" else "更新"}: &f$text"
-                  finishActionOrFav(
-                      player, session, pending.slot, pending.actionIndex, action, successMsg) {
-                        openContextMenu(player, session, pending.slot)
-                      }
-                  return@Runnable
-                }
-                is PendingInput.MenuTitle -> {
-                  session.menuTitle = pending.color + text
-                  msg(player, "&e[GuiMaker] &aタイトルを設定: &f${session.menuTitle}")
-                }
-              }
-              saveWorkingCopy(session)
-              openCanvas(player, session)
-            })
+        if (parsed.isEmpty()) {
+          msg(player, "&e[GuiMaker] &c更新する key=value がありません。")
+          openActionEditMenu(player, session, pending.slot, pending.actionIndex)
+          return
+        }
+        val params = current.params.toMutableMap()
+        params.putAll(parsed)
+        actions[pending.actionIndex] = current.copy(params = params)
+        applyPdcToItem(session, pending.slot)
+        saveWorkingCopy(session)
+        msg(player, "&e[GuiMaker] &a詳細パラメータを更新しました: &f${parsed.keys.joinToString()}")
+        openActionEditMenu(player, session, pending.slot, pending.actionIndex)
+        return
+      }
+      is PendingInput.MenuTitle -> {
+        session.menuTitle = pending.color + text
+        msg(player, "&e[GuiMaker] &aタイトルを設定: &f${session.menuTitle}")
+      }
+    }
+    saveWorkingCopy(session)
+    openCanvas(player, session)
+  }
+
+  private fun normalizeTypedInput(raw: String): String {
+    val text = raw.trim()
+    val unescaped = if (text.startsWith("\\/")) text.removePrefix("\\") else text
+    if (unescaped.length >= 2) {
+      val first = unescaped.first()
+      val last = unescaped.last()
+      if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+        return unescaped.substring(1, unescaped.length - 1)
+      }
+    }
+    return unescaped
+  }
+
+  private fun parseKeyValuePairs(raw: String): Map<String, String>? {
+    val tokens = splitKeyValueTokens(raw) ?: return null
+    val result = linkedMapOf<String, String>()
+    for (token in tokens) {
+      val eq = token.indexOf('=')
+      if (eq <= 0) return null
+      val key = token.substring(0, eq).trim()
+      if (key.isBlank()) return null
+      result[key] = token.substring(eq + 1)
+    }
+    return result
+  }
+
+  private fun splitKeyValueTokens(raw: String): List<String>? {
+    val tokens = mutableListOf<String>()
+    val current = StringBuilder()
+    var quote: Char? = null
+    var escaped = false
+    raw.trim().forEach { ch ->
+      when {
+        escaped -> {
+          current.append(ch)
+          escaped = false
+        }
+        quote != null && ch == '\\' -> escaped = true
+        quote != null && ch == quote -> quote = null
+        quote != null -> current.append(ch)
+        ch == '"' || ch == '\'' -> quote = ch
+        ch.isWhitespace() -> {
+          if (current.isNotEmpty()) {
+            tokens += current.toString()
+            current.clear()
+          }
+        }
+        else -> current.append(ch)
+      }
+    }
+    if (escaped || quote != null) return null
+    if (current.isNotEmpty()) tokens += current.toString()
+    return tokens
   }
 
   // ── 直接操作 API (コマンドから呼び出す) ─────────────────────
@@ -1934,11 +2629,14 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
       value: String
   ) {
     val actionType = type.uppercase()
+    val normalizedValue = normalizeTypedInput(value)
     addActionToSlot(
-        session, slot, GuiActionDef(actionType, GuiActionCatalog.params(actionType, value)))
+        session,
+        slot,
+        GuiActionDef(actionType, GuiActionCatalog.params(actionType, normalizedValue)))
     applyPdcToItem(session, slot)
     saveWorkingCopy(session)
-    msg(player, "&e[GuiMaker] &aslot $slot アクション追加: &f${type.uppercase()} $value")
+    msg(player, "&e[GuiMaker] &aslot $slot アクション追加: &f${type.uppercase()} $normalizedValue")
   }
 
   fun cmdClearActions(player: Player, session: GuiEditorSession, slot: Int) {
@@ -1997,6 +2695,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     when (action.type) {
       "OPEN_MENU" -> openMenuPicker(player, session, slot, actionIndex)
       "OPEN_POPUP" -> openPopupPicker(player, session, slot, actionIndex)
+      "OPEN_SPECIAL" -> openSpecialMenuPicker(player, session, slot, actionIndex)
       "SOUND" -> {
         session.soundVolume = action.params["volume"]?.toFloatOrNull()?.coerceIn(0.0f, 4.0f) ?: 1.0f
         openSoundCategoryPicker(player, session, slot, actionIndex)
@@ -2822,6 +3521,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
         makeItem(
             Material.NETHER_STAR,
             "&6公式テンプレート",
+            "&7クリックで公式テンプレートだけ表示します",
             "&7OPコマンドで個人テンプレートを承認します",
             "&f/guimaker template approve <player> <menu|block> <id> [official-id]"))
 
@@ -2931,6 +3631,10 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
         openTemplateHub(player, session, holder.page, TemplateCategory.BLOCK, holder.sortMode)
         return
       }
+      "公式テンプレート" -> {
+        openTemplateHub(player, session, 0, TemplateCategory.SHARED, holder.sortMode)
+        return
+      }
       "前のページ" -> {
         openTemplateHub(player, session, holder.page - 1, holder.category, holder.sortMode)
         return
@@ -3002,7 +3706,8 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
         session.slots[TEMPLATE_BLOCK_EDIT_SLOT] =
             template.def.copy(
                 lore = template.def.lore.toMutableList(),
-                actions = template.def.actions.toMutableList())
+                actions = template.def.actions.toMutableList(),
+                extras = template.def.extras.toMutableMap())
         applyPdcToItem(session, TEMPLATE_BLOCK_EDIT_SLOT)
         msg(player, "&e[GuiMaker] &aブロックテンプレート編集を開始しました: &f${entry.id}")
         openContextMenu(player, session, TEMPLATE_BLOCK_EDIT_SLOT)
@@ -3097,7 +3802,8 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     session.slots[targetSlot] =
         template.def.copy(
             lore = template.def.lore.toMutableList(),
-            actions = template.def.actions.toMutableList())
+            actions = template.def.actions.toMutableList(),
+            extras = template.def.extras.toMutableMap())
     applyPdcToItem(session, targetSlot)
     saveWorkingCopy(session)
     msg(player, "&e[GuiMaker] &aブロックテンプレートを配置しました: &f${entry.id} &7(slot $targetSlot)")
@@ -3114,6 +3820,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
   private fun firstEmptyCanvasSlot(session: GuiEditorSession): Int? {
     val inv = session.canvasInventory ?: return null
     return (0 until session.menuSize).firstOrNull {
+      if (session.surface == GuiEditableSurface.POPUP && it in 45..53) return@firstOrNull false
       inv.getItem(it)?.takeIf { item -> item.type != Material.AIR } == null
     }
   }
@@ -3170,6 +3877,97 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
+  private fun openPopupSettings(player: Player, session: GuiEditorSession) {
+    val meta = session.popupMeta ?: PopupEditorMeta().also { session.popupMeta = it }
+    val inv = Bukkit.createInventory(PopupSettingsHolder(session), 54, comp("&8Popup設定"))
+    fillMain(inv, Material.PURPLE_STAINED_GLASS_PANE)
+    inv.setItem(4, makeItem(Material.CHORUS_FRUIT, "&d${session.displayId}", "&7Popup専用設定"))
+    inv.setItem(
+        10,
+        makeItem(
+            popupGlassMaterial(meta.glass),
+            "&d背景ガラス",
+            "&7現在: &f${meta.glass}",
+            "&7左クリックで次へ / 右クリックで前へ"))
+    inv.setItem(
+        12,
+        makeItem(
+            Material.ARROW,
+            "&eNav Active -",
+            "&7現在: &f${if (meta.navActive < 0) "なし" else meta.navActive}",
+            "&7下部ナビの強調スロットを戻します"))
+    inv.setItem(
+        14,
+        makeItem(
+            Material.ARROW,
+            "&eNav Active +",
+            "&7現在: &f${if (meta.navActive < 0) "なし" else meta.navActive}",
+            "&7下部ナビの強調スロットを進めます"))
+    inv.setItem(
+        20, makeItem(Material.NAME_TAG, "&bタイトル", "&7現在: &f${session.menuTitle}", "&7クリックでタイトルを編集"))
+    inv.setItem(48, makeItem(Material.LIME_CONCRETE_POWDER, "&a反映", "&7Popup YAML に書き込みます"))
+    inv.setItem(HUB_BACK_SLOT, makeItem(Material.ARROW, "&fキャンバスへ戻る"))
+    applyUiSkin(inv, "popup_settings")
+    player.openInventory(inv)
+  }
+
+  private fun handlePopupSettingsClick(
+      event: InventoryClickEvent,
+      player: Player,
+      holder: PopupSettingsHolder
+  ) {
+    event.isCancelled = true
+    if (event.clickedInventory != event.inventory) return
+    val session = holder.session
+    val meta = session.popupMeta ?: PopupEditorMeta().also { session.popupMeta = it }
+    when (funcLabelAt("popup_settings", event.rawSlot)) {
+      "背景ガラス" -> {
+        meta.glass = nextPopupGlass(meta.glass, backwards = event.isRightClick)
+        saveWorkingCopy(session)
+        openPopupSettings(player, session)
+      }
+      "Nav Active -" -> {
+        meta.navActive = nextNavActive(meta.navActive, -1)
+        saveWorkingCopy(session)
+        openPopupSettings(player, session)
+      }
+      "Nav Active +" -> {
+        meta.navActive = nextNavActive(meta.navActive, 1)
+        saveWorkingCopy(session)
+        openPopupSettings(player, session)
+      }
+      "タイトル" -> openColorPicker(player, session, -1, "TITLE")
+      "キャンバスへ戻る" -> openCanvas(player, session)
+      "反映" -> commitSession(player, session)
+    }
+  }
+
+  private fun popupGlassMaterial(name: String): Material =
+      runCatching { Material.valueOf(name) }.getOrDefault(Material.GRAY_STAINED_GLASS_PANE)
+
+  private fun nextPopupGlass(current: String, backwards: Boolean): String {
+    val options =
+        listOf(
+            Material.GRAY_STAINED_GLASS_PANE,
+            Material.WHITE_STAINED_GLASS_PANE,
+            Material.LIGHT_BLUE_STAINED_GLASS_PANE,
+            Material.LIME_STAINED_GLASS_PANE,
+            Material.YELLOW_STAINED_GLASS_PANE,
+            Material.ORANGE_STAINED_GLASS_PANE,
+            Material.PURPLE_STAINED_GLASS_PANE,
+            Material.RED_STAINED_GLASS_PANE,
+            Material.BLACK_STAINED_GLASS_PANE)
+    val index = options.indexOf(popupGlassMaterial(current)).takeIf { it >= 0 } ?: 0
+    val delta = if (backwards) -1 else 1
+    return options[Math.floorMod(index + delta, options.size)].name
+  }
+
+  private fun nextNavActive(current: Int, delta: Int): Int {
+    val options = listOf(-1) + NavBar.entries.map { it.slot }
+    val index = options.indexOf(current).takeIf { it >= 0 } ?: 0
+    return options[Math.floorMod(index + delta, options.size)]
+  }
+
   private fun applyEditorBar(
       player: Player,
       inv: Inventory,
@@ -3194,7 +3992,12 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
                 "&7ID: &f${templateTarget.id}"))
     inv.setItem(
         49, makeItem(Material.YELLOW_CONCRETE_POWDER, "&eテンプレート", "&7GUI/ブロックテンプレートを保存・読込します"))
-    inv.setItem(50, makeItem(Material.PURPLE_CONCRETE_POWDER, "&dタイトル", "&7メニュータイトルを変更します"))
+    inv.setItem(
+        50,
+        if (session.surface == GuiEditableSurface.POPUP)
+            makeItem(
+                Material.PURPLE_CONCRETE_POWDER, "&dPopup設定", "&7title / glass / nav_active を編集します")
+        else makeItem(Material.PURPLE_CONCRETE_POWDER, "&dタイトル", "&7メニュータイトルを変更します"))
     inv.setItem(
         51,
         if (templateTarget == null)
@@ -3216,7 +4019,9 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
       47 -> openPreview(player, session)
       48 -> if (!saveTemplateEdit(player, session)) commitSession(player, session)
       49 -> openTemplateHub(player, session)
-      50 -> openColorPicker(player, session, -1, "TITLE")
+      50 ->
+          if (session.surface == GuiEditableSurface.POPUP) openPopupSettings(player, session)
+          else openColorPicker(player, session, -1, "TITLE")
       51 -> {
         if (session.templateEditTarget != null) {
           openTemplateHub(player, session)
@@ -3224,7 +4029,13 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
           player.closeInventory()
           Bukkit.getScheduler()
               .runTaskLater(
-                  plugin, Runnable { player.performCommand("menu ${session.menuId}") }, 1L)
+                  plugin,
+                  Runnable {
+                    if (session.surface == GuiEditableSurface.POPUP)
+                        plugin.popupMenuEngine.open(player, session.menuId)
+                    else player.performCommand("menu ${session.menuId}")
+                  },
+                  1L)
         }
       }
       52 -> player.closeInventory()
@@ -3249,10 +4060,14 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     rebuildSlotsFromInventory(session)
     val itemCount =
         session.canvasInventory?.contents?.count { it != null && it.type != Material.AIR } ?: 0
-    val hasDraft = GuiMakerExporter.hasDraft(plugin, session.menuId)
-    msg(player, "&e[GuiMaker] &fID: &a${session.menuId}")
+    val hasDraft = GuiMakerExporter.hasDraft(plugin, session)
+    msg(player, "&e[GuiMaker] &fID: &a${session.displayId}")
     msg(player, "&e[GuiMaker] &fタイトル: &a${session.menuTitle}")
     msg(player, "&e[GuiMaker] &fサイズ: &a${session.menuSize} &fアイテム数: &a$itemCount")
+    if (session.surface == GuiEditableSurface.POPUP) {
+      val meta = session.popupMeta ?: PopupEditorMeta()
+      msg(player, "&e[GuiMaker] &fPopup: glass=&a${meta.glass} &fnav_active=&a${meta.navActive}")
+    }
     msg(player, "&e[GuiMaker] &fドラフト: ${if (hasDraft) "&a保存済み" else "&7なし"}")
   }
 
@@ -3277,6 +4092,35 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     return stack
   }
 
+  private fun applyPopupReservedSlots(inv: Inventory, session: GuiEditorSession) {
+    val active = session.popupMeta?.navActive ?: -1
+    for (slot in 45..53) {
+      val item =
+          if (slot == POPUP_RESERVED_BACK_SLOT) {
+            makeItem(
+                Material.ARROW,
+                "&fPopup設定へ戻る",
+                "&7Popupでは 45-53 は下部ナビゲーション専用です",
+                "&7クリックで Popup設定へ戻ります")
+          } else {
+            makeItem(
+                if (slot == active) Material.LIME_STAINED_GLASS_PANE
+                else Material.RED_STAINED_GLASS_PANE,
+                if (slot == active) "&aNavBar予約: $slot" else "&cNavBar予約: $slot",
+                "&7Popupでは 45-53 は下部ナビゲーション専用です",
+                "&7このスロットにはアイテムを配置できません",
+                "&7Popup設定から nav_active を変更できます")
+          }
+      val meta = item.itemMeta ?: continue
+      meta.persistentDataContainer.set(
+          KEY_FUNC,
+          PersistentDataType.STRING,
+          if (slot == POPUP_RESERVED_BACK_SLOT) "popup_reserved_back" else "popup_reserved")
+      item.itemMeta = meta
+      inv.setItem(slot, item)
+    }
+  }
+
   private fun editorHead(player: Player, session: GuiEditorSession): ItemStack {
     val stack = ItemStack(Material.PLAYER_HEAD)
     val meta = stack.itemMeta as? SkullMeta ?: return stack
@@ -3286,7 +4130,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     meta.lore(
         buildList {
           if (templateTarget == null) {
-            add(comp("&7編集中: &a${session.menuId}"))
+            add(comp("&7編集中: &a${session.displayId}"))
           } else {
             add(comp("&dテンプレート編集中"))
             add(
@@ -3319,6 +4163,22 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
           .decoration(TextDecoration.ITALIC, false)
 
   // ── Holders ─────────────────────────────────────────────────
+
+  inner class HubHolder : InventoryHolder {
+    override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
+  }
+
+  inner class SurfaceListHolder(val surface: GuiEditableSurface, val page: Int) : InventoryHolder {
+    override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
+  }
+
+  inner class UiScreenListHolder(val page: Int) : InventoryHolder {
+    override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
+  }
+
+  inner class SpecialSurfaceHubHolder : InventoryHolder {
+    override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
+  }
 
   inner class CanvasHolder(val session: GuiEditorSession) : InventoryHolder {
     override fun getInventory(): Inventory =
@@ -3431,6 +4291,15 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
   }
 
+  inner class SpecialMenuPickHolder(
+      val session: GuiEditorSession,
+      val canvasSlot: Int,
+      val actionIndex: Int?,
+      val slotToId: Map<Int, String>
+  ) : InventoryHolder {
+    override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
+  }
+
   inner class ConfirmHolder(
       val session: GuiEditorSession,
       val slot: Int,
@@ -3465,6 +4334,10 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
       val allScreens: Boolean,
       val page: Int
   ) : InventoryHolder {
+    override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
+  }
+
+  inner class PopupSettingsHolder(val session: GuiEditorSession) : InventoryHolder {
     override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
   }
 
