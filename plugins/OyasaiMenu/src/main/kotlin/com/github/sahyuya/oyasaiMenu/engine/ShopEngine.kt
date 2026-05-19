@@ -17,8 +17,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
@@ -29,9 +29,6 @@ import org.bukkit.inventory.ItemStack
  * - buildShopItemStack(): エンチャント付きアイテムでも isInverted を反映した lore を表示 (旧: 反転モードでも常に「左クリック→購入」と表示していた)
  */
 class ShopEngine(private val plugin: OyasaiMenu) : Listener {
-
-  private val playerStates: MutableMap<String, PlayerShopState> = mutableMapOf()
-  private val activeShopPlayers: MutableSet<String> = mutableSetOf()
 
   fun openShop(player: Player, categoryId: String, page: Int = 0) {
     if (player.gameMode == org.bukkit.GameMode.CREATIVE) {
@@ -49,13 +46,8 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
               return
             }
     val clampedPage = page.coerceIn(0, category.pageCount - 1)
-    val state =
-        playerStates
-            .getOrPut(player.uniqueId.toString()) { PlayerShopState(categoryId, clampedPage) }
-            .copy(categoryId = categoryId, page = clampedPage)
-    playerStates[player.uniqueId.toString()] = state
+    val state = PlayerShopState(categoryId, clampedPage)
     player.openInventory(buildShopInventory(player, category, state))
-    activeShopPlayers.add(player.uniqueId.toString())
   }
 
   private fun buildShopInventory(
@@ -63,11 +55,13 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       category: ShopCategory,
       state: PlayerShopState
   ): Inventory {
+    val holder = ShopMenuHolder(state)
     val inv =
         Bukkit.createInventory(
-            null,
+            holder,
             54,
             comp("${c(category.displayName)} &8| &f${state.page + 1}&8/&f${category.pageCount}"))
+    holder.attach(inv)
     category.getPage(state.page).forEachIndexed { i, item ->
       if (item.material != null)
           inv.setItem(
@@ -205,8 +199,7 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent) {
     val player = event.whoClicked as? Player ?: return
-    if (!activeShopPlayers.contains(player.uniqueId.toString())) return
-    val state = playerStates[player.uniqueId.toString()] ?: return
+    val state = (event.view.topInventory.holder as? ShopMenuHolder)?.state ?: return
     if (event.clickedInventory == player.inventory) {
       if (event.isShiftClick) event.isCancelled = true
       return
@@ -243,16 +236,6 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
-  @EventHandler
-  fun onInventoryClose(event: InventoryCloseEvent) {
-    val player = event.player as? Player ?: return
-    if (!activeShopPlayers.remove(player.uniqueId.toString())) return
-    playerStates[player.uniqueId.toString()]?.let { state ->
-      playerStates[player.uniqueId.toString()] =
-          state.copy(quantity = ShopQuantity.ONE, isInverted = false)
-    }
-  }
-
   private fun handleBuy(player: Player, item: ShopItem, quantity: Int) {
     if (!item.canBuy) {
       player.sendMessage(c("&cこのアイテムは購入できません。"))
@@ -279,7 +262,7 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       player.sendMessage(c("&cこのアイテムは売却できません。"))
       return
     }
-    val removed = removeFromInventory(player, item.material!!, quantity)
+    val removed = removeFromInventory(player, item, quantity)
     if (removed == 0) {
       player.sendMessage(c("&c${item.materialId} を持っていません。"))
       return
@@ -296,12 +279,12 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       player.sendMessage(c("&cこのアイテムは売却できません。"))
       return
     }
-    val total = countInInventory(player, item.material!!)
+    val total = countInInventory(player, item)
     if (total == 0) {
       player.sendMessage(c("&c${item.materialId} を持っていません。"))
       return
     }
-    removeFromInventory(player, item.material, total)
+    removeFromInventory(player, item, total)
     EconomyManager.deposit(player, item.sellPrice * total)
     player.sendMessage(
         c(
@@ -318,19 +301,15 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     if (newPage !in 0 until category.pageCount) return
     val newState = state.copy(page = newPage)
     player.openInventory(buildShopInventory(player, category, newState))
-    playerStates[player.uniqueId.toString()] = newState
-    activeShopPlayers.add(player.uniqueId.toString())
   }
 
   private fun cycleQuantity(player: Player, state: PlayerShopState, category: ShopCategory) {
     val newState = state.copy(quantity = state.quantity.next())
-    playerStates[player.uniqueId.toString()] = newState
     refreshInventory(player, category, newState)
   }
 
   private fun toggleInversion(player: Player, state: PlayerShopState, category: ShopCategory) {
     val newState = state.copy(isInverted = !state.isInverted)
-    playerStates[player.uniqueId.toString()] = newState
     refreshInventory(player, category, newState)
     val msg = if (newState.isInverted) "&c左右反転: 左=売却 右=購入" else "&a通常モード: 左=購入 右=売却"
     player.sendMessage(c(msg))
@@ -343,6 +322,7 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
 
   private fun refreshInventory(player: Player, category: ShopCategory, state: PlayerShopState) {
     val inv = player.openInventory.topInventory
+    (inv.holder as? ShopMenuHolder)?.state = state
     for (i in 0..44) inv.setItem(i, null)
     category.getPage(state.page).forEachIndexed { i, item ->
       if (item.material != null)
@@ -360,21 +340,38 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     plugin.popupMenuEngine.open(player, "shopindex")
   }
 
-  private fun countInInventory(player: Player, material: Material): Int =
-      player.inventory.contents.filterNotNull().filter { it.type == material }.sumOf { it.amount }
+  private fun matchesShopItem(stack: ItemStack, item: ShopItem): Boolean {
+    if (stack.type != item.material) return false
+    if (item.enchantments.isEmpty()) return true
+    val meta = stack.itemMeta ?: return false
+    return item.enchantments.all { (ench, lvl) -> meta.getEnchantLevel(ench) >= lvl }
+  }
 
-  private fun removeFromInventory(player: Player, material: Material, quantity: Int): Int {
+  private fun countInInventory(player: Player, item: ShopItem): Int =
+      player.inventory.contents.filterNotNull().filter { matchesShopItem(it, item) }.sumOf { it.amount }
+
+  private fun removeFromInventory(player: Player, item: ShopItem, quantity: Int): Int {
     var remaining = quantity
-    player.inventory.contents.forEachIndexed { i, item ->
-      if (remaining <= 0 || item == null || item.type != material) return@forEachIndexed
-      if (item.amount <= remaining) {
-        remaining -= item.amount
+    player.inventory.contents.forEachIndexed { i, stack ->
+      if (remaining <= 0 || stack == null || !matchesShopItem(stack, item)) return@forEachIndexed
+      if (stack.amount <= remaining) {
+        remaining -= stack.amount
         player.inventory.setItem(i, null)
       } else {
-        item.amount -= remaining
+        stack.amount -= remaining
         remaining = 0
       }
     }
     return quantity - remaining
+  }
+
+  private class ShopMenuHolder(var state: PlayerShopState) : InventoryHolder {
+    private lateinit var holderInventory: Inventory
+
+    fun attach(inventory: Inventory) {
+      holderInventory = inventory
+    }
+
+    override fun getInventory(): Inventory = holderInventory
   }
 }

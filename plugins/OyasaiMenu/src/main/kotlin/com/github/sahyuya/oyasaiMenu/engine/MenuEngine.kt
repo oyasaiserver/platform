@@ -18,16 +18,18 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 
 class MenuEngine(private val plugin: OyasaiMenu) : Listener {
 
-  private val playerStates: MutableMap<String, PlayerMenuState> = mutableMapOf()
   private var cachedTpsAtMillis: Long = 0L
   private var cachedTps: Double = 20.0
+  private val placeholderApiAvailable: Boolean by lazy {
+    Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")
+  }
 
   private val rootFallback =
       MenuDefinition(id = "root", title = "&8✦ おやさい鯖 メニュー ✦", size = 54, items = emptyMap())
@@ -41,15 +43,15 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
               plugin.logger.warning("存在しないメニューID: $menuId (player=${player.name})")
               return
             }
-    val inventory = buildInventory(player, menuDef)
+    val state = PlayerMenuState(menuId = menuId, page = page)
+    val inventory = buildInventory(player, menuDef, state)
     player.openInventory(inventory)
-    playerStates[player.uniqueId.toString()] = PlayerMenuState(menuId = menuId, page = page)
   }
 
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent) {
     val player = event.whoClicked as? Player ?: return
-    val state = playerStates[player.uniqueId.toString()] ?: return
+    val state = (event.view.topInventory.holder as? MenuHolder)?.state ?: return
     if (event.clickedInventory == player.inventory) {
       if (event.isShiftClick) event.isCancelled = true
       return
@@ -66,15 +68,16 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     plugin.actionEngine.executeActions(player, itemDef.actions, state)
   }
 
-  @EventHandler
-  fun onInventoryClose(event: InventoryCloseEvent) {
-    playerStates.remove((event.player as? Player)?.uniqueId?.toString() ?: return)
-  }
-
-  private fun buildInventory(player: Player, menuDef: MenuDefinition): Inventory {
+  private fun buildInventory(
+      player: Player,
+      menuDef: MenuDefinition,
+      state: PlayerMenuState
+  ): Inventory {
     val context = PlaceholderContext(player)
     val title = applyPlaceholders(menuDef.title, context)
-    val inv = Bukkit.createInventory(null, menuDef.size, comp(title))
+    val holder = MenuHolder(state)
+    val inv = Bukkit.createInventory(holder, menuDef.size, comp(title))
+    holder.attach(inv)
     menuDef.items.values.forEach { itemDef ->
       if (itemDef.icon.isAir) return@forEach
       if (!PlayerAccess.hasRequirement(player, itemDef.permission)) return@forEach
@@ -151,13 +154,27 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
     return result
   }
 
-  fun getPlayerState(player: Player): PlayerMenuState? = playerStates[player.uniqueId.toString()]
+  fun getPlayerState(player: Player): PlayerMenuState? =
+      (player.openInventory.topInventory.holder as? MenuHolder)?.state
 
-  fun clearCache() = playerStates.clear()
+  fun clearCache() {
+    Bukkit.getOnlinePlayers()
+        .filter { it.openInventory.topInventory.holder is MenuHolder }
+        .forEach { it.closeInventory() }
+  }
+
+  private class MenuHolder(val state: PlayerMenuState) : InventoryHolder {
+    private lateinit var holderInventory: Inventory
+
+    fun attach(inventory: Inventory) {
+      holderInventory = inventory
+    }
+
+    override fun getInventory(): Inventory = holderInventory
+  }
 
   private inner class PlaceholderContext(val player: Player) {
-    val placeholderApiAvailable: Boolean =
-        Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")
+    val placeholderApiAvailable: Boolean = this@MenuEngine.placeholderApiAvailable
     val onlinePlayers: String by
         lazy(LazyThreadSafetyMode.NONE) { Bukkit.getOnlinePlayers().size.toString() }
     val tpsTwoDecimals: String by

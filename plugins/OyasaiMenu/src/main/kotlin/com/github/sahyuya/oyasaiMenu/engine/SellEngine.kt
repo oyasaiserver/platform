@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 
 /**
@@ -23,8 +24,6 @@ import org.bukkit.inventory.ItemStack
  * ホワイトリスト厳密照合 (displayName / BookMeta / CustomModelData 等)
  */
 class SellEngine(private val plugin: OyasaiMenu) : Listener {
-
-  private val openPlayers: MutableSet<String> = mutableSetOf()
 
   fun openSellMenu(player: Player) {
     if (player.gameMode == org.bukkit.GameMode.CREATIVE) {
@@ -36,7 +35,6 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
     player.openInventory(buildSellInventory())
-    openPlayers.add(player.uniqueId.toString())
     player.sendMessage(c("&a売却したいアイテムを入れて &e「売却実行」 &aを押してください。"))
   }
 
@@ -59,7 +57,9 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   // ============================
 
   private fun buildSellInventory(): Inventory {
-    val inv = Bukkit.createInventory(null, 54, comp("&6アイテム一括売却"))
+    val holder = SellMenuHolder()
+    val inv = Bukkit.createInventory(holder, 54, comp("&6アイテム一括売却"))
+    holder.attach(inv)
     buildControlBar(inv, null)
     return inv
   }
@@ -88,14 +88,13 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent) {
     val player = event.whoClicked as? Player ?: return
-    if (!openPlayers.contains(player.uniqueId.toString())) return
+    val inv = event.view.topInventory.takeIf { it.holder is SellMenuHolder } ?: return
     val slot = event.rawSlot
 
     if (event.clickedInventory == player.inventory) {
       if (event.isShiftClick) {
         event.isCancelled = true
         val item = event.currentItem?.clone() ?: return
-        val inv = player.openInventory.topInventory
         val emptySlot = (0..44).firstOrNull { inv.getItem(it) == null }
         if (emptySlot != null) {
           inv.setItem(emptySlot, item)
@@ -112,7 +111,7 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
       event.isCancelled = true
       when (slot) {
         45 -> player.closeInventory()
-        49 -> handleSell(player)
+        49 -> handleSell(player, inv)
       }
       return
     }
@@ -120,15 +119,14 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
 
   @EventHandler
   fun onInventoryDrag(event: InventoryDragEvent) {
-    val player = event.whoClicked as? Player ?: return
-    if (!openPlayers.contains(player.uniqueId.toString())) return
+    event.view.topInventory.takeIf { it.holder is SellMenuHolder } ?: return
     if (event.rawSlots.any { it in 45..53 }) event.isCancelled = true
   }
 
   @EventHandler
   fun onInventoryClose(event: InventoryCloseEvent) {
     val player = event.player as? Player ?: return
-    if (!openPlayers.remove(player.uniqueId.toString())) return
+    event.inventory.holder as? SellMenuHolder ?: return
     returnItems(player, event.inventory)
   }
 
@@ -136,8 +134,7 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
   // 売却処理
   // ============================
 
-  private fun handleSell(player: Player) {
-    val inv = player.openInventory.topInventory
+  private fun handleSell(player: Player, inv: Inventory) {
     val items = getInputItems(inv)
     if (items.isEmpty()) {
       player.sendMessage(c("&c売却できるアイテムがありません。"))
@@ -191,5 +188,15 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
         player.world.dropItemNaturally(player.location, it)
       }
     }
+  }
+
+  private class SellMenuHolder : InventoryHolder {
+    private lateinit var holderInventory: Inventory
+
+    fun attach(inventory: Inventory) {
+      holderInventory = inventory
+    }
+
+    override fun getInventory(): Inventory = holderInventory
   }
 }

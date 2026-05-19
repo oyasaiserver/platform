@@ -33,10 +33,6 @@ class MacroCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplet
               sender.sendMessage("§cゲーム内から実行してください。")
               return false
             }
-    if (!player.hasPermission("oyasaimenu.macro")) {
-      player.sendMessage(c("&cこのコマンドを使う権限がありません。"))
-      return false
-    }
 
     when {
       args.size >= 2 && args[0].equals("share", ignoreCase = true) -> handleShare(player, args[1])
@@ -206,7 +202,6 @@ class MacroCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplet
       args: Array<out String>
   ): List<String>? {
     val player = sender as? Player ?: return emptyList()
-    if (!player.hasPermission("oyasaimenu.macro")) return emptyList()
     val prefix = args.lastOrNull() ?: ""
     return when (args.size) {
       0,

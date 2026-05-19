@@ -11,12 +11,10 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 
 class AdminEngine(private val plugin: OyasaiMenu) : Listener {
-
-  private val activePlayers: MutableSet<String> = mutableSetOf()
 
   fun openAdminMenu(player: Player) {
     if (!player.hasPermission("oyasaimenu.admin")) {
@@ -24,11 +22,10 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
       return
     }
     player.openInventory(buildInventory())
-    activePlayers.add(player.uniqueId.toString())
   }
 
   private fun buildInventory(): Inventory {
-    val inv = Bukkit.createInventory(null, 54, comp("&b⚙ 管理者メニュー"))
+    val inv = Bukkit.createInventory(AdminMenuHolder(), 54, comp("&b⚙ 管理者メニュー"))
     inv.setItem(
         10, makeItem(Material.EMERALD, "&aリロード", listOf("&7全 YAML を再読み込みします", "", "&eクリックで実行")))
     inv.setItem(
@@ -72,8 +69,8 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
 
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent) {
+    event.inventory.holder as? AdminMenuHolder ?: return
     val player = event.whoClicked as? Player ?: return
-    if (!activePlayers.contains(player.uniqueId.toString())) return
     if (event.clickedInventory == player.inventory) {
       if (event.isShiftClick) event.isCancelled = true
       return
@@ -112,8 +109,7 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
-  @EventHandler
-  fun onInventoryClose(event: InventoryCloseEvent) {
-    activePlayers.remove((event.player as? Player)?.uniqueId?.toString() ?: return)
+  private class AdminMenuHolder : InventoryHolder {
+    override fun getInventory(): Inventory = Bukkit.createInventory(this, 54)
   }
 }

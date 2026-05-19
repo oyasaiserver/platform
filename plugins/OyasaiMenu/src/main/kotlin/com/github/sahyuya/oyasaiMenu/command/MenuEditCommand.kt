@@ -27,10 +27,6 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
               sender.sendMessage("§cゲーム内から実行してください。")
               return true
             }
-    if (!player.hasPermission("oyasaimenu.admin")) {
-      player.sendMessage(c("&c編集権限がありません。"))
-      return true
-    }
     when (args.getOrNull(0)?.lowercase()) {
       "announce" -> handleAnnounce(player, args.drop(1).toTypedArray())
       "shop" -> handleShop(player, args.drop(1).toTypedArray())
@@ -265,7 +261,6 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
       alias: String,
       args: Array<out String>
   ): List<String>? {
-    if (!sender.hasPermission("oyasaimenu.admin")) return emptyList()
     val prefix = args.lastOrNull() ?: ""
     return when {
       args.size <= 1 ->

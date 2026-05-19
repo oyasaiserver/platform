@@ -45,19 +45,15 @@ class ActionEngine(private val plugin: OyasaiMenu) {
           plugin.logger.warning("open_menu にターゲットが未指定。")
           return
         }
-        Bukkit.getScheduler()
-            .runTaskLater(
-                plugin,
-                Runnable {
-                  // popup/ プレフィックスがある場合や PopupMenuLoader に登録済みなら popupMenuEngine へ委譲
-                  val popupId = target.removePrefix("popup/")
-                  if (plugin.popupMenuLoader.getPopup(popupId) != null) {
-                    plugin.popupMenuEngine.open(player, popupId)
-                  } else {
-                    plugin.menuEngine.openMenu(player, target)
-                  }
-                },
-                1L)
+        runDelayed {
+          // popup/ プレフィックスがある場合や PopupMenuLoader に登録済みなら popupMenuEngine へ委譲
+          val popupId = target.removePrefix("popup/")
+          if (plugin.popupMenuLoader.getPopup(popupId) != null) {
+            plugin.popupMenuEngine.open(player, popupId)
+          } else {
+            plugin.menuEngine.openMenu(player, target)
+          }
+        }
       }
 
       ActionType.OPEN_POPUP -> {
@@ -66,8 +62,7 @@ class ActionEngine(private val plugin: OyasaiMenu) {
           plugin.logger.warning("open_popup にターゲットが未指定。")
           return
         }
-        Bukkit.getScheduler()
-            .runTaskLater(plugin, Runnable { plugin.popupMenuEngine.open(player, target) }, 1L)
+        runDelayed { plugin.popupMenuEngine.open(player, target) }
       }
 
       ActionType.OPEN_SPECIAL -> {
@@ -76,15 +71,11 @@ class ActionEngine(private val plugin: OyasaiMenu) {
           plugin.logger.warning("open_special にターゲットが未指定。")
           return
         }
-        Bukkit.getScheduler()
-            .runTaskLater(
-                plugin, Runnable { plugin.specialMenuEngine.open(player, target, action) }, 1L)
+        runDelayed { plugin.specialMenuEngine.open(player, target, action) }
       }
 
       ActionType.PARAM_COMMAND -> {
-        Bukkit.getScheduler()
-            .runTaskLater(
-                plugin, Runnable { plugin.parameterCommandEngine.open(player, action) }, 1L)
+        runDelayed { plugin.parameterCommandEngine.open(player, action) }
       }
 
       ActionType.RUN_COMMAND,
@@ -209,73 +200,45 @@ class ActionEngine(private val plugin: OyasaiMenu) {
 
       ActionType.OPEN_SHOP -> {
         val category = action.getString("category", "")
-        Bukkit.getScheduler()
-            .runTaskLater(
-                plugin,
-                Runnable {
-                  if (category.isEmpty()) {
-                    // カテゴリ未指定 → ショップ一覧メニューを開く
-                    plugin.popupMenuEngine.open(player, "shopindex")
-                  } else {
-                    // カテゴリ指定 → ShopEngine 経由でショップGUIを直接開く
-                    // ※ menuEngine.openMenu("shop/blocks") ではなく shopEngine.openShop() を呼ぶ。
-                    //   menus/shop/blocks.yml という静的ファイルは存在しないため。
-                    plugin.shopEngine.openShop(player, category)
-                  }
-                },
-                1L)
+        runDelayed {
+          if (category.isEmpty()) {
+            // カテゴリ未指定 → ショップ一覧メニューを開く
+            plugin.popupMenuEngine.open(player, "shopindex")
+          } else {
+            // カテゴリ指定 → ShopEngine 経由でショップGUIを直接開く
+            // ※ menuEngine.openMenu("shop/blocks") ではなく shopEngine.openShop() を呼ぶ。
+            //   menus/shop/blocks.yml という静的ファイルは存在しないため。
+            plugin.shopEngine.openShop(player, category)
+          }
+        }
       }
 
       ActionType.OPEN_POINT_SHOP -> {
         val category = action.getString("category", "")
-        Bukkit.getScheduler()
-            .runTaskLater(
-                plugin,
-                Runnable {
-                  val catId =
-                      if (category.isEmpty())
-                          plugin.pointShopLoader.getAllCategories().keys.firstOrNull()
-                              ?: return@Runnable
-                      else category
-                  plugin.pointShopEngine.openShop(player, catId)
-                },
-                1L)
+        runDelayed {
+          val catId =
+              if (category.isEmpty())
+                  plugin.pointShopLoader.getAllCategories().keys.firstOrNull()
+                      ?: return@runDelayed
+              else category
+          plugin.pointShopEngine.openShop(player, catId)
+        }
       }
 
-      ActionType.OPEN_UTILITY ->
-          Bukkit.getScheduler()
-              .runTaskLater(plugin, Runnable { plugin.popupMenuEngine.open(player, "utility") }, 1L)
-
-      ActionType.OPEN_MACRO -> {
-        Bukkit.getScheduler()
-            .runTaskLater(plugin, Runnable { plugin.macroEngine.openMacroList(player) }, 1L)
+      ActionType.OPEN_UTILITY,
+      ActionType.OPEN_CHANNEL,
+      ActionType.OPEN_SOCIALLIKES,
+      ActionType.OPEN_CARBUILDER,
+      ActionType.OPEN_LINKS -> {
+        val popupId = LEGACY_POPUP_IDS[action.type] ?: return
+        runDelayed { plugin.popupMenuEngine.open(player, popupId) }
       }
 
-      ActionType.OPEN_INFO ->
-          Bukkit.getScheduler()
-              .runTaskLater(plugin, Runnable { plugin.menuEngine.openMenu(player, "root") }, 1L)
+      ActionType.OPEN_MACRO -> runDelayed { plugin.macroEngine.openMacroList(player) }
 
-      ActionType.OPEN_CHANNEL ->
-          Bukkit.getScheduler()
-              .runTaskLater(plugin, Runnable { plugin.popupMenuEngine.open(player, "channel") }, 1L)
+      ActionType.OPEN_INFO -> runDelayed { plugin.menuEngine.openMenu(player, "root") }
 
-      ActionType.OPEN_SOCIALLIKES ->
-          Bukkit.getScheduler()
-              .runTaskLater(
-                  plugin, Runnable { plugin.popupMenuEngine.open(player, "sociallikes") }, 1L)
-
-      ActionType.OPEN_CARBUILDER ->
-          Bukkit.getScheduler()
-              .runTaskLater(
-                  plugin, Runnable { plugin.popupMenuEngine.open(player, "carbuilder") }, 1L)
-
-      ActionType.OPEN_LINKS ->
-          Bukkit.getScheduler()
-              .runTaskLater(plugin, Runnable { plugin.popupMenuEngine.open(player, "links") }, 1L)
-
-      ActionType.OPEN_SELL ->
-          Bukkit.getScheduler()
-              .runTaskLater(plugin, Runnable { plugin.sellEngine.openSellMenu(player) }, 1L)
+      ActionType.OPEN_SELL -> runDelayed { plugin.sellEngine.openSellMenu(player) }
 
       ActionType.UNKNOWN -> plugin.logger.warning("未知のアクション: player=${player.name}")
     }
@@ -299,4 +262,18 @@ class ActionEngine(private val plugin: OyasaiMenu) {
 
   private fun applyPlaceholders(player: Player, text: String): String =
       plugin.menuEngine.applyPlaceholders(player, text)
+
+  private inline fun runDelayed(crossinline action: () -> Unit) {
+    Bukkit.getScheduler().runTaskLater(plugin, Runnable { action() }, 1L)
+  }
+
+  companion object {
+    private val LEGACY_POPUP_IDS =
+        mapOf(
+            ActionType.OPEN_UTILITY to "utility",
+            ActionType.OPEN_CHANNEL to "channel",
+            ActionType.OPEN_SOCIALLIKES to "sociallikes",
+            ActionType.OPEN_CARBUILDER to "carbuilder",
+            ActionType.OPEN_LINKS to "links")
+  }
 }

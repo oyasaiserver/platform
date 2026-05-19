@@ -7,6 +7,7 @@ import com.github.sahyuya.oyasaiMenu.model.MenuAction
 import com.github.sahyuya.oyasaiMenu.util.ItemVisuals
 import java.util.Locale
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
@@ -45,7 +46,7 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
   private val KEY_SCREEN by lazy { NamespacedKey(plugin, "gm_screen") }
   private val KEY_SKIN_ITEM by lazy { NamespacedKey(plugin, "gm_skin_item") }
 
-  val sessions: MutableMap<UUID, GuiEditorSession> = mutableMapOf()
+  val sessions: MutableMap<UUID, GuiEditorSession> = ConcurrentHashMap()
   private val playerFavorites: MutableMap<UUID, MutableList<GuiActionDef>> = mutableMapOf()
   private val uiSkinSilentPlayers: MutableSet<UUID> = mutableSetOf()
 

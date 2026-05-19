@@ -1,7 +1,6 @@
 package com.github.sahyuya.oyasaiMenu.command
 
 import com.github.sahyuya.oyasaiMenu.OyasaiMenu
-import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -21,10 +20,6 @@ class AdminMenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCom
               sender.sendMessage("§cゲーム内から実行してください。")
               return false
             }
-    if (!player.hasPermission("oyasaimenu.admin")) {
-      player.sendMessage(c("&cこのコマンドを使う権限がありません。"))
-      return false
-    }
     plugin.adminEngine.openAdminMenu(player)
     return true
   }
@@ -35,7 +30,6 @@ class AdminMenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCom
       alias: String,
       args: Array<out String>
   ): List<String>? {
-    if (!sender.hasPermission("oyasaimenu.admin")) return emptyList()
     return emptyList()
   }
 }

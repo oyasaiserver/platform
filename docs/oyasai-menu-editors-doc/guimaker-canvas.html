@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>GuiMaker キャンバス・プレビュー</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>GuiMaker <small>キャンバス・プレビュー</small></h1>
+  <p class="subtitle">openCanvas / openPreview — 編集の中心となる対話的キャンバス</p>
+</header>
+
+<nav class="sidebar">
+  <a href="index.html" class="toc-back">← 目次に戻る</a>
+  <h2>このページの内容</h2>
+  <ol>
+    <li><a href="#canvas">編集キャンバス</a></li>
+    <li><a href="#editor-bar">エディタバー (slot 45-53)</a></li>
+    <li><a href="#preview">プレビュー画面</a></li>
+    <li><a href="#pdc">PDC追従の仕組み</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+
+<section id="canvas" class="card">
+  <h2>編集キャンバス (openCanvas)</h2>
+  <p>
+    通常GUIまたはPopupを編集する<strong>中央の対話的画面</strong>です。プレイヤーは自由にアイテムをスロットに配置・移動・削除できます。
+    アイテムを右クリックすると <code>openContextMenu</code> が呼ばれ、そのスロットの詳細編集に入ります。
+  </p>
+
+  <h3>動作モード</h3>
+  <div class="flow">
+    <div class="flow-step">
+      <strong>左クリック / Drag</strong>
+      <span>アイテム移動・配置。閉じた後 <code>rebuildSlotsFromInventory</code> が走り PDC からスロット情報を再構築する</span>
+    </div>
+    <div class="flow-step">
+      <strong>右クリック / Shift+右</strong>
+      <span>アイテムがあるスロットで <code>openContextMenu(player, session, slot)</code> を呼ぶ</span>
+    </div>
+    <div class="flow-step">
+      <strong>Shift+左</strong>
+      <span><code>event.isCancelled = true</code>（インベントリへの転送を抑制）</span>
+    </div>
+  </div>
+
+  <h3>サイズとタイトル</h3>
+  <ul>
+    <li><code>session.menuSize</code> (9, 18, 27, 36, 45, 54 のいずれか) で初期化</li>
+    <li>通常GUI: タイトルは <code>session.menuTitle</code></li>
+    <li>テンプレート編集中: タイトルが <code>"&d[テンプレート] &lt;title&gt;"</code> になる</li>
+    <li>Popup編集中: <code>applyPopupReservedSlots</code> により <strong>slot 45-53 がナビバー予約</strong>として上書き</li>
+  </ul>
+
+  <h3>Popup予約スロットの保護</h3>
+  <p>
+    <code>onInventoryDrag</code> と <code>handleCanvasClick</code> で Popup の slot 45–53 にアイテムを置こうとすると
+    <code>event.isCancelled = true</code> され、「&cPopup の slot 45-53 はナビバー予約です。」と通知されます。
+  </p>
+
+  <h3>関連クラス</h3>
+  <pre><code>class CanvasHolder(val session: GuiEditorSession) : InventoryHolder
+class PreviewHolder(val session: GuiEditorSession) : InventoryHolder
+class ContextHolder(val session: GuiEditorSession, val slot: Int) : InventoryHolder</code></pre>
+</section>
+
+<section id="editor-bar" class="card">
+  <h2>エディタバー (slot 45-53)</h2>
+  <p>キャンバス以外のサブ画面（コンテキスト、ロア管理、アクション管理など）にはエディタバーが共通配置されます。<code>applyEditorBar</code> が呼ばれます。</p>
+
+  <div class="grid">
+    <div class="slot kind-fill"><span class="num">36</span></div>
+    <div class="slot kind-fill"><span class="num">37</span></div>
+    <div class="slot kind-fill"><span class="num">38</span></div>
+    <div class="slot kind-fill"><span class="num">39</span></div>
+    <div class="slot kind-fill"><span class="num">40</span></div>
+    <div class="slot kind-fill"><span class="num">41</span></div>
+    <div class="slot kind-fill"><span class="num">42</span></div>
+    <div class="slot kind-fill"><span class="num">43</span></div>
+    <div class="slot kind-fill"><span class="num">44</span></div>
+    <div class="slot kind-data"><span class="num">45</span><span class="icon">👤</span><span class="label">編集者</span></div>
+    <div class="slot kind-func"><span class="num">46</span><span class="icon">🟦</span><span class="label">キャンバス</span></div>
+    <div class="slot kind-func"><span class="num">47</span><span class="icon">🟦</span><span class="label">プレビュー</span></div>
+    <div class="slot kind-confirm"><span class="num">48</span><span class="icon">🟩</span><span class="label">反映/保存</span></div>
+    <div class="slot kind-bar"><span class="num">49</span><span class="icon">🟨</span><span class="label">テンプレート</span></div>
+    <div class="slot kind-reserved"><span class="num">50</span><span class="icon">🟪</span><span class="label">タイトル/Popup設定</span></div>
+    <div class="slot kind-nav"><span class="num">51</span><span class="icon">🔵</span><span class="label">ライブ表示</span></div>
+    <div class="slot kind-fill"><span class="num">52</span><span class="icon">⬛</span><span class="label">閉じる</span></div>
+    <div class="slot kind-func"><span class="num">53</span><span class="icon">⬅</span><span class="label">戻る</span></div>
+  </div>
+
+  <h3>各ボタンの動作 (handleEditorBarClick)</h3>
+  <table>
+    <thead><tr><th>slot</th><th>機能</th><th>説明</th></tr></thead>
+    <tbody>
+      <tr><td>45</td><td>セッション情報表示</td><td>ID/タイトル/サイズ/アイテム数/ドラフト有無をチャットへ。アイテムは<code>PLAYER_HEAD</code></td></tr>
+      <tr><td>46</td><td>キャンバスへ</td><td>キャンバスを再表示。<code>CYAN_CONCRETE_POWDER</code></td></tr>
+      <tr><td>47</td><td>プレビュー</td><td>編集中の状態でアクションを試行できる。<code>LIGHT_BLUE_CONCRETE_POWDER</code></td></tr>
+      <tr><td>48</td><td>反映/テンプレ保存</td><td>通常: live YAMLへ commit + <code>plugin.reload()</code>。テンプレ編集中: テンプレートファイルへ保存</td></tr>
+      <tr><td>49</td><td>テンプレート管理</td><td><code>openTemplateHub(player, session)</code></td></tr>
+      <tr><td>50</td><td>タイトル/Popup設定</td><td>通常GUI: カラー選択→タイトル入力 / Popup: <code>openPopupSettings</code></td></tr>
+      <tr><td>51</td><td>ライブ表示</td><td>通常: <code>/menu &lt;id&gt;</code> / Popup: <code>plugin.popupMenuEngine.open</code></td></tr>
+      <tr><td>52</td><td>閉じる</td><td>セッションは保持。<code>player.closeInventory()</code></td></tr>
+      <tr><td>53</td><td>戻る</td><td>呼び出し画面に応じた <code>back()</code> ラムダを実行</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="preview" class="card">
+  <h2>プレビュー画面 (openPreview)</h2>
+  <p>編集中のセッションをディープコピーし、<strong>アクションを実行可能</strong>な状態で表示するインタラクティブプレビューです。</p>
+
+  <h3>挙動</h3>
+  <ul>
+    <li>タイトルは <code>"&7[プレビュー] &lt;menuTitle&gt;"</code></li>
+    <li>クリック時 <code>handlePreviewClick</code> がアクションリストを実行</li>
+    <li>サポートされるアクション: PLAYER_CMD / CONSOLE_CMD / OP_PLAYER_CMD / MESSAGE / BROADCAST / SOUND / PARAM_COMMAND / CLOSE / OPEN_MENU / OPEN_POPUP / OPEN_SPECIAL / URL / CHAT_PASTE / SUGGEST_COMMAND</li>
+    <li>OP_PLAYER_CMD は一時OP化 (<code>player.isOp = true</code>) で実行され、finallyで戻す</li>
+    <li>OPEN_MENU/OPEN_POPUP は <code>runTaskLater(1L)</code> で <code>/menu &lt;target&gt;</code> を実行</li>
+  </ul>
+
+  <h3>編集に戻るには</h3>
+  <ul>
+    <li>通常GUI: <code>/guimaker edit &lt;id&gt; canvas</code></li>
+    <li>Popup: <code>/guimaker popup edit &lt;id&gt;</code></li>
+  </ul>
+</section>
+
+<section id="pdc" class="card">
+  <h2>PDC追従の仕組み (アイテム本位)</h2>
+  <p>
+    GuiMakerでは、スロットの情報（名前・ロア・権限・アクション・追加データ）を<strong>アイテム自身の PersistentDataContainer (PDC)</strong> に書き込みます。
+    プレイヤーがアイテムをドラッグして別スロットへ移したとき、PDCの情報も自然に追従するため、UX的に「設定がアイテムと一緒に移動する」体験になります。
+  </p>
+
+  <h3>PDCキー</h3>
+  <table>
+    <thead><tr><th>キー</th><th>型</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td><code>gm_name</code></td><td>STRING</td><td>表示名 (&カラーコード可)</td></tr>
+      <tr><td><code>gm_lore</code></td><td>STRING</td><td>ロア（改行区切り）</td></tr>
+      <tr><td><code>gm_perm</code></td><td>STRING</td><td>権限ノード or <code>lpgroup:&lt;name&gt;</code></td></tr>
+      <tr><td><code>gm_actions</code></td><td>STRING</td><td><code>TYPE key=value key=value\nTYPE ...</code> 形式</td></tr>
+      <tr><td><code>gm_enchanted</code></td><td>STRING</td><td><code>"1"</code> でエンチャント表示ON</td></tr>
+      <tr><td><code>gm_extra</code></td><td>STRING</td><td>extras key/value (Popup向け fallback_icon等)</td></tr>
+      <tr><td><code>gm_func</code></td><td>STRING</td><td>UI スキンエディタ専用: funcLabel識別</td></tr>
+      <tr><td><code>gm_screen</code></td><td>STRING</td><td>UI スキンエディタ専用: 所属screen識別</td></tr>
+      <tr><td><code>gm_skin_item</code></td><td>STRING</td><td>UI スキンアイテムであることのマーク</td></tr>
+    </tbody>
+  </table>
+
+  <h3>シリアライズ仕様 (actions/extras)</h3>
+  <pre><code>// serializeActions
+TYPE key1=value1 key2=value2
+TYPE3 key3=value3
+
+// 空白は \s に、改行は \n にエスケープされる</code></pre>
+
+  <h3>キャンバス → セッションへの逆変換</h3>
+  <p><code>rebuildSlotsFromInventory(session)</code> が呼ばれると、現在のキャンバスにあるアイテムをすべて走査し PDCから <code>GuiSlotDef</code> を復元します。Popupの場合は slot 45–53 はスキップ。</p>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>
