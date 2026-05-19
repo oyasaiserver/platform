@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>特殊メニュー</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>特殊メニュー <small>SpecialMenuEngine</small></h1>
+  <p class="subtitle">OPEN_SPECIAL — online_players / confirm</p>
+</header>
+
+<nav class="sidebar">
+  <a href="index.html" class="toc-back">← 目次に戻る</a>
+  <h2>このページの内容</h2>
+  <ol>
+    <li><a href="#concept">特殊メニューの概念</a></li>
+    <li><a href="#players">オンラインプレイヤー</a></li>
+    <li><a href="#confirm">確認コマンド</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+
+<section id="concept" class="card">
+  <h2>特殊メニューの概念</h2>
+  <p>
+    YAMLでは表現しきれない<strong>動的なデータ駆動メニュー</strong>のための仕組み。
+    YAMLメニューのアクションから <code>OPEN_SPECIAL</code> でターゲットIDを指定して起動します。
+  </p>
+
+  <h3>提供される特殊メニュー</h3>
+  <ul>
+    <li><code>online_players</code> / <code>online-players</code> / <code>players</code> — オンラインプレイヤー一覧</li>
+    <li><code>confirm</code> — コマンド実行前の確認画面</li>
+  </ul>
+
+  <h3>呼び出しエントリポイント</h3>
+  <pre><code>plugin.specialMenuEngine.open(player, target, action)</code></pre>
+  <p>OPでない場合は「&c特殊メニューはOP限定です。」と通知して終了。</p>
+
+  <h3>YAML例</h3>
+  <pre><code>actions:
+  - type: OPEN_SPECIAL
+    target: online_players
+
+  - type: OPEN_SPECIAL
+    target: confirm
+    command: "kick {player} 不正行為"
+    mode: op</code></pre>
+</section>
+
+<section id="players" class="card">
+  <h2>オンラインプレイヤー (openOnlinePlayers)</h2>
+  <p>サーバー上の全プレイヤーをページング表示。クリックでテレポート。</p>
+
+  <h3>レイアウト</h3>
+  <div class="grid">
+    <div class="slot kind-grid"><span class="num">0</span><span class="label">P1</span></div>
+    <div class="slot kind-grid"><span class="num">1</span><span class="label">P2</span></div>
+    <div class="slot kind-grid"><span class="num">2</span></div>
+    <div class="slot kind-grid"><span class="num">3</span></div>
+    <div class="slot kind-grid"><span class="num">4</span></div>
+    <div class="slot kind-grid"><span class="num">5</span></div>
+    <div class="slot kind-grid"><span class="num">6</span></div>
+    <div class="slot kind-grid"><span class="num">7</span></div>
+    <div class="slot kind-grid"><span class="num">8</span></div>
+    <div class="slot kind-grid"><span class="num">9</span></div>
+    <div class="slot kind-grid"><span class="num">10</span></div>
+    <div class="slot kind-grid"><span class="num">11</span></div>
+    <div class="slot kind-grid"><span class="num">12</span></div>
+    <div class="slot kind-grid"><span class="num">13</span></div>
+    <div class="slot kind-grid"><span class="num">14</span></div>
+    <div class="slot kind-grid"><span class="num">15</span></div>
+    <div class="slot kind-grid"><span class="num">16</span></div>
+    <div class="slot kind-grid"><span class="num">17</span></div>
+    <div class="slot kind-grid"><span class="num">18</span></div>
+    <div class="slot kind-grid"><span class="num">19</span></div>
+    <div class="slot kind-grid"><span class="num">20</span></div>
+    <div class="slot kind-grid"><span class="num">21</span></div>
+    <div class="slot kind-grid"><span class="num">22</span></div>
+    <div class="slot kind-grid"><span class="num">23</span></div>
+    <div class="slot kind-grid"><span class="num">24</span></div>
+    <div class="slot kind-grid"><span class="num">25</span></div>
+    <div class="slot kind-grid"><span class="num">26</span></div>
+    <div class="slot kind-grid"><span class="num">27</span></div>
+    <div class="slot kind-grid"><span class="num">28</span></div>
+    <div class="slot kind-grid"><span class="num">29</span></div>
+    <div class="slot kind-grid"><span class="num">30</span></div>
+    <div class="slot kind-grid"><span class="num">31</span></div>
+    <div class="slot kind-grid"><span class="num">32</span></div>
+    <div class="slot kind-grid"><span class="num">33</span></div>
+    <div class="slot kind-grid"><span class="num">34</span></div>
+    <div class="slot kind-grid"><span class="num">35</span></div>
+    <div class="slot kind-grid"><span class="num">36</span></div>
+    <div class="slot kind-grid"><span class="num">37</span></div>
+    <div class="slot kind-grid"><span class="num">38</span></div>
+    <div class="slot kind-grid"><span class="num">39</span></div>
+    <div class="slot kind-grid"><span class="num">40</span></div>
+    <div class="slot kind-grid"><span class="num">41</span></div>
+    <div class="slot kind-grid"><span class="num">42</span></div>
+    <div class="slot kind-grid"><span class="num">43</span></div>
+    <div class="slot kind-grid"><span class="num">44</span></div>
+    <div class="slot kind-nav"><span class="num">45</span><span class="icon">⬅</span><span class="label">前ページ</span></div>
+    <div class="slot kind-fill"><span class="num">46</span></div>
+    <div class="slot kind-fill"><span class="num">47</span></div>
+    <div class="slot kind-fill"><span class="num">48</span></div>
+    <div class="slot kind-func"><span class="num">49</span><span class="icon">🟫</span><span class="label">メインメニュー</span></div>
+    <div class="slot kind-fill"><span class="num">50</span></div>
+    <div class="slot kind-fill"><span class="num">51</span></div>
+    <div class="slot kind-fill"><span class="num">52</span></div>
+    <div class="slot kind-nav"><span class="num">53</span><span class="icon">➡</span><span class="label">次ページ</span></div>
+  </div>
+  <p class="caption">背景: GRAY_STAINED_GLASS_PANE / タイトル: <code>"&8オンラインプレイヤー (&lt;count&gt;)"</code></p>
+
+  <h3>プレイヤーアイテム (playerHead)</h3>
+  <ul>
+    <li>Material: <code>PLAYER_HEAD</code> + <code>SkullMeta.owningPlayer</code></li>
+    <li>表示名: <code>&a&lt;name&gt;</code></li>
+    <li>ロア: <code>&7左クリックで /tp &lt;name&gt;</code></li>
+  </ul>
+
+  <h3>クリック動作</h3>
+  <table>
+    <thead><tr><th>slot</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td>45</td><td>前のページ (<code>holder.page - 1</code>)</td></tr>
+      <tr><td>49</td><td>メインメニュー (<code>plugin.menuEngine.openMenu(player, "root")</code>)</td></tr>
+      <tr><td>53</td><td>次のページ (<code>holder.page + 1</code>)</td></tr>
+      <tr><td>0–44</td><td><code>SkullMeta.owningPlayer.uniqueId</code> からターゲット取得 → <code>player.performCommand("tp &lt;name&gt;")</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>OP保護</h3>
+  <p><code>handleOnlinePlayersClick</code> 冒頭で <code>!player.isOp</code> なら <code>closeInventory</code> + 通知。</p>
+
+  <h3>ソート</h3>
+  <p>プレイヤーリストは <code>sortedBy { it.name.lowercase() }</code> でアルファベット順。</p>
+</section>
+
+<section id="confirm" class="card">
+  <h2>確認コマンド (openConfirmCommand)</h2>
+  <p>コマンド実行前にプレイヤーが確認できる54スロット画面。</p>
+
+  <div class="grid">
+    <div class="slot kind-fill"><span class="num">0</span></div>
+    <div class="slot kind-fill"><span class="num">1</span></div>
+    <div class="slot kind-fill"><span class="num">2</span></div>
+    <div class="slot kind-fill"><span class="num">3</span></div>
+    <div class="slot kind-fill"><span class="num">4</span></div>
+    <div class="slot kind-fill"><span class="num">5</span></div>
+    <div class="slot kind-fill"><span class="num">6</span></div>
+    <div class="slot kind-fill"><span class="num">7</span></div>
+    <div class="slot kind-fill"><span class="num">8</span></div>
+    <div class="slot kind-fill"><span class="num">9</span></div>
+    <div class="slot kind-fill"><span class="num">10</span></div>
+    <div class="slot kind-fill"><span class="num">11</span></div>
+    <div class="slot kind-fill"><span class="num">12</span></div>
+    <div class="slot kind-data"><span class="num">13</span><span class="icon">⚙</span><span class="label">実行予定</span></div>
+    <div class="slot kind-fill"><span class="num">14</span></div>
+    <div class="slot kind-fill"><span class="num">15</span></div>
+    <div class="slot kind-fill"><span class="num">16</span></div>
+    <div class="slot kind-fill"><span class="num">17</span></div>
+    <div class="slot kind-fill"><span class="num">18</span></div>
+    <div class="slot kind-fill"><span class="num">19</span></div>
+    <div class="slot kind-confirm"><span class="num">20</span><span class="icon">✅</span><span class="label">実行する</span></div>
+    <div class="slot kind-fill"><span class="num">21</span></div>
+    <div class="slot kind-fill"><span class="num">22</span></div>
+    <div class="slot kind-fill"><span class="num">23</span></div>
+    <div class="slot kind-danger"><span class="num">24</span><span class="icon">❌</span><span class="label">キャンセル</span></div>
+    <div class="slot kind-fill"><span class="num">25</span></div>
+    <div class="slot kind-fill"><span class="num">26</span></div>
+    <div class="slot kind-fill"><span class="num">27</span></div>
+    <div class="slot kind-fill"><span class="num">28</span></div>
+    <div class="slot kind-fill"><span class="num">29</span></div>
+    <div class="slot kind-fill"><span class="num">30</span></div>
+    <div class="slot kind-fill"><span class="num">31</span></div>
+    <div class="slot kind-fill"><span class="num">32</span></div>
+    <div class="slot kind-fill"><span class="num">33</span></div>
+    <div class="slot kind-fill"><span class="num">34</span></div>
+    <div class="slot kind-fill"><span class="num">35</span></div>
+    <div class="slot kind-fill"><span class="num">36</span></div>
+    <div class="slot kind-fill"><span class="num">37</span></div>
+    <div class="slot kind-fill"><span class="num">38</span></div>
+    <div class="slot kind-fill"><span class="num">39</span></div>
+    <div class="slot kind-fill"><span class="num">40</span></div>
+    <div class="slot kind-fill"><span class="num">41</span></div>
+    <div class="slot kind-fill"><span class="num">42</span></div>
+    <div class="slot kind-fill"><span class="num">43</span></div>
+    <div class="slot kind-fill"><span class="num">44</span></div>
+    <div class="slot kind-fill"><span class="num">45</span></div>
+    <div class="slot kind-fill"><span class="num">46</span></div>
+    <div class="slot kind-fill"><span class="num">47</span></div>
+    <div class="slot kind-fill"><span class="num">48</span></div>
+    <div class="slot kind-fill"><span class="num">49</span></div>
+    <div class="slot kind-fill"><span class="num">50</span></div>
+    <div class="slot kind-fill"><span class="num">51</span></div>
+    <div class="slot kind-fill"><span class="num">52</span></div>
+    <div class="slot kind-fill"><span class="num">53</span></div>
+  </div>
+  <p class="caption">背景: GRAY_STAINED_GLASS_PANE / タイトル: <code>"&8コマンド実行確認"</code></p>
+
+  <h3>表示内容</h3>
+  <ul>
+    <li>slot 13: 「実行予定」(<code>COMMAND_BLOCK</code>) — mode と command をロアに表示</li>
+    <li>slot 20: 「実行する」(<code>LIME_CONCRETE</code>)</li>
+    <li>slot 24: 「キャンセル」(<code>RED_CONCRETE</code>)</li>
+  </ul>
+
+  <h3>クリック動作</h3>
+  <table>
+    <thead><tr><th>slot</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td>20</td><td><code>closeInventory</code> + <code>plugin.parameterCommandEngine.executeCommand(player, holder.command, holder.mode)</code></td></tr>
+      <tr><td>24</td><td><code>player.closeInventory()</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>呼び出し元</h3>
+  <ul>
+    <li>YAML から <code>OPEN_SPECIAL target=confirm</code> + <code>command</code>/<code>mode</code></li>
+    <li>GuiMakerの特殊メニューHubから「確認ボタンメニュー」 (サンプル: <code>"say GuiMaker confirm sample"</code>)</li>
+    <li>ParameterCommandEngine の <code>confirm=true</code> 経由</li>
+  </ul>
+
+  <h3>InventoryHolder</h3>
+  <pre><code>private class ConfirmCommandHolder(val command: String, val mode: String) : InventoryHolder</code></pre>
+  <p>command と mode を holder に保持し、clickハンドラから取り出して実行する。</p>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>

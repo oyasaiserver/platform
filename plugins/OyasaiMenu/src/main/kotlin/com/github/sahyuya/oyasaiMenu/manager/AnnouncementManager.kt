@@ -4,6 +4,7 @@ import com.github.sahyuya.oyasaiMenu.OyasaiMenu
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import java.io.File
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Material
@@ -19,7 +20,7 @@ import org.bukkit.inventory.meta.BookMeta
  * AnnouncementManager
  *
  * 変更点:
- * - pendingBookEditors を MutableMap<UUID, Int> に変更し、渡した本のスロットを保存
+ * - pendingBookEditors を ConcurrentHashMap<UUID, Int> に変更し、渡した本のスロットを保存
  * - removeBook: スロット指定で直接削除し、delay を 3L に延長して確実性を向上
  */
 class AnnouncementManager(private val plugin: OyasaiMenu) : Listener {
@@ -30,7 +31,7 @@ class AnnouncementManager(private val plugin: OyasaiMenu) : Listener {
   private var currentBody: MutableList<String> = mutableListOf()
 
   /** UUID → 渡した本のスロット番号 */
-  private val pendingBookEditors: MutableMap<UUID, Int> = mutableMapOf()
+  private val pendingBookEditors: ConcurrentHashMap<UUID, Int> = ConcurrentHashMap()
   private val plainText = PlainTextComponentSerializer.plainText()
 
   // ============================

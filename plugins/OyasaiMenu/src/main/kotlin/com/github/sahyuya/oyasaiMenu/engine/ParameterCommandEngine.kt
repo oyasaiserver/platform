@@ -6,6 +6,7 @@ import com.github.sahyuya.oyasaiMenu.util.GuiUtil.c
 import com.github.sahyuya.oyasaiMenu.util.GuiUtil.comp
 import java.util.Locale
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.roundToInt
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -24,7 +25,7 @@ import org.bukkit.inventory.ItemStack
 class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
 
   private val placeholderPattern = Regex("\\{([A-Za-z][A-Za-z0-9_.-]*)}")
-  private val pendingTextInput: MutableMap<UUID, PendingTextInput> = mutableMapOf()
+  private val pendingTextInput: MutableMap<UUID, PendingTextInput> = ConcurrentHashMap()
 
   fun open(player: Player, action: MenuAction) {
     if (!player.isOp) {

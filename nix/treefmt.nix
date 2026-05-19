@@ -22,6 +22,7 @@
       settings = {
         wrap = 80;
       };
+      excludes = [ "plugins/* " ];
     };
     nixfmt = {
       enable = true;
@@ -56,6 +57,7 @@
         # to avoid inconsistency.
         line_ending = "lf";
       };
+      excludes = [ "plugins/* " ];
     };
     # keep-sorted end
   };

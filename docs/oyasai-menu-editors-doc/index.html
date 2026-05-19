@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お野菜メニュー エディタ画面ドキュメント</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>お野菜メニュー <small>エディタ画面ドキュメント</small></h1>
+  <p class="subtitle">Plugin: OyasaiMenu / Source: plugins/OyasaiMenu/src/main/kotlin/com/github/sahyuya/oyasaiMenu</p>
+</header>
+
+<nav class="sidebar">
+  <h2>目次</h2>
+  <ol>
+    <li><a href="#overview">概要</a></li>
+    <li>
+      GuiMaker (チェストGUIエディタ)
+      <ul>
+        <li><a href="guimaker-hub.html">編集ハブ・各リスト画面</a></li>
+        <li><a href="guimaker-canvas.html">キャンバス・プレビュー</a></li>
+        <li><a href="guimaker-context.html">コンテキスト・ロア・アクション編集</a></li>
+        <li><a href="guimaker-pickers.html">各種ピッカー (権限/サウンド/カラー他)</a></li>
+        <li><a href="guimaker-templates.html">テンプレート管理</a></li>
+        <li><a href="guimaker-uiskin.html">UIスキンエディタ</a></li>
+        <li><a href="guimaker-popup.html">Popup設定エディタ</a></li>
+      </ul>
+    </li>
+    <li><a href="admin-menu.html">管理者メニュー (/adminmenu)</a></li>
+    <li><a href="announcement.html">お知らせ本エディタ (/menuedit announce)</a></li>
+    <li><a href="macro.html">マクロエディタ (/macro)</a></li>
+    <li><a href="param-command.html">可変コマンドエディタ (PARAM_COMMAND)</a></li>
+    <li><a href="special-menu.html">特殊メニュー (online_players / confirm)</a></li>
+    <li><a href="data-flow.html">データフロー・ファイル構造</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+  <section id="overview" class="card">
+    <h2>概要</h2>
+    <p>
+      <strong>OyasaiMenu</strong> プラグインに含まれる各種エディタ画面の使用方法・スロット配置・技術詳細を網羅したドキュメントです。
+      OyasaiMenuはチェストUI形式のメニュー定義（YAML）と、それをGUI上で編集する複合エディタ <strong>GuiMaker</strong> を中核に持ちます。
+    </p>
+    <h3>主要コンポーネント</h3>
+    <ul class="comp-list">
+      <li><span class="badge badge-editor">GuiMaker</span> 通常GUI/Popup/UIスキンを編集する複合エディタ (<code>guimaker/</code> パッケージ)</li>
+      <li><span class="badge badge-admin">AdminEngine</span> 管理メニュー (<code>/adminmenu</code>)</li>
+      <li><span class="badge badge-book">AnnouncementManager</span> 本(WRITABLE_BOOK)エディタ</li>
+      <li><span class="badge badge-macro">MacroEngine</span> マクロ一覧・詳細・本エディタ</li>
+      <li><span class="badge badge-param">ParameterCommandEngine</span> 可変コマンド (placeholder付き) 編集</li>
+      <li><span class="badge badge-special">SpecialMenuEngine</span> オンラインプレイヤー / 確認メニュー</li>
+    </ul>
+
+    <h3>GuiMakerコマンド体系 (一部)</h3>
+    <table class="cmd-table">
+      <thead><tr><th>コマンド</th><th>動作</th></tr></thead>
+      <tbody>
+        <tr><td><code>/guimaker</code></td><td>編集ハブを開く（引数なし）</td></tr>
+        <tr><td><code>/guimaker hub</code></td><td>編集ハブを明示的に開く</td></tr>
+        <tr><td><code>/guimaker new &lt;id&gt;</code></td><td>新規通常GUIを作成</td></tr>
+        <tr><td><code>/guimaker edit &lt;id&gt; [canvas|preview|commit|revert|info|discard|title|name|lore|...]</code></td><td>個別操作（GUI+コマンドのハイブリッド）</td></tr>
+        <tr><td><code>/guimaker list</code></td><td>編集対象メニューID一覧をチャット表示</td></tr>
+        <tr><td><code>/guimaker popup [list|edit|new|set]</code></td><td>Popup関連</td></tr>
+        <tr><td><code>/guimaker ui [edit|list|silent]</code></td><td>UIスキン</td></tr>
+        <tr><td><code>/guimaker special</code></td><td>特殊メニュー入口</td></tr>
+        <tr><td><code>/guimaker template [approve]</code></td><td>テンプレート管理（公式承認）</td></tr>
+        <tr><td><code>/guimaker help</code></td><td>ヘルプ</td></tr>
+      </tbody>
+    </table>
+    <p class="note">※ コマンド権限: <strong>OPのみ</strong>（<code>onCommand</code> 冒頭で <code>sender.isOp</code> チェック）</p>
+
+    <h3>権限・前提</h3>
+    <ul>
+      <li>GuiMaker: <strong>OP限定</strong></li>
+      <li>AdminMenu / MenuEdit: <code>oyasaimenu.admin</code> パーミッション</li>
+      <li>Macro: <code>oyasaimenu.macro</code> パーミッション</li>
+      <li>ParameterCommand / SpecialMenu (online_players, confirm): <strong>OP限定</strong></li>
+    </ul>
+  </section>
+
+  <section id="legend" class="card">
+    <h2>このドキュメントの見方</h2>
+    <h3>54スロットグリッドの読み方</h3>
+    <p>各エディタ画面は基本的に <strong>9列 × 6行 = 54スロット</strong> のチェストGUIで構成されます。</p>
+    <div class="grid-demo">
+      <div class="slot demo">0</div><div class="slot demo">1</div><div class="slot demo">2</div>
+      <div class="slot demo">3</div><div class="slot demo">4</div><div class="slot demo">5</div>
+      <div class="slot demo">6</div><div class="slot demo">7</div><div class="slot demo">8</div>
+      <div class="slot demo">9</div><div class="slot demo">10</div><div class="slot demo">11</div>
+      <div class="slot demo">12</div><div class="slot demo">13</div><div class="slot demo">14</div>
+      <div class="slot demo">15</div><div class="slot demo">16</div><div class="slot demo">17</div>
+      <div class="slot demo">18</div><div class="slot demo">19</div><div class="slot demo">20</div>
+      <div class="slot demo">21</div><div class="slot demo">22</div><div class="slot demo">23</div>
+      <div class="slot demo">24</div><div class="slot demo">25</div><div class="slot demo">26</div>
+      <div class="slot demo">27</div><div class="slot demo">28</div><div class="slot demo">29</div>
+      <div class="slot demo">30</div><div class="slot demo">31</div><div class="slot demo">32</div>
+      <div class="slot demo">33</div><div class="slot demo">34</div><div class="slot demo">35</div>
+      <div class="slot demo">36</div><div class="slot demo">37</div><div class="slot demo">38</div>
+      <div class="slot demo">39</div><div class="slot demo">40</div><div class="slot demo">41</div>
+      <div class="slot demo">42</div><div class="slot demo">43</div><div class="slot demo">44</div>
+      <div class="slot demo">45</div><div class="slot demo">46</div><div class="slot demo">47</div>
+      <div class="slot demo">48</div><div class="slot demo">49</div><div class="slot demo">50</div>
+      <div class="slot demo">51</div><div class="slot demo">52</div><div class="slot demo">53</div>
+    </div>
+    <p class="caption">スロット番号 (rawSlot): 左上から右へ 0–8、次の行が 9–17、…、最終行が 45–53</p>
+
+    <h3>色分け凡例</h3>
+    <ul class="legend-list">
+      <li><span class="slot legend kind-func">機</span> 機能ボタン (戻る・追加・削除など)</li>
+      <li><span class="slot legend kind-data">D</span> データ表示 (現在の編集対象)</li>
+      <li><span class="slot legend kind-nav">N</span> ナビゲーション (前/次ページ・カテゴリ)</li>
+      <li><span class="slot legend kind-confirm">確</span> 確認・実行ボタン</li>
+      <li><span class="slot legend kind-danger">危</span> 削除・キャンセル等の危険操作</li>
+      <li><span class="slot legend kind-bar">E</span> エディタバー (slot 45-53、共通)</li>
+      <li><span class="slot legend kind-fill">.</span> 背景ガラス (操作不可)</li>
+      <li><span class="slot legend kind-grid">G</span> 動的グリッド (アイテム/エントリ表示)</li>
+      <li><span class="slot legend kind-reserved">予</span> 予約スロット (Popup 45-53など)</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>

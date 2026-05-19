@@ -17,8 +17,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 
 /**
@@ -31,9 +31,6 @@ import org.bukkit.inventory.ItemStack
  * - AIR スロット対応: AIR アイコンは空スロット扱い
  */
 class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
-
-  private val playerStates: MutableMap<String, PlayerPointShopState> = mutableMapOf()
-  private val activePlayers: MutableSet<String> = mutableSetOf()
 
   fun openShop(player: Player, categoryId: String, page: Int = 0) {
     if (!TokenCurrencyManager.isAvailable) {
@@ -49,8 +46,6 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
     val clampedPage = page.coerceIn(0, category.pageCount - 1)
     val state = PlayerPointShopState(categoryId = categoryId, page = clampedPage)
     player.openInventory(buildInventory(player, category, state))
-    playerStates[player.uniqueId.toString()] = state
-    activePlayers.add(player.uniqueId.toString())
   }
 
   private fun buildInventory(
@@ -62,11 +57,13 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
     val balanceText =
         if (EconomyManager.isAvailable) EconomyManager.format(EconomyManager.getBalance(player))
         else "---"
+    val holder = PointShopHolder(state)
     val inv =
         Bukkit.createInventory(
-            null,
+            holder,
             54,
             comp("${c(category.displayName)} &8| &f${state.page+1}&8/&f${category.pageCount}"))
+    holder.attach(inv)
     category.getPage(state.page).forEachIndexed { i, item ->
       if (!item.icon.isAir) {
         inv.setItem(i, buildItemStack(player, item, tokens, balanceText))
@@ -153,8 +150,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent) {
     val player = event.whoClicked as? Player ?: return
-    if (!activePlayers.contains(player.uniqueId.toString())) return
-    val state = playerStates[player.uniqueId.toString()] ?: return
+    val state = (event.view.topInventory.holder as? PointShopHolder)?.state ?: return
     if (event.clickedInventory == player.inventory) {
       if (event.isShiftClick) event.isCancelled = true
       return
@@ -183,13 +179,6 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
         handlePurchase(player, item, state, category)
       }
     }
-  }
-
-  @EventHandler
-  fun onInventoryClose(event: InventoryCloseEvent) {
-    val player = event.player as? Player ?: return
-    activePlayers.remove(player.uniqueId.toString())
-    playerStates.remove(player.uniqueId.toString())
   }
 
   private fun handlePurchase(
@@ -260,11 +249,19 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
     if (newPage !in 0 until category.pageCount) return
     val newState = state.copy(page = newPage)
     player.openInventory(buildInventory(player, category, newState))
-    playerStates[player.uniqueId.toString()] = newState
-    activePlayers.add(player.uniqueId.toString())
   }
 
   private fun handleBack(player: Player) {
     plugin.popupMenuEngine.open(player, "shopindex")
+  }
+
+  private class PointShopHolder(val state: PlayerPointShopState) : InventoryHolder {
+    private lateinit var holderInventory: Inventory
+
+    fun attach(inventory: Inventory) {
+      holderInventory = inventory
+    }
+
+    override fun getInventory(): Inventory = holderInventory
   }
 }

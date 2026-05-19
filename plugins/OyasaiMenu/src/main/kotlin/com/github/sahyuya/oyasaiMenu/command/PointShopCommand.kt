@@ -22,10 +22,6 @@ class PointShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCom
               sender.sendMessage("§cゲーム内から実行してください。")
               return false
             }
-    if (!player.hasPermission("oyasaimenu.use")) {
-      player.sendMessage(c("&cこのコマンドを使う権限がありません。"))
-      return false
-    }
     val cats = plugin.pointShopLoader.getAllCategories()
     if (cats.isEmpty()) {
       player.sendMessage(c("&cポイントショップが設定されていません。"))
@@ -42,7 +38,6 @@ class PointShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCom
       alias: String,
       args: Array<out String>
   ): List<String>? {
-    if (!sender.hasPermission("oyasaimenu.use")) return emptyList()
     if (args.size > 1) return emptyList()
     val prefix = args.firstOrNull() ?: ""
     return plugin.pointShopLoader.getAllCategories().keys.filter {

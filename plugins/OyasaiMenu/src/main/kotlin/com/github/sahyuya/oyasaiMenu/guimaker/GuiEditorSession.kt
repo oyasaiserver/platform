@@ -28,7 +28,7 @@ class GuiEditorSession(
   var surface: GuiEditableSurface = GuiEditableSurface.NORMAL
   var popupMeta: PopupEditorMeta? = null
   val slots: MutableMap<Int, GuiSlotDef> = mutableMapOf()
-  var pendingInput: PendingInput? = null
+  @Volatile var pendingInput: PendingInput? = null
   var canvasInventory: Inventory? = null
   var contextSlot: Int = -1
   var soundVolume: Float = 1.0f

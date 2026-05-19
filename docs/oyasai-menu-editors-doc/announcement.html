@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>お知らせ本エディタ</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>お知らせ本エディタ <small>AnnouncementManager</small></h1>
+  <p class="subtitle">openBookEditor — WRITABLE_BOOK を使った独自エディタ</p>
+</header>
+
+<nav class="sidebar">
+  <a href="index.html" class="toc-back">← 目次に戻る</a>
+  <h2>このページの内容</h2>
+  <ol>
+    <li><a href="#concept">概念</a></li>
+    <li><a href="#flow">編集フロー</a></li>
+    <li><a href="#yaml">YAMLストレージ</a></li>
+    <li><a href="#cmds">コマンド一覧</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+
+<section id="concept" class="card">
+  <h2>概念</h2>
+  <p>
+    OyasaiMenuの<strong>お知らせ</strong>は、メインメニュー(root)に表示されるアナウンスメント。タイトル1個 + 本文の複数行構成です。
+    編集は <strong>WRITABLE_BOOK</strong> をプレイヤーに渡して本のUIで行う独自のエディタを採用しています。
+  </p>
+
+  <h3>データモデル</h3>
+  <pre><code>data class Announcement(val title: String, val body: List&lt;String&gt;)
+
+private var currentTitle: String = "&f✦ ようこそ！"
+private var currentBody: MutableList&lt;String&gt; = mutableListOf()</code></pre>
+
+  <h3>保存先</h3>
+  <p><code>plugins/OyasaiMenu/announcements.yml</code></p>
+  <p>YAML構造（リスト形式だが現状は1件のみ管理）:</p>
+  <pre><code>announcements:
+  - title: "&f✦ ようこそ！"
+    body:
+      - "&7今日は晴れです"
+      - "&71日1回でログインボーナス"</code></pre>
+</section>
+
+<section id="flow" class="card">
+  <h2>編集フロー</h2>
+
+  <div class="flow">
+    <div class="flow-step">
+      <strong>1. エディタ起動</strong>
+      <span><code>/menuedit announce book</code> または管理者メニュー slot 12 から</span>
+    </div>
+    <div class="flow-step">
+      <strong>2. 本を受け取る</strong>
+      <span><code>WRITABLE_BOOK</code> を <code>player.inventory.firstEmpty()</code> に配置、handheldスロットに切替</span>
+    </div>
+    <div class="flow-step">
+      <strong>3. 本を開く</strong>
+      <span>右クリックで本のUIが開く（Minecraft標準UI）</span>
+    </div>
+    <div class="flow-step">
+      <strong>4. テキスト入力</strong>
+      <span>各ページに文字を書く。改行ごとに本文の1行になる</span>
+    </div>
+    <div class="flow-step">
+      <strong>5. 確定</strong>
+      <span><strong>Done</strong>: 本文だけ更新 / <strong>署名</strong>: 署名名がタイトルになる</span>
+    </div>
+    <div class="flow-step">
+      <strong>6. 本を削除</strong>
+      <span>3 tick 後に対象スロットから本を削除 (フォールバックでインベ全走査)</span>
+    </div>
+  </div>
+
+  <h3>初期テキスト</h3>
+  <p>currentBody が空の場合は説明ページが入り、空でなければ既存本文がページ254文字単位で分割される。</p>
+  <pre><code>ここにお知らせの内容を書いてください。
+改行ごとに Lore の1行になります。
+
+Done のみ → Lore を更新 (本は消えます)
+署名して確定 → 署名名がタイトルになります (本は消えます)</code></pre>
+
+  <h3>イベント処理 (onPlayerEditBook)</h3>
+  <ol>
+    <li><code>pendingBookEditors</code> から渡したスロット番号を取得</li>
+    <li>本のページから本文を抽出 → 改行で分割し空行を除外</li>
+    <li><code>currentBody</code> を更新</li>
+    <li>署名時(<code>event.isSigning</code>): タイトルを更新、<code>event.isCancelled = true</code> でWRITTEN_BOOK化を阻止</li>
+    <li><code>saveToFile()</code> + <code>broadcastRefresh()</code> でメインメニュー再描画</li>
+    <li><code>removeBook(player, slot)</code> で本を削除</li>
+  </ol>
+
+  <h3>broadcastRefresh()</h3>
+  <p>現在 <code>root</code> メニューを開いている全プレイヤーに対し、<code>plugin.menuEngine.openMenu(p, "root")</code> を再実行してお知らせの更新を反映させる。</p>
+</section>
+
+<section id="yaml" class="card">
+  <h2>YAMLストレージ詳細</h2>
+
+  <h3>ロード (parseFile)</h3>
+  <ul>
+    <li><code>announcements.yml</code> をプラグインリソースから初期コピー</li>
+    <li>YAML の <code>announcements</code> リストの先頭要素のみ取り出す</li>
+    <li><code>title</code> = String、<code>body</code> = List&lt;String&gt;</li>
+    <li>解析エラー時はWarningのみ。<code>currentTitle</code>/<code>currentBody</code> は初期値のまま</li>
+  </ul>
+
+  <h3>セーブ (saveToFile)</h3>
+  <p>1件のlinkedMap (title / body) のみのリストとして書き出す。<strong>常に上書き</strong>。</p>
+</section>
+
+<section id="cmds" class="card">
+  <h2>コマンド一覧 (MenuEditCommand)</h2>
+  <table class="cmd-table">
+    <thead><tr><th>コマンド</th><th>動作</th><th>JSON対応</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>/menuedit announce title &lt;text&gt;</code></td>
+        <td>タイトルを更新</td>
+        <td>○ (<code>{</code> 始まりはJSON componentとしてパース)</td>
+      </tr>
+      <tr>
+        <td><code>/menuedit announce line &lt;番号&gt; &lt;text&gt;</code></td>
+        <td>指定行(1始まり)を更新。不足は空行で埋める</td>
+        <td>○</td>
+      </tr>
+      <tr>
+        <td><code>/menuedit announce remove-line &lt;番号&gt;</code></td>
+        <td>指定行を削除</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td><code>/menuedit announce book</code></td>
+        <td>本エディタを開く (closeInventory後 1 tick で書籍を渡す)</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td><code>/menuedit announce show</code></td>
+        <td>現在のタイトル/本文をチャットに表示</td>
+        <td>-</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>JSON パース (parseTextInput)</h3>
+  <pre><code>private fun parseTextInput(raw: String): String {
+  val trimmed = raw.trim()
+  if (!trimmed.startsWith("{")) return trimmed
+  return runCatching {
+    LegacyComponentSerializer.legacyAmpersand()
+        .serialize(GsonComponentSerializer.gson().deserialize(trimmed))
+  }.getOrElse { trimmed }
+}</code></pre>
+  <p class="note">JSON形式の<code>{"text":"...","color":"red"}</code> を渡すと、レガシーカラーコード形式 (<code>&c...</code>) に変換して保存します。</p>
+
+  <h3>Tab補完</h3>
+  <ul>
+    <li>arg1: <code>announce</code>, <code>shop</code>, <code>whitelist</code></li>
+    <li>arg2 (announce): <code>title</code>, <code>line</code>, <code>remove-line</code>, <code>book</code>, <code>show</code></li>
+    <li>arg3 (announce line): 1 〜 (body.size + 1)</li>
+    <li>arg3 (announce remove-line): 1 〜 body.size</li>
+  </ul>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>

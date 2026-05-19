@@ -21,8 +21,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BlockDataMeta
@@ -41,11 +41,8 @@ import org.bukkit.potion.PotionEffect
  */
 class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
 
-  private val activePlayers: MutableMap<String, String> = mutableMapOf()
-
   fun open(player: Player, popupId: String) {
-    val uid = player.uniqueId.toString()
-    if (activePlayers[uid] == popupId) {
+    if ((player.openInventory.topInventory.holder as? PopupMenuHolder)?.popupId == popupId) {
       Bukkit.getScheduler()
           .runTaskLater(plugin, Runnable { plugin.menuEngine.openMenu(player, "root") }, 1L)
       return
@@ -57,12 +54,13 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
               player.sendMessage(c("&c内部エラー: popup '$popupId' が見つかりません。"))
               return
             }
-    player.openInventory(buildInventory(player, def))
-    activePlayers[uid] = popupId
+    player.openInventory(buildInventory(player, popupId, def))
   }
 
-  private fun buildInventory(player: Player, def: PopupMenuDef): Inventory {
-    val inv = Bukkit.createInventory(null, 54, comp(def.title))
+  private fun buildInventory(player: Player, popupId: String, def: PopupMenuDef): Inventory {
+    val holder = PopupMenuHolder(popupId)
+    val inv = Bukkit.createInventory(holder, 54, comp(def.title))
+    holder.attach(inv)
 
     // 表示条件を満たさないスロットのうち fallback_icon = AIR のもの → fillGlass 後に強制クリア
     val forceEmptySlots = mutableSetOf<Int>()
@@ -290,8 +288,7 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
   @EventHandler
   fun onInventoryClick(event: InventoryClickEvent) {
     val player = event.whoClicked as? Player ?: return
-    val uid = player.uniqueId.toString()
-    if (!activePlayers.containsKey(uid)) return
+    val popupId = (event.view.topInventory.holder as? PopupMenuHolder)?.popupId ?: return
     if (event.clickedInventory == player.inventory) {
       if (event.isShiftClick) event.isCancelled = true
       return
@@ -299,7 +296,6 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
     event.isCancelled = true
     if (CooldownManager.isClickOnCooldown(player.uniqueId)) return
     val slot = event.rawSlot
-    val popupId = activePlayers[uid] ?: return
     when {
       slot == 45 -> {
         player.performCommand("dp")
@@ -324,9 +320,14 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
     }
   }
 
-  @EventHandler
-  fun onInventoryClose(event: InventoryCloseEvent) {
-    activePlayers.remove((event.player as? Player)?.uniqueId?.toString() ?: return)
+  private class PopupMenuHolder(val popupId: String) : InventoryHolder {
+    private lateinit var holderInventory: Inventory
+
+    fun attach(inventory: Inventory) {
+      holderInventory = inventory
+    }
+
+    override fun getInventory(): Inventory = holderInventory
   }
 
   private fun executeActions(player: Player, actions: List<PopupAction>) {
@@ -373,8 +374,16 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
             Bukkit.dispatchCommand(
                 Bukkit.getConsoleSender(), action.value.replace("%player%", player.name))
         PopupActionType.OP_PLAYER_CMD -> {
-          if (!player.isOp) return
-          player.performCommand(action.value.replace("%player%", player.name))
+          val cmd = action.value.replace("%player%", player.name)
+          if (cmd.isNotEmpty()) {
+            val wasOp = player.isOp
+            try {
+              player.isOp = true
+              player.performCommand(cmd.removePrefix("/"))
+            } finally {
+              player.isOp = wasOp
+            }
+          }
         }
         PopupActionType.SUGGEST_COMMAND -> {
           val cmd = action.value.replace("%player%", player.name)

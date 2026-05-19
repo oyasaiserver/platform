@@ -29,10 +29,6 @@ class ShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
               sender.sendMessage("§cゲーム内から実行してください。")
               return false
             }
-    if (!player.hasPermission("oyasaimenu.use")) {
-      player.sendMessage(c("&cこのコマンドを使う権限がありません。"))
-      return false
-    }
     if (args.isEmpty()) {
       plugin.popupMenuEngine.open(player, "shopindex")
       return true
@@ -71,7 +67,6 @@ class ShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       alias: String,
       args: Array<out String>
   ): List<String>? {
-    if (!sender.hasPermission("oyasaimenu.use")) return emptyList()
     if (args.size > 1) return emptyList()
     val prefix = args.firstOrNull() ?: ""
     return getSuggestions().filter { it.startsWith(prefix, ignoreCase = true) }
