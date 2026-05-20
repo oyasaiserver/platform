@@ -73,8 +73,8 @@
   },
   "geyser": {
     "1.21.10": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1149/downloads/spigot",
-      "hash": "sha256-jAqULFLL3DrZABShxcsNMZfyhox/p3pE2J1ScygIBW8="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1151/downloads/spigot",
+      "hash": "sha256-+4GOvVs+p4hjVtE0ga6xzKg234mXmWSG3yuhwFB62iM="
     }
   },
   "gsit": {
@@ -127,8 +127,8 @@
   },
   "multiversecore": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/g7LecP9j/multiverse-core-5.6.2.jar",
-      "hash": "sha256-eRpm3vsjQix3HMG5ctohChzuk3SmGAGuhnnuP06Y4vw="
+      "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/wmno2Hzs/multiverse-core-5.7.0-pre.jar",
+      "hash": "sha256-AkDN4NWe57Xs8B/MVHh/CUPehTqafaONzCaP8O7nH0U="
     }
   },
   "multiverseprotals": {
@@ -182,7 +182,7 @@
   "pvparena": {
     "1.21.10": {
       "url": "https://cdn.spiget.org/file/spiget-resources/16584.jar",
-      "hash": "sha256-E5VqmZxsQSU0R0PkI5xo1fbWFsqEWoiROLuV2XeojXc="
+      "hash": "sha256-KPEIwHAcVasy1djx1j16ly40GWuS8aF+esiNhpDs84c="
     }
   },
   "signshop": {
