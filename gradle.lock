@@ -101,46 +101,46 @@
       "hash": "sha256-Q1z/VXiZht7arXF/aPuo1UgklHhWLc2EsirU1lZvRAs="
     }
   },
-  "com.diffplug.spotless:spotless-lib:3.1.2": {
-    "spotless-lib-3.1.2.jar": {
-      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib/3.1.2/spotless-lib-3.1.2.jar",
-      "hash": "sha256-qA4xv2rLSBgCmIvuVVkIFbCYjWhge2pYb/x3XN+Kmz8="
+  "com.diffplug.spotless:spotless-lib:4.5.0": {
+    "spotless-lib-4.5.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib/4.5.0/spotless-lib-4.5.0.jar",
+      "hash": "sha256-mM2f5ktjmNp6kPL9kG7wq8Gg5tZvUZ/mrwilhde7bak="
     },
-    "spotless-lib-3.1.2.module": {
-      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib/3.1.2/spotless-lib-3.1.2.module",
-      "hash": "sha256-jFVmoeOpxnx1eCDU7g3aG6rj3CTeUtJKhKFuAd7FG3E="
+    "spotless-lib-4.5.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib/4.5.0/spotless-lib-4.5.0.module",
+      "hash": "sha256-AlNtIagrdaWmOaPNQWCgg5oanDXy3EwP9FJBtHafXTU="
     },
-    "spotless-lib-3.1.2.pom": {
-      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib/3.1.2/spotless-lib-3.1.2.pom",
-      "hash": "sha256-7ksMx9n2w/cozgczgkS6nTns6MqUmkDlfzEWaTHgiag="
+    "spotless-lib-4.5.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib/4.5.0/spotless-lib-4.5.0.pom",
+      "hash": "sha256-SvSliKd1rChPrVC/EUkkZwAE9rgKCSkT9QSOb9Gj2fI="
     }
   },
-  "com.diffplug.spotless:spotless-lib-extra:3.1.2": {
-    "spotless-lib-extra-3.1.2.jar": {
-      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib-extra/3.1.2/spotless-lib-extra-3.1.2.jar",
-      "hash": "sha256-N8m73mPVzrspMyHBz9BG/HoFzQZqvanaUqpjqOpnb3Q="
+  "com.diffplug.spotless:spotless-lib-extra:4.5.0": {
+    "spotless-lib-extra-4.5.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib-extra/4.5.0/spotless-lib-extra-4.5.0.jar",
+      "hash": "sha256-dU+ATAnfouuNU5YzEdK+aPG0pWIQEdy1UNcC6tKGUdk="
     },
-    "spotless-lib-extra-3.1.2.module": {
-      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib-extra/3.1.2/spotless-lib-extra-3.1.2.module",
-      "hash": "sha256-3F2e6yh8cqlPDlrRFc8YC976BROKnLTElMZ2oRvxGKs="
+    "spotless-lib-extra-4.5.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib-extra/4.5.0/spotless-lib-extra-4.5.0.module",
+      "hash": "sha256-Bf7t0gVQynxXCeUc7zgpPFADpcx/qrdU6dusW3Vd4KU="
     },
-    "spotless-lib-extra-3.1.2.pom": {
-      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib-extra/3.1.2/spotless-lib-extra-3.1.2.pom",
-      "hash": "sha256-Aq6OOHRUkbUkWdJTIphqV1D16qs+WyYc+fj7+bzzM3s="
+    "spotless-lib-extra-4.5.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-lib-extra/4.5.0/spotless-lib-extra-4.5.0.pom",
+      "hash": "sha256-UPJN+KOGtZ48rS2ylhjHOYgEgZAQYENCsX5jxubdPGU="
     }
   },
-  "com.diffplug.spotless:spotless-plugin-gradle:7.0.4": {
-    "spotless-plugin-gradle-7.0.4.jar": {
-      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-plugin-gradle/7.0.4/spotless-plugin-gradle-7.0.4.jar",
-      "hash": "sha256-I1V83sEwtLssotMO2iOYMl4J3+a5kNLqzZ1fOaHe3nE="
+  "com.diffplug.spotless:spotless-plugin-gradle:8.4.0": {
+    "spotless-plugin-gradle-8.4.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-plugin-gradle/8.4.0/spotless-plugin-gradle-8.4.0.jar",
+      "hash": "sha256-oHy1L8S4IhcWeW63AyMQakSjMZ7Itk5ugFb+gn+UOLo="
     },
-    "spotless-plugin-gradle-7.0.4.module": {
-      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-plugin-gradle/7.0.4/spotless-plugin-gradle-7.0.4.module",
-      "hash": "sha256-84xGBPDjvlbQ6KViHb4sPc8K5sEbRTd9YMO6EPUcdqs="
+    "spotless-plugin-gradle-8.4.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-plugin-gradle/8.4.0/spotless-plugin-gradle-8.4.0.module",
+      "hash": "sha256-lQhXXODePA1p+l+xrTWo2/iQKuoQVe/E0328FjyHMmc="
     },
-    "spotless-plugin-gradle-7.0.4.pom": {
-      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-plugin-gradle/7.0.4/spotless-plugin-gradle-7.0.4.pom",
-      "hash": "sha256-Dgkm/VyB7KlFU2R684APUrLbfBpQF6g5FStKxJZHui4="
+    "spotless-plugin-gradle-8.4.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/diffplug/spotless/spotless-plugin-gradle/8.4.0/spotless-plugin-gradle-8.4.0.pom",
+      "hash": "sha256-d0glMskp8EZGF/iXUT/CJNeuMlFeNIKaPO3F5WlH59s="
     }
   },
   "com.discordsrv:discordsrv:1.30.5": {
@@ -2825,30 +2825,30 @@
       "hash": "sha256-IFwDmkLLrjVW776wSkg+s6PPlVC9db+EJg3I8oIY8QU="
     }
   },
-  "org.eclipse.jgit:org.eclipse.jgit:6.10.1.202505221210-r": {
-    "org.eclipse.jgit-6.10.1.202505221210-r.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/eclipse/jgit/org.eclipse.jgit/6.10.1.202505221210-r/org.eclipse.jgit-6.10.1.202505221210-r.jar",
-      "hash": "sha256-jwE1ykXQDE2o57oultROGt5FK/J515yk61SSHo8nlSw="
+  "org.eclipse.jgit:org.eclipse.jgit:7.5.0.202512021534-r": {
+    "org.eclipse.jgit-7.5.0.202512021534-r.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/eclipse/jgit/org.eclipse.jgit/7.5.0.202512021534-r/org.eclipse.jgit-7.5.0.202512021534-r.jar",
+      "hash": "sha256-FZe8eKjYwBFpdtRqlIcqLMKGVnDrpNsLn1GBGzSTbXI="
     },
-    "org.eclipse.jgit-6.10.1.202505221210-r.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/eclipse/jgit/org.eclipse.jgit/6.10.1.202505221210-r/org.eclipse.jgit-6.10.1.202505221210-r.pom",
-      "hash": "sha256-zVAKQncnlazpys4jPeQGGUMRdJR+MNLCRUVGJgA1ztw="
+    "org.eclipse.jgit-7.5.0.202512021534-r.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/eclipse/jgit/org.eclipse.jgit/7.5.0.202512021534-r/org.eclipse.jgit-7.5.0.202512021534-r.pom",
+      "hash": "sha256-bJVN/BDxwwG9uiXT1jCfd0eYBDY891VuUei7NxRVXGQ="
     }
   },
-  "org.eclipse.jgit:org.eclipse.jgit-parent:6.10.1.202505221210-r": {
-    "org.eclipse.jgit-parent-6.10.1.202505221210-r.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/eclipse/jgit/org.eclipse.jgit-parent/6.10.1.202505221210-r/org.eclipse.jgit-parent-6.10.1.202505221210-r.pom",
-      "hash": "sha256-qosjJzQVcamIZ/iB7cYgVHtAmOlR87a72c9wxH4pUMw="
+  "org.eclipse.jgit:org.eclipse.jgit-parent:7.5.0.202512021534-r": {
+    "org.eclipse.jgit-parent-7.5.0.202512021534-r.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/eclipse/jgit/org.eclipse.jgit-parent/7.5.0.202512021534-r/org.eclipse.jgit-parent-7.5.0.202512021534-r.pom",
+      "hash": "sha256-fjiAaoU2kaSdsW6sg2/mtiYnaUOxCLZ3VKPVx0D7vA4="
     }
   },
-  "org.eclipse.platform:org.eclipse.osgi:3.23.0": {
-    "org.eclipse.osgi-3.23.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/eclipse/platform/org.eclipse.osgi/3.23.0/org.eclipse.osgi-3.23.0.jar",
-      "hash": "sha256-GsETVBoZ8McsBCH7JAWN78p+PG8oLl7nPxTSdoqa5lM="
+  "org.eclipse.platform:org.eclipse.osgi:3.24.100": {
+    "org.eclipse.osgi-3.24.100.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/eclipse/platform/org.eclipse.osgi/3.24.100/org.eclipse.osgi-3.24.100.jar",
+      "hash": "sha256-0g+JIDBZb7wsJdoArNvSdQ93zv1oE2wzo+J5uJSYZ6g="
     },
-    "org.eclipse.osgi-3.23.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/eclipse/platform/org.eclipse.osgi/3.23.0/org.eclipse.osgi-3.23.0.pom",
-      "hash": "sha256-tbuXndaxJrjJ1cDVe3aQyhZ0Bz0oQQk7lsWxz0QHEyk="
+    "org.eclipse.osgi-3.24.100.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/eclipse/platform/org.eclipse.osgi/3.24.100/org.eclipse.osgi-3.24.100.pom",
+      "hash": "sha256-+U4i9QNmKcxz7AM41+C5wFx2g70TZ4wWa8p/fIfm+oE="
     }
   },
   "org.eclipse.sisu:org.eclipse.sisu.inject:0.9.0.M2": {
@@ -3727,16 +3727,6 @@
     "slf4j-api-2.0.16.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.pom",
       "hash": "sha256-saAPWxxNvmK4BdZdI5Eab3cGOInXyx6G/oOJ1hkEc/c="
-    }
-  },
-  "org.slf4j:slf4j-api:1.7.36": {
-    "slf4j-api-1.7.36.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
-      "hash": "sha256-0+9XXj5JeWeNwBvx3M5RAhSTtNEft/G+itmCh3wWocA="
-    },
-    "slf4j-api-1.7.36.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.pom",
-      "hash": "sha256-+wRqnCKUN5KLsRwtJ8i113PriiXmDL0lPZhSEN7cJoQ="
     }
   },
   "org.slf4j:slf4j-api:1.7.32": {

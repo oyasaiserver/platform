@@ -46,4 +46,5 @@ updates:
           - "*"
     ignore:
       - dependency-name: "*purpur-api*"
+      - dependency-name: "paper-dev-bundle"
       - dependency-name: "gradle-wrapper"
