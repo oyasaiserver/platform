@@ -16,7 +16,7 @@ jobs:
         with:
           key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
           path: "~/.cache/nix"
-      - uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f
+      - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3
         with:
           extra_nix_config: |
             extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
