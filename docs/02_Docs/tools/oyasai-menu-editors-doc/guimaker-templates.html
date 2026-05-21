@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>GuiMaker テンプレート管理</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>GuiMaker <small>テンプレート管理</small></h1>
+  <p class="subtitle">openTemplateHub / openTemplateEditor / openTemplateDeleteConfirm — GuiTemplateStore</p>
+</header>
+
+<nav class="sidebar">
+  <a href="index.html" class="toc-back">← 目次に戻る</a>
+  <h2>このページの内容</h2>
+  <ol>
+    <li><a href="#concept">テンプレートの概念</a></li>
+    <li><a href="#hub">テンプレートハブ</a></li>
+    <li><a href="#editor">テンプレートエディタ</a></li>
+    <li><a href="#delete">削除確認</a></li>
+    <li><a href="#approve">公式承認 (approve)</a></li>
+    <li><a href="#paths">保存先パス</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+
+<section id="concept" class="card">
+  <h2>テンプレートの概念</h2>
+  <p>
+    GuiMakerには、編集結果を「テンプレート」として保存・再利用できる機能があります。
+    テンプレートは <strong>2軸 × 2軸 = 4種類</strong> に分類されます。
+  </p>
+
+  <h3>Kind (種類)</h3>
+  <ul>
+    <li><code>MENU</code> — GUI全体（メニュー54枠分の構造を丸ごと）</li>
+    <li><code>BLOCK</code> — 単一スロットのアイテム + 設定 (PDC)</li>
+  </ul>
+
+  <h3>Scope (スコープ)</h3>
+  <ul>
+    <li><code>PERSONAL</code> — 個人テンプレート (作成者のみアクセス可)</li>
+    <li><code>SHARED</code> — 公式テンプレート (全員アクセス可、OPコマンドで承認)</li>
+  </ul>
+
+  <h3>保存ディレクトリ</h3>
+  <pre><code>plugins/OyasaiMenu/guimaker-templates/
+├── players/&lt;owner-uuid&gt;/
+│   ├── menus/    # 個人 MENU テンプレート
+│   └── blocks/   # 個人 BLOCK テンプレート
+└── shared/
+    ├── menus/    # 公式 MENU テンプレート
+    └── blocks/   # 公式 BLOCK テンプレート</code></pre>
+
+  <h3>GuiTemplateEntry</h3>
+  <pre><code>data class GuiTemplateEntry(
+    val id: String,        // ファイル名から .yml を取り除いたID (パス区切り含む)
+    val kind: GuiTemplateKind,
+    val scope: GuiTemplateScope,
+    val file: File
+)</code></pre>
+</section>
+
+<section id="hub" class="card">
+  <h2>テンプレートハブ (openTemplateHub)</h2>
+  <p>テンプレート一覧と保存・読み込み・削除の起点。エディタバーの slot 49 から開けます。</p>
+
+  <div class="grid">
+    <div class="slot kind-fill"><span class="num">0</span></div>
+    <div class="slot kind-fill"><span class="num">1</span></div>
+    <div class="slot kind-fill"><span class="num">2</span></div>
+    <div class="slot kind-fill"><span class="num">3</span></div>
+    <div class="slot kind-data"><span class="num">4</span><span class="icon">⭐</span><span class="label">テンプレート</span></div>
+    <div class="slot kind-fill"><span class="num">5</span></div>
+    <div class="slot kind-fill"><span class="num">6</span></div>
+    <div class="slot kind-fill"><span class="num">7</span></div>
+    <div class="slot kind-fill"><span class="num">8</span></div>
+    <div class="slot kind-fill"><span class="num">9</span></div>
+    <div class="slot kind-confirm"><span class="num">10</span><span class="icon">📦</span><span class="label">GUI保存</span></div>
+    <div class="slot kind-confirm"><span class="num">11</span><span class="icon">🖼</span><span class="label">ブロック保存</span></div>
+    <div class="slot kind-func"><span class="num">12</span><span class="icon">⭐</span><span class="label">公式情報</span></div>
+    <div class="slot kind-fill"><span class="num">13</span></div>
+    <div class="slot kind-fill"><span class="num">14</span></div>
+    <div class="slot kind-fill"><span class="num">15</span></div>
+    <div class="slot kind-fill"><span class="num">16</span></div>
+    <div class="slot kind-fill"><span class="num">17</span></div>
+    <div class="slot kind-fill"><span class="num">18</span></div>
+    <div class="slot kind-grid"><span class="num">19</span><span class="label">T1</span></div>
+    <div class="slot kind-grid"><span class="num">20</span><span class="label">T2</span></div>
+    <div class="slot kind-grid"><span class="num">21</span></div>
+    <div class="slot kind-grid"><span class="num">22</span></div>
+    <div class="slot kind-grid"><span class="num">23</span></div>
+    <div class="slot kind-grid"><span class="num">24</span></div>
+    <div class="slot kind-grid"><span class="num">25</span></div>
+    <div class="slot kind-fill"><span class="num">26</span></div>
+    <div class="slot kind-fill"><span class="num">27</span></div>
+    <div class="slot kind-grid"><span class="num">28</span></div>
+    <div class="slot kind-grid"><span class="num">29</span></div>
+    <div class="slot kind-grid"><span class="num">30</span></div>
+    <div class="slot kind-grid"><span class="num">31</span></div>
+    <div class="slot kind-grid"><span class="num">32</span></div>
+    <div class="slot kind-grid"><span class="num">33</span></div>
+    <div class="slot kind-grid"><span class="num">34</span></div>
+    <div class="slot kind-fill"><span class="num">35</span></div>
+    <div class="slot kind-fill"><span class="num">36</span></div>
+    <div class="slot kind-grid"><span class="num">37</span></div>
+    <div class="slot kind-grid"><span class="num">38</span></div>
+    <div class="slot kind-grid"><span class="num">39</span></div>
+    <div class="slot kind-grid"><span class="num">40</span></div>
+    <div class="slot kind-grid"><span class="num">41</span></div>
+    <div class="slot kind-grid"><span class="num">42</span></div>
+    <div class="slot kind-grid"><span class="num">43</span></div>
+    <div class="slot kind-fill"><span class="num">44</span></div>
+    <div class="slot kind-data"><span class="num">45</span><span class="icon">📖</span><span class="label">一覧情報</span></div>
+    <div class="slot kind-fill"><span class="num">46</span></div>
+    <div class="slot kind-fill"><span class="num">47</span></div>
+    <div class="slot kind-nav"><span class="num">48</span><span class="icon">⬅</span><span class="label">前ページ</span></div>
+    <div class="slot kind-func"><span class="num">49</span><span class="icon">🔄</span><span class="label">表示切替</span></div>
+    <div class="slot kind-nav"><span class="num">50</span><span class="icon">➡</span><span class="label">次ページ</span></div>
+    <div class="slot kind-fill"><span class="num">51</span></div>
+    <div class="slot kind-fill"><span class="num">52</span></div>
+    <div class="slot kind-func"><span class="num">53</span><span class="icon">⬅</span><span class="label">編集に戻る</span></div>
+  </div>
+  <p class="caption">背景: YELLOW_STAINED_GLASS_PANE / TEMPLATE_GRID_SLOTS = 19-25, 28-34, 37-43 (合計21件/ページ)</p>
+
+  <h3>クリック動作</h3>
+  <table>
+    <thead><tr><th>slot</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td>10</td><td>現在のGUIを個人テンプレートに保存 (<code>GuiTemplateStore.saveMenuTemplate</code>)</td></tr>
+      <tr><td>11</td><td>選択中スロットのブロックを保存 (<code>saveBlockTemplate</code>)</td></tr>
+      <tr><td>12</td><td>公式テンプレートの説明（クリックなしの情報表示）</td></tr>
+      <tr><td>49</td><td>表示切替: 左クリック=カテゴリ(ALL/MENU/BLOCK/PERSONAL/SHARED) / 右クリック=ソート(更新降順/昇順/名前順/名前逆順)</td></tr>
+      <tr><td>53</td><td>編集に戻る (<code>returnFromTemplateHub</code>)</td></tr>
+      <tr><td>グリッド(19-43)</td><td>テンプレート選択 (下記参照)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>テンプレートクリックの種別</h3>
+  <table>
+    <thead><tr><th>クリック</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td>左クリック</td><td>テンプレートを現在の編集に読み込み (MENUは丸ごと置換、BLOCKは選択中スロットへ配置)</td></tr>
+      <tr><td>右クリック</td><td>テンプレートをUIで編集 (<code>openTemplateEditor</code>)</td></tr>
+      <tr><td>Shift+右クリック</td><td>削除確認画面 (<code>openTemplateDeleteConfirm</code>)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>カテゴリ・ソート (内部 enum)</h3>
+  <pre><code>enum class TemplateCategory(val displayName: String) {
+  ALL("すべて"), MENU("GUI"), BLOCK("ブロック"), PERSONAL("個人"), SHARED("公式")
+}
+
+enum class TemplateSortMode(val displayName: String) {
+  UPDATED_DESC("新しい順"), UPDATED_ASC("古い順"),
+  NAME_ASC("名前順"), NAME_DESC("名前逆順")
+}</code></pre>
+</section>
+
+<section id="editor" class="card">
+  <h2>テンプレートエディタ (openTemplateEditor)</h2>
+  <p>既存テンプレートを右クリックすると、そのテンプレートを<strong>編集モード</strong>で開けます。</p>
+
+  <h3>MENU の場合</h3>
+  <ul>
+    <li><code>GuiMakerExporter.loadFileIntoSession</code> でテンプレートファイルをセッションに読み込み</li>
+    <li>キャンバスを開く (タイトルが <code>"&d[テンプレート] &lt;title&gt;"</code> に)</li>
+    <li>エディタバーの slot 48 が「テンプレート保存」に変化</li>
+    <li>キャンバス変更ごとに <code>saveWorkingCopy</code> がテンプレートファイルへ自動保存</li>
+  </ul>
+
+  <h3>BLOCK の場合</h3>
+  <ul>
+    <li><code>GuiTemplateStore.loadBlockTemplate</code> で読み込み</li>
+    <li><strong>54スロットのキャンバス</strong>を作り、slot 22 (<code>TEMPLATE_BLOCK_EDIT_SLOT</code>) にアイテムを配置</li>
+    <li>そのままコンテキストメニューを開く (<code>openContextMenu(player, session, 22)</code>)</li>
+  </ul>
+
+  <h3>session.templateEditTarget</h3>
+  <p>編集中のテンプレートを表すフィールド。これが <code>null</code> でない場合、保存先はライブYAMLではなくテンプレートファイル。</p>
+</section>
+
+<section id="delete" class="card">
+  <h2>削除確認 (openTemplateDeleteConfirm)</h2>
+  <p>Shift+右クリックで開く赤背景の確認画面。</p>
+  <ul>
+    <li>背景: <code>RED_STAINED_GLASS_PANE</code></li>
+    <li>slot 13: <code>TNT</code> + 対象情報 (scope, kind, id)</li>
+    <li>slot 20: 実行する (<code>LIME_CONCRETE</code>) — <code>GuiTemplateStore.deleteTemplate</code></li>
+    <li>slot 24: キャンセル (<code>RED_CONCRETE</code>) — テンプレートハブに戻る</li>
+  </ul>
+</section>
+
+<section id="approve" class="card">
+  <h2>公式承認コマンド (template approve)</h2>
+  <p>個人テンプレートをコピーして公式 (shared) フォルダに格納するOPコマンド。</p>
+  <pre><code>/guimaker template approve &lt;player|uuid&gt; &lt;menu|block&gt; &lt;template-id&gt; [official-id]</code></pre>
+
+  <h3>処理 (GuiTemplateStore.approvePersonalTemplate)</h3>
+  <ol>
+    <li><code>sourceId</code>/<code>officialId</code> を <code>sanitizeId</code> でバリデーション</li>
+    <li>個人テンプレートファイルを取得・存在チェック</li>
+    <li><code>sharedDir</code> 配下に <code>Files.copy(REPLACE_EXISTING)</code></li>
+    <li>成功時は相対パスを返却（"/guimaker-templates/shared/menus/foo.yml" のような形式）</li>
+  </ol>
+
+  <h3>ID制約 (idPattern)</h3>
+  <pre><code>Regex("[a-zA-Z0-9_.-]+(?:/[a-zA-Z0-9_.-]+)*")</code></pre>
+  <ul>
+    <li>英数字・<code>_</code>・<code>-</code>・<code>.</code> と階層区切り <code>/</code> のみ</li>
+    <li><code>.</code> または <code>..</code> 単独の階層は禁止</li>
+  </ul>
+</section>
+
+<section id="paths" class="card">
+  <h2>保存先パス完全リスト</h2>
+  <table>
+    <thead><tr><th>内容</th><th>パス</th></tr></thead>
+    <tbody>
+      <tr><td>個人MENU テンプレート</td><td><code>guimaker-templates/players/&lt;uuid&gt;/menus/&lt;id&gt;.yml</code></td></tr>
+      <tr><td>個人BLOCK テンプレート</td><td><code>guimaker-templates/players/&lt;uuid&gt;/blocks/&lt;id&gt;.yml</code></td></tr>
+      <tr><td>公式MENU テンプレート</td><td><code>guimaker-templates/shared/menus/&lt;id&gt;.yml</code></td></tr>
+      <tr><td>公式BLOCK テンプレート</td><td><code>guimaker-templates/shared/blocks/&lt;id&gt;.yml</code></td></tr>
+      <tr><td>個人お気に入り (アクション)</td><td><code>favorites/&lt;uuid&gt;.yml</code></td></tr>
+    </tbody>
+  </table>
+  <p class="caption">ルート: <code>plugins/OyasaiMenu/</code></p>
+
+  <h3>BLOCKテンプレートのYAML構造</h3>
+  <pre><code>template:
+  kind: block
+  source-menu: &lt;menu-id&gt;
+  source-slot: &lt;slot&gt;
+item:
+  icon: &lt;MATERIAL&gt;
+  name: &lt;displayName&gt;
+  lore: [...]
+  permission: &lt;node or lpgroup:xxx&gt;
+  enchanted: true|false
+  actions:
+    - type: &lt;TYPE&gt;
+      &lt;key&gt;: &lt;value&gt;
+    - type: ...</code></pre>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>

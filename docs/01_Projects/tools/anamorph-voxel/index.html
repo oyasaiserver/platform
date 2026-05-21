@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNG to Trapezoid VOX</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #15171a;
+      color: #f2f4f7;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      padding: 18px;
+      background: #20242a;
+      border-right: 1px solid #343a42;
+      overflow: auto;
+    }
+
+    main {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 18px;
+      margin: 0 0 14px;
+      font-weight: 700;
+    }
+
+    .drop-zone {
+      border: 2px dashed #596170;
+      border-radius: 8px;
+      padding: 18px;
+      text-align: center;
+      color: #c9d0dc;
+      margin-bottom: 16px;
+      background: #181b20;
+    }
+
+    .drop-zone.dragover {
+      border-color: #7db7ff;
+      background: #1f2b38;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .control {
+      margin: 15px 0;
+    }
+
+    .control label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #d8dde6;
+    }
+
+    input[type="range"] {
+      width: 100%;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 7px;
+      padding: 11px 12px;
+      margin-top: 14px;
+      background: #4d9cff;
+      color: #07111f;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .stats {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 7px;
+      background: #181b20;
+      color: #b8c0cc;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    canvas.preview {
+      display: block;
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <h1>PNG to Trapezoid VOX</h1>
+
+    <div id="dropZone" class="drop-zone">
+      PNGをドラッグ&ドロップ
+      <input id="fileInput" type="file" accept="image/png,image/*" />
+    </div>
+
+    <div class="control">
+      <label><span>front_span</span><strong id="frontSpanValue">32</strong></label>
+      <input id="frontSpan" type="range" min="1" max="128" value="32" />
+    </div>
+
+    <div class="control">
+      <label><span>back_span</span><strong id="backSpanValue">8</strong></label>
+      <input id="backSpan" type="range" min="1" max="128" value="8" />
+    </div>
+
+    <div class="control">
+      <label><span>depth</span><strong id="depthValue">32</strong></label>
+      <input id="depth" type="range" min="1" max="128" value="32" />
+    </div>
+
+    <div class="control">
+      <label><span>max_span</span><strong id="maxSpanValue">64</strong></label>
+      <input id="maxSpan" type="range" min="1" max="256" value="64" />
+    </div>
+
+    <div class="control">
+      <label><span>gap_layers</span><strong id="gapLayersValue">0</strong></label>
+      <input id="gapLayers" type="range" min="0" max="16" value="0" />
+    </div>
+
+    <button id="downloadButton" disabled>.vox をダウンロード</button>
+
+    <div class="stats" id="stats">
+      PNG未読み込み
+    </div>
+  </aside>
+
+  <main>
+    <canvas id="threeCanvas" class="preview"></canvas>
+  </main>
+
+  <script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js";
+    import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js";
+
+    const palette = [
+      [0, 0, 0, 0],
+      [48, 48, 48, 255],
+      [112, 112, 112, 255],
+      [176, 176, 176, 255],
+      [240, 240, 240, 255],
+    ];
+
+    const els = {
+      fileInput: document.getElementById("fileInput"),
+      dropZone: document.getElementById("dropZone"),
+      downloadButton: document.getElementById("downloadButton"),
+      stats: document.getElementById("stats"),
+      frontSpan: document.getElementById("frontSpan"),
+      backSpan: document.getElementById("backSpan"),
+      depth: document.getElementById("depth"),
+      maxSpan: document.getElementById("maxSpan"),
+      gapLayers: document.getElementById("gapLayers"),
+      frontSpanValue: document.getElementById("frontSpanValue"),
+      backSpanValue: document.getElementById("backSpanValue"),
+      depthValue: document.getElementById("depthValue"),
+      maxSpanValue: document.getElementById("maxSpanValue"),
+      gapLayersValue: document.getElementById("gapLayersValue"),
+      threeCanvas: document.getElementById("threeCanvas"),
+    };
+
+    let sourceBitmap = null;
+    let latestVoxels = [];
+    let latestSpec = null;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x15171a);
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
+    camera.position.set(90, 80, 110);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas: els.threeCanvas,
+      antialias: true,
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    dirLight.position.set(80, 120, 100);
+    scene.add(dirLight);
+
+    const grid = new THREE.GridHelper(160, 16, 0x4d5663, 0x2f353d);
+    grid.rotation.x = Math.PI / 2;
+    scene.add(grid);
+
+    const previewGroup = new THREE.Group();
+    scene.add(previewGroup);
+
+    const cubeGeometry = new THREE.BoxGeometry(0.95, 0.95, 0.95);
+    const materials = {
+      1: new THREE.MeshLambertMaterial({ color: 0x303030 }),
+      2: new THREE.MeshLambertMaterial({ color: 0x707070 }),
+      3: new THREE.MeshLambertMaterial({ color: 0xb0b0b0 }),
+      4: new THREE.MeshLambertMaterial({ color: 0xf0f0f0 }),
+    };
+
+    function quantizeToPaletteIndex(value) {
+      if (value < 64) return 1;
+      if (value < 128) return 2;
+      if (value < 192) return 3;
+      return 4;
+    }
+
+    function getSpec() {
+      const frontSpan = Number(els.frontSpan.value);
+      const backSpan = Number(els.backSpan.value);
+      const depth = Number(els.depth.value);
+      const maxSpan = Number(els.maxSpan.value);
+
+      return {
+        front_span: Math.min(frontSpan, maxSpan),
+        back_span: Math.min(backSpan, maxSpan),
+        size_x: maxSpan,
+        size_y: maxSpan,
+        size_z: depth,
+        max_span: maxSpan,
+      };
+    }
+
+    function computeCrossSpans(spec, gapLayers = 0) {
+      const spans = [];
+
+      for (let z = 0; z < spec.size_z; z++) {
+        if (gapLayers > 0 && z % (gapLayers + 1) !== 0) {
+          spans.push(0);
+          continue;
+        }
+
+        if (spec.size_z === 1) {
+          spans.push(Math.round(spec.front_span));
+          continue;
+        }
+
+        const t = z / (spec.size_z - 1);
+        const span = Math.round(spec.front_span + (spec.back_span - spec.front_span) * t);
+        spans.push(Math.max(1, Math.min(spec.max_span, span)));
+      }
+
+      return spans;
+    }
+
+    function readResizedPixels(bitmap, span) {
+      const canvas = document.createElement("canvas");
+      canvas.width = span;
+      canvas.height = span;
+
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      ctx.imageSmoothingEnabled = false;
+      ctx.clearRect(0, 0, span, span);
+      ctx.drawImage(bitmap, 0, 0, span, span);
+
+      return ctx.getImageData(0, 0, span, span).data;
+    }
+
+    function generateTrapezoidVoxels(frontBitmap, spec, spans) {
+      const voxels = [];
+      const resizedCache = new Map();
+
+      for (let z = 0; z < spec.size_z; z++) {
+        const span = spans[z];
+        if (span === 0) continue;
+
+        let data = resizedCache.get(span);
+        if (!data) {
+          data = readResizedPixels(frontBitmap, span);
+          resizedCache.set(span, data);
+        }
+
+        const offset = Math.floor((spec.size_x - span) / 2);
+
+        for (let row = 0; row < span; row++) {
+          for (let col = 0; col < span; col++) {
+            const i = (row * span + col) * 4;
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const value = Math.round((r + g + b) / 3);
+            const idx = quantizeToPaletteIndex(value);
+
+            voxels.push({
+              x: offset + col,
+              y: offset + (span - 1 - row),
+              z,
+              idx,
+            });
+          }
+        }
+      }
+
+      return voxels;
+    }
+
+    function makeChunk(id, content) {
+      const chunk = new Uint8Array(12 + content.length);
+      const view = new DataView(chunk.buffer);
+
+      chunk[0] = id.charCodeAt(0);
+      chunk[1] = id.charCodeAt(1);
+      chunk[2] = id.charCodeAt(2);
+      chunk[3] = id.charCodeAt(3);
+
+      view.setUint32(4, content.length, true);
+      view.setUint32(8, 0, true);
+      chunk.set(content, 12);
+
+      return chunk;
+    }
+
+    function writeVox(voxels, spec) {
+      const sizeContent = new Uint8Array(12);
+      const sizeView = new DataView(sizeContent.buffer);
+      sizeView.setUint32(0, spec.size_x, true);
+      sizeView.setUint32(4, spec.size_y, true);
+      sizeView.setUint32(8, spec.size_z, true);
+      const sizeChunk = makeChunk("SIZE", sizeContent);
+
+      const xyziContent = new Uint8Array(4 + voxels.length * 4);
+      const xyziView = new DataView(xyziContent.buffer);
+      xyziView.setUint32(0, voxels.length, true);
+
+      for (let i = 0; i < voxels.length; i++) {
+        const base = 4 + i * 4;
+        xyziContent[base] = voxels[i].x;
+        xyziContent[base + 1] = voxels[i].y;
+        xyziContent[base + 2] = voxels[i].z;
+        xyziContent[base + 3] = voxels[i].idx;
+      }
+
+      const xyziChunk = makeChunk("XYZI", xyziContent);
+
+      const rgbaContent = new Uint8Array(1024);
+      for (let i = 0; i < 256; i++) {
+        const color = palette[i] || [0, 0, 0, 0];
+        rgbaContent[i * 4] = color[0];
+        rgbaContent[i * 4 + 1] = color[1];
+        rgbaContent[i * 4 + 2] = color[2];
+        rgbaContent[i * 4 + 3] = color[3];
+      }
+
+      const rgbaChunk = makeChunk("RGBA", rgbaContent);
+
+      const childrenSize = sizeChunk.length + xyziChunk.length + rgbaChunk.length;
+      const totalSize = 8 + 12 + childrenSize;
+      const out = new Uint8Array(totalSize);
+      const view = new DataView(out.buffer);
+
+      out[0] = "V".charCodeAt(0);
+      out[1] = "O".charCodeAt(0);
+      out[2] = "X".charCodeAt(0);
+      out[3] = " ".charCodeAt(0);
+      view.setUint32(4, 150, true);
+
+      out[8] = "M".charCodeAt(0);
+      out[9] = "A".charCodeAt(0);
+      out[10] = "I".charCodeAt(0);
+      out[11] = "N".charCodeAt(0);
+      view.setUint32(12, 0, true);
+      view.setUint32(16, childrenSize, true);
+
+      let offset = 20;
+      out.set(sizeChunk, offset);
+      offset += sizeChunk.length;
+      out.set(xyziChunk, offset);
+      offset += xyziChunk.length;
+      out.set(rgbaChunk, offset);
+
+      return out;
+    }
+
+    function clearPreview() {
+      while (previewGroup.children.length) {
+        const child = previewGroup.children.pop();
+        child.geometry.dispose();
+        if (Array.isArray(child.material)) {
+          child.material.forEach((mat) => mat.dispose());
+        }
+      }
+    }
+
+    function updatePreview(voxels, spec) {
+      clearPreview();
+
+      const buckets = { 1: [], 2: [], 3: [], 4: [] };
+      for (const voxel of voxels) {
+        buckets[voxel.idx].push(voxel);
+      }
+
+      const matrix = new THREE.Matrix4();
+      const centerX = (spec.size_x - 1) / 2;
+      const centerY = (spec.size_y - 1) / 2;
+      const centerZ = (spec.size_z - 1) / 2;
+
+      for (const idx of [1, 2, 3, 4]) {
+        const list = buckets[idx];
+        if (list.length === 0) continue;
+
+        const mesh = new THREE.InstancedMesh(cubeGeometry, materials[idx], list.length);
+        mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+
+        for (let i = 0; i < list.length; i++) {
+          const v = list[i];
+          matrix.makeTranslation(v.x - centerX, v.z - centerZ, v.y - centerY);
+          mesh.setMatrixAt(i, matrix);
+        }
+
+        mesh.instanceMatrix.needsUpdate = true;
+        previewGroup.add(mesh);
+      }
+
+      controls.target.set(0, 0, 0);
+      controls.update();
+    }
+
+    function updateLabels() {
+      els.frontSpanValue.textContent = els.frontSpan.value;
+      els.backSpanValue.textContent = els.backSpan.value;
+      els.depthValue.textContent = els.depth.value;
+      els.maxSpanValue.textContent = els.maxSpan.value;
+      els.gapLayersValue.textContent = els.gapLayers.value;
+    }
+
+    function rebuild() {
+      updateLabels();
+
+      if (!sourceBitmap) {
+        els.stats.textContent = "PNG未読み込み";
+        return;
+      }
+
+      const spec = getSpec();
+      const gapLayers = Number(els.gapLayers.value);
+      const spans = computeCrossSpans(spec, gapLayers);
+      const voxels = generateTrapezoidVoxels(sourceBitmap, spec, spans);
+
+      latestSpec = spec;
+      latestVoxels = voxels;
+
+      updatePreview(voxels, spec);
+
+      const visibleLayers = spans.filter((span) => span > 0).length;
+      els.stats.innerHTML = [
+        `画像: ${sourceBitmap.width} x ${sourceBitmap.height}px`,
+        `VOXサイズ: ${spec.size_x} x ${spec.size_y} x ${spec.size_z}`,
+        `実層: ${visibleLayers}`,
+        `Voxel数: ${voxels.length.toLocaleString()}`,
+      ].join("<br>");
+
+      els.downloadButton.disabled = voxels.length === 0;
+    }
+
+    async function loadFile(file) {
+      if (!file) return;
+      const bitmap = await createImageBitmap(file);
+      sourceBitmap = bitmap;
+      rebuild();
+    }
+
+    els.fileInput.addEventListener("change", (event) => {
+      loadFile(event.target.files[0]);
+    });
+
+    for (const input of [els.frontSpan, els.backSpan, els.depth, els.maxSpan, els.gapLayers]) {
+      input.addEventListener("input", rebuild);
+    }
+
+    els.dropZone.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      els.dropZone.classList.add("dragover");
+    });
+
+    els.dropZone.addEventListener("dragleave", () => {
+      els.dropZone.classList.remove("dragover");
+    });
+
+    els.dropZone.addEventListener("drop", (event) => {
+      event.preventDefault();
+      els.dropZone.classList.remove("dragover");
+      loadFile(event.dataTransfer.files[0]);
+    });
+
+    els.downloadButton.addEventListener("click", () => {
+      if (!latestSpec || latestVoxels.length === 0) return;
+
+      const bytes = writeVox(latestVoxels, latestSpec);
+      const blob = new Blob([bytes], { type: "application/octet-stream" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "trapezoid.vox";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+    });
+
+    function resizeRenderer() {
+      const rect = renderer.domElement.getBoundingClientRect();
+      const width = Math.max(1, Math.floor(rect.width));
+      const height = Math.max(1, Math.floor(rect.height));
+
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+
+    window.addEventListener("resize", resizeRenderer);
+
+    function animate() {
+      resizeRenderer();
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+
+    updateLabels();
+    animate();
+  </script>
+</body>
+</html>

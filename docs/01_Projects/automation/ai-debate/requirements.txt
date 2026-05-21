@@ -1,0 +1,2 @@
+# No third-party dependencies required.
+# Requires: claude CLI and codex CLI installed and authenticated.

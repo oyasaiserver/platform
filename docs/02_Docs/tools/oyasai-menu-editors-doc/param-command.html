@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>可変コマンドエディタ</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>可変コマンドエディタ <small>ParameterCommandEngine</small></h1>
+  <p class="subtitle">PARAM_COMMAND — プレースホルダ付きコマンドのGUI入力</p>
+</header>
+
+<nav class="sidebar">
+  <a href="index.html" class="toc-back">← 目次に戻る</a>
+  <h2>このページの内容</h2>
+  <ol>
+    <li><a href="#concept">概念とユースケース</a></li>
+    <li><a href="#layout">レイアウト</a></li>
+    <li><a href="#types">パラメータタイプ</a></li>
+    <li><a href="#actions">操作と挙動</a></li>
+    <li><a href="#exec">実行モード</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+
+<section id="concept" class="card">
+  <h2>概念とユースケース</h2>
+  <p>
+    OyasaiMenuのアクション <code>PARAM_COMMAND</code> は、コマンドテンプレート内の <code>{name}</code> プレースホルダを
+    プレイヤーが<strong>GUIで対話的に値を入力</strong>してから実行するための仕組みです。
+  </p>
+
+  <h3>典型例</h3>
+  <ul>
+    <li><code>//stack {amount}</code> — WorldEditのstack数を画面入力</li>
+    <li><code>give {player} diamond {count}</code> — 対象プレイヤーと個数を選んで配布</li>
+    <li><code>gamemode {mode} {player}</code> — モードとプレイヤーをenumで選択</li>
+  </ul>
+
+  <h3>プレースホルダのパターン</h3>
+  <pre><code>// 正規表現
+Regex("\\{([A-Za-z][A-Za-z0-9_.-]*)}")</code></pre>
+
+  <h3>呼び出し</h3>
+  <p>OP限定。<code>plugin.parameterCommandEngine.open(player, action)</code> が呼ばれると54スロットのGUIを開きます。</p>
+  <p>YAML定義例（通常GUIメニュー側）:</p>
+  <pre><code>items:
+  item_10:
+    slot: 10
+    icon: REPEATER
+    name: "&e可変ペースト"
+    actions:
+      - type: PARAM_COMMAND
+        command: "//stack {amount} up"
+        execution: player    # player / op / console
+        confirm: "true"      # 任意: 確認画面を経由
+        params:
+          amount:
+            type: int
+            min: 1
+            max: 50
+            step: 1
+            default: 10</code></pre>
+</section>
+
+<section id="layout" class="card">
+  <h2>レイアウト</h2>
+  <p>タイトル: <code>&8可変コマンド</code> / 背景: GRAY_STAINED_GLASS_PANE</p>
+  <div class="grid">
+    <div class="slot kind-data"><span class="num">0</span><span class="icon">⚙</span><span class="label">可変コマンド</span></div>
+    <div class="slot kind-fill"><span class="num">1</span></div>
+    <div class="slot kind-fill"><span class="num">2</span></div>
+    <div class="slot kind-fill"><span class="num">3</span></div>
+    <div class="slot kind-data"><span class="num">4</span><span class="icon">📄</span><span class="label">実行内容</span></div>
+    <div class="slot kind-fill"><span class="num">5</span></div>
+    <div class="slot kind-fill"><span class="num">6</span></div>
+    <div class="slot kind-fill"><span class="num">7</span></div>
+    <div class="slot kind-fill"><span class="num">8</span></div>
+    <div class="slot kind-fill"><span class="num">9</span></div>
+    <div class="slot kind-grid"><span class="num">10</span><span class="label">P1</span></div>
+    <div class="slot kind-grid"><span class="num">11</span><span class="label">P2</span></div>
+    <div class="slot kind-grid"><span class="num">12</span><span class="label">P3</span></div>
+    <div class="slot kind-grid"><span class="num">13</span><span class="label">P4</span></div>
+    <div class="slot kind-grid"><span class="num">14</span><span class="label">P5</span></div>
+    <div class="slot kind-grid"><span class="num">15</span><span class="label">P6</span></div>
+    <div class="slot kind-grid"><span class="num">16</span><span class="label">P7</span></div>
+    <div class="slot kind-fill"><span class="num">17</span></div>
+    <div class="slot kind-fill"><span class="num">18</span></div>
+    <div class="slot kind-grid"><span class="num">19</span></div>
+    <div class="slot kind-grid"><span class="num">20</span></div>
+    <div class="slot kind-grid"><span class="num">21</span></div>
+    <div class="slot kind-grid"><span class="num">22</span></div>
+    <div class="slot kind-grid"><span class="num">23</span></div>
+    <div class="slot kind-grid"><span class="num">24</span></div>
+    <div class="slot kind-grid"><span class="num">25</span></div>
+    <div class="slot kind-fill"><span class="num">26</span></div>
+    <div class="slot kind-fill"><span class="num">27</span></div>
+    <div class="slot kind-grid"><span class="num">28</span></div>
+    <div class="slot kind-grid"><span class="num">29</span></div>
+    <div class="slot kind-grid"><span class="num">30</span></div>
+    <div class="slot kind-grid"><span class="num">31</span></div>
+    <div class="slot kind-grid"><span class="num">32</span></div>
+    <div class="slot kind-grid"><span class="num">33</span></div>
+    <div class="slot kind-grid"><span class="num">34</span></div>
+    <div class="slot kind-fill"><span class="num">35</span></div>
+    <div class="slot kind-fill"><span class="num">36</span></div>
+    <div class="slot kind-fill"><span class="num">37</span></div>
+    <div class="slot kind-fill"><span class="num">38</span></div>
+    <div class="slot kind-fill"><span class="num">39</span></div>
+    <div class="slot kind-fill"><span class="num">40</span></div>
+    <div class="slot kind-fill"><span class="num">41</span></div>
+    <div class="slot kind-fill"><span class="num">42</span></div>
+    <div class="slot kind-fill"><span class="num">43</span></div>
+    <div class="slot kind-fill"><span class="num">44</span></div>
+    <div class="slot kind-confirm"><span class="num">45</span><span class="icon">▶</span><span class="label">実行</span></div>
+    <div class="slot kind-fill"><span class="num">46</span></div>
+    <div class="slot kind-fill"><span class="num">47</span></div>
+    <div class="slot kind-fill"><span class="num">48</span></div>
+    <div class="slot kind-func"><span class="num">49</span><span class="icon">🔄</span><span class="label">初期値に戻す</span></div>
+    <div class="slot kind-fill"><span class="num">50</span></div>
+    <div class="slot kind-fill"><span class="num">51</span></div>
+    <div class="slot kind-fill"><span class="num">52</span></div>
+    <div class="slot kind-danger"><span class="num">53</span><span class="icon">⛔</span><span class="label">閉じる</span></div>
+  </div>
+  <p class="caption">パラメータグリッド (10-16, 19-25, 28-34) は最大21件 / 上限超は表示されない</p>
+
+  <h3>主要スロット</h3>
+  <table>
+    <thead><tr><th>slot</th><th>機能</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>「可変コマンド」ヘッダー (<code>COMMAND_BLOCK</code>)</td></tr>
+      <tr><td>4</td><td>実行内容プレビュー (テンプレート + プレースホルダ展開後)</td></tr>
+      <tr><td>10-34 (グリッド)</td><td>各パラメータ</td></tr>
+      <tr><td>45</td><td>実行 (<code>LIME_CONCRETE</code>) — confirm=true なら確認画面経由</td></tr>
+      <tr><td>49</td><td>初期値に戻す (<code>LEVER</code>)</td></tr>
+      <tr><td>53</td><td>閉じる (<code>BARRIER</code>)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="types" class="card">
+  <h2>パラメータタイプ (ParamType)</h2>
+  <table>
+    <thead><tr><th>type</th><th>Material</th><th>挙動</th></tr></thead>
+    <tbody>
+      <tr><td>INT</td><td>REPEATER</td><td>整数。左+ / 右- / Shift= ×10 / Shift+中=手入力</td></tr>
+      <tr><td>FLOAT</td><td>COMPARATOR</td><td>浮動小数。step分の増減</td></tr>
+      <tr><td>MATERIAL</td><td>STONE</td><td>固定リスト: stone, oak_planks, glass, air, dirt, grass_block, water</td></tr>
+      <tr><td>PLAYER</td><td>PLAYER_HEAD</td><td>オンラインプレイヤー名で循環</td></tr>
+      <tr><td>ENUM</td><td>BOOK</td><td><code>options</code> で指定したリストで循環</td></tr>
+      <tr><td>TEXT</td><td>NAME_TAG</td><td>テキスト直入力のみ（左右クリックでは変わらない）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>型推定 (inferType)</h3>
+  <p>YAMLで <code>type</code> 未指定の場合、パラメータ名から推定:</p>
+  <ul>
+    <li><code>player</code> / <code>target</code> / <code>user</code> → PLAYER</li>
+    <li>名前に <code>block</code> / <code>material</code> / <code>item</code> 含む → MATERIAL</li>
+    <li>名前に <code>radius</code> / <code>scale</code> / <code>speed</code> 含む → FLOAT</li>
+    <li>その他 → INT</li>
+  </ul>
+
+  <h3>パラメータ仕様 (ParamSpec)</h3>
+  <pre><code>data class ParamSpec(
+    val name: String,
+    val type: ParamType,
+    val min: Double?,
+    val max: Double?,
+    val step: Double,           // デフォルト 1.0
+    val defaultRaw: String?,
+    val enumOptions: List&lt;String&gt;
+)</code></pre>
+  <p>YAML側では <code>params: { name: { type, min, max, step, default, options } }</code> のネスト形式、または <code>param.&lt;name&gt;.&lt;key&gt;</code> / <code>&lt;name&gt;_&lt;key&gt;</code> のフラット形式に対応。</p>
+</section>
+
+<section id="actions" class="card">
+  <h2>操作と挙動</h2>
+
+  <h3>パラメータ調整 (adjustValue)</h3>
+  <table>
+    <thead><tr><th>クリック</th><th>動作 (INT/FLOAT)</th><th>動作 (PLAYER/ENUM/MATERIAL)</th></tr></thead>
+    <tbody>
+      <tr><td>左クリック</td><td>+ step</td><td>次の選択肢へ</td></tr>
+      <tr><td>右クリック</td><td>- step</td><td>前の選択肢へ</td></tr>
+      <tr><td>Shift+左</td><td>+ step × 10</td><td>(手入力モードへ)</td></tr>
+      <tr><td>Shift+右</td><td>- step × 10</td><td>(手入力モードへ)</td></tr>
+      <tr><td>中クリック</td><td>(手入力モードへ)</td><td>(手入力モードへ)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>手入力モード (startTextInput)</h3>
+  <ol>
+    <li><code>pendingTextInput[player.uuid] = PendingTextInput(session, spec)</code></li>
+    <li>インベントリを閉じる</li>
+    <li>「&e{name} の値をチャットに入力してください。cancel で中止。」</li>
+    <li>チャット入力 or コマンド入力をキャプチャ (<code>AsyncPlayerChatEvent</code> / <code>PlayerCommandPreprocessEvent</code>)</li>
+    <li><code>cancel</code> または「キャンセル」で中止、それ以外は <code>spec.normalizeInput</code> でバリデーション</li>
+    <li>整形後、<code>session.values[name] = normalized</code> として再オープン</li>
+  </ol>
+
+  <h3>初期化 (slot 49)</h3>
+  <p>すべての値を <code>spec.defaultValue(player)</code> に戻す。</p>
+
+  <h3>クランプ (clamp)</h3>
+  <p>min/max が指定されていれば、数値型は <code>coerceAtLeast</code>/<code>coerceAtMost</code> でクランプされる。</p>
+</section>
+
+<section id="exec" class="card">
+  <h2>実行モード (executeCommand)</h2>
+  <p>slot 45「実行」をクリックすると、<code>expandCommand</code> でプレースホルダを展開してから実行。</p>
+
+  <h3>展開順序</h3>
+  <ol>
+    <li><code>plugin.menuEngine.applyPlaceholders(player, template)</code> — PlaceholderAPI等の組み込み置換</li>
+    <li><code>session.values.forEach { (key, value) -&gt; result.replace("{$key}", value) }</code> — 入力済みの値を埋め込み</li>
+  </ol>
+
+  <h3>実行モード (mode)</h3>
+  <table>
+    <thead><tr><th>mode</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td><code>player</code> (デフォルト)</td><td><code>player.performCommand(command)</code></td></tr>
+      <tr><td><code>console</code></td><td><code>Bukkit.dispatchCommand(consoleSender, command)</code></td></tr>
+      <tr><td><code>op</code></td><td>一時OP化して実行 (finally で wasOp に戻す)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>YAMLでのモード指定</h3>
+  <p><code>execution: console</code> または <code>mode: op</code> など。<code>executionMode(action)</code> が <code>execution</code> → <code>mode</code> の順で読む。</p>
+
+  <h3>確認画面 (confirm=true)</h3>
+  <p>YAML側で <code>confirm: "true"</code> を指定すると、実行前に <code>SpecialMenuEngine.openConfirmCommand</code> 経由で確認GUI(54スロット)が出る。</p>
+
+  <h3>正規化 (normalizeCommand)</h3>
+  <ol>
+    <li>前後トリム + クォート除去 (<code>"..."</code> / <code>'...'</code>) + <code>\/</code> エスケープ解除</li>
+    <li><code>/</code> 始まりなら <code>removePrefix("/")</code></li>
+  </ol>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>

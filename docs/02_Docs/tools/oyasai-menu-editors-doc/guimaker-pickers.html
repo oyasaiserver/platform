@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>GuiMaker 各種ピッカー</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>GuiMaker <small>各種ピッカー (権限/サウンド/カラー他)</small></h1>
+  <p class="subtitle">openPermissionPicker / openSoundCategoryPicker / openSoundPicker / openColorPicker / openMenuPicker / openPopupPicker / openSpecialMenuPicker</p>
+</header>
+
+<nav class="sidebar">
+  <a href="index.html" class="toc-back">← 目次に戻る</a>
+  <h2>このページの内容</h2>
+  <ol>
+    <li><a href="#permission">権限ピッカー (LuckPerms)</a></li>
+    <li><a href="#sound">サウンドピッカー</a></li>
+    <li><a href="#color">カラーピッカー</a></li>
+    <li><a href="#menu-pick">メニューIDピッカー</a></li>
+    <li><a href="#popup-pick">PopupIDピッカー</a></li>
+    <li><a href="#special-pick">特殊メニューIDピッカー</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+
+<section id="permission" class="card">
+  <h2>権限ピッカー (openPermissionPicker)</h2>
+  <p>LuckPermsグループを<strong>カテゴリ別に分類</strong>してGUI選択できる画面。選択値は <code>lpgroup:&lt;name&gt;</code> として保存されます。</p>
+  <p>背景: <code>LIGHT_BLUE_STAINED_GLASS_PANE</code></p>
+
+  <h3>カテゴリ分類 (GuiPermissionCatalog)</h3>
+  <table>
+    <thead><tr><th>カテゴリ</th><th>所属グループ例</th><th>アイコン</th></tr></thead>
+    <tbody>
+      <tr><td>プレイヤーランク</td><td>default, shokyu, beginner, member, chukyu, jokyu</td><td>EMERALD</td></tr>
+      <tr><td>建築ランク</td><td>builder, takumi</td><td>BRICKS (takumi だけ DIAMOND_PICKAXE)</td></tr>
+      <tr><td>特別ロール</td><td>fly, white, blue</td><td>fly→FEATHER, 他→LAPIS_LAZULI</td></tr>
+      <tr><td>スタッフ</td><td>admin, owner, staff, mod, moderator</td><td>NETHER_STAR</td></tr>
+      <tr><td>その他</td><td>未分類のLuckPermsグループ</td><td>PAPER</td></tr>
+    </tbody>
+  </table>
+
+  <h3>表示名カスタマイズ (displayName)</h3>
+  <ul>
+    <li>default → 初期 / shokyu, beginner → 初級者 / chukyu → 中級者 / jokyu → 上級者</li>
+    <li>builder → 建築士 / takumi → たくみ</li>
+    <li>fly → Fly / white → White / blue → Blue</li>
+    <li>その他はLuckPerms表示名があればそれ、なければグループ名</li>
+  </ul>
+
+  <h3>レイアウト (フラット形式)</h3>
+  <p>21件まで一括表示するフラット形式。グリッド(10-16, 19-25, 28-34)に <code>collectGroups()</code> の上位21件が並びます。</p>
+  <ul>
+    <li>slot 0: タイトル (<code>IRON_DOOR</code> 「権限を設定」)</li>
+    <li>slot 9, 18, 27: カテゴリラベル (プレイヤーランク / 建築ランク / スタッフ)</li>
+    <li>slot 40: 権限をクリア (<code>BARRIER</code>)</li>
+    <li>slot 42: 手入力 (<code>WRITABLE_BOOK</code>)</li>
+  </ul>
+
+  <h3>カテゴリ別ページング (openPermissionGroupPicker)</h3>
+  <p>カテゴリで絞った場合のページング表示。slot 36/44 で前/次ページ、slot 40 で「カテゴリへ戻る」、slot 42 で「手入力」。</p>
+</section>
+
+<section id="sound" class="card">
+  <h2>サウンドピッカー (openSoundCategoryPicker → openSoundPicker)</h2>
+  <p>Sound enum 全件を<strong>カテゴリ別</strong>に表示する2段階GUI。左クリックで追加、右クリックで視聴。</p>
+  <p>背景: <code>LIGHT_BLUE_STAINED_GLASS_PANE</code></p>
+
+  <h3>カテゴリ画面 (openSoundCategoryPicker)</h3>
+  <div class="grid">
+    <div class="slot kind-data"><span class="num">0</span><span class="icon">🎵</span><span class="label">効果音</span></div>
+    <div class="slot kind-fill"><span class="num">1</span></div>
+    <div class="slot kind-fill"><span class="num">2</span></div>
+    <div class="slot kind-fill"><span class="num">3</span></div>
+    <div class="slot kind-data"><span class="num">4</span></div>
+    <div class="slot kind-fill"><span class="num">5</span></div>
+    <div class="slot kind-fill"><span class="num">6</span></div>
+    <div class="slot kind-fill"><span class="num">7</span></div>
+    <div class="slot kind-fill"><span class="num">8</span></div>
+    <div class="slot kind-fill"><span class="num">9</span></div>
+    <div class="slot kind-func"><span class="num">10</span><span class="icon">🎵</span><span class="label">UI</span></div>
+    <div class="slot kind-func"><span class="num">11</span><span class="icon">👤</span><span class="label">ENTITY</span></div>
+    <div class="slot kind-func"><span class="num">12</span><span class="icon">🪨</span><span class="label">BLOCK</span></div>
+    <div class="slot kind-func"><span class="num">13</span><span class="icon">📦</span><span class="label">ITEM</span></div>
+    <div class="slot kind-func"><span class="num">14</span><span class="icon">🎶</span><span class="label">MUSIC</span></div>
+    <div class="slot kind-func"><span class="num">15</span><span class="icon">💎</span><span class="label">AMBIENT</span></div>
+    <div class="slot kind-func"><span class="num">16</span><span class="icon">💧</span><span class="label">WEATHER</span></div>
+    <div class="slot kind-fill"><span class="num">17</span></div>
+    <div class="slot kind-fill"><span class="num">18</span></div>
+    <div class="slot kind-func"><span class="num">19</span><span class="icon">🔔</span><span class="label">EVENT</span></div>
+    <div class="slot kind-fill"><span class="num">20</span></div>
+    <div class="slot kind-fill"><span class="num">21</span></div>
+    <div class="slot kind-fill"><span class="num">22</span></div>
+    <div class="slot kind-fill"><span class="num">23</span></div>
+    <div class="slot kind-fill"><span class="num">24</span></div>
+    <div class="slot kind-fill"><span class="num">25</span></div>
+    <div class="slot kind-fill"><span class="num">26</span></div>
+    <div class="slot kind-fill"><span class="num">27</span></div>
+    <div class="slot kind-fill"><span class="num">28</span></div>
+    <div class="slot kind-fill"><span class="num">29</span></div>
+    <div class="slot kind-fill"><span class="num">30</span></div>
+    <div class="slot kind-fill"><span class="num">31</span></div>
+    <div class="slot kind-fill"><span class="num">32</span></div>
+    <div class="slot kind-fill"><span class="num">33</span></div>
+    <div class="slot kind-fill"><span class="num">34</span></div>
+    <div class="slot kind-fill"><span class="num">35</span></div>
+    <div class="slot kind-nav"><span class="num">36</span><span class="icon">⬅</span><span class="label">前ページ</span></div>
+    <div class="slot kind-nav"><span class="num">37</span><span class="icon">🔉</span><span class="label">音量-</span></div>
+    <div class="slot kind-fill"><span class="num">38</span></div>
+    <div class="slot kind-data"><span class="num">39</span><span class="icon">🔊</span><span class="label">音量</span></div>
+    <div class="slot kind-func"><span class="num">40</span><span class="icon">📚</span><span class="label">カテゴリへ</span></div>
+    <div class="slot kind-nav"><span class="num">41</span><span class="icon">🔊</span><span class="label">音量+</span></div>
+    <div class="slot kind-func"><span class="num">42</span><span class="icon">✏</span><span class="label">手入力</span></div>
+    <div class="slot kind-nav"><span class="num">43</span><span class="icon">🔄</span><span class="label">音量リセット</span></div>
+    <div class="slot kind-nav"><span class="num">44</span><span class="icon">➡</span><span class="label">次ページ</span></div>
+    <div class="slot kind-data"><span class="num">45</span></div>
+    <div class="slot kind-func"><span class="num">46</span></div>
+    <div class="slot kind-func"><span class="num">47</span></div>
+    <div class="slot kind-confirm"><span class="num">48</span></div>
+    <div class="slot kind-bar"><span class="num">49</span></div>
+    <div class="slot kind-reserved"><span class="num">50</span></div>
+    <div class="slot kind-nav"><span class="num">51</span></div>
+    <div class="slot kind-fill"><span class="num">52</span></div>
+    <div class="slot kind-func"><span class="num">53</span><span class="icon">⬅</span><span class="label">アクション選択</span></div>
+  </div>
+
+  <h3>音量制御 (固定位置)</h3>
+  <table>
+    <thead><tr><th>slot</th><th>機能</th></tr></thead>
+    <tbody>
+      <tr><td>36</td><td>前のページ</td></tr>
+      <tr><td>37</td><td>音量 -0.25</td></tr>
+      <tr><td>39</td><td>音量表示</td></tr>
+      <tr><td>40</td><td>カテゴリへ戻る</td></tr>
+      <tr><td>41</td><td>音量 +0.25</td></tr>
+      <tr><td>42</td><td>手入力</td></tr>
+      <tr><td>43</td><td>音量リセット</td></tr>
+      <tr><td>44</td><td>次のページ</td></tr>
+    </tbody>
+  </table>
+
+  <h3>サウンドピッカー (openSoundPicker)</h3>
+  <p>選択したカテゴリ (例: <code>ui</code>) で始まるサウンドのみページング表示。</p>
+  <ul>
+    <li>サウンドリスト: <code>Sound.values()</code> をkey化し<code>"&lt;category&gt;."</code>でフィルタ</li>
+    <li>1ページ21件 (グリッド 10-16, 19-25, 28-34)</li>
+    <li><strong>左クリック</strong>: SOUNDアクションを追加/更新</li>
+    <li><strong>右クリック / Shift+右</strong>: 視聴のみ (<code>playSoundPreview</code>)</li>
+    <li>SOUNDアクションは <code>{ "sound": "&lt;name&gt;", "volume": "&lt;value&gt;" }</code> 形式で保存</li>
+  </ul>
+</section>
+
+<section id="color" class="card">
+  <h2>カラーピッカー (openColorPicker)</h2>
+  <p>テキスト入力 (アイテム名・ロア・タイトル) の前に表示される、Minecraftカラーコードの選択GUI。</p>
+  <p>背景: <code>LIGHT_BLUE_STAINED_GLASS_PANE</code></p>
+
+  <h3>カラー一覧</h3>
+  <table>
+    <thead><tr><th>code</th><th>名前</th><th>Material</th></tr></thead>
+    <tbody>
+      <tr><td>&amp;0</td><td>黒</td><td>BLACK_WOOL</td></tr>
+      <tr><td>&amp;1</td><td>濃紺</td><td>BLUE_WOOL</td></tr>
+      <tr><td>&amp;2</td><td>緑</td><td>GREEN_WOOL</td></tr>
+      <tr><td>&amp;3</td><td>シアン</td><td>CYAN_WOOL</td></tr>
+      <tr><td>&amp;4</td><td>濃赤</td><td>RED_WOOL</td></tr>
+      <tr><td>&amp;5</td><td>紫</td><td>PURPLE_WOOL</td></tr>
+      <tr><td>&amp;6</td><td>金色</td><td>ORANGE_WOOL</td></tr>
+      <tr><td>&amp;7</td><td>灰色</td><td>LIGHT_GRAY_WOOL</td></tr>
+      <tr><td>&amp;8</td><td>暗灰</td><td>GRAY_WOOL</td></tr>
+      <tr><td>&amp;9</td><td>青</td><td>LIGHT_BLUE_WOOL</td></tr>
+      <tr><td>&amp;a</td><td>黄緑</td><td>LIME_WOOL</td></tr>
+      <tr><td>&amp;b</td><td>水色</td><td>CYAN_WOOL</td></tr>
+      <tr><td>&amp;c</td><td>赤</td><td>PINK_WOOL</td></tr>
+      <tr><td>&amp;d</td><td>ピンク</td><td>MAGENTA_WOOL</td></tr>
+      <tr><td>&amp;e</td><td>黄色</td><td>YELLOW_WOOL</td></tr>
+      <tr><td>&amp;f</td><td>白</td><td>WHITE_WOOL</td></tr>
+    </tbody>
+  </table>
+  <p>配置: slots 10-17 と 19-26 (合計16色) + slot 40「カラーなし / 手動入力」</p>
+
+  <h3>target別の遷移先</h3>
+  <table>
+    <thead><tr><th>target</th><th>PendingInput</th></tr></thead>
+    <tbody>
+      <tr><td><code>NAME</code></td><td>ItemName(slot, color)</td></tr>
+      <tr><td><code>LORE</code></td><td>LoreLine(slot, color)</td></tr>
+      <tr><td><code>LORE_EDIT:&lt;index&gt;</code></td><td>LoreEdit(slot, lineIndex, color)</td></tr>
+      <tr><td><code>TITLE</code></td><td>MenuTitle(color)</td></tr>
+    </tbody>
+  </table>
+  <p class="note">カラー選択後、インベントリを閉じて「チャット入力モード」に入ります。プレイヤーがチャットでテキストを送信すると、color + text が結合されて適用されます。</p>
+</section>
+
+<section id="menu-pick" class="card">
+  <h2>メニューIDピッカー (openMenuPicker)</h2>
+  <p><code>OPEN_MENU</code> アクションで開くメニューIDを選択するGUI。</p>
+  <ul>
+    <li>背景: <code>LIME_STAINED_GLASS_PANE</code></li>
+    <li>表示対象: <code>GuiMakerExporter.listMenuIds(plugin)</code> の編集可能なメニューID</li>
+    <li>グリッド: 10-16, 19-25, 28-34, 37-43 (28件)</li>
+    <li>slot 44: IDを手入力</li>
+    <li>各アイテム: <code>ENDER_CHEST</code> + ID表示</li>
+  </ul>
+</section>
+
+<section id="popup-pick" class="card">
+  <h2>PopupIDピッカー (openPopupPicker)</h2>
+  <p><code>OPEN_POPUP</code> アクションのターゲット選択GUI。</p>
+  <ul>
+    <li>背景: <code>PURPLE_STAINED_GLASS_PANE</code></li>
+    <li>表示対象: <code>plugin.popupMenuLoader.getPopupIds()</code></li>
+    <li>各PopupIDに紐付くアイコン:
+      <ul>
+        <li>shopindex → <code>CHEST</code></li>
+        <li>utility → <code>CRAFTING_TABLE</code></li>
+        <li>channel → <code>JUKEBOX</code></li>
+        <li>sociallikes → <code>HEART_OF_THE_SEA</code></li>
+        <li>carbuilder → <code>MINECART</code></li>
+        <li>links → <code>MAP</code></li>
+        <li>その他: <code>CHORUS_FRUIT</code></li>
+      </ul>
+    </li>
+    <li>slot 44: IDを手入力</li>
+  </ul>
+</section>
+
+<section id="special-pick" class="card">
+  <h2>特殊メニューIDピッカー (openSpecialMenuPicker)</h2>
+  <p><code>OPEN_SPECIAL</code> アクションのターゲット選択GUI。固定2件 + 手入力。</p>
+  <table>
+    <thead><tr><th>slot</th><th>ID</th><th>名前</th><th>Material</th></tr></thead>
+    <tbody>
+      <tr><td>20</td><td><code>online_players</code></td><td>オンラインプレイヤー</td><td>PLAYER_HEAD</td></tr>
+      <tr><td>24</td><td><code>confirm</code></td><td>確認メニュー</td><td>LIME_CONCRETE</td></tr>
+      <tr><td>44</td><td>-</td><td>IDを手入力</td><td>WRITABLE_BOOK</td></tr>
+    </tbody>
+  </table>
+  <p>背景: <code>LIGHT_BLUE_STAINED_GLASS_PANE</code></p>
+</section>
+
+<section id="chat-flow" class="card">
+  <h2>チャット入力フロー (PendingInput)</h2>
+  <p>多くのピッカーは選択後に<strong>チャットでテキスト入力</strong>を要求します。</p>
+
+  <h3>PendingInput sealed class</h3>
+  <pre><code>sealed class PendingInput(val slot: Int) {
+  class ItemName(slot: Int, val color: String = "")
+  class LoreLine(slot: Int, val color: String = "")
+  class LoreEdit(slot: Int, val lineIndex: Int, val color: String = "")
+  class Permission(slot: Int)
+  class ActionParam(slot: Int, val actionType: String, val actionIndex: Int? = null)
+  class MenuTitle(val color: String = "")
+}</code></pre>
+
+  <h3>入力受信処理</h3>
+  <p>2つのイベントハンドラで受信:</p>
+  <ul>
+    <li><code>AsyncPlayerChatEvent</code> (LOWEST priority) — 通常のチャット入力</li>
+    <li><code>PlayerCommandPreprocessEvent</code> (LOWEST priority) — スラッシュコマンド入力もキャプチャ</li>
+  </ul>
+  <p>どちらも <code>event.isCancelled = true</code> して<strong>チャットへの送信を抑制</strong>。<code>handlePendingInput</code> でメインスレッドへ戻して処理。</p>
+
+  <h3>入力の正規化 (normalizeTypedInput)</h3>
+  <ol>
+    <li>前後の空白をトリム</li>
+    <li><code>\/</code> で始まる場合 <code>\</code> を除去 (コマンド回避のエスケープ)</li>
+    <li>"..." または '...' で囲まれている場合は引用符を除去</li>
+  </ol>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>

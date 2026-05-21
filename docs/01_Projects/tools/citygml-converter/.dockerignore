@@ -1,0 +1,10 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+env/
+venv/
+.env
+*.gml
+*.glb
+*.schem

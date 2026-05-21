@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>データフロー・ファイル構造</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>データフロー・ファイル構造 <small>OyasaiMenu</small></h1>
+  <p class="subtitle">YAML / PDC / ドラフト・ライブ・テンプレート間のデータフロー</p>
+</header>
+
+<nav class="sidebar">
+  <a href="index.html" class="toc-back">← 目次に戻る</a>
+  <h2>このページの内容</h2>
+  <ol>
+    <li><a href="#dirs">プラグインデータ構造</a></li>
+    <li><a href="#draft-live">ドラフト / ライブ分離</a></li>
+    <li><a href="#flow">編集データフロー</a></li>
+    <li><a href="#yaml-normal">通常GUIのYAML</a></li>
+    <li><a href="#yaml-popup">PopupのYAML</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+
+<section id="dirs" class="card">
+  <h2>プラグインデータ構造</h2>
+  <pre><code>plugins/OyasaiMenu/
+├── config.yml                        # プラグイン基本設定
+├── announcements.yml                 # お知らせ (タイトル + 本文)
+├── gui-maker-ui-screens.yml          # GuiMaker UI画面定義
+├── menus/                            # ライブ通常GUI
+│   ├── root.yml
+│   ├── shop_main.yml
+│   ├── ...
+│   └── popup/                        # ライブPopup
+│       ├── shopindex.yml
+│       └── ...
+├── guimaker/                         # ドラフト通常GUI
+│   ├── &lt;menu-id&gt;.yml
+│   └── popup/                        # ドラフトPopup
+│       └── &lt;popup-id&gt;.yml
+├── guimaker-templates/               # テンプレート
+│   ├── players/&lt;uuid&gt;/
+│   │   ├── menus/
+│   │   └── blocks/
+│   └── shared/
+│       ├── menus/
+│       └── blocks/
+├── ui-skin/                          # UIスキンカスタマイズ
+│   ├── hub.yml
+│   ├── context.yml
+│   └── ...
+├── favorites/                        # 個人お気に入りアクション
+│   └── &lt;uuid&gt;.yml
+└── (他: shops.yml, pointshop.yml, custom_items.yml など)</code></pre>
+
+  <h3>編集対象外の特殊YAML (blockedLiveFileNames)</h3>
+  <p>GuiMakerの編集対象から除外されるYAML（専用エディタが必要）:</p>
+  <ul>
+    <li><code>menus/custom_items.yml</code></li>
+    <li><code>menus/shops.yml</code></li>
+    <li><code>menus/pointshop.yml</code></li>
+  </ul>
+</section>
+
+<section id="draft-live" class="card">
+  <h2>ドラフト / ライブ分離</h2>
+  <p>GuiMakerは編集中の状態を<strong>ドラフト</strong>として保存し、明示的にcommitするまで<strong>ライブ</strong>に反映しません。</p>
+
+  <h3>分離の意義</h3>
+  <ul>
+    <li>編集中の未完成版を放置してもサーバーに影響しない</li>
+    <li>commitした瞬間に <code>plugin.reload()</code> が走り全プレイヤーに反映</li>
+    <li>revertでドラフトを破棄してライブに戻せる</li>
+  </ul>
+
+  <h3>パス対応</h3>
+  <table>
+    <thead><tr><th>種類</th><th>ドラフト</th><th>ライブ</th></tr></thead>
+    <tbody>
+      <tr><td>通常GUI</td><td><code>guimaker/&lt;id&gt;.yml</code></td><td><code>menus/&lt;id&gt;.yml</code></td></tr>
+      <tr><td>Popup</td><td><code>guimaker/popup/&lt;id&gt;.yml</code></td><td><code>menus/popup/&lt;id&gt;.yml</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>主要関数 (GuiMakerExporter)</h3>
+  <table>
+    <thead><tr><th>関数</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td><code>exportDraft</code></td><td>セッションをドラフトに書き出す</td></tr>
+      <tr><td><code>hasDraft</code></td><td>ドラフトが存在するかチェック</td></tr>
+      <tr><td><code>commit</code></td><td>セッションをライブに書き出し相対パスを返す</td></tr>
+      <tr><td><code>revertDraft</code></td><td>ドラフトファイルを削除</td></tr>
+      <tr><td><code>loadIntoSession</code></td><td>ドラフト優先で、なければライブから読み込む</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="flow" class="card">
+  <h2>編集データフロー</h2>
+
+  <h3>セッションの読み込み</h3>
+  <div class="flow">
+    <div class="flow-step">
+      <strong>1. /guimaker edit &lt;id&gt;</strong>
+      <span>または UI から ID をクリック</span>
+    </div>
+    <div class="flow-step">
+      <strong>2. resolveSession</strong>
+      <span>既存セッションがあれば返す。なければ新規 GuiEditorSession</span>
+    </div>
+    <div class="flow-step">
+      <strong>3. loadIntoSession</strong>
+      <span>draft → live の順でファイル検索 → parseYamlIntoSession</span>
+    </div>
+    <div class="flow-step">
+      <strong>4. PDC埋め込み</strong>
+      <span>各スロットに ItemStack を作り、PDC に name/lore/perm/actions/extras を設定</span>
+    </div>
+    <div class="flow-step">
+      <strong>5. openCanvas</strong>
+      <span>canvasInventoryを作成、PDC付きアイテムを配置</span>
+    </div>
+  </div>
+
+  <h3>編集中の自動保存</h3>
+  <div class="flow">
+    <div class="flow-step">
+      <strong>キャンバスでアイテム移動</strong>
+      <span>onInventoryClick → 1tick後にrebuildSlotsFromInventory</span>
+    </div>
+    <div class="flow-step">
+      <strong>各種編集操作</strong>
+      <span>applyPdcToItem(session, slot) でPDC更新 + saveWorkingCopy</span>
+    </div>
+    <div class="flow-step">
+      <strong>saveWorkingCopy</strong>
+      <span>テンプレート編集中 → テンプレートファイル / 通常 → exportDraft</span>
+    </div>
+    <div class="flow-step">
+      <strong>onInventoryClose</strong>
+      <span>キャンバスを閉じたタイミングで saveWorkingCopy が呼ばれる</span>
+    </div>
+  </div>
+
+  <h3>commitフロー</h3>
+  <div class="flow">
+    <div class="flow-step">
+      <strong>1. エディタバー slot 48</strong>
+      <span>(または /guimaker edit &lt;id&gt; commit)</span>
+    </div>
+    <div class="flow-step">
+      <strong>2. テンプレート編集中?</strong>
+      <span>はい → テンプレートファイル保存で終了</span>
+    </div>
+    <div class="flow-step">
+      <strong>3. rebuildSlotsFromInventory</strong>
+      <span>PDCから session.slots を再構築</span>
+    </div>
+    <div class="flow-step">
+      <strong>4. GuiMakerExporter.commit</strong>
+      <span>writeYaml/writePopupYaml でライブファイルへ</span>
+    </div>
+    <div class="flow-step">
+      <strong>5. plugin.reload()</strong>
+      <span>全YAMLのリロード、開いているメニューも更新</span>
+    </div>
+  </div>
+
+  <h3>テンプレート編集の保存先切替</h3>
+  <p>
+    <code>session.templateEditTarget != null</code> の場合、commitせずとも編集ごとに
+    <code>GuiTemplateStore.saveEditedTemplate</code> でテンプレートファイルへ直接保存される。
+    エディタバーの slot 48 が「テンプレート保存」ラベルに変化し、押すと <code>saveTemplateEdit</code> が呼ばれる。
+  </p>
+</section>
+
+<section id="yaml-normal" class="card">
+  <h2>通常GUIのYAML (writeYaml)</h2>
+
+  <h3>構造</h3>
+  <pre><code>menu:
+  title: "&8メニュータイトル"
+  size: 54
+items:
+  item_0:
+    slot: 0
+    icon: ENDER_CHEST
+    name: "&aクリック！"
+    lore:
+      - "&7説明1"
+      - "&7説明2"
+    permission: "lpgroup:builder"
+    enchanted: true
+    actions:
+      - type: OPEN_MENU
+        target: shop_main
+      - type: SOUND
+        sound: ui.button.click
+        volume: "1.0"
+  item_10:
+    slot: 10
+    icon: DIAMOND
+    actions:
+      - type: PLAYER_CMD
+        command: "spawn"</code></pre>
+
+  <h3>パース順序 (parseYamlIntoSession)</h3>
+  <ol>
+    <li>menu.title / menu.size を読む (size は <code>((n+8)/9)*9</code> で9の倍数化)</li>
+    <li>items の各セクションを走査</li>
+    <li>slot, icon, name, lore, permission, enchanted, actions を取得</li>
+    <li>各 GuiSlotDef を session.slots に登録</li>
+    <li>ItemStack + ItemMeta を作って PDC をすべてセット</li>
+    <li>tempInventory に配置 → session.canvasInventory にセット</li>
+  </ol>
+
+  <h3>書き込み順序 (writeYaml)</h3>
+  <ol>
+    <li>menu.title / menu.size を書く</li>
+    <li>canvasInventory を走査 (slot 0 から size-1)</li>
+    <li>各アイテムについて key = <code>"items.item_$slot"</code> で書き出し</li>
+    <li>name は def.name > meta.displayName の順で取得</li>
+    <li>lore は def.lore > meta.lore の順で取得</li>
+    <li>actions は <code>List&lt;Map&lt;String, Any&gt;&gt;</code> として書き出し</li>
+  </ol>
+</section>
+
+<section id="yaml-popup" class="card">
+  <h2>PopupのYAML (writePopupYaml)</h2>
+
+  <h3>構造</h3>
+  <pre><code>title: "&8Popupタイトル"
+glass: GRAY_STAINED_GLASS_PANE
+nav_active: -1
+items:
+  shop_button:           # キー(item_N または extras.popup.key)
+    slot: 10
+    icon: CHEST          # or CUSTOM_HEAD (PLAYER_HEAD + texture)
+    texture: "https://..."
+    name: "&aショップ"
+    lore:
+      - "&7商品を売買"
+    enchanted: false
+    required_permission: "lpgroup:default"
+    op_only: false
+    fallback_icon: AIR
+    fallback_texture: "https://..."
+    fallback_name: "&8未開放"
+    fallback_lore:
+      - "&7条件を満たすと表示されます"
+    actions:
+      - open_menu: "shop"
+      - close: true
+    fallback_actions:
+      - chat_paste: "..."</code></pre>
+
+  <h3>通常GUIとの大きな違い</h3>
+  <ol>
+    <li><strong>itemsキー名がカスタマイズ可能</strong>: <code>extras["popup.key"]</code> があればそれ、なければ <code>item_$slot</code></li>
+    <li><strong>slot制限</strong>: 0..44 のみ（45-53はナビバー予約）</li>
+    <li><strong>permissionキー</strong>: <code>required_permission</code> (通常GUIは <code>permission</code>)</li>
+    <li><strong>actions形式</strong>: 通常GUIは <code>type: TYPE</code> + キー、Popupは <code>player_cmd:</code> / <code>open_popup:</code> 等のショートキー</li>
+    <li><strong>fallback_*</strong>: 権限なしプレイヤー向けに別アイコン・テキスト・アクションを設定可</li>
+    <li><strong>CUSTOM_HEAD</strong>: <code>PLAYER_HEAD</code> + <code>texture</code> URL でスキンヘッドを表示</li>
+    <li><strong>op_only</strong>: trueならOPのみに表示</li>
+  </ol>
+
+  <h3>キー名の重複対策 (uniquePopupKey)</h3>
+  <p>同じpopup.key を持つアイテムが複数ある場合、<code>&lt;key&gt;_2</code>, <code>&lt;key&gt;_3</code> ... と連番をつけて重複回避。</p>
+
+  <h3>アクションマッピング (popupActionMap)</h3>
+  <p>GuiActionDef → PopupActionType → YAMLキー名 の変換。<code>PopupActionType</code> に存在しない値 (SOUND, BROADCAST, MESSAGE, PARAM_COMMAND, OPEN_MACRO以外の一部) はnullを返し、YAML出力時にスキップされる。</p>
+
+  <h3>アクション逆変換 (parsePopupActions)</h3>
+  <p>YAMLマップのキー (<code>player_cmd</code>, <code>open_popup</code>, ...) から GuiActionDef に変換:</p>
+  <pre><code>map.containsKey("player_cmd") -&gt; GuiActionDef("PLAYER_CMD", mapOf("command" to ...))
+map.containsKey("open_popup") -&gt; GuiActionDef("OPEN_POPUP", mapOf("target" to ...))
+map.containsKey("open_sell") -&gt; GuiActionDef("OPEN_SELL")
+// etc.</code></pre>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>

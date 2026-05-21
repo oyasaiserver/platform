@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MCA Command Block Scanner</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f7f9;
+      --fg: #171a1f;
+      --muted: #667085;
+      --line: #d8dde6;
+      --panel: #ffffff;
+      --accent: #1769aa;
+      --critical-bg: #ffe1e1;
+      --critical-fg: #9f1239;
+      --high-bg: #ffe9cc;
+      --high-fg: #9a3412;
+      --medium-bg: #eef2ff;
+      --medium-fg: #3730a3;
+      --low-bg: #edf7ed;
+      --low-fg: #166534;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111418;
+        --fg: #e8edf3;
+        --muted: #9aa4b2;
+        --line: #2a313b;
+        --panel: #171b21;
+        --accent: #68aee8;
+        --critical-bg: #4a141d;
+        --critical-fg: #ffb4c2;
+        --high-bg: #4a280b;
+        --high-fg: #ffc48a;
+        --medium-bg: #20245a;
+        --medium-fg: #c7d2fe;
+        --low-bg: #12331f;
+        --low-fg: #a7f3d0;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    .controls {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .drop {
+      border: 2px dashed var(--line);
+      background: var(--panel);
+      min-height: 132px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .drop.dragover {
+      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+    }
+
+    .drop strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .drop span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button, label.button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--fg);
+      padding: 9px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    input[type="search"] {
+      flex: 1 1 280px;
+      min-width: 180px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--fg);
+      padding: 9px 10px;
+      font-size: 14px;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 22px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .table-wrap {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      overflow: auto;
+      max-height: 68vh;
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 8px 10px;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: var(--panel);
+      z-index: 1;
+      text-align: left;
+    }
+
+    td.command {
+      white-space: pre-wrap;
+      min-width: 420px;
+      max-width: 760px;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .critical { background: var(--critical-bg); color: var(--critical-fg); }
+    .high { background: var(--high-bg); color: var(--high-fg); }
+    .medium { background: var(--medium-bg); color: var(--medium-fg); }
+    .low { background: var(--low-bg); color: var(--low-fg); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>MCA Command Block Scanner</h1>
+
+  <section class="controls">
+    <div id="drop" class="drop">
+      <div>
+        <strong>.mca ファイルまたはワールドフォルダをドロップ</strong>
+        <span>region / DIM-1/region / DIM1/region を含む複数ファイルに対応</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <label class="button">
+        .mcaを選択
+        <input id="fileInput" type="file" accept=".mca" multiple />
+      </label>
+
+      <label class="button">
+        フォルダを選択
+        <input id="dirInput" type="file" webkitdirectory directory multiple />
+      </label>
+
+      <button id="clearBtn" type="button">クリア</button>
+      <button id="csvBtn" type="button" disabled>CSVダウンロード</button>
+      <input id="search" type="search" placeholder="command検索" />
+    </div>
+
+    <div id="status" class="status">未処理</div>
+  </section>
+
+  <section id="stats" class="stats"></section>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>world</th>
+          <th>x</th>
+          <th>y</th>
+          <th>z</th>
+          <th>type</th>
+          <th>auto</th>
+          <th>impact</th>
+          <th>command</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+(() => {
+  const workerSource = String.raw`
+importScripts("https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js");
+
+const SECTOR = 4096;
+const HEAVY = ["execute", "fill", "clone", "summon", "tp", "teleport", "particle", "effect", "forceload", "spreadplayers"];
+
+self.onmessage = async (event) => {
+  const files = event.data.files || [];
+  const all = [];
+  let processed = 0;
+
+  for (const item of files) {
+    try {
+      const rows = scanMca(item.buffer, item.path || item.name || "");
+      all.push(...rows);
+    } catch (err) {
+      postMessage({ type: "warn", message: (item.path || item.name) + ": " + err.message });
+    }
+
+    processed++;
+    postMessage({ type: "progress", processed, total: files.length, found: all.length });
+  }
+
+  postMessage({ type: "done", rows: all });
+};
+
+function inferWorld(path) {
+  const parts = String(path || "").replace(/\\/g, "/").split("/").filter(Boolean);
+  const regionIndex = parts.lastIndexOf("region");
+  if (regionIndex > 0) {
+    const prev = parts[regionIndex - 1];
+    if ((prev === "DIM-1" || prev === "DIM1") && regionIndex > 1) return parts[regionIndex - 2];
+    return prev;
+  }
+  if (parts.length >= 2) return parts[parts.length - 2];
+  return "(unknown)";
+}
+
+function scanMca(buffer, path) {
+  const bytes = new Uint8Array(buffer);
+  const view = new DataView(buffer);
+  const found = [];
+  const world = inferWorld(path);
+
+  if (bytes.length < 8192) return found;
+
+  for (let i = 0; i < 1024; i++) {
+    const entry = view.getUint32(i * 4, false);
+    const sectorOffset = entry >>> 8;
+    const sectorCount = entry & 0xff;
+    if (!sectorOffset || !sectorCount) continue;
+
+    const chunkOffset = sectorOffset * SECTOR;
+    if (chunkOffset + 5 > bytes.length) continue;
+
+    const dataLength = view.getUint32(chunkOffset, false);
+    if (dataLength <= 1 || chunkOffset + 4 + dataLength > bytes.length) continue;
+
+    const compression = view.getUint8(chunkOffset + 4);
+    const compressed = bytes.subarray(chunkOffset + 5, chunkOffset + 4 + dataLength);
+
+    try {
+      let raw;
+      if (compression === 2) raw = pako.inflate(compressed);
+      else if (compression === 1) raw = pako.ungzip(compressed);
+      else raw = compressed;
+
+      const nbt = new NbtReader(raw).readRoot();
+      const root = nbt.value || nbt;
+
+      let blockEntities = asArray(root.block_entities);
+      let sections = asArray(root.sections);
+
+      if (root.Level) {
+        blockEntities = asArray(root.Level.TileEntities);
+        sections = asArray(root.Level.Sections);
+      }
+
+      const commandEntities = blockEntities.filter(be => String(be.id || "").toLowerCase().includes("command"));
+      if (!commandEntities.length) continue;
+
+      for (const be of commandEntities) {
+        const bx = Number(be.x || 0);
+        const by = Number(be.y || 0);
+        const bz = Number(be.z || 0);
+        const blockName = decodeBlockAt(sections, bx, by, bz) || "minecraft:command_block";
+
+        let type = "impulse";
+        if (blockName.includes("repeating")) type = "repeating";
+        else if (blockName.includes("chain")) type = "chain";
+
+        const auto = Number(be.auto || 0) === 1;
+        const command = String(be.Command || "");
+        const impact = assess(type, auto, command);
+
+        found.push({
+          world,
+          x: bx,
+          y: by,
+          z: bz,
+          type,
+          auto,
+          impact,
+          command
+        });
+      }
+    } catch (_) {
+      continue;
+    }
+  }
+
+  return found;
+}
+
+function assess(type, auto, cmd) {
+  const c = String(cmd || "").toLowerCase().trim();
+  if (type === "repeating" && auto) {
+    return HEAVY.some(h => c.startsWith(h)) ? "critical" : "high";
+  }
+  if (type === "repeating" || (type === "chain" && auto)) return "medium";
+  return "low";
+}
+
+function decodeBlockAt(sections, bx, by, bz) {
+  const lx = bx & 0xf;
+  const lz = bz & 0xf;
+  const sectionY = by >> 4;
+
+  for (const sec of sections) {
+    const sy = Number(sec.Y ?? sec.y ?? 0);
+    if (sy !== sectionY) continue;
+
+    const bs = sec.block_states || sec;
+    const paletteTag = bs.palette || sec.Palette;
+    const dataTag = bs.data || sec.BlockStates;
+
+    if (!paletteTag) return null;
+
+    const palette = asArray(paletteTag).map(e => String((e && e.Name) || ""));
+    if (palette.length === 1) return palette[0];
+    if (!dataTag) return null;
+
+    const ly = by & 0xf;
+    const blockIndex = ly * 256 + lz * 16 + lx;
+    const bits = Math.max(4, bitLength(palette.length - 1));
+    const perLong = Math.floor(64 / bits);
+    const longIndex = Math.floor(blockIndex / perLong);
+    const bitOffset = BigInt((blockIndex % perLong) * bits);
+
+    const longs = asArray(dataTag);
+    if (longIndex >= longs.length) return null;
+
+    let lv = toUnsigned64(longs[longIndex]);
+    const mask = (1n << BigInt(bits)) - 1n;
+    const paletteIndex = Number((lv >> bitOffset) & mask);
+
+    if (paletteIndex < palette.length) return palette[paletteIndex];
+  }
+
+  return null;
+}
+
+function bitLength(n) {
+  n = Number(n);
+  if (n <= 0) return 0;
+  return Math.floor(Math.log2(n)) + 1;
+}
+
+function toUnsigned64(v) {
+  if (typeof v === "bigint") return BigInt.asUintN(64, v);
+  return BigInt.asUintN(64, BigInt(v));
+}
+
+function asArray(v) {
+  if (!v) return [];
+  return Array.isArray(v) ? v : [];
+}
+
+class NbtReader {
+  constructor(bytes) {
+    this.bytes = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+    this.view = new DataView(this.bytes.buffer, this.bytes.byteOffset, this.bytes.byteLength);
+    this.pos = 0;
+    this.decoder = new TextDecoder("utf-8");
+  }
+
+  readRoot() {
+    const type = this.u8();
+    if (type === 0) return { name: "", value: null };
+    const name = this.string();
+    return { name, value: this.payload(type) };
+  }
+
+  payload(type) {
+    switch (type) {
+      case 1: return this.i8();
+      case 2: return this.i16();
+      case 3: return this.i32();
+      case 4: return this.i64();
+      case 5: return this.f32();
+      case 6: return this.f64();
+      case 7: return this.byteArray();
+      case 8: return this.string();
+      case 9: return this.list();
+      case 10: return this.compound();
+      case 11: return this.intArray();
+      case 12: return this.longArray();
+      default: throw new Error("Unsupported NBT tag: " + type);
+    }
+  }
+
+  compound() {
+    const out = {};
+    while (true) {
+      const type = this.u8();
+      if (type === 0) break;
+      const name = this.string();
+      out[name] = this.payload(type);
+    }
+    return out;
+  }
+
+  list() {
+    const type = this.u8();
+    const length = this.i32();
+    const out = new Array(Math.max(0, length));
+    for (let i = 0; i < length; i++) out[i] = this.payload(type);
+    return out;
+  }
+
+  byteArray() {
+    const length = this.i32();
+    const out = new Int8Array(length);
+    for (let i = 0; i < length; i++) out[i] = this.i8();
+    return Array.from(out);
+  }
+
+  intArray() {
+    const length = this.i32();
+    const out = new Array(length);
+    for (let i = 0; i < length; i++) out[i] = this.i32();
+    return out;
+  }
+
+  longArray() {
+    const length = this.i32();
+    const out = new Array(length);
+    for (let i = 0; i < length; i++) out[i] = this.i64();
+    return out;
+  }
+
+  string() {
+    const length = this.u16();
+    const start = this.pos;
+    this.pos += length;
+    return this.decoder.decode(this.bytes.subarray(start, start + length));
+  }
+
+  u8() {
+    return this.view.getUint8(this.pos++);
+  }
+
+  i8() {
+    return this.view.getInt8(this.pos++);
+  }
+
+  u16() {
+    const v = this.view.getUint16(this.pos, false);
+    this.pos += 2;
+    return v;
+  }
+
+  i16() {
+    const v = this.view.getInt16(this.pos, false);
+    this.pos += 2;
+    return v;
+  }
+
+  i32() {
+    const v = this.view.getInt32(this.pos, false);
+    this.pos += 4;
+    return v;
+  }
+
+  i64() {
+    const hi = BigInt(this.view.getInt32(this.pos, false));
+    const lo = BigInt(this.view.getUint32(this.pos + 4, false));
+    this.pos += 8;
+    return BigInt.asIntN(64, (hi << 32n) | lo);
+  }
+
+  f32() {
+    const v = this.view.getFloat32(this.pos, false);
+    this.pos += 4;
+    return v;
+  }
+
+  f64() {
+    const v = this.view.getFloat64(this.pos, false);
+    this.pos += 8;
+    return v;
+  }
+}
+`;
+
+  const workerUrl = URL.createObjectURL(new Blob([workerSource], { type: "text/javascript" }));
+  let worker = null;
+  let rows = [];
+
+  const drop = document.getElementById("drop");
+  const fileInput = document.getElementById("fileInput");
+  const dirInput = document.getElementById("dirInput");
+  const clearBtn = document.getElementById("clearBtn");
+  const csvBtn = document.getElementById("csvBtn");
+  const search = document.getElementById("search");
+  const tbody = document.getElementById("tbody");
+  const status = document.getElementById("status");
+  const stats = document.getElementById("stats");
+
+  fileInput.addEventListener("change", () => startScan(filesFromList(fileInput.files)));
+  dirInput.addEventListener("change", () => startScan(filesFromList(dirInput.files)));
+  clearBtn.addEventListener("click", clearAll);
+  csvBtn.addEventListener("click", downloadCsv);
+  search.addEventListener("input", render);
+
+  drop.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    drop.classList.add("dragover");
+  });
+
+  drop.addEventListener("dragleave", () => {
+    drop.classList.remove("dragover");
+  });
+
+  drop.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    drop.classList.remove("dragover");
+
+    const files = await filesFromDrop(e.dataTransfer);
+    startScan(files);
+  });
+
+  function filesFromList(fileList) {
+    return Array.from(fileList)
+      .filter(f => f.name.toLowerCase().endsWith(".mca"))
+      .map(f => ({ file: f, path: f.webkitRelativePath || f.name }));
+  }
+
+  async function filesFromDrop(dataTransfer) {
+    const items = Array.from(dataTransfer.items || []);
+    const out = [];
+
+    if (items.length && items[0].webkitGetAsEntry) {
+      for (const item of items) {
+        const entry = item.webkitGetAsEntry();
+        if (entry) await walkEntry(entry, "", out);
+      }
+      return out.filter(x => x.file.name.toLowerCase().endsWith(".mca"));
+    }
+
+    return filesFromList(dataTransfer.files);
+  }
+
+  async function walkEntry(entry, prefix, out) {
+    if (entry.isFile) {
+      const file = await new Promise((resolve, reject) => entry.file(resolve, reject));
+      out.push({ file, path: prefix + file.name });
+      return;
+    }
+
+    if (entry.isDirectory) {
+      const reader = entry.createReader();
+      while (true) {
+        const entries = await new Promise((resolve, reject) => reader.readEntries(resolve, reject));
+        if (!entries.length) break;
+        for (const child of entries) {
+          await walkEntry(child, prefix + entry.name + "/", out);
+        }
+      }
+    }
+  }
+
+  async function startScan(fileItems) {
+    const mcaFiles = fileItems.filter(x => x.file && x.file.name.toLowerCase().endsWith(".mca"));
+    if (!mcaFiles.length) {
+      setStatus("対象の .mca ファイルがありません");
+      return;
+    }
+
+    if (worker) worker.terminate();
+
+    rows = [];
+    render();
+    csvBtn.disabled = true;
+    setStatus(`${mcaFiles.length} ファイルを読み込み中...`);
+
+    const payloadFiles = [];
+    for (let i = 0; i < mcaFiles.length; i++) {
+      const item = mcaFiles[i];
+      const buffer = await item.file.arrayBuffer();
+      payloadFiles.push({ name: item.file.name, path: item.path, buffer });
+      setStatus(`${i + 1}/${mcaFiles.length} ファイルをメモリに読み込み中...`);
+    }
+
+    worker = new Worker(workerUrl);
+    worker.onmessage = (event) => {
+      const msg = event.data;
+
+      if (msg.type === "progress") {
+        setStatus(`${msg.processed}/${msg.total} ファイル処理済み / ${msg.found} 件検出`);
+      } else if (msg.type === "warn") {
+        setStatus(msg.message);
+      } else if (msg.type === "done") {
+        rows = msg.rows || [];
+        rows.sort((a, b) =>
+          String(a.world).localeCompare(String(b.world)) ||
+          a.x - b.x || a.y - b.y || a.z - b.z
+        );
+        csvBtn.disabled = rows.length === 0;
+        setStatus(`完了: ${rows.length} 件`);
+        render();
+      }
+    };
+
+    worker.onerror = (err) => {
+      setStatus("Worker error: " + err.message);
+    };
+
+    worker.postMessage({ files: payloadFiles }, payloadFiles.map(x => x.buffer));
+  }
+
+  function clearAll() {
+    rows = [];
+    search.value = "";
+    fileInput.value = "";
+    dirInput.value = "";
+    csvBtn.disabled = true;
+    if (worker) worker.terminate();
+    worker = null;
+    setStatus("未処理");
+    render();
+  }
+
+  function filteredRows() {
+    const q = search.value.trim().toLowerCase();
+    if (!q) return rows;
+    return rows.filter(r => String(r.command || "").toLowerCase().includes(q));
+  }
+
+  function render() {
+    const visible = filteredRows();
+
+    tbody.innerHTML = "";
+    const frag = document.createDocumentFragment();
+
+    for (const r of visible) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${esc(r.world)}</td>
+        <td>${esc(r.x)}</td>
+        <td>${esc(r.y)}</td>
+        <td>${esc(r.z)}</td>
+        <td>${esc(r.type)}</td>
+        <td>${r.auto ? "true" : "false"}</td>
+        <td><span class="pill ${esc(r.impact)}">${esc(r.impact)}</span></td>
+        <td class="command">${esc(r.command)}</td>
+      `;
+      frag.appendChild(tr);
+    }
+
+    tbody.appendChild(frag);
+    renderStats(visible);
+  }
+
+  function renderStats(visible) {
+    const counts = countBy(rows, "impact");
+    const typeCounts = countBy(rows, "type");
+
+    stats.innerHTML = `
+      <div class="stat"><b>${rows.length}</b><span>total</span></div>
+      <div class="stat"><b>${visible.length}</b><span>filtered</span></div>
+      <div class="stat"><b>${counts.critical || 0}</b><span>critical</span></div>
+      <div class="stat"><b>${counts.high || 0}</b><span>high</span></div>
+      <div class="stat"><b>${counts.medium || 0}</b><span>medium</span></div>
+      <div class="stat"><b>${counts.low || 0}</b><span>low</span></div>
+      <div class="stat"><b>${typeCounts.repeating || 0}</b><span>repeating</span></div>
+      <div class="stat"><b>${rows.filter(r => r.auto).length}</b><span>auto</span></div>
+    `;
+  }
+
+  function countBy(list, key) {
+    const out = {};
+    for (const item of list) out[item[key]] = (out[item[key]] || 0) + 1;
+    return out;
+  }
+
+  function downloadCsv() {
+    const header = ["world", "x", "y", "z", "type", "auto", "impact", "command"];
+    const lines = [header.join(",")];
+
+    for (const r of filteredRows()) {
+      lines.push(header.map(k => csvCell(r[k])).join(","));
+    }
+
+    const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "command_blocks.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function csvCell(value) {
+    const s = String(value ?? "");
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+
+  function esc(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[ch]));
+  }
+
+  function setStatus(text) {
+    status.textContent = text;
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
