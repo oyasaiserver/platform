@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOD1.5 / LOD2 Compare</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #101319;
+      color: #e5e7eb;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    #scene {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    #panel {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      width: min(470px, calc(100vw - 24px));
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      background: rgba(16, 19, 25, 0.86);
+      backdrop-filter: blur(10px);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    #stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .card {
+      min-width: 0;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(26, 29, 38, 0.88);
+      border-radius: 6px;
+      padding: 8px;
+    }
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+    .card p {
+      margin: 3px 0;
+      color: #a8b3c7;
+      font-size: 11px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+    .card b { color: #e5e7eb; font-weight: 650; }
+    #legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 9px;
+      color: #a8b3c7;
+      font-size: 11px;
+    }
+    .swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      margin-right: 5px;
+      vertical-align: -1px;
+    }
+    #error {
+      margin-top: 8px;
+      color: #fca5a5;
+      font-size: 12px;
+      white-space: pre-wrap;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+  <section id="panel">
+    <h1>LOD1.5相当 / LOD2 比較</h1>
+    <div id="stats"></div>
+    <div id="legend">
+      <div><span class="swatch" style="background:#64748b"></span>wall</div>
+      <div><span class="swatch" style="background:#7dd3a8"></span>roof</div>
+      <div><span class="swatch" style="background:#334155"></span>ground</div>
+    </div>
+    <div id="error"></div>
+  </section>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+    const canvas = document.getElementById("scene");
+    const statsEl = document.getElementById("stats");
+    const errorEl = document.getElementById("error");
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x101319, 1);
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x101319, 160, 520);
+
+    const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 1400);
+    camera.position.set(78, 66, 172);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, 10, 0);
+
+    scene.add(new THREE.HemisphereLight(0xdbeafe, 0x0f172a, 2.2));
+    const sun = new THREE.DirectionalLight(0xffffff, 2.5);
+    sun.position.set(90, 130, 80);
+    scene.add(sun);
+
+    const grid = new THREE.GridHelper(180, 36, 0x334155, 0x1f2937);
+    grid.position.y = -0.03;
+    scene.add(grid);
+
+    const materials = {
+      ground: new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.9, metalness: 0.0, side: THREE.DoubleSide }),
+      roof: new THREE.MeshStandardMaterial({ color: 0x7dd3a8, roughness: 0.72, metalness: 0.0, side: THREE.DoubleSide }),
+      wall: new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.78, metalness: 0.0, side: THREE.DoubleSide }),
+      other: new THREE.MeshStandardMaterial({ color: 0xfbbf24, roughness: 0.7, metalness: 0.0, side: THREE.DoubleSide }),
+    };
+
+    function resize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function makeMesh(triangles, material, bounds, offsetX) {
+      const positions = [];
+      const centerX = (bounds.xMin + bounds.xMax) / 2;
+      const centerZ = (bounds.zMin + bounds.zMax) / 2;
+      for (const tri of triangles) {
+        for (const [x, y, z] of tri) {
+          positions.push(x - centerX + offsetX, y, z - centerZ);
+        }
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+      geometry.computeVertexNormals();
+      return new THREE.Mesh(geometry, material);
+    }
+
+    function addModel(data, modelKey, offsetX) {
+      const group = new THREE.Group();
+      for (const key of ["ground", "wall", "roof", "other"]) {
+        const tris = data.models[modelKey][key] ?? [];
+        if (tris.length) {
+          group.add(makeMesh(tris, materials[key], data.bounds, offsetX));
+        }
+      }
+      scene.add(group);
+      return group;
+    }
+
+    function addLabel(text, x, y, z) {
+      const canvas2 = document.createElement("canvas");
+      canvas2.width = 512;
+      canvas2.height = 96;
+      const ctx = canvas2.getContext("2d");
+      ctx.clearRect(0, 0, canvas2.width, canvas2.height);
+      ctx.font = "bold 38px ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "rgba(229, 231, 235, 0.96)";
+      ctx.fillText(text, canvas2.width / 2, canvas2.height / 2);
+      const texture = new THREE.CanvasTexture(canvas2);
+      const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+      const sprite = new THREE.Sprite(material);
+      sprite.position.set(x, y, z);
+      sprite.scale.set(34, 6.4, 1);
+      scene.add(sprite);
+    }
+
+    function fmt(n, d = 0) {
+      return Number(n).toLocaleString("ja-JP", { maximumFractionDigits: d });
+    }
+
+    function renderStats(data) {
+      const s1 = data.stats.lod15;
+      const s2 = data.stats.lod2;
+      statsEl.innerHTML = `
+        <article class="card">
+          <h2>LOD1.5相当</h2>
+          <p>flat roof mass model</p>
+          <p>triangles: <b>${fmt(s1.triangles)}</b></p>
+          <p>footprint vertices: <b>${fmt(s1.footprintVertices)}</b></p>
+          <p>height: <b>${fmt(s1.height, 2)}</b> blocks</p>
+        </article>
+        <article class="card">
+          <h2>LOD2</h2>
+          <p>roof / wall / ground surfaces</p>
+          <p>triangles: <b>${fmt(s2.triangles)}</b></p>
+          <p>roof surfaces: <b>${fmt(s2.roofSurfaces)}</b></p>
+          <p>wall surfaces: <b>${fmt(s2.wallSurfaces)}</b></p>
+        </article>
+      `;
+    }
+
+    try {
+      const data = await fetch("./lod_compare_data.json").then((r) => {
+        if (!r.ok) throw new Error(`data load failed: ${r.status}`);
+        return r.json();
+      });
+      const gap = Math.max(44, (data.bounds.xMax - data.bounds.xMin) * 1.7);
+      addModel(data, "lod15", -gap / 2);
+      addModel(data, "lod2", gap / 2);
+      addLabel("LOD1.5相当", -gap / 2, data.bounds.yMax + 8, 0);
+      addLabel("LOD2", gap / 2, data.bounds.yMax + 8, 0);
+      renderStats(data);
+      controls.target.set(0, Math.max(8, data.bounds.yMax / 2), 0);
+      controls.update();
+      animate();
+    } catch (error) {
+      errorEl.textContent = String(error?.message ?? error);
+    }
+
+    function animate() {
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+  </script>
+</body>
+</html>

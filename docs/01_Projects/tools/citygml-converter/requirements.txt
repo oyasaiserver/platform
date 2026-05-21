@@ -1,0 +1,7 @@
+lxml>=4.9
+numpy>=1.24
+mcschematic>=0.0.3
+mapbox-earcut>=1.0.0
+fastapi>=0.110.0
+uvicorn>=0.29.0
+python-multipart>=0.0.9

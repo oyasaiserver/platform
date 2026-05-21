@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: minecraft-glass-gradient
+    env: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /

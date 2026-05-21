@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityGML Viewer</title>
+
+    <!-- Leaflet.js (CDN) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        #app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+        #map {
+            flex: 1;
+            height: 100%;
+        }
+        #sidebar {
+            width: 320px;
+            background: #fff;
+            border-left: 1px solid #ccc;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1000; /* over leaflet map container */
+        }
+        h2 { margin-top: 0; font-size: 1.2rem; color: #333; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem;}
+        
+        #fileInput { width: 100%; font-size: 0.85rem; }
+        
+        #loading {
+            display: none;
+            color: #d9534f;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .panel {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        table.details-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+        table.details-table th, table.details-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        table.details-table th {
+            background: #e9ecef;
+            width: 40%;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    <div id="map"></div>
+    <div id="sidebar">
+        <h2>CityGML Viewer</h2>
+        
+        <div class="control-group panel">
+            <label for="fileInput">Select .gml Files / Folder</label>
+            <!-- 複数ファイル選択 または フォルダ選択 -->
+            <input type="file" id="fileInput" multiple accept=".gml" webkitdirectory directory />
+            <div id="loading">Loading and Parsing...</div>
+        </div>
+
+        <div class="control-group panel" id="details-panel">
+            <label>Building Details</label>
+            <p style="font-size: 0.85rem; color: #666; margin: 0;">Click a building on the map to see properties.</p>
+            <div id="details-content"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- Map Initialization ---
+    const map = L.map('map').setView([35.681236, 139.767125], 13); // Default Tokyo
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Layer for GeoJSON footprints
+    const geoJsonLayer = L.geoJSON(null, {
+        style: {
+            color: "#ff7800",
+            weight: 1,
+            fillColor: "#ff7800",
+            fillOpacity: 0.5
+        },
+        onEachFeature: function (feature, layer) {
+            layer.on('click', function (e) {
+                L.DomEvent.stopPropagation(e); // Prevent map click from firing
+                showBuildingDetails(feature.properties);
+                
+                // Highlight selected building
+                geoJsonLayer.eachLayer(l => geoJsonLayer.resetStyle(l));
+                layer.setStyle({ color: "red", weight: 2, fillOpacity: 0.8 });
+            });
+        }
+    }).addTo(map);
+
+    const fileMap = new Map();
+    let meshRectangles = [];
+
+    // --- Core Logic Math ---
+    function latlonToMeshcode(lat, lon) {
+        const p = Math.floor(lat * 1.5);
+        const u = Math.floor(lon - 100);
+        const r1 = lat * 1.5 - p;
+        const c1 = lon - (u + 100);
+        const r2 = Math.floor(r1 * 8);
+        const c2 = Math.floor(c1 * 8);
+        const r3 = Math.floor((r1 * 8 - r2) * 10);
+        const c3 = Math.floor((c1 * 8 - c2) * 10);
+        const pad = (num, size) => ('00' + num).slice(-size);
+        return `${pad(p, 2)}${pad(u, 2)}${r2}${c2}${r3}${c3}`;
+    }
+
+    function meshcodeToBounds(code) {
+        const p  = parseInt(code.substring(0, 2), 10);
+        const u  = parseInt(code.substring(2, 4), 10);
+        const r2 = parseInt(code.substring(4, 5), 10);
+        const c2 = parseInt(code.substring(5, 6), 10);
+        const r3 = parseInt(code.substring(6, 7), 10);
+        const c3 = parseInt(code.substring(7, 8), 10);
+
+        const lat_min = p / 1.5 + r2 / 12  + r3 / 120;
+        const lon_min = 100 + u  + c2 / 8  + c3 / 80;
+
+        return {
+            lat_min: lat_min,
+            lat_max: lat_min + 1/120,
+            lon_min: lon_min,
+            lon_max: lon_min + 1/80
+        };
+    }
+
+    // --- File Input Event ---
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        const files = e.target.files;
+        let boundsAccumulator = [];
+
+        // Clear previous meshes state (but keep footprints if user wants them, here we clear for fresh view)
+        meshRectangles.forEach(r => map.removeLayer(r));
+        meshRectangles = [];
+        fileMap.clear();
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (!file.name.endsWith('.gml')) continue;
+
+            const match = file.name.match(/^(\d{8})/);
+            if (match) {
+                const meshCode = match[1];
+                fileMap.set(meshCode, file);
+
+                const bounds = meshcodeToBounds(meshCode);
+                const leafletBounds = [
+                    [bounds.lat_min, bounds.lon_min],
+                    [bounds.lat_max, bounds.lon_max]
+                ];
+                boundsAccumulator.push(leafletBounds);
+
+                const rect = L.rectangle(leafletBounds, {
+                    color: "#3388ff",
+                    weight: 2,
+                    fillOpacity: 0.15,
+                    dashArray: '4'
+                }).addTo(map);
+
+                rect.bindTooltip(`Click to load: ${meshCode}`);
+                
+                rect.on('click', () => {
+                    loadAndParseGmlFile(file, rect);
+                });
+
+                meshRectangles.push(rect);
+            }
+        }
+
+        if (boundsAccumulator.length > 0) {
+            map.fitBounds(boundsAccumulator);
+        }
+    });
+
+    // --- XML Parsing Helpers (Namespace safe) ---
+    function getByLocalName(parentElem, localName) {
+        const result = [];
+        // Use wildcards to safely ignore specific namespace prefixes (bldg:, gml:, etc)
+        const elements = parentElem.getElementsByTagName('*');
+        for (let i = 0; i < elements.length; i++) {
+            if (elements[i].localName === localName) {
+                result.push(elements[i]);
+            }
+        }
+        return result;
+    }
+
+    function parsePosList(text, dim = 3) {
+        const nums = text.trim().split(/\s+/).map(Number);
+        const coords = [];
+        for (let i = 0; i <= nums.length - dim; i += dim) {
+            coords.push(nums.slice(i, i + dim));
+        }
+        return coords;
+    }
+
+    function collectPolygons(surfaceElem) {
+        const out = [];
+        const polygons = getByLocalName(surfaceElem, 'Polygon');
+        for (let i = 0; i < polygons.length; i++) {
+            const posLists = getByLocalName(polygons[i], 'posList');
+            if (posLists.length > 0 && posLists[0].textContent) {
+                const dimAttr = posLists[0].getAttribute('srsDimension');
+                const dim = dimAttr ? parseInt(dimAttr, 10) : 3;
+                const coords = parsePosList(posLists[0].textContent, dim);
+                if (coords.length > 0) out.push({ coordinates: coords });
+            }
+        }
+        return out;
+    }
+
+    function getSurfaceType(boundedElem) {
+        if (getByLocalName(boundedElem, 'GroundSurface').length > 0) return 'GroundSurface';
+        if (getByLocalName(boundedElem, 'RoofSurface').length > 0) return 'RoofSurface';
+        if (getByLocalName(boundedElem, 'WallSurface').length > 0) return 'WallSurface';
+        return 'Other';
+    }
+
+    function parseBuilding(bldgElem) {
+        // gml:id
+        const gid = bldgElem.getAttribute('gml:id') || bldgElem.getAttributeNS('http://www.opengis.net/gml', 'id') || '';
+        
+        const surfaces = { 'GroundSurface': [], 'RoofSurface': [], 'WallSurface': [], 'Other': [] };
+        
+        const boundedBys = getByLocalName(bldgElem, 'boundedBy');
+        for (let i = 0; i < boundedBys.length; i++) {
+            const kind = getSurfaceType(boundedBys[i]);
+            surfaces[kind] = surfaces[kind].concat(collectPolygons(boundedBys[i]));
+        }
+        
+        const heightEl = getByLocalName(bldgElem, 'measuredHeight')[0];
+        const height = (heightEl && heightEl.textContent) ? parseFloat(heightEl.textContent) : null;
+
+        const storeysEl = getByLocalName(bldgElem, 'storeysAboveGround')[0];
+        const storeys = (storeysEl && storeysEl.textContent) ? parseInt(storeysEl.textContent, 10) : null;
+
+        return {
+            building_id: gid,
+            measured_height: height,
+            storeys: storeys,
+            ground_surfaces: surfaces['GroundSurface'],
+            roof_surfaces: surfaces['RoofSurface'],
+            wall_surfaces: surfaces['WallSurface']
+        };
+    }
+
+    function buildingToFeature(bldg) {
+        // Prefer GroundSurface over RoofSurface
+        const gs = bldg.ground_surfaces.length > 0 ? bldg.ground_surfaces : bldg.roof_surfaces;
+        if (!gs || gs.length === 0) return null;
+
+        // GML (EPSG:6697) is [lat, lon, alt] => GeoJSON needs [lon, lat]
+        const ring = gs[0].coordinates.map(c => [c[1], c[0]]);
+        
+        // Make sure it forms a valid closed polygon for GeoJSON
+        if (ring.length > 0) {
+            const first = ring[0];
+            const last = ring[ring.length - 1];
+            if (first[0] !== last[0] || first[1] !== last[1]) {
+                ring.push([first[0], first[1]]);
+            }
+        }
+        
+        if (ring.length < 4) return null; // A valid polygon ring needs at least 4 coordinates
+
+        return {
+            type: 'Feature',
+            id: bldg.building_id,
+            geometry: {
+                type: 'Polygon',
+                coordinates: [ring]
+            },
+            properties: {
+                building_id: bldg.building_id,
+                measured_height: bldg.measured_height,
+                storeysAboveGround: bldg.storeys
+            }
+        };
+    }
+
+    // --- Actions ---
+    async function loadAndParseGmlFile(file, boundsLayer) {
+        const loader = document.getElementById('loading');
+        loader.style.display = 'block';
+
+        // Non-blocking UI by delaying parsing slightly
+        setTimeout(async () => {
+            try {
+                const text = await file.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(text, 'text/xml');
+
+                const buildings = getByLocalName(xmlDoc, 'Building');
+                const features = [];
+
+                for (let i = 0; i < buildings.length; i++) {
+                    const bData = parseBuilding(buildings[i]);
+                    const feat = buildingToFeature(bData);
+                    if (feat) features.push(feat);
+                }
+
+                if (features.length > 0) {
+                    geoJsonLayer.addData({
+                        type: 'FeatureCollection',
+                        features: features
+                    });
+                }
+
+                // Change style to indicate it's loaded and turn off the click handler
+                boundsLayer.setStyle({ color: '#28a745', fillOpacity: 0.05, dashArray: null });
+                boundsLayer.unbindTooltip();
+                boundsLayer.bindTooltip(`Loaded: ${file.name}`);
+                boundsLayer.off('click');
+                
+            } catch (error) {
+                console.error("Error parsing GML:", error);
+                alert(`Failed to parse file: ${file.name}\n${error.message}`);
+            } finally {
+                loader.style.display = 'none';
+            }
+        }, 50);
+    }
+
+    function showBuildingDetails(props) {
+        const container = document.getElementById('details-content');
+        container.innerHTML = `
+            <table class="details-table">
+                <tbody>
+                    <tr><th>Building ID</th><td>${props.building_id || 'N/A'}</td></tr>
+                    <tr><th>Measured Height</th><td>${props.measured_height !== null ? props.measured_height + ' m' : 'N/A'}</td></tr>
+                    <tr><th>Storeys</th><td>${props.storeysAboveGround !== null ? props.storeysAboveGround : 'N/A'}</td></tr>
+                </tbody>
+            </table>
+        `;
+    }
+
+    // Deselect feature when clicking on map
+    map.on('click', function() {
+        geoJsonLayer.eachLayer(l => geoJsonLayer.resetStyle(l));
+        document.getElementById('details-content').innerHTML = '';
+    });
+</script>
+
+</body>
+</html>

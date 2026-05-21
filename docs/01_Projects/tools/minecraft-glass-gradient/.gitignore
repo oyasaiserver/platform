@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+*.schem
+output/
+gui/dist/
+*.gif
+*.png
+*.jpg
+*.jpeg
+.DS_Store
+gui/data/palettes/*.json
