@@ -1,0 +1,61 @@
+---
+title: "OyasaiPets — ペットシステム"
+category: platform
+status: active
+owner: marzipan99
+source_of_truth: "plugins/OyasaiPets/src/main/kotlin/me/marzipan/OyasaiPets/OyasaiPetsUnified.kt"
+related_paths:
+  - plugins/OyasaiPets/
+last_validated: "2026-05-20"
+agent_task: null
+---
+
+# OyasaiPets
+
+Minecraft向けペット召喚・育成・管理プラグイン（v2.5.0）。
+
+## 主要クラス
+
+メインソース（モノリシック）: `OyasaiPetsUnified.kt`（約7800行）
+
+### ActivePetRegistry（v2.5.0）
+
+全ペットエンティティのインメモリレジストリ。ワールドスキャンを廃止し高速化。
+
+```kotlin
+object ActivePetRegistry {
+    fun register(entity: Entity)
+    fun unregister(entityUuid: UUID)
+    fun findByPetId(petId: String): Entity?
+    fun getByOwner(ownerUuidStr: String): List<Entity>
+    fun countByOwner(ownerUuidStr: String): Int
+    fun getAll(): Collection<Entity>
+    fun clear()
+}
+```
+
+**重要**: `register` 前に必ず `petId` と `ownerId` をエンティティにセットすること。
+
+## ビルド
+
+```bash
+gradle :plugins:OyasaiPets:compileKotlin
+gradle :plugins:OyasaiPets:build
+```
+
+**既知の問題**: detekt 1.23.6 が Java 25 で `IllegalArgumentException: 25` — コードと無関係のCI既知問題。
+
+## 主要バグ修正履歴
+
+### v2.5.0 (2026-03-08)
+- `onPetSpawned` 呼び出し順序修正（petId/ownerIdセット後に呼ぶ）— registry全バグの根本原因
+- PUFFERFISH削除
+- Armadillo shell状態管理
+- FLYING pet descent on ground
+- ALLAY/PARROT FLYING_SPEED 復元
+- pet follow teleport（20ブロック超で自動テレポート）
+
+### v2.4.0 (2026-03-05)
+- Flying pet descent task leak修正
+- Breeding cost before validation
+- breedSelections thread safety

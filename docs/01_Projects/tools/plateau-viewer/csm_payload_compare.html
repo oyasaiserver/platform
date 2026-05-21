@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSM Payload Shape Compare</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0f1117;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    #scene {
+      position: fixed;
+      inset: 0;
+    }
+    #hud {
+      position: fixed;
+      inset: 12px auto auto 12px;
+      width: min(480px, calc(100vw - 24px));
+      padding: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      background: rgba(15, 17, 23, 0.84);
+      backdrop-filter: blur(10px);
+      border-radius: 8px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+    #variant-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    button {
+      min-height: 30px;
+      border: 1px solid rgba(148, 163, 184, 0.26);
+      border-radius: 6px;
+      padding: 5px 8px;
+      background: #1a1d26;
+      color: #cbd5e1;
+      font: inherit;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    button.active {
+      border-color: #4f9cf9;
+      color: white;
+      background: #1f3558;
+    }
+    #stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      font-size: 11px;
+    }
+    .stat {
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(26, 29, 38, 0.84);
+      border-radius: 6px;
+      padding: 6px 7px;
+      min-width: 0;
+    }
+    .stat span {
+      display: block;
+      color: #94a3b8;
+      margin-bottom: 2px;
+    }
+    .stat b {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #e2e8f0;
+      font-weight: 650;
+    }
+    #legend {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: #94a3b8;
+      font-size: 11px;
+    }
+    .swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      margin-right: 5px;
+      vertical-align: -1px;
+    }
+    #error {
+      color: #fca5a5;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+  <section id="hud">
+    <h1>CSM payload shape compare</h1>
+    <div id="variant-buttons"></div>
+    <div id="stats"></div>
+    <div id="legend">
+      <div><span class="swatch" style="background:#4f9cf9"></span>reference</div>
+      <div><span class="swatch" style="background:#fb923c"></span>selected</div>
+    </div>
+    <div id="error"></div>
+  </section>
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+    const canvas = document.getElementById("scene");
+    const buttonsEl = document.getElementById("variant-buttons");
+    const statsEl = document.getElementById("stats");
+    const errorEl = document.getElementById("error");
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x0f1117, 1);
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x0f1117, 180, 520);
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
+    camera.position.set(120, 95, 155);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, 28, 0);
+
+    scene.add(new THREE.HemisphereLight(0xdbeafe, 0x111827, 2.4));
+    const sun = new THREE.DirectionalLight(0xffffff, 2.2);
+    sun.position.set(120, 180, 90);
+    scene.add(sun);
+
+    const grid = new THREE.GridHelper(180, 36, 0x334155, 0x1e293b);
+    grid.position.y = -0.01;
+    scene.add(grid);
+
+    const exactMaterial = new THREE.MeshStandardMaterial({
+      color: 0x4f9cf9,
+      roughness: 0.72,
+      metalness: 0.0,
+      transparent: true,
+      opacity: 0.22,
+    });
+    const selectedMaterial = new THREE.MeshStandardMaterial({
+      color: 0xfb923c,
+      roughness: 0.62,
+      metalness: 0.0,
+      transparent: true,
+      opacity: 0.92,
+    });
+    const exactSolidMaterial = new THREE.MeshStandardMaterial({
+      color: 0x4f9cf9,
+      roughness: 0.68,
+      metalness: 0.0,
+    });
+    const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const group = new THREE.Group();
+    scene.add(group);
+
+    function resize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function makeMesh(columns, material, bounds, offsetX = 0) {
+      const mesh = new THREE.InstancedMesh(boxGeometry, material, columns.length);
+      mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+      const dummy = new THREE.Object3D();
+      const centerX = (bounds.xMin + bounds.xMax + 1) / 2;
+      const centerZ = (bounds.zMin + bounds.zMax + 1) / 2;
+      columns.forEach((col, i) => {
+        const [x, z, y, h, sx = 1, sz = 1] = col;
+        const sy = h + 1;
+        dummy.position.set(x + sx / 2 - centerX + offsetX, y + sy / 2, z + sz / 2 - centerZ);
+        dummy.scale.set(sx, sy, sz);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(i, dummy.matrix);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+      return mesh;
+    }
+
+    function fmt(n) {
+      return Number(n).toLocaleString("ja-JP");
+    }
+
+    function stat(label, value) {
+      const div = document.createElement("div");
+      div.className = "stat";
+      div.innerHTML = `<span>${label}</span><b>${value}</b>`;
+      return div;
+    }
+
+    function renderStats(stats) {
+      statsEl.replaceChildren(
+        stat("records", fmt(stats.logicalRecords)),
+        stat("blocks", fmt(stats.blocks)),
+        stat("command chars", fmt(stats.commandChars)),
+        stat("payload chars", fmt(stats.base997PayloadChars)),
+        stat("added blocks", fmt(stats.added)),
+        stat("removed blocks", fmt(stats.removed)),
+        stat("IoU", stats.iou.toFixed(4)),
+        stat("mode", stats.lossless ? "lossless" : "lossy")
+      );
+    }
+
+    function clearGroup() {
+      while (group.children.length) {
+        const child = group.children.pop();
+        child.geometry?.dispose?.();
+      }
+    }
+
+    function showVariant(data, variant) {
+      clearGroup();
+      const exact = data.variants.find((v) => v.id === "exact");
+      if (variant.id === "exact") {
+        group.add(makeMesh(exact.columns, exactSolidMaterial, data.bounds));
+      } else {
+        group.add(makeMesh(exact.columns, exactMaterial, data.bounds));
+        const material = selectedMaterial.clone();
+        material.color = new THREE.Color(variant.color);
+        group.add(makeMesh(variant.columns, material, data.bounds));
+      }
+      renderStats(variant.stats);
+      for (const button of buttonsEl.querySelectorAll("button")) {
+        button.classList.toggle("active", button.dataset.id === variant.id);
+      }
+    }
+
+    function animate() {
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+
+    try {
+      const data = await fetch("./csm_payload_compare_data.json").then((r) => {
+        if (!r.ok) throw new Error(`data load failed: ${r.status}`);
+        return r.json();
+      });
+      for (const variant of data.variants) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.id = variant.id;
+        button.textContent = variant.label;
+        button.addEventListener("click", () => showVariant(data, variant));
+        buttonsEl.appendChild(button);
+      }
+      showVariant(data, data.variants[0]);
+      animate();
+    } catch (error) {
+      errorEl.textContent = String(error?.message ?? error);
+    }
+  </script>
+</body>
+</html>

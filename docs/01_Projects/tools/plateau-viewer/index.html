@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CitiesSkyMine — PLATEAU LOD2 Viewer</title>
+
+  <!-- Leaflet CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0f1117;
+      --surface: #1a1d26;
+      --border:  #2a2d3a;
+      --accent:  #4f9cf9;
+      --accent2: #7dd3a8;
+      --text:    #e2e8f0;
+      --muted:   #6b7280;
+      --panel:   340px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+    }
+
+    #layout {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* ── 左: 地図エリア ── */
+    #map-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+    }
+
+    #map-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    .badge {
+      background: rgba(15, 17, 23, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 11px;
+      color: var(--muted);
+      backdrop-filter: blur(4px);
+    }
+
+    .badge b { color: var(--accent); }
+
+    #status-badge { pointer-events: all; }
+
+    /* ── タイルレジェンド ── */
+    #legend {
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── 右: パネル ── */
+    #panel {
+      width: var(--panel);
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #panel-header {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #panel-header h1 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    #panel-header .sub {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── 建物メタ情報 ── */
+    #meta-section {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 90px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .meta-label { color: var(--muted); font-size: 11px; }
+    .meta-value { color: var(--text); font-weight: 500; }
+    .meta-value.highlight { color: var(--accent2); }
+
+    /* ── ジオメトリサマリー ── */
+    #summary-section {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+    }
+
+    .sum-card {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 8px;
+      text-align: center;
+    }
+
+    .sum-card .num { font-size: 18px; color: var(--accent); font-weight: 700; }
+    .sum-card .lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+    /* ── JSON 表示エリア ── */
+    #json-section {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #json-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    #json-toolbar .title { font-size: 11px; color: var(--muted); }
+
+    #surface-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    #json-output {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 16px;
+      background: var(--bg);
+      font-size: 11px;
+      line-height: 1.6;
+      white-space: pre;
+      color: #a8b8cf;
+    }
+
+    #json-output .k { color: #7dd3a8; }  /* key */
+    #json-output .s { color: #fbbf24; }  /* string */
+    #json-output .n { color: #60a5fa; }  /* number */
+    #json-output .b { color: #f472b6; }  /* bool/null */
+
+    /* ── アクションボタン ── */
+    #action-section {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #command-output {
+      display: none;
+      width: 100%;
+      min-height: 86px;
+      max-height: 160px;
+      resize: vertical;
+      padding: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--accent2);
+      font-family: inherit;
+      font-size: 10px;
+      line-height: 1.45;
+      white-space: pre;
+      overflow: auto;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      letter-spacing: 0.03em;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-secondary:hover:not(:disabled) { border-color: var(--accent2); color: var(--accent2); }
+
+    /* ── トースト通知 ── */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: var(--accent2);
+      color: #0f1117;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 12px;
+      transition: transform 0.25s ease;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── 初期プレースホルダー ── */
+    #placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #placeholder .icon { font-size: 40px; }
+
+    /* ── Leaflet 上書き ── */
+    .leaflet-container { background: #1a1d26; font-family: inherit; }
+
+    /* タイルツールチップ */
+    .tile-tooltip {
+      background: rgba(15,17,23,0.88);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      font-family: 'SF Mono','Fira Code','Consolas',monospace;
+      font-size: 10px;
+      padding: 2px 7px;
+      box-shadow: none;
+    }
+    .tile-tooltip::before { display: none; }
+
+    /* ── スクロールバー ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<div id="layout">
+  <!-- 左: CesiumJS 地図 -->
+  <div id="map-container">
+    <div id="cesiumContainer"></div>
+    <div id="map-overlay">
+      <div class="badge" id="status-badge">読み込み中...</div>
+      <div class="badge" id="coord-badge" style="display:none">
+        <b id="coord-text">—</b>
+      </div>
+      <div class="badge" id="legend">
+        <div class="legend-row">
+          <div class="legend-dot" style="background:#4f9cf9;opacity:0.9"></div>
+          LOD2 あり（クリックで読み込み）
+        </div>
+        <div class="legend-row">
+          <div class="legend-dot" style="background:#6b7280;opacity:0.7"></div>
+          LOD1 のみ
+        </div>
+        <div class="legend-row">
+          <div class="legend-dot" style="background:#fbbf24"></div>
+          読み込み中
+        </div>
+        <div class="legend-row">
+          <div class="legend-dot" style="background:#7dd3a8"></div>
+          読み込み済（再クリックで削除）
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右: 情報パネル -->
+  <div id="panel">
+    <div id="panel-header">
+      <div>
+        <h1>CitiesSkyMine</h1>
+        <div class="sub">PLATEAU LOD2 Viewer — Phase 2</div>
+      </div>
+    </div>
+
+    <!-- 建物が未選択のとき -->
+    <div id="placeholder">
+      <div class="icon">🏢</div>
+      <div>地図上の建物をクリックすると<br>LOD2 ジオメトリを表示します</div>
+    </div>
+
+    <!-- 建物選択後に表示 -->
+    <div id="building-info" style="display:none; flex:1; flex-direction:column; overflow:hidden;">
+
+      <div id="meta-section">
+        <div class="meta-row">
+          <span class="meta-label">建物 ID</span>
+          <span class="meta-value" id="meta-id" style="font-size:10px">—</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">高さ</span>
+          <span class="meta-value highlight" id="meta-height">— m</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-label">階数（地上）</span>
+          <span class="meta-value" id="meta-storeys">—</span>
+        </div>
+      </div>
+
+      <div id="summary-section">
+        <div class="sum-card">
+          <div class="num" id="sum-ground">0</div>
+          <div class="lbl">Ground</div>
+        </div>
+        <div class="sum-card">
+          <div class="num" id="sum-roof">0</div>
+          <div class="lbl">Roof</div>
+        </div>
+        <div class="sum-card">
+          <div class="num" id="sum-wall">0</div>
+          <div class="lbl">Wall</div>
+        </div>
+      </div>
+
+      <div id="json-section">
+        <div id="json-toolbar">
+          <span class="title">ジオメトリ JSON</span>
+          <div id="surface-tabs">
+            <button class="tab-btn active" data-tab="all">ALL</button>
+            <button class="tab-btn" data-tab="ground">GND</button>
+            <button class="tab-btn" data-tab="roof">ROOF</button>
+            <button class="tab-btn" data-tab="wall">WALL</button>
+          </div>
+        </div>
+        <div id="json-output"></div>
+      </div>
+
+      <div id="action-section">
+        <button class="btn btn-primary" id="btn-copy" disabled>
+          📋 Minecraft コマンドをコピー
+        </button>
+        <textarea id="command-output" readonly spellcheck="false"></textarea>
+        <button class="btn btn-secondary" id="btn-clear">
+          選択解除
+        </button>
+        <button class="btn btn-secondary" id="btn-unload-all">
+          🗑 全タイルをクリア
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast">コピーしました ✓</div>
+
+<!-- アプリ本体 -->
+<script type="module" src="js/viewer.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: plateau-viewer
+    env: docker
+    plan: free
+    region: oregon
+    envVars:
+      - key: CITYGML_DATASET
+        value: /app/data
+    disk:
+      name: plateau-data
+      mountPath: /app/data
+      sizeGB: 1

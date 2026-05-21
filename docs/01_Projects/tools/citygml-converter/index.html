@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityGML → GLB Converter</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; background: #1a1a2e; color: #e0e0e0; display: flex; flex-direction: column; height: 100vh; }
+  header { padding: 12px 20px; background: #16213e; border-bottom: 1px solid #0f3460; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  header h1 { font-size: 1.1rem; font-weight: 600; color: #a8d8ea; }
+  .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  label.file-btn { cursor: pointer; background: #0f3460; border: 1px solid #a8d8ea; border-radius: 6px; padding: 6px 14px; font-size: 0.85rem; color: #a8d8ea; transition: background 0.2s; }
+  label.file-btn:hover { background: #1a5276; }
+  input[type="file"] { display: none; }
+  button { cursor: pointer; border: none; border-radius: 6px; padding: 6px 14px; font-size: 0.85rem; font-weight: 600; transition: background 0.2s; }
+  #convertBtn { background: #e94560; color: #fff; }
+  #convertBtn:hover:not(:disabled) { background: #c0392b; }
+  #convertBtn:disabled { background: #555; cursor: not-allowed; }
+  #status { font-size: 0.8rem; color: #aaa; min-width: 160px; }
+  #downloadLink { display: none; background: #27ae60; color: #fff; border-radius: 6px; padding: 6px 14px; font-size: 0.85rem; font-weight: 600; text-decoration: none; }
+  #downloadLink:hover { background: #219a52; }
+  #fileList { font-size: 0.78rem; color: #888; }
+  main { flex: 1; overflow: hidden; }
+  #viewport { width: 100%; height: 100%; display: block; }
+  #overlay { position: absolute; top: 60px; left: 20px; font-size: 0.75rem; color: #555; pointer-events: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>CityGML → GLB</h1>
+  <div class="controls">
+    <label class="file-btn" for="fileInput">GMLファイル選択</label>
+    <input type="file" id="fileInput" multiple accept=".gml,.xml">
+    <span id="fileList">ファイル未選択</span>
+    <button id="convertBtn" disabled>変換</button>
+    <span id="status"></span>
+    <a id="downloadLink" download="output.glb">GLBダウンロード</a>
+  </div>
+</header>
+<main>
+  <canvas id="viewport"></canvas>
+</main>
+<div id="overlay">マウス: 回転 / ホイール: ズーム / 右ドラッグ: パン</div>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/loaders/GLTFLoader.js';
+
+// ─── Three.js setup ──────────────────────────────────────────────────────────
+const canvas = document.getElementById('viewport');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(devicePixelRatio);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1a2e);
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+dirLight.position.set(200, 500, 300);
+scene.add(dirLight);
+scene.add(new THREE.GridHelper(1000, 50, 0x333366, 0x222244));
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000);
+camera.position.set(0, 300, 600);
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(canvas);
+resize();
+
+(function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); })();
+
+// ─── Coordinate math ─────────────────────────────────────────────────────────
+const A = 6_378_137.0, F = 1 / 298.257223563;
+const E2 = 2 * F - F * F;
+
+function geoToEcef(lat_deg, lon_deg, h_m) {
+  const lat = lat_deg * Math.PI / 180, lon = lon_deg * Math.PI / 180;
+  const N = A / Math.sqrt(1 - E2 * Math.sin(lat) ** 2);
+  return [
+    (N + h_m) * Math.cos(lat) * Math.cos(lon),
+    (N + h_m) * Math.cos(lat) * Math.sin(lon),
+    (N * (1 - E2) + h_m) * Math.sin(lat),
+  ];
+}
+
+function makeEnuBasis(lat0, lon0) {
+  const lat = lat0 * Math.PI / 180, lon = lon0 * Math.PI / 180;
+  const e = [-Math.sin(lon), Math.cos(lon), 0];
+  const n = [-Math.sin(lat) * Math.cos(lon), -Math.sin(lat) * Math.sin(lon), Math.cos(lat)];
+  const u = [ Math.cos(lat) * Math.cos(lon),  Math.cos(lat) * Math.sin(lon), Math.sin(lat)];
+  return [e, n, u];
+}
+
+function geoToEnu(lat, lon, h, originEcef, enuBasis) {
+  const [ex, ey, ez] = geoToEcef(lat, lon, h);
+  const dx = ex - originEcef[0], dy = ey - originEcef[1], dz = ez - originEcef[2];
+  const [e_v, n_v, u_v] = enuBasis;
+  return [
+    dx * e_v[0] + dy * e_v[1] + dz * e_v[2],
+    dx * n_v[0] + dy * n_v[1] + dz * n_v[2],
+    dx * u_v[0] + dy * u_v[1] + dz * u_v[2],
+  ];
+}
+
+// ─── XML helpers ─────────────────────────────────────────────────────────────
+function getByLocalName(parent, localName) {
+  const out = [];
+  for (const el of parent.getElementsByTagNameNS('*', localName)) out.push(el);
+  return out;
+}
+
+function parsePosList(text) {
+  const vals = text.trim().split(/\s+/).map(Number);
+  if (vals.length % 3 !== 0) return [];
+  const pts = [];
+  for (let i = 0; i < vals.length; i += 3) pts.push([vals[i], vals[i + 1], vals[i + 2]]);
+  return pts;
+}
+
+/** Yield { coords, gmlId } for every exterior ring reachable from elem */
+function* surfacesFromElement(elem) {
+  for (const poly of getByLocalName(elem, 'Polygon')) {
+    const gmlId = poly.getAttribute('gml:id') || poly.getAttributeNS('http://www.opengis.net/gml', 'id') || poly.getAttribute('id');
+    const extElems = getByLocalName(poly, 'exterior');
+    if (!extElems.length) continue;
+    const exterior = extElems[0];
+    const ringElems = getByLocalName(exterior, 'LinearRing');
+    if (!ringElems.length) continue;
+    const ring = ringElems[0];
+
+    let coords = [];
+    const posListEls = getByLocalName(ring, 'posList');
+    if (posListEls.length && posListEls[0].textContent) {
+      coords = parsePosList(posListEls[0].textContent);
+    } else {
+      for (const pos of getByLocalName(ring, 'pos')) {
+        if (pos.textContent) coords.push(pos.textContent.trim().split(/\s+/).map(Number));
+      }
+    }
+    if (coords.length >= 3) yield { coords, gmlId };
+  }
+}
+
+function extractGeometry(docs) {
+  const surfaces = []; // [{coords, gmlId}]
+
+  for (const doc of docs) {
+    const root = doc.documentElement;
+
+    // bldg:Building → lod2Solid / lod2MultiSurface / boundedBy
+    const buildings = getByLocalName(root, 'Building');
+    for (const bldg of buildings) {
+      let found = false;
+
+      for (const tag of ['lod2Solid', 'lod2MultiSurface']) {
+        const containers = getByLocalName(bldg, tag);
+        for (const c of containers) {
+          for (const s of surfacesFromElement(c)) { surfaces.push(s); found = true; }
+        }
+      }
+
+      for (const bsurf of getByLocalName(bldg, 'boundedBy')) {
+        for (const s of surfacesFromElement(bsurf)) { surfaces.push(s); found = true; }
+      }
+
+      if (!found) {
+        for (const c of getByLocalName(bldg, 'lod1Solid')) {
+          for (const s of surfacesFromElement(c)) surfaces.push(s);
+        }
+      }
+    }
+  }
+
+  return surfaces;
+}
+
+// ─── Triangulation ───────────────────────────────────────────────────────────
+function triangulate(ring) {
+  // Remove closing duplicate point
+  let pts = ring;
+  const first = ring[0], last = ring[ring.length - 1];
+  if (first[0] === last[0] && first[1] === last[1] && first[2] === last[2]) {
+    pts = ring.slice(0, -1);
+  }
+  const tris = [];
+  for (let i = 1; i < pts.length - 1; i++) tris.push([pts[0], pts[i], pts[i + 1]]);
+  return tris;
+}
+
+function computeNormal(a, b, c) {
+  const ax = b[0]-a[0], ay = b[1]-a[1], az = b[2]-a[2];
+  const bx = c[0]-a[0], by = c[1]-a[1], bz = c[2]-a[2];
+  const nx = ay*bz - az*by, ny = az*bx - ax*bz, nz = ax*by - ay*bx;
+  const ln = Math.sqrt(nx*nx + ny*ny + nz*nz) || 1;
+  return [nx/ln, ny/ln, nz/ln];
+}
+
+// ─── GLB builder ─────────────────────────────────────────────────────────────
+function pad4(arr, padByte = 0) {
+  while (arr.length % 4) arr.push(padByte);
+  return arr;
+}
+
+function buildGlb(allTriangles) {
+  // Collect all positions, normals, indices into a single primitive (flat grey)
+  const positions = [];
+  const normals   = [];
+  const indices   = [];
+
+  let baseVtx = 0;
+  for (const { verts, normal } of allTriangles) {
+    for (const v of verts) positions.push(...v), normals.push(...normal);
+    indices.push(baseVtx, baseVtx + 1, baseVtx + 2);
+    baseVtx += 3;
+  }
+
+  if (positions.length === 0) throw new Error('No geometry extracted.');
+
+  // Compute min/max for POSITION accessor
+  const xs = positions.filter((_, i) => i % 3 === 0);
+  const ys = positions.filter((_, i) => i % 3 === 1);
+  const zs = positions.filter((_, i) => i % 3 === 2);
+  const posMin = [Math.min(...xs), Math.min(...ys), Math.min(...zs)];
+  const posMax = [Math.max(...xs), Math.max(...ys), Math.max(...zs)];
+
+  // Pack binary data
+  const posBytes  = new Float32Array(positions).buffer;
+  const norBytes  = new Float32Array(normals).buffer;
+  const idxBytes  = new Uint32Array(indices).buffer;
+
+  // Build BIN buffer: [posBytes][pad][norBytes][pad][idxBytes][pad]
+  const bin = [];
+  let binOffset = 0;
+
+  function appendBin(ab) {
+    const bytes = Array.from(new Uint8Array(ab));
+    const offset = binOffset;
+    bin.push(...bytes);
+    binOffset += bytes.length;
+    pad4(bin, 0);
+    binOffset = bin.length;
+    return { offset, byteLength: bytes.length };
+  }
+
+  const posView = appendBin(posBytes);
+  const norView = appendBin(norBytes);
+  const idxView = appendBin(idxBytes);
+
+  const vtxCount = positions.length / 3;
+  const idxCount = indices.length;
+
+  const gltf = {
+    asset: { version: '2.0', generator: 'Antigravity CityGML Converter (JS)' },
+    scene: 0,
+    scenes: [{ nodes: [0] }],
+    nodes: [{ mesh: 0 }],
+    meshes: [{
+      primitives: [{
+        attributes: { POSITION: 0, NORMAL: 1 },
+        indices: 2,
+        material: 0,
+        mode: 4,
+      }]
+    }],
+    accessors: [
+      {
+        bufferView: 0, componentType: 5126, count: vtxCount,
+        type: 'VEC3', min: posMin, max: posMax,
+      },
+      {
+        bufferView: 1, componentType: 5126, count: vtxCount, type: 'VEC3',
+      },
+      {
+        bufferView: 2, componentType: 5125, count: idxCount, type: 'SCALAR',
+      },
+    ],
+    bufferViews: [
+      { buffer: 0, byteOffset: posView.offset, byteLength: posView.byteLength, target: 34962 },
+      { buffer: 0, byteOffset: norView.offset, byteLength: norView.byteLength, target: 34962 },
+      { buffer: 0, byteOffset: idxView.offset, byteLength: idxView.byteLength, target: 34963 },
+    ],
+    buffers: [{ byteLength: bin.length }],
+    materials: [{
+      pbrMetallicRoughness: {
+        baseColorFactor: [0.75, 0.75, 0.78, 1.0],
+        metallicFactor: 0.0,
+        roughnessFactor: 1.0,
+      }
+    }],
+  };
+
+  // JSON chunk (pad with spaces 0x20)
+  const jsonBytes = Array.from(new TextEncoder().encode(JSON.stringify(gltf)));
+  pad4(jsonBytes, 0x20);
+
+  // BIN chunk (already padded by appendBin)
+  const binBytes = bin;
+
+  const jsonChunkLen = jsonBytes.length;
+  const binChunkLen  = binBytes.length;
+
+  const totalLen = 12 + 8 + jsonChunkLen + (binChunkLen ? 8 + binChunkLen : 0);
+
+  const out = new Uint8Array(totalLen);
+  const dv  = new DataView(out.buffer);
+  let off = 0;
+
+  // GLB header
+  dv.setUint32(off, 0x46546C67, true); off += 4; // magic 'glTF'
+  dv.setUint32(off, 2,          true); off += 4; // version
+  dv.setUint32(off, totalLen,   true); off += 4; // total length
+
+  // JSON chunk
+  dv.setUint32(off, jsonChunkLen, true); off += 4;
+  dv.setUint32(off, 0x4E4F534A,  true); off += 4; // 'JSON'
+  out.set(jsonBytes, off); off += jsonChunkLen;
+
+  // BIN chunk
+  if (binChunkLen) {
+    dv.setUint32(off, binChunkLen, true); off += 4;
+    dv.setUint32(off, 0x004E4942, true); off += 4; // 'BIN\0'
+    out.set(binBytes, off);
+  }
+
+  return out.buffer;
+}
+
+// ─── UI logic ─────────────────────────────────────────────────────────────────
+const fileInput   = document.getElementById('fileInput');
+const fileList    = document.getElementById('fileList');
+const convertBtn  = document.getElementById('convertBtn');
+const statusEl    = document.getElementById('status');
+const downloadLink = document.getElementById('downloadLink');
+
+let selectedFiles = [];
+
+fileInput.addEventListener('change', () => {
+  selectedFiles = Array.from(fileInput.files);
+  if (selectedFiles.length === 0) {
+    fileList.textContent = 'ファイル未選択';
+    convertBtn.disabled = true;
+  } else {
+    fileList.textContent = selectedFiles.map(f => f.name).join(', ');
+    convertBtn.disabled = false;
+  }
+  downloadLink.style.display = 'none';
+  statusEl.textContent = '';
+});
+
+convertBtn.addEventListener('click', async () => {
+  convertBtn.disabled = true;
+  downloadLink.style.display = 'none';
+  statusEl.textContent = 'GMLを解析中…';
+
+  try {
+    const parser = new DOMParser();
+    const docs = [];
+    for (const file of selectedFiles) {
+      const text = await file.text();
+      const doc = parser.parseFromString(text, 'application/xml');
+      const err = doc.querySelector('parsererror');
+      if (err) throw new Error(`XML parse error in ${file.name}: ${err.textContent}`);
+      docs.push(doc);
+    }
+
+    statusEl.textContent = 'ジオメトリ抽出中…';
+    // Use setTimeout to allow UI to update
+    await new Promise(r => setTimeout(r, 10));
+
+    const surfaces = extractGeometry(docs);
+    if (surfaces.length === 0) throw new Error('ジオメトリが見つかりませんでした。LOD2データか確認してください。');
+
+    statusEl.textContent = `${surfaces.length} 面を抽出。座標変換中…`;
+    await new Promise(r => setTimeout(r, 10));
+
+    // Compute ENU origin from centroid of all coordinates
+    let sumLat = 0, sumLon = 0, count = 0;
+    for (const { coords } of surfaces) {
+      for (const c of coords) { sumLat += c[0]; sumLon += c[1]; count++; }
+    }
+    const lat0 = sumLat / count, lon0 = sumLon / count;
+    const originEcef = geoToEcef(lat0, lon0, 0);
+    const enuBasis   = makeEnuBasis(lat0, lon0);
+
+    statusEl.textContent = '三角形分割中…';
+    await new Promise(r => setTimeout(r, 10));
+
+    const allTriangles = [];
+    for (const { coords } of surfaces) {
+      // coords: [lat, lon, alt]  (PLATEAU GML is lat, lon, alt order)
+      const enuRing = coords.map(c => {
+        const [east, north, up] = geoToEnu(c[0], c[1], c[2], originEcef, enuBasis);
+        // Three.js: X=east, Y=up, Z=-north  (right-hand Y-up)
+        return [east, up, -north];
+      });
+      const tris = triangulate(enuRing);
+      for (const tri of tris) {
+        const normal = computeNormal(...tri);
+        allTriangles.push({ verts: tri, normal });
+      }
+    }
+
+    statusEl.textContent = `${allTriangles.length} 三角形。GLB生成中…`;
+    await new Promise(r => setTimeout(r, 10));
+
+    const glbBuffer = buildGlb(allTriangles);
+
+    // Trigger download
+    const blob = new Blob([glbBuffer], { type: 'model/gltf-binary' });
+    const url  = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.style.display = 'inline-block';
+
+    // Preview in Three.js
+    statusEl.textContent = 'プレビュー表示中…';
+    await new Promise(r => setTimeout(r, 10));
+
+    // Remove previous model
+    scene.children
+      .filter(c => c.userData.isBuilding)
+      .forEach(c => scene.remove(c));
+
+    const loader = new GLTFLoader();
+    loader.parse(glbBuffer, '', (gltf) => {
+      const model = gltf.scene;
+      model.userData.isBuilding = true;
+
+      // Compute bounding box and center camera
+      const box = new THREE.Box3().setFromObject(model);
+      const center = box.getCenter(new THREE.Vector3());
+      const size   = box.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z);
+
+      model.position.sub(center); // center at origin
+      scene.add(model);
+
+      camera.position.set(maxDim * 0.8, maxDim * 0.5, maxDim * 1.2);
+      controls.target.set(0, 0, 0);
+      controls.update();
+
+      statusEl.textContent = `完了 (${allTriangles.length.toLocaleString()} tri)`;
+      convertBtn.disabled = false;
+    }, (err) => {
+      statusEl.textContent = 'プレビューエラー: ' + err.message;
+      convertBtn.disabled = false;
+    });
+
+  } catch (e) {
+    statusEl.textContent = 'エラー: ' + e.message;
+    console.error(e);
+    convertBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+env/
+venv/
+.env
+.venv
+# 大きなデータセットフォルダを除外（ボリュームマウントで渡す）
+data/
+dataset/
+*.gml

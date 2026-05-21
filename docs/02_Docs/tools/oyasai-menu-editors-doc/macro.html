@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>マクロエディタ</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>マクロエディタ <small>MacroEngine</small></h1>
+  <p class="subtitle">/macro — 一覧 / 詳細 / 本エディタ / 実行本</p>
+</header>
+
+<nav class="sidebar">
+  <a href="index.html" class="toc-back">← 目次に戻る</a>
+  <h2>このページの内容</h2>
+  <ol>
+    <li><a href="#concept">マクロの概念</a></li>
+    <li><a href="#list">マクロ一覧画面</a></li>
+    <li><a href="#detail">マクロ詳細画面</a></li>
+    <li><a href="#bookeditor">本エディタ</a></li>
+    <li><a href="#exec-book">マクロ実行本</a></li>
+    <li><a href="#sharing">共有機能</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+
+<section id="concept" class="card">
+  <h2>マクロの概念</h2>
+  <p>
+    プレイヤーが複数のコマンドを順番に実行できる<strong>個人用マクロシステム</strong>。
+    各プレイヤーには上限 (デフォルト＋permissionで拡張) があり、マクロは <code>PlayerMacro</code> として保存されます。
+  </p>
+
+  <h3>データモデル</h3>
+  <pre><code>data class PlayerMacro(
+    val id: String,         // 自動生成: &lt;mcid&gt;_&lt;safeName&gt;[_N]
+    val name: String,       // プレイヤーが見る名前
+    val ownerUUID: String,
+    val commands: List&lt;String&gt;,
+    val cooldownSeconds: Int = 0
+)</code></pre>
+
+  <h3>権限</h3>
+  <p><code>oyasaimenu.macro</code></p>
+
+  <h3>特殊コマンド</h3>
+  <ul>
+    <li><code>wait 1.0s</code> (または <code>wait 1.0</code>) — 1秒待機（秒数の後の <code>s</code> は省略可）</li>
+    <li>先頭 <code>/</code> なし → チャット発言として扱う</li>
+    <li>その他 → 通常コマンドとして実行</li>
+  </ul>
+</section>
+
+<section id="list" class="card">
+  <h2>マクロ一覧画面 (buildMacroListInventory)</h2>
+  <p>54スロット、最大45件/ページのマクロ一覧。</p>
+
+  <div class="grid">
+    <div class="slot kind-grid"><span class="num">0</span><span class="label">M1</span></div>
+    <div class="slot kind-grid"><span class="num">1</span><span class="label">M2</span></div>
+    <div class="slot kind-grid"><span class="num">2</span></div>
+    <div class="slot kind-grid"><span class="num">3</span></div>
+    <div class="slot kind-grid"><span class="num">4</span></div>
+    <div class="slot kind-grid"><span class="num">5</span></div>
+    <div class="slot kind-grid"><span class="num">6</span></div>
+    <div class="slot kind-grid"><span class="num">7</span></div>
+    <div class="slot kind-grid"><span class="num">8</span></div>
+    <div class="slot kind-grid"><span class="num">9</span></div>
+    <div class="slot kind-grid"><span class="num">10</span></div>
+    <div class="slot kind-grid"><span class="num">11</span></div>
+    <div class="slot kind-grid"><span class="num">12</span></div>
+    <div class="slot kind-grid"><span class="num">13</span></div>
+    <div class="slot kind-grid"><span class="num">14</span></div>
+    <div class="slot kind-grid"><span class="num">15</span></div>
+    <div class="slot kind-grid"><span class="num">16</span></div>
+    <div class="slot kind-grid"><span class="num">17</span></div>
+    <div class="slot kind-grid"><span class="num">18</span></div>
+    <div class="slot kind-grid"><span class="num">19</span></div>
+    <div class="slot kind-grid"><span class="num">20</span></div>
+    <div class="slot kind-grid"><span class="num">21</span></div>
+    <div class="slot kind-grid"><span class="num">22</span></div>
+    <div class="slot kind-grid"><span class="num">23</span></div>
+    <div class="slot kind-grid"><span class="num">24</span></div>
+    <div class="slot kind-grid"><span class="num">25</span></div>
+    <div class="slot kind-grid"><span class="num">26</span></div>
+    <div class="slot kind-grid"><span class="num">27</span></div>
+    <div class="slot kind-grid"><span class="num">28</span></div>
+    <div class="slot kind-grid"><span class="num">29</span></div>
+    <div class="slot kind-grid"><span class="num">30</span></div>
+    <div class="slot kind-grid"><span class="num">31</span></div>
+    <div class="slot kind-grid"><span class="num">32</span></div>
+    <div class="slot kind-grid"><span class="num">33</span></div>
+    <div class="slot kind-grid"><span class="num">34</span></div>
+    <div class="slot kind-grid"><span class="num">35</span></div>
+    <div class="slot kind-grid"><span class="num">36</span></div>
+    <div class="slot kind-grid"><span class="num">37</span></div>
+    <div class="slot kind-grid"><span class="num">38</span></div>
+    <div class="slot kind-grid"><span class="num">39</span></div>
+    <div class="slot kind-grid"><span class="num">40</span></div>
+    <div class="slot kind-grid"><span class="num">41</span></div>
+    <div class="slot kind-grid"><span class="num">42</span></div>
+    <div class="slot kind-grid"><span class="num">43</span></div>
+    <div class="slot kind-grid"><span class="num">44</span></div>
+    <div class="slot kind-func"><span class="num">45</span><span class="icon">⬅</span><span class="label">戻る</span></div>
+    <div class="slot kind-nav"><span class="num">46</span><span class="icon">⬅</span><span class="label">前</span></div>
+    <div class="slot kind-fill"><span class="num">47</span></div>
+    <div class="slot kind-fill"><span class="num">48</span></div>
+    <div class="slot kind-confirm"><span class="num">49</span><span class="icon">⭐</span><span class="label">新規作成</span></div>
+    <div class="slot kind-fill"><span class="num">50</span></div>
+    <div class="slot kind-fill"><span class="num">51</span></div>
+    <div class="slot kind-nav"><span class="num">52</span><span class="icon">➡</span><span class="label">次</span></div>
+    <div class="slot kind-func"><span class="num">53</span><span class="icon">📚</span><span class="label">モード切替</span></div>
+  </div>
+
+  <h3>マクロアイテム表示 (buildMacroItem)</h3>
+  <ul>
+    <li>Material: <code>COMMAND_BLOCK</code></li>
+    <li>表示名: <code>&e&lt;マクロ名&gt;</code></li>
+    <li>ロア: ID / コマンド数 / 先頭5行 / Cooldown / 操作ヒント</li>
+    <li>PDC: <code>macro_id</code> でID保存</li>
+  </ul>
+
+  <h3>クリック動作 (実行モード / 編集モード)</h3>
+  <table>
+    <thead><tr><th>モード</th><th>左クリック</th><th>右クリック</th></tr></thead>
+    <tbody>
+      <tr><td>実行モード (デフォルト)</td><td>マクロを実行</td><td>詳細画面を開く</td></tr>
+      <tr><td>編集モード</td><td>詳細画面を開く</td><td>マクロを実行</td></tr>
+    </tbody>
+  </table>
+
+  <h3>その他のスロット</h3>
+  <table>
+    <thead><tr><th>slot</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td>45</td><td>メインメニュー(root)に戻る (1 tick後)</td></tr>
+      <tr><td>46/52</td><td>前/次のページ (1ページ45件)</td></tr>
+      <tr><td>49</td><td>新規マクロ作成 → チャットでマクロ名入力</td></tr>
+      <tr><td>53</td><td>実行モード ⇔ 編集モード トグル</td></tr>
+    </tbody>
+  </table>
+
+  <h3>タイトル</h3>
+  <p><code>"&6コマンドマクロ &8| &f&lt;page+1&gt;&8/&f&lt;pageCount&gt;"</code></p>
+</section>
+
+<section id="detail" class="card">
+  <h2>マクロ詳細画面 (buildMacroDetailInventory)</h2>
+  <p>個別マクロの編集・実行・共有・実行本入手の起点。タイトル: <code>"&6マクロ詳細: &e&lt;マクロ名&gt;"</code></p>
+
+  <div class="grid">
+    <div class="slot kind-fill"><span class="num">0</span></div>
+    <div class="slot kind-fill"><span class="num">1</span></div>
+    <div class="slot kind-fill"><span class="num">2</span></div>
+    <div class="slot kind-fill"><span class="num">3</span></div>
+    <div class="slot kind-fill"><span class="num">4</span></div>
+    <div class="slot kind-fill"><span class="num">5</span></div>
+    <div class="slot kind-fill"><span class="num">6</span></div>
+    <div class="slot kind-fill"><span class="num">7</span></div>
+    <div class="slot kind-fill"><span class="num">8</span></div>
+    <div class="slot kind-fill"><span class="num">9</span></div>
+    <div class="slot kind-func"><span class="num">10</span><span class="icon">🏷</span><span class="label">名前変更</span></div>
+    <div class="slot kind-func"><span class="num">11</span><span class="icon">📘</span><span class="label">本で編集</span></div>
+    <div class="slot kind-fill"><span class="num">12</span></div>
+    <div class="slot kind-confirm"><span class="num">13</span><span class="icon">▶</span><span class="label">今すぐ実行</span></div>
+    <div class="slot kind-fill"><span class="num">14</span></div>
+    <div class="slot kind-func"><span class="num">15</span><span class="icon">📤</span><span class="label">共有ID発行</span></div>
+    <div class="slot kind-func"><span class="num">16</span><span class="icon">📕</span><span class="label">実行本入手</span></div>
+    <div class="slot kind-fill"><span class="num">17</span></div>
+    <div class="slot kind-fill"><span class="num">18</span></div>
+    <div class="slot kind-fill"><span class="num">19</span></div>
+    <div class="slot kind-fill"><span class="num">20</span></div>
+    <div class="slot kind-fill"><span class="num">21</span></div>
+    <div class="slot kind-fill"><span class="num">22</span></div>
+    <div class="slot kind-fill"><span class="num">23</span></div>
+    <div class="slot kind-fill"><span class="num">24</span></div>
+    <div class="slot kind-fill"><span class="num">25</span></div>
+    <div class="slot kind-fill"><span class="num">26</span></div>
+    <div class="slot kind-fill"><span class="num">27</span></div>
+    <div class="slot kind-fill"><span class="num">28</span></div>
+    <div class="slot kind-fill"><span class="num">29</span></div>
+    <div class="slot kind-fill"><span class="num">30</span></div>
+    <div class="slot kind-fill"><span class="num">31</span></div>
+    <div class="slot kind-fill"><span class="num">32</span></div>
+    <div class="slot kind-fill"><span class="num">33</span></div>
+    <div class="slot kind-fill"><span class="num">34</span></div>
+    <div class="slot kind-fill"><span class="num">35</span></div>
+    <div class="slot kind-fill"><span class="num">36</span></div>
+    <div class="slot kind-func"><span class="num">37</span><span class="icon">⬅</span><span class="label">戻る</span></div>
+    <div class="slot kind-fill"><span class="num">38</span></div>
+    <div class="slot kind-fill"><span class="num">39</span></div>
+    <div class="slot kind-fill"><span class="num">40</span></div>
+    <div class="slot kind-fill"><span class="num">41</span></div>
+    <div class="slot kind-fill"><span class="num">42</span></div>
+    <div class="slot kind-danger"><span class="num">43</span><span class="icon">💥</span><span class="label">削除</span></div>
+    <div class="slot kind-fill"><span class="num">44</span></div>
+    <div class="slot kind-fill"><span class="num">45</span></div>
+    <div class="slot kind-fill"><span class="num">46</span></div>
+    <div class="slot kind-fill"><span class="num">47</span></div>
+    <div class="slot kind-fill"><span class="num">48</span></div>
+    <div class="slot kind-fill"><span class="num">49</span></div>
+    <div class="slot kind-fill"><span class="num">50</span></div>
+    <div class="slot kind-fill"><span class="num">51</span></div>
+    <div class="slot kind-fill"><span class="num">52</span></div>
+    <div class="slot kind-fill"><span class="num">53</span></div>
+  </div>
+
+  <h3>クリック動作 (handleDetailClick)</h3>
+  <table>
+    <thead><tr><th>slot</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td>10</td><td>名前変更 → チャットで入力 (cancel可)</td></tr>
+      <tr><td>11</td><td>本エディタを開く (1 tick後)</td></tr>
+      <tr><td>13</td><td>マクロを今すぐ実行</td></tr>
+      <tr><td>15</td><td>共有ID発行 (<code>handleShare</code>) — チャットにクリックでコピー可能なIDを表示</td></tr>
+      <tr><td>16</td><td>マクロ実行本(<code>WRITTEN_BOOK</code>)を取得</td></tr>
+      <tr><td>37</td><td>マクロ一覧に戻る</td></tr>
+      <tr><td>43</td><td>マクロを削除</td></tr>
+    </tbody>
+  </table>
+
+  <h3>マクロIDの逆引き</h3>
+  <p>タイトル文字列 <code>"マクロ詳細: &lt;name&gt;"</code> から名前部分を取り出し、カラーコードを除去して <code>plugin.macroManager.getMacros</code> から検索。複数マクロ同名の場合は最初に見つかったものが返る。</p>
+</section>
+
+<section id="bookeditor" class="card">
+  <h2>本エディタ (openBookEditor)</h2>
+  <p>マクロのコマンドリストを<strong>WRITABLE_BOOK</strong>で編集する仕組み。</p>
+
+  <h3>フロー</h3>
+  <ol>
+    <li><code>WRITABLE_BOOK</code> を生成。マクロのコマンドがあれば1行/coomandで詰めてページに分割 (1ページ254文字)</li>
+    <li><code>preferredSlot</code> が指定されていてそのスロットが空ならそこに、そうでなければ <code>firstEmpty()</code></li>
+    <li>そのスロットを <code>heldItemSlot</code> に設定 → 自動的に手持ちに切り替え</li>
+    <li><code>bookEditorPending[player.uuid] = BookEditorState(macroId, slot)</code></li>
+    <li>プレイヤーが本UIで編集し「完了」を押す → <code>onPlayerEditBook</code></li>
+    <li>ページから本文を取り出し → 改行で分割 → 空行除外 → 新コマンドリスト</li>
+    <li>署名(<code>isSigning</code>)もキャンセル扱い、本は3 tick後に削除</li>
+    <li>コマンドが空なら破棄、変更がなければ「変更なし」、エラーがあれば再オープン</li>
+  </ol>
+
+  <h3>初期表示テキスト (コマンドが空の場合)</h3>
+  <pre><code>コマンドを1行ずつ入力
+
+改行でコマンドを区切ります
+スラッシュなし→チャット発言
+
+wait 1.0s で遅延も可
+
+完了 で確定</code></pre>
+</section>
+
+<section id="exec-book" class="card">
+  <h2>マクロ実行本 (createMacroBook)</h2>
+  <p>マクロを<strong>クリックひとつで実行</strong>できる WRITTEN_BOOK アイテム。</p>
+
+  <h3>本の構成</h3>
+  <ul>
+    <li>Material: <code>WRITTEN_BOOK</code></li>
+    <li>Generation: <code>ORIGINAL</code></li>
+    <li>Title: マクロ名 (空なら "Untitled")</li>
+    <li>Author: プレイヤー名</li>
+    <li>表示名: <code>&6▶ &e&lt;マクロ名&gt; &8(&7マクロ実行本&8)</code></li>
+    <li>ロア: 「右クリック→マクロ実行」「Shift+右クリック→内容を開く」「ID表示」</li>
+    <li>ページ1: マクロ概要 (名前/コマンド数)</li>
+    <li>ページ2以降: 全コマンドを番号付きで列挙</li>
+    <li>PDC: <code>macro_book_id</code> でマクロID保存</li>
+  </ul>
+
+  <h3>右クリック実行 (onPlayerInteract)</h3>
+  <ol>
+    <li>action が <code>RIGHT_CLICK_AIR</code> または <code>RIGHT_CLICK_BLOCK</code></li>
+    <li>手持ちが <code>WRITTEN_BOOK</code> で PDC に <code>macro_book_id</code> あり</li>
+    <li>スニーク中(<code>isSneaking</code>)なら<strong>素通り</strong> (本を開く)</li>
+    <li>それ以外: <code>event.isCancelled = true</code> + <code>plugin.macroManager.executeMacro</code></li>
+  </ol>
+
+  <h3>配布 (giveMacroBook)</h3>
+  <p><code>player.inventory.addItem(book)</code>。インベ満杯なら足元にドロップ。<code>ENTITY_EXPERIENCE_ORB_PICKUP</code> サウンドを鳴らす。</p>
+</section>
+
+<section id="sharing" class="card">
+  <h2>共有機能 (handleShare / SharedMacroManager)</h2>
+  <p>マクロを他プレイヤーに渡すためのID発行システム。</p>
+
+  <h3>共有ID発行フロー</h3>
+  <ol>
+    <li>コマンド空のマクロは共有不可</li>
+    <li>既存の共有がある場合は最大5件まで表示 (作成日時付き)</li>
+    <li><code>plugin.sharedMacroManager.publishMacro</code> で新IDを発行</li>
+    <li>IDは <code>buildIdComponent</code> でクリック可能な Component に整形 (<code>ClickEvent.copyToClipboard</code>)</li>
+    <li>受取側: <code>/macro import &lt;shareId&gt;</code></li>
+    <li>過去ID一覧: <code>/macro shares</code></li>
+  </ol>
+
+  <h3>クリックイベント (Component)</h3>
+  <p>共有IDは <code>NamedTextColor.GOLD</code> + BOLD で表示され、クリックすると<strong>クリップボードにコピー</strong>される。HoverEventで「クリックでコピー」がツールチップ表示。</p>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>

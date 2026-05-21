@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>GuiMaker UIスキンエディタ</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <h1>GuiMaker <small>UIスキンエディタ</small></h1>
+  <p class="subtitle">openUiSkinEditor / openUiSkinBlockPicker — gui-maker-ui-screens.yml の編集</p>
+</header>
+
+<nav class="sidebar">
+  <a href="index.html" class="toc-back">← 目次に戻る</a>
+  <h2>このページの内容</h2>
+  <ol>
+    <li><a href="#concept">UIスキンの概念</a></li>
+    <li><a href="#editor">UIスキンエディタ</a></li>
+    <li><a href="#picker">UIブロックピッカー</a></li>
+    <li><a href="#yaml">YAMLファイル構造</a></li>
+    <li><a href="#schema">スキーマと後方互換</a></li>
+  </ol>
+</nav>
+
+<main class="main">
+
+<section id="concept" class="card">
+  <h2>UIスキンの概念</h2>
+  <p>
+    GuiMakerが提供する<strong>各エディタ画面のスロット配置・アイコンを上書き</strong>するための機能です。
+    つまり「GuiMakerのGUI自体」をプレイヤー（OP）がGUI上でカスタマイズできるようにする層です。
+  </p>
+
+  <h3>定義ファイル: gui-maker-ui-screens.yml</h3>
+  <ul>
+    <li>初回起動時にプラグインリソースから自動コピー</li>
+    <li>各画面 (<code>hub</code>, <code>context</code>, <code>action_type</code>, ...) ごとに既定のスロット定義を保持</li>
+    <li>plugin側で <code>GuiMakerUiSkinDefinitions.load</code> でロード</li>
+    <li>欠けているキーは <code>mergeBundledDefaults</code> でバンドル版から自動補完</li>
+  </ul>
+
+  <h3>カスタマイズデータ: ui-skin/&lt;screen&gt;.yml</h3>
+  <p>個別画面ごとのプレイヤーカスタマイズ。<code>positions</code> (機能の配置スロット), <code>icons</code> (装飾アイコン), <code>enabled</code> (有効ラベル一覧) を保存。</p>
+
+  <h3>主要クラス</h3>
+  <ul>
+    <li><code>GuiMakerUiSkinDefinitions</code> (object) — バンドル/カスタマイズ済み定義のロード</li>
+    <li><code>GuiMakerUiSkinStore</code> — <code>ui-skin/&lt;screen&gt;.yml</code> のCRUDとキャッシュ</li>
+    <li><code>UiSkinData(positions, icons, enabledLabels)</code> — メモリ表現</li>
+    <li><code>UiScreenCatalog(restoreSlots, screenDefs, defaultGlassByScreen, fallbackGlass)</code> — 全体定義</li>
+  </ul>
+</section>
+
+<section id="editor" class="card">
+  <h2>UIスキンエディタ (openUiSkinEditor)</h2>
+  <p>編集対象画面1つにつきインベントリを開き、機能ボタンを任意のスロットに<strong>ドラッグ＆ドロップで移動</strong>できます。</p>
+
+  <h3>レイアウト</h3>
+  <div class="grid">
+    <div class="slot kind-skin"><span class="num">0</span><span class="label">機能/装飾</span></div>
+    <div class="slot kind-skin"><span class="num">1</span></div>
+    <div class="slot kind-skin"><span class="num">2</span></div>
+    <div class="slot kind-skin"><span class="num">3</span></div>
+    <div class="slot kind-skin"><span class="num">4</span></div>
+    <div class="slot kind-skin"><span class="num">5</span></div>
+    <div class="slot kind-skin"><span class="num">6</span></div>
+    <div class="slot kind-skin"><span class="num">7</span></div>
+    <div class="slot kind-skin"><span class="num">8</span></div>
+    <div class="slot kind-skin"><span class="num">9</span></div>
+    <div class="slot kind-skin"><span class="num">10</span></div>
+    <div class="slot kind-skin"><span class="num">11</span></div>
+    <div class="slot kind-skin"><span class="num">12</span></div>
+    <div class="slot kind-skin"><span class="num">13</span></div>
+    <div class="slot kind-skin"><span class="num">14</span></div>
+    <div class="slot kind-skin"><span class="num">15</span></div>
+    <div class="slot kind-skin"><span class="num">16</span></div>
+    <div class="slot kind-skin"><span class="num">17</span></div>
+    <div class="slot kind-skin"><span class="num">18</span></div>
+    <div class="slot kind-skin"><span class="num">19</span></div>
+    <div class="slot kind-skin"><span class="num">20</span></div>
+    <div class="slot kind-skin"><span class="num">21</span></div>
+    <div class="slot kind-skin"><span class="num">22</span></div>
+    <div class="slot kind-skin"><span class="num">23</span></div>
+    <div class="slot kind-skin"><span class="num">24</span></div>
+    <div class="slot kind-skin"><span class="num">25</span></div>
+    <div class="slot kind-skin"><span class="num">26</span></div>
+    <div class="slot kind-skin"><span class="num">27</span></div>
+    <div class="slot kind-skin"><span class="num">28</span></div>
+    <div class="slot kind-skin"><span class="num">29</span></div>
+    <div class="slot kind-skin"><span class="num">30</span></div>
+    <div class="slot kind-skin"><span class="num">31</span></div>
+    <div class="slot kind-skin"><span class="num">32</span></div>
+    <div class="slot kind-skin"><span class="num">33</span></div>
+    <div class="slot kind-skin"><span class="num">34</span></div>
+    <div class="slot kind-skin"><span class="num">35</span></div>
+    <div class="slot kind-skin"><span class="num">36</span></div>
+    <div class="slot kind-skin"><span class="num">37</span></div>
+    <div class="slot kind-skin"><span class="num">38</span></div>
+    <div class="slot kind-skin"><span class="num">39</span></div>
+    <div class="slot kind-skin"><span class="num">40</span></div>
+    <div class="slot kind-skin"><span class="num">41</span></div>
+    <div class="slot kind-skin"><span class="num">42</span></div>
+    <div class="slot kind-skin"><span class="num">43</span></div>
+    <div class="slot kind-skin"><span class="num">44</span></div>
+    <div class="slot kind-data"><span class="num">45</span><span class="icon">📖</span><span class="label">使い方</span></div>
+    <div class="slot kind-danger"><span class="num">46</span><span class="icon">🔥</span><span class="label">削除モード</span></div>
+    <div class="slot kind-bar"><span class="num">47</span><span class="label">復元1</span></div>
+    <div class="slot kind-bar"><span class="num">48</span><span class="label">復元2</span></div>
+    <div class="slot kind-confirm"><span class="num">49</span><span class="icon">💾</span><span class="label">保存して閉じる</span></div>
+    <div class="slot kind-bar"><span class="num">50</span><span class="label">復元3</span></div>
+    <div class="slot kind-bar"><span class="num">51</span><span class="label">復元4</span></div>
+    <div class="slot kind-func"><span class="num">52</span><span class="icon">📦</span><span class="label">UIブロック</span></div>
+    <div class="slot kind-danger"><span class="num">53</span><span class="icon">❌</span><span class="label">キャンセル</span></div>
+  </div>
+  <p class="caption">背景: 画面別 default-glass (なければ GRAY_STAINED_GLASS_PANE) / 0–44 は機能ボタン&装飾の編集領域</p>
+
+  <h3>復元スロット (UI_SKIN_RESTORE_SLOTS)</h3>
+  <p>デフォルトでは <code>[47, 48, 50, 51]</code>。非表示にした機能ラベルを再追加するための「追加候補」枠です。</p>
+
+  <h3>操作方法</h3>
+  <table>
+    <thead><tr><th>操作</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td>左クリック (機能ブロックを掴む → 別スロットへ)</td><td>機能ボタンを移動</td></tr>
+      <tr><td>右+手持ちアイテム</td><td>アイコン (Material) を変更</td></tr>
+      <tr><td>右+空手</td><td>アイコンを初期化 (デフォルトに戻す)</td></tr>
+      <tr><td>削除モード ON 中 → 機能ブロックをクリック</td><td>その機能ラベルを非表示</td></tr>
+      <tr><td>復元スロット (47/48/50/51) をクリック</td><td>そこに表示中の非表示ラベルを再追加</td></tr>
+      <tr><td>slot 49</td><td><code>saveSkinEditorAndClose</code> → ui-skin/&lt;screen&gt;.yml に書き込み</td></tr>
+      <tr><td>slot 52</td><td><code>openUiSkinBlockPicker</code> へ</td></tr>
+      <tr><td>slot 53</td><td>キャンセル (closeInventory)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>シャドウルール (プレイヤーインベ干渉防止)</h3>
+  <p>プレイヤーインベントリでの shift-click や HOTBAR_SWAP, COLLECT_TO_CURSOR などはスキンアイテムが混入しないよう<code>event.isCancelled = true</code>。</p>
+
+  <h3>OnInventoryClose時の処理</h3>
+  <p>カーソル上にスキンアイテム (KEY_SKIN_ITEM PDC付き) が残っていた場合、1tick遅延で <code>setItemOnCursor(AIR)</code> して破棄する。</p>
+</section>
+
+<section id="picker" class="card">
+  <h2>UIブロックピッカー (openUiSkinBlockPicker)</h2>
+  <p>編集中の画面（または全画面）で利用可能な機能ブロックを<strong>インベントリへ取り出せる</strong>ピッカー。</p>
+
+  <h3>レイアウト</h3>
+  <ul>
+    <li>グリッド 0-44 に最大45件のUIブロック</li>
+    <li>slot 45: 状態表示 (この画面のUIブロック / 全UIブロック / ページ表示)</li>
+    <li>slot 48: 前のページ</li>
+    <li>slot 49: 表示切替 (<code>allScreens</code> トグル)</li>
+    <li>slot 50: 次のページ</li>
+    <li>slot 53: UI編集に戻る</li>
+  </ul>
+
+  <h3>アイテム表示</h3>
+  <table>
+    <thead><tr><th>状態</th><th>表示</th></tr></thead>
+    <tbody>
+      <tr><td>同じ画面の機能 (compatible=true)</td><td><code>&b&lt;label&gt;</code> / 「クリックでインベントリに追加」</td></tr>
+      <tr><td>別画面の機能 (compatible=false)</td><td><code>&7&lt;label&gt;</code> / 「別画面用: この画面には配置できません」</td></tr>
+    </tbody>
+  </table>
+
+  <h3>クリック動作</h3>
+  <ul>
+    <li>機能ブロックを左クリック → 同じ画面用なら <code>player.inventory.addItem</code> で配布</li>
+    <li>別画面のブロックは「&cこのUIブロックは別画面用です」と通知して何もしない</li>
+  </ul>
+</section>
+
+<section id="yaml" class="card">
+  <h2>YAMLファイル構造</h2>
+
+  <h3>gui-maker-ui-screens.yml (定義側)</h3>
+  <pre><code>restore-slots: [47, 48, 50, 51]
+fallback-glass: GRAY_STAINED_GLASS_PANE
+screens:
+  hub:
+    default-glass: GRAY_STAINED_GLASS_PANE
+    slots:
+      10:
+        label: "通常GUI"
+        material: ENDER_CHEST
+      12:
+        label: "Popupメニュー"
+        material: CHORUS_FRUIT
+      # ...
+  context:
+    default-glass: BLUE_STAINED_GLASS_PANE
+    slots:
+      10:
+        label: "名前を設定"
+        material: NAME_TAG
+      # ...</code></pre>
+
+  <h3>ui-skin/&lt;screen&gt;.yml (カスタマイズ側)</h3>
+  <pre><code>schema: 3
+positions:
+  0:
+    label: "名前を設定"
+    slot: 19
+  1:
+    label: "ロアを追加"
+    slot: 28
+icons:
+  10: NETHERITE_INGOT
+  11: DIAMOND
+enabled:
+  - "名前を設定"
+  - "ロアを追加"
+  - "権限を設定"</code></pre>
+</section>
+
+<section id="schema" class="card">
+  <h2>スキーマと後方互換</h2>
+  <p><code>UI_SKIN_SCHEMA_VERSION = 3</code>。schema未満のファイルを読み込んだ場合、レガシー対応として「<code>slot 0</code> またはアイテムプレビューラベルを自動的にenabledに追加」(<code>legacyEnabledAdditions</code>) します。</p>
+
+  <h3>positions のロード仕様 (後方互換)</h3>
+  <p>3形式に対応:</p>
+  <ol>
+    <li>新形式: <code>positions.&lt;n&gt;: {label: ..., slot: ...}</code></li>
+    <li>中間形式: <code>positions.&lt;label&gt;: &lt;slot&gt;</code> (キーに直接ラベル)</li>
+    <li>レガシー形式: <code>positions.&lt;label&gt;.&lt;sublabel&gt;: &lt;slot&gt;</code> (ネスト1段)</li>
+  </ol>
+
+  <h3>enabled / hidden の二択</h3>
+  <ul>
+    <li><code>enabled: [...]</code> が存在: 明示的に有効化されたラベル一覧として読み込み</li>
+    <li><code>hidden: [...]</code> が存在: 「全ラベル - hidden」を有効化</li>
+    <li>どちらも無い場合: <code>enabledLabels = null</code> (= 全部有効)</li>
+  </ul>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>OyasaiMenu Editors Documentation</p>
+</footer>
+</body>
+</html>
