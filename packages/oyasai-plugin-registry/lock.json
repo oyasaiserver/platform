@@ -73,14 +73,14 @@
   },
   "geyser": {
     "1.21.10": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1149/downloads/spigot",
-      "hash": "sha256-jAqULFLL3DrZABShxcsNMZfyhox/p3pE2J1ScygIBW8="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1153/downloads/spigot",
+      "hash": "sha256-1vX9kk9A6R2wMgZ/i3Bo88YwVCd3r3A40jVCuvdD3JA="
     }
   },
   "gsit": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/UZnBkQYH/GSit-3.3.3.jar",
-      "hash": "sha256-aIRj13zbjtlGrILBfdqDRHV5BLKqH3ipcNkZucYP4Fk="
+      "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/9f2VZUi6/GSit-3.4.0.jar",
+      "hash": "sha256-z8Be/6MskeKpM60KEy27ac9qvwCpelsedq5uVZVLNRw="
     }
   },
   "imageonmap": {
@@ -127,8 +127,8 @@
   },
   "multiversecore": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/g7LecP9j/multiverse-core-5.6.2.jar",
-      "hash": "sha256-eRpm3vsjQix3HMG5ctohChzuk3SmGAGuhnnuP06Y4vw="
+      "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/wmno2Hzs/multiverse-core-5.7.0-pre.jar",
+      "hash": "sha256-AkDN4NWe57Xs8B/MVHh/CUPehTqafaONzCaP8O7nH0U="
     }
   },
   "multiverseprotals": {
@@ -182,7 +182,7 @@
   "pvparena": {
     "1.21.10": {
       "url": "https://cdn.spiget.org/file/spiget-resources/16584.jar",
-      "hash": "sha256-E5VqmZxsQSU0R0PkI5xo1fbWFsqEWoiROLuV2XeojXc="
+      "hash": "sha256-KPEIwHAcVasy1djx1j16ly40GWuS8aF+esiNhpDs84c="
     }
   },
   "signshop": {
@@ -247,8 +247,8 @@
   },
   "viaversion": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/bpOs8Bc5/ViaVersion-5.9.2-SNAPSHOT.jar",
-      "hash": "sha256-+Dax9wDEcn/o97AfSDh4qMfUhWLjd1wHdEDo3m5g6Hs="
+      "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/eyeMrOf6/ViaVersion-5.9.2-SNAPSHOT.jar",
+      "hash": "sha256-XkyA9nEnOkZJ1I4BHfYBmOdduyCk7ck/chg7YbDizqs="
     }
   },
   "worldborder": {
