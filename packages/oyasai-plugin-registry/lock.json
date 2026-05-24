@@ -79,8 +79,8 @@
   },
   "gsit": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/9f2VZUi6/GSit-3.4.0.jar",
-      "hash": "sha256-z8Be/6MskeKpM60KEy27ac9qvwCpelsedq5uVZVLNRw="
+      "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/xdYtUFhY/GSit-3.4.1.jar",
+      "hash": "sha256-Op6odpYKISc1BM4GVwBkQbaHyOEg/7PXcMHU92c9Who="
     }
   },
   "imageonmap": {
@@ -247,8 +247,8 @@
   },
   "viaversion": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/eyeMrOf6/ViaVersion-5.9.2-SNAPSHOT.jar",
-      "hash": "sha256-XkyA9nEnOkZJ1I4BHfYBmOdduyCk7ck/chg7YbDizqs="
+      "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/cXLtSQvv/ViaVersion-5.9.2-SNAPSHOT.jar",
+      "hash": "sha256-AkKV2g8JC2HRtosc4IKJF9jShhQz3yHO1Q9hh1JK5Ts="
     }
   },
   "worldborder": {
