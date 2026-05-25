@@ -83,12 +83,6 @@
       "hash": "sha256-/SF/dBIrDNTTo37DSoA0IymfTuxR3d57kmiUZbWUUd0="
     }
   },
-  "geyser": {
-    "1.21.10": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1154/downloads/spigot",
-      "hash": "sha256-ew0GDWTT0Dik8jykLNeLPtexXiH9n+568R+VKmP3zxc="
-    }
-  },
   "gsit": {
     "1.21.10": {
       "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/xdYtUFhY/GSit-3.4.1.jar",
