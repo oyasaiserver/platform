@@ -57,6 +57,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       minecraftMain: imageIds["oyasai-minecraft-main"],
       minecraftBackup: imageIds["mc-backup"],
       velocity: imageIds["oyasai-velocity"],
+      silverbullet: imageIds["silverbullet"],
+      caddy: imageIds["caddy"],
     } as const;
 
     const network = new Network(this, this.t("network"), {
@@ -253,6 +255,54 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           DB_DUMP_RETENTION: "14d",
           DB_DEBUG: true,
         }),
+      });
+
+      const silverbulletContainer = new Container(
+        this,
+        this.t("silverbullet-container"),
+        {
+          image: images.silverbullet,
+          name: "silverbullet",
+          restart: "unless-stopped",
+          networksAdvanced: [network],
+          env: envs({
+            // NOMERGE
+            // SB_USER: secrets.get("SB_USER"),
+          }),
+          volumes: [
+            {
+              containerPath: "/space",
+              hostPath: join(this.workdir, "silverbullet"),
+            },
+          ],
+        },
+      );
+
+      new Container(this, this.t("caddy-container"), {
+        image: images.caddy,
+        name: "caddy",
+        restart: "unless-stopped",
+        dependsOn: [silverbulletContainer],
+        networksAdvanced: [network],
+        ports: ports({
+          tcp: [80, 443],
+        }),
+        command: [
+          "reverse-proxy",
+          "--from",
+          // TODO: violation of layer - root dns should be defined per-env. This
+          // assumes that caddy only exists in master.
+          commonInfra.oyasaiIoRegistrarDomain.domainName,
+          "--to",
+          // TODO: assumes 3000
+          `${silverbulletContainer.name}:3000`,
+        ],
+        volumes: [
+          {
+            containerPath: "/data",
+            hostPath: join(this.workdir, "caddy"),
+          },
+        ],
       });
     }
   }

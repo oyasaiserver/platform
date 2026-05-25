@@ -1,4 +1,24 @@
 {
+    "caddy": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "caddy",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "arch": "amd64",
+            "finalImageName": null,
+            "finalImageTag": null,
+            "imageDigest": "sha256:ec18ee54aab3315c22e25f3b2babda73ff8007d39b13b3bd1bfffa2f0444c7d9",
+            "imageName": "caddy",
+            "imageTag": "2.11.3",
+            "os": "linux",
+            "sha256": "sha256-e7XCeWxwkjZKxLBOjc23j80pngi8jQZJ2kSfs7A9TaY=",
+            "tlsVerify": null
+        },
+        "version": "2.11.3"
+    },
     "mariadb": {
         "cargoLock": null,
         "date": null,

@@ -5,7 +5,13 @@
 }:
 
 let
-  inherit (callPackage ./_sources/generated.nix { }) mariadb mc-backup mysql-backup;
+  inherit (callPackage ./_sources/generated.nix { })
+    mariadb
+    mc-backup
+    mysql-backup
+    caddy
+    silverbullet
+    ;
 in
 runCommandLocal "oyasai-standalone-images"
   {
@@ -31,6 +37,24 @@ runCommandLocal "oyasai-standalone-images"
         fromImage = mysql-backup.src;
         config = {
           Entrypoint = [ "/entrypoint" ];
+        };
+      };
+      caddy = oyasaiDockerTools.buildImage {
+        name = caddy.pname;
+        fromImage = caddy.src;
+        config = {
+          Entrypoint = [ "caddy" ];
+        };
+      };
+      silverbullet = oyasaiDockerTools.buildImage {
+        name = silverbullet.pname;
+        fromImage = silverbullet.src;
+        config = {
+          Entrypoint = [
+            "/sbin/tini"
+            "--"
+            "/docker-entrypoint.sh"
+          ];
         };
       };
     };

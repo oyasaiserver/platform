@@ -6,6 +6,18 @@
   dockerTools,
 }:
 {
+  caddy = {
+    pname = "caddy";
+    version = "2.11.3";
+    src = dockerTools.pullImage {
+      imageName = "caddy";
+      imageDigest = "sha256:ec18ee54aab3315c22e25f3b2babda73ff8007d39b13b3bd1bfffa2f0444c7d9";
+      sha256 = "sha256-e7XCeWxwkjZKxLBOjc23j80pngi8jQZJ2kSfs7A9TaY=";
+      finalImageTag = "2.11.3";
+      os = "linux";
+      arch = "amd64";
+    };
+  };
   mariadb = {
     pname = "mariadb";
     version = "10.4.28";
