@@ -34,7 +34,6 @@ oyasaiPurpur rec {
     proxies.velocity = {
       enabled = true;
       online-mode = true;
-      secret = "PAPER_VELOCITY_SECRET_PLACEHOLDER";
     };
   };
 
