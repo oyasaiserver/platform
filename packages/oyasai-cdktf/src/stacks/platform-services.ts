@@ -55,6 +55,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       mysqlBackup: imageIds["mysql-backup"],
       minecraftMain: imageIds["oyasai-minecraft-main"],
       minecraftBackup: imageIds["mc-backup"],
+      velocity: imageIds["oyasai-velocity"],
     } as const;
 
     const network = new Network(this, this.t("network"), {
@@ -81,12 +82,16 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       ],
     });
 
+    // Can change to "oyasai-minecraft-main" for naming consistency but too lazy
+    // to do the data migration - shun 2026-05
+    const minecraftMainWorkDir = join(this.workdir, "minecraft-main");
+
     const minecraftMainContainer = new Container(
       this,
       this.t("minecraft-main-container"),
       {
         image: images.minecraftMain,
-        name: "minecraft-main",
+        name: "oyasai-minecraft-main",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
         tty: true,
@@ -95,8 +100,11 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         init: true,
         networksAdvanced: [network],
         ports: ports({
-          tcp: [8100, 8192, 25565, 25575],
-          udp: [19132],
+          tcp: [
+            8100, // Bluemap
+            8192, // Votifier
+            25575, // Rcon
+          ],
         }),
         env: envs({
           MEMORY: this.isMaster
@@ -111,11 +119,12 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           ...(this.isMaster && {
             DISCORDSRV_TOKEN: secrets.get("DISCORDSRV_TOKEN"),
           }),
+          PAPER_VELOCITY_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),
         }),
         volumes: [
           {
             containerPath: "/data",
-            hostPath: join(this.workdir, "minecraft-main"),
+            hostPath: minecraftMainWorkDir,
           },
         ],
         ...(this.isMaster && {
@@ -125,6 +134,27 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
       },
     );
+
+    new Container(this, this.t("velocity-container"), {
+      image: images.velocity,
+      name: "velocity",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      ports: ports({
+        tcp: [25565], // Java
+        udp: [19132], // Bedrock
+      }),
+      env: envs({
+        VELOCITY_FORWARDING_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),
+        MEMORY: "512M",
+      }),
+      volumes: [
+        {
+          containerPath: "/data",
+          hostPath: join(this.workdir, "velocity"),
+        },
+      ],
+    });
 
     if (this.isMaster) {
       const cloudflareBaseUrl = `https://${secrets.get("CLOUDFLARE_ACCOUNT_ID")}.r2.cloudflarestorage.com`;
@@ -158,7 +188,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           ].join(","),
           PRUNE_RESTIC_RETENTION:
             "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
-          RCON_HOST: "minecraft-main",
+          RCON_HOST: minecraftMainContainer.name,
           RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
           RESTIC_ADDITIONAL_TAGS: "", // Set to an empty string to disable additional tags.
           RESTIC_PASSWORD: secrets.get("RESTIC_PASSWORD"),
@@ -168,7 +198,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
         volumes: [
           {
-            hostPath: join(this.workdir, "minecraft-main"),
+            hostPath: minecraftMainWorkDir,
             containerPath: "/data",
             readOnly: true,
           },

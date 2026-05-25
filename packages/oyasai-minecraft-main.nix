@@ -1,131 +1,106 @@
-{
-  oyasaiPurpur,
-  oyasai-plugin-registry,
-  lib,
-  oyasaiDockerTools,
-  stdenv,
-  mc-monitor,
-}:
+{ oyasaiPurpur, oyasai-plugin-registry }:
 
-let
-  final = oyasaiPurpur rec {
-    name = "oyasai-minecraft-main";
-    version = "1.21.10";
+oyasaiPurpur rec {
+  name = "oyasai-minecraft-main";
+  version = "1.21.10";
 
-    icon = ../assets/icon-64x64.png;
+  icon = ../assets/icon-64x64.png;
 
-    properties = {
-      # keep-sorted start
-      allow-flight = true;
-      allow-nether = false;
-      difficulty = "normal";
-      enable-command-block = true;
-      enable-jmx-monitoring = true;
-      enable-rcon = true;
-      enforce-secure-profile = false;
-      generate-structures = false;
-      level-name = "lifeworld";
-      max-players = 70;
-      motd = "§l§r                 §b§lOyasai§f§lServer§7 [v${version}]§r\\n§l§f            建築勢は集合だ！建築！建築！建築！！！";
-      network-compression-threshold = 96;
-      pvp = false;
-      simulation-distance = 16;
-      spawn-animals = false;
-      spawn-npcs = false;
-      spawn-protection = 0;
-      sync-chunk-writes = false;
-      view-distance = 32;
-      # keep-sorted end
-    };
+  properties = {
+    # keep-sorted start
+    allow-flight = true;
+    allow-nether = false;
+    difficulty = "normal";
+    enable-command-block = true;
+    enable-jmx-monitoring = true;
+    enable-rcon = true;
+    enforce-secure-profile = false;
+    generate-structures = false;
+    level-name = "lifeworld";
+    max-players = 70;
+    network-compression-threshold = 96;
+    online-mode = false; # handled by velocity
+    pvp = false;
+    simulation-distance = 16;
+    spawn-animals = false;
+    spawn-npcs = false;
+    spawn-protection = 0;
+    sync-chunk-writes = false;
+    view-distance = 32;
+    # keep-sorted end
+  };
 
-    plugins = with oyasai-plugin-registry.forVersion version; [
-      # keep-sorted start
-      advancedban
-      arceon
-      bkcommonlib
-      bluemap
-      citiesskymine
-      coreprotect
-      crackshotguns
-      decentholograms
-      discordsrv
-      dynamicprofile
-      entitypose
-      essentialsx
-      essentialsxchat
-      essentialsxspawn
-      ezedits
-      fastasyncvoxelsniper
-      fastasyncworldedit
-      floodgate
-      geyser
-      gsit
-      imageonmap
-      inventoryshop
-      joincommands
-      luckperms
-      lunachat
-      lwc
-      minepacks
-      multiversecore
-      multiverseprotals
-      mycommand
-      nuvotifier
-      openinv
-      oyasaiadmintools
-      oyasaimenu
-      oyasaipets
-      oyasaiutilities
-      oyasaivehicles
-      painttools
-      particlehats
-      placeholderapi
-      plugmanx
-      protocollib
-      pvparena
-      signshop
-      simpleelevator
-      skinsrestorer
-      skript
-      slotmachine
-      sociallikes3
-      socialvotes
-      tab
-      tntruneloaded
-      tokenmanager
-      tpswitch
-      vault
-      veinminer
-      venturechat
-      vertex
-      viaversion
-      worldborder
-      worldeditsui
-      worldguard
-      zvoteparty
-      # keep-sorted end
-    ];
-
-    passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      docker = oyasaiDockerTools.buildLayeredImage {
-        inherit name;
-        config = {
-          Cmd = [ (lib.getExe final) ];
-          WorkingDir = "/data";
-          Healthcheck = {
-            Test = [
-              "CMD"
-              (lib.getExe mc-monitor)
-              "status"
-            ];
-            Interval = 5 * 1000000000;
-            Timeout = 5 * 1000000000;
-            StartPeriod = 60 * 1000000000;
-            Retries = 20;
-          };
-        };
-      };
+  paperConfig = {
+    proxies.velocity = {
+      enabled = true;
+      online-mode = true;
     };
   };
-in
-final
+
+  plugins = with oyasai-plugin-registry.forVersion version; [
+    # keep-sorted start
+    advancedban
+    arceon
+    bkcommonlib
+    bluemap
+    citiesskymine
+    coreprotect
+    crackshotguns
+    decentholograms
+    discordsrv
+    dynamicprofile
+    entitypose
+    essentialsx
+    essentialsxchat
+    essentialsxspawn
+    ezedits
+    fastasyncvoxelsniper
+    fastasyncworldedit
+    floodgate
+    gsit
+    imageonmap
+    inventoryshop
+    joincommands
+    luckperms
+    lunachat
+    lwc
+    minepacks
+    multiversecore
+    multiverseprotals
+    mycommand
+    nuvotifier
+    openinv
+    oyasaiadmintools
+    oyasaimenu
+    oyasaipets
+    oyasaiutilities
+    oyasaivehicles
+    painttools
+    particlehats
+    placeholderapi
+    plugmanx
+    protocollib
+    pvparena
+    signshop
+    simpleelevator
+    skinsrestorer
+    skript
+    slotmachine
+    sociallikes3
+    socialvotes
+    tab
+    tntruneloaded
+    tokenmanager
+    tpswitch
+    vault
+    veinminer
+    venturechat
+    vertex
+    viaversion
+    worldborder
+    worldeditsui
+    worldguard
+    zvoteparty
+    # keep-sorted end
+  ];
+}
