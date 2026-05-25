@@ -1,4 +1,8 @@
-{ oyasaiVelocity, oyasai-plugin-registry }:
+{
+  oyasaiVelocity,
+  oyasai-plugin-registry,
+  oyasai-minecraft-main,
+}:
 
 oyasaiVelocity {
   name = "oyasai-velocity";
@@ -13,7 +17,7 @@ oyasaiVelocity {
   velocityConfig = {
     config-version = "2.7";
     bind = "0.0.0.0:25565";
-    motd = "OyasaiServer";
+    motd = "§l§r                 §b§lOyasai§f§lServer§r\\n§l§f            建築勢は集合だ！建築！建築！建築！！！";
     show-max-players = 500;
     online-mode = true;
     force-key-authentication = true;
@@ -25,7 +29,7 @@ oyasaiVelocity {
     enable-player-address-logging = true;
 
     servers = {
-      main = "minecraft-main:25565";
+      main = "${oyasai-minecraft-main.name}:25565";
       try = [ "main" ];
     };
 
