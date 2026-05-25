@@ -1,6 +1,6 @@
-{ oyasaiPurpur, oyasai-plugin-registry }:
+{ oyasaiPaper, oyasai-plugin-registry }:
 
-oyasaiPurpur rec {
+oyasaiPaper rec {
   name = "oyasai-minecraft-main";
   version = "1.21.10";
 
@@ -34,7 +34,6 @@ oyasaiPurpur rec {
     proxies.velocity = {
       enabled = true;
       online-mode = true;
-      secret = "PAPER_VELOCITY_SECRET_PLACEHOLDER";
     };
   };
 

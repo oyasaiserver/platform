@@ -54,7 +54,7 @@ lib.makeScope pkgs.newScope (
     inherit (inputs.gradle2nix.packages.${system}) gradle2nix;
     inherit (inputs.tools.packages.${system}) nix-flake-check-changed nix-grep-to-build npm-list;
     inherit (inputs.nix-minecraft.legacyPackages.${system})
-      purpurServers
+      paperServers
       neoforgeServers
       vanillaServers
       velocityServers
@@ -81,7 +81,7 @@ lib.makeScope pkgs.newScope (
         }
       );
 
-    oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
+    oyasaiPaper = callPackage ./oyasai-paper.nix { };
     oyasaiVelocity = callPackage ./oyasai-velocity.nix { };
 
     oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
