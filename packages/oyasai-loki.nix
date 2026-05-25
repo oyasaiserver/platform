@@ -1,0 +1,53 @@
+{
+  lib,
+  grafana-loki,
+  oyasaiDockerTools,
+  stdenv,
+  formats,
+}:
+
+let
+  lokiYml = (formats.yaml { }).generate "loki.yml" {
+    auth_enabled = false;
+
+    server.http_listen_port = 3100;
+
+    common = {
+      instance_addr = "127.0.0.1";
+      path_prefix = "/data";
+      storage.filesystem = {
+        chunks_directory = "/data/chunks";
+        rules_directory = "/data/rules";
+      };
+      replication_factor = 1;
+      ring.kvstore.store = "inmemory";
+    };
+
+    schema_config.configs = [
+      {
+        from = "2020-10-24";
+        store = "tsdb";
+        object_store = "filesystem";
+        schema = "v13";
+        index = {
+          prefix = "index_";
+          period = "24h";
+        };
+      }
+    ];
+  };
+in
+lib.optionalAttrs stdenv.hostPlatform.isLinux {
+  docker = oyasaiDockerTools.buildLayeredImage {
+    name = "oyasai-loki";
+    config = {
+      Cmd = [
+        "${grafana-loki}/bin/loki"
+        "-config.file=${lokiYml}"
+      ];
+      ExposedPorts = {
+        "3100/tcp" = { };
+      };
+    };
+  };
+}

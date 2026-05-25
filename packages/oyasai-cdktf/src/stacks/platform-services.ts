@@ -49,27 +49,39 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
 
     const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
+      // keep-sorted start
+      alloy: imageIds["oyasai-alloy"],
+      grafana: imageIds["oyasai-grafana"],
+      loki: imageIds["oyasai-loki"],
       mariadb: imageIds.mariadb,
-      mysqlBackup: imageIds["mysql-backup"],
+      mcMonitorExporter: imageIds["oyasai-mc-monitor-exporter"],
+      minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
+      minecraftBackup: imageIds["mc-backup"],
       minecraftLobby: imageIds["oyasai-minecraft-lobby"],
       minecraftMain: imageIds["oyasai-minecraft-main"],
-      minecraftBackup: imageIds["mc-backup"],
+      mysqlBackup: imageIds["mysql-backup"],
+      prometheus: imageIds["oyasai-prometheus"],
       velocity: imageIds["oyasai-velocity"],
+      // keep-sorted end
+    } as const;
+
+    const baseHostPath = join("/opt/platform", this.environment);
+    const hostPaths = {
+      // keep-sorted start
+      grafana: join(baseHostPath, "grafana"),
+      loki: join(baseHostPath, "loki"),
+      mariadb: join(baseHostPath, "mariadb"),
+      minecraftAxiom: join(baseHostPath, "minecraft-axiom"),
+      minecraftLobby: join(baseHostPath, "minecraft-lobby"),
+      minecraftMain: join(baseHostPath, "minecraft-main"),
+      prometheus: join(baseHostPath, "prometheus"),
+      velocity: join(baseHostPath, "velocity"),
+      // keep-sorted end
     } as const;
 
     const network = new Network(this, this.t("network"), {
       name: "network",
     });
-
-    const hostPathRoot = join("/opt/platform", this.environment);
-
-    // Define all host paths here to avoid crash.
-    const hostPaths = {
-      main: join(hostPathRoot, "minecraft-main"),
-      lobby: join(hostPathRoot, "lobby"),
-      velocity: join(hostPathRoot, "velocity"),
-      mariadb: join(hostPathRoot, "mariadb"),
-    };
 
     const mariadbContainer = new Container(this, this.t("mariadb-container"), {
       image: images.mariadb,
@@ -113,11 +125,9 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
         env: envs({
           MEMORY: this.isMaster
-            ? // On-prem has 64GB but looks like 28GB is the most stable because
-              // JVM GC overhead. No calculation, based on experiments.
-              "28G"
-            : // GitHub Action runners have 16GB, but also runs other containers
-              // so limiting to 10GB.
+            ? // On-prem has 64GB
+              "20G"
+            : // GitHub Action runners have 16GB
               "10G",
           RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
 
@@ -129,7 +139,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         volumes: [
           {
             containerPath: "/data",
-            hostPath: hostPaths.main,
+            hostPath: hostPaths.minecraftMain,
           },
         ],
         ...(this.isMaster && {
@@ -160,7 +170,33 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         volumes: [
           {
             containerPath: "/data",
-            hostPath: hostPaths.lobby,
+            hostPath: hostPaths.minecraftLobby,
+          },
+        ],
+      },
+    );
+
+    const minecraftAxiomContainer = new Container(
+      this,
+      this.t("minecraft-axiom-container"),
+      {
+        image: images.minecraftAxiom,
+        name: "oyasai-minecraft-axiom",
+        dependsOn: [mariadbContainer],
+        restart: "unless-stopped",
+        tty: true,
+        stdinOpen: true,
+        destroyGraceSeconds: 2 * 60,
+        init: true,
+        networksAdvanced: [network],
+        env: envs({
+          MEMORY: "8G",
+          PAPER_VELOCITY_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),
+        }),
+        volumes: [
+          {
+            containerPath: "/data",
+            hostPath: hostPaths.minecraftAxiom,
           },
         ],
       },
@@ -190,17 +226,17 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     if (this.isMaster) {
       const cloudflareBaseUrl = `https://${secrets.get("CLOUDFLARE_ACCOUNT_ID")}.r2.cloudflarestorage.com`;
 
-      // Backup sidecar containers for Minecraft containers
-      for (const { container, hostPath } of [
-        { container: minecraftMainContainer, hostPath: hostPaths.main },
-        {
-          container: minecraftLobbyContainer,
-          hostPath: hostPaths.lobby,
-        },
-      ]) {
-        new Container(this, this.t(`${container.name}-backup-container`), {
-          name: `${container.name}-backup`,
-          dependsOn: [container],
+      const backedupMinecraftContainers = {
+        ["minecraft-main"]: minecraftMainContainer,
+        ["minecraft-axiom"]: minecraftAxiomContainer,
+      } as const;
+
+      for (const [backupName, minecraftContainer] of Object.entries(
+        backedupMinecraftContainers,
+      )) {
+        new Container(this, this.t(`${backupName}-backup-container`), {
+          name: `${backupName}-backup`,
+          dependsOn: [minecraftContainer],
           image: images.minecraftBackup,
           networksAdvanced: [network],
           restart: "unless-stopped",
@@ -210,7 +246,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
             AWS_SECRET_ACCESS_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
             BACKUP_INTERVAL: "6h",
             BACKUP_METHOD: "restic",
-            BACKUP_NAME: container.name,
+            BACKUP_NAME: backupName,
             EXCLUDES: [
               // keep-sorted start
               "*.hprof", // Spark profiles - they are huge.
@@ -227,21 +263,15 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
             ].join(","),
             PRUNE_RESTIC_RETENTION:
               "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
-            RCON_HOST: container.name,
+            RCON_HOST: minecraftContainer.name,
             RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
             RESTIC_ADDITIONAL_TAGS: "", // Set to an empty string to disable additional tags.
             RESTIC_PASSWORD: secrets.get("RESTIC_PASSWORD"),
-            RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/${container.name}-backup`,
+            RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/${backupName}-backup`,
             RESTIC_VERBOSE: true,
             // keep-sorted end
           }),
-          volumes: [
-            {
-              hostPath,
-              containerPath: "/data",
-              readOnly: true,
-            },
-          ],
+          volumes: minecraftContainer.volumesInput,
         });
       }
 
@@ -268,5 +298,71 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
       });
     }
+
+    new Container(this, this.t("mc-monitor-exporter-container"), {
+      image: images.mcMonitorExporter,
+      name: "mc-monitor-exporter",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      env: envs({
+        EXPORT_SERVERS: [
+          `${minecraftMainContainer.name}:25565`,
+          `${minecraftLobbyContainer.name}:25565`,
+        ].join(","),
+      }),
+    });
+
+    new Container(this, this.t("loki-container"), {
+      image: images.loki,
+      name: "loki",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      volumes: [
+        {
+          containerPath: "/data",
+          hostPath: hostPaths.loki,
+        },
+      ],
+    });
+
+    new Container(this, this.t("alloy-container"), {
+      image: images.alloy,
+      name: "alloy",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      volumes: [
+        {
+          containerPath: "/var/run/docker.sock",
+          hostPath: "/var/run/docker.sock",
+        },
+      ],
+    });
+
+    new Container(this, this.t("prometheus-container"), {
+      image: images.prometheus,
+      name: "prometheus",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      volumes: [
+        {
+          containerPath: "/data",
+          hostPath: hostPaths.prometheus,
+        },
+      ],
+    });
+
+    new Container(this, this.t("grafana-container"), {
+      image: images.grafana,
+      name: "grafana",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      ports: ports({ tcp: [3000] }),
+      volumes: [
+        {
+          containerPath: "/data",
+          hostPath: hostPaths.grafana,
+        },
+      ],
+    });
   }
 }

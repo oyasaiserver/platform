@@ -76,16 +76,16 @@ let
 
       MEMORY="''${MEMORY:-2G}"
 
+      # Mostly taken from: https://exa.y2k.diy/garden/jvm-args/
       exec java \
         -Xmx"''${MEMORY}" \
         -Xms"''${MEMORY}" \
         -XX:+UseZGC \
-        -XX:+AlwaysPreTouch \
-        -XX:+DisableExplicitGC \
-        -XX:+PerfDisableSharedMem \
+        -XX:+UseCompactObjectHeaders \
         -XX:-OmitStackTraceInFastThrow \
         -Dfile.encoding=UTF-8 \
         -Dcom.mojang.eula.agree=true \
+        -Dpaper.disableStartupVersionCheck \
         -jar "${package}/lib/minecraft/server.jar" \
         nogui \
         "$@"
