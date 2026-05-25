@@ -77,12 +77,6 @@
       "hash": "sha256-8liZUEOkhpy28e9gURCsHZBmpbHhsxZJWiWwavoMEGA="
     }
   },
-  "geyser": {
-    "1.21.10": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1154/downloads/spigot",
-      "hash": "sha256-ew0GDWTT0Dik8jykLNeLPtexXiH9n+568R+VKmP3zxc="
-    }
-  },
   "geyser-velocity": {
     "velocity": {
       "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1154/downloads/velocity",

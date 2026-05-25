@@ -39,27 +39,6 @@ let
       jre
     ];
 
-    passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      docker = oyasaiDockerTools.buildLayeredImage {
-        inherit name;
-        config = {
-          Cmd = [ (lib.getExe result) ];
-          WorkingDir = "/data";
-          Healthcheck = {
-            Test = [
-              "CMD"
-              (lib.getExe mc-monitor)
-              "status"
-            ];
-            Interval = 5 * 1000000000;
-            Timeout = 5 * 1000000000;
-            StartPeriod = 60 * 1000000000;
-            Retries = 20;
-          };
-        };
-      };
-    };
-
     text = ''
       # Technically not required but prepopulate the cache to ensure
       # reproducibility.
@@ -111,6 +90,27 @@ let
         nogui \
         "$@"
     '';
+
+    passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      docker = oyasaiDockerTools.buildLayeredImage {
+        inherit name;
+        config = {
+          Cmd = [ (lib.getExe result) ];
+          WorkingDir = "/data";
+          Healthcheck = {
+            Test = [
+              "CMD"
+              (lib.getExe mc-monitor)
+              "status"
+            ];
+            Interval = 5 * 1000000000;
+            Timeout = 5 * 1000000000;
+            StartPeriod = 60 * 1000000000;
+            Retries = 20;
+          };
+        };
+      };
+    };
   };
 in
 result
