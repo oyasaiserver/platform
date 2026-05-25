@@ -1,18 +1,9 @@
-{
-  lib,
-  oyasaiDockerTools,
-  stdenv,
-  velocityServers,
-  writeShellApplication,
-  formats,
-  coreutils,
-}:
+{ oyasaiVelocity }:
 
-let
+oyasaiVelocity {
   name = "oyasai-velocity";
-  package = velocityServers.velocity;
 
-  velocityToml = (formats.toml { }).generate "velocity.toml" {
+  velocityConfig = {
     config-version = "2.7";
     bind = "0.0.0.0:25565";
     motd = "OyasaiServer";
@@ -58,28 +49,4 @@ let
       show-plugins = false;
     };
   };
-
-  final = writeShellApplication {
-    inherit name;
-
-    runtimeInputs = [ coreutils ];
-
-    text = ''
-      cp --no-preserve=ownership,mode ${velocityToml} velocity.toml
-
-      MEMORY="''${MEMORY:-512M}"
-      exec ${lib.getExe package} -Xmx"''${MEMORY}" -Xms"''${MEMORY}" "$@"
-    '';
-
-    passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      docker = oyasaiDockerTools.buildLayeredImage {
-        inherit name;
-        config = {
-          Cmd = [ (lib.getExe final) ];
-          WorkingDir = "/data";
-        };
-      };
-    };
-  };
-in
-final
+}
