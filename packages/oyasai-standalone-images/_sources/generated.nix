@@ -20,12 +20,12 @@
   };
   mc-backup = {
     pname = "mc-backup";
-    version = "2026.5.0";
+    version = "2026.5.1";
     src = dockerTools.pullImage {
       imageName = "itzg/mc-backup";
-      imageDigest = "sha256:3ee78d8c49d70efc4dfc06d362051b5a028d4f28f2f0fe095e3cbccd29ab511d";
-      sha256 = "sha256-VbYN9VF/9LJPXhH5HSISQ+3YzqJlliUtiE39oWFPcBw=";
-      finalImageTag = "2026.5.0";
+      imageDigest = "sha256:b39062655acf39b4c9cf5d3343a96abad0e7a276c1091331a502dd6f0357f4e9";
+      sha256 = "sha256-e8LguIiEBM8jtrh121MJE9FY4D0C1+EMJ8DPYMHNX2A=";
+      finalImageTag = "2026.5.1";
       os = "linux";
       arch = "amd64";
     };
@@ -38,6 +38,18 @@
       imageDigest = "sha256:9a9a12dc942c370040ced1d43ab9f7d1162e9fde7f38b0f7749c3516d79a812c";
       sha256 = "sha256-6I4SlD+N7jzTDqH7hfu6C7Sh4ALaL6WpkWqTjrhoCK0=";
       finalImageTag = "1.4.0";
+      os = "linux";
+      arch = "amd64";
+    };
+  };
+  silverbullet = {
+    pname = "silverbullet";
+    version = "2.8.1";
+    src = dockerTools.pullImage {
+      imageName = "zefhemel/silverbullet";
+      imageDigest = "sha256:c5f99879153d9e89025b2a9d6b76a0927935bd71c06d66f3a7ad60fc77621c6d";
+      sha256 = "sha256-kGXtMWa6sb9Ln97qNcuUz4OPX8ua63hEVgkA9EVnuWY=";
+      finalImageTag = "2.8.1";
       os = "linux";
       arch = "amd64";
     };

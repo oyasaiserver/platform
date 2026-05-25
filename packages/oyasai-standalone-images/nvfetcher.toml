@@ -15,3 +15,9 @@ docker.os = "linux"
 docker.arch = "amd64"
 fetch.docker = "databack/mysql-backup"
 src.manual = "1.4.0"
+
+[silverbullet]
+docker.os = "linux"
+docker.arch = "amd64"
+fetch.docker = "zefhemel/silverbullet"
+src.container = "zefhemel/silverbullet"
