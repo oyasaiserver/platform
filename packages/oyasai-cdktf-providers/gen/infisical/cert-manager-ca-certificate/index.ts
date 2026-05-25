@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/cert_manager_ca_certificate
+// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_ca_certificate
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface CertManagerCaCertificateConfig extends cdktf.TerraformMetaArgum
   /**
   * The ID of the certificate authority to generate a certificate for
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/cert_manager_ca_certificate#ca_id CertManagerCaCertificate#ca_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_ca_certificate#ca_id CertManagerCaCertificate#ca_id}
   */
   readonly caId: string;
   /**
   * The maximum number of intermediate CAs that may follow this CA in the certificate chain. Use -1 for no path limit
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/cert_manager_ca_certificate#max_path_length CertManagerCaCertificate#max_path_length}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_ca_certificate#max_path_length CertManagerCaCertificate#max_path_length}
   */
   readonly maxPathLength?: number;
   /**
   * The date and time when the CA expires in RFC3339 format (e.g., '2034-01-01T00:00:00Z')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/cert_manager_ca_certificate#not_after CertManagerCaCertificate#not_after}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_ca_certificate#not_after CertManagerCaCertificate#not_after}
   */
   readonly notAfter: string;
   /**
   * The date and time when the CA becomes valid in RFC3339 format (e.g., '2024-01-01T00:00:00Z')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/cert_manager_ca_certificate#not_before CertManagerCaCertificate#not_before}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_ca_certificate#not_before CertManagerCaCertificate#not_before}
   */
   readonly notBefore: string;
   /**
   * The ID of the parent CA (required for intermediate CAs)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/cert_manager_ca_certificate#parent_ca_id CertManagerCaCertificate#parent_ca_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_ca_certificate#parent_ca_id CertManagerCaCertificate#parent_ca_id}
   */
   readonly parentCaId?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/cert_manager_ca_certificate infisical_cert_manager_ca_certificate}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_ca_certificate infisical_cert_manager_ca_certificate}
 */
 export class CertManagerCaCertificate extends cdktf.TerraformResource {
 
@@ -56,7 +56,7 @@ export class CertManagerCaCertificate extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerCaCertificate resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerCaCertificate to import
-  * @param importFromId The id of the existing CertManagerCaCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/cert_manager_ca_certificate#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerCaCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_ca_certificate#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerCaCertificate to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -68,7 +68,7 @@ export class CertManagerCaCertificate extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/cert_manager_ca_certificate infisical_cert_manager_ca_certificate} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_ca_certificate infisical_cert_manager_ca_certificate} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -79,7 +79,7 @@ export class CertManagerCaCertificate extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_ca_certificate',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.22'
+        providerVersion: '0.16.25'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

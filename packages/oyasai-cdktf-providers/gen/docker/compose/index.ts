@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose
+// https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface ComposeConfig extends cdktf.TerraformMetaArguments {
   /**
   * One or more Compose file paths, equivalent to repeating the `-f` flag with `docker compose`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose#config_paths Compose#config_paths}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose#config_paths Compose#config_paths}
   */
   readonly configPaths: string[];
   /**
   * Optional list of env files to load before parsing the Compose configuration. If omitted, Compose uses the default `.env` behavior.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose#env_files Compose#env_files}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose#env_files Compose#env_files}
   */
   readonly envFiles?: string[];
   /**
   * Optional list of Compose profiles to enable.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose#profiles Compose#profiles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose#profiles Compose#profiles}
   */
   readonly profiles?: string[];
   /**
   * Optional project directory used as the Compose working directory. If omitted, Compose uses the directory of the first file in `config_paths`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose#project_directory Compose#project_directory}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose#project_directory Compose#project_directory}
   */
   readonly projectDirectory?: string;
   /**
   * Optional Compose project name. If omitted, Compose derives the project name the same way as the CLI.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose#project_name Compose#project_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose#project_name Compose#project_name}
   */
   readonly projectName?: string;
   /**
   * If `true`, remove containers for services that are no longer present in the Compose configuration during apply and destroy.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose#remove_orphans Compose#remove_orphans}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose#remove_orphans Compose#remove_orphans}
   */
   readonly removeOrphans?: boolean | cdktf.IResolvable;
   /**
   * If `true`, wait until services reach the running or healthy state before returning from apply.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose#wait Compose#wait}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose#wait Compose#wait}
   */
   readonly wait?: boolean | cdktf.IResolvable;
   /**
   * Optional duration for `wait`, for example `30s` or `2m`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose#wait_timeout Compose#wait_timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose#wait_timeout Compose#wait_timeout}
   */
   readonly waitTimeout?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose docker_compose}
+* Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose docker_compose}
 */
 export class Compose extends cdktf.TerraformResource {
 
@@ -74,7 +74,7 @@ export class Compose extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Compose resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Compose to import
-  * @param importFromId The id of the existing Compose that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Compose that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Compose to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -86,7 +86,7 @@ export class Compose extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.3.0/docs/resources/compose docker_compose} Resource
+  * Create a new {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/compose docker_compose} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -97,7 +97,7 @@ export class Compose extends cdktf.TerraformResource {
       terraformResourceType: 'docker_compose',
       terraformGeneratorMetadata: {
         providerName: 'docker',
-        providerVersion: '4.3.0'
+        providerVersion: '4.4.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

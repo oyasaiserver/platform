@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key
+// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface KmsKeyConfig extends cdktf.TerraformMetaArguments {
   /**
   * The description of the KMS key. Maximum 500 characters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key#description KmsKey#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key#description KmsKey#description}
   */
   readonly description?: string;
   /**
   * The encryption algorithm for the key. Options: aes-256-gcm, aes-128-gcm, RSA_4096, ECC_NIST_P256. Defaults to 'aes-256-gcm'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key#encryption_algorithm KmsKey#encryption_algorithm}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key#encryption_algorithm KmsKey#encryption_algorithm}
   */
   readonly encryptionAlgorithm?: string;
   /**
   * Whether the key is disabled. Defaults to false.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key#is_disabled KmsKey#is_disabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key#is_disabled KmsKey#is_disabled}
   */
   readonly isDisabled?: boolean | cdktf.IResolvable;
   /**
   * The usage of the key. Options: encrypt-decrypt, sign-verify. Defaults to 'encrypt-decrypt'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key#key_usage KmsKey#key_usage}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key#key_usage KmsKey#key_usage}
   */
   readonly keyUsage?: string;
   /**
   * The name of the KMS key. Must be 1-32 characters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key#name KmsKey#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key#name KmsKey#name}
   */
   readonly name: string;
   /**
   * The ID of the project where the KMS key will be created.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key#project_id KmsKey#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key#project_id KmsKey#project_id}
   */
   readonly projectId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key infisical_kms_key}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key infisical_kms_key}
 */
 export class KmsKey extends cdktf.TerraformResource {
 
@@ -62,7 +62,7 @@ export class KmsKey extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a KmsKey resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the KmsKey to import
-  * @param importFromId The id of the existing KmsKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing KmsKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the KmsKey to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -74,7 +74,7 @@ export class KmsKey extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/kms_key infisical_kms_key} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/kms_key infisical_kms_key} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -85,7 +85,7 @@ export class KmsKey extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_kms_key',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.22'
+        providerVersion: '0.16.25'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

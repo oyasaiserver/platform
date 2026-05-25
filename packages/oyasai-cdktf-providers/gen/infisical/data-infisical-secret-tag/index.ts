@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/data-sources/secret_tag
+// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secret_tag
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataInfisicalSecretTagConfig extends cdktf.TerraformMetaArgumen
   /**
   * The project id associated with the secret tag
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/data-sources/secret_tag#project_id DataInfisicalSecretTag#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secret_tag#project_id DataInfisicalSecretTag#project_id}
   */
   readonly projectId: string;
   /**
   * The slug of the tag to fetch
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/data-sources/secret_tag#slug DataInfisicalSecretTag#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secret_tag#slug DataInfisicalSecretTag#slug}
   */
   readonly slug: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/data-sources/secret_tag infisical_secret_tag}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secret_tag infisical_secret_tag}
 */
 export class DataInfisicalSecretTag extends cdktf.TerraformDataSource {
 
@@ -38,7 +38,7 @@ export class DataInfisicalSecretTag extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataInfisicalSecretTag resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataInfisicalSecretTag to import
-  * @param importFromId The id of the existing DataInfisicalSecretTag that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/data-sources/secret_tag#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataInfisicalSecretTag that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secret_tag#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataInfisicalSecretTag to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class DataInfisicalSecretTag extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/data-sources/secret_tag infisical_secret_tag} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secret_tag infisical_secret_tag} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class DataInfisicalSecretTag extends cdktf.TerraformDataSource {
       terraformResourceType: 'infisical_secret_tag',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.22'
+        providerVersion: '0.16.25'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

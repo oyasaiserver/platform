@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops
+// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncAzureDevopsConfig extends cdktf.TerraformMetaArgument
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#auto_sync_enabled SecretSyncAzureDevops#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#auto_sync_enabled SecretSyncAzureDevops#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the azure-devops Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#connection_id SecretSyncAzureDevops#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#connection_id SecretSyncAzureDevops#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the Azure DevOps sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#description SecretSyncAzureDevops#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#description SecretSyncAzureDevops#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#destination_config SecretSyncAzureDevops#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#destination_config SecretSyncAzureDevops#destination_config}
   */
   readonly destinationConfig: SecretSyncAzureDevopsDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#environment SecretSyncAzureDevops#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#environment SecretSyncAzureDevops#environment}
   */
   readonly environment: string;
   /**
   * The name of the Azure DevOps sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#name SecretSyncAzureDevops#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#name SecretSyncAzureDevops#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#project_id SecretSyncAzureDevops#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#project_id SecretSyncAzureDevops#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#secret_path SecretSyncAzureDevops#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#secret_path SecretSyncAzureDevops#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#sync_options SecretSyncAzureDevops#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#sync_options SecretSyncAzureDevops#sync_options}
   */
   readonly syncOptions: SecretSyncAzureDevopsSyncOptions;
 }
@@ -66,7 +66,7 @@ export interface SecretSyncAzureDevopsDestinationConfig {
   /**
   * The ID of the Azure DevOps project to sync secrets to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#devops_project_id SecretSyncAzureDevops#devops_project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#devops_project_id SecretSyncAzureDevops#devops_project_id}
   */
   readonly devopsProjectId: string;
 }
@@ -159,13 +159,13 @@ export interface SecretSyncAzureDevopsSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from Azure DevOps. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#disable_secret_deletion SecretSyncAzureDevops#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#disable_secret_deletion SecretSyncAzureDevops#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * The format to use for structuring secret keys in the Azure DevOps destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#key_schema SecretSyncAzureDevops#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#key_schema SecretSyncAzureDevops#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -288,7 +288,7 @@ export class SecretSyncAzureDevopsSyncOptionsOutputReference extends cdktf.Compl
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops infisical_secret_sync_azure_devops}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops infisical_secret_sync_azure_devops}
 */
 export class SecretSyncAzureDevops extends cdktf.TerraformResource {
 
@@ -304,7 +304,7 @@ export class SecretSyncAzureDevops extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncAzureDevops resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncAzureDevops to import
-  * @param importFromId The id of the existing SecretSyncAzureDevops that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncAzureDevops that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncAzureDevops to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -316,7 +316,7 @@ export class SecretSyncAzureDevops extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_azure_devops infisical_secret_sync_azure_devops} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_azure_devops infisical_secret_sync_azure_devops} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -327,7 +327,7 @@ export class SecretSyncAzureDevops extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_azure_devops',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.22'
+        providerVersion: '0.16.25'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
