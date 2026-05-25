@@ -53,6 +53,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const images = {
       mariadb: imageIds.mariadb,
       mysqlBackup: imageIds["mysql-backup"],
+      minecraftLobby: imageIds["oyasai-minecraft-lobby"],
       minecraftMain: imageIds["oyasai-minecraft-main"],
       minecraftBackup: imageIds["mc-backup"],
       velocity: imageIds["oyasai-velocity"],
@@ -132,6 +133,32 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           // spikes caused by the main tick thread being scheduled on E-cores.
           cpuSet: "0-11",
         }),
+      },
+    );
+
+    const minecraftLobbyContainer = new Container(
+      this,
+      this.t("minecraft-lobby-container"),
+      {
+        image: images.minecraftLobby,
+        name: "oyasai-minecraft-lobby",
+        dependsOn: [mariadbContainer],
+        restart: "unless-stopped",
+        tty: true,
+        stdinOpen: true,
+        destroyGraceSeconds: 2 * 60,
+        init: true,
+        networksAdvanced: [network],
+        env: envs({
+          MEMORY: "2G",
+          PAPER_VELOCITY_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),
+        }),
+        volumes: [
+          {
+            containerPath: "/data",
+            hostPath: join(this.workdir, "minecraft-lobby"),
+          },
+        ],
       },
     );
 

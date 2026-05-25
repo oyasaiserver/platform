@@ -2,11 +2,9 @@
   oyasaiVelocity,
   oyasai-plugin-registry,
   oyasai-minecraft-main,
+  oyasai-minecraft-lobby,
 }:
 
-let
-  defaultServer = "main";
-in
 oyasaiVelocity {
   name = "oyasai-velocity";
 
@@ -25,9 +23,11 @@ oyasaiVelocity {
     # Velocity tries to set default
     forced-hosts = { };
 
+    # TODO: set lobby as default server after experimentation.
     servers = {
-      ${defaultServer} = "${oyasai-minecraft-main.name}:25565";
-      try = [ defaultServer ];
+      main = oyasai-minecraft-main.name;
+      lobby = oyasai-minecraft-lobby.name;
+      try = [ "main" ];
     };
   };
 }
