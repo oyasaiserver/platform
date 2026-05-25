@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github
+// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncGithubConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#auto_sync_enabled SecretSyncGithub#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#auto_sync_enabled SecretSyncGithub#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the github Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#connection_id SecretSyncGithub#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#connection_id SecretSyncGithub#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the Github sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#description SecretSyncGithub#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#description SecretSyncGithub#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#destination_config SecretSyncGithub#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#destination_config SecretSyncGithub#destination_config}
   */
   readonly destinationConfig: SecretSyncGithubDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#environment SecretSyncGithub#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#environment SecretSyncGithub#environment}
   */
   readonly environment: string;
   /**
   * The name of the Github sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#name SecretSyncGithub#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#name SecretSyncGithub#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#project_id SecretSyncGithub#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#project_id SecretSyncGithub#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#secret_path SecretSyncGithub#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#secret_path SecretSyncGithub#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#sync_options SecretSyncGithub#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#sync_options SecretSyncGithub#sync_options}
   */
   readonly syncOptions: SecretSyncGithubSyncOptions;
 }
@@ -66,37 +66,37 @@ export interface SecretSyncGithubDestinationConfig {
   /**
   * The environment to sync the secrets to, required if scope is `repository-environment`
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#repository_environment SecretSyncGithub#repository_environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#repository_environment SecretSyncGithub#repository_environment}
   */
   readonly repositoryEnvironment?: string;
   /**
   * The repository to sync the secrets to, required if scope is `repository` or `repository-environment`. This is only the name of the repository, without the repository owner included. As an example if you have a repository called Infisical/go-sdk, you would only need to provide `go-sdk` here.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#repository_name SecretSyncGithub#repository_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#repository_name SecretSyncGithub#repository_name}
   */
   readonly repositoryName?: string;
   /**
   * The owner of the Github repository, required if scope is `repository`, `repository-environment`, or `organization`. This is the organization name, or the username for personal repositories. As an example if you have a repository called Infisical/go-sdk, you would only need to provide `Infisical` here.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#repository_owner SecretSyncGithub#repository_owner}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#repository_owner SecretSyncGithub#repository_owner}
   */
   readonly repositoryOwner?: string;
   /**
   * The scope to sync the secrets to, repository|organization
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#scope SecretSyncGithub#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#scope SecretSyncGithub#scope}
   */
   readonly scope: string;
   /**
   * The repository ids to sync the secrets to, required if scope is `organization` and the visibility field is set to `selected`
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#selected_repository_ids SecretSyncGithub#selected_repository_ids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#selected_repository_ids SecretSyncGithub#selected_repository_ids}
   */
   readonly selectedRepositoryIds?: number[];
   /**
   * The visibility of the Github repository, required if scope is `organization`. Accepted values are: `all`|`private`|`selected`
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#visibility SecretSyncGithub#visibility}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#visibility SecretSyncGithub#visibility}
   */
   readonly visibility?: string;
 }
@@ -334,19 +334,19 @@ export interface SecretSyncGithubSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from Github. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#disable_secret_deletion SecretSyncGithub#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#disable_secret_deletion SecretSyncGithub#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#initial_sync_behavior SecretSyncGithub#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#initial_sync_behavior SecretSyncGithub#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the Github destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#key_schema SecretSyncGithub#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#key_schema SecretSyncGithub#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -495,7 +495,7 @@ export class SecretSyncGithubSyncOptionsOutputReference extends cdktf.ComplexObj
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github infisical_secret_sync_github}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github infisical_secret_sync_github}
 */
 export class SecretSyncGithub extends cdktf.TerraformResource {
 
@@ -511,7 +511,7 @@ export class SecretSyncGithub extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncGithub resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncGithub to import
-  * @param importFromId The id of the existing SecretSyncGithub that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncGithub that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncGithub to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -523,7 +523,7 @@ export class SecretSyncGithub extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_github infisical_secret_sync_github} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_github infisical_secret_sync_github} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -534,7 +534,7 @@ export class SecretSyncGithub extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_github',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.22'
+        providerVersion: '0.16.25'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

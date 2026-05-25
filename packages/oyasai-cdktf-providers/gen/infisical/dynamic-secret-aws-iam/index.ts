@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam
+// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface DynamicSecretAwsIamConfig extends cdktf.TerraformMetaArguments 
   /**
   * The configuration of the dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#configuration DynamicSecretAwsIam#configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#configuration DynamicSecretAwsIam#configuration}
   */
   readonly configuration: DynamicSecretAwsIamConfiguration;
   /**
   * The default TTL that will be applied for all the leases.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#default_ttl DynamicSecretAwsIam#default_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#default_ttl DynamicSecretAwsIam#default_ttl}
   */
   readonly defaultTtl: string;
   /**
   * The slug of the environment to create the dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#environment_slug DynamicSecretAwsIam#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#environment_slug DynamicSecretAwsIam#environment_slug}
   */
   readonly environmentSlug: string;
   /**
   * The maximum limit a TTL can be leased or renewed for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#max_ttl DynamicSecretAwsIam#max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#max_ttl DynamicSecretAwsIam#max_ttl}
   */
   readonly maxTtl?: string;
   /**
   * The metadata associated with this dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#metadata DynamicSecretAwsIam#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#metadata DynamicSecretAwsIam#metadata}
   */
   readonly metadata?: DynamicSecretAwsIamMetadata[] | cdktf.IResolvable;
   /**
   * The name of the dynamic secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#name DynamicSecretAwsIam#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#name DynamicSecretAwsIam#name}
   */
   readonly name: string;
   /**
   * The path to create the dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#path DynamicSecretAwsIam#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#path DynamicSecretAwsIam#path}
   */
   readonly path: string;
   /**
   * The slug of the project to create dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#project_slug DynamicSecretAwsIam#project_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#project_slug DynamicSecretAwsIam#project_slug}
   */
   readonly projectSlug: string;
   /**
   * The username template of the dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#username_template DynamicSecretAwsIam#username_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#username_template DynamicSecretAwsIam#username_template}
   */
   readonly usernameTemplate?: string;
 }
@@ -66,13 +66,13 @@ export interface DynamicSecretAwsIamConfigurationAccessKeyConfig {
   /**
   * The managing AWS IAM User Access Key
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#access_key DynamicSecretAwsIam#access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#access_key DynamicSecretAwsIam#access_key}
   */
   readonly accessKey: string;
   /**
   * The managing AWS IAM User Secret Key
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#secret_access_key DynamicSecretAwsIam#secret_access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#secret_access_key DynamicSecretAwsIam#secret_access_key}
   */
   readonly secretAccessKey: string;
 }
@@ -191,7 +191,7 @@ export interface DynamicSecretAwsIamConfigurationAssumeRoleConfig {
   /**
   * The ARN of the AWS Role to assume.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#role_arn DynamicSecretAwsIam#role_arn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#role_arn DynamicSecretAwsIam#role_arn}
   */
   readonly roleArn: string;
 }
@@ -284,55 +284,55 @@ export interface DynamicSecretAwsIamConfiguration {
   /**
   * Configuration for the 'access_key' authentication method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#access_key_config DynamicSecretAwsIam#access_key_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#access_key_config DynamicSecretAwsIam#access_key_config}
   */
   readonly accessKeyConfig?: DynamicSecretAwsIamConfigurationAccessKeyConfig;
   /**
   * Configuration for the 'assume_role' authentication method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#assume_role_config DynamicSecretAwsIam#assume_role_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#assume_role_config DynamicSecretAwsIam#assume_role_config}
   */
   readonly assumeRoleConfig?: DynamicSecretAwsIamConfigurationAssumeRoleConfig;
   /**
   * IAM AWS Path to scope created IAM User resource access.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#aws_path DynamicSecretAwsIam#aws_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#aws_path DynamicSecretAwsIam#aws_path}
   */
   readonly awsPath?: string;
   /**
   * The authentication method to use. Must be 'access_key' or 'assume_role'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#method DynamicSecretAwsIam#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#method DynamicSecretAwsIam#method}
   */
   readonly method: string;
   /**
   * The IAM Policy ARN of the AWS Permissions Boundary to attach to IAM users created in the role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#permission_boundary_policy_arn DynamicSecretAwsIam#permission_boundary_policy_arn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#permission_boundary_policy_arn DynamicSecretAwsIam#permission_boundary_policy_arn}
   */
   readonly permissionBoundaryPolicyArn?: string;
   /**
   * The AWS IAM managed policies that should be attached to the created users. Multiple values can be provided by separating them with commas
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#policy_arns DynamicSecretAwsIam#policy_arns}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#policy_arns DynamicSecretAwsIam#policy_arns}
   */
   readonly policyArns?: string;
   /**
   * The AWS IAM inline policy that should be attached to the created users. Multiple values can be provided by separating them with commas
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#policy_document DynamicSecretAwsIam#policy_document}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#policy_document DynamicSecretAwsIam#policy_document}
   */
   readonly policyDocument?: string;
   /**
   * The AWS data center region.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#region DynamicSecretAwsIam#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#region DynamicSecretAwsIam#region}
   */
   readonly region: string;
   /**
   * The AWS IAM groups that should be assigned to the created users. Multiple values can be provided by separating them with commas
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#user_groups DynamicSecretAwsIam#user_groups}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#user_groups DynamicSecretAwsIam#user_groups}
   */
   readonly userGroups?: string;
 }
@@ -654,13 +654,13 @@ export interface DynamicSecretAwsIamMetadata {
   /**
   * The key of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#key DynamicSecretAwsIam#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#key DynamicSecretAwsIam#key}
   */
   readonly key: string;
   /**
   * The value of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#value DynamicSecretAwsIam#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#value DynamicSecretAwsIam#value}
   */
   readonly value: string;
 }
@@ -799,7 +799,7 @@ export class DynamicSecretAwsIamMetadataList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam infisical_dynamic_secret_aws_iam}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam infisical_dynamic_secret_aws_iam}
 */
 export class DynamicSecretAwsIam extends cdktf.TerraformResource {
 
@@ -815,7 +815,7 @@ export class DynamicSecretAwsIam extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DynamicSecretAwsIam resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DynamicSecretAwsIam to import
-  * @param importFromId The id of the existing DynamicSecretAwsIam that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DynamicSecretAwsIam that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DynamicSecretAwsIam to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -827,7 +827,7 @@ export class DynamicSecretAwsIam extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/dynamic_secret_aws_iam infisical_dynamic_secret_aws_iam} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/dynamic_secret_aws_iam infisical_dynamic_secret_aws_iam} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -838,7 +838,7 @@ export class DynamicSecretAwsIam extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_dynamic_secret_aws_iam',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.22'
+        providerVersion: '0.16.25'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

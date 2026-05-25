@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store
+// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncAwsParameterStoreConfig extends cdktf.TerraformMetaAr
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#auto_sync_enabled SecretSyncAwsParameterStore#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#auto_sync_enabled SecretSyncAwsParameterStore#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the aws Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#connection_id SecretSyncAwsParameterStore#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#connection_id SecretSyncAwsParameterStore#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the AWS Parameter Store sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#description SecretSyncAwsParameterStore#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#description SecretSyncAwsParameterStore#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#destination_config SecretSyncAwsParameterStore#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#destination_config SecretSyncAwsParameterStore#destination_config}
   */
   readonly destinationConfig: SecretSyncAwsParameterStoreDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#environment SecretSyncAwsParameterStore#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#environment SecretSyncAwsParameterStore#environment}
   */
   readonly environment: string;
   /**
   * The name of the AWS Parameter Store sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#name SecretSyncAwsParameterStore#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#name SecretSyncAwsParameterStore#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#project_id SecretSyncAwsParameterStore#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#project_id SecretSyncAwsParameterStore#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#secret_path SecretSyncAwsParameterStore#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#secret_path SecretSyncAwsParameterStore#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#sync_options SecretSyncAwsParameterStore#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#sync_options SecretSyncAwsParameterStore#sync_options}
   */
   readonly syncOptions: SecretSyncAwsParameterStoreSyncOptions;
 }
@@ -66,13 +66,13 @@ export interface SecretSyncAwsParameterStoreDestinationConfig {
   /**
   * The AWS region of your AWS Parameter Store
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#aws_region SecretSyncAwsParameterStore#aws_region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#aws_region SecretSyncAwsParameterStore#aws_region}
   */
   readonly awsRegion: string;
   /**
   * The path in the AWS Parameter Store where the secrets will be stored, Example: /example/path/
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#path SecretSyncAwsParameterStore#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#path SecretSyncAwsParameterStore#path}
   */
   readonly path: string;
 }
@@ -191,13 +191,13 @@ export interface SecretSyncAwsParameterStoreSyncOptionsTags {
   /**
   * The key of the tag
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#key SecretSyncAwsParameterStore#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#key SecretSyncAwsParameterStore#key}
   */
   readonly key: string;
   /**
   * The value of the tag
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#value SecretSyncAwsParameterStore#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#value SecretSyncAwsParameterStore#value}
   */
   readonly value: string;
 }
@@ -338,37 +338,37 @@ export interface SecretSyncAwsParameterStoreSyncOptions {
   /**
   * The AWS KMS key ID to use for encryption
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#aws_kms_key_id SecretSyncAwsParameterStore#aws_kms_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#aws_kms_key_id SecretSyncAwsParameterStore#aws_kms_key_id}
   */
   readonly awsKmsKeyId?: string;
   /**
   * When set to true, Infisical will not remove secrets from AWS Parameter Store. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#disable_secret_deletion SecretSyncAwsParameterStore#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#disable_secret_deletion SecretSyncAwsParameterStore#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination, import-prioritize-source, import-prioritize-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#initial_sync_behavior SecretSyncAwsParameterStore#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#initial_sync_behavior SecretSyncAwsParameterStore#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the AWS Parameter Store destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#key_schema SecretSyncAwsParameterStore#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#key_schema SecretSyncAwsParameterStore#key_schema}
   */
   readonly keySchema?: string;
   /**
   * Whether to sync the secret metadata as tags
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#sync_secret_metadata_as_tags SecretSyncAwsParameterStore#sync_secret_metadata_as_tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#sync_secret_metadata_as_tags SecretSyncAwsParameterStore#sync_secret_metadata_as_tags}
   */
   readonly syncSecretMetadataAsTags?: boolean | cdktf.IResolvable;
   /**
   * The tags to sync to the secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#tags SecretSyncAwsParameterStore#tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#tags SecretSyncAwsParameterStore#tags}
   */
   readonly tags?: SecretSyncAwsParameterStoreSyncOptionsTags[] | cdktf.IResolvable;
 }
@@ -604,7 +604,7 @@ export class SecretSyncAwsParameterStoreSyncOptionsOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store infisical_secret_sync_aws_parameter_store}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store infisical_secret_sync_aws_parameter_store}
 */
 export class SecretSyncAwsParameterStore extends cdktf.TerraformResource {
 
@@ -620,7 +620,7 @@ export class SecretSyncAwsParameterStore extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncAwsParameterStore resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncAwsParameterStore to import
-  * @param importFromId The id of the existing SecretSyncAwsParameterStore that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncAwsParameterStore that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncAwsParameterStore to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -632,7 +632,7 @@ export class SecretSyncAwsParameterStore extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.22/docs/resources/secret_sync_aws_parameter_store infisical_secret_sync_aws_parameter_store} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_aws_parameter_store infisical_secret_sync_aws_parameter_store} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -643,7 +643,7 @@ export class SecretSyncAwsParameterStore extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_aws_parameter_store',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.22'
+        providerVersion: '0.16.25'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
