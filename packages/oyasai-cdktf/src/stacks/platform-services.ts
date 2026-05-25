@@ -101,9 +101,6 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
             8192, // Votifier
             25575, // Rcon
           ],
-          udp: [
-            19132, // Bedrock
-          ],
         }),
         env: envs({
           MEMORY: this.isMaster
@@ -141,8 +138,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       restart: "unless-stopped",
       networksAdvanced: [network],
       ports: ports({
-        tcp: [25565],
-        udp: [],
+        tcp: [25565], // Java
+        udp: [19132], // Bedrock
       }),
       env: envs({
         VELOCITY_FORWARDING_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),

@@ -11,7 +11,7 @@ export function envs(
 }
 
 export function ports(
-  mapping: Readonly<Record<"tcp" | "udp", number[]>>,
+  mapping: Readonly<Partial<Record<"tcp" | "udp", number[]>>>,
 ): ContainerPorts[] {
   return Object.entries(mapping).flatMap(([protocol, ports]) =>
     ports.map((port) => ({

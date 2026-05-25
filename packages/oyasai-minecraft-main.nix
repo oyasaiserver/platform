@@ -58,7 +58,6 @@ oyasaiPurpur rec {
     fastasyncvoxelsniper
     fastasyncworldedit
     floodgate
-    geyser
     gsit
     imageonmap
     inventoryshop

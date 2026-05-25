@@ -1,7 +1,14 @@
-{ oyasaiVelocity }:
+{ oyasaiVelocity, oyasai-plugin-registry }:
 
 oyasaiVelocity {
   name = "oyasai-velocity";
+
+  plugins = with oyasai-plugin-registry.forVersion "velocity"; [
+    # keep-sorted start
+    floodgate-velocity
+    geyser-velocity
+    # keep-sorted end
+  ];
 
   velocityConfig = {
     config-version = "2.7";

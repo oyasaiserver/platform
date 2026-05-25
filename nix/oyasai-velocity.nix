@@ -8,7 +8,11 @@
   coreutils,
 }:
 
-{ name, velocityConfig }:
+{
+  name,
+  velocityConfig,
+  plugins ? [ ],
+}:
 
 let
   package = velocityServers.velocity;
@@ -32,6 +36,12 @@ let
 
     text = ''
       cp --no-preserve=ownership,mode ${velocityToml} velocity.toml
+
+      mkdir -p plugins
+      rm -f plugins/*.jar
+      ${lib.optionalString (plugins != [ ]) ''
+        cp --no-preserve=ownership,mode ${lib.concatStringsSep " " plugins} plugins
+      ''}
 
       MEMORY="''${MEMORY:-512M}"
       exec ${lib.getExe package} -Xmx"''${MEMORY}" -Xms"''${MEMORY}" "$@"

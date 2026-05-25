@@ -61,8 +61,8 @@
   },
   "fastasyncworldedit": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/MOe9fY3h/FastAsyncWorldEdit-Bukkit-2.15.0.jar",
-      "hash": "sha256-rPJn1wubCG7h0VIIXt8bSOByn2cYDqvcII01a6Uz13E="
+      "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/Dx0x0kQW/FastAsyncWorldEdit-Bukkit-2.15.1.jar",
+      "hash": "sha256-PXZSI0nORW/W2sd9VGCns/yLbsf1IG+qPWy86Y6cgMM="
     }
   },
   "floodgate": {
@@ -71,10 +71,22 @@
       "hash": "sha256-ZR31ephvY1BqEcLyxrJxR+3snFkJT6ffzCGhMdqKEDA="
     }
   },
+  "floodgate-velocity": {
+    "velocity": {
+      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/132/downloads/velocity",
+      "hash": "sha256-8liZUEOkhpy28e9gURCsHZBmpbHhsxZJWiWwavoMEGA="
+    }
+  },
   "geyser": {
     "1.21.10": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1153/downloads/spigot",
-      "hash": "sha256-1vX9kk9A6R2wMgZ/i3Bo88YwVCd3r3A40jVCuvdD3JA="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1154/downloads/spigot",
+      "hash": "sha256-ew0GDWTT0Dik8jykLNeLPtexXiH9n+568R+VKmP3zxc="
+    }
+  },
+  "geyser-velocity": {
+    "velocity": {
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.0/builds/1154/downloads/velocity",
+      "hash": "sha256-/SF/dBIrDNTTo37DSoA0IymfTuxR3d57kmiUZbWUUd0="
     }
   },
   "gsit": {
@@ -127,8 +139,8 @@
   },
   "multiversecore": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/wmno2Hzs/multiverse-core-5.7.0-pre.jar",
-      "hash": "sha256-AkDN4NWe57Xs8B/MVHh/CUPehTqafaONzCaP8O7nH0U="
+      "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/OGgIkbOl/multiverse-core-5.7.0-pre.1.jar",
+      "hash": "sha256-qfvQIMRGNf6ZvaXP6ARjPVQwDlsAz5B2ja/+feDSywA="
     }
   },
   "multiverseprotals": {
