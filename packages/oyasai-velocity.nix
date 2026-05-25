@@ -16,8 +16,9 @@ oyasaiVelocity {
 
   velocityConfig = {
     config-version = "2.8";
-    motd = "§l§r                 §b§lOyasai§f§lServer§r\\n§l§f            建築勢は集合だ！建築！建築！建築！！！";
+    motd = "                 <aqua><bold>Oyasai<white>Server<reset>\\n<bold>            建築勢は集合だ！建築！建築！建築！！！";
     player-info-forwarding-mode = "modern";
+    forced-hosts = { };
 
     servers = {
       main = "${oyasai-minecraft-main.name}:25565";
