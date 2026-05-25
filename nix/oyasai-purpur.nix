@@ -8,6 +8,7 @@
   writeTextFile,
   formats,
   coreutils,
+  gnused,
   purpurServers,
 }:
 
@@ -36,6 +37,7 @@ let
 
     runtimeInputs = [
       coreutils
+      gnused
       jre
     ];
 
@@ -64,6 +66,13 @@ let
       ${lib.optionalString (paperConfig != null) ''
         mkdir -p config
         cp --no-preserve=ownership,mode ${paperGlobalYml} config/paper-global.yml
+        # FIXME: Paper supports PAPER_VELOCITY_SECRET env var (@PostProcess in GlobalConfiguration.java,
+        # added June 2022), but it's unclear whether Purpur's build includes this. In practice the env
+        # var silently has no effect and we fall back to sed-patching the baked YAML at startup.
+        # Consider switching to upstream Paper if Purpur-specific features are no longer needed.
+        if [[ -n "''${PAPER_VELOCITY_SECRET:-}" ]]; then
+          sed -i "s/PAPER_VELOCITY_SECRET_PLACEHOLDER/''${PAPER_VELOCITY_SECRET}/" config/paper-global.yml
+        fi
       ''}
 
       # Doesn't have cli flag
