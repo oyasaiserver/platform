@@ -18,7 +18,6 @@ oyasaiPurpur rec {
     generate-structures = false;
     level-name = "lifeworld";
     max-players = 70;
-    motd = "§l§r                 §b§lOyasai§f§lServer§7 [v${version}]§r\\n§l§f            建築勢は集合だ！建築！建築！建築！！！";
     network-compression-threshold = 96;
     online-mode = false; # handled by velocity
     pvp = false;

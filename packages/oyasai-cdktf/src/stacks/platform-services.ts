@@ -82,12 +82,16 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       ],
     });
 
+    // Can change to "oyasai-minecraft-main" for naming consistency but too lazy
+    // to do the data migration - shun 2026-05
+    const minecraftMainWorkDir = join(this.workdir, "minecraft-main");
+
     const minecraftMainContainer = new Container(
       this,
       this.t("minecraft-main-container"),
       {
         image: images.minecraftMain,
-        name: "minecraft-main",
+        name: "oyasai-minecraft-main",
         dependsOn: [mariadbContainer],
         restart: "unless-stopped",
         tty: true,
@@ -120,7 +124,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         volumes: [
           {
             containerPath: "/data",
-            hostPath: join(this.workdir, "minecraft-main"),
+            hostPath: minecraftMainWorkDir,
           },
         ],
         ...(this.isMaster && {
@@ -185,7 +189,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           ].join(","),
           PRUNE_RESTIC_RETENTION:
             "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
-          RCON_HOST: "minecraft-main",
+          RCON_HOST: minecraftMainContainer.name,
           RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
           RESTIC_ADDITIONAL_TAGS: "", // Set to an empty string to disable additional tags.
           RESTIC_PASSWORD: secrets.get("RESTIC_PASSWORD"),
@@ -195,7 +199,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
         volumes: [
           {
-            hostPath: join(this.workdir, "minecraft-main"),
+            hostPath: minecraftMainWorkDir,
             containerPath: "/data",
             readOnly: true,
           },
