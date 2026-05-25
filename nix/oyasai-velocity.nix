@@ -24,16 +24,6 @@ let
 
     runtimeInputs = [ coreutils ];
 
-    passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      docker = oyasaiDockerTools.buildLayeredImage {
-        inherit name;
-        config = {
-          Cmd = [ (lib.getExe result) ];
-          WorkingDir = "/data";
-        };
-      };
-    };
-
     text = ''
       cp --no-preserve=ownership,mode ${velocityToml} velocity.toml
 
@@ -46,6 +36,16 @@ let
       MEMORY="''${MEMORY:-512M}"
       exec ${lib.getExe package} -Xmx"''${MEMORY}" -Xms"''${MEMORY}" "$@"
     '';
+
+    passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      docker = oyasaiDockerTools.buildLayeredImage {
+        inherit name;
+        config = {
+          Cmd = [ (lib.getExe result) ];
+          WorkingDir = "/data";
+        };
+      };
+    };
   };
 in
 result

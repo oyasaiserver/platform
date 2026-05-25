@@ -77,12 +77,6 @@
       "url": "https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity"
     }
   },
-  "geyser": {
-    "1.21.10": {
-      "type": "url",
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot"
-    }
-  },
   "geyser-velocity": {
     "velocity": {
       "type": "url",
