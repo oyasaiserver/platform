@@ -17,8 +17,6 @@ type Props = Readonly<{
 }>;
 
 export class PlatformServices extends OyasaiPlatformTerraformStack {
-  private readonly workdir = join("/opt/platform", this.environment);
-
   constructor(
     scope: Construct,
     id: string,
@@ -63,6 +61,16 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       name: "network",
     });
 
+    const hostPathRoot = join("/opt/platform", this.environment);
+
+    // Define all host paths here to avoid crash.
+    const hostPaths = {
+      main: join(hostPathRoot, "minecraft-main"),
+      lobby: join(hostPathRoot, "lobby"),
+      velocity: join(hostPathRoot, "velocity"),
+      mariadb: join(hostPathRoot, "mariadb"),
+    };
+
     const mariadbContainer = new Container(this, this.t("mariadb-container"), {
       image: images.mariadb,
       name: "mariadb",
@@ -74,18 +82,14 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       volumes: [
         {
           containerPath: "/var/lib/mysql",
-          hostPath: join(this.workdir, "mariadb"),
+          hostPath: hostPaths.mariadb,
         },
         {
           containerPath: "/docker-entrypoint-initdb.d",
-          hostPath: join(this.workdir, "mariadb"),
+          hostPath: hostPaths.mariadb,
         },
       ],
     });
-
-    // Can change to "oyasai-minecraft-main" for naming consistency but too lazy
-    // to do the data migration - shun 2026-05
-    const minecraftMainWorkDir = join(this.workdir, "minecraft-main");
 
     const minecraftMainContainer = new Container(
       this,
@@ -125,7 +129,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         volumes: [
           {
             containerPath: "/data",
-            hostPath: minecraftMainWorkDir,
+            hostPath: hostPaths.main,
           },
         ],
         ...(this.isMaster && {
@@ -156,7 +160,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         volumes: [
           {
             containerPath: "/data",
-            hostPath: join(this.workdir, "minecraft-lobby"),
+            hostPath: hostPaths.lobby,
           },
         ],
       },
@@ -178,7 +182,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       volumes: [
         {
           containerPath: "/data",
-          hostPath: join(this.workdir, "velocity"),
+          hostPath: hostPaths.velocity,
         },
       ],
     });
@@ -186,51 +190,60 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     if (this.isMaster) {
       const cloudflareBaseUrl = `https://${secrets.get("CLOUDFLARE_ACCOUNT_ID")}.r2.cloudflarestorage.com`;
 
-      new Container(this, this.t("minecraft-backup-container"), {
-        name: "minecraft-main-backup",
-        dependsOn: [minecraftMainContainer],
-        image: images.minecraftBackup,
-        networksAdvanced: [network],
-        restart: "unless-stopped",
-        env: envs({
-          // keep-sorted start block=yes
-          AWS_ACCESS_KEY_ID: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
-          AWS_SECRET_ACCESS_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
-          BACKUP_INTERVAL: "6h",
-          BACKUP_METHOD: "restic",
-          BACKUP_NAME: minecraftMainContainer.name,
-          EXCLUDES: [
-            // keep-sorted start
-            "*.hprof", // Spark profiles - they are huge.
-            "*.jar",
-            "*.tmp",
-            "archive",
-            "bluemap",
-            "cache",
-            "crash-reports",
-            "debug",
-            "logs",
-            "versions",
+      // Backup sidecar containers for Minecraft containers
+      for (const { container, hostPath } of [
+        { container: minecraftMainContainer, hostPath: hostPaths.main },
+        {
+          container: minecraftLobbyContainer,
+          hostPath: hostPaths.lobby,
+        },
+      ]) {
+        new Container(this, this.t(`${container.name}-backup-container`), {
+          name: `${container.name}-backup`,
+          dependsOn: [container],
+          image: images.minecraftBackup,
+          networksAdvanced: [network],
+          restart: "unless-stopped",
+          env: envs({
+            // keep-sorted start block=yes
+            AWS_ACCESS_KEY_ID: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
+            AWS_SECRET_ACCESS_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
+            BACKUP_INTERVAL: "6h",
+            BACKUP_METHOD: "restic",
+            BACKUP_NAME: container.name,
+            EXCLUDES: [
+              // keep-sorted start
+              "*.hprof", // Spark profiles - they are huge.
+              "*.jar",
+              "*.tmp",
+              "archive",
+              "bluemap",
+              "cache",
+              "crash-reports",
+              "debug",
+              "logs",
+              "versions",
+              // keep-sorted end
+            ].join(","),
+            PRUNE_RESTIC_RETENTION:
+              "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
+            RCON_HOST: container.name,
+            RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
+            RESTIC_ADDITIONAL_TAGS: "", // Set to an empty string to disable additional tags.
+            RESTIC_PASSWORD: secrets.get("RESTIC_PASSWORD"),
+            RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/${container.name}-backup`,
+            RESTIC_VERBOSE: true,
             // keep-sorted end
-          ].join(","),
-          PRUNE_RESTIC_RETENTION:
-            "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
-          RCON_HOST: minecraftMainContainer.name,
-          RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
-          RESTIC_ADDITIONAL_TAGS: "", // Set to an empty string to disable additional tags.
-          RESTIC_PASSWORD: secrets.get("RESTIC_PASSWORD"),
-          RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/minecraft-main-backup`,
-          RESTIC_VERBOSE: true,
-          // keep-sorted end
-        }),
-        volumes: [
-          {
-            hostPath: minecraftMainWorkDir,
-            containerPath: "/data",
-            readOnly: true,
-          },
-        ],
-      });
+          }),
+          volumes: [
+            {
+              hostPath,
+              containerPath: "/data",
+              readOnly: true,
+            },
+          ],
+        });
+      }
 
       new Container(this, this.t("mariadb-backup-container"), {
         name: "mariadb-backup",
