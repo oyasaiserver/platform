@@ -9,7 +9,6 @@
   formats,
   coreutils,
   purpurServers,
-  gnused
 }:
 
 {
@@ -38,12 +37,11 @@ let
     runtimeInputs = [
       coreutils
       jre
-      gnused
     ];
 
     text = ''
       # Technically not required but prepopulate the cache to ensure
-      # reproducability.
+      # reproducibility.
       mkdir -p cache
       cp --no-preserve=ownership,mode ${package.vanillaJar} cache/mojang_${version}.jar
 
