@@ -66,7 +66,7 @@ oyasaiPurpur rec {
     lwc
     minepacks
     multiversecore
-    multiverseprotals
+    multiverseportals
     mycommand
     nuvotifier
     openinv

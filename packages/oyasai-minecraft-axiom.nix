@@ -30,8 +30,13 @@ oyasaiPurpur rec {
     fastasyncvoxelsniper
     fastasyncworldedit
     floodgate
+    multiversecore
+    multiverseportals
     plugmanx
+    venturechat
     viaversion
+    worldeditsui
+    worldguard
     # keep-sorted end
   ];
 }
