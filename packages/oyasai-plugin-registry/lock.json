@@ -5,6 +5,12 @@
       "hash": "sha256-e0llrauKgRDij8wUYDvnFIJzwuVDAU2RXd9EpjkDHdg="
     }
   },
+  "axiom-paper-plugin": {
+    "1.21.10": {
+      "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/KIGJ1Vhv/AxiomPaperPlugin-5.0.4-for-MC1.21.10.jar",
+      "hash": "sha256-zbgssJUQ6j4UGQwQOzNer2sOxAK8pn5QOpm0KLnyBUg="
+    }
+  },
   "bkcommonlib": {
     "1.21.10": {
       "url": "https://cdn.modrinth.com/data/rTg6ckWb/versions/yZdQcJiN/BKCommonLib-1.21.11-v1-1957.jar",
@@ -57,6 +63,12 @@
     "1.21.10": {
       "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXSpawn-2.22.0-dev+112-5baf239.jar",
       "hash": "sha256-TVCKrAe29k8Fh/xIH+FeXQoWc89iiv69up3KF7L75Y4="
+    }
+  },
+  "fastasyncvoxelsniper": {
+    "1.21.10": {
+      "url": "https://cdn.modrinth.com/data/D7XBSI1y/versions/n77tXMjA/fastasyncvoxelsniper-3.2.4.jar",
+      "hash": "sha256-k1qgEacp/UDLh/0+Nxwg3UWBMDVH1PksMcvGCOfl7LM="
     }
   },
   "fastasyncworldedit": {
@@ -253,8 +265,8 @@
   },
   "viaversion": {
     "1.21.10": {
-      "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/cXLtSQvv/ViaVersion-5.9.2-SNAPSHOT.jar",
-      "hash": "sha256-AkKV2g8JC2HRtosc4IKJF9jShhQz3yHO1Q9hh1JK5Ts="
+      "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/lrrqDnmv/ViaVersion-5.9.2-SNAPSHOT.jar",
+      "hash": "sha256-7hV4UNV5Qm9FDVU9Y7spSUED4eURP19bZrgPEBiZI+M="
     }
   },
   "worldborder": {

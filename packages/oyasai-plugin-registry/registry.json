@@ -5,6 +5,12 @@
       "type": "spiget"
     }
   },
+  "axiom-paper-plugin": {
+    "1.21.10": {
+      "slug": "axiom-paper-plugin",
+      "type": "modrinth"
+    }
+  },
   "bkcommonlib": {
     "1.21.10": {
       "slug": "bkcommonlib",
@@ -57,6 +63,12 @@
     "1.21.10": {
       "type": "url",
       "url": "https://ci.ender.zone/job/EssentialsX/lastSuccessfulBuild/artifact/jars/EssentialsXSpawn-2.22.0-dev+112-5baf239.jar"
+    }
+  },
+  "fastasyncvoxelsniper": {
+    "1.21.10": {
+      "slug": "fastasyncvoxelsniper",
+      "type": "modrinth"
     }
   },
   "fastasyncworldedit": {
