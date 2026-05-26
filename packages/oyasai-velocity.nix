@@ -3,6 +3,7 @@
   oyasai-plugin-registry,
   oyasai-minecraft-main,
   oyasai-minecraft-lobby,
+  oyasai-minecraft-axiom,
 }:
 
 oyasaiVelocity {
@@ -27,6 +28,7 @@ oyasaiVelocity {
     servers = {
       main = oyasai-minecraft-main.name;
       lobby = oyasai-minecraft-lobby.name;
+      axiom = oyasai-minecraft-axiom.name;
       try = [ "main" ];
     };
   };

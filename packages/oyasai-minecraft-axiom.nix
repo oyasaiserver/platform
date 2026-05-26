@@ -1,25 +1,14 @@
 { oyasaiPurpur, oyasai-plugin-registry }:
 
 oyasaiPurpur rec {
-  name = "oyasai-minecraft-axios";
+  name = "oyasai-minecraft-axiom";
   version = "1.21.10";
 
+  # NOMERGE set properly
   properties = {
     # keep-sorted start
-    allow-flight = true;
-    difficulty = "peaceful";
     enable-rcon = true;
-    enforce-secure-profile = false;
-    max-players = 70;
-    network-compression-threshold = 96;
     online-mode = false; # handled by velocity
-    pvp = false;
-    simulation-distance = 8;
-    spawn-animals = false;
-    spawn-monsters = false;
-    spawn-npcs = false;
-    spawn-protection = 0;
-    view-distance = 16;
     # keep-sorted endt
   };
 
@@ -34,10 +23,12 @@ oyasaiPurpur rec {
     # keep-sorted start
     arceon
     arceon-axiom
-    axiom
     axiom-paper-plugin
-    ezedit
+    ezedits
+    fastasyncvoxelsniper
+    fastasyncworldedit
     floodgate
+    plugmanx
     viaversion
     # keep-sorted end
   ];
