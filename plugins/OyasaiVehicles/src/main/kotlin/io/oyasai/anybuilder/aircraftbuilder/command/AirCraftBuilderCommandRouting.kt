@@ -104,7 +104,9 @@ private fun handleAircraftBuilderSingleArgumentCommand(
             baseData,
         )
       },
-      successMessage = { vehicleName -> "[AircraftBuilder] Spawned trial vehicle for $vehicleName" },
+      successMessage = { vehicleName ->
+        "[AircraftBuilder] Spawned trial vehicle for $vehicleName"
+      },
   )
 }
 

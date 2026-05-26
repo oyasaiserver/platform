@@ -354,7 +354,11 @@ class MacroEngine(private val plugin: OyasaiMenu) : Listener {
     if (curPage < pageCount - 1)
         inv.setItem(
             52,
-            makeItem(Material.ARROW, "&e次のページ →", listOf("&7ページ &f${curPage + 2}&7/&f${pageCount}")),
+            makeItem(
+                Material.ARROW,
+                "&e次のページ →",
+                listOf("&7ページ &f${curPage + 2}&7/&f${pageCount}"),
+            ),
         )
 
     inv.setItem(45, makeItem(Material.ARROW, "&c← 戻る", listOf("&7メインメニューに戻ります")))

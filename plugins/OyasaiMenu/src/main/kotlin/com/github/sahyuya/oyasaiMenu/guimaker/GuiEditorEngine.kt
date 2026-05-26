@@ -1209,7 +1209,13 @@ class GuiEditorEngine(private val plugin: OyasaiMenu) : Listener {
     colors.forEachIndexed { i, c ->
       inv.setItem(
           colorSlots[i],
-          makeItem(c.mat, "&f● ${c.name}", "&7コード: &f${c.code}", "${c.code}テキストサンプル&r", "&7クリックで適用"),
+          makeItem(
+              c.mat,
+              "&f● ${c.name}",
+              "&7コード: &f${c.code}",
+              "${c.code}テキストサンプル&r",
+              "&7クリックで適用",
+          ),
       )
     }
     inv.setItem(40, makeItem(Material.PAPER, "&fカラーなし / 手動入力", "&7&カラーコードを自分で書く場合"))
