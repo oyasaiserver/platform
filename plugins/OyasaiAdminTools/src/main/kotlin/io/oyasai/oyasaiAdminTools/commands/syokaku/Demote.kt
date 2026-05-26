@@ -50,7 +50,9 @@ object Demote : CommandExecutor {
               if (playerUUID == null) {
                 Bukkit.getScheduler()
                     .runTask(
-                        plugin, Runnable { sender.sendMessage("§cプレイヤー '$playerName' が見つかりません。") })
+                        plugin,
+                        Runnable { sender.sendMessage("§cプレイヤー '$playerName' が見つかりません。") },
+                    )
                 return@Runnable
               }
 
@@ -84,7 +86,8 @@ object Demote : CommandExecutor {
                                         isForced = false,
                                         date =
                                             DateTimeUtils.formatToString(
-                                                DateTimeUtils.getCurrentJST()),
+                                                DateTimeUtils.getCurrentJST()
+                                            ),
                                         note = note,
                                         playedSec =
                                             player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20L,
@@ -114,7 +117,8 @@ object Demote : CommandExecutor {
                                     )
                                 PromotionNotifier.notifyAll(notification)
                                 sender.sendMessage(
-                                    "§a${player.name}さんを§e${previousRank.name}§aに§c「↓降格↓」§aさせました。")
+                                    "§a${player.name}さんを§e${previousRank.name}§aに§c「↓降格↓」§aさせました。"
+                                )
                               } else {
                                 sender.sendMessage("§e${player.name}さんは既に最低ランクです。")
                               }
@@ -125,7 +129,8 @@ object Demote : CommandExecutor {
                       )
                 }
               }
-            })
+            },
+        )
     return true
   }
 }

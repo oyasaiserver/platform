@@ -90,7 +90,8 @@ object LeaderBoardCommand : CommandExecutor {
                         MOVE -> "移動した距離"
                         PLAYTIME-> "プレイした時間"
                     }
-                }  page ${page+1}")
+                }  page ${page+1}"
+        )
         val sorted =
             hi.sortedByDescending {
               when (type) {
@@ -114,7 +115,8 @@ object LeaderBoardCommand : CommandExecutor {
                             MOVE->"${data.move}メートル"
                             LEVEL->"Lv.${Bukkit.getOfflinePlayer(sorted.get(i)).getLeve()}"
                             PLAYTIME->getStats(sorted.get(i)).getPlayTime()
-                        }}, $name")
+                        }}, $name"
+          )
         }
         if (p0 is Player) {
           val data = getSenderStatsRef(p0.uniqueId)
@@ -129,7 +131,8 @@ object LeaderBoardCommand : CommandExecutor {
                             MOVE->"${data.move}メートル"
                             LEVEL->"Lv.${p0.getLeve()}"
                             PLAYTIME-> getStats(p0.uniqueId).getPlayTime()
-                        }}, ${p0.name}")
+                        }}, ${p0.name}"
+          )
         }
         p0.sendMessage("--------------------")
       }

@@ -56,14 +56,18 @@ object SLNear : CommandExecutor {
           .sendMessage(
               TextComponent(
                       Tools.socialLikesLOGO +
-                          "&r${distance}m先: &a${data.title}&7(ID:${data.id})".color())
+                          "&r${distance}m先: &a${data.title}&7(ID:${data.id})".color()
+                  )
                   .apply {
                     this.clickEvent =
                         ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp ${data.id}")
                     this.hoverEvent =
                         HoverEvent(
-                            HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
-                  })
+                            HoverEvent.Action.SHOW_TEXT,
+                            Text("&nクリックでその建築へテレポート&rします".color()),
+                        )
+                  }
+          )
     }
 
     return true

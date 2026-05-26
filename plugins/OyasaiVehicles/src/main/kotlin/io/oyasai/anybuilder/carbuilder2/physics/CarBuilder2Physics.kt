@@ -22,14 +22,15 @@ fun CarBuilder2EntityData.computeVelocity(
     slot: Int,
     slipstreamActive: Boolean,
     setYaw0: Float,
-    slipYaw: Float
+    slipYaw: Float,
 ): Vector {
   return this.vehicle
       .controlSpeed(
           wasd,
           slot,
           slipstreamActive,
-          if (this.vehicle.underBlockCheck0) underBlockCheck(this) else 1.0)
+          if (this.vehicle.underBlockCheck0) underBlockCheck(this) else 1.0,
+      )
       .rotateAroundY(Math.toRadians(-(setYaw0.toDouble() + slipYaw)))
 }
 
@@ -48,11 +49,13 @@ fun slipstream(data: CarBuilder2EntityData, slipAngle: Float, wasd: ControlKey?)
       val dir =
           Vector(0.0, 0.0, 1.0)
               .rotateAroundY(
-                  Math.toRadians((data.bodyArmorStands[0].location.yaw + slipAngle).toDouble()))
+                  Math.toRadians((data.bodyArmorStands[0].location.yaw + slipAngle).toDouble())
+              )
       val excludeList =
           CarBuilder2EntityList.getBodyArmorStandList(data.bodyArmorStands.first().uniqueId)
-      if (Tools.rayTraceEntities(
-          loc, dir, (data.vehicle.speed.z + 0.01) * 30.0, 5.0, excludeList)) {
+      if (
+          Tools.rayTraceEntities(loc, dir, (data.vehicle.speed.z + 0.01) * 30.0, 5.0, excludeList)
+      ) {
         data.vehicle.speed.z += 0.00075
         true
       } else {

@@ -10,14 +10,14 @@ import org.bukkit.configuration.file.YamlConfiguration
 data class UiSkinData(
     val positions: Map<String, Int> = emptyMap(),
     val icons: Map<Int, Material> = emptyMap(),
-    val enabledLabels: Set<String>? = null
+    val enabledLabels: Set<String>? = null,
 )
 
 data class UiScreenCatalog(
     val restoreSlots: List<Int>,
     val screenDefs: Map<String, Map<Int, Pair<String, Material>>>,
     val defaultGlassByScreen: Map<String, Material>,
-    val fallbackGlass: Material = Material.GRAY_STAINED_GLASS_PANE
+    val fallbackGlass: Material = Material.GRAY_STAINED_GLASS_PANE,
 ) {
   fun screenDefaultGlass(screenName: String): Material =
       defaultGlassByScreen[screenName] ?: fallbackGlass
@@ -82,7 +82,7 @@ object GuiMakerUiSkinDefinitions {
   private fun mergeMissingSection(
       source: org.bukkit.configuration.ConfigurationSection,
       target: org.bukkit.configuration.ConfigurationSection,
-      path: String
+      path: String,
   ): Boolean {
     var changed = false
     val sourceSection =
@@ -205,8 +205,10 @@ class GuiMakerUiSkinStore(private val plugin: OyasaiMenu, private val catalog: U
                     else -> null
                   }
               val enabledLabels =
-                  if (loadedEnabledLabels != null &&
-                      schema < GuiMakerUiSkinDefinitions.UI_SKIN_SCHEMA_VERSION) {
+                  if (
+                      loadedEnabledLabels != null &&
+                          schema < GuiMakerUiSkinDefinitions.UI_SKIN_SCHEMA_VERSION
+                  ) {
                     loadedEnabledLabels + catalog.legacyEnabledAdditions(screenName)
                   } else {
                     loadedEnabledLabels

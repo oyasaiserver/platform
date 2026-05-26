@@ -49,7 +49,7 @@ data class CarBuilder2EntityData(
     val realMode: Boolean,
     var setYaw: Float,
     val item: ItemStack? = null,
-    private val pluginRef: Plugin = requireNotNull(Tools.pl) { "Plugin is not initialized" }
+    private val pluginRef: Plugin = requireNotNull(Tools.pl) { "Plugin is not initialized" },
 ) :
     BaseVehicleEntityDataCore(
         seatArmorStandOffsets,
@@ -61,7 +61,9 @@ data class CarBuilder2EntityData(
             NamespacedKey(pluginRef, vehicleBodyArmorStands[0].uniqueId.toString()),
             "| 1速 0km/h |",
             BarColor.WHITE,
-            BarStyle.SEGMENTED_10)) {
+            BarStyle.SEGMENTED_10,
+        ),
+    ) {
   var pitch: Float = 0f
   override var exit: Boolean = false
   var driveStartSwitch: Boolean = false
@@ -96,15 +98,21 @@ data class CarBuilder2EntityData(
 
     this.setYaw = -this.setYaw
     this.reOffsetDisplay(
-        CarBuilder2EntityType.Body, mutableMapOf(0 to this.baseData.config.getOffsetBody()))
+        CarBuilder2EntityType.Body,
+        mutableMapOf(0 to this.baseData.config.getOffsetBody()),
+    )
     this.reOffsetDisplayMap(
-        CarBuilder2EntityType.Wheel, this.baseData.config.getOffset(CarBuilder2BaseDataType.Wheel))
+        CarBuilder2EntityType.Wheel,
+        this.baseData.config.getOffset(CarBuilder2BaseDataType.Wheel),
+    )
     this.reOffsetDisplayMap(
         CarBuilder2EntityType.Wheel2,
-        this.baseData.config.getOffset(CarBuilder2BaseDataType.Wheel2))
+        this.baseData.config.getOffset(CarBuilder2BaseDataType.Wheel2),
+    )
     this.reOffsetDisplayMap(
         CarBuilder2EntityType.HeadLight,
-        this.baseData.config.getOffset(CarBuilder2BaseDataType.HeadLight))
+        this.baseData.config.getOffset(CarBuilder2BaseDataType.HeadLight),
+    )
     this.wheelTask(0.001, 0.0f)
     this.isLightBlockToList()
     this.bodyLightTask(0, null)

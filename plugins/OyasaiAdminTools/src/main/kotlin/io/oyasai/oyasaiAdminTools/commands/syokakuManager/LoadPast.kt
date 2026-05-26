@@ -78,7 +78,8 @@ object LoadPast : CommandExecutor {
                               builds = buildCount,
                               lastLv = 0,
                               lastExp = 0,
-                          ))
+                          )
+                      )
                     }
                     JsonUtils.saveUserJson(uuid)
                   },

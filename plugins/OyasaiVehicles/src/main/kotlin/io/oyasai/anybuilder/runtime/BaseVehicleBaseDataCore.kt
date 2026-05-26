@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin
 abstract class BaseVehicleBaseDataCore<C : CustomYaml>(
     final override val name: String,
     val config: C,
-    private val rootFolderName: String
+    private val rootFolderName: String,
 ) : VehicleBaseData {
   protected val plugin: Plugin = requireNotNull(Tools.pl) { "Plugin is not initialized" }
 

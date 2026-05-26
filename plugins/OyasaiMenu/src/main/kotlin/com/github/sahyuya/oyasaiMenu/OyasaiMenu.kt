@@ -108,14 +108,16 @@ class OyasaiMenu : JavaPlugin(), Listener {
             parameterCommandEngine,
             specialMenuEngine,
             announcementManager,
-            this)
+            this,
+        )
         .forEach { server.pluginManager.registerEvents(it, this) }
 
     logger.info(
         "OyasaiMenu 起動完了 | メニュー:${menuLoader.getMenuCount()} " +
             "ショップ:${shopLoader.getAllCategories().size} " +
             "Pショップ:${pointShopLoader.getAllCategories().size} " +
-            "Popup:loaded")
+            "Popup:loaded"
+    )
   }
 
   override fun onDisable() {
@@ -140,7 +142,10 @@ class OyasaiMenu : JavaPlugin(), Listener {
     val player = event.player
     if (player.isOp) {
       server.scheduler.runTaskLater(
-          this, Runnable { macroManager.distributeOpTemplates(player) }, 20L)
+          this,
+          Runnable { macroManager.distributeOpTemplates(player) },
+          20L,
+      )
     }
   }
 

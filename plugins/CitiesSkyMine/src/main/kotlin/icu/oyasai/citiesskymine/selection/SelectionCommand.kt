@@ -33,14 +33,15 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
           }
         },
         20L,
-        20L)
+        20L,
+    )
   }
 
   override fun onCommand(
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     if (sender !is Player) {
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
@@ -69,7 +70,7 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     if (sender !is Player || args.isEmpty()) return emptyList()
     return when (args.size) {
@@ -78,9 +79,11 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
             it.startsWith(args[0], ignoreCase = true)
           }
       2 ->
-          if (args[0].equals("delete", ignoreCase = true) ||
-              args[0].equals("del", ignoreCase = true) ||
-              args[0].equals("remove", ignoreCase = true)) {
+          if (
+              args[0].equals("delete", ignoreCase = true) ||
+                  args[0].equals("del", ignoreCase = true) ||
+                  args[0].equals("remove", ignoreCase = true)
+          ) {
             namedKeys(sender).filter { it.startsWith(args[1], ignoreCase = true) }
           } else {
             emptyList()
@@ -111,7 +114,8 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     val target =
         readSelection(
             player,
-            if (rawKey == PREVIOUS_KEY) "selection.previous" else "selection.named.${key(rawKey)}")
+            if (rawKey == PREVIOUS_KEY) "selection.previous" else "selection.named.${key(rawKey)}",
+        )
     if (target == null) {
       MessageUtil.error(player, "保存された選択範囲がありません: $displayName")
       return
@@ -126,7 +130,8 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     rememberCurrent(player, target)
     MessageUtil.success(
         player,
-        "WorldEdit 選択範囲を復元しました: $displayName (${target.pos1.x()},${target.pos1.y()},${target.pos1.z()} -> ${target.pos2.x()},${target.pos2.y()},${target.pos2.z()})")
+        "WorldEdit 選択範囲を復元しました: $displayName (${target.pos1.x()},${target.pos1.y()},${target.pos1.z()} -> ${target.pos2.x()},${target.pos2.y()},${target.pos2.z()})",
+    )
   }
 
   private fun listNamed(player: Player) {
@@ -195,7 +200,7 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       player: Player,
       path: String,
       selection: StoredSelection,
-      name: String
+      name: String,
   ) {
     plugin.playerDataStore.setMany(
         player,
@@ -208,7 +213,9 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
             "$path.z1" to selection.pos1.z(),
             "$path.x2" to selection.pos2.x(),
             "$path.y2" to selection.pos2.y(),
-            "$path.z2" to selection.pos2.z()))
+            "$path.z2" to selection.pos2.z(),
+        ),
+    )
   }
 
   private fun readSelection(player: Player, path: String): StoredSelection? {
@@ -224,7 +231,11 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     val y2 = plugin.playerDataStore.getInt(player, "$path.y2") ?: return null
     val z2 = plugin.playerDataStore.getInt(player, "$path.z2") ?: return null
     return StoredSelection(
-        worldId, worldName, BlockVector3.at(x1, y1, z1), BlockVector3.at(x2, y2, z2))
+        worldId,
+        worldName,
+        BlockVector3.at(x1, y1, z1),
+        BlockVector3.at(x2, y2, z2),
+    )
   }
 
   private fun namedKeys(player: Player): Set<String> =
@@ -266,7 +277,7 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       val worldId: UUID,
       val worldName: String,
       val pos1: BlockVector3,
-      val pos2: BlockVector3
+      val pos2: BlockVector3,
   )
 
   companion object {

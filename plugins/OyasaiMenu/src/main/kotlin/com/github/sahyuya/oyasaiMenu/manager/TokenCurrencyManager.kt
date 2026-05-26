@@ -91,7 +91,10 @@ object TokenCurrencyManager {
     runCatching {
       val m =
           tm.javaClass.getMethod(
-              "removeTokens", Player::class.java, Long::class.javaPrimitiveType!!)
+              "removeTokens",
+              Player::class.java,
+              Long::class.javaPrimitiveType!!,
+          )
       val ok = m.invoke(tm, player, amount) as? Boolean ?: true
       return if (ok) null else "&cポイント引き落とし処理に失敗しました。"
     }

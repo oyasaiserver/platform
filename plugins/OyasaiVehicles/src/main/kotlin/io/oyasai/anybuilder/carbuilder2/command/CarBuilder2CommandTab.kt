@@ -22,7 +22,7 @@ object CarBuilder2CommandTab : TabCompleter {
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): MutableList<String>? {
     return handleCarBuilder2Tab(sender, command, alias, args)
   }
@@ -33,7 +33,7 @@ fun handleCarBuilder2Tab(
     sender: CommandSender,
     command: Command,
     alias: String,
-    args: Array<out String>
+    args: Array<out String>,
 ): MutableList<String>? {
   if (command.name != "carbuilder2") return null
 
@@ -57,7 +57,8 @@ fun handleCarBuilder2Tab(
       }
       if (sender.canManageCarBuilder2(data)) {
         subCommands.addAll(
-            listOf("save", "size", "offset", "headlight", "sound", "spring", "delete"))
+            listOf("save", "size", "offset", "headlight", "sound", "spring", "delete")
+        )
       }
       if (sender.hasOyasaiAdminPermission()) {
         subCommands.addAll(listOf("eventcar", "machineset"))
@@ -77,9 +78,11 @@ fun handleCarBuilder2Tab(
           if (sender is Player) {
             val targetBlock = sender.getTargetBlockExact(5)
             val type = targetBlock?.type
-            if (type == Material.COMMAND_BLOCK ||
-                type == Material.CHAIN_COMMAND_BLOCK ||
-                type == Material.REPEATING_COMMAND_BLOCK) {
+            if (
+                type == Material.COMMAND_BLOCK ||
+                    type == Material.CHAIN_COMMAND_BLOCK ||
+                    type == Material.REPEATING_COMMAND_BLOCK
+            ) {
               return tabFilter(current, CARDINAL_DIRECTIONS)
             }
           }
@@ -98,7 +101,9 @@ fun handleCarBuilder2Tab(
       when (sub) {
         "machineset" ->
             tabFilter(
-                current, listOf("<パワー(1～1000)>", "64", "180", "280", "320", "500", "700", "1000"))
+                current,
+                listOf("<パワー(1～1000)>", "64", "180", "280", "320", "500", "700", "1000"),
+            )
         "offset" -> tabFilter(current, listOf("管理番号(0～9)", "0", "1", "2", "3"))
         "headlight" -> {
           if (sub2 == "angle") tabFilter(current, listOf("45.0"))
@@ -120,7 +125,8 @@ fun handleCarBuilder2Tab(
         "machineset" ->
             tabFilter(
                 current,
-                listOf("<ブレーキ(1～1000)>", "128", "200", "350", "425", "500", "600", "800", "1000"))
+                listOf("<ブレーキ(1～1000)>", "128", "200", "350", "425", "500", "600", "800", "1000"),
+            )
         "offset" -> tabFilter(current, listOf("<x>", "0.000", "del"))
         "headlight" -> {
           if (sub2 == "rotateoffset") tabFilter(current, listOf("<y>", "0.000"))

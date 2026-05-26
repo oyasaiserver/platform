@@ -58,15 +58,16 @@ object SLSignLikes {
             ItemStack(Material.RED_WOOL).apply {
               allFlag()
               addText("&f前のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pagePane.page > 0) {
-                pagePane.setPage(pagePane.page - 1)
-                gui.title =
-                    Tools.socialLikesLOGOShort +
-                        "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pagePane.page > 0) {
+            pagePane.setPage(pagePane.page - 1)
+            gui.title =
+                Tools.socialLikesLOGOShort +
+                    "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
+            gui.update()
+          }
+        },
         0,
         0,
     )
@@ -75,15 +76,16 @@ object SLSignLikes {
             ItemStack(Material.GREEN_WOOL).apply {
               allFlag()
               addText("&f次のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pagePane.page < pagePane.pages - 1) {
-                pagePane.setPage(pagePane.page + 1)
-                gui.title =
-                    Tools.socialLikesLOGOShort +
-                        "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pagePane.page < pagePane.pages - 1) {
+            pagePane.setPage(pagePane.page + 1)
+            gui.title =
+                Tools.socialLikesLOGOShort +
+                    "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
+            gui.update()
+          }
+        },
         8,
         0,
     )
@@ -92,9 +94,10 @@ object SLSignLikes {
             ItemStack(Material.BARRIER).apply {
               allFlag()
               addText("&c閉じる", mutableListOf())
-            }) { event: InventoryClickEvent ->
-              event.whoClicked.closeInventory()
-            },
+            }
+        ) { event: InventoryClickEvent ->
+          event.whoClicked.closeInventory()
+        },
         4,
         0,
     )
@@ -103,10 +106,11 @@ object SLSignLikes {
           GuiItem(
               ItemStack(Material.ENDER_CHEST)
                   .allFlag()
-                  .addText("&a詳細設定", mutableListOf("&7Like看板の設定を開きます"))) {
-                it.whoClicked.closeInventory()
-                SLSignSetting.createGUI(sign, slData).show(it.whoClicked)
-              },
+                  .addText("&a詳細設定", mutableListOf("&7Like看板の設定を開きます"))
+          ) {
+            it.whoClicked.closeInventory()
+            SLSignSetting.createGUI(sign, slData).show(it.whoClicked)
+          },
           6,
           0,
       )
@@ -123,7 +127,8 @@ object SLSignLikes {
                         "&3作成日:&f " +
                             slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
                     ),
-                )) {},
+                )
+        ) {},
         7,
         0,
     )
@@ -133,10 +138,11 @@ object SLSignLikes {
           GuiItem(
               ItemStack(Material.WRITABLE_BOOK)
                   .allFlag()
-                  .addText("&fコメントを編集する", mutableListOf("&7現在の状態:").apply { addAll(lore) })) {
-                it.whoClicked.closeInventory()
-                commentEdit((it.whoClicked as Player), slData)
-              },
+                  .addText("&fコメントを編集する", mutableListOf("&7現在の状態:").apply { addAll(lore) })
+          ) {
+            it.whoClicked.closeInventory()
+            commentEdit((it.whoClicked as Player), slData)
+          },
           1,
           0,
       )
@@ -144,7 +150,8 @@ object SLSignLikes {
       val lore = slData.comment.split(',')
       navigation.addItem(
           GuiItem(
-              ItemStack(Material.WRITTEN_BOOK).allFlag().addText("&7コメント", lore.toMutableList())),
+              ItemStack(Material.WRITTEN_BOOK).allFlag().addText("&7コメント", lore.toMutableList())
+          ),
           1,
           0,
       )
@@ -160,10 +167,12 @@ object SLSignLikes {
                 .allFlag()
                 .addText(
                     "&f${offlineOwnerPlayer.name}さんの建築一覧を見る",
-                    mutableListOf("&7この方が建てた他の建築を見れます"))) {
-              it.whoClicked.closeInventory()
-              UserBuild.createGUI(offlineOwnerPlayer, (it.whoClicked as Player)).show(it.whoClicked)
-            },
+                    mutableListOf("&7この方が建てた他の建築を見れます"),
+                )
+        ) {
+          it.whoClicked.closeInventory()
+          UserBuild.createGUI(offlineOwnerPlayer, (it.whoClicked as Player)).show(it.whoClicked)
+        },
         5,
         0,
     )
@@ -172,69 +181,75 @@ object SLSignLikes {
             ItemStack(Material.ACACIA_SIGN).apply {
               allFlag()
               addText("&fリポスト(宣伝)", mutableListOf("&310&fP&7を消費してオンラインプレイヤーへ宣伝します"))
-            }) { event: InventoryClickEvent ->
-              event.whoClicked.closeInventory()
-              val tm =
-                  Tools.getTokenManager()
-                      ?: run {
-                        Tools.plugin.logger.warning("TokenManager null!!!!")
-                        event.whoClicked.sendMessage(
-                            Tools.socialLikesLOGO + "&c内部エラーが発生しました、申し訳ございません。".color())
-                        event.whoClicked.sendMessage(
-                            Tools.socialLikesLOGO + "&cError: TM null.".color())
-                        return@GuiItem
-                      }
-              val player = event.whoClicked as Player
-              val bal = tm.getTokens(player)
-              if (bal.isEmpty) {
-                return@GuiItem
-              } else {
-                if (bal.asLong < 10) {
-                  player.sendMessage(Tools.socialLikesLOGO + "&eポイント不足です!".color())
-                  return@GuiItem
-                } else {
-                  tm.removeTokens(player, 10)
-                  player.sendMessage(Tools.socialLikesLOGO + "&e10p消費しました!".color())
-                }
-              }
+            }
+        ) { event: InventoryClickEvent ->
+          event.whoClicked.closeInventory()
+          val tm =
+              Tools.getTokenManager()
+                  ?: run {
+                    Tools.plugin.logger.warning("TokenManager null!!!!")
+                    event.whoClicked.sendMessage(
+                        Tools.socialLikesLOGO + "&c内部エラーが発生しました、申し訳ございません。".color()
+                    )
+                    event.whoClicked.sendMessage(
+                        Tools.socialLikesLOGO + "&cError: TM null.".color()
+                    )
+                    return@GuiItem
+                  }
+          val player = event.whoClicked as Player
+          val bal = tm.getTokens(player)
+          if (bal.isEmpty) {
+            return@GuiItem
+          } else {
+            if (bal.asLong < 10) {
+              player.sendMessage(Tools.socialLikesLOGO + "&eポイント不足です!".color())
+              return@GuiItem
+            } else {
+              tm.removeTokens(player, 10)
+              player.sendMessage(Tools.socialLikesLOGO + "&e10p消費しました!".color())
+            }
+          }
 
-              // 通知
-              Bukkit.spigot()
-                  .broadcast(TextComponent("&d[${event.whoClicked.name}さんからの宣伝]".color()))
-              Bukkit.spigot()
-                  .broadcast(
-                      TextComponent(
-                              Tools.socialLikesLOGO +
-                                  "&f${offlineOwnerPlayer.name}さん&rの「&a${slData.title}&r」を見に行きましょう！"
-                                      .color())
-                          .apply {
-                            this.clickEvent =
-                                ClickEvent(
-                                    ClickEvent.Action.RUN_COMMAND,
-                                    "/sociallikes3:sltp ${slData.id}")
-                            this.hoverEvent =
-                                HoverEvent(
-                                    HoverEvent.Action.SHOW_TEXT, Text("&nクリックでテレポート&rします".color()))
-                          })
-              Bukkit.spigot()
-                  .broadcast(
-                      TextComponent("&l&n/sltp ${slData.id}&r".color()).apply {
+          // 通知
+          Bukkit.spigot().broadcast(TextComponent("&d[${event.whoClicked.name}さんからの宣伝]".color()))
+          Bukkit.spigot()
+              .broadcast(
+                  TextComponent(
+                          Tools.socialLikesLOGO +
+                              "&f${offlineOwnerPlayer.name}さん&rの「&a${slData.title}&r」を見に行きましょう！"
+                                  .color()
+                      )
+                      .apply {
                         this.clickEvent =
                             ClickEvent(
-                                ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp ${slData.id}")
+                                ClickEvent.Action.RUN_COMMAND,
+                                "/sociallikes3:sltp ${slData.id}",
+                            )
                         this.hoverEvent =
                             HoverEvent(
-                                HoverEvent.Action.SHOW_TEXT, Text("&nクリックでテレポート&rします".color()))
-                      })
-              Bukkit.spigot().broadcast(TextComponent(" "))
+                                HoverEvent.Action.SHOW_TEXT,
+                                Text("&nクリックでテレポート&rします".color()),
+                            )
+                      }
+              )
+          Bukkit.spigot()
+              .broadcast(
+                  TextComponent("&l&n/sltp ${slData.id}&r".color()).apply {
+                    this.clickEvent =
+                        ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp ${slData.id}")
+                    this.hoverEvent =
+                        HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでテレポート&rします".color()))
+                  }
+              )
+          Bukkit.spigot().broadcast(TextComponent(" "))
 
-              PublicityHistory.addData(event.whoClicked.uniqueId, slData.id)
+          PublicityHistory.addData(event.whoClicked.uniqueId, slData.id)
 
-              // 通知音
-              Bukkit.getOnlinePlayers().forEach {
-                it.playSound(it, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2F, 1.15F)
-              }
-            },
+          // 通知音
+          Bukkit.getOnlinePlayers().forEach {
+            it.playSound(it, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2F, 1.15F)
+          }
+        },
         2,
         0,
     )
@@ -252,8 +267,12 @@ object SLSignLikes {
               .addText(
                   slData.comment,
                   mutableListOf(
-                      "&7出力先(右側)にあるこの本をクリックで確定します", "&7普通に閉じた場合はキャンセルです", "&7カンマ(,)で改行扱いします"),
-              ))
+                      "&7出力先(右側)にあるこの本をクリックで確定します",
+                      "&7普通に閉じた場合はキャンセルです",
+                      "&7カンマ(,)で改行扱いします",
+                  ),
+              )
+      )
       onClick { slot, e ->
         if (slot != AnvilGUI.Slot.OUTPUT) {
           return@onClick listOf()

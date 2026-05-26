@@ -172,13 +172,15 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
             .append(Component.text("【おすすめ建築】").color(NamedTextColor.LIGHT_PURPLE))
             .append(Component.text(" ${playerName} さんの「"))
             .append(
-                Component.text("${Data.getSLData(selected)?.title}").color(NamedTextColor.GREEN))
+                Component.text("${Data.getSLData(selected)?.title}").color(NamedTextColor.GREEN)
+            )
             .append(Component.text("」 ").color(NamedTextColor.WHITE))
             .appendNewline()
             .append(
                 Component.text("/sltp ${selected} ")
                     .color(NamedTextColor.WHITE)
-                    .decorate(TextDecoration.BOLD))
+                    .decorate(TextDecoration.BOLD)
+            )
             .append(Component.text(" §b[ここをクリックでテレポート]").color(NamedTextColor.AQUA))
             .clickEvent(ClickEvent.runCommand("/sltp $selected"))
             .hoverEvent(HoverEvent.showText(Component.text("クリックしてテレポート！")))
@@ -190,7 +192,8 @@ class RecommendBroadcaster(private val plugin: JavaPlugin) {
           it.sendMessage(
               Component.text("おすすめ建築が未登録です！ /dp から設定できます")
                   .color(NamedTextColor.YELLOW)
-                  .hoverEvent(HoverEvent.showText(Component.text("/dp コマンドでおすすめ建築を登録できます！"))))
+                  .hoverEvent(HoverEvent.showText(Component.text("/dp コマンドでおすすめ建築を登録できます！")))
+          )
       if (getStats(it.uniqueId).notice)
           it.playSound(it.location, org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2f, 1.5f)
     }

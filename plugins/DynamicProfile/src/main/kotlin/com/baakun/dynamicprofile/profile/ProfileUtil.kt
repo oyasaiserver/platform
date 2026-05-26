@@ -40,7 +40,8 @@ object ProfileUtil {
         )
     if (!isSelfProfile) {
       titleLore.add(
-          "&a最終オンライン: &7${if (player.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}")
+          "&a最終オンライン: &7${if (player.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}"
+      )
     }
     if (statsData.introduction.isNotEmpty()) {
       titleLore.add("")
@@ -74,7 +75,8 @@ object ProfileUtil {
                 .apply {
                   if (!isSelfProfile)
                       add(
-                          "&a最終オンライン: &7${if (player.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}")
+                          "&a最終オンライン: &7${if (player.isOnline) {"現在オンライン"} else {statsData.getLastOnlineTime()}}"
+                      )
                   if (statsData.introduction.isNotEmpty()) {
                     add("")
                     add("&7自己紹介 &f：")

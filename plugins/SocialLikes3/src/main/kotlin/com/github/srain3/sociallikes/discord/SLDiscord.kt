@@ -112,8 +112,9 @@ object SLDiscord {
                     val block = data.loc.block.state
                     if (block !is Sign) return
                     // 看板ブロックへlike数を反映させる
-                    if (Events.checkMarkRegex.containsMatchIn(
-                        block.getSide(Side.FRONT).getLine(3))) {
+                    if (
+                        Events.checkMarkRegex.containsMatchIn(block.getSide(Side.FRONT).getLine(3))
+                    ) {
                       block
                           .getSide(Side.FRONT)
                           .setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())

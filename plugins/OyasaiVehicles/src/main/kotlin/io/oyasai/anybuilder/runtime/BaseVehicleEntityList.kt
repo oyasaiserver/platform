@@ -83,7 +83,7 @@ abstract class BaseVehicleEntityList<T : VehicleEntityData> {
 
 abstract class BaseVehicleCache<T : VehicleBaseData>(
     private val folderName: String,
-    private val logPrefix: String
+    private val logPrefix: String,
 ) {
   protected val cache: SortedMap<String, T> = TreeMap()
 
@@ -113,7 +113,8 @@ abstract class BaseVehicleCache<T : VehicleBaseData>(
               }
               Bukkit.getLogger().info("[$logPrefix] Load $folderName completion!")
             },
-            "$logPrefix-reloadCache")
+            "$logPrefix-reloadCache",
+        )
         .start()
   }
 

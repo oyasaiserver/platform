@@ -27,11 +27,17 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
   private fun buildInventory(): Inventory {
     val inv = Bukkit.createInventory(AdminMenuHolder(), 54, comp("&b⚙ 管理者メニュー"))
     inv.setItem(
-        10, makeItem(Material.EMERALD, "&aリロード", listOf("&7全 YAML を再読み込みします", "", "&eクリックで実行")))
+        10,
+        makeItem(Material.EMERALD, "&aリロード", listOf("&7全 YAML を再読み込みします", "", "&eクリックで実行")),
+    )
     inv.setItem(
         12,
         makeItem(
-            Material.WRITABLE_BOOK, "&bアナウンス編集", listOf("&7本と羽ペンでお知らせを編集します", "", "&eクリックで本を受け取る")))
+            Material.WRITABLE_BOOK,
+            "&bアナウンス編集",
+            listOf("&7本と羽ペンでお知らせを編集します", "", "&eクリックで本を受け取る"),
+        ),
+    )
     inv.setItem(
         14,
         makeItem(
@@ -44,7 +50,10 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
                 "&f/menuedit shop &7<category> add <mat> <buy> <sell>",
                 "&f/menuedit shop &7<category> remove <index>",
                 "",
-                "&eクリックでコマンドガイドを表示")))
+                "&eクリックでコマンドガイドを表示",
+            ),
+        ),
+    )
     inv.setItem(
         16,
         makeItem(
@@ -58,7 +67,10 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
                 "&f/menuedit whitelist add hand/h &7<売値>",
                 "&f/menuedit whitelist remove &7<番号>",
                 "",
-                "&eクリックでコマンドガイドを表示")))
+                "&eクリックでコマンドガイドを表示",
+            ),
+        ),
+    )
     inv.setItem(34, makeItem(Material.OAK_DOOR, "&7閉じる", listOf("&7管理者メニューを閉じます")))
     val glass = makeItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, " ")
     for (i in 0..53) {
@@ -86,7 +98,10 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
         player.closeInventory()
         Bukkit.getScheduler()
             .runTaskLater(
-                plugin, Runnable { plugin.announcementManager.openBookEditor(player) }, 1L)
+                plugin,
+                Runnable { plugin.announcementManager.openBookEditor(player) },
+                1L,
+            )
       }
       14 -> {
         player.closeInventory()
@@ -95,7 +110,8 @@ class AdminEngine(private val plugin: OyasaiMenu) : Listener {
         player.sendMessage(c("&f/menuedit shop &7<category> add <material> <buy> <sell>"))
         player.sendMessage(c("&f/menuedit shop &7<category> remove <index>"))
         player.sendMessage(
-            c("&7カテゴリ: &f${plugin.shopLoader.getAllCategories().keys.joinToString(", ")}"))
+            c("&7カテゴリ: &f${plugin.shopLoader.getAllCategories().keys.joinToString(", ")}")
+        )
       }
       16 -> {
         player.closeInventory()

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender
 
 fun AircraftBuilderCommand.handleAircraftBuilderInfo(
     sender: CommandSender,
-    data: AircraftBuilderBaseData?
+    data: AircraftBuilderBaseData?,
 ) {
   if (!sender.canUseAircraftBuilder()) {
     sender.sendMessage(AircraftBuilder_PERMISSION_DENIED)
@@ -28,7 +28,8 @@ fun AircraftBuilderCommand.handleAircraftBuilderInfo(
           "  Size: ${BuilderInfoCommon.formatNumber(config.getBodySize())}",
           "  Offset: ${BuilderInfoCommon.formatVector(config.getOffsetBody())}",
           "  Rotate: ${BuilderInfoCommon.formatNumber(config.getRotateBody())}",
-          "[Seats]")
+          "[Seats]",
+      )
   config
       .getSeatList()
       .toList()

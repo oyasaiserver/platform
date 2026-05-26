@@ -13,7 +13,7 @@ class OyasaiMenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCo
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     when (args.getOrNull(0)?.lowercase()) {
       "reload" -> {
@@ -37,7 +37,7 @@ class OyasaiMenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCo
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String>? {
     if (!sender.hasPermission("oyasaimenu.admin")) return emptyList()
     if (args.size > 1) return emptyList()

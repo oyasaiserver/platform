@@ -21,7 +21,7 @@ import org.bukkit.util.Vector
 fun CarBuilder2Command.handleCarBuilder2Settings(
     data: CarBuilder2BaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   val name = args[0]
   if (args.size < 2) return
@@ -53,7 +53,8 @@ fun CarBuilder2Command.handleCarBuilder2Settings(
           parseBaseDataType(baseDataTypeName)
               ?: run {
                 sender.sendMessage(
-                    "[CarBuilder2] Invalid type! Use body, wheel, wheel2, or headlight")
+                    "[CarBuilder2] Invalid type! Use body, wheel, wheel2, or headlight"
+                )
                 return
               }
       val config = vehicleData.config
@@ -70,7 +71,8 @@ fun CarBuilder2Command.handleCarBuilder2Settings(
       }
       config.save()
       sender.sendMessage(
-          "[CarBuilder2] Set $baseDataTypeName size to $size for $name${if (auto && baseDataType == CarBuilder2BaseDataType.Body) " (auto offset)" else ""}")
+          "[CarBuilder2] Set $baseDataTypeName size to $size for $name${if (auto && baseDataType == CarBuilder2BaseDataType.Body) " (auto offset)" else ""}"
+      )
     }
     "offset" -> {
       val vehicleData = data ?: return
@@ -117,7 +119,8 @@ fun CarBuilder2Command.handleCarBuilder2Settings(
           config.setHeadLightRotateOffset(offsetVector)
           config.save()
           sender.sendMessage(
-              "[CarBuilder2] Set HeadLight rotate offset to X_$x|Y_$y|Z_$z for $name")
+              "[CarBuilder2] Set HeadLight rotate offset to X_$x|Y_$y|Z_$z for $name"
+          )
         }
 
         else -> {
@@ -150,7 +153,7 @@ private fun applyCarBuilder2Offset(
     config: CarBuilder2Config,
     partTypeName: String,
     index: Int,
-    offset: Vector?
+    offset: Vector?,
 ): Boolean {
   when (partTypeName) {
     "body" -> if (offset == null) config.clearBodyOffset() else config.setBodyOffset(offset)

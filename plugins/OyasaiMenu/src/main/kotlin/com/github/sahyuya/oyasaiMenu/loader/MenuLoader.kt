@@ -59,8 +59,9 @@ class MenuLoader(private val plugin: OyasaiMenu) {
           if (file.isDirectory) {
             if (file.name == "popup") return@forEach
             scanDirectory(file, "$prefix${file.name}/", skipFiles)
-          } else if (file.extension.equals("yml", ignoreCase = true) &&
-              file.name.lowercase() !in skipFiles) {
+          } else if (
+              file.extension.equals("yml", ignoreCase = true) && file.name.lowercase() !in skipFiles
+          ) {
             val id =
                 if (prefix.isEmpty() && file.nameWithoutExtension.equals("root", ignoreCase = true))
                     "root"
@@ -119,7 +120,8 @@ class MenuLoader(private val plugin: OyasaiMenu) {
         actions = actions,
         permission = permission,
         customTexture = customTexture,
-        enchanted = enchanted)
+        enchanted = enchanted,
+    )
   }
 
   @Suppress("UNCHECKED_CAST")

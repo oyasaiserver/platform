@@ -27,7 +27,8 @@ object CarBuilder2SmokeGUI {
           Material.BLUE_WOOL to Color.fromRGB(0, 0, 170),
           Material.PURPLE_WOOL to Color.fromRGB(170, 0, 170),
           Material.MAGENTA_WOOL to Color.fromRGB(155, 90, 200),
-          Material.PINK_WOOL to Color.fromRGB(255, 170, 200))
+          Material.PINK_WOOL to Color.fromRGB(255, 170, 200),
+      )
 
   private val colorStringList: Map<Material, String> =
       mapOf(
@@ -46,7 +47,8 @@ object CarBuilder2SmokeGUI {
           Material.BLUE_WOOL to "青色",
           Material.PURPLE_WOOL to "紫色",
           Material.MAGENTA_WOOL to "薄紫色",
-          Material.PINK_WOOL to "桃色")
+          Material.PINK_WOOL to "桃色",
+      )
 
   private val data: MutableMap<UUID, List<Color>> = mutableMapOf()
   private val yaml: MutableMap<UUID, CustomYaml> = mutableMapOf()

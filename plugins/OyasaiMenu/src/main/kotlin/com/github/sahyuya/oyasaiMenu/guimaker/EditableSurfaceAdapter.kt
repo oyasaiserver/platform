@@ -6,7 +6,7 @@ data class EditCapabilities(
     val freeSlotEditing: Boolean = true,
     val reservedSlots: Set<Int> = emptySet(),
     val structuredSettings: Boolean = false,
-    val templateLibrary: Boolean = false
+    val templateLibrary: Boolean = false,
 )
 
 interface EditableSurfaceAdapter {
@@ -51,7 +51,10 @@ object PopupMenuAdapter : EditableSurfaceAdapter {
   override val label = "Popupメニュー"
   override val capabilities =
       EditCapabilities(
-          freeSlotEditing = true, reservedSlots = (45..53).toSet(), structuredSettings = true)
+          freeSlotEditing = true,
+          reservedSlots = (45..53).toSet(),
+          structuredSettings = true,
+      )
 
   override fun listIds(plugin: OyasaiMenu): List<String> = GuiMakerExporter.listPopupIds(plugin)
 

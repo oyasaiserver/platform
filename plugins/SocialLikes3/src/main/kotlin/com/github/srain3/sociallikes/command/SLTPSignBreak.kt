@@ -42,8 +42,10 @@ object SLTPSignBreak : CommandExecutor {
     val id = container.get(SLSignSetting.sltpSignKey, PersistentDataType.INTEGER) ?: 0
     val data = Data.getSLData(id)
     if (data != null) {
-      if (container.get(SLSignSetting.sltpSignUUIDKey, PersistentDataType.STRING) !=
-          sender.uniqueId.toString() && !sender.isOp && data.owner != sender.uniqueId) {
+      if (
+          container.get(SLSignSetting.sltpSignUUIDKey, PersistentDataType.STRING) !=
+              sender.uniqueId.toString() && !sender.isOp && data.owner != sender.uniqueId
+      ) {
         sender.sendMessage("§c他人の看板は回収できません")
         return true
       }

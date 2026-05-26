@@ -41,7 +41,9 @@ object SeePlayerInfo : CommandExecutor {
               if (playerUUID == null) {
                 Bukkit.getScheduler()
                     .runTask(
-                        plugin, Runnable { sender.sendMessage("§cプレイヤー '$playerName' が見つかりません。") })
+                        plugin,
+                        Runnable { sender.sendMessage("§cプレイヤー '$playerName' が見つかりません。") },
+                    )
                 return@Runnable
               }
 
@@ -65,14 +67,16 @@ object SeePlayerInfo : CommandExecutor {
                           plugin,
                           Runnable {
                             sender.sendMessage(
-                                " - §a現在のランク: §r${rank?.name} (ID: ${rank?.groupName})")
+                                " - §a現在のランク: §r${rank?.name} (ID: ${rank?.groupName})"
+                            )
                             sender.sendMessage(
                                 " - §a最後の昇格日: §e${lastPromo?.date} (${
                             ChronoUnit.DAYS.between(
                               lastPromoDate,
                               DateTimeUtils.getCurrentJST(),
                             )
-                          }日前)")
+                          }日前)"
+                            )
                             sender.sendMessage(" - §a初回ログイン: §e${statsData.getFirstPlayed()}")
                             sender.sendMessage(" - §a最終ログイン: §e${statsData.getLastOnlineTime()}")
                             sender.sendMessage(" - §aログイン回数: §e${statsData.join}回")
@@ -87,16 +91,19 @@ object SeePlayerInfo : CommandExecutor {
                                 firstBuild?.time,
                                 LocalDateTime.now(),
                               )
-                            }")
+                            }"
+                              )
                               sender.sendMessage(
                                   " - §a最終建築: §e${DateTimeUtils.formatToString(lastBuild?.time ?: LocalDateTime.now())}, §a経過日数: ${
                               ChronoUnit.DAYS.between(
                                 lastBuild?.time,
                                 LocalDateTime.now(),
                               )
-                            }")
+                            }"
+                              )
                             }
-                          })
+                          },
+                      )
                 }
               } else {
                 // GUI一覧表示・チャットで1個ずつ表示
@@ -109,7 +116,8 @@ object SeePlayerInfo : CommandExecutor {
                             plugin,
                             Runnable {
                               sender.sendMessage("§cページ番号が不正です。0 - ${history.records.size}")
-                            })
+                            },
+                        )
                     return@Runnable
                   }
 
@@ -133,7 +141,8 @@ object SeePlayerInfo : CommandExecutor {
 
                     val message =
                         Component.text(
-                                "===============${page + 1}/${history.records.size}=============")
+                                "===============${page + 1}/${history.records.size}============="
+                            )
                             .appendNewline()
                             .append(Component.text(" - 日付: ${record.date}"))
                             .appendNewline()
@@ -141,23 +150,28 @@ object SeePlayerInfo : CommandExecutor {
                             .appendNewline()
                             .append(
                                 Component.text(
-                                    " - ランク: ${record.previousRank} -> ${record.newRank}"))
+                                    " - ランク: ${record.previousRank} -> ${record.newRank}"
+                                )
+                            )
                             .appendNewline()
                             .append(Component.text(" - 備考: ${record.note}"))
                             .appendNewline()
                             .append(
                                 Component.text(
-                                    " - 昇格者: ${Bukkit.getOfflinePlayer(UUID.fromString(record.promotedBy)).name}"))
+                                    " - 昇格者: ${Bukkit.getOfflinePlayer(UUID.fromString(record.promotedBy)).name}"
+                                )
+                            )
                             .appendNewline()
                             .append(
-                                Component.text(" - 特例昇格: ${if (record.isForced) "はい" else "いいえ"}"))
+                                Component.text(" - 特例昇格: ${if (record.isForced) "はい" else "いいえ"}")
+                            )
                             .appendNewline()
                             .append(Component.text(" - プレイ時間: ${record.playedSec / 3600}時間"))
                             .appendNewline()
                             .append(
                                 Component.text(" - 最後の建築ID: ${record.lastBuildID}")
-                                    .clickEvent(
-                                        ClickEvent.runCommand("sltp ${record.lastBuildID}")))
+                                    .clickEvent(ClickEvent.runCommand("sltp ${record.lastBuildID}"))
+                            )
                             .appendNewline()
                             .append(Component.text(" - 建築数: ${record.builds}"))
                             .appendNewline()
@@ -170,7 +184,10 @@ object SeePlayerInfo : CommandExecutor {
                                     .hoverEvent(HoverEvent.showText(Component.text("クリックして前のページ")))
                                     .clickEvent(
                                         ClickEvent.runCommand(
-                                            "syokaku seeplayerinfo ${playerName} ${page}")))
+                                            "syokaku seeplayerinfo ${playerName} ${page}"
+                                        )
+                                    )
+                            )
                             //
                             // .append(Component.text("<<<<<<<<<<<<<<<").clickEvent(ClickEvent.runCommand("syokaku
                             // ${playerName} ${if(page+1<history.records.size) page+1 else page}")))
@@ -180,7 +197,10 @@ object SeePlayerInfo : CommandExecutor {
                                     .hoverEvent(HoverEvent.showText(Component.text("クリックして次のページ")))
                                     .clickEvent(
                                         ClickEvent.runCommand(
-                                            "syokaku seeplayerinfo ${playerName} ${page + 2}")))
+                                            "syokaku seeplayerinfo ${playerName} ${page + 2}"
+                                        )
+                                    )
+                            )
                     sender.sendMessage(message)
                   }
                 } else if (args[1] == "gui" && sender is Player) {
@@ -210,7 +230,9 @@ object SeePlayerInfo : CommandExecutor {
                         lore.add(Component.text("§e種類: §f${type}"))
                         lore.add(
                             Component.text(
-                                "§e昇格者: §f${Bukkit.getOfflinePlayer(UUID.fromString(promotedBy)).name}"))
+                                "§e昇格者: §f${Bukkit.getOfflinePlayer(UUID.fromString(promotedBy)).name}"
+                            )
+                        )
                         lore.add(Component.text("§e備考: §f${note}"))
                         lore.add(Component.text("§e特例昇格: §f${if (isForced) "はい" else "いいえ"}"))
                         lore.add(Component.text("§eプレイ時間: §f${playedSec / 3600}時間"))
@@ -226,7 +248,8 @@ object SeePlayerInfo : CommandExecutor {
                       .runTask(plugin, Runnable { sender.openInventory(inventory) })
                 }
               }
-            })
+            },
+        )
 
     return true
   }

@@ -72,9 +72,11 @@ fun AircraftBuilderEntityData.autoSitStartImpl() {
           this@autoSitStartImpl.joinBody()
           val driverSeat =
               this@autoSitStartImpl.seatArmorStands.keys.firstOrNull { it.first == 0 }?.second
-          if (driverSeat != null &&
-              driverSeat.passengers.isNotEmpty() &&
-              !this@autoSitStartImpl.driveStartSwitch) {
+          if (
+              driverSeat != null &&
+                  driverSeat.passengers.isNotEmpty() &&
+                  !this@autoSitStartImpl.driveStartSwitch
+          ) {
             this@autoSitStartImpl.start()
           }
         }

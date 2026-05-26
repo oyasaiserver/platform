@@ -39,7 +39,8 @@ object SLSignGet : CommandExecutor {
         genSignItem(slData, sender, false)
       }
       sender.sendMessage(
-          Tools.socialLikesLOGO + "&r Like看板のアイテムを渡しました! 設置して/slupdateを行ってください".color())
+          Tools.socialLikesLOGO + "&r Like看板のアイテムを渡しました! 設置して/slupdateを行ってください".color()
+      )
     } else {
       sender.sendMessage(Tools.socialLikesLOGO + "&e 他人のLike看板は取得できません".color())
     }

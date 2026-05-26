@@ -33,8 +33,10 @@ object AircraftBuilderEvents : VehicleEventListenerBase() {
         onEmptyDriverSeat = { data ->
           Bukkit.getLogger()
               .info(
-                  "[AircraftBuilder] Aircraft ${data.baseData.name} despawned due to ENTITY_ATTACK on empty driver seat.")
-        })
+                  "[AircraftBuilder] Aircraft ${data.baseData.name} despawned due to ENTITY_ATTACK on empty driver seat."
+              )
+        },
+    )
   }
 
   @EventHandler
@@ -63,7 +65,8 @@ object AircraftBuilderEvents : VehicleEventListenerBase() {
             AircraftBuilderSpawn.spawn(spawnLoc, vehicleItem, owner, owner, baseData, yaw)
           }
         },
-        consumeItem = { clickEvent, _ -> clickEvent.player.inventory.itemInMainHand.amount = 0 })
+        consumeItem = { clickEvent, _ -> clickEvent.player.inventory.itemInMainHand.amount = 0 },
+    )
   }
 
   @EventHandler
@@ -73,10 +76,11 @@ object AircraftBuilderEvents : VehicleEventListenerBase() {
         canRide = { it.canRideAircraftBuilderOrAdmin() },
         deniedMessage = "[AircraftBuilder] 実行権限がありません。",
         isSeatArmorStand = AircraftBuilderEntityList::checkSeatArmorStand,
-        getDrivingSeatData = AircraftBuilderEntityList::checkDrivingSeat) { player, _ ->
-          player.sendMessage("[AircraftBuilder] ホットバースロットで特殊操作:")
-          player.sendMessage("[AircraftBuilder] １～４：下降, ５：キープ, ６～９：上昇です")
-        }
+        getDrivingSeatData = AircraftBuilderEntityList::checkDrivingSeat,
+    ) { player, _ ->
+      player.sendMessage("[AircraftBuilder] ホットバースロットで特殊操作:")
+      player.sendMessage("[AircraftBuilder] １～４：下降, ５：キープ, ６～９：上昇です")
+    }
   }
 
   @EventHandler

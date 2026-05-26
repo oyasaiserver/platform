@@ -45,7 +45,8 @@ private val compassYawByDirection =
         "sse" to -22.5,
         "ssw" to 22.5,
         "wnw" to 112.5,
-        "wsw" to 67.5)
+        "wsw" to 67.5,
+    )
 
 private fun isLegacyColorCode(code: Char): Boolean =
     code.lowercaseChar() in "0123456789abcdefklmnorx"
@@ -176,14 +177,15 @@ fun copyTransformationValues(transformation: Transformation): Transformation =
         Vector3f(transformation.translation),
         Quaternionf(transformation.leftRotation),
         Vector3f(transformation.scale),
-        Quaternionf(transformation.rightRotation))
+        Quaternionf(transformation.rightRotation),
+    )
 
 private fun <T : Entity> findNearbyEntitiesInWorld(
     entities: Iterable<T>,
     loc: Location,
     x: Double,
     y: Double,
-    z: Double
+    z: Double,
 ): List<T> {
   val worldId = loc.world?.uid ?: return emptyList()
   val aabb = BoundingBox.of(loc, x, y, z)
@@ -201,7 +203,7 @@ fun findNearbyEntities(
     loc: Location,
     x: Double,
     y: Double,
-    z: Double
+    z: Double,
 ): List<Entity> {
   return findNearbyEntitiesInWorld(searchEntityList, loc, x, y, z)
 }
@@ -211,7 +213,7 @@ fun rayTraceEntityHit(
     direction: Vector,
     maxDistance: Double,
     raySize: Double,
-    searchEntityList: List<Entity>
+    searchEntityList: List<Entity>,
 ): Boolean {
   if (maxDistance < 0.0) return false
   val worldId = start.world?.uid ?: return false
@@ -263,7 +265,7 @@ object Tools {
       loc: Location,
       x: Double,
       y: Double,
-      z: Double
+      z: Double,
   ): List<Entity> = findNearbyEntities(searchEntityList, loc, x, y, z)
 
   fun rayTraceEntities(
@@ -271,7 +273,7 @@ object Tools {
       direction: Vector,
       maxDistance: Double,
       raySize: Double,
-      searchEntityList: List<Entity>
+      searchEntityList: List<Entity>,
   ): Boolean = rayTraceEntityHit(start, direction, maxDistance, raySize, searchEntityList)
 
   fun sendDonateLink(player: Player) {

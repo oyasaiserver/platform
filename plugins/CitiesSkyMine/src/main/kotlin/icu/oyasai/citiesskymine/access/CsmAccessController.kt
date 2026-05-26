@@ -22,7 +22,7 @@ class CsmAccessController(private val plugin: Main) {
     SELECTION("selection", "citiesskymine.selection"),
     CONFIG("config", "citiesskymine.config"),
     DEBUGSTICK("debugstick", "citiesskymine.debugstick"),
-    PRESET("preset", "citiesskymine.preset")
+    PRESET("preset", "citiesskymine.preset"),
   }
 
   fun require(sender: CommandSender, command: CommandKey): Boolean {
@@ -40,8 +40,10 @@ class CsmAccessController(private val plugin: Main) {
       return true
     }
 
-    if (plugin.config.getBoolean("access.legacy-permissions-bypass", true) &&
-        sender.hasPermission(command.legacyPermission)) {
+    if (
+        plugin.config.getBoolean("access.legacy-permissions-bypass", true) &&
+            sender.hasPermission(command.legacyPermission)
+    ) {
       return true
     }
 
@@ -62,10 +64,14 @@ class CsmAccessController(private val plugin: Main) {
     }
     if (sender is BlockCommandSender) {
       return commandMatches(
-          command, plugin.config.getStringList("access.command-blocks.allowed-commands"))
+          command,
+          plugin.config.getStringList("access.command-blocks.allowed-commands"),
+      )
     }
     return commandMatches(
-        command, plugin.config.getStringList("access.non-player.allowed-commands"))
+        command,
+        plugin.config.getStringList("access.non-player.allowed-commands"),
+    )
   }
 
   private fun rolesFor(player: Player): Set<String> {
@@ -82,7 +88,7 @@ class CsmAccessController(private val plugin: Main) {
   private fun addRoleWithInheritance(
       role: String,
       result: MutableSet<String>,
-      visiting: MutableSet<String>
+      visiting: MutableSet<String>,
   ) {
     val normalized = role.lowercase()
     if (!visiting.add(normalized)) return
@@ -126,7 +132,8 @@ class CsmAccessController(private val plugin: Main) {
         mapOf(
             "admin" to "citiesskymine.role.admin",
             "takumi" to "citiesskymine.role.takumi",
-            "builder" to "citiesskymine.role.builder")
+            "builder" to "citiesskymine.role.builder",
+        )
 
     private val DEFAULT_COMMAND_ROLES =
         mapOf(
@@ -143,6 +150,7 @@ class CsmAccessController(private val plugin: Main) {
             CommandKey.SELECTION to listOf("builder", "takumi", "admin"),
             CommandKey.CONFIG to listOf("builder", "takumi", "admin"),
             CommandKey.DEBUGSTICK to listOf("takumi", "admin"),
-            CommandKey.PRESET to listOf("builder", "takumi", "admin"))
+            CommandKey.PRESET to listOf("builder", "takumi", "admin"),
+        )
   }
 }

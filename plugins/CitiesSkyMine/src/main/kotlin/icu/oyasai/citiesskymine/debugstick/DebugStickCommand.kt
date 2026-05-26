@@ -20,7 +20,7 @@ class DebugStickCommand(private val plugin: Main, memoryStore: DebugStickMemoryS
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     if (sender !is Player) {
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
@@ -31,8 +31,10 @@ class DebugStickCommand(private val plugin: Main, memoryStore: DebugStickMemoryS
       MessageUtil.error(sender, "デバッグ棒互換コマンドは無効です。")
       return true
     }
-    if (plugin.config.getBoolean("debug-stick.require-creative", false) &&
-        sender.gameMode != GameMode.CREATIVE) {
+    if (
+        plugin.config.getBoolean("debug-stick.require-creative", false) &&
+            sender.gameMode != GameMode.CREATIVE
+    ) {
       MessageUtil.error(sender, "クリエイティブモードでのみ使用できます。")
       return true
     }
@@ -58,7 +60,7 @@ class DebugStickCommand(private val plugin: Main, memoryStore: DebugStickMemoryS
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> =
       when (args.size) {
         1 -> listOf("select", "cycle").filter { it.startsWith(args[0], ignoreCase = true) }

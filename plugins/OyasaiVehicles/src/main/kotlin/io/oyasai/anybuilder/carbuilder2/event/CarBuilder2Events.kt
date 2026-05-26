@@ -33,8 +33,10 @@ object CarBuilder2Events : VehicleEventListenerBase() {
         onEmptyDriverSeat = { data ->
           Bukkit.getLogger()
               .info(
-                  "[CarBuilder2] Car ${data.baseData.name} despawned due to ENTITY_ATTACK on empty driver seat.")
-        })
+                  "[CarBuilder2] Car ${data.baseData.name} despawned due to ENTITY_ATTACK on empty driver seat."
+              )
+        },
+    )
   }
 
   @EventHandler
@@ -63,7 +65,8 @@ object CarBuilder2Events : VehicleEventListenerBase() {
             CarBuilder2Spawn.spawn(spawnLoc, vehicleItem, owner, owner, baseData, yaw)
           }
         },
-        consumeItem = { clickEvent, _ -> clickEvent.player.inventory.itemInMainHand.amount = 0 })
+        consumeItem = { clickEvent, _ -> clickEvent.player.inventory.itemInMainHand.amount = 0 },
+    )
   }
 
   @EventHandler
@@ -73,12 +76,12 @@ object CarBuilder2Events : VehicleEventListenerBase() {
         canRide = { it.canRideCarBuilder2OrAdmin() },
         deniedMessage = "[CarBuilder2] 実行権限がありません。",
         isSeatArmorStand = CarBuilder2EntityList::checkSeatArmorStand,
-        getDrivingSeatData = CarBuilder2EntityList::checkDrivingSeat) { player, data ->
-          player.sendMessage("[CarBuilder2] ホットバースロットで操作:")
-          val mtStr = if (data.vehicle.manualTransmission) "４：シフトダウン, ６：シフトアップ | " else ""
-          player.sendMessage(
-              "[CarBuilder2] １：左ウインカー, ２：ハザード, ３：右ウインカー | ${mtStr} ８：ライト, ９：クルーズモード切替")
-        }
+        getDrivingSeatData = CarBuilder2EntityList::checkDrivingSeat,
+    ) { player, data ->
+      player.sendMessage("[CarBuilder2] ホットバースロットで操作:")
+      val mtStr = if (data.vehicle.manualTransmission) "４：シフトダウン, ６：シフトアップ | " else ""
+      player.sendMessage("[CarBuilder2] １：左ウインカー, ２：ハザード, ３：右ウインカー | ${mtStr} ８：ライト, ９：クルーズモード切替")
+    }
   }
 
   @EventHandler

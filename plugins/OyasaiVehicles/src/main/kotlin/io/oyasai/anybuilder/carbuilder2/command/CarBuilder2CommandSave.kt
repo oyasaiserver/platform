@@ -17,7 +17,7 @@ import org.bukkit.util.Vector
 fun CarBuilder2Command.handleCarBuilder2Save(
     existingData: CarBuilder2BaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   val name = args[0]
   executeSaveFlow(
@@ -37,7 +37,8 @@ fun CarBuilder2Command.handleCarBuilder2Save(
       onReady = { player, vehicleData ->
         if (args.size < 3) {
           player.sendMessage(
-              "[CarBuilder2] /cbmenu <name> save <body/wheel/wheel2/headlight> [size]")
+              "[CarBuilder2] /cbmenu <name> save <body/wheel/wheel2/headlight> [size]"
+          )
           endUserTask(player)
         } else {
           val baseDataTypeName = args[2].lowercase(Locale.ROOT)
@@ -63,16 +64,19 @@ fun CarBuilder2Command.handleCarBuilder2Save(
                     vehicleData.config.set("owner", ownerUUID.toString())
                     vehicleData.config.save()
                     player.sendMessage(
-                        "[CarBuilder2] Finished saving $baseDataTypeName for $name. Entity count: ${vehicleData.totalEntity()}")
+                        "[CarBuilder2] Finished saving $baseDataTypeName for $name. Entity count: ${vehicleData.totalEntity()}"
+                    )
                     val entityLimit = player.getEntityLimitByPermission()
                     if (vehicleData.totalEntity() > entityLimit) {
                       player.sendMessage(
-                          "[CarBuilder2] Total entities exceed $entityLimit! Cannot spawn!")
+                          "[CarBuilder2] Total entities exceed $entityLimit! Cannot spawn!"
+                      )
                     }
                   } else {
                     player.sendMessage("[CarBuilder2] Saving finished. (No block data!)")
                   }
-                })
+                },
+            )
           }
         }
       },
@@ -155,7 +159,7 @@ fun setPartOffset(
     config: CarBuilder2Config,
     type: CarBuilder2BaseDataType,
     index: Int,
-    vec: Vector
+    vec: Vector,
 ) {
   config.setPartOffset(type, index, vec)
 }

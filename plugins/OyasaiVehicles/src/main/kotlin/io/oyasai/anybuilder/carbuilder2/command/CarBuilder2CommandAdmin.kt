@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack
 fun CarBuilder2Command.handleCarBuilder2MachineSet(
     data: CarBuilder2BaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   val name = args[0]
   if (!sender.hasOyasaiAdminPermission()) {
@@ -34,7 +34,8 @@ fun CarBuilder2Command.handleCarBuilder2MachineSet(
   }
   if (args.size < 8) {
     sender.sendMessage(
-        "[CarBuilder2] /cbmenu <name> machineset <TopSpeed> <Power> <Brake> <Gears> <Grip> <isMT> [Mode] [player/direction]")
+        "[CarBuilder2] /cbmenu <name> machineset <TopSpeed> <Power> <Brake> <Gears> <Grip> <isMT> [Mode] [player/direction]"
+    )
     return
   }
 
@@ -48,12 +49,14 @@ fun CarBuilder2Command.handleCarBuilder2MachineSet(
   val selectedMode = modeArgument?.let { normalizeCarMode(it) }
   val modeName = selectedMode ?: "Normal"
   val spawnTargetArg = if (selectedMode != null) args.getOrNull(9) else modeArgument
-  if (topSpeed == null ||
-      power == null ||
-      brake == null ||
-      gears == null ||
-      grip == null ||
-      isMT == null) {
+  if (
+      topSpeed == null ||
+          power == null ||
+          brake == null ||
+          gears == null ||
+          grip == null ||
+          isMT == null
+  ) {
     sender.sendMessage("[CarBuilder2] Invalid arguments")
     return
   }
@@ -65,11 +68,13 @@ fun CarBuilder2Command.handleCarBuilder2MachineSet(
             return
           }
 
-  if (topSpeed !in 1..CarBuilder2Item.TOP_SPEED_MAX ||
-      power !in 1..CarBuilder2Item.POWER_MAX ||
-      brake !in 1..CarBuilder2Item.BRAKE_MAX ||
-      gears !in 1..CarBuilder2Item.GEAR_MAX ||
-      grip !in 1..CarBuilder2Item.GRIP_MAX) {
+  if (
+      topSpeed !in 1..CarBuilder2Item.TOP_SPEED_MAX ||
+          power !in 1..CarBuilder2Item.POWER_MAX ||
+          brake !in 1..CarBuilder2Item.BRAKE_MAX ||
+          gears !in 1..CarBuilder2Item.GEAR_MAX ||
+          grip !in 1..CarBuilder2Item.GRIP_MAX
+  ) {
     sender.sendMessage("[CarBuilder2] Stat values are out of range")
     return
   }
@@ -104,12 +109,14 @@ fun CarBuilder2Command.handleCarBuilder2MachineSet(
         val yaw = Tools.getYawFromCardinalDirections(spawnTargetArg).toFloat()
         CarBuilder2Spawn.spawn(nearbyPlayer.location, item, nearbyPlayer, nearbyPlayer, data, yaw)
         sender.sendMessage(
-            "[CarBuilder2] Spawned custom trial car for $name to ${nearbyPlayer.name}")
+            "[CarBuilder2] Spawned custom trial car for $name to ${nearbyPlayer.name}"
+        )
       } else if (spawnTargetArg != null) {
         val targetPlayer = resolveOnlinePlayer(sender, spawnTargetArg) ?: return
         CarBuilder2Spawn.spawn(targetPlayer.location, item, targetPlayer, targetPlayer, data)
         sender.sendMessage(
-            "[CarBuilder2] Spawned custom trial car for $name to ${targetPlayer.name}")
+            "[CarBuilder2] Spawned custom trial car for $name to ${targetPlayer.name}"
+        )
       } else {
         CarBuilder2Spawn.spawn(sender.location, item, null, sender, data)
         sender.sendMessage("[CarBuilder2] Spawned custom trial car for $name")
@@ -119,7 +126,8 @@ fun CarBuilder2Command.handleCarBuilder2MachineSet(
     is ConsoleCommandSender -> {
       if (spawnTargetArg == null) {
         sender.sendMessage(
-            "[CarBuilder2] /cbmenu <name> machineset <TopSpeed> <Power> <Brake> <Gears> <Grip> <isMT> [Mode] <player>")
+            "[CarBuilder2] /cbmenu <name> machineset <TopSpeed> <Power> <Brake> <Gears> <Grip> <isMT> [Mode] <player>"
+        )
         return
       }
       val targetPlayer = resolveOnlinePlayer(sender, spawnTargetArg) ?: return
@@ -130,7 +138,8 @@ fun CarBuilder2Command.handleCarBuilder2MachineSet(
     is BlockCommandSender -> {
       if (spawnTargetArg == null) {
         sender.sendMessage(
-            "[CarBuilder2] /cbmenu <name> machineset <TopSpeed> <Power> <Brake> <Gears> <Grip> <isMT> [Mode] <direction>")
+            "[CarBuilder2] /cbmenu <name> machineset <TopSpeed> <Power> <Brake> <Gears> <Grip> <isMT> [Mode] <direction>"
+        )
         return
       }
       val nearbyPlayer =
@@ -146,7 +155,8 @@ fun CarBuilder2Command.handleCarBuilder2MachineSet(
 
     else -> {
       sender.sendMessage(
-          "[CarBuilder2] This command is only available to players, console, or command blocks")
+          "[CarBuilder2] This command is only available to players, console, or command blocks"
+      )
     }
   }
 }
@@ -154,7 +164,7 @@ fun CarBuilder2Command.handleCarBuilder2MachineSet(
 fun CarBuilder2Command.handleCarBuilder2EventCar(
     data: CarBuilder2BaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   val name = args[0]
   if (data == null) {
@@ -213,7 +223,11 @@ fun applyCarMode(item: ItemStack, mode: String): Boolean {
 
 private fun findNearbyCarBuilder2Player(location: Location): Player? {
   return Tools.getNearbyPlayers(
-          location, COMMAND_BLOCK_SEARCH_XZ, COMMAND_BLOCK_SEARCH_Y, COMMAND_BLOCK_SEARCH_XZ)
+          location,
+          COMMAND_BLOCK_SEARCH_XZ,
+          COMMAND_BLOCK_SEARCH_Y,
+          COMMAND_BLOCK_SEARCH_XZ,
+      )
       .firstOrNull()
 }
 

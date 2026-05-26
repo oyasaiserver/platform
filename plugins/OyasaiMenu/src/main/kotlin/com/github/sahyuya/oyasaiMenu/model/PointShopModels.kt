@@ -5,7 +5,7 @@ import org.bukkit.Material
 data class PointShopCategory(
     val id: String,
     val displayName: String,
-    val items: Map<String, PointShopItem>
+    val items: Map<String, PointShopItem>,
 ) {
   val itemsPerPage: Int = 45
   val itemList: List<PointShopItem> =
@@ -29,7 +29,7 @@ data class PointShopItem(
     val message: String,
     val commands: List<String>,
     val closeOnPurchase: Boolean = false,
-    val customTexture: String? = null
+    val customTexture: String? = null,
 )
 
 data class PlayerPointShopState(val categoryId: String, val page: Int = 0)

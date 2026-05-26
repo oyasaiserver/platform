@@ -64,7 +64,7 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     if (command.name != COMMAND_NAME) return false
 
@@ -94,7 +94,7 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): MutableList<String>? {
     if (command.name != COMMAND_NAME) return null
 
@@ -156,17 +156,19 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
         SLOT_CAR,
         ItemStack(Material.ENDER_PEARL)
             .allHide()
-            .addText("&aCarBuilder2", listOf("&f車の試乗・購入などはこちらから", "&e統合版は非対応"))) {
-          openBuilderMenu(it) { player -> CarBuilder2GUI.menu().open(player) }
-        }
+            .addText("&aCarBuilder2", listOf("&f車の試乗・購入などはこちらから", "&e統合版は非対応")),
+    ) {
+      openBuilderMenu(it) { player -> CarBuilder2GUI.menu().open(player) }
+    }
 
     gui.setItem(
         SLOT_AIRCRAFT,
         ItemStack(Material.FEATHER)
             .allHide()
-            .addText("&aAircraftBuilder", listOf("&f飛行機の試乗・購入などはこちらから", "&e統合版は非対応"))) {
-          openBuilderMenu(it) { player -> AircraftBuilderGUI.menu().open(player) }
-        }
+            .addText("&aAircraftBuilder", listOf("&f飛行機の試乗・購入などはこちらから", "&e統合版は非対応")),
+    ) {
+      openBuilderMenu(it) { player -> AircraftBuilderGUI.menu().open(player) }
+    }
 
     val cameraIcon =
         (CustomHead.getHead("camera") ?: ItemStack(Material.ENDER_EYE))
@@ -177,9 +179,11 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
     }
 
     gui.setItem(
-        SLOT_GARAGE, ItemStack(Material.CHEST).allHide().addText("&fガレージ", listOf("&fガレージを開く"))) {
-          openCommand(it.whoClicked as Player, "$COMMAND_ALIAS $SUB_GARAGE")
-        }
+        SLOT_GARAGE,
+        ItemStack(Material.CHEST).allHide().addText("&fガレージ", listOf("&fガレージを開く")),
+    ) {
+      openCommand(it.whoClicked as Player, "$COMMAND_ALIAS $SUB_GARAGE")
+    }
 
     return gui
   }
@@ -190,8 +194,8 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
     val newStatus = !camera(uuid)
     cameraSetting[uuid] = newStatus
     player.sendMessage(
-        Tools.color(
-            "[OyasaiVehicles] 視点追尾(カメラ自動回転)を${if (newStatus) "&a有効" else "&c無効"}&rに切り替えました"))
+        Tools.color("[OyasaiVehicles] 視点追尾(カメラ自動回転)を${if (newStatus) "&a有効" else "&c無効"}&rに切り替えました")
+    )
     return true
   }
 
@@ -207,7 +211,8 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
     val setting = net(player.uniqueId)
     setting.nextMode()
     player.sendMessage(
-        Tools.color("[OyasaiVehicles] ネットワーク設定を&a${setting.currentModeLabel()}&rに切り替え"))
+        Tools.color("[OyasaiVehicles] ネットワーク設定を&a${setting.currentModeLabel()}&rに切り替え")
+    )
     return true
   }
 
@@ -237,11 +242,13 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
       SUB_EVENT_MODE -> {
         eventMode = !eventMode
         sender.sendMessage(
-            Tools.color("[OyasaiVehicles] イベントモードを${if (eventMode) "&a有効化" else "&c無効化"}&rしました"))
+            Tools.color("[OyasaiVehicles] イベントモードを${if (eventMode) "&a有効化" else "&c無効化"}&rしました")
+        )
       }
       SUB_UNDER_BLOCK ->
           sender.sendMessage(
-              "UnderBlockIsSpeed.yml reload! load Material=> ${UnderBlockPattern.loadConfig()}")
+              "UnderBlockIsSpeed.yml reload! load Material=> ${UnderBlockPattern.loadConfig()}"
+          )
       SUB_RELOAD ->
           when (args.getOrNull(2)?.lowercase(Locale.ROOT)) {
             null,
@@ -252,7 +259,8 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
             "vehicles" -> sender.sendMessage(VehicleReloadService.reloadVehicles())
             else ->
                 sender.sendMessage(
-                    Tools.color("[OyasaiVehicles] Unknown reload target: ${args[2]}"))
+                    Tools.color("[OyasaiVehicles] Unknown reload target: ${args[2]}")
+                )
           }
       null -> Unit
       else ->
@@ -270,7 +278,7 @@ object VehicleMenuCommand : CommandExecutor, TabCompleter {
 
   private fun openBuilderMenu(
       event: org.bukkit.event.inventory.InventoryClickEvent,
-      openMenu: (Player) -> Unit
+      openMenu: (Player) -> Unit,
   ) {
     val player = event.whoClicked as Player
     player.playMenuClick()

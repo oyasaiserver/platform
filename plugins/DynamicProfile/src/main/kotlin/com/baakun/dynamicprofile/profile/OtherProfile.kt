@@ -111,7 +111,12 @@ object OtherProfile {
             .allFlag()
             .guiRun {
               viewer.playSound(
-                  viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
+                  viewer.location,
+                  Sound.UI_BUTTON_CLICK,
+                  SoundCategory.MASTER,
+                  0.75F,
+                  1F,
+              )
               ofp.name?.let {
                 viewer.closeInventory()
                 val payGui = Pay.getPayAmountGUI(viewer, target)
@@ -128,7 +133,12 @@ object OtherProfile {
             .allFlag()
             .guiRun {
               viewer.playSound(
-                  viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
+                  viewer.location,
+                  Sound.UI_BUTTON_CLICK,
+                  SoundCategory.MASTER,
+                  0.75F,
+                  1F,
+              )
               ofp.name?.let {
                 viewer.closeInventory()
                 val payGui = Pay.getTokenAmountGUI(viewer, target)
@@ -140,11 +150,18 @@ object OtherProfile {
     val tpaEnderPearl =
         ItemStack(Material.ENDER_PEARL)
             .addText(
-                "&fクリックで${target}へtpa要求を送る", mutableListOf("&7相手へテレポートしたい時用", "&7相手が許可するとテレポートする"))
+                "&fクリックで${target}へtpa要求を送る",
+                mutableListOf("&7相手へテレポートしたい時用", "&7相手が許可するとテレポートする"),
+            )
             .allFlag()
             .guiRun {
               viewer.playSound(
-                  viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
+                  viewer.location,
+                  Sound.UI_BUTTON_CLICK,
+                  SoundCategory.MASTER,
+                  0.75F,
+                  1F,
+              )
               ofp.name?.let {
                 viewer.closeInventory()
                 viewer.performCommand("tpa $target")
@@ -166,7 +183,12 @@ object OtherProfile {
             .allFlag()
             .guiRun {
               viewer.playSound(
-                  viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
+                  viewer.location,
+                  Sound.UI_BUTTON_CLICK,
+                  SoundCategory.MASTER,
+                  0.75F,
+                  1F,
+              )
               viewer.closeInventory()
 
               //                if (!viewer.isOp && viewer.gameMode != GameMode.CREATIVE) {

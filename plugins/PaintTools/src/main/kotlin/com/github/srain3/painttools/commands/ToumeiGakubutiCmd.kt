@@ -33,7 +33,9 @@ object ToumeiGakubutiCmd : CommandExecutor {
             }
             sender.sendMessage(
                 ToolBox.colorMessage(
-                    "[PaintTools] &aPlayer中心に&6半径8block&aほどの透明額縁&6${count}個&aを&c透明解除&aしました"))
+                    "[PaintTools] &aPlayer中心に&6半径8block&aほどの透明額縁&6${count}個&aを&c透明解除&aしました"
+                )
+            )
           }
 
           "count" -> {
@@ -45,7 +47,9 @@ object ToumeiGakubutiCmd : CommandExecutor {
                     .size
             sender.sendMessage(
                 ToolBox.colorMessage(
-                    "[PaintTools] &aPlayer中心に&6半径8block&aほどの透明額縁の数は&e${count}個&aです"))
+                    "[PaintTools] &aPlayer中心に&6半径8block&aほどの透明額縁の数は&e${count}個&aです"
+                )
+            )
           }
 
           else -> {
@@ -67,7 +71,8 @@ object ToumeiGakubutiCmd : CommandExecutor {
     if (entity is ItemFrame) {
       entity.isVisible = !entity.isVisible
       sender.sendMessage(
-          ToolBox.colorMessage("[PaintTools] &a額縁の透明化を&6${!entity.isVisible}&aへ変更しました!"))
+          ToolBox.colorMessage("[PaintTools] &a額縁の透明化を&6${!entity.isVisible}&aへ変更しました!")
+      )
     } else {
       sender.sendMessage(ToolBox.colorMessage("[PaintTools] &c額縁に視線を合わせて下さい!"))
     }

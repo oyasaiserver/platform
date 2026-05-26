@@ -21,7 +21,7 @@ object BuilderCommandRouter {
       handleAdmin: (String) -> Boolean,
       handleManager: (String) -> Boolean,
       handleGeneral: (String) -> Boolean,
-      handleUnknown: () -> Boolean = { false }
+      handleUnknown: () -> Boolean = { false },
   ): Boolean {
     return when {
       subCommand in adminCommands -> handleAdmin(subCommand)
@@ -39,7 +39,7 @@ object BuilderLifecycle {
       tabCompleter: TabCompleter,
       events: Listener,
       entityList: BaseVehicleEntityList<*>,
-      cache: BaseVehicleCache<*>
+      cache: BaseVehicleCache<*>,
   ) {
     val plugin = Tools.pl ?: return
     plugin.getCommand(commandName)?.apply {
@@ -56,7 +56,7 @@ object BuilderCommandTabSupport {
   private fun filterBy(
       current: String,
       values: Collection<String>,
-      predicate: (normalizedValue: String, normalizedCurrent: String) -> Boolean
+      predicate: (normalizedValue: String, normalizedCurrent: String) -> Boolean,
   ): MutableList<String> {
     val c = current.lowercase(Locale.ROOT)
     return values.filter { value -> predicate(value.lowercase(Locale.ROOT), c) }.toMutableList()

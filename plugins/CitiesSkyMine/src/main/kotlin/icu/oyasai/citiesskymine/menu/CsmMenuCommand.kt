@@ -27,7 +27,7 @@ class CsmMenuCommand(private val plugin: Main, private val engine: CsmMenuEngine
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     val player =
         sender as? Player
@@ -46,7 +46,8 @@ class CsmMenuCommand(private val plugin: Main, private val engine: CsmMenuEngine
         }
         engine.reload()
         player.sendMessage(
-            comp("&e[CsmMenu] &aメニューをリロードしました。(${engine.loader.getMenuIds().size} 件)"))
+            comp("&e[CsmMenu] &aメニューをリロードしました。(${engine.loader.getMenuIds().size} 件)")
+        )
       }
       else -> engine.openMenu(player, sub)
     }
@@ -57,7 +58,7 @@ class CsmMenuCommand(private val plugin: Main, private val engine: CsmMenuEngine
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     if (!sender.isOp) return emptyList()
     if (args.size != 1) return emptyList()

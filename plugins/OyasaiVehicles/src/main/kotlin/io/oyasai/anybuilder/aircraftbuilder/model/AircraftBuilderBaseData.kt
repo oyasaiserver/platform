@@ -65,7 +65,10 @@ class AircraftBuilderConfig(fileName: String) : CustomYaml(fileName) {
 
 class AircraftBuilderBaseData(name: String) :
     BaseVehicleBaseDataCore<AircraftBuilderConfig>(
-        name, AircraftBuilderConfig("AircraftBuilder/$name/$name.yml"), "AircraftBuilder") {
+        name,
+        AircraftBuilderConfig("AircraftBuilder/$name/$name.yml"),
+        "AircraftBuilder",
+    ) {
   val body: MutableMap<Vector, Pair<BlockData, Vector>> = LinkedHashMap()
   var boxSize: BoundingBox = BoundingBox()
 

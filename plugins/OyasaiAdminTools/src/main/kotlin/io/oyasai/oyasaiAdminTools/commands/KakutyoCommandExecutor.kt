@@ -16,7 +16,7 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     if (sender !is Player) {
       sender.sendMessage("§cこのコマンドはプレイヤーのみ実行可能です。")
@@ -67,7 +67,8 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
 
     if (borderData == null) {
       sender.sendMessage(
-          "§cこのワールド (${currentWorldName}) にはWorldBorderが設定されていません。先に /wb set を行ってください。")
+          "§cこのワールド (${currentWorldName}) にはWorldBorderが設定されていません。先に /wb set を行ってください。"
+      )
       return true
     }
 
@@ -118,7 +119,7 @@ object KakutyoCommandExecutor : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String> {
     return when (args.size) {
       1 ->

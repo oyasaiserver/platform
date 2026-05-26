@@ -25,8 +25,10 @@ abstract class VehicleEventListenerBase : Listener {
 
   @EventHandler
   fun wallDamageCancel(event: EntityDamageEvent) {
-    if (event.cause == EntityDamageEvent.DamageCause.FALL ||
-        event.cause == EntityDamageEvent.DamageCause.SUFFOCATION) {
+    if (
+        event.cause == EntityDamageEvent.DamageCause.FALL ||
+            event.cause == EntityDamageEvent.DamageCause.SUFFOCATION
+    ) {
       val entity = event.entity
       if (entity is Player && checkSeatPlayerUUID(entity.uniqueId)) {
         event.isCancelled = true
@@ -48,7 +50,7 @@ abstract class VehicleEventListenerBase : Listener {
         if (data.summoner?.uniqueId == playerUUID) {
           markVehicleExit(data)
         }
-      }
+      },
   ) {
     val player = event.player
     val vehicle = player.vehicle ?: return
@@ -66,7 +68,7 @@ abstract class VehicleEventListenerBase : Listener {
       isVehicleArmorStand: (UUID) -> Boolean,
       getData: (UUID) -> T?,
       shouldMarkExit: (EntityDamageEvent) -> Boolean = { true },
-      onEmptyDriverSeat: ((T) -> Unit)? = null
+      onEmptyDriverSeat: ((T) -> Unit)? = null,
   ) {
     if (event.entity.type != EntityType.ARMOR_STAND) return
     val uuid = event.entity.uniqueId
@@ -88,7 +90,7 @@ abstract class VehicleEventListenerBase : Listener {
       isBuilderItem: (ItemStack) -> Boolean,
       resolveBaseData: (ItemStack) -> T?,
       spawnVehicle: (Location, ItemStack, Player, T, Float) -> Boolean,
-      consumeItem: (PlayerInteractEvent, ItemStack) -> Unit
+      consumeItem: (PlayerInteractEvent, ItemStack) -> Unit,
   ) {
     if (event.hand != EquipmentSlot.HAND) return
     if (event.action != Action.RIGHT_CLICK_BLOCK) return
@@ -118,7 +120,7 @@ abstract class VehicleEventListenerBase : Listener {
       isBuilderItem: (ItemStack) -> Boolean,
       resolveBaseData: (ItemStack) -> T?,
       spawnVehicle: (Location, ItemStack, Player, T, Float) -> Boolean,
-      consumeItem: (PlayerInteractEvent, ItemStack) -> Unit
+      consumeItem: (PlayerInteractEvent, ItemStack) -> Unit,
   ) {
     val item = getItem(event) ?: return
     if (!isBuilderItem(item)) return
@@ -132,12 +134,13 @@ abstract class VehicleEventListenerBase : Listener {
         isBuilderItem = isBuilderItem,
         resolveBaseData = resolveBaseData,
         spawnVehicle = spawnVehicle,
-        consumeItem = consumeItem)
+        consumeItem = consumeItem,
+    )
   }
 
   protected fun <T : VehicleEntityData> handleEntityUnload(
       event: EntitiesUnloadEvent,
-      getData: (UUID) -> T?
+      getData: (UUID) -> T?,
   ) {
     val dataSet =
         event.entities
@@ -153,7 +156,7 @@ abstract class VehicleEventListenerBase : Listener {
       event: PlayerInteractAtEntityEvent,
       isSeatArmorStand: (UUID) -> Boolean,
       getDrivingSeatData: (UUID) -> T?,
-      onDrivingSeatMounted: (Player, T) -> Unit
+      onDrivingSeatMounted: (Player, T) -> Unit,
   ) {
     val entity = event.rightClicked
     if (entity.type != EntityType.ARMOR_STAND || entity.passengers.isNotEmpty()) return
@@ -173,7 +176,7 @@ abstract class VehicleEventListenerBase : Listener {
       deniedMessage: String,
       isSeatArmorStand: (UUID) -> Boolean,
       getDrivingSeatData: (UUID) -> T?,
-      onDrivingSeatMounted: (Player, T) -> Unit
+      onDrivingSeatMounted: (Player, T) -> Unit,
   ) {
     val entity = event.rightClicked
     if (entity.type != EntityType.ARMOR_STAND || !isSeatArmorStand(entity.uniqueId)) return
@@ -185,7 +188,8 @@ abstract class VehicleEventListenerBase : Listener {
         event = event,
         isSeatArmorStand = isSeatArmorStand,
         getDrivingSeatData = getDrivingSeatData,
-        onDrivingSeatMounted = onDrivingSeatMounted)
+        onDrivingSeatMounted = onDrivingSeatMounted,
+    )
   }
 
   protected abstract fun checkSeatPlayerUUID(uuid: UUID): Boolean

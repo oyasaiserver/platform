@@ -133,7 +133,8 @@ object PaintToolsCmd : CommandExecutor {
               if (it.name == args[1]) {
                 it.openInventory(giveDyeInv() ?: return true)
                 sender.sendMessage(
-                    ToolBox.colorMessage("[PaintTools] &6${it.name}&aにDyeBoxを開かせました"))
+                    ToolBox.colorMessage("[PaintTools] &6${it.name}&aにDyeBoxを開かせました")
+                )
               }
             }
           } else {
@@ -146,7 +147,8 @@ object PaintToolsCmd : CommandExecutor {
               if (it.name == args[1]) {
                 it.openInventory(giveDyeInv() ?: return true)
                 sender.sendMessage(
-                    ToolBox.colorMessage("[PaintTools] &6${it.name}&aにDyeBoxを開かせました"))
+                    ToolBox.colorMessage("[PaintTools] &6${it.name}&aにDyeBoxを開かせました")
+                )
               }
             }
           }
@@ -211,7 +213,9 @@ object PaintToolsCmd : CommandExecutor {
     mapMeta.setDisplayName("Canvas: $id")
     mapMeta.lore =
         mutableListOf(
-            ToolBox.colorMessage("&a額縁に飾ってから"), ToolBox.colorMessage("&a各種染料で右クリックすると描けます"))
+            ToolBox.colorMessage("&a額縁に飾ってから"),
+            ToolBox.colorMessage("&a各種染料で右クリックすると描けます"),
+        )
     mapMeta.persistentDataContainer.set(
         NamespacedKey(ToolBox.pl, "ID"),
         PersistentDataType.INTEGER,

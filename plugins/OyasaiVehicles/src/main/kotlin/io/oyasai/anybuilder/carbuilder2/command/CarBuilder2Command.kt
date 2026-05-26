@@ -13,7 +13,7 @@ object CarBuilder2Command : BuilderCommandBase() {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     return handleCarBuilder2Command(sender, command, label, args)
   }

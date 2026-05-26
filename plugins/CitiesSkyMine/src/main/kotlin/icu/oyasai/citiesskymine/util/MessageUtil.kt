@@ -37,11 +37,13 @@ object MessageUtil {
 
   fun header(sender: CommandSender, title: String) {
     sender.sendMessage(
-        mm.deserialize("<dark_gray>===[ <gold><bold>$title</bold></gold> <dark_gray>]==="))
+        mm.deserialize("<dark_gray>===[ <gold><bold>$title</bold></gold> <dark_gray>]===")
+    )
   }
 
   fun helpEntry(sender: CommandSender, cmd: String, desc: String) {
     sender.sendMessage(
-        mm.deserialize("  <gold>$cmd</gold> <dark_gray>-</dark_gray> <gray>$desc</gray>"))
+        mm.deserialize("  <gold>$cmd</gold> <dark_gray>-</dark_gray> <gray>$desc</gray>")
+    )
   }
 }

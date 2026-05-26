@@ -68,8 +68,10 @@ class EntityClick : Listener {
   fun onManipulate(event: PlayerArmorStandManipulateEvent) {
     val hand = event.player.inventory.itemInMainHand
     val armor = event.rightClicked
-    if (isEntiStick(hand) ||
-        armor.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)) {
+    if (
+        isEntiStick(hand) ||
+            armor.persistentDataContainer.has(EntityPose.ITEMLOCK, PersistentDataType.BYTE)
+    ) {
       event.isCancelled = true
     }
   }
@@ -221,7 +223,8 @@ class EntityClick : Listener {
             Bukkit.createInventory(
                 player, // holder（nullでもOK）
                 9,
-                title)
+                title,
+            )
 
         val ligbrwItem =
             CustomHead.get("10673a3e975e95385683734de0aaae2fc14491c89c448fc77c954329312c558b")
@@ -230,7 +233,10 @@ class EntityClick : Listener {
                       itemMeta!!.apply {
                         setDisplayName("${ChatColor.GREEN}栗色")
                         persistentDataContainer.set(
-                            WOLF_KEY, PersistentDataType.STRING, "LIGHT_BROWN")
+                            WOLF_KEY,
+                            PersistentDataType.STRING,
+                            "LIGHT_BROWN",
+                        )
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
                       }
@@ -346,7 +352,8 @@ class EntityClick : Listener {
             Bukkit.createInventory(
                 player, // holder（nullでもOK）
                 18,
-                title1)
+                title1,
+            )
 
         val toracItem =
             CustomHead.get("ed2926a6976f05725fd0ac1079abead49427747a687929efe31e1ccdbcfa741f")
@@ -410,7 +417,10 @@ class EntityClick : Listener {
                       itemMeta!!.apply {
                         setDisplayName("${ChatColor.GREEN}ブリティッシュ_ショートヘア")
                         persistentDataContainer.set(
-                            CAT_KEY, PersistentDataType.STRING, "LIGHT_GRAY")
+                            CAT_KEY,
+                            PersistentDataType.STRING,
+                            "LIGHT_GRAY",
+                        )
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
                       }
@@ -422,7 +432,10 @@ class EntityClick : Listener {
                       itemMeta!!.apply {
                         setDisplayName("${ChatColor.GREEN}ペルシャ")
                         persistentDataContainer.set(
-                            CAT_KEY, PersistentDataType.STRING, "LIGHT_BROWN")
+                            CAT_KEY,
+                            PersistentDataType.STRING,
+                            "LIGHT_BROWN",
+                        )
                         if (isMini)
                             persistentDataContainer.set(SIZE_KEY, PersistentDataType.STRING, "MINI")
                       }
@@ -493,7 +506,8 @@ class EntityClick : Listener {
             Bukkit.createInventory(
                 player, // holder（nullでもOK）
                 9,
-                "§3ウサギ選択")
+                "§3ウサギ選択",
+            )
         val brorItem =
             CustomHead.get("c1db38ef3c1a1d59f779a0cd9f9e616de0cc9acc7734b8facc36fc4ea40d0235")
                 .apply {
@@ -527,7 +541,10 @@ class EntityClick : Listener {
                   itemMeta!!.apply {
                     setDisplayName("${ChatColor.GREEN}白黒")
                     persistentDataContainer.set(
-                        RABBIT_KEY, PersistentDataType.STRING, "WHITE_BLACK")
+                        RABBIT_KEY,
+                        PersistentDataType.STRING,
+                        "WHITE_BLACK",
+                    )
                   }
             }
         val gorItem =
@@ -545,7 +562,10 @@ class EntityClick : Listener {
                       itemMeta!!.apply {
                         setDisplayName("${ChatColor.GREEN}ソルト＆ペッパー")
                         persistentDataContainer.set(
-                            RABBIT_KEY, PersistentDataType.STRING, "LIGHT_BROWN")
+                            RABBIT_KEY,
+                            PersistentDataType.STRING,
+                            "LIGHT_BROWN",
+                        )
                       }
                 }
         inv3.setItem(0, brorItem)
@@ -565,7 +585,8 @@ class EntityClick : Listener {
             Bukkit.createInventory(
                 player, // holder（nullでもOK）
                 9,
-                "§3オウム選択")
+                "§3オウム選択",
+            )
         val redItem =
             CustomHead.get("5d1a168bc72cb314f7c86feef9d9bc7612365244ce67f0a104fce04203430c1d")
                 .apply {

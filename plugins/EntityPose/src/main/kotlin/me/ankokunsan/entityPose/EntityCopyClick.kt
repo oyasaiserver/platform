@@ -72,7 +72,14 @@ class EntityCopyClick : Listener {
                     if (entity.isValid) {
                       val headlocation = entity.location.add(0.0, entity.height + 0.2, 0.0)
                       player.spawnParticle(
-                          Particle.HAPPY_VILLAGER, headlocation, 10, 0.1, 0.1, 0.1, 0.05)
+                          Particle.HAPPY_VILLAGER,
+                          headlocation,
+                          10,
+                          0.1,
+                          0.1,
+                          0.1,
+                          0.05,
+                      )
                     }
                   }
                 }
@@ -134,7 +141,14 @@ class EntityCopyClick : Listener {
                     if (entity.isValid) {
                       val headlocation = entity.location.add(0.0, entity.height + 0.2, 0.0)
                       player.spawnParticle(
-                          Particle.HAPPY_VILLAGER, headlocation, 10, 0.1, 0.1, 0.1, 0.05)
+                          Particle.HAPPY_VILLAGER,
+                          headlocation,
+                          10,
+                          0.1,
+                          0.1,
+                          0.1,
+                          0.05,
+                      )
                     }
                   }
                 }

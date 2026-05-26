@@ -269,7 +269,8 @@ object Data {
                           check,
                           comment,
                           worldStr,
-                          textID)
+                          textID,
+                      )
                   val list = dataMap[it.name] ?: mutableListOf()
                   list.add(slData)
                   dataMap[it.name] = list
@@ -474,8 +475,10 @@ object Data {
                             switchY = false
                             continue
                           }
-                          if (sLoc.block.getRelative(BlockFace.DOWN).blockData.material ==
-                              Material.WATER) {
+                          if (
+                              sLoc.block.getRelative(BlockFace.DOWN).blockData.material ==
+                                  Material.WATER
+                          ) {
                             switchY = false
                             continue
                           }
@@ -483,7 +486,8 @@ object Data {
                         sLoc.y -= 1.0
                         if (sLoc.y <= -64.0) {
                           player.sendMessage(
-                              Tools.socialLikesLOGO + "&e足場が無いためテレポートできませんでした".color())
+                              Tools.socialLikesLOGO + "&e足場が無いためテレポートできませんでした".color()
+                          )
                           return
                         }
                       }

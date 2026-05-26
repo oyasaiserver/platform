@@ -19,7 +19,7 @@ data class MileagePointData(
     val playerUUID: UUID,
     val file: CustomYaml,
     var mile: Int,
-    var mileage: Double
+    var mileage: Double,
 )
 
 object MileagePoint : Listener {
@@ -95,7 +95,7 @@ object MileageTracker {
 
   data class VehicleData(
       val seats: MutableSet<Pair<Int, ArmorStand>>,
-      val addMileagePercent: Double
+      val addMileagePercent: Double,
   )
 
   private val activeVehicles: MutableMap<ArmorStand, VehicleData> = mutableMapOf()
@@ -184,7 +184,9 @@ object MileageTracker {
           if (player.isOnline) {
             player.sendMessage(
                 Tools.color(
-                    "&9獲得マイルPoint&7: &b${addMileagePoint}p &a/ &9現在のマイルPoint&7: &b${data.mile}p"))
+                    "&9獲得マイルPoint&7: &b${addMileagePoint}p &a/ &9現在のマイルPoint&7: &b${data.mile}p"
+                )
+            )
           }
         }
         data.mileage += mileage0
@@ -195,7 +197,7 @@ object MileageTracker {
   fun start(
       mainArmorStand: ArmorStand,
       seatArmorStand: MutableSet<Pair<Int, ArmorStand>>,
-      addMileagePercent: Double
+      addMileagePercent: Double,
   ) {
     activeVehicles[mainArmorStand] = VehicleData(seatArmorStand, addMileagePercent)
     ensureTaskRunning()

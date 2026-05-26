@@ -23,7 +23,8 @@ fun CarBuilder2EntityData.autoSitStartImpl() {
           if (firstSeat == null) {
             Bukkit.getLogger()
                 .warning(
-                    "[CarBuilder2] Despawning car ${this@autoSitStartImpl.baseData.name}: No seats found!")
+                    "[CarBuilder2] Despawning car ${this@autoSitStartImpl.baseData.name}: No seats found!"
+                )
             this@autoSitStartImpl.exit = true
             this@autoSitStartImpl.exitTask()
             this.cancel()
@@ -32,7 +33,8 @@ fun CarBuilder2EntityData.autoSitStartImpl() {
           if (firstSeat.isDead) {
             Bukkit.getLogger()
                 .warning(
-                    "[CarBuilder2] Despawning car ${this@autoSitStartImpl.baseData.name}: Driver seat ArmorStand is dead!")
+                    "[CarBuilder2] Despawning car ${this@autoSitStartImpl.baseData.name}: Driver seat ArmorStand is dead!"
+                )
             this@autoSitStartImpl.exit = true
             this@autoSitStartImpl.exitTask()
             this.cancel()
@@ -59,7 +61,8 @@ fun CarBuilder2EntityData.autoSitStartImpl() {
                             "４=シフトダウン, ６=シフトアップ | "
                         else ""
                     player.sendMessage(
-                        "[CarBuilder2] １=左ウインカー, ２=ハザード, ３=右ウインカー | ${mtStr} ８=ライトON/OFF, ９=クルーズモード切替")
+                        "[CarBuilder2] １=左ウインカー, ２=ハザード, ３=右ウインカー | ${mtStr} ８=ライトON/OFF, ９=クルーズモード切替"
+                    )
                   }
                 }
 
@@ -90,9 +93,11 @@ fun CarBuilder2EntityData.autoSitStartImpl() {
           this@autoSitStartImpl.joinBody()
           val driverSeat =
               this@autoSitStartImpl.seatArmorStands.keys.firstOrNull { it.first == 0 }?.second
-          if (driverSeat != null &&
-              driverSeat.passengers.isNotEmpty() &&
-              !this@autoSitStartImpl.driveStartSwitch) {
+          if (
+              driverSeat != null &&
+                  driverSeat.passengers.isNotEmpty() &&
+                  !this@autoSitStartImpl.driveStartSwitch
+          ) {
             this@autoSitStartImpl.start()
           }
         }

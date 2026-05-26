@@ -23,7 +23,8 @@ object Bou {
         listOf(
             "${ChatColor.GRAY}ブロックを左クリック→置くエンティティを選択するGUI",
             "${ChatColor.GRAY}エンティティを左クリック→部位選択(しゃがみで戻る)",
-            "${ChatColor.GRAY}エンティティを右クリック→回転(しゃがみで逆回転)")
+            "${ChatColor.GRAY}エンティティを右クリック→回転(しゃがみで逆回転)",
+        )
 
     meta.addEnchant(Enchantment.DENSITY, 1, true)
     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)

@@ -71,7 +71,7 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
   private fun buildInventory(
       player: Player,
       menuDef: MenuDefinition,
-      state: PlayerMenuState
+      state: PlayerMenuState,
   ): Inventory {
     val context = PlaceholderContext(player)
     val title = applyPlaceholders(menuDef.title, context)
@@ -90,7 +90,7 @@ class MenuEngine(private val plugin: OyasaiMenu) : Listener {
   private fun buildItemStack(
       player: Player,
       itemDef: MenuItemDefinition,
-      context: PlaceholderContext
+      context: PlaceholderContext,
   ): ItemStack {
     val item: ItemStack =
         when {

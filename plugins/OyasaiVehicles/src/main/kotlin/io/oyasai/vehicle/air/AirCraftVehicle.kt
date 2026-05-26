@@ -9,7 +9,7 @@ data class AircraftVehicle(
     val speedLimit: Double,
     val power: Int,
     val brake: Int,
-    val slip: Float
+    val slip: Float,
 ) : AirVehicle(speedLimit, power, brake) {
 
   var slipAngle: Float = 0.0f

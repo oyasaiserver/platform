@@ -16,7 +16,7 @@ object WhiteLineSmoother {
   fun smooth(
       editSession: EditSession,
       path: List<PathPoint>,
-      settings: RoadSettings
+      settings: RoadSettings,
   ): SmoothResult {
     val lineData = settings.lineMaterial.createBlockData()
     require(lineData is Stairs) { "白線素材には階段ブロックを設定してください。" }
@@ -64,7 +64,7 @@ object WhiteLineSmoother {
       prev: Vec?,
       next: Vec?,
       offset: Int,
-      heading: Double
+      heading: Double,
   ): Orientation {
     val prevCard = prev?.takeIf { it.isCardinal() }
     val nextCard = next?.takeIf { it.isCardinal() }
@@ -190,7 +190,7 @@ object WhiteLineSmoother {
       endX: Double,
       endY: Double,
       endZ: Double,
-      defaultHeading: Double
+      defaultHeading: Double,
   ): List<TracedBlock> {
     val result = mutableListOf<TracedBlock>()
     val startBlockX = floor(startX).toInt()
@@ -297,7 +297,7 @@ object WhiteLineSmoother {
     CENTER_LINE,
     LANE,
     OUTER_LINE,
-    SIDEWALK
+    SIDEWALK,
   }
 
   private data class BlockPos(val x: Int, val y: Int, val z: Int) {
@@ -330,7 +330,7 @@ object WhiteLineSmoother {
 
   private fun computeZigzagOrientations(
       traced: List<TracedBlock>,
-      offset: Int
+      offset: Int,
   ): Array<Orientation?> {
     val size = traced.size
     val result = arrayOfNulls<Orientation>(size)
@@ -386,7 +386,7 @@ object WhiteLineSmoother {
       offset: Int,
       buffer: Array<Orientation?>,
       prevVec: Array<Vec?>,
-      nextVec: Array<Vec?>
+      nextVec: Array<Vec?>,
   ) {
     val length = end - start
     if (length == 0) return

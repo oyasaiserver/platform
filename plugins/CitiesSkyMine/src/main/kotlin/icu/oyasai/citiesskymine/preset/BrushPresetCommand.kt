@@ -22,7 +22,7 @@ class BrushPresetCommand(private val plugin: Main) : CommandExecutor, TabComplet
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     if (sender !is Player) {
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
@@ -51,7 +51,7 @@ class BrushPresetCommand(private val plugin: Main) : CommandExecutor, TabComplet
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     if (sender !is Player) return emptyList()
     return when (args.size) {

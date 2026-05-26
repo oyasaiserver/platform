@@ -25,7 +25,8 @@ object CarBuilder2GUI {
         title = "CarBuilder2",
         onTrialClick = { listMenu(false).open(it) },
         onBuyClick = { listMenu(true).open(it) },
-        onCustomClick = { vehicleCustomMenu().open(it) })
+        onCustomClick = { vehicleCustomMenu().open(it) },
+    )
   }
 
   fun listMenu(buySwitch: Boolean): PaginatedOyasaiMenu {
@@ -44,7 +45,9 @@ object CarBuilder2GUI {
                   listOf(
                       "&aエンティティ数&7: &a${data.totalEntity()}",
                       "&3作者&7: &b${Bukkit.getOfflinePlayer(ownerUUID).name ?: "Unknown"}",
-                      line4))
+                      line4,
+                  ),
+              )
             },
         onSelection = onSelection@{ player, name, buy ->
               if (buy) {
@@ -66,7 +69,8 @@ object CarBuilder2GUI {
               } else {
                 player.performCommand("cbmenu $name spawn")
               }
-            })
+            },
+    )
   }
 
   fun vehicleCustomMenu(): OyasaiMenu {
@@ -90,7 +94,9 @@ object CarBuilder2GUI {
               }
             },
             setupButtons = ::setupCustomButtons,
-            refresh = ::vehicleCustomRePane))
+            refresh = ::vehicleCustomRePane,
+        ),
+    )
     return gui
   }
 
@@ -106,20 +112,20 @@ object CarBuilder2GUI {
         payCost = { uuid, cost -> MileagePoint.payment(uuid, cost) },
         onRefresh = { targetGui, currentItem, player ->
           vehicleCustomRePane(targetGui, currentItem, player)
-        })
+        },
+    )
 
     gui.setItem(
         8,
-        ItemStack(Material.CRAFTING_TABLE)
-            .addText("&fMT切り替え", listOf("&7MTかATかを切り替えます"))
-            .allHide()) { event ->
-          event.isCancelled = true
-          val p = event.whoClicked as Player
-          val currentItem = clickItem[p.uniqueId] ?: return@setItem
-          CarBuilder2Item.changeCarIsMT(currentItem)
-          p.playSound(p.location, Sound.UI_BUTTON_CLICK, 0.5f, 1.0f)
-          vehicleCustomRePane(gui, currentItem, p)
-        }
+        ItemStack(Material.CRAFTING_TABLE).addText("&fMT切り替え", listOf("&7MTかATかを切り替えます")).allHide(),
+    ) { event ->
+      event.isCancelled = true
+      val p = event.whoClicked as Player
+      val currentItem = clickItem[p.uniqueId] ?: return@setItem
+      CarBuilder2Item.changeCarIsMT(currentItem)
+      p.playSound(p.location, Sound.UI_BUTTON_CLICK, 0.5f, 1.0f)
+      vehicleCustomRePane(gui, currentItem, p)
+    }
 
     gui.setItem(
         7,
@@ -132,15 +138,18 @@ object CarBuilder2GUI {
                     "&7Normal_Race=従来の操作に加え、路面のブロックで速度が変わります",
                     "&7Pro=路面のブロックの変化に加え、操作感もよくあるレースゲームのようで楽しくなります",
                     "&7Pro+=操作性がよりリアルで難しくなります",
-                    "&7Real=ハンドル操作が完全にリアルでドリフトは未実装です"))
-            .allHide()) { event ->
-          event.isCancelled = true
-          val p = event.whoClicked as Player
-          val currentItem = clickItem[p.uniqueId] ?: return@setItem
-          CarBuilder2Item.changeCarMode(currentItem)
-          p.playSound(p.location, Sound.UI_BUTTON_CLICK, 0.5f, 1.0f)
-          vehicleCustomRePane(gui, currentItem, p)
-        }
+                    "&7Real=ハンドル操作が完全にリアルでドリフトは未実装です",
+                ),
+            )
+            .allHide(),
+    ) { event ->
+      event.isCancelled = true
+      val p = event.whoClicked as Player
+      val currentItem = clickItem[p.uniqueId] ?: return@setItem
+      CarBuilder2Item.changeCarMode(currentItem)
+      p.playSound(p.location, Sound.UI_BUTTON_CLICK, 0.5f, 1.0f)
+      vehicleCustomRePane(gui, currentItem, p)
+    }
   }
 
   private fun vehicleCustomRePane(gui: OyasaiMenu, item: ItemStack, player: Player) {
@@ -154,7 +163,9 @@ object CarBuilder2GUI {
             BuilderMenuSupport.VehicleStatRow("&fパワー", "&7上限:1000"),
             BuilderMenuSupport.VehicleStatRow("&fブレーキ", "&7上限:1000"),
             BuilderMenuSupport.VehicleStatRow("&fギア数", "&7上限:100"),
-            BuilderMenuSupport.VehicleStatRow("&fタイヤ", "&7上限:200")))
+            BuilderMenuSupport.VehicleStatRow("&fタイヤ", "&7上限:200"),
+        ),
+    )
 
     val cost = CarBuilder2Item.getCarVCCost(item) ?: 0
     val limit = maxCostList[player.uniqueId] ?: 0

@@ -59,7 +59,7 @@ object FacadeGenerator {
       player: Player,
       editSession: EditSession,
       bays: Int,
-      palette: FacadePalette
+      palette: FacadePalette,
   ): Boolean {
     val hit =
         player.rayTraceBlocks(20.0)
@@ -103,7 +103,16 @@ object FacadeGenerator {
     // ── Noble floor F2  Y=5..9 ───────────────────────────────────────
     buildContinuousBalcony(ctx, m, width, y = 5)
     buildFloor(
-        ctx, m, bays, yStart = 5, yEnd = 9, winY1 = 6, winY2 = 8, balconet = false, noble = true)
+        ctx,
+        m,
+        bays,
+        yStart = 5,
+        yEnd = 9,
+        winY1 = 6,
+        winY2 = 8,
+        balconet = false,
+        noble = true,
+    )
 
     // ── Cornice at Y=10 ──────────────────────────────────────────────
     buildCornice(ctx, m, width, 10, protrude = 1)
@@ -118,7 +127,8 @@ object FacadeGenerator {
         winY1 = 12,
         winY2 = 13,
         balconet = true,
-        noble = false)
+        noble = false,
+    )
 
     // ── Cornice at Y=15 ──────────────────────────────────────────────
     buildCornice(ctx, m, width, 15, protrude = 1)
@@ -133,7 +143,8 @@ object FacadeGenerator {
         winY1 = 17,
         winY2 = 18,
         balconet = true,
-        noble = false)
+        noble = false,
+    )
 
     // ── Cornice at Y=20 ──────────────────────────────────────────────
     buildCornice(ctx, m, width, 20, protrude = 1)
@@ -149,7 +160,8 @@ object FacadeGenerator {
         winY1 = 22,
         winY2 = 23,
         balconet = false,
-        noble = false)
+        noble = false,
+    )
 
     // ── Main cornice  Y=25..26 (deep protrusion) ─────────────────────
     buildCornice(ctx, m, width, 25, protrude = 2)

@@ -22,7 +22,7 @@ object IntersectionBuilder {
       world: World,
       center: Location,
       session: IntersectionSession,
-      settings: RoadSettings
+      settings: RoadSettings,
   ) {
     val cx = center.blockX.toDouble()
     val cy = center.blockY.toDouble()

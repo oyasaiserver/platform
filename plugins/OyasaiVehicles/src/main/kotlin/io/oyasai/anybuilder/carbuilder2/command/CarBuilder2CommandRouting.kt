@@ -53,7 +53,8 @@ val CARDINAL_DIRECTIONS =
         "w",
         "wnw",
         "nw",
-        "nnw")
+        "nnw",
+    )
 
 val COMMAND_BLOCK_MATERIALS =
     setOf(Material.COMMAND_BLOCK, Material.CHAIN_COMMAND_BLOCK, Material.REPEATING_COMMAND_BLOCK)
@@ -62,7 +63,8 @@ val OFFSET_AUTO_SCALE_TYPES =
     listOf(
         CarBuilder2BaseDataType.Wheel,
         CarBuilder2BaseDataType.Wheel2,
-        CarBuilder2BaseDataType.HeadLight)
+        CarBuilder2BaseDataType.HeadLight,
+    )
 
 val CarBuilder2_GENERAL_COMMANDS = setOf("spawn", "buy", "info")
 val CarBuilder2_MANAGER_COMMANDS =
@@ -78,7 +80,7 @@ fun handleCarBuilder2Command(
     sender: CommandSender,
     command: Command,
     label: String,
-    args: Array<out String>
+    args: Array<out String>,
 ): Boolean {
   if (command.name != "carbuilder2") return false
 
@@ -102,7 +104,8 @@ fun handleCarBuilder2Command(
       handleAdmin = { cmd -> handleCarBuilder2AdminCommand(cmd, data, sender, args) },
       handleManager = { handleCarBuilder2ManagerCommand(data, sender, args) },
       handleGeneral = { cmd -> handleCarBuilder2GeneralCommand(cmd, sender, name, data, args) },
-      handleUnknown = { true })
+      handleUnknown = { true },
+  )
 }
 
 private fun handleCarBuilder2RootCommand(sender: CommandSender): Boolean {
@@ -110,13 +113,14 @@ private fun handleCarBuilder2RootCommand(sender: CommandSender): Boolean {
       sender = sender,
       hasPermission = { it.canUseCarBuilder2() },
       deniedMessage = CarBuilder2_PERMISSION_DENIED,
-      openMenu = { CarBuilder2GUI.menu().open(it) })
+      openMenu = { CarBuilder2GUI.menu().open(it) },
+  )
 }
 
 private fun handleCarBuilder2SingleArgumentCommand(
     sender: CommandSender,
     name: String,
-    data: CarBuilder2BaseData?
+    data: CarBuilder2BaseData?,
 ): Boolean {
   return CarBuilder2Command.spawnSingleArgumentTrial(
       sender = sender,
@@ -126,9 +130,15 @@ private fun handleCarBuilder2SingleArgumentCommand(
       deniedMessage = CarBuilder2_PERMISSION_DENIED,
       spawnTrial = { player, baseData ->
         CarBuilder2Spawn.spawn(
-            player.location, ItemStack(Material.HOPPER_MINECART), null, player, baseData)
+            player.location,
+            ItemStack(Material.HOPPER_MINECART),
+            null,
+            player,
+            baseData,
+        )
       },
-      successMessage = { vehicleName -> "[CarBuilder2] Spawned trial car for $vehicleName" })
+      successMessage = { vehicleName -> "[CarBuilder2] Spawned trial car for $vehicleName" },
+  )
 }
 
 private fun handleCarBuilder2GeneralCommand(
@@ -136,7 +146,7 @@ private fun handleCarBuilder2GeneralCommand(
     sender: CommandSender,
     name: String,
     data: CarBuilder2BaseData?,
-    args: Array<out String>
+    args: Array<out String>,
 ): Boolean {
   when (subCommand) {
     "spawn" -> {
@@ -158,7 +168,7 @@ private fun handleCarBuilder2GeneralCommand(
 private fun handleCarBuilder2ManagerCommand(
     data: CarBuilder2BaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ): Boolean {
   CarBuilder2Command.handleCarBuilder2Settings(data, sender, args)
   return true
@@ -168,7 +178,7 @@ private fun handleCarBuilder2AdminCommand(
     subCommand: String,
     data: CarBuilder2BaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ): Boolean {
   when (subCommand) {
     "machineset" -> CarBuilder2Command.handleCarBuilder2MachineSet(data, sender, args)
@@ -182,7 +192,7 @@ private fun handleCarBuilder2Spawn(
     sender: CommandSender,
     name: String,
     data: CarBuilder2BaseData?,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   if (data == null) return
   if (sender is Player) {
@@ -194,7 +204,13 @@ private fun handleCarBuilder2Spawn(
         if (args.size > 2) Tools.getYawFromCardinalDirections(args[2])
         else sender.location.yaw.toDouble()
     CarBuilder2Spawn.spawn(
-        sender.location, ItemStack(Material.HOPPER_MINECART), null, sender, data, yaw.toFloat())
+        sender.location,
+        ItemStack(Material.HOPPER_MINECART),
+        null,
+        sender,
+        data,
+        yaw.toFloat(),
+    )
     sender.sendMessage("[CarBuilder2] Spawned car for $name")
   }
 }
@@ -217,5 +233,6 @@ private fun handleCarBuilder2Buy(sender: CommandSender, name: String, data: CarB
           it.sendMessage("[CarBuilder2] Purchased $name!")
         }
       },
-      onPaymentFailure = { it.sendMessage("[CarBuilder2] Not enough points!") })
+      onPaymentFailure = { it.sendMessage("[CarBuilder2] Not enough points!") },
+  )
 }

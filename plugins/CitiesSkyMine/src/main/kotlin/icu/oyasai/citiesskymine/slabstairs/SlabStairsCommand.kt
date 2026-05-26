@@ -31,7 +31,7 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     if (sender !is Player) {
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
@@ -60,7 +60,7 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     if (args.isEmpty()) return emptyList()
     if (args.size == 1) {
@@ -94,7 +94,8 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
     val maxBlocks =
         plugin.config.getLong(
             "limits.max-blocks-slab-stairs",
-            plugin.config.getLong("limits.max-blocks-csm", 2_000_000L))
+            plugin.config.getLong("limits.max-blocks-csm", 2_000_000L),
+        )
     if (maxBlocks > 0 && plan.placements.size > maxBlocks) {
       MessageUtil.error(player, "生成ブロック数が上限 ($maxBlocks) を超えています: ${plan.placements.size}")
       return
@@ -107,7 +108,8 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
             for (placement in plan.placements) {
               editSession.setBlock(
                   BlockVector3.at(placement.x, placement.y, placement.z),
-                  BukkitAdapter.adapt(placement.data))
+                  BukkitAdapter.adapt(placement.data),
+              )
             }
             true
           }
@@ -131,7 +133,8 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
         }
     MessageUtil.success(
         player,
-        "SlabStairs を生成しました: ${plan.columns} columns / ${plan.placements.size} blocks / slab=${plan.slabBlocks} / stairs=${plan.stairBlocks} / full=${plan.fullBlocks} / slope=$slopeText")
+        "SlabStairs を生成しました: ${plan.columns} columns / ${plan.placements.size} blocks / slab=${plan.slabBlocks} / stairs=${plan.stairBlocks} / full=${plan.fullBlocks} / slope=$slopeText",
+    )
     if (plan.steep) {
       MessageUtil.info(player, "45度以上の急勾配として full block の支えを含めました。")
     }
@@ -167,7 +170,7 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
   private fun buildPlan(
       world: World,
       selection: RampSelection,
-      materials: SlabStairsMaterials
+      materials: SlabStairsMaterials,
   ): SlabStairsBuildPlan {
     val dx = selection.pos2.x() - selection.pos1.x()
     val dz = selection.pos2.z() - selection.pos1.z()
@@ -237,7 +240,8 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
         steep = steep,
         slabBlocks = slabBlocks,
         stairBlocks = stairBlocks,
-        fullBlocks = fullBlocks)
+        fullBlocks = fullBlocks,
+    )
   }
 
   private fun projectedIndex(
@@ -246,7 +250,7 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
       dz: Int,
       horizontalSteps: Int,
       x: Int,
-      z: Int
+      z: Int,
   ): Int {
     val denominator = dx.toDouble() * dx.toDouble() + dz.toDouble() * dz.toDouble()
     val progress =
@@ -339,7 +343,8 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
     MessageUtil.helpEntry(sender, "//undo", "直前の SlabStairs 生成を FAWE で取り消し")
     MessageUtil.send(
         sender,
-        "<gray>ポイント1からポイント2方向に高さを補間し、1:2 は slab、1:1 付近は stairs、45度以上は full block の支えを使います。</gray>")
+        "<gray>ポイント1からポイント2方向に高さを補間し、1:2 は slab、1:1 付近は stairs、45度以上は full block の支えを使います。</gray>",
+    )
   }
 
   private fun slabSuggestions(prefix: String): List<String> =
@@ -365,20 +370,20 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
 
   private enum class TopKind {
     SLAB,
-    STAIR
+    STAIR,
   }
 
   private data class RampSelection(
       val pos1: BlockVector3,
       val pos2: BlockVector3,
       val min: BlockVector3,
-      val max: BlockVector3
+      val max: BlockVector3,
   )
 
   private data class SlabStairsMaterials(
       val slab: Material,
       val stair: Material,
-      val full: Material
+      val full: Material,
   )
 
   private data class SlabStairsBuildPlan(
@@ -389,7 +394,7 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
       val steep: Boolean,
       val slabBlocks: Int,
       val stairBlocks: Int,
-      val fullBlocks: Int
+      val fullBlocks: Int,
   )
 
   private data class Placement(val x: Int, val y: Int, val z: Int, val data: BlockData)

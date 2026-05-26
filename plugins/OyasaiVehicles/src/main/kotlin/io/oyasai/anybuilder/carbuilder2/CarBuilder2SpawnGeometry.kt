@@ -22,7 +22,7 @@ fun CarBuilder2Spawn.spawnAutoFlip(
     blockData: MutableMap<Vector, Pair<BlockData, Vector>>,
     offsetData: MutableMap<Int, Vector>,
     size: Double,
-    box: BoundingBox?
+    box: BoundingBox?,
 ): MutableMap<Pair<Int, Vector>, MutableSet<BlockDisplay>> {
   val map = mutableMapOf<Pair<Int, Vector>, MutableSet<BlockDisplay>>()
 
@@ -107,7 +107,7 @@ fun CarBuilder2Spawn.getCarSize(cbd: CarBuilder2BaseData): Vector {
 
   fun applyWheelRange(
       wheelData: Map<Vector, Pair<BlockData, Vector>>,
-      type: CarBuilder2BaseDataType
+      type: CarBuilder2BaseDataType,
   ) {
     var maxXW = 0.0
     var minXW = 0.0

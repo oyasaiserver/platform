@@ -36,13 +36,15 @@ object SLSignDel {
             ItemStack(Material.GREEN_BED).apply {
               allFlag()
               addText("&cはい、消去します。", mutableListOf("&fこの操作は取り消せません"))
-            })
+            }
+        )
     val buttonN =
         GuiItem(
             ItemStack(Material.RED_BED).apply {
               allFlag()
               addText("&aいいえ、消去せず画面を閉じます。", mutableListOf("&fインベントリを閉じます"))
-            })
+            }
+        )
 
     buttonY.setAction {
       Data.changeUserLikesInt(slData.owner, -slData.likes.count())
@@ -53,7 +55,8 @@ object SLSignDel {
       SLDiscord.deleteSLToMsg(slData)
       it.whoClicked.closeInventory()
       it.whoClicked.sendMessage(
-          Tools.socialLikesLOGO + "&r ID:${slData.id}「&a${slData.title}&r」を&c消去しました".color())
+          Tools.socialLikesLOGO + "&r ID:${slData.id}「&a${slData.title}&r」を&c消去しました".color()
+      )
     }
     buttonN.setAction { it.whoClicked.closeInventory() }
 

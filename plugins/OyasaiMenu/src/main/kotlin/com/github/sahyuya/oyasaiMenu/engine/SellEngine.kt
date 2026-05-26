@@ -78,7 +78,9 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
         makeItem(
             Material.LIME_CONCRETE,
             "&a▶ 売却実行",
-            listOf("&7ショップに販売されているアイテムのみ売却可能", "&7売却不可アイテムはそのまま残ります")))
+            listOf("&7ショップに販売されているアイテムのみ売却可能", "&7売却不可アイテムはそのまま残ります"),
+        ),
+    )
   }
 
   // ============================
@@ -160,7 +162,9 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
       player.sendMessage(
           c(
               "&c売却可能なアイテムがありませんでした。" +
-                  if (unsellable > 0) " &7(未登録/ホワイトリスト対象外: ${unsellable}種)" else ""))
+                  if (unsellable > 0) " &7(未登録/ホワイトリスト対象外: ${unsellable}種)" else ""
+          )
+      )
       return
     }
 
@@ -169,7 +173,9 @@ class SellEngine(private val plugin: OyasaiMenu) : Listener {
     buildControlBar(inv, "&f${count}個 → &a+${EconomyManager.format(earned)}$suffix")
     player.sendMessage(
         c(
-            "&a一括売却完了! &f${count}個 &7→ &f+${EconomyManager.format(earned)}\n&7残高: &f${EconomyManager.format(EconomyManager.getBalance(player))}"))
+            "&a一括売却完了! &f${count}個 &7→ &f+${EconomyManager.format(earned)}\n&7残高: &f${EconomyManager.format(EconomyManager.getBalance(player))}"
+        )
+    )
     if (unsellable > 0) player.sendMessage(c("&7売却不可アイテム (${unsellable}種) はGUIに残っています。閉じると返却されます。"))
     player.playSound(player.location, org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
   }

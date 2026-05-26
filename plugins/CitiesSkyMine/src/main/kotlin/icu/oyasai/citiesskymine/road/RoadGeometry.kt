@@ -76,7 +76,8 @@ object RoadGeometry {
               alpha = alpha,
               R = R,
               Ls = Ls,
-              waypoints = waypoints)
+              waypoints = waypoints,
+          )
       result.addAll(curvePoints)
 
       if (curvePoints.isNotEmpty()) {
@@ -108,7 +109,7 @@ object RoadGeometry {
       z1: Double,
       x2: Double,
       y2: Double,
-      z2: Double
+      z2: Double,
   ): List<PathPoint> {
     val dx = x2 - x1
     val dz = z2 - z1
@@ -134,7 +135,7 @@ object RoadGeometry {
       alpha: Double,
       R: Double,
       Ls: Double,
-      waypoints: List<Location>
+      waypoints: List<Location>,
   ): List<PathPoint> {
     val sign = if (alpha >= 0) 1.0 else -1.0
     val thetaS = Ls / (2.0 * R)
@@ -216,7 +217,7 @@ object RoadGeometry {
       ax: Double,
       az: Double,
       bx: Double,
-      bz: Double
+      bz: Double,
   ): Double {
     val dx = bx - ax
     val dz = bz - az

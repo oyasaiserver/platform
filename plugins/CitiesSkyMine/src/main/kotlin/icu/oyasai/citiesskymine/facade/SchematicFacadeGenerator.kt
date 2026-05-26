@@ -60,7 +60,7 @@ object SchematicFacadeGenerator {
       editSession: EditSession,
       schemFile: File,
       bays: Int,
-      patternId: String
+      patternId: String,
   ): Boolean {
     val pat = A.PATTERNS.firstOrNull { it.id == patternId } ?: A.PATTERNS[0]
     val clip = load(schemFile, player) ?: return false
@@ -80,7 +80,8 @@ object SchematicFacadeGenerator {
           A.Y1,
           A.DZ_FRONT,
           A.DZ_BACK,
-          worldX = i * pat.bayWidth)
+          worldX = i * pat.bayWidth,
+      )
     }
 
     return true
@@ -93,7 +94,19 @@ object SchematicFacadeGenerator {
     val (right, back, origin) = setup(player) ?: return false
 
     pasteSlab(
-        clip, editSession, origin, right, back, 0, 130, A.Y0, 38, A.DZ_FRONT, A.DZ_BACK, worldX = 0)
+        clip,
+        editSession,
+        origin,
+        right,
+        back,
+        0,
+        130,
+        A.Y0,
+        38,
+        A.DZ_FRONT,
+        A.DZ_BACK,
+        worldX = 0,
+    )
 
     return true
   }
@@ -103,7 +116,7 @@ object SchematicFacadeGenerator {
   private data class SetupResult(
       val right: BlockVector3,
       val back: BlockVector3,
-      val origin: BlockVector3
+      val origin: BlockVector3,
   )
 
   private fun setup(player: Player): SetupResult? {

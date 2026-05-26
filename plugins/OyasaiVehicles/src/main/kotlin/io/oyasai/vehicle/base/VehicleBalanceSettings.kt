@@ -63,7 +63,11 @@ object VehicleBalanceSettings {
     upgradeCostLimit = config.readInt(PATH_UPGRADE_COST_LIMIT, DEFAULT_UPGRADE_COST_LIMIT)
     carOverspeedFriction =
         config.readClampedDouble(
-            PATH_CAR_OVERSPEED_FRICTION, DEFAULT_CAR_OVERSPEED_FRICTION, 0.0, 1.0)
+            PATH_CAR_OVERSPEED_FRICTION,
+            DEFAULT_CAR_OVERSPEED_FRICTION,
+            0.0,
+            1.0,
+        )
     carCoastFriction =
         config.readClampedDouble(PATH_CAR_COAST_FRICTION, DEFAULT_CAR_COAST_FRICTION, 0.0, 1.0)
     carTurnFriction =
@@ -72,13 +76,24 @@ object VehicleBalanceSettings {
         config.readMinimumDouble(PATH_CAR_BRAKE_MULTIPLIER, DEFAULT_CAR_BRAKE_MULTIPLIER, 0.0)
     aircraftCoastFriction =
         config.readClampedDouble(
-            PATH_AIRCRAFT_COAST_FRICTION, DEFAULT_AIRCRAFT_COAST_FRICTION, 0.0, 1.0)
+            PATH_AIRCRAFT_COAST_FRICTION,
+            DEFAULT_AIRCRAFT_COAST_FRICTION,
+            0.0,
+            1.0,
+        )
     aircraftTurnFriction =
         config.readClampedDouble(
-            PATH_AIRCRAFT_TURN_FRICTION, DEFAULT_AIRCRAFT_TURN_FRICTION, 0.0, 1.0)
+            PATH_AIRCRAFT_TURN_FRICTION,
+            DEFAULT_AIRCRAFT_TURN_FRICTION,
+            0.0,
+            1.0,
+        )
     aircraftBrakeMultiplier =
         config.readMinimumDouble(
-            PATH_AIRCRAFT_BRAKE_MULTIPLIER, DEFAULT_AIRCRAFT_BRAKE_MULTIPLIER, 0.0)
+            PATH_AIRCRAFT_BRAKE_MULTIPLIER,
+            DEFAULT_AIRCRAFT_BRAKE_MULTIPLIER,
+            0.0,
+        )
     sizeLimit =
         config
             .readMinimumDouble(PATH_VEHICLE_SIZE_LIMIT, DEFAULT_VEHICLE_SIZE_LIMIT.toDouble(), 0.0)
@@ -92,13 +107,13 @@ object VehicleBalanceSettings {
       path: String,
       defaultValue: Double,
       minimum: Double,
-      maximum: Double
+      maximum: Double,
   ): Double = readDouble(path, defaultValue).coerceIn(minimum, maximum)
 
   private fun FileConfiguration?.readMinimumDouble(
       path: String,
       defaultValue: Double,
-      minimum: Double
+      minimum: Double,
   ): Double = readDouble(path, defaultValue).coerceAtLeast(minimum)
 
   private fun FileConfiguration?.readDouble(path: String, defaultValue: Double): Double =

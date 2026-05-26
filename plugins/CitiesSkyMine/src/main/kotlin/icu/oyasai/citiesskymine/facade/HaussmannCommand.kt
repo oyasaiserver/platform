@@ -16,7 +16,7 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     if (sender !is Player) {
       sender.sendMessage("§cプレイヤーのみ使用可能です")
@@ -120,15 +120,16 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
   private fun showHelp(sender: CommandSender) {
     sender.sendMessage(
         """
-            §6=== Haussmann Facade Generator ===
-            §e/hb build §7[ベイ数=4] [palette=cream|grey|brown|red]
-              §7プロシージャルにファサードを生成
-            §e/hb schem full §7— スキマティック全体を1棟貼り付け
-            §e/hb schem §7<ベイ数> §7[pattern] [ファイルパス]
-              §7pattern: regular(3幅) / wide(4幅) / grand(4幅左)
-            §e//undo §7— 直前の生成をFAWEで取り消す
+        §6=== Haussmann Facade Generator ===
+        §e/hb build §7[ベイ数=4] [palette=cream|grey|brown|red]
+          §7プロシージャルにファサードを生成
+        §e/hb schem full §7— スキマティック全体を1棟貼り付け
+        §e/hb schem §7<ベイ数> §7[pattern] [ファイルパス]
+          §7pattern: regular(3幅) / wide(4幅) / grand(4幅左)
+        §e//undo §7— 直前の生成をFAWEで取り消す
         """
-            .trimIndent())
+            .trimIndent()
+    )
   }
 
   // ── tab complete ──────────────────────────────────────────────────────
@@ -137,7 +138,7 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String> {
     val a0 = args.getOrNull(0)?.lowercase() ?: ""
     val a1 = args.getOrNull(1)?.lowercase() ?: ""

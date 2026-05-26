@@ -20,7 +20,7 @@ abstract class BaseVehicle(val speedLimit0: Double, val power0: Int, val brake0:
 
   protected fun calculateDescent(
       mainArmorStand: ArmorStand,
-      descentValue: Double = GRAVITY_DESCENT
+      descentValue: Double = GRAVITY_DESCENT,
   ): Double {
     val result =
         mainArmorStand.world.rayTraceBlocks(mainArmorStand.location, DOWN_VECTOR, RAYCAST_DISTANCE)

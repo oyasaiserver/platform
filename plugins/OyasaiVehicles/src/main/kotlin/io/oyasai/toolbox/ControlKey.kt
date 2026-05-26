@@ -11,5 +11,5 @@ enum class ControlKey(val vec: Vector) {
   S(Vector(0.0, 0.0, -1.0)),
   A(Vector(1.0, 0.0, 0.0)),
   D(Vector(-1.0, 0.0, 0.0)),
-  NONE(Vector(0.0, 0.0, 0.0))
+  NONE(Vector(0.0, 0.0, 0.0)),
 }

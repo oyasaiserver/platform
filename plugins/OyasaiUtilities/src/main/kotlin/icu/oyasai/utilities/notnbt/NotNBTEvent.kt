@@ -20,8 +20,10 @@ object NotNBTEvent : Listener {
     val meta = event.cursor.itemMeta ?: return
 
     // nbtに「item(s):」タグが存在する場合デフォのアイテムにする処理
-    if (nbtItemsRegex.containsMatchIn(meta.asString.lowercase()) ||
-        nbtEMFRegex.containsMatchIn(meta.asString)) {
+    if (
+        nbtItemsRegex.containsMatchIn(meta.asString.lowercase()) ||
+            nbtEMFRegex.containsMatchIn(meta.asString)
+    ) {
       event.cursor.itemMeta = ItemStack(event.cursor.type).itemMeta
     }
 

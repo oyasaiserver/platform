@@ -15,13 +15,14 @@ class ShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
           "deco" to "decorations",
           "ore" to "ores",
           "tool" to "tools",
-          "ps" to "pointshop")
+          "ps" to "pointshop",
+      )
 
   override fun onCommand(
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     val player =
         sender as? Player
@@ -40,7 +41,9 @@ class ShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
         return false
       }
       plugin.pointShopEngine.openShop(
-          player, plugin.pointShopLoader.getAllCategories().keys.first())
+          player,
+          plugin.pointShopLoader.getAllCategories().keys.first(),
+      )
       return true
     }
     val resolved = shortcuts[input] ?: input
@@ -65,7 +68,7 @@ class ShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String>? {
     if (args.size > 1) return emptyList()
     val prefix = args.firstOrNull() ?: ""

@@ -93,7 +93,9 @@ class SvCommand : CommandExecutor {
                 Component.text()
                     .append(
                         Component.text(
-                            "§7ID:§6${s.id}§7「§a${s.name}§7」座標：${s.x} ${s.y} ${s.z} world=${s.world}"))
+                            "§7ID:§6${s.id}§7「§a${s.name}§7」座標：${s.x} ${s.y} ${s.z} world=${s.world}"
+                        )
+                    )
                     .clickEvent(ClickEvent.runCommand("/svtp ${s.id}"))
                     .hoverEvent(HoverEvent.showText(Component.text("§bクリックでこのSV看板へテレポート")))
                     .build()

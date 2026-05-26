@@ -25,7 +25,7 @@ object CarBuilder2Spawn {
       owner: Player?,
       spawnPlayer: Player?,
       data: CarBuilder2BaseData,
-      yaw: Float = loc.yaw
+      yaw: Float = loc.yaw,
   ): Boolean {
     val totalEntity = data.totalEntity()
     val limitSender = spawnPlayer ?: owner ?: return false
@@ -44,7 +44,11 @@ object CarBuilder2Spawn {
 
     val seatMap =
         BuilderSpawnSupport.spawnSeat(
-            loc, seatList.entries.map { it.key to it.value }, yaw, indexedName = false)
+            loc,
+            seatList.entries.map { it.key to it.value },
+            yaw,
+            indexedName = false,
+        )
 
     val size = getCarSize(data)
     val x = size.x
@@ -53,11 +57,17 @@ object CarBuilder2Spawn {
     val bodyArmorStandInt = (totalEntity.toDouble() / 100.0).roundToInt() + 1
     val bodyArmorStandList =
         BuilderSpawnSupport.spawnBodyArmorStands(
-            loc, bodyArmorStandInt, yaw, createFirst = { ArmorStandSpawner.spawn(loc, x, y) })
+            loc,
+            bodyArmorStandInt,
+            yaw,
+            createFirst = { ArmorStandSpawner.spawn(loc, x, y) },
+        )
 
     val displayMap =
         mutableMapOf<
-            CarBuilder2EntityType, MutableMap<Pair<Int, Vector>, MutableSet<BlockDisplay>>>()
+            CarBuilder2EntityType,
+            MutableMap<Pair<Int, Vector>, MutableSet<BlockDisplay>>,
+        >()
 
     displayMap[CarBuilder2EntityType.Body] =
         mutableMapOf(
@@ -67,7 +77,9 @@ object CarBuilder2Spawn {
                     bodyArmorStandList,
                     data.body,
                     data.config.getSize(CarBuilder2BaseDataType.Body),
-                    data.boxSize[CarBuilder2BaseDataType.Body]))
+                    data.boxSize[CarBuilder2BaseDataType.Body],
+                )
+        )
 
     displayMap[CarBuilder2EntityType.Wheel] =
         spawnAutoFlip(
@@ -76,7 +88,8 @@ object CarBuilder2Spawn {
             data.wheel,
             data.config.getOffset(CarBuilder2BaseDataType.Wheel),
             data.config.getSize(CarBuilder2BaseDataType.Wheel),
-            data.boxSize[CarBuilder2BaseDataType.Wheel])
+            data.boxSize[CarBuilder2BaseDataType.Wheel],
+        )
 
     displayMap[CarBuilder2EntityType.Wheel2] =
         spawnAutoFlip(
@@ -85,7 +98,8 @@ object CarBuilder2Spawn {
             data.wheel2,
             data.config.getOffset(CarBuilder2BaseDataType.Wheel2),
             data.config.getSize(CarBuilder2BaseDataType.Wheel2),
-            data.boxSize[CarBuilder2BaseDataType.Wheel2])
+            data.boxSize[CarBuilder2BaseDataType.Wheel2],
+        )
 
     displayMap[CarBuilder2EntityType.HeadLight] =
         spawnAutoFlip(
@@ -94,7 +108,8 @@ object CarBuilder2Spawn {
             data.headLight,
             data.config.getOffset(CarBuilder2BaseDataType.HeadLight),
             data.config.getSize(CarBuilder2BaseDataType.HeadLight),
-            data.boxSize[CarBuilder2BaseDataType.HeadLight])
+            data.boxSize[CarBuilder2BaseDataType.HeadLight],
+        )
 
     val meta = item.itemMeta
     val carMode = CarBuilder2Item.getCarMode(meta)
@@ -121,7 +136,8 @@ object CarBuilder2Spawn {
             data,
             carMode == "Real",
             yaw,
-            item)
+            item,
+        )
 
     CarBuilder2EntityList.addEntity(cEntity)
     BuilderSpawnSupport.rememberTrialSpawn(owner, spawnPlayer, oldSpawnCarData, cEntity)

@@ -10,7 +10,7 @@ abstract class LandVehicle(
     power1: Int,
     brake1: Int,
     val maxSize0: Double,
-    val underBlockCheck0: Boolean
+    val underBlockCheck0: Boolean,
 ) : BaseVehicle(speedLimit1, power1, brake1) {
 
   var oldHandlingFloat: Float = 0.0f
@@ -44,7 +44,7 @@ abstract class LandVehicle(
 
   private fun traceStepBlock(
       mainArmorStand: ArmorStand,
-      forwardVec: Vector
+      forwardVec: Vector,
   ): org.bukkit.block.Block? {
     val world = mainArmorStand.world
     val direction = forwardVec.clone().normalize()
@@ -55,7 +55,8 @@ abstract class LandVehicle(
             direction,
             1.25 + this.speed.z * 2.0 + this.maxSize0,
             FluidCollisionMode.NEVER,
-            true) ?: return null
+            true,
+        ) ?: return null
 
     return rayTrace.hitBlock
   }

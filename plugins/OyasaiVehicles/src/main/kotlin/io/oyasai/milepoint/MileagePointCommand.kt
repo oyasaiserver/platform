@@ -22,14 +22,15 @@ object MileagePointCommand : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     if (command.name != COMMAND_NAME) return false
 
     if (args.isEmpty()) {
       if (sender is Player) {
         sender.sendMessage(
-            color("&9現在のマイルポイント&7: &b${MileagePoint.getUserPoint(sender.uniqueId)}p"))
+            color("&9現在のマイルポイント&7: &b${MileagePoint.getUserPoint(sender.uniqueId)}p")
+        )
       }
       return true
     }
@@ -53,7 +54,7 @@ object MileagePointCommand : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): MutableList<String>? {
     if (command.name != COMMAND_NAME || !sender.hasOyasaiAdminPermission()) return null
 
@@ -64,16 +65,22 @@ object MileagePointCommand : CommandExecutor, TabCompleter {
               when (args[0]) {
                 SUB_ADD ->
                     BuilderCommandTabSupport.filterStartsWith(
-                        args[1], listOf("-10", "10", "25", "50", "100"))
+                        args[1],
+                        listOf("-10", "10", "25", "50", "100"),
+                    )
                 SUB_CHECK ->
                     BuilderCommandTabSupport.filterStartsWith(
-                        args[1], Bukkit.getOnlinePlayers().map { it.name })
+                        args[1],
+                        Bukkit.getOnlinePlayers().map { it.name },
+                    )
                 else -> mutableListOf()
               }
           3 ->
               if (args[0] == SUB_ADD) {
                 BuilderCommandTabSupport.filterStartsWith(
-                    args[2], Bukkit.getOnlinePlayers().map { it.name })
+                    args[2],
+                    Bukkit.getOnlinePlayers().map { it.name },
+                )
               } else {
                 mutableListOf()
               }
@@ -94,14 +101,16 @@ object MileagePointCommand : CommandExecutor, TabCompleter {
                 }
         val amount = parseAmount(sender, args[1]) ?: return true
         sender.sendMessage(
-            "${player.name}のマイルポイントを${MileagePoint.changePoint(player.uniqueId, amount)}pに変更しました")
+            "${player.name}のマイルポイントを${MileagePoint.changePoint(player.uniqueId, amount)}pに変更しました"
+        )
         return true
       }
       3 -> {
         val amount = parseAmount(sender, args[1]) ?: return true
         val targetPlayer = resolveOnlinePlayer(sender, args[2]) ?: return true
         sender.sendMessage(
-            "${args[2]}のマイルポイントを${MileagePoint.changePoint(targetPlayer.uniqueId, amount)}pに変更しました")
+            "${args[2]}のマイルポイントを${MileagePoint.changePoint(targetPlayer.uniqueId, amount)}pに変更しました"
+        )
         return true
       }
       else -> sender.sendMessage(color("&c/milepoint add <amount> [player]"))

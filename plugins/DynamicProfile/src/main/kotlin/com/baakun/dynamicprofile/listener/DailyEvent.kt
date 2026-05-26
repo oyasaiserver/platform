@@ -41,7 +41,8 @@ object DailyEvent : Listener {
                   .filter { it.isOp }
                   .forEach {
                     it.sendMessage(
-                        "§c[DynamicProfile] プレイヤー ${player.name}(${player.uniqueId}) のデータ読み込みに失敗しています。管理者はUserStatsJSON/${player.uniqueId}.jsonを確認してください。")
+                        "§c[DynamicProfile] プレイヤー ${player.name}(${player.uniqueId}) のデータ読み込みに失敗しています。管理者はUserStatsJSON/${player.uniqueId}.jsonを確認してください。"
+                    )
                   }
               player.sendMessage("§cエラーが発生したため、あなたのDynamicProfileの情報が一時的に初期化されています。管理者に連絡してください。")
             }
@@ -80,7 +81,8 @@ object DailyEvent : Listener {
                   .recommends
                   .values
                   .filter { it != Integer.MIN_VALUE }
-                  .filterIndexed { index, i -> index != 0 })
+                  .filterIndexed { index, i -> index != 0 }
+          )
     } else {
       plugin.recommendBroadcaster?.normalCache?.add(player.uniqueId)
     }

@@ -12,7 +12,7 @@ class MenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     val player =
         sender as? Player
@@ -29,7 +29,7 @@ class MenuCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String>? {
     return emptyList()
   }

@@ -42,7 +42,7 @@ fun handleAircraftBuilderCommand(
     sender: CommandSender,
     command: Command,
     label: String,
-    args: Array<out String>
+    args: Array<out String>,
 ): Boolean {
   if (command.name != "aircraftbuilder") {
     return false
@@ -71,7 +71,8 @@ fun handleAircraftBuilderCommand(
       generalCommands = AircraftBuilder_GENERAL_COMMANDS,
       handleAdmin = { cmd -> handleAircraftBuilderAdminCommand(cmd, data, sender, args) },
       handleManager = { cmd -> handleAircraftBuilderManagerCommand(cmd, data, sender, args) },
-      handleGeneral = { cmd -> handleAircraftBuilderGeneralCommand(cmd, sender, name, data, args) })
+      handleGeneral = { cmd -> handleAircraftBuilderGeneralCommand(cmd, sender, name, data, args) },
+  )
 }
 
 private fun handleAircraftBuilderRootCommand(sender: CommandSender): Boolean {
@@ -79,13 +80,14 @@ private fun handleAircraftBuilderRootCommand(sender: CommandSender): Boolean {
       sender = sender,
       hasPermission = { it.canUseAircraftBuilder() },
       deniedMessage = AircraftBuilder_PERMISSION_DENIED,
-      openMenu = { AircraftBuilderGUI.menu().open(it) })
+      openMenu = { AircraftBuilderGUI.menu().open(it) },
+  )
 }
 
 private fun handleAircraftBuilderSingleArgumentCommand(
     sender: CommandSender,
     name: String,
-    data: AircraftBuilderBaseData?
+    data: AircraftBuilderBaseData?,
 ): Boolean {
   return AircraftBuilderCommand.spawnSingleArgumentTrial(
       sender = sender,
@@ -95,11 +97,15 @@ private fun handleAircraftBuilderSingleArgumentCommand(
       deniedMessage = AircraftBuilder_PERMISSION_DENIED,
       spawnTrial = { player, baseData ->
         AircraftBuilderSpawn.spawn(
-            player.location, ItemStack(Material.HOPPER_MINECART), null, player, baseData)
+            player.location,
+            ItemStack(Material.HOPPER_MINECART),
+            null,
+            player,
+            baseData,
+        )
       },
-      successMessage = { vehicleName ->
-        "[AircraftBuilder] Spawned trial vehicle for $vehicleName"
-      })
+      successMessage = { vehicleName -> "[AircraftBuilder] Spawned trial vehicle for $vehicleName" },
+  )
 }
 
 private fun handleAircraftBuilderGeneralCommand(
@@ -107,7 +113,7 @@ private fun handleAircraftBuilderGeneralCommand(
     sender: CommandSender,
     name: String,
     data: AircraftBuilderBaseData?,
-    args: Array<out String>
+    args: Array<out String>,
 ): Boolean {
   when (subCommand) {
     "spawn" -> {
@@ -130,7 +136,7 @@ private fun handleAircraftBuilderManagerCommand(
     subCommand: String,
     data: AircraftBuilderBaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ): Boolean {
   return when {
     subCommand == "save" && data == null -> {
@@ -149,7 +155,7 @@ private fun handleAircraftBuilderAdminCommand(
     subCommand: String,
     data: AircraftBuilderBaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ): Boolean {
   when (subCommand) {
     "machineset" -> {
@@ -168,7 +174,7 @@ private fun handleAircraftBuilderSpawn(
     sender: CommandSender,
     name: String,
     data: AircraftBuilderBaseData?,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   if (data == null) return
   when (args.size) {
@@ -179,7 +185,12 @@ private fun handleAircraftBuilderSpawn(
           return
         }
         AircraftBuilderSpawn.spawn(
-            sender.location, ItemStack(Material.HOPPER_MINECART), null, sender, data)
+            sender.location,
+            ItemStack(Material.HOPPER_MINECART),
+            null,
+            sender,
+            data,
+        )
         sender.sendMessage("[AircraftBuilder] Spawned trial vehicle for $name")
       }
       return
@@ -193,7 +204,12 @@ private fun handleAircraftBuilderSpawn(
         }
         if (target != null && target.isOnline) {
           AircraftBuilderSpawn.spawn(
-              target.location, ItemStack(Material.HOPPER_MINECART), null, target, data)
+              target.location,
+              ItemStack(Material.HOPPER_MINECART),
+              null,
+              target,
+              data,
+          )
           target.sendMessage("[AircraftBuilder] Spawned trial vehicle for $name")
           sender.sendMessage("[AircraftBuilder] Spawned trial vehicle for $name to ${target.name}")
         } else {
@@ -204,7 +220,12 @@ private fun handleAircraftBuilderSpawn(
       if (sender is ConsoleCommandSender) {
         if (target != null && target.isOnline) {
           AircraftBuilderSpawn.spawn(
-              target.location, ItemStack(Material.HOPPER_MINECART), null, target, data)
+              target.location,
+              ItemStack(Material.HOPPER_MINECART),
+              null,
+              target,
+              data,
+          )
           target.sendMessage("[AircraftBuilder] Spawned trial vehicle for $name")
         } else {
           sender.sendMessage("[AircraftBuilder] Player ${args[2]} does not exist")
@@ -219,7 +240,8 @@ private fun handleAircraftBuilderSpawn(
                     blockLoc,
                     COMMAND_BLOCK_SEARCH_XZ,
                     COMMAND_BLOCK_SEARCH_Y,
-                    COMMAND_BLOCK_SEARCH_XZ)
+                    COMMAND_BLOCK_SEARCH_XZ,
+                )
                 .firstOrNull()
         if (nearby != null) {
           AircraftBuilderSpawn.spawn(
@@ -228,7 +250,8 @@ private fun handleAircraftBuilderSpawn(
               null,
               nearby,
               data,
-              yaw.toFloat())
+              yaw.toFloat(),
+          )
           nearby.sendMessage("[AircraftBuilder] Spawned trial vehicle for $name")
         }
         return

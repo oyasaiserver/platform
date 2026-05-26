@@ -104,7 +104,8 @@ object VoterListGUI {
                       SortMode.LATEST -> "§e最新投票順"
                       SortMode.COUNT -> "§e投票数降順"
                       SortMode.NAME -> "§eプレイヤー名順"
-                    })
+                    }
+                )
               }
         },
     )

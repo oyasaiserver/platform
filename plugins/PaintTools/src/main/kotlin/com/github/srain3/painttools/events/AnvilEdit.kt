@@ -32,8 +32,11 @@ object AnvilEdit : Listener {
                   AnvilGUI.ResponseAction { _, player ->
                     player.sendMessage(
                         ToolBox.colorMessage(
-                            "[PaintTools] &cRGB値→ &r255,255,255 &cあるいは &r#ffffff &cのフォーマットのみ受け付けます!"))
-                  })
+                            "[PaintTools] &cRGB値→ &r255,255,255 &cあるいは &r#ffffff &cのフォーマットのみ受け付けます!"
+                        )
+                    )
+                  }
+              )
             }
           }
           val handMeta = stateSnapshot.player.inventory.itemInMainHand.itemMeta

@@ -22,7 +22,7 @@ import org.bukkit.entity.Player
 data class TimeData(
     val cost: Int,
     val sectorTimes: MutableList<LocalTime> = mutableListOf(),
-    val timeNanoLong: MutableList<Long> = mutableListOf()
+    val timeNanoLong: MutableList<Long> = mutableListOf(),
 ) {
   private var finishSwitch: Boolean = false
   private var maxSectorInt: Int = 0
@@ -106,7 +106,8 @@ object YamlData {
           "CP:2200",
           "CP:2300",
           "CP:2400",
-          "CP:2500")
+          "CP:2500",
+      )
 
   fun getCircuitTAData(yaml: CustomYaml, cp: String): List<Long> {
     return yaml.getLongList("$cp.BEST.Time")
@@ -149,7 +150,9 @@ object YamlData {
         player.sendMessage(color("[TA] &9$circuit&7:&r$cp ベストタイム [$day]"))
         player.sendMessage(
             color(
-                "[TA] &9$circuit&7:&r$cp ベストタイム &a${LocalTime.ofNanoOfDay(totalTime).format(Tools.timeFormat)}"))
+                "[TA] &9$circuit&7:&r$cp ベストタイム &a${LocalTime.ofNanoOfDay(totalTime).format(Tools.timeFormat)}"
+            )
+        )
       }
     }
   }
@@ -162,7 +165,7 @@ object TimeAttackCommand : CommandExecutor {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     if (command.name != "timeattack") return false
 
@@ -223,7 +226,8 @@ object TimeAttackCommand : CommandExecutor {
             val sectorTime = timeData.sector(sectorInt)
             if (sectorTime != null && key.first.isOnline) {
               key.first.sendMessage(
-                  color("[TA] &9$circuit&7:&rS$sectorInt &a${sectorTime.format(Tools.timeFormat)}"))
+                  color("[TA] &9$circuit&7:&rS$sectorInt &a${sectorTime.format(Tools.timeFormat)}")
+              )
             }
           }
         }
@@ -239,13 +243,16 @@ object TimeAttackCommand : CommandExecutor {
           if (lastSector != null && totalTime != null && key.first.isOnline) {
             val player = key.first
             player.sendMessage(
-                color("[TA] &9$circuit&7:&rLS &a${lastSector.format(Tools.timeFormat)}"))
+                color("[TA] &9$circuit&7:&rLS &a${lastSector.format(Tools.timeFormat)}")
+            )
             player.sendMessage(
-                color("[TA] &9$circuit&7:&rTime &d${totalTime.format(Tools.timeFormat)}"))
+                color("[TA] &9$circuit&7:&rTime &d${totalTime.format(Tools.timeFormat)}")
+            )
 
             if (YamlData.setTimeData(circuit, player.uniqueId, timeData)) {
               player.sendMessage(
-                  color("[TA] &9$circuit&7:&b${costRateConvert(timeData.cost)}の自己ベスト更新!"))
+                  color("[TA] &9$circuit&7:&b${costRateConvert(timeData.cost)}の自己ベスト更新!")
+              )
             }
           }
 

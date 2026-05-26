@@ -92,7 +92,8 @@ object ResultGUI {
                       SortMode.VOTES_DESC -> "§e投票数降順"
                       SortMode.NAME -> "§eSV看板名順"
                       SortMode.ID -> "§eID名順"
-                    })
+                    }
+                )
               }
         },
     )

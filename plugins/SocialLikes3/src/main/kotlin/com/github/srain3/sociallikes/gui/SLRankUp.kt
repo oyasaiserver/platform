@@ -55,13 +55,14 @@ object SLRankUp {
             ItemStack(Material.RED_WOOL).apply {
               allFlag()
               addText("&f前のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pagePane.page > 0) {
-                pagePane.setPage(pagePane.page - 1)
-                gui.title = Tools.socialLikesLOGOShort + "&0ランクアップ候補 p${pagePane.page+1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pagePane.page > 0) {
+            pagePane.setPage(pagePane.page - 1)
+            gui.title = Tools.socialLikesLOGOShort + "&0ランクアップ候補 p${pagePane.page+1}".color()
+            gui.update()
+          }
+        },
         0,
         0,
     )
@@ -70,13 +71,14 @@ object SLRankUp {
             ItemStack(Material.GREEN_WOOL).apply {
               allFlag()
               addText("&f次のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pagePane.page < pagePane.pages - 1) {
-                pagePane.setPage(pagePane.page + 1)
-                gui.title = Tools.socialLikesLOGOShort + "&0ランクアップ候補 p${pagePane.page+1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pagePane.page < pagePane.pages - 1) {
+            pagePane.setPage(pagePane.page + 1)
+            gui.title = Tools.socialLikesLOGOShort + "&0ランクアップ候補 p${pagePane.page+1}".color()
+            gui.update()
+          }
+        },
         8,
         0,
     )
@@ -85,9 +87,10 @@ object SLRankUp {
             ItemStack(Material.BARRIER).apply {
               allFlag()
               addText("&c閉じる", mutableListOf())
-            }) { event: InventoryClickEvent ->
-              event.whoClicked.closeInventory()
-            },
+            }
+        ) { event: InventoryClickEvent ->
+          event.whoClicked.closeInventory()
+        },
         4,
         0,
     )
@@ -106,7 +109,8 @@ object SLRankUp {
             Comparator.comparingInt<Pair<UUID, RankUpData>?> { it.second.buildCount }
                 .thenComparingLong {
                   it.second.lastOnlineTime()?.toEpochSecond(ZoneOffset.UTC) ?: 0L
-                })
+                }
+        )
         .toMap()
         .forEach { (_, rud) ->
           val player = Bukkit.getOfflinePlayer(rud.user)

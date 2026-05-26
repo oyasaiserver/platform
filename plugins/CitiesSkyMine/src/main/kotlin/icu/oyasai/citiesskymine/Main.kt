@@ -107,7 +107,8 @@ class Main : JavaPlugin() {
             selectionHandler,
             configHandler,
             debugStickHandler,
-            brushPresetHandler)
+            brushPresetHandler,
+        )
     val csmCmd = getCommand("csm")
     csmCmd?.setExecutor(csmHandler)
     csmCmd?.tabCompleter = csmHandler
@@ -202,7 +203,8 @@ class Main : JavaPlugin() {
               if (s.cachedPath.isNotEmpty()) RoadPreview.showOnce(player, s.cachedPath, s.settings)
             },
             0L,
-            10L)
+            10L,
+        )
   }
 
   fun stopPreview(player: Player) {
@@ -242,7 +244,8 @@ class Main : JavaPlugin() {
               IntersectionPreview.showOnce(player, s.center!!, s, roadSettings)
             },
             0L,
-            10L)
+            10L,
+        )
   }
 
   fun stopIntersectionPreview(player: Player) {
@@ -264,7 +267,9 @@ class Main : JavaPlugin() {
             "road.roadmat" to settings.roadMaterial.name,
             "road.sidewalkmat" to settings.sidewalkMaterial.name,
             "road.linemat" to settings.lineMaterial.name,
-            "road.debug-line-groups" to settings.debugLineGroups))
+            "road.debug-line-groups" to settings.debugLineGroups,
+        ),
+    )
   }
 
   fun saveIntersectionSettings(player: Player, session: IntersectionSession) {
@@ -274,7 +279,9 @@ class Main : JavaPlugin() {
             "intersection.arms" to session.arms,
             "intersection.arm-length" to session.armLength,
             "intersection.corner-radius" to session.cornerRadius,
-            "intersection.rotation" to session.rotationDeg))
+            "intersection.rotation" to session.rotationDeg,
+        ),
+    )
   }
 
   private fun loadRoadSettings(player: Player, settings: RoadSettings) {

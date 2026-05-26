@@ -51,7 +51,8 @@ fun AircraftBuilderEntityData.startImpl() {
                 addYaw,
                 this@startImpl.bodyArmorStands,
                 this@startImpl.seatArmorStands,
-                this@startImpl.getCarPlayers())
+                this@startImpl.getCarPlayers(),
+            )
           }
 
           this@startImpl.soundTask(wasd)

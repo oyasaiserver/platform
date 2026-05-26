@@ -15,7 +15,7 @@ object NmsMountBridge {
 
   private fun createSetPassengersPacket(
       vehicleEntityId: Int,
-      passengerEntityIds: IntArray
+      passengerEntityIds: IntArray,
   ): ClientboundSetPassengersPacket {
     val buf = FriendlyByteBuf(Unpooled.buffer(max(32, 8 + passengerEntityIds.size * 5)))
     buf.writeVarInt(vehicleEntityId)

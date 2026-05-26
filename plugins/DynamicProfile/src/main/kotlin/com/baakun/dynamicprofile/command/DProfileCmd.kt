@@ -101,7 +101,8 @@ object DProfileCmd : CommandExecutor {
         .addText(
             "&a他プレイヤーのプロフィールを開く",
             mutableListOf(
-                "&7現在のプレイヤー数..&7${Bukkit.getOnlinePlayers().size}/${Bukkit.getMaxPlayers()}"),
+                "&7現在のプレイヤー数..&7${Bukkit.getOnlinePlayers().size}/${Bukkit.getMaxPlayers()}"
+            ),
         )
         .guiRun {
           viewer.playSound(viewer.location, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)

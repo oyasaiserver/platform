@@ -37,14 +37,16 @@ object GetRank : CommandExecutor {
                               Bukkit.getOfflinePlayer(playerUUID).name ?: playerName
                           if (rank != null) {
                             sender.sendMessage(
-                                "§a${displayPlayerName}さんの現在のランクは§e${rank.name}§aです。")
+                                "§a${displayPlayerName}さんの現在のランクは§e${rank.name}§aです。"
+                            )
                           } else {
                             sender.sendMessage("§c${displayPlayerName}さんのランク情報が見つかりません。")
                           }
                         },
                     )
               }
-            })
+            },
+        )
     return true
   }
 }

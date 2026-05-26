@@ -101,11 +101,14 @@ object SLUpdate : CommandExecutor {
               .append(result)
               .append(
                   Component.text("ID: ${if(id==Integer.MIN_VALUE) "不明" else id}, ")
-                      .color(TextColor.color(0xAAAAAA)))
+                      .color(TextColor.color(0xAAAAAA))
+              )
               .append(
                   Component.text(
-                          "Location: ${block.world.name} / ${block.x}, ${block.y}, ${block.z}")
-                      .color(TextColor.color(0xAAAAAA)))
+                          "Location: ${block.world.name} / ${block.x}, ${block.y}, ${block.z}"
+                      )
+                      .color(TextColor.color(0xAAAAAA))
+              )
               .clickEvent(ClickEvent.runCommand("/minecraft:tp ${block.x} ${block.y} ${block.z}"))
       player.sendMessage(message)
     }

@@ -78,7 +78,8 @@ object SLtp : CommandExecutor {
               AllBuild.timeToUser(time)
                   ?: run {
                     sender.sendMessage(
-                        Tools.socialLikesLOGO + "&c 情報が欠けているためユーザーの次の建築を返せませんでした".color())
+                        Tools.socialLikesLOGO + "&c 情報が欠けているためユーザーの次の建築を返せませんでした".color()
+                    )
                     return true
                   }
           val getID =
@@ -123,7 +124,8 @@ object SLtp : CommandExecutor {
               AllBuild.timeToUser(time)
                   ?: run {
                     sender.sendMessage(
-                        Tools.socialLikesLOGO + "&c 情報が欠けているためユーザーの前の建築を返せませんでした".color())
+                        Tools.socialLikesLOGO + "&c 情報が欠けているためユーザーの前の建築を返せませんでした".color()
+                    )
                     return true
                   }
           val getID =
@@ -184,11 +186,13 @@ object SLtp : CommandExecutor {
           override fun run() {
             if (sender.teleport(slLoc, PlayerTeleportEvent.TeleportCause.COMMAND)) {
               sender.sendMessage(
-                  Tools.socialLikesLOGO + " &r「${slData.title}」へテレポートしました(ID:${slData.id})".color())
+                  Tools.socialLikesLOGO + " &r「${slData.title}」へテレポートしました(ID:${slData.id})".color()
+              )
             } else {
               sender.sendMessage(
                   Tools.socialLikesLOGO +
-                      " &c何らかの理由で「${slData.title}」へテレポート出来ませんでした(ID:${slData.id})".color())
+                      " &c何らかの理由で「${slData.title}」へテレポート出来ませんでした(ID:${slData.id})".color()
+              )
             }
           }
         }

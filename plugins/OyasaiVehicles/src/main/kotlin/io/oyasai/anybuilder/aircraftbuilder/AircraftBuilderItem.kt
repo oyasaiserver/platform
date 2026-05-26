@@ -22,14 +22,16 @@ object AircraftBuilderItem {
       listOf(
           BuilderItemSupport.VehicleStatSpec("最高速", topSpeedRegex, 68, strict = true),
           BuilderItemSupport.VehicleStatSpec("パワー", powerMaxRegex, 64, strict = true),
-          BuilderItemSupport.VehicleStatSpec("ブレーキ", brakeMaxRegex, 128, strict = true))
+          BuilderItemSupport.VehicleStatSpec("ブレーキ", brakeMaxRegex, 128, strict = true),
+      )
 
   private fun readStats(meta: ItemMeta?): List<Int> {
     val stats = BuilderItemSupport.readVehicleStatValues(meta, statSpecs)
     return listOf(
         stats[0].coerceIn(1, TOP_SPEED_MAX),
         stats[1].coerceIn(1, POWER_MAX),
-        stats[2].coerceIn(1, BRAKE_MAX))
+        stats[2].coerceIn(1, BRAKE_MAX),
+    )
   }
 
   fun buyItem(name: String, playerName: String?): ItemStack? {
@@ -38,7 +40,8 @@ object AircraftBuilderItem {
         data.name,
         playerName,
         20831,
-        listOf("AC: ${data.name}", "Cost: 0", "最高速: 68", "パワー: 64", "ブレーキ: 128", "Mode: Normal"))
+        listOf("AC: ${data.name}", "Cost: 0", "最高速: 68", "パワー: 64", "ブレーキ: 128", "Mode: Normal"),
+    )
   }
 
   fun eventCarItem(name: String, costLimit: Int): ItemStack? {
@@ -54,11 +57,13 @@ object AircraftBuilderItem {
         listOf(
             BuilderItemSupport.LoreLineReplacement(topSpeedRegex, "最高速: $topSpeed"),
             BuilderItemSupport.LoreLineReplacement(powerMaxRegex, "パワー: $power"),
-            BuilderItemSupport.LoreLineReplacement(brakeMaxRegex, "ブレーキ: $brake")),
+            BuilderItemSupport.LoreLineReplacement(brakeMaxRegex, "ブレーキ: $brake"),
+        ),
         costRegex = costRegex,
         costValue =
             BuilderItemSupport.getCostFromStats(listOf(topSpeed, power, brake), listOf(68, 64, 128))
-                ?: 0)
+                ?: 0,
+    )
   }
 
   fun getACNormalVehicle(meta: ItemMeta?): AircraftVehicle {
@@ -93,7 +98,8 @@ object AircraftBuilderItem {
         mapOf(
             "パワー" to BuilderItemSupport.VehicleIntRule(powerMaxRegex, POWER_MAX),
             "最高速" to BuilderItemSupport.VehicleIntRule(topSpeedRegex, TOP_SPEED_MAX),
-            "ブレーキ" to BuilderItemSupport.VehicleIntRule(brakeMaxRegex, BRAKE_MAX))
+            "ブレーキ" to BuilderItemSupport.VehicleIntRule(brakeMaxRegex, BRAKE_MAX),
+        )
     return BuilderItemSupport.changeVehicleInt(item, str, value, rules, costRegex, ::getCarVCCost)
   }
 }

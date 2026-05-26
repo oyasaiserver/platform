@@ -29,7 +29,7 @@ object BuilderSpawnSupport {
       createNext: (Location) -> ArmorStand = { location ->
         location.world?.spawnEntity(location, EntityType.ARMOR_STAND) as ArmorStand
       },
-      customName: String = "machinev"
+      customName: String = "machinev",
   ): MutableList<ArmorStand> {
     val list = mutableListOf<ArmorStand>()
     if (loc.world == null) return list
@@ -52,7 +52,7 @@ object BuilderSpawnSupport {
       bodyArmorStandsList: MutableList<ArmorStand>,
       data: MutableMap<Vector, Pair<BlockData, Vector>>,
       size: Double,
-      box: BoundingBox?
+      box: BoundingBox?,
   ): MutableSet<BlockDisplay> {
     val list = LinkedHashSet<BlockDisplay>()
     val world = loc.world ?: return list
@@ -68,7 +68,8 @@ object BuilderSpawnSupport {
               vec.clone().multiply(fixWidth).toVector3f(),
               AxisAngle4f(),
               pair.second.clone().multiply(fixWidth).toVector3f(),
-              AxisAngle4f())
+              AxisAngle4f(),
+          )
       blockDisplay.interpolationDuration = 2
       blockDisplay.interpolationDelay = 0
       blockDisplay.setRotation(0.0f, 0.0f)
@@ -84,7 +85,7 @@ object BuilderSpawnSupport {
       loc: Location,
       seatPairs: Iterable<Pair<Int, Vector>>,
       yaw: Float,
-      indexedName: Boolean
+      indexedName: Boolean,
   ): MutableMap<Pair<Int, ArmorStand>, Vector> {
     val map = LinkedHashMap<Pair<Int, ArmorStand>, Vector>()
     val world = loc.world ?: return map
@@ -100,7 +101,9 @@ object BuilderSpawnSupport {
       armorStand.setBasePlate(false)
       armorStand.customName(Component.text(if (indexedName) "machinev_seat_$i" else "machinev"))
       armorStand.setItem(
-          EquipmentSlot.HEAD, ItemStack(if (i == 0) Material.GREEN_WOOL else Material.BLACK_WOOL))
+          EquipmentSlot.HEAD,
+          ItemStack(if (i == 0) Material.GREEN_WOOL else Material.BLACK_WOOL),
+      )
       armorStand.addEquipmentLock(EquipmentSlot.HEAD, LockType.REMOVING_OR_CHANGING)
       map[i to armorStand] = vec
     }
@@ -109,7 +112,7 @@ object BuilderSpawnSupport {
 
   fun <T : VehicleEntityData> clearOldTrialSpawn(
       spawnPlayer: Player?,
-      oldMap: MutableMap<UUID, T>
+      oldMap: MutableMap<UUID, T>,
   ) {
     if (spawnPlayer == null) return
     val oldData = oldMap.remove(spawnPlayer.uniqueId) ?: return
@@ -122,7 +125,7 @@ object BuilderSpawnSupport {
   fun <T : VehicleEntityData> beginTrialSpawn(
       owner: Player?,
       spawnPlayer: Player?,
-      oldMap: MutableMap<UUID, T>
+      oldMap: MutableMap<UUID, T>,
   ) {
     if (owner == null) {
       clearOldTrialSpawn(spawnPlayer, oldMap)
@@ -133,7 +136,7 @@ object BuilderSpawnSupport {
       owner: Player?,
       spawnPlayer: Player?,
       oldMap: MutableMap<UUID, T>,
-      data: T
+      data: T,
   ) {
     if (owner == null && spawnPlayer != null) {
       oldMap[spawnPlayer.uniqueId] = data

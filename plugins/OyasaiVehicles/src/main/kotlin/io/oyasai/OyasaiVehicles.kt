@@ -50,7 +50,7 @@ class OyasaiVehicles : JavaPlugin() {
   private fun registerCommand(
       name: String,
       executor: CommandExecutor,
-      tabCompleter: TabCompleter? = null
+      tabCompleter: TabCompleter? = null,
   ) {
     getCommand(name)?.apply {
       setExecutor(executor)

@@ -23,7 +23,7 @@ class EntityCommands : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     val player =
         sender as? Player
@@ -347,7 +347,7 @@ class EntityCommands : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): MutableList<String> {
     val completions = mutableListOf<String>()
 
@@ -365,7 +365,8 @@ class EntityCommands : CommandExecutor, TabCompleter {
               "paste",
               "cut",
               "clear",
-              "hojo")
+              "hojo",
+          )
       completions.addAll(list.filter { it.startsWith(args[0], ignoreCase = true) })
       return completions
     }

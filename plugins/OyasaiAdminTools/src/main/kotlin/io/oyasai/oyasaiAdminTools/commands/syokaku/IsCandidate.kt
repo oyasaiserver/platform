@@ -42,7 +42,9 @@ object IsCandidate : CommandExecutor {
               if (playerUUID == null) {
                 Bukkit.getScheduler()
                     .runTask(
-                        plugin, Runnable { sender.sendMessage("§cプレイヤー '$playerName' が見つかりません。") })
+                        plugin,
+                        Runnable { sender.sendMessage("§cプレイヤー '$playerName' が見つかりません。") },
+                    )
                 return@Runnable
               }
               val player = Bukkit.getOfflinePlayer(playerUUID)
@@ -74,7 +76,7 @@ object IsCandidate : CommandExecutor {
                                     "経過日数: ${
                                       ChronoUnit.DAYS.between(
                                         DateTimeUtils.unixToJST(player.firstPlayed),
-                                        DateTimeUtils.getCurrentJST()
+                                        DateTimeUtils.getCurrentJST(),
                                       )
                                     }/${next.minElapse}日 ${
                                       if (ChronoUnit.DAYS.between(
@@ -90,7 +92,8 @@ object IsCandidate : CommandExecutor {
                                 sender.sendMessage(messageBuildCount)
                                 if (nextRank != null) {
                                   sender.sendMessage(
-                                      "§a${player.name}さんは§e${nextRank.name}§aの昇格候補です。")
+                                      "§a${player.name}さんは§e${nextRank.name}§aの昇格候補です。"
+                                  )
                                 } else {
                                   sender.sendMessage("§e${player.name}さんはまだ昇格条件を満たしていません。")
                                 }
@@ -102,7 +105,8 @@ object IsCandidate : CommandExecutor {
                       )
                 }
               }
-            })
+            },
+        )
     return true
   }
 }

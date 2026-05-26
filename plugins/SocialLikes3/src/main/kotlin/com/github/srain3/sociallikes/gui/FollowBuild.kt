@@ -69,21 +69,22 @@ object FollowBuild : Listener {
             ItemStack(Material.RED_WOOL).apply {
               allFlag()
               addText("&f前のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (filterSwitch) {
-                if (pane.page > 0) {
-                  pane.setPage(pane.page - 1)
-                  gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p${pane.page + 1}".color()
-                  gui.update()
-                }
-              } else {
-                if (pane.page > 0) {
-                  pane.setPage(pane.page - 1)
-                  gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p${pane.page + 1}".color()
-                  gui.update()
-                }
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (filterSwitch) {
+            if (pane.page > 0) {
+              pane.setPage(pane.page - 1)
+              gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p${pane.page + 1}".color()
+              gui.update()
+            }
+          } else {
+            if (pane.page > 0) {
+              pane.setPage(pane.page - 1)
+              gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p${pane.page + 1}".color()
+              gui.update()
+            }
+          }
+        },
         0,
         0,
     )
@@ -92,21 +93,22 @@ object FollowBuild : Listener {
             ItemStack(Material.GREEN_WOOL).apply {
               allFlag()
               addText("&f次のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (filterSwitch) {
-                if (pane.page < pane.pages - 1) {
-                  pane.setPage(pane.page + 1)
-                  gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p${pane.page + 1}".color()
-                  gui.update()
-                }
-              } else {
-                if (pane.page < pane.pages - 1) {
-                  pane.setPage(pane.page + 1)
-                  gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p${pane.page + 1}".color()
-                  gui.update()
-                }
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (filterSwitch) {
+            if (pane.page < pane.pages - 1) {
+              pane.setPage(pane.page + 1)
+              gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p${pane.page + 1}".color()
+              gui.update()
+            }
+          } else {
+            if (pane.page < pane.pages - 1) {
+              pane.setPage(pane.page + 1)
+              gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p${pane.page + 1}".color()
+              gui.update()
+            }
+          }
+        },
         8,
         0,
     )
@@ -115,9 +117,10 @@ object FollowBuild : Listener {
             ItemStack(Material.BARRIER).apply {
               allFlag()
               addText("&c閉じる", mutableListOf())
-            }) { event: InventoryClickEvent ->
-              event.whoClicked.closeInventory()
-            },
+            }
+        ) { event: InventoryClickEvent ->
+          event.whoClicked.closeInventory()
+        },
         4,
         0,
     )
@@ -126,10 +129,11 @@ object FollowBuild : Listener {
             ItemStack(Material.TOTEM_OF_UNDYING).apply {
               allFlag()
               addText("&fフォロー中の人一覧", mutableListOf())
-            }) { event: InventoryClickEvent ->
-              event.whoClicked.closeInventory()
-              followHeadListGUI(userList).show(event.whoClicked)
-            },
+            }
+        ) { event: InventoryClickEvent ->
+          event.whoClicked.closeInventory()
+          followHeadListGUI(userList).show(event.whoClicked)
+        },
         7,
         0,
     )
@@ -138,25 +142,26 @@ object FollowBuild : Listener {
             ItemStack(Material.ENDER_EYE).apply {
               allFlag()
               addText("&f新着/全建築の切替スイッチ", mutableListOf())
-            }) { _: InventoryClickEvent ->
-              filterSwitch = !filterSwitch
-              if (filterSwitch) {
-                if (pane.pages != 0) {
-                  pane.page = 0
-                }
-                pane.clear()
-                pane.populateWithItemStacks(itemListNew)
-                gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p1".color()
-              } else {
-                if (pane.pages != 0) {
-                  pane.page = 0
-                }
-                pane.clear()
-                pane.populateWithItemStacks(itemListALL)
-                gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p1".color()
-              }
-              gui.update()
-            },
+            }
+        ) { _: InventoryClickEvent ->
+          filterSwitch = !filterSwitch
+          if (filterSwitch) {
+            if (pane.pages != 0) {
+              pane.page = 0
+            }
+            pane.clear()
+            pane.populateWithItemStacks(itemListNew)
+            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の新着建築 p1".color()
+          } else {
+            if (pane.pages != 0) {
+              pane.page = 0
+            }
+            pane.clear()
+            pane.populateWithItemStacks(itemListALL)
+            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の全建築 p1".color()
+          }
+          gui.update()
+        },
         6,
         0,
     )
@@ -284,13 +289,14 @@ object FollowBuild : Listener {
             ItemStack(Material.RED_WOOL).apply {
               allFlag()
               addText("&f前のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pane.page > 0) {
-                pane.setPage(pane.page - 1)
-                gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pane.page > 0) {
+            pane.setPage(pane.page - 1)
+            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
+            gui.update()
+          }
+        },
         0,
         0,
     )
@@ -299,13 +305,14 @@ object FollowBuild : Listener {
             ItemStack(Material.GREEN_WOOL).apply {
               allFlag()
               addText("&f次のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pane.page < pane.pages - 1) {
-                pane.setPage(pane.page + 1)
-                gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pane.page < pane.pages - 1) {
+            pane.setPage(pane.page + 1)
+            gui.title = Tools.socialLikesLOGOShort + "&r フォロー中の人 p${pane.page + 1}".color()
+            gui.update()
+          }
+        },
         8,
         0,
     )
@@ -314,9 +321,10 @@ object FollowBuild : Listener {
             ItemStack(Material.BARRIER).apply {
               allFlag()
               addText("&c閉じる", mutableListOf())
-            }) { event: InventoryClickEvent ->
-              event.whoClicked.closeInventory()
-            },
+            }
+        ) { event: InventoryClickEvent ->
+          event.whoClicked.closeInventory()
+        },
         4,
         0,
     )

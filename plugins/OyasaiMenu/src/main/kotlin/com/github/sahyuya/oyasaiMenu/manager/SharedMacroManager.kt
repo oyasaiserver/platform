@@ -30,7 +30,7 @@ class SharedMacroManager(private val plugin: OyasaiMenu) {
       val author: String,
       val authorUUID: String,
       val createdAt: Long,
-      val commands: List<String>
+      val commands: List<String>,
   )
 
   private val shareDir: File
@@ -92,7 +92,8 @@ class SharedMacroManager(private val plugin: OyasaiMenu) {
               author = yaml.getString("author", "不明") ?: "不明",
               authorUUID = yaml.getString("author_uuid", "") ?: "",
               createdAt = yaml.getLong("created_at", 0L),
-              commands = yaml.getStringList("commands"))
+              commands = yaml.getStringList("commands"),
+          )
         }
         .getOrElse {
           plugin.logger.warning("SharedMacroManager: 読み込み失敗 $shareId — ${it.message}")
@@ -123,7 +124,8 @@ class SharedMacroManager(private val plugin: OyasaiMenu) {
                     author = yaml.getString("author", "") ?: "",
                     authorUUID = uuidStr,
                     createdAt = yaml.getLong("created_at", 0L),
-                    commands = yaml.getStringList("commands"))
+                    commands = yaml.getStringList("commands"),
+                )
               }
               .getOrNull()
         }
