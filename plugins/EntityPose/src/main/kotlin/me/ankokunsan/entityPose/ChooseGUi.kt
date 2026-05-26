@@ -25,7 +25,8 @@ object ChooseGUi {
         Bukkit.createInventory(
             player, // holder（nullでもOK）
             18, // サイズ（9の倍数）
-            "§3エンティティスポーン")
+            "§3エンティティスポーン",
+        )
     val sarmorStandItem = ItemStack(Material.ARMOR_STAND)
     sarmorStandItem.itemMeta =
         sarmorStandItem.itemMeta!!.apply {
@@ -114,7 +115,8 @@ object ChooseGUi {
             "§b15度ずつ" to 15.0,
             "§b22.5度ずつ" to 22.5,
             "§b40度ずつ" to 40.0,
-            "§b45度ずつ" to 45.0)
+            "§b45度ずつ" to 45.0,
+        )
     kakudos.forEachIndexed { index, (name, value) ->
       val item =
           ItemStack(Material.COMPASS).apply {

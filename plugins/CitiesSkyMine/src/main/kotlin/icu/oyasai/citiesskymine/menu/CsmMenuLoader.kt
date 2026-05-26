@@ -81,7 +81,8 @@ class CsmMenuLoader(private val plugin: Main) {
         lore = lore,
         actions = actions,
         permission = permission,
-        enchanted = enchanted)
+        enchanted = enchanted,
+    )
   }
 
   @Suppress("UNCHECKED_CAST")

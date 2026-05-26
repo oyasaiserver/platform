@@ -170,11 +170,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779508581,
-        "narHash": "sha256-qZjcS4jRe0pUv4ZAFCyr7ELFrb3LPLr+5u8LHRZjMVQ=",
+        "lastModified": 1779768841,
+        "narHash": "sha256-lzDWYWg0s4Vvb7lJMdM7ySEHDuSOY8fXMUAXl2ReiAo=",
         "owner": "infinidoge",
         "repo": "nix-minecraft",
-        "rev": "e13397b445bb0dcb390f90126914113ec5dd5afe",
+        "rev": "8996e4e811210fc7b51ead34a8c0ae5ba8df8eef",
         "type": "github"
       },
       "original": {
@@ -184,6 +184,22 @@
       }
     },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1779622335,
+        "narHash": "sha256-ViA62qtL5za7V3d5I8OA9q9JcFhsVAiL5jVHwEclWqk=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "705e9929918b43bd7b715dc0a878ac870449bb03",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-26.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-25-11": {
       "locked": {
         "lastModified": 1779467186,
         "narHash": "sha256-nOesoDCiXcUftqbRBMz9tt4blI5PvljMWbm3kuCA+0s=",
@@ -221,11 +237,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779589689,
-        "narHash": "sha256-poiUSO+RUXEEva69MdnNpZ4BHgQcmcczywvfD0Oci8M=",
+        "lastModified": 1779762416,
+        "narHash": "sha256-+mflh0jv/eauBK9nOK9l3hS9OihLHdAagNM+80HiRUU=",
         "owner": "nix-community",
         "repo": "nixpkgs-terraform-providers-bin",
-        "rev": "fdac948efab810649cd42dc4bb6b29137099889e",
+        "rev": "4f863f9d114c5b7ef4edeec8b808725fbc680111",
         "type": "github"
       },
       "original": {
@@ -236,11 +252,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1779508470,
-        "narHash": "sha256-Ap9KJX+5xHIn3bPIpfNgT6MEXdAECECwo4/rmlQD74M=",
+        "lastModified": 1779560665,
+        "narHash": "sha256-tpyBcxPpcQb8ukyNF7DoCwfSY3VPsxHoYwj00Cayv5o=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "29916453413845e54a65b8a1cf996842300cd299",
+        "rev": "64c08a7ca051951c8eae34e3e3cb1e202fe36786",
         "type": "github"
       },
       "original": {
@@ -289,6 +305,7 @@
         "mc-monitor": "mc-monitor",
         "nix-minecraft": "nix-minecraft",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-25-11": "nixpkgs-25-11",
         "nixpkgs-terraform-providers-bin": "nixpkgs-terraform-providers-bin",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "package-lock2nix": "package-lock2nix",

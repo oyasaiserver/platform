@@ -12,5 +12,5 @@ data class RoadSettings(
     var roadMaterial: Material = Material.GRAY_CONCRETE,
     var sidewalkMaterial: Material = Material.ANDESITE,
     var lineMaterial: Material = Material.SMOOTH_QUARTZ,
-    var debugLineGroups: Boolean = false // true の場合、ライン種別ごとにデバッグ用素材を使う
+    var debugLineGroups: Boolean = false, // true の場合、ライン種別ごとにデバッグ用素材を使う
 )

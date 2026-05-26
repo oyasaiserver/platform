@@ -174,7 +174,8 @@ object OperatorCommand : CommandExecutor {
                     val file =
                         File(
                             plugin.dataFolder.absolutePath +
-                                "/UserStatsJSON/${player.uniqueId}.json")
+                                "/UserStatsJSON/${player.uniqueId}.json"
+                        )
                     try {
                       file.parentFile?.mkdirs()
                       if (!file.exists()) file.createNewFile()
@@ -322,8 +323,10 @@ object OperatorCommand : CommandExecutor {
             sender.sendMessage("このコマンドはプレイヤーから実行してください。")
             return true
           }
-          if (player.getTargetBlock(null, 3).isEmpty ||
-              player.getTargetBlock(null, 3).type != Material.CHEST)
+          if (
+              player.getTargetBlock(null, 3).isEmpty ||
+                  player.getTargetBlock(null, 3).type != Material.CHEST
+          )
               return false
           plugin.config.set(
               "RewardChestXYZ",
@@ -368,7 +371,8 @@ object OperatorCommand : CommandExecutor {
             "owners" -> {
               if (args.size < 3) {
                 sender.sendMessage(
-                    Component.text("使用法: /op title owners <称号ID>").color(NamedTextColor.RED))
+                    Component.text("使用法: /op title owners <称号ID>").color(NamedTextColor.RED)
+                )
                 return true
               }
               val titleId = args[2].toIntOrNull()
@@ -392,7 +396,8 @@ object OperatorCommand : CommandExecutor {
             }
             "give" -> {
               sender.sendMessage(
-                  giveTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3])))
+                  giveTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3]))
+              )
             }
             "add" -> {
               sender.sendMessage(createNewTitle(args[2], args[3].toInt()))
@@ -402,7 +407,8 @@ object OperatorCommand : CommandExecutor {
             }
             "deprive" -> {
               sender.sendMessage(
-                  deTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3])))
+                  deTitle(Bukkit.getOfflinePlayer(args[2]).uniqueId, Integer.parseInt(args[3]))
+              )
             }
             "reload" -> {
               saveTitles()

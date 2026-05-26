@@ -172,7 +172,8 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
           runCatching { Bukkit.createBlockData(spec.material, "[$blockState]") }
               .getOrElse {
                 plugin.logger.warning(
-                    "Popup item '${spec.material.name}': block_state の適用に失敗しました: ${it.message}")
+                    "Popup item '${spec.material.name}': block_state の適用に失敗しました: ${it.message}"
+                )
                 return stack
               }
       meta.setBlockData(data)
@@ -209,7 +210,8 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
     if (spec.blockState.isEmpty()) return
     stack.setData(
         DataComponentTypes.TOOLTIP_DISPLAY,
-        TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.BLOCK_DATA).build())
+        TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.BLOCK_DATA).build(),
+    )
   }
 
   @Suppress("UNCHECKED_CAST")
@@ -347,7 +349,8 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
               setOf(
                   PopupActionType.CLOSE,
                   PopupActionType.SUGGEST_COMMAND,
-                  PopupActionType.OP_PLAYER_CMD)
+                  PopupActionType.OP_PLAYER_CMD,
+              )
         }
 
     if (needsCloseFirst) {
@@ -359,7 +362,8 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
                 Bukkit.getScheduler()
                     .runTaskLater(plugin, Runnable { dispatchDeferred(player, actions) }, 1L)
               },
-              1L)
+              1L,
+          )
     } else {
       Bukkit.getScheduler().runTaskLater(plugin, Runnable { dispatchDeferred(player, actions) }, 1L)
     }
@@ -372,7 +376,9 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
             player.performCommand(action.value.replace("%player%", player.name))
         PopupActionType.CONSOLE_CMD ->
             Bukkit.dispatchCommand(
-                Bukkit.getConsoleSender(), action.value.replace("%player%", player.name))
+                Bukkit.getConsoleSender(),
+                action.value.replace("%player%", player.name),
+            )
         PopupActionType.OP_PLAYER_CMD -> {
           val cmd = action.value.replace("%player%", player.name)
           if (cmd.isNotEmpty()) {
@@ -399,7 +405,10 @@ class PopupMenuEngine(private val plugin: OyasaiMenu) : Listener {
                               HoverEvent.showText(
                                   Component.text("クリックでチャット欄に入力されます")
                                       .color(NamedTextColor.GRAY)
-                                      .decoration(TextDecoration.ITALIC, false))))
+                                      .decoration(TextDecoration.ITALIC, false)
+                              )
+                          )
+                  )
                   .build()
           player.sendMessage(msg)
         }

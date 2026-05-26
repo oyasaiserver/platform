@@ -52,14 +52,15 @@ object SearchBuild {
             ItemStack(Material.RED_WOOL).apply {
               allFlag()
               addText("&f前のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pagePane.page > 0) {
-                pagePane.setPage(pagePane.page - 1)
-                gui.title =
-                    Tools.socialLikesLOGOShort + "&r 「${searchText}」の建築 p${pagePane.page+1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pagePane.page > 0) {
+            pagePane.setPage(pagePane.page - 1)
+            gui.title =
+                Tools.socialLikesLOGOShort + "&r 「${searchText}」の建築 p${pagePane.page+1}".color()
+            gui.update()
+          }
+        },
         0,
         0,
     )
@@ -68,14 +69,15 @@ object SearchBuild {
             ItemStack(Material.GREEN_WOOL).apply {
               allFlag()
               addText("&f次のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pagePane.page < pagePane.pages - 1) {
-                pagePane.setPage(pagePane.page + 1)
-                gui.title =
-                    Tools.socialLikesLOGOShort + "&r 「${searchText}」の建築 p${pagePane.page+1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pagePane.page < pagePane.pages - 1) {
+            pagePane.setPage(pagePane.page + 1)
+            gui.title =
+                Tools.socialLikesLOGOShort + "&r 「${searchText}」の建築 p${pagePane.page+1}".color()
+            gui.update()
+          }
+        },
         8,
         0,
     )
@@ -84,9 +86,10 @@ object SearchBuild {
             ItemStack(Material.BARRIER).apply {
               allFlag()
               addText("&c閉じる", mutableListOf())
-            }) { event: InventoryClickEvent ->
-              event.whoClicked.closeInventory()
-            },
+            }
+        ) { event: InventoryClickEvent ->
+          event.whoClicked.closeInventory()
+        },
         4,
         0,
     )
@@ -129,7 +132,10 @@ object SearchBuild {
           ItemStack(Material.OAK_SIGN)
               .allFlag()
               .addText(
-                  "ここに探したい建築名", mutableListOf("&7出力先(右側)にあるこの看板をクリックで確定します", "&7普通に閉じた場合はキャンセルです")))
+                  "ここに探したい建築名",
+                  mutableListOf("&7出力先(右側)にあるこの看板をクリックで確定します", "&7普通に閉じた場合はキャンセルです"),
+              )
+      )
       onClick { slot, e ->
         if (slot != AnvilGUI.Slot.OUTPUT) {
           return@onClick listOf()

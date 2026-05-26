@@ -35,9 +35,11 @@ object SLMenu {
     val paneMid = StaticPane(9, 3)
 
     paneUp.fillWith(
-        ItemStack(Material.PURPLE_STAINED_GLASS_PANE).allFlag().addText(" ", mutableListOf()))
+        ItemStack(Material.PURPLE_STAINED_GLASS_PANE).allFlag().addText(" ", mutableListOf())
+    )
     paneDown.fillWith(
-        ItemStack(Material.GRAY_STAINED_GLASS_PANE).allFlag().addText(" ", mutableListOf()))
+        ItemStack(Material.GRAY_STAINED_GLASS_PANE).allFlag().addText(" ", mutableListOf())
+    )
     gui.addPane(Slot.fromXY(0, 0), paneUp)
     gui.addPane(Slot.fromXY(0, 4), paneDown)
 
@@ -46,10 +48,11 @@ object SLMenu {
           GuiItem(
               ItemStack(Material.ENCHANTING_TABLE)
                   .allFlag()
-                  .addText("&f全ての建築", mutableListOf("&7建築一覧を表示します"))) {
-                it.whoClicked.closeInventory()
-                AllBuild.createGUI().show(it.whoClicked)
-              },
+                  .addText("&f全ての建築", mutableListOf("&7建築一覧を表示します"))
+          ) {
+            it.whoClicked.closeInventory()
+            AllBuild.createGUI().show(it.whoClicked)
+          },
           0,
           1,
       )
@@ -57,10 +60,11 @@ object SLMenu {
           GuiItem(
               ItemStack(Material.OAK_SIGN)
                   .allFlag()
-                  .addText("&f名前から建築を検索", mutableListOf("&7建築名から絞り込めます"))) {
-                it.whoClicked.closeInventory()
-                SearchBuild.offlinePlayerSearch(it.whoClicked as Player)
-              },
+                  .addText("&f名前から建築を検索", mutableListOf("&7建築名から絞り込めます"))
+          ) {
+            it.whoClicked.closeInventory()
+            SearchBuild.offlinePlayerSearch(it.whoClicked as Player)
+          },
           2,
           1,
       )
@@ -68,10 +72,11 @@ object SLMenu {
           GuiItem(
               ItemStack(Material.PLAYER_HEAD)
                   .allFlag()
-                  .addText("&fプレイヤーの建築", mutableListOf("&7選択したプレイヤーの建築を表示します"))) {
-                it.whoClicked.closeInventory()
-                UserBuild.openOnlinePlayerGUI(it.whoClicked)
-              },
+                  .addText("&fプレイヤーの建築", mutableListOf("&7選択したプレイヤーの建築を表示します"))
+          ) {
+            it.whoClicked.closeInventory()
+            UserBuild.openOnlinePlayerGUI(it.whoClicked)
+          },
           4,
           1,
       )
@@ -79,10 +84,11 @@ object SLMenu {
           GuiItem(
               ItemStack(Material.TOTEM_OF_UNDYING)
                   .allFlag()
-                  .addText("&fフォロー建築一覧", mutableListOf("&7フォローしたプレイヤーの建築を表示します"))) {
-                it.whoClicked.closeInventory()
-                FollowBuild.getFollowBuildsGUI(it.whoClicked.uniqueId).show(it.whoClicked)
-              },
+                  .addText("&fフォロー建築一覧", mutableListOf("&7フォローしたプレイヤーの建築を表示します"))
+          ) {
+            it.whoClicked.closeInventory()
+            FollowBuild.getFollowBuildsGUI(it.whoClicked.uniqueId).show(it.whoClicked)
+          },
           6,
           1,
       )

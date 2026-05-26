@@ -30,14 +30,15 @@ object BuilderMenuSupport {
           "_WALL_SIGN" to "_SIGN",
           "_WALL_HANGING_SIGN" to "_HANGING_SIGN",
           "_WALL_BANNER" to "_BANNER",
-          "_WALL_TORCH" to "_TORCH")
+          "_WALL_TORCH" to "_TORCH",
+      )
   private val listTitleEndIntRegex = Regex(": [0-9]+")
 
   data class VehicleListRow(
       val ownerUUID: UUID,
       val name: String,
       val material: Material?,
-      val lore: List<String>
+      val lore: List<String>,
   )
 
   data class VehicleStatRow(val title: String, val limitText: String)
@@ -51,14 +52,14 @@ object BuilderMenuSupport {
       val getCostLimit: (ItemStack) -> Int,
       val resolveUnlimitedCost: (Player) -> Int,
       val setupButtons: (OyasaiMenu) -> Unit,
-      val refresh: (OyasaiMenu, ItemStack, Player) -> Unit
+      val refresh: (OyasaiMenu, ItemStack, Player) -> Unit,
   )
 
   fun createRootMenu(
       title: String,
       onTrialClick: (Player) -> Unit,
       onBuyClick: (Player) -> Unit,
-      onCustomClick: (Player) -> Unit
+      onCustomClick: (Player) -> Unit,
   ): OyasaiMenu {
     val gui = OyasaiMenu(9, title)
     gui.setGlobalClickAction { it.isCancelled = true }
@@ -67,28 +68,30 @@ object BuilderMenuSupport {
         ROOT_TRIAL_SLOT,
         ItemStack(Material.FLOWER_BANNER_PATTERN)
             .addText("&f試乗", listOf("&f試乗車両を選択するメニューを開く"))
-            .allHide()) { event ->
-          event.isCancelled = true
-          event.whoClicked.closeInventory()
-          onTrialClick(event.whoClicked as Player)
-        }
+            .allHide(),
+    ) { event ->
+      event.isCancelled = true
+      event.whoClicked.closeInventory()
+      onTrialClick(event.whoClicked as Player)
+    }
     gui.setItem(
         ROOT_BUY_SLOT,
-        ItemStack(Material.MINECART).addText("&f購入", listOf("&f購入する車両選択メニューを開く")).allHide()) { event
-          ->
-          event.isCancelled = true
-          event.whoClicked.closeInventory()
-          onBuyClick(event.whoClicked as Player)
-        }
+        ItemStack(Material.MINECART).addText("&f購入", listOf("&f購入する車両選択メニューを開く")).allHide(),
+    ) { event ->
+      event.isCancelled = true
+      event.whoClicked.closeInventory()
+      onBuyClick(event.whoClicked as Player)
+    }
     gui.setItem(
         ROOT_CUSTOM_SLOT,
         ItemStack(Material.HOPPER_MINECART)
             .addText("&f性能カスタム", listOf("&f購入した車両の性能を変化させるメニューを開く"))
-            .allHide()) { event ->
-          event.isCancelled = true
-          event.whoClicked.closeInventory()
-          onCustomClick(event.whoClicked as Player)
-        }
+            .allHide(),
+    ) { event ->
+      event.isCancelled = true
+      event.whoClicked.closeInventory()
+      onCustomClick(event.whoClicked as Player)
+    }
     return gui
   }
 
@@ -97,7 +100,7 @@ object BuilderMenuSupport {
       title: String = "u:ALL a:ALL t:ALL: 1",
       source: Iterable<String>,
       resolveRow: (String) -> VehicleListRow?,
-      onSelection: (Player, String, Boolean) -> Unit
+      onSelection: (Player, String, Boolean) -> Unit,
   ): PaginatedOyasaiMenu {
     val gui = PaginatedOyasaiMenu(54, title)
     gui.setGlobalClickAction { it.isCancelled = true }
@@ -179,7 +182,7 @@ object BuilderMenuSupport {
 
   fun <T> buildGroupedVehicleItemStacks(
       source: Iterable<T>,
-      resolveRow: (T) -> VehicleListRow?
+      resolveRow: (T) -> VehicleListRow?,
   ): MutableMap<UUID, MutableList<ItemStack>> {
     val grouped = mutableMapOf<UUID, MutableList<ItemStack>>()
 
@@ -220,7 +223,7 @@ object BuilderMenuSupport {
       getCostLimit: (UUID) -> Int,
       isEventVehicle: (UUID) -> Boolean = { false },
       payCost: (UUID, Int) -> Boolean = { _, _ -> true },
-      onRefresh: (OyasaiMenu, ItemStack, Player) -> Unit
+      onRefresh: (OyasaiMenu, ItemStack, Player) -> Unit,
   ) {
     statNames.forEachIndexed { y, stat ->
       val rowOffset = (y + 1) * 9
@@ -230,19 +233,20 @@ object BuilderMenuSupport {
           item = CustomHead.get('-')?.clone() ?: ItemStack(Material.RED_WOOL),
           title = "&c-1",
           lore = listOf("&9マイルポイントを消費せず値を減らす", "&fShiftキーを押しながらクリックで&c-10", stat),
-          getCurrentItem = getCurrentItem) { event, player, currentItem ->
-            val count = if (event.isShiftClick) 10 else 1
-            var failed = false
+          getCurrentItem = getCurrentItem,
+      ) { event, player, currentItem ->
+        val count = if (event.isShiftClick) 10 else 1
+        var failed = false
 
-            repeat(count) {
-              if (!changeStat(currentItem, stat, -1)) {
-                failed = true
-              }
-            }
-
-            playResultSound(player, failed)
-            onRefresh(gui, currentItem, player)
+        repeat(count) {
+          if (!changeStat(currentItem, stat, -1)) {
+            failed = true
           }
+        }
+
+        playResultSound(player, failed)
+        onRefresh(gui, currentItem, player)
+      }
 
       bindStatButton(
           gui = gui,
@@ -254,33 +258,35 @@ object BuilderMenuSupport {
                   "&9マイルポイント&b3p&7消費して値を増やす",
                   "&e※Event用の車両の場合ポイントを消費しません",
                   "&fShiftキーを押しながらクリックで&a+10",
-                  stat),
-          getCurrentItem = getCurrentItem) { event, player, currentItem ->
-            val count = if (event.isShiftClick) 10 else 1
-            var failed = false
-            val eventVehicle = isEventVehicle(player.uniqueId)
+                  stat,
+              ),
+          getCurrentItem = getCurrentItem,
+      ) { event, player, currentItem ->
+        val count = if (event.isShiftClick) 10 else 1
+        var failed = false
+        val eventVehicle = isEventVehicle(player.uniqueId)
 
-            repeat(count) {
-              val currentCost = getCurrentCost(currentItem) ?: 0
-              val limit = getCostLimit(player.uniqueId)
-              if (currentCost >= limit) {
-                failed = true
-                return@repeat
-              }
-              if (!changeStat(currentItem, stat, 1)) {
-                failed = true
-                return@repeat
-              }
-              if (!eventVehicle && !payCost(player.uniqueId, 3)) {
-                changeStat(currentItem, stat, -1)
-                failed = true
-                return@repeat
-              }
-            }
-
-            playResultSound(player, failed)
-            onRefresh(gui, currentItem, player)
+        repeat(count) {
+          val currentCost = getCurrentCost(currentItem) ?: 0
+          val limit = getCostLimit(player.uniqueId)
+          if (currentCost >= limit) {
+            failed = true
+            return@repeat
           }
+          if (!changeStat(currentItem, stat, 1)) {
+            failed = true
+            return@repeat
+          }
+          if (!eventVehicle && !payCost(player.uniqueId, 3)) {
+            changeStat(currentItem, stat, -1)
+            failed = true
+            return@repeat
+          }
+        }
+
+        playResultSound(player, failed)
+        onRefresh(gui, currentItem, player)
+      }
     }
   }
 
@@ -288,7 +294,7 @@ object BuilderMenuSupport {
       gui: PaginatedOyasaiMenu,
       allItemStacks: MutableList<ItemStack>,
       sortedUserItems: Map<UUID, MutableList<ItemStack>>,
-      handleItemClick: (InventoryClickEvent) -> Unit
+      handleItemClick: (InventoryClickEvent) -> Unit,
   ) {
     allItemStacks.forEach { item -> gui.addPaginatedItem(item, handleItemClick) }
 
@@ -313,11 +319,12 @@ object BuilderMenuSupport {
     }
 
     gui.setItem(
-        PAGE_CLOSE_SLOT, ItemStack(Material.BARRIER).addText("閉じる", emptyList()).allHide()) { event
-          ->
-          event.isCancelled = true
-          event.whoClicked.closeInventory()
-        }
+        PAGE_CLOSE_SLOT,
+        ItemStack(Material.BARRIER).addText("閉じる", emptyList()).allHide(),
+    ) { event ->
+      event.isCancelled = true
+      event.whoClicked.closeInventory()
+    }
 
     var selectedCreatorIndex = -1
     val creatorKeys = sortedUserItems.keys.toList()
@@ -326,26 +333,27 @@ object BuilderMenuSupport {
         PAGE_FILTER_SLOT,
         ItemStack(Material.FLOWER_BANNER_PATTERN)
             .addText("制作者別フィルタ", listOf("制作者ごとの車両のフィルタ"))
-            .allHide()) { event ->
-          event.isCancelled = true
-          gui.currentPage = 0
-          gui.clearPaginatedItems()
+            .allHide(),
+    ) { event ->
+      event.isCancelled = true
+      gui.currentPage = 0
+      gui.clearPaginatedItems()
 
-          if (selectedCreatorIndex >= creatorKeys.size - 1) {
-            selectedCreatorIndex = -1
-            allItemStacks.forEach { item -> gui.addPaginatedItem(item, handleItemClick) }
-          } else {
-            selectedCreatorIndex++
-            val filterUUID = creatorKeys[selectedCreatorIndex]
-            val filteredItems = sortedUserItems[filterUUID] ?: mutableListOf()
-            filteredItems.forEach { item -> gui.addPaginatedItem(item, handleItemClick) }
-          }
+      if (selectedCreatorIndex >= creatorKeys.size - 1) {
+        selectedCreatorIndex = -1
+        allItemStacks.forEach { item -> gui.addPaginatedItem(item, handleItemClick) }
+      } else {
+        selectedCreatorIndex++
+        val filterUUID = creatorKeys[selectedCreatorIndex]
+        val filteredItems = sortedUserItems[filterUUID] ?: mutableListOf()
+        filteredItems.forEach { item -> gui.addPaginatedItem(item, handleItemClick) }
+      }
 
-          val userFilterText =
-              if (selectedCreatorIndex == -1) "ALL" else (selectedCreatorIndex + 1).toString()
-          updateUserFilterTitle(gui, userFilterText, event.whoClicked as Player)
-          gui.populate(event.whoClicked as Player)
-        }
+      val userFilterText =
+          if (selectedCreatorIndex == -1) "ALL" else (selectedCreatorIndex + 1).toString()
+      updateUserFilterTitle(gui, userFilterText, event.whoClicked as Player)
+      gui.populate(event.whoClicked as Player)
+    }
 
     gui.populate()
   }
@@ -373,7 +381,7 @@ object BuilderMenuSupport {
       title: String,
       lore: List<String>,
       getCurrentItem: (UUID) -> ItemStack?,
-      onClick: (InventoryClickEvent, Player, ItemStack) -> Unit
+      onClick: (InventoryClickEvent, Player, ItemStack) -> Unit,
   ) {
     gui.setItem(slot, item.addText(title, lore)) { event ->
       event.isCancelled = true

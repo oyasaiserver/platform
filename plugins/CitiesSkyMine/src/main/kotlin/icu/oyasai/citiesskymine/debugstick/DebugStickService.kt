@@ -22,7 +22,8 @@ class DebugStickService(private val plugin: Main, private val memoryStore: Debug
     memoryStore.setSelectedProperty(player, block.type, selected.name)
 
     return DebugStickResult.Success(
-        "${block.type.key.key}: ${selected.name}=${selected.currentValue}")
+        "${block.type.key.key}: ${selected.name}=${selected.currentValue}"
+    )
   }
 
   fun cycle(player: Player): DebugStickResult {
@@ -45,13 +46,14 @@ class DebugStickService(private val plugin: Main, private val memoryStore: Debug
 
     block.setBlockData(nextData, plugin.config.getBoolean("debug-stick.apply-physics", false))
     return DebugStickResult.Success(
-        "${block.type.key.key}: ${selected.name} ${selected.currentValue} -> $nextValue")
+        "${block.type.key.key}: ${selected.name} ${selected.currentValue} -> $nextValue"
+    )
   }
 
   private fun selectedProperty(
       player: Player,
       block: Block,
-      properties: List<DebugBlockProperty>
+      properties: List<DebugBlockProperty>,
   ): DebugBlockProperty {
     val selectedName = memoryStore.selectedProperty(player, block.type)
     val selected = properties.firstOrNull { it.name == selectedName } ?: properties.first()

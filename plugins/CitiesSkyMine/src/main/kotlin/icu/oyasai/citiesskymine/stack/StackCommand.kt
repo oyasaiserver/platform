@@ -23,7 +23,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     if (sender !is Player) {
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
@@ -53,7 +53,9 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val estimatedBlocks = region.volume * parsed.times.toLong()
     val maxBlocks =
         plugin.config.getLong(
-            "limits.max-blocks-stack", plugin.config.getLong("limits.max-blocks-csm", 2_000_000L))
+            "limits.max-blocks-stack",
+            plugin.config.getLong("limits.max-blocks-csm", 2_000_000L),
+        )
     if (maxBlocks > 0 && estimatedBlocks > maxBlocks) {
       MessageUtil.error(sender, "複製ブロック数が上限 ($maxBlocks) を超えています: $estimatedBlocks")
       return true
@@ -69,7 +71,8 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     MessageUtil.success(
         sender,
-        "選択範囲を複製しました: ${copied.blocks} blocks / ${parsed.times} times / offset=${offset.x},${offset.y},${offset.z} / facing=${offset.facing.name.lowercase()}")
+        "選択範囲を複製しました: ${copied.blocks} blocks / ${parsed.times} times / offset=${offset.x},${offset.y},${offset.z} / facing=${offset.facing.name.lowercase()}",
+    )
     if (copied.undoRecorded) {
       MessageUtil.info(sender, "FAWE の //undo でこの複製を取り消せます。")
     } else {
@@ -82,7 +85,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     if (args.isEmpty()) return emptyList()
     val current = args.last()
@@ -140,7 +143,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun computeOffset(
       player: Player,
       region: CuboidRegion,
-      directions: List<String>
+      directions: List<String>,
   ): StackOffset {
     val facing = yawFace(player.location.yaw)
     val forward = horizontalUnit(facing)
@@ -201,7 +204,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       region: CuboidRegion,
       offset: StackOffset,
       times: Int,
-      skipIds: Set<String>
+      skipIds: Set<String>,
   ): StackResult {
     val posA = region.pos1
     val posB = region.pos2
@@ -310,7 +313,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private data class ParsedStackArgs(
       val directions: List<String>,
       val times: Int,
-      val skipIds: Set<String>
+      val skipIds: Set<String>,
   )
 
   private data class HorizontalUnit(val x: Int, val z: Int)
@@ -325,7 +328,7 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     LEFT,
     RIGHT,
     UP,
-    DOWN
+    DOWN,
   }
 
   companion object {

@@ -100,7 +100,8 @@ object SelectTitle {
           mutableListOf(
               "&a所有者数: &7${currentTitle.owners.size}",
               "&aバリュー(表示優先度): &7${currentTitle.rarity}",
-          ))
+          )
+      )
       if (currentTitle.description != null && !currentTitle.description.isEmpty()) {
         titleLore.add("")
         titleLore.add("&7称号の説明 &f:")

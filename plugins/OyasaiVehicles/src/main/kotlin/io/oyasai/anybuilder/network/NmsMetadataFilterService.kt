@@ -115,7 +115,7 @@ object NmsMetadataFilterService : Listener {
 
   private fun shouldCancelMetadataPacket(
       playerUUID: UUID,
-      packet: ClientboundSetEntityDataPacket
+      packet: ClientboundSetEntityDataPacket,
   ): Boolean {
     if (!EntityRuntime.displayEntityIds.contains(packet.id())) return false
 

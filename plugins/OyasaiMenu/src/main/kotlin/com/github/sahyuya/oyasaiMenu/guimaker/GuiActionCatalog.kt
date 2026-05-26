@@ -22,7 +22,8 @@ object GuiActionCatalog {
           "CHAT_PASTE",
           "SUGGEST_COMMAND",
           "SOUND",
-          "CLOSE")
+          "CLOSE",
+      )
 
   fun params(type: String, value: String, soundVolume: String? = null): Map<String, String> =
       when (type.uppercase()) {

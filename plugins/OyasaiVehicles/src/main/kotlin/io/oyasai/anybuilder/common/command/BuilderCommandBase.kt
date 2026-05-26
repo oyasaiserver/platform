@@ -40,7 +40,7 @@ abstract class BuilderCommandBase : CommandExecutor {
       sender: CommandSender,
       name: String,
       busyMessage: String,
-      invalidMessage: String
+      invalidMessage: String,
   ): Player? {
     val player = sender as? Player ?: return null
     if (!beginUserTask(player, busyMessage)) {
@@ -57,7 +57,7 @@ abstract class BuilderCommandBase : CommandExecutor {
       player: Player,
       name: String,
       resolveData: (String) -> T,
-      canEdit: (T, Player) -> Boolean
+      canEdit: (T, Player) -> Boolean,
   ): T? {
     val data = resolveData(name)
     if (!canEdit(data, player)) {
@@ -81,14 +81,15 @@ abstract class BuilderCommandBase : CommandExecutor {
                     }
                   }
                   .runTask(plugin)
-            })
+            },
+        )
   }
 
   fun openRootMenuIfPermitted(
       sender: CommandSender,
       hasPermission: (Player) -> Boolean,
       deniedMessage: String,
-      openMenu: (Player) -> Unit
+      openMenu: (Player) -> Unit,
   ): Boolean {
     if (sender is Player) {
       if (!hasPermission(sender)) {
@@ -107,7 +108,7 @@ abstract class BuilderCommandBase : CommandExecutor {
       canSpawn: (Player) -> Boolean,
       deniedMessage: String,
       spawnTrial: (Player, T) -> Unit,
-      successMessage: (String) -> String
+      successMessage: (String) -> String,
   ): Boolean {
     if (sender !is Player || data == null) {
       return true
@@ -132,7 +133,7 @@ abstract class BuilderCommandBase : CommandExecutor {
       cost: Int,
       pay: (UUID, Int) -> Boolean,
       onPaymentSuccess: (Player) -> Unit,
-      onPaymentFailure: (Player) -> Unit
+      onPaymentFailure: (Player) -> Unit,
   ): Boolean {
     val player = sender as? Player ?: return true
     if (!canUse(player)) {
@@ -166,7 +167,7 @@ abstract class BuilderCommandBase : CommandExecutor {
       invalidNameMessage: String,
       resolveData: (String) -> T,
       canEdit: (T, Player) -> Boolean,
-      onReady: (Player, T) -> Unit
+      onReady: (Player, T) -> Unit,
   ): Boolean {
     if (existingData == null && !canCreate(sender)) {
       sender.sendMessage(deniedMessage)
@@ -177,7 +178,8 @@ abstract class BuilderCommandBase : CommandExecutor {
             sender = sender,
             name = name,
             busyMessage = busyMessage,
-            invalidMessage = invalidNameMessage) ?: return true
+            invalidMessage = invalidNameMessage,
+        ) ?: return true
     val data =
         resolveSaveData(player = player, name = name, resolveData = resolveData, canEdit = canEdit)
             ?: return true

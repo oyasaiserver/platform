@@ -15,7 +15,7 @@ data class CarNormalVehicle(
     val underBlockCheck: Boolean,
     val gearMax: Int,
     val isMT: Boolean,
-    val slip: Double
+    val slip: Double,
 ) : CarVehicle(speedLimit, power, brake, maxSize, underBlockCheck, gearMax, isMT) {
 
   var slipAngle: Double = 0.0
@@ -24,7 +24,7 @@ data class CarNormalVehicle(
       wasd: ControlKey?,
       slot: Int,
       slipstream: Boolean,
-      ubc: Double
+      ubc: Double,
   ): Vector = applySpeedUpdate(wasd, slot, slipstream, ubc, 1.0)
 
   override fun slip(first: ControlKey?): Double {
@@ -77,10 +77,17 @@ data class CarProVehicle(
     val gearMaxVal: Int,
     val isMTVal: Boolean,
     val grip: Int,
-    val plusMode: Boolean
+    val plusMode: Boolean,
 ) :
     CarVehicle(
-        speedLimitVal, powerVal, brakeVal, maxSizeVal, underBlockCheckVal, gearMaxVal, isMTVal) {
+        speedLimitVal,
+        powerVal,
+        brakeVal,
+        maxSizeVal,
+        underBlockCheckVal,
+        gearMaxVal,
+        isMTVal,
+    ) {
 
   var slipAngle: Double = 0.0
 
@@ -93,7 +100,7 @@ data class CarProVehicle(
       wasd: ControlKey?,
       slot: Int,
       slipstream: Boolean,
-      ubc: Double
+      ubc: Double,
   ): Vector = applySpeedUpdate(wasd, slot, slipstream, ubc, 1.0 - slipAngle / SLIP_ANGLE_MAX)
 
   override fun handling(wasd: ControlKey?, wheelZ: Float): Float {
@@ -162,16 +169,19 @@ data class CarProVehicle(
       else -> slipAngle *= if (plusMode) 0.9125 else 0.95
     }
 
-    if (abs(slipAngle) <= 3.5 &&
-        first !in
-            listOf(
-                ControlKey.W,
-                ControlKey.WA,
-                ControlKey.WD,
-                ControlKey.SA,
-                ControlKey.SD,
-                ControlKey.A,
-                ControlKey.D)) {
+    if (
+        abs(slipAngle) <= 3.5 &&
+            first !in
+                listOf(
+                    ControlKey.W,
+                    ControlKey.WA,
+                    ControlKey.WD,
+                    ControlKey.SA,
+                    ControlKey.SD,
+                    ControlKey.A,
+                    ControlKey.D,
+                )
+    ) {
       slipAngle = 0.0
     }
 
@@ -218,7 +228,7 @@ class CarRealVehicle(
     underBlockCheck: Boolean,
     gearMax: Int,
     val isMT: Boolean,
-    val grip: Int
+    val grip: Int,
 ) : CarVehicle(speedLimit, power, brake, maxSize, underBlockCheck, gearMax, isMT) {
 
   var slipAngle: Double = 0.0
@@ -227,7 +237,7 @@ class CarRealVehicle(
       wasd: ControlKey?,
       slot: Int,
       slipstream: Boolean,
-      ubc: Double
+      ubc: Double,
   ): Vector = applySpeedUpdate(wasd, slot, slipstream, ubc, 1.0 - slipAngle / SLIP_ANGLE_MAX)
 
   override fun handling(wasd: ControlKey?, wheelZ: Float): Float {
@@ -268,7 +278,8 @@ class CarRealVehicle(
     handleAngle =
         handleAngle.coerceIn(
             -(35.0 / (0.5 + abs(speed.z) * 1.5)).toFloat(),
-            (35.0 / (0.5 + abs(speed.z) * 1.5)).toFloat())
+            (35.0 / (0.5 + abs(speed.z) * 1.5)).toFloat(),
+        )
     return gripAdjustedHandlingForce
   }
 

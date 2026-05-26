@@ -31,14 +31,14 @@ class CitiesSkyMineCommand(
     private val selectionCommand: SelectionCommand,
     private val configCommand: ConfigGuiCommand,
     private val debugStickCommand: DebugStickCommand,
-    private val brushPresetCommand: BrushPresetCommand
+    private val brushPresetCommand: BrushPresetCommand,
 ) : CommandExecutor, TabCompleter {
 
   override fun onCommand(
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     val sub = args.getOrNull(0)?.lowercase()
     return when (sub) {
@@ -50,7 +50,9 @@ class CitiesSkyMineCommand(
       "version",
       "ver" -> {
         MessageUtil.info(
-            sender, "CitiesSkyMine version: <white>${plugin.description.version}</white>")
+            sender,
+            "CitiesSkyMine version: <white>${plugin.description.version}</white>",
+        )
         true
       }
       "info" -> {
@@ -132,7 +134,7 @@ class CitiesSkyMineCommand(
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     if (args.isEmpty()) return emptyList()
     if (args.size == 1) {
@@ -171,11 +173,20 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm payload load <payload> [0-3] [L|R]", "payloadをFAWEで配置")
     MessageUtil.helpEntry(sender, "//undo", "直近のFAWE対応CSM生成を取り消し")
     MessageUtil.helpEntry(
-        sender, "/csm window [width] [height] [frame] [glass] [backing]", "正面方向に窓を生成")
+        sender,
+        "/csm window [width] [height] [frame] [glass] [backing]",
+        "正面方向に窓を生成",
+    )
     MessageUtil.helpEntry(
-        sender, "/csm slabstairs [build] [slab] [stair] [full]", "WorldEdit選択範囲に階段を生成。取り消しは //undo")
+        sender,
+        "/csm slabstairs [build] [slab] [stair] [full]",
+        "WorldEdit選択範囲に階段を生成。取り消しは //undo",
+    )
     MessageUtil.helpEntry(
-        sender, "/csm stack <forward|back|left|right|up|down...> <times>", "選択範囲を視点基準で複製")
+        sender,
+        "/csm stack <forward|back|left|right|up|down...> <times>",
+        "選択範囲を視点基準で複製",
+    )
     MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
     MessageUtil.helpEntry(sender, "/csm config", "個人設定GUIを開く")
     MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
@@ -183,7 +194,8 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
     MessageUtil.send(
         sender,
-        "<gray>Shortcuts: /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.ns, /.sel, /.cf, /.ds, /.brp</gray>")
+        "<gray>Shortcuts: /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.ns, /.sel, /.cf, /.ds, /.brp</gray>",
+    )
   }
 
   private fun showInfo(sender: CommandSender) {
@@ -215,6 +227,7 @@ class CitiesSkyMineCommand(
             "selection",
             "config",
             "debugstick",
-            "preset")
+            "preset",
+        )
   }
 }

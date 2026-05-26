@@ -132,7 +132,10 @@ class GUIClick : Listener {
             if (allInvincible) it.persistentDataContainer.remove(EntityPose.INVINCIBLE)
             else
                 it.persistentDataContainer.set(
-                    EntityPose.INVINCIBLE, PersistentDataType.BYTE, 1.toByte())
+                    EntityPose.INVINCIBLE,
+                    PersistentDataType.BYTE,
+                    1.toByte(),
+                )
           }
         }
         1 -> {
@@ -154,7 +157,10 @@ class GUIClick : Listener {
             if (allItemlock) it.persistentDataContainer.remove(EntityPose.ITEMLOCK)
             else
                 it.persistentDataContainer.set(
-                    EntityPose.ITEMLOCK, PersistentDataType.BYTE, 1.toByte())
+                    EntityPose.ITEMLOCK,
+                    PersistentDataType.BYTE,
+                    1.toByte(),
+                )
           }
         }
         5 -> {
@@ -193,7 +199,10 @@ class GUIClick : Listener {
             if (allarrange) it.persistentDataContainer.remove(EntityPose.ARRANGELOCK)
             else
                 it.persistentDataContainer.set(
-                    EntityPose.ARRANGELOCK, PersistentDataType.BYTE, 1.toByte())
+                    EntityPose.ARRANGELOCK,
+                    PersistentDataType.BYTE,
+                    1.toByte(),
+                )
           }
         }
       }
@@ -235,7 +244,8 @@ class GUIClick : Listener {
             "WHITE" to "snowy",
             "BLACK" to "black",
             "WOOD" to "woods",
-            "NORMAL" to "pale")
+            "NORMAL" to "pale",
+        )
     // 2. 対応するバリアント名を取得（なければ処理終了）
     val variantName = variantMap[action] ?: return
     // 3. 共通のスポーン・追従処理を実行
@@ -277,7 +287,8 @@ class GUIClick : Listener {
             "RAG" to "ragdoll",
             "WHITE" to "white",
             "GRAY" to "jellie",
-            "BLACK" to "all_black")
+            "BLACK" to "all_black",
+        )
     // 2. 対応するバリアント名を取得
     val variantName = catVariantMap[action] ?: return
     // 3. 共通のスポーン・追従処理
@@ -312,7 +323,8 @@ class GUIClick : Listener {
             "BLACK" to Rabbit.Type.BLACK,
             "WHITE_BLACK" to Rabbit.Type.BLACK_AND_WHITE,
             "GOLD" to Rabbit.Type.GOLD,
-            "LIGHT_BROWN" to Rabbit.Type.SALT_AND_PEPPER)
+            "LIGHT_BROWN" to Rabbit.Type.SALT_AND_PEPPER,
+        )
     // 2. 対応するバリアント名を取得
     val rabtype = rabbitTypeMap[action] ?: return
     // 3. 共通のスポーン・追従処理
@@ -342,7 +354,8 @@ class GUIClick : Listener {
             "BLUE" to Parrot.Variant.BLUE,
             "GREEN" to Parrot.Variant.GREEN,
             "CYAN" to Parrot.Variant.CYAN,
-            "GRAY" to Parrot.Variant.GRAY)
+            "GRAY" to Parrot.Variant.GRAY,
+        )
 
     val parrotType = parrotVariantMap[action] ?: return
     FollowEntity.start<Parrot>(player, EntityType.PARROT) { parrot -> parrot.variant = parrotType }

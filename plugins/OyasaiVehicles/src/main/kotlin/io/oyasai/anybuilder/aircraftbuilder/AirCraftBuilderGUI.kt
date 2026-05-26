@@ -22,7 +22,8 @@ object AircraftBuilderGUI {
         title = "AircraftBuilder",
         onTrialClick = { listMenu(false).open(it) },
         onBuyClick = { listMenu(true).open(it) },
-        onCustomClick = { vehicleCustomMenu().open(it) })
+        onCustomClick = { vehicleCustomMenu().open(it) },
+    )
   }
 
   fun listMenu(buySwitch: Boolean): PaginatedOyasaiMenu {
@@ -41,7 +42,9 @@ object AircraftBuilderGUI {
                   listOf(
                       "&aエンティティ数&7: &a${data.totalEntity()}",
                       "&3作者&7: &b${Bukkit.getOfflinePlayer(ownerUUID).name ?: "Unknown"}",
-                      line4))
+                      line4,
+                  ),
+              )
             },
         onSelection = onSelection@{ player, name, buy ->
               if (buy) {
@@ -63,7 +66,8 @@ object AircraftBuilderGUI {
               } else {
                 player.performCommand("acmenu $name spawn")
               }
-            })
+            },
+    )
   }
 
   fun vehicleCustomMenu(): OyasaiMenu {
@@ -87,7 +91,9 @@ object AircraftBuilderGUI {
               }
             },
             setupButtons = ::setupCustomButtons,
-            refresh = ::vehicleCustomRePane))
+            refresh = ::vehicleCustomRePane,
+        ),
+    )
     return gui
   }
 
@@ -103,7 +109,8 @@ object AircraftBuilderGUI {
         payCost = { uuid, cost -> MileagePoint.payment(uuid, cost) },
         onRefresh = { targetGui, currentItem, player ->
           vehicleCustomRePane(targetGui, currentItem, player)
-        })
+        },
+    )
   }
 
   private fun vehicleCustomRePane(gui: OyasaiMenu, item: ItemStack, player: Player) {
@@ -115,7 +122,9 @@ object AircraftBuilderGUI {
         listOf(
             BuilderMenuSupport.VehicleStatRow("&f最高速", "&7上限:180"),
             BuilderMenuSupport.VehicleStatRow("&fパワー", "&7上限:1000"),
-            BuilderMenuSupport.VehicleStatRow("&fブレーキ", "&7上限:1000")))
+            BuilderMenuSupport.VehicleStatRow("&fブレーキ", "&7上限:1000"),
+        ),
+    )
 
     val cost = AircraftBuilderItem.getCarVCCost(item) ?: 0
     val limit = maxCostList[player.uniqueId] ?: 0

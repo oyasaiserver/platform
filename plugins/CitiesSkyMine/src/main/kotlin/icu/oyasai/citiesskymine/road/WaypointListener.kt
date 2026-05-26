@@ -28,7 +28,8 @@ class WaypointListener(private val plugin: Main) : Listener {
     session.waypoints.add(loc)
 
     player.sendMessage(
-        "§a[RC] 通過点 §f${session.waypoints.size}§a を追加: §f(${block.x}, ${block.y + 1}, ${block.z})")
+        "§a[RC] 通過点 §f${session.waypoints.size}§a を追加: §f(${block.x}, ${block.y + 1}, ${block.z})"
+    )
 
     // 2点目が揃ったらプレビュー開始、以降は毎回 dirty マークして再計算
     plugin.updatePreview(player)

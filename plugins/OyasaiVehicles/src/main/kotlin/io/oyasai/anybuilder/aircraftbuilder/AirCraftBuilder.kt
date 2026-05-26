@@ -15,7 +15,8 @@ object AircraftBuilder {
         tabCompleter = AircraftBuilderCommandTab,
         events = AircraftBuilderEvents,
         entityList = AircraftBuilderEntityList,
-        cache = AircraftBuilderBaseCache)
+        cache = AircraftBuilderBaseCache,
+    )
   }
 
   fun onDisable() {

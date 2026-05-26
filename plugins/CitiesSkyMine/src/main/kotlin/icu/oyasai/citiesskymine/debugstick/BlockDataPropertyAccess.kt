@@ -25,7 +25,7 @@ class BlockDataPropertyAccess {
 
   private fun propertiesFromNms(
       blockData: BlockData,
-      parsed: ParsedBlockData
+      parsed: ParsedBlockData,
   ): List<DebugBlockProperty>? {
     val state = invoke(blockData, "getState") ?: return null
     val rawProperties = invoke(state, "getProperties") as? Iterable<*> ?: return null
@@ -53,20 +53,21 @@ class BlockDataPropertyAccess {
 
   private fun propertiesFromString(
       blockData: BlockData,
-      parsed: ParsedBlockData
+      parsed: ParsedBlockData,
   ): List<DebugBlockProperty> =
       parsed.properties.map { (name, current) ->
         DebugBlockProperty(
             name = name,
             values = fallbackValues(blockData, parsed, name, current),
-            currentValue = current)
+            currentValue = current,
+        )
       }
 
   private fun fallbackValues(
       blockData: BlockData,
       parsed: ParsedBlockData,
       propertyName: String,
-      currentValue: String
+      currentValue: String,
   ): List<String> {
     val candidates = linkedSetOf<String>()
     when {
@@ -158,7 +159,8 @@ class BlockDataPropertyAccess {
             "cooldown",
             "unstable",
             "partial",
-            "full")
+            "full",
+        )
     if (propertyName == "orientation") {
       for (vertical in listOf("up", "down")) {
         for (horizontal in listOf("north", "east", "south", "west")) {
@@ -260,7 +262,7 @@ class BlockDataPropertyAccess {
 
   private data class ParsedBlockData(
       val blockId: String,
-      val properties: LinkedHashMap<String, String>
+      val properties: LinkedHashMap<String, String>,
   )
 
   companion object {
@@ -273,7 +275,8 @@ class BlockDataPropertyAccess {
             java.lang.Long.TYPE to java.lang.Long::class.java,
             java.lang.Float.TYPE to java.lang.Float::class.java,
             java.lang.Double.TYPE to java.lang.Double::class.java,
-            java.lang.Character.TYPE to java.lang.Character::class.java)
+            java.lang.Character.TYPE to java.lang.Character::class.java,
+        )
   }
 }
 

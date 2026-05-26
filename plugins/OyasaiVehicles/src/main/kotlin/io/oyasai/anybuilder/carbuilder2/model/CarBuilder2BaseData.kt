@@ -16,7 +16,10 @@ import org.bukkit.util.Vector
 
 class CarBuilder2BaseData(name: String) :
     BaseVehicleBaseDataCore<CarBuilder2Config>(
-        name, CarBuilder2Config("CarBuilder2/$name/$name.yml"), "CarBuilder2") {
+        name,
+        CarBuilder2Config("CarBuilder2/$name/$name.yml"),
+        "CarBuilder2",
+    ) {
   val body: MutableMap<Vector, Pair<BlockData, Vector>> = LinkedHashMap()
   val wheel: MutableMap<Vector, Pair<BlockData, Vector>> = LinkedHashMap()
   val wheel2: MutableMap<Vector, Pair<BlockData, Vector>> = LinkedHashMap()
@@ -70,7 +73,8 @@ class CarBuilder2BaseData(name: String) :
 
     val raw: MutableMap<Vector, BlockData> =
         SchematicToData.fileToRawBlockData(
-            vehicleFile("${name}_${type.configName.lowercase(Locale.ROOT)}.schem")) ?: return true
+            vehicleFile("${name}_${type.configName.lowercase(Locale.ROOT)}.schem")
+        ) ?: return true
     if (type == CarBuilder2BaseDataType.Body) {
       raw.entries.removeIf { entry -> isHeadBlock(entry.value) }
     }

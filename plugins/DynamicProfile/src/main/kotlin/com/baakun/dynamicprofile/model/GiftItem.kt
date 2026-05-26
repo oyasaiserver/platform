@@ -98,7 +98,8 @@ object GiftItem : Listener {
     shulkerBoxItem.addText(
         "${from.name} → ${to.name}",
         mutableListOf(
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH時mm分ss秒"))),
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH時mm分ss秒"))
+        ),
     )
     db.inventory.addItem(shulkerBoxItem)
   }

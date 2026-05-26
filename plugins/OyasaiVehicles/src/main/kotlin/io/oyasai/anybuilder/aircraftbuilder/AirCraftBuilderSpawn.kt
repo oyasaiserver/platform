@@ -23,13 +23,14 @@ object AircraftBuilderSpawn {
       owner: Player?,
       spawnPlayer: Player?,
       data: AircraftBuilderBaseData,
-      yaw: Float = loc.yaw
+      yaw: Float = loc.yaw,
   ): Boolean {
     val limitSender = spawnPlayer ?: owner ?: return false
     val entityLimit = limitSender.getEntityLimitByPermission()
     if (data.totalEntity() > entityLimit && !(spawnPlayer?.isOp ?: false)) {
       limitSender.sendMessage(
-          "[AircraftBuilder] エンティティ数が${entityLimit}を超えています (${data.totalEntity()})")
+          "[AircraftBuilder] エンティティ数が${entityLimit}を超えています (${data.totalEntity()})"
+      )
       return false
     } else {
       BuilderSpawnSupport.beginTrialSpawn(owner, spawnPlayer, oldSpawnCarData)
@@ -40,12 +41,21 @@ object AircraftBuilderSpawn {
       val bodyArmorStandInt: Int = (data.totalEntity().toDouble() / 100.0).roundToInt() + 1
       val bodyArmorStandList =
           BuilderSpawnSupport.spawnBodyArmorStands(
-              loc, bodyArmorStandInt, yaw, createFirst = { ArmorStandSpawner.spawn(loc, 0.6, 1.2) })
+              loc,
+              bodyArmorStandInt,
+              yaw,
+              createFirst = { ArmorStandSpawner.spawn(loc, 0.6, 1.2) },
+          )
 
       val blockDisplayMap = LinkedHashMap<Pair<Int, Vector>, MutableSet<BlockDisplay>>()
       blockDisplayMap[Pair(0, Vector().zero())] =
           BuilderSpawnSupport.spawnBlockDisplay(
-              loc, bodyArmorStandList, data.body, data.config.getBodySize(), data.boxSize)
+              loc,
+              bodyArmorStandList,
+              data.body,
+              data.config.getBodySize(),
+              data.boxSize,
+          )
 
       val cEntity =
           AircraftBuilderEntityData(
@@ -57,7 +67,8 @@ object AircraftBuilderSpawn {
               spawnPlayer,
               data,
               yaw,
-              item)
+              item,
+          )
       AircraftBuilderEntityList.addEntity(cEntity)
       BuilderSpawnSupport.rememberTrialSpawn(owner, spawnPlayer, oldSpawnCarData, cEntity)
       return true

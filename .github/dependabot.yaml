@@ -47,3 +47,4 @@ updates:
     ignore:
       - dependency-name: "*purpur-api*"
       - dependency-name: "gradle-wrapper"
+      - dependency-name: "spotless-plugin"

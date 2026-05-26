@@ -12,7 +12,7 @@ import org.joml.Vector3f
 
 fun CarBuilder2EntityData.reOffsetDisplayMapImpl(
     type: CarBuilder2EntityType,
-    newOffset: Map<Int, Vector>
+    newOffset: Map<Int, Vector>,
 ) {
   this.reOffsetDisplay(type, newOffset.toMutableMap())
 }
@@ -27,7 +27,7 @@ fun CarBuilder2EntityData.saveDefImpl(type: CarBuilder2EntityType) {
 
 fun CarBuilder2EntityData.reOffsetDisplayImpl(
     type: CarBuilder2EntityType,
-    newOffset: MutableMap<Int, Vector>
+    newOffset: MutableMap<Int, Vector>,
 ) {
   val currentTypeMap = this.display[type] ?: return
   val hitKeys = mutableListOf<Pair<Int, Vector>>()
@@ -53,7 +53,8 @@ fun CarBuilder2EntityData.reOffsetDisplayImpl(
                           .rotationX(Math.toRadians(this.pitch.toDouble()).toFloat())
                           .rotateY(Math.toRadians(this.setYaw.toDouble()).toFloat()),
                       trans.scale,
-                      trans.rightRotation)
+                      trans.rightRotation,
+                  )
             }
           }
         }
@@ -69,7 +70,8 @@ fun CarBuilder2EntityData.reOffsetDisplayImpl(
                       .rotationX(Math.toRadians(this.pitch.toDouble()).toFloat())
                       .rotateY(Math.toRadians(this.setYaw.toDouble()).toFloat()),
                   trans.scale,
-                  trans.rightRotation)
+                  trans.rightRotation,
+              )
         }
       }
     }

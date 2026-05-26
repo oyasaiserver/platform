@@ -19,12 +19,14 @@ fun handleCarBuilder2Info(sender: CommandSender, name: String, data: CarBuilder2
           "Entity count: ${data.totalEntity()}",
           "[Body]",
           "  Size: ${BuilderInfoCommon.formatNumber(config.getSize(CarBuilder2BaseDataType.Body))}",
-          "  Offset: ${BuilderInfoCommon.formatVector(config.getOffsetBody())}")
+          "  Offset: ${BuilderInfoCommon.formatVector(config.getOffsetBody())}",
+      )
 
   listOf(
           CarBuilder2BaseDataType.Wheel,
           CarBuilder2BaseDataType.Wheel2,
-          CarBuilder2BaseDataType.HeadLight)
+          CarBuilder2BaseDataType.HeadLight,
+      )
       .forEach { type ->
         info.add("[${type.configName}]")
         info.add("  Size: ${BuilderInfoCommon.formatNumber(config.getSize(type))}")
@@ -39,7 +41,8 @@ fun handleCarBuilder2Info(sender: CommandSender, name: String, data: CarBuilder2
         if (type == CarBuilder2BaseDataType.HeadLight) {
           info.add("  Angle: ${BuilderInfoCommon.formatNumber(config.getHeadLightAngle())}")
           info.add(
-              "  RotateOffset: ${BuilderInfoCommon.formatVector(config.getHeadLightRotateOffset())}")
+              "  RotateOffset: ${BuilderInfoCommon.formatVector(config.getHeadLightRotateOffset())}"
+          )
         }
       }
 

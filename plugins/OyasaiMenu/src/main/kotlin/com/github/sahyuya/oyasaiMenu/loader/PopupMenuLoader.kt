@@ -35,7 +35,8 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
             "utility",
             "macromenu",
             "links",
-            "vtpbiome")
+            "vtpbiome",
+        )
         .forEach { name ->
           val f = File(dir, "$name.yml")
           if (!f.exists()) {
@@ -108,7 +109,8 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
                 runCatching { Material.valueOf(fallbackIconName) }
                     .getOrElse {
                       plugin.logger.warning(
-                          "Popup $id '$key': 不明な fallback_icon '$fallbackIconName'")
+                          "Popup $id '$key': 不明な fallback_icon '$fallbackIconName'"
+                      )
                       null
                     }
           }
@@ -147,7 +149,9 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
               fallbackTexture = fallbackTexture,
               fallbackName = fallbackName,
               fallbackLore = fallbackLore,
-              fallbackActions = fallbackActions))
+              fallbackActions = fallbackActions,
+          )
+      )
     }
 
     return PopupMenuDef(id = id, title = title, glass = glass, navActive = navActive, items = items)
@@ -173,7 +177,7 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
   private fun parseItemSpec(
       sec: ConfigurationSection?,
       popupId: String,
-      itemKey: String
+      itemKey: String,
   ): PopupItemSpec? {
     if (sec == null) return null
     val id =
@@ -216,7 +220,8 @@ class PopupMenuLoader(private val plugin: OyasaiMenu) {
         material = material,
         amount = sec.getInt("count", sec.getInt("amount", 1)).coerceIn(1, 64),
         blockState = blockState,
-        rawComponents = rawComponents)
+        rawComponents = rawComponents,
+    )
   }
 
   private fun parseAction(map: Map<String, Any>): PopupAction? =

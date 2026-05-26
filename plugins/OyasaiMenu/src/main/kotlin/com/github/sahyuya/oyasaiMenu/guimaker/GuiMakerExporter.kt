@@ -287,7 +287,8 @@ object GuiMakerExporter {
               .map { map ->
                 GuiActionDef(
                     type = map["type"]?.toString() ?: "UNKNOWN",
-                    params = map.filterKeys { it != "type" }.mapValues { it.value.toString() })
+                    params = map.filterKeys { it != "type" }.mapValues { it.value.toString() },
+                )
               }
               .toMutableList()
 
@@ -297,7 +298,8 @@ object GuiMakerExporter {
               lore = sec.getStringList("lore").toMutableList(),
               permission = sec.getString("permission"),
               enchanted = sec.getBoolean("enchanted", false),
-              actions = actions)
+              actions = actions,
+          )
       session.slots[slot] = def
 
       // PDC をアイテムに付与してアイテム本位で追従するようにする
@@ -308,32 +310,38 @@ object GuiMakerExporter {
             meta.displayName(
                 LegacyComponentSerializer.legacyAmpersand()
                     .deserialize(def.name)
-                    .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false))
+                    .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
+            )
         if (def.lore.isNotEmpty())
             meta.lore(
                 def.lore.map {
                   LegacyComponentSerializer.legacyAmpersand()
                       .deserialize(it)
                       .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
-                })
+                }
+            )
         ItemVisuals.applyEnchantVisual(meta, def.enchanted)
         val pdc = meta.persistentDataContainer
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_name"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            def.name)
+            def.name,
+        )
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_lore"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            def.lore.joinToString("\n"))
+            def.lore.joinToString("\n"),
+        )
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_perm"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            def.permission ?: "")
+            def.permission ?: "",
+        )
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_enchanted"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            if (def.enchanted) "1" else "")
+            if (def.enchanted) "1" else "",
+        )
         val actStr =
             def.actions.joinToString("\n") { a ->
               a.type +
@@ -347,11 +355,13 @@ object GuiMakerExporter {
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_actions"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            actStr)
+            actStr,
+        )
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_extra"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            serializeExtras(def.extras))
+            serializeExtras(def.extras),
+        )
         item.itemMeta = meta
       }
       tempInv.setItem(slot, item)
@@ -367,7 +377,8 @@ object GuiMakerExporter {
     session.popupMeta =
         PopupEditorMeta(
             glass = yaml.getString("glass", "GRAY_STAINED_GLASS_PANE") ?: "GRAY_STAINED_GLASS_PANE",
-            navActive = yaml.getInt("nav_active", -1))
+            navActive = yaml.getInt("nav_active", -1),
+        )
     session.slots.clear()
 
     val tempInv = Bukkit.createInventory(null, 54)
@@ -390,7 +401,8 @@ object GuiMakerExporter {
               lore = sec.getStringList("lore").toMutableList(),
               permission = sec.getString("required_permission"),
               enchanted = sec.getBoolean("enchanted", false),
-              actions = parsePopupActions(sec.getList("actions")).toMutableList())
+              actions = parsePopupActions(sec.getList("actions")).toMutableList(),
+          )
       def.extras["popup.key"] = key
       texture?.let { def.extras["texture"] = it }
       if (sec.getBoolean("op_only", false)) def.extras["op_only"] = "true"
@@ -411,40 +423,48 @@ object GuiMakerExporter {
             meta.displayName(
                 LegacyComponentSerializer.legacyAmpersand()
                     .deserialize(def.name)
-                    .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false))
+                    .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
+            )
         if (def.lore.isNotEmpty())
             meta.lore(
                 def.lore.map {
                   LegacyComponentSerializer.legacyAmpersand()
                       .deserialize(it)
                       .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
-                })
+                }
+            )
         ItemVisuals.applyEnchantVisual(meta, def.enchanted)
         val pdc = meta.persistentDataContainer
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_name"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            def.name)
+            def.name,
+        )
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_lore"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            def.lore.joinToString("\n"))
+            def.lore.joinToString("\n"),
+        )
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_perm"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            def.permission ?: "")
+            def.permission ?: "",
+        )
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_enchanted"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            if (def.enchanted) "1" else "")
+            if (def.enchanted) "1" else "",
+        )
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_actions"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            serializeActions(def.actions))
+            serializeActions(def.actions),
+        )
         pdc.set(
             org.bukkit.NamespacedKey(plugin, "gm_extra"),
             org.bukkit.persistence.PersistentDataType.STRING,
-            serializeExtras(def.extras))
+            serializeExtras(def.extras),
+        )
         item.itemMeta = meta
       }
       tempInv.setItem(slot, item)
@@ -455,7 +475,7 @@ object GuiMakerExporter {
   private fun parseLoadedPopupIntoSession(
       plugin: OyasaiMenu,
       popup: PopupMenuDef,
-      session: GuiEditorSession
+      session: GuiEditorSession,
   ) {
     session.surface = GuiEditableSurface.POPUP
     session.menuTitle = popup.title
@@ -473,7 +493,8 @@ object GuiMakerExporter {
               lore = popupItem.lore.toMutableList(),
               permission = popupItem.requiredPermission,
               enchanted = popupItem.enchanted,
-              actions = popupItem.actions.map { popupActionDef(it) }.toMutableList())
+              actions = popupItem.actions.map { popupActionDef(it) }.toMutableList(),
+          )
       def.extras["popup.key"] = popupItem.key
       popupItem.customTexture?.let { def.extras["texture"] = it }
       if (popupItem.opOnly) def.extras["op_only"] = "true"
@@ -522,7 +543,7 @@ object GuiMakerExporter {
       inv: org.bukkit.inventory.Inventory,
       slot: Int,
       mat: Material,
-      def: GuiSlotDef
+      def: GuiSlotDef,
   ) {
     val item = ItemStack(mat)
     val meta = item.itemMeta
@@ -531,40 +552,48 @@ object GuiMakerExporter {
           meta.displayName(
               LegacyComponentSerializer.legacyAmpersand()
                   .deserialize(def.name)
-                  .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false))
+                  .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
+          )
       if (def.lore.isNotEmpty())
           meta.lore(
               def.lore.map {
                 LegacyComponentSerializer.legacyAmpersand()
                     .deserialize(it)
                     .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)
-              })
+              }
+          )
       ItemVisuals.applyEnchantVisual(meta, def.enchanted)
       val pdc = meta.persistentDataContainer
       pdc.set(
           org.bukkit.NamespacedKey(plugin, "gm_name"),
           org.bukkit.persistence.PersistentDataType.STRING,
-          def.name)
+          def.name,
+      )
       pdc.set(
           org.bukkit.NamespacedKey(plugin, "gm_lore"),
           org.bukkit.persistence.PersistentDataType.STRING,
-          def.lore.joinToString("\n"))
+          def.lore.joinToString("\n"),
+      )
       pdc.set(
           org.bukkit.NamespacedKey(plugin, "gm_perm"),
           org.bukkit.persistence.PersistentDataType.STRING,
-          def.permission ?: "")
+          def.permission ?: "",
+      )
       pdc.set(
           org.bukkit.NamespacedKey(plugin, "gm_enchanted"),
           org.bukkit.persistence.PersistentDataType.STRING,
-          if (def.enchanted) "1" else "")
+          if (def.enchanted) "1" else "",
+      )
       pdc.set(
           org.bukkit.NamespacedKey(plugin, "gm_actions"),
           org.bukkit.persistence.PersistentDataType.STRING,
-          serializeActions(def.actions))
+          serializeActions(def.actions),
+      )
       pdc.set(
           org.bukkit.NamespacedKey(plugin, "gm_extra"),
           org.bukkit.persistence.PersistentDataType.STRING,
-          serializeExtras(def.extras))
+          serializeExtras(def.extras),
+      )
       item.itemMeta = meta
     }
     inv.setItem(slot, item)
@@ -580,7 +609,7 @@ object GuiMakerExporter {
       yaml: YamlConfiguration,
       base: String,
       def: GuiSlotDef?,
-      field: String
+      field: String,
   ) {
     def?.extras?.get(field)?.takeIf { it.isNotBlank() }?.let { yaml.set("$base.$field", it) }
   }
@@ -619,7 +648,9 @@ object GuiMakerExporter {
           map.containsKey("open_macro") -> GuiActionDef("OPEN_MACRO")
           map.containsKey("open_point_shop") ->
               GuiActionDef(
-                  "OPEN_POINT_SHOP", mapOf("category" to map["open_point_shop"].toString()))
+                  "OPEN_POINT_SHOP",
+                  mapOf("category" to map["open_point_shop"].toString()),
+              )
           map.containsKey("open_menu") ->
               GuiActionDef("OPEN_MENU", mapOf("target" to map["open_menu"].toString()))
           map.containsKey("close") -> GuiActionDef("CLOSE")

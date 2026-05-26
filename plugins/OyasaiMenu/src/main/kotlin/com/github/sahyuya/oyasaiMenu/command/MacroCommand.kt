@@ -25,7 +25,7 @@ class MacroCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplet
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     val player =
         sender as? Player
@@ -100,7 +100,8 @@ class MacroCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplet
             Component.text("  ")
                 .decoration(TextDecoration.ITALIC, false)
                 .append(buildIdComponent(share.shareId))
-                .append(comp("  &8[${dateFormat.format(Date(share.createdAt))}]")))
+                .append(comp("  &8[${dateFormat.format(Date(share.createdAt))}]"))
+        )
       }
       if (existing.size > 5) player.sendMessage(comp("  &8...他 ${existing.size - 5} 件"))
       player.sendMessage(comp("&7新しいIDを発行する場合は下のIDをご利用ください:"))
@@ -117,7 +118,8 @@ class MacroCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplet
             .decoration(TextDecoration.ITALIC, false)
             .append(comp("&a新しい共有ID: "))
             .append(buildIdComponent(shareId))
-            .append(comp("  &7(クリックでコピー)")))
+            .append(comp("  &7(クリックでコピー)"))
+    )
     player.sendMessage(comp("&7相手に &f/macro import $shareId &7と伝えてください。"))
   }
 
@@ -135,7 +137,8 @@ class MacroCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplet
               .decoration(TextDecoration.ITALIC, false)
               .append(comp("&7${share.macroName}: "))
               .append(buildIdComponent(share.shareId))
-              .append(comp("  &8[${dateFormat.format(Date(share.createdAt))}]")))
+              .append(comp("  &8[${dateFormat.format(Date(share.createdAt))}]"))
+      )
     }
     if (all.size > 20) player.sendMessage(comp("&8...他 ${all.size - 20} 件 (古いものは省略)"))
     player.sendMessage(comp("&7取り込み: &f/macro import <ID>"))
@@ -161,9 +164,11 @@ class MacroCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplet
                 name = shared.macroName,
                 ownerUUID = player.uniqueId.toString(),
                 commands = shared.commands,
-                cooldownSeconds = plugin.config.getInt("macro.cooldown-seconds", 3)),
+                cooldownSeconds = plugin.config.getInt("macro.cooldown-seconds", 3),
+            ),
             plugin.macroManager.getMaxMacros(player),
-            player)
+            player,
+        )
     if (err != null) {
       player.sendMessage(c("&c取り込み失敗: $err"))
       return
@@ -186,7 +191,9 @@ class MacroCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplet
               HoverEvent.showText(
                   Component.text("クリックでコピー: $shareId")
                       .color(NamedTextColor.GRAY)
-                      .decoration(TextDecoration.ITALIC, false)))
+                      .decoration(TextDecoration.ITALIC, false)
+              )
+          )
 
   private fun generateUniqueId(baseId: String, existing: Set<String>): String {
     if (!existing.contains(baseId)) return baseId
@@ -199,7 +206,7 @@ class MacroCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplet
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String>? {
     val player = sender as? Player ?: return emptyList()
     val prefix = args.lastOrNull() ?: ""

@@ -20,7 +20,7 @@ fun CarBuilder2EntityData.smokeParticleImpl(
     speed: Double,
     slipAngle: Float,
     yaw: Float,
-    player: Player?
+    player: Player?,
 ) {
   if (player == null) return
   if (abs(slipAngle) < 8.5f || speed <= 0.1) return
@@ -49,7 +49,8 @@ fun CarBuilder2EntityData.smokeParticleImpl(
             kotlin.random.Random.nextDouble(1.1) * 0.1,
             kotlin.random.Random.nextDouble(0.5) * 0.1,
             kotlin.random.Random.nextDouble(1.1) * 0.1,
-            dustOptions)
+            dustOptions,
+        )
       }
     }
   }
@@ -67,13 +68,15 @@ fun CarBuilder2EntityData.smokeParticleImpl(
       Sound.ENTITY_GHAST_SCREAM,
       SoundCategory.PLAYERS,
       volume,
-      soundPitch1)
+      soundPitch1,
+  )
   world.playSound(
       this.bodyArmorStands[0].location,
       Sound.ENTITY_GHAST_SCREAM,
       SoundCategory.PLAYERS,
       volume,
-      soundPitch2)
+      soundPitch2,
+  )
 }
 
 fun CarBuilder2EntityData.isLightBlockToListImpl() {
@@ -85,20 +88,23 @@ fun CarBuilder2EntityData.isLightBlockToListImpl() {
           Material.LANTERN,
           Material.SOUL_LANTERN,
           Material.SEA_LANTERN,
-          Material.END_ROD)
+          Material.END_ROD,
+      )
   val brakeMaterials =
       setOf(
           Material.REDSTONE_BLOCK,
           Material.RED_NETHER_BRICKS,
           Material.RED_NETHER_BRICK_SLAB,
           Material.RED_NETHER_BRICK_STAIRS,
-          Material.CHISELED_NETHER_BRICKS)
+          Material.CHISELED_NETHER_BRICKS,
+      )
   val winkerMaterials =
       setOf(
           Material.ORANGE_TERRACOTTA,
           Material.YELLOW_TERRACOTTA,
           Material.ORANGE_SHULKER_BOX,
-          Material.YELLOW_SHULKER_BOX)
+          Material.YELLOW_SHULKER_BOX,
+      )
 
   CarBuilder2DisplayType.entries.forEach { displayTypeList[it] = LinkedHashSet() }
 

@@ -93,7 +93,9 @@ class AnnouncementManager(private val plugin: OyasaiMenu) : Listener {
               "ここにお知らせの内容を書いてください。\n" +
                   "改行ごとに Lore の1行になります。\n\n" +
                   "Done のみ → Lore を更新 (本は消えます)\n" +
-                  "署名して確定 → 署名名がタイトルになります (本は消えます)"))
+                  "署名して確定 → 署名名がタイトルになります (本は消えます)"
+          )
+      )
     } else {
       splitIntoPages(currentBody.joinToString("\n"), 254).forEach {
         meta.addPages(Component.text(it))
@@ -154,8 +156,10 @@ class AnnouncementManager(private val plugin: OyasaiMenu) : Listener {
         plugin,
         Runnable {
           val atSlot = player.inventory.getItem(slot)
-          if (atSlot != null &&
-              (atSlot.type == Material.WRITABLE_BOOK || atSlot.type == Material.WRITTEN_BOOK)) {
+          if (
+              atSlot != null &&
+                  (atSlot.type == Material.WRITABLE_BOOK || atSlot.type == Material.WRITTEN_BOOK)
+          ) {
             player.inventory.setItem(slot, null)
             return@Runnable
           }
@@ -168,7 +172,8 @@ class AnnouncementManager(private val plugin: OyasaiMenu) : Listener {
             }
           }
         },
-        3L)
+        3L,
+    )
   }
 
   // ============================
@@ -181,7 +186,8 @@ class AnnouncementManager(private val plugin: OyasaiMenu) : Listener {
     val yaml = YamlConfiguration()
     yaml.set(
         "announcements",
-        listOf(linkedMapOf("title" to currentTitle, "body" to currentBody.toList())))
+        listOf(linkedMapOf("title" to currentTitle, "body" to currentBody.toList())),
+    )
     runCatching { yaml.save(file) }
         .onFailure { e -> plugin.logger.warning("announcements.yml 保存失敗: ${e.message}") }
   }

@@ -34,7 +34,8 @@ object OyasaiSchematics : Command("oyasai-schematics") {
         }
         sender.sendMessage(
             Component.text("[$name] ダウンロード成功。このメッセージをクリックしてコマンドをコピー、実行してロードできます。")
-                .clickEvent(ClickEvent.copyToClipboard("/schematic load $id.schem")))
+                .clickEvent(ClickEvent.copyToClipboard("/schematic load $id.schem"))
+        )
       }
     }
     return true

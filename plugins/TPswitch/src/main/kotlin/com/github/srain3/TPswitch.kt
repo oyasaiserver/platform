@@ -36,20 +36,24 @@ class TPswitch : JavaPlugin() {
         }
         if (config.getBoolean("${server.getPlayerExact(targetP)!!.uniqueId}.switch", true)) {
           // TP open (BlackList Check)
-          if (config.getBoolean(
-              "${server.getPlayerExact(targetP)!!.uniqueId}.BlackList.${senderP.uniqueId}",
-              false,
-          )) { // BlackList Player!!! TP Cancel!!!
+          if (
+              config.getBoolean(
+                  "${server.getPlayerExact(targetP)!!.uniqueId}.BlackList.${senderP.uniqueId}",
+                  false,
+              )
+          ) { // BlackList Player!!! TP Cancel!!!
             senderP.sendMessage("§6TPinfo:§e$targetP §6is in closed mode!")
             return true
           } // no BlackList Player
           return false
         } else {
           // TP Close (WhiteList Check)
-          if (config.getBoolean(
-              "${server.getPlayerExact(targetP)!!.uniqueId}.WhiteList.${senderP.uniqueId}",
-              false,
-          )) { // WhiteList Player
+          if (
+              config.getBoolean(
+                  "${server.getPlayerExact(targetP)!!.uniqueId}.WhiteList.${senderP.uniqueId}",
+                  false,
+              )
+          ) { // WhiteList Player
             return false
           } // no WhiteList Player. TP Cancel!
           senderP.sendMessage("§6TPinfo:§e$targetP §6is in closed mode!")
@@ -222,7 +226,8 @@ class TPswitch : JavaPlugin() {
                   )
                   config.set("${sender.uniqueId}.BlackListName.${args[1]}", null)
                   sender.sendMessage(
-                      "§6TPinfo: You WhiteList add §e${args[1]}\n§6We accept TP from §e${args[1]}")
+                      "§6TPinfo: You WhiteList add §e${args[1]}\n§6We accept TP from §e${args[1]}"
+                  )
                   saveConfig()
                   return true
                 }
@@ -242,7 +247,8 @@ class TPswitch : JavaPlugin() {
                   )
                   config.set("${sender.uniqueId}.WhiteListName.${args[1]}", null)
                   sender.sendMessage(
-                      "§6TPinfo: You BlackList add §c${args[1]}\n§6We do not accept TP from §c${args[1]}")
+                      "§6TPinfo: You BlackList add §c${args[1]}\n§6We do not accept TP from §c${args[1]}"
+                  )
                   saveConfig()
                   return true
                 }
@@ -262,7 +268,8 @@ class TPswitch : JavaPlugin() {
                   )
                   config.set("${sender.uniqueId}.WhiteListName.${args[1]}", null)
                   sender.sendMessage(
-                      "§6TPinfo: You have removed §e${args[1]} §6from the list\n§e${args[1]} §6is affected by your OPEN/CLOSE")
+                      "§6TPinfo: You have removed §e${args[1]} §6from the list\n§e${args[1]} §6is affected by your OPEN/CLOSE"
+                  )
                   saveConfig()
                   return true
                 }

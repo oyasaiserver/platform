@@ -19,7 +19,7 @@ abstract class BaseVehicleEntityDataCore(
     final override val summoner: Player?,
     val plugin: Plugin,
     val bossBarKey: NamespacedKey,
-    val bossBar: KeyedBossBar
+    val bossBar: KeyedBossBar,
 ) : VehicleEntityData {
   abstract override var owner: UUID?
   override val displayList: MutableSet<Display> = LinkedHashSet()
@@ -56,6 +56,7 @@ abstract class BaseVehicleEntityDataCore(
           this.refreshDisplayEntityID()
           this.arrayEntityID.toIntArray()
         },
-        NmsMountBridge::sendMountPacket)
+        NmsMountBridge::sendMountPacket,
+    )
   }
 }

@@ -50,7 +50,7 @@ object EntityLifecycleCommon {
 
   fun refreshDisplayList(
       displayList: MutableSet<Display>,
-      displayGroups: Iterable<Iterable<Display>>
+      displayGroups: Iterable<Iterable<Display>>,
   ) {
     displayList.clear()
     displayGroups.forEach { displayList.addAll(it) }
@@ -58,7 +58,7 @@ object EntityLifecycleCommon {
 
   fun refreshDisplayEntityIds(
       arrayEID: MutableSet<Int>,
-      displayGroups: Iterable<Iterable<Display>>
+      displayGroups: Iterable<Iterable<Display>>,
   ): List<Int> {
     arrayEID.clear()
     displayGroups.forEach { displaySet ->
@@ -72,7 +72,7 @@ object EntityLifecycleCommon {
       nearbyPlayers: Collection<Player>,
       rootEntityId: Int,
       mountEntityIds: () -> IntArray,
-      sendMountPacket: (Player, Int, IntArray) -> Unit
+      sendMountPacket: (Player, Int, IntArray) -> Unit,
   ) {
     nearbyPlayers.forEach { player ->
       if (!trackedPlayers.contains(player)) {

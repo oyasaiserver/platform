@@ -10,12 +10,12 @@ data class GuiSlotDef(
     var permission: String? = null,
     var enchanted: Boolean = false,
     val actions: MutableList<GuiActionDef> = mutableListOf(),
-    val extras: MutableMap<String, String> = mutableMapOf()
+    val extras: MutableMap<String, String> = mutableMapOf(),
 )
 
 enum class GuiEditableSurface {
   NORMAL,
-  POPUP
+  POPUP,
 }
 
 data class PopupEditorMeta(var glass: String = "GRAY_STAINED_GLASS_PANE", var navActive: Int = -1)
@@ -23,7 +23,7 @@ data class PopupEditorMeta(var glass: String = "GRAY_STAINED_GLASS_PANE", var na
 class GuiEditorSession(
     val menuId: String,
     var menuTitle: String = "&8メニュー",
-    var menuSize: Int = 54
+    var menuSize: Int = 54,
 ) {
   var surface: GuiEditableSurface = GuiEditableSurface.NORMAL
   var popupMeta: PopupEditorMeta? = null

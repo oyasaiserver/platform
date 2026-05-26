@@ -17,7 +17,8 @@ object GuiMakerMigration {
             copyDirectory(sourceRoot.resolve("ui-skin"), plugin.dataFolder.resolve("ui-skin")) +
             copyFileIfMissing(
                 sourceRoot.resolve("gui-maker-ui-screens.yml"),
-                plugin.dataFolder.resolve("gui-maker-ui-screens.yml"))
+                plugin.dataFolder.resolve("gui-maker-ui-screens.yml"),
+            )
 
     if (copied > 0) {
       plugin.logger.info("GuiMaker: CitiesSkyMine から $copied 件の既存データを OyasaiMenu へ移行しました。")

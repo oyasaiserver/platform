@@ -56,13 +56,14 @@ object AllBuild {
             ItemStack(Material.RED_WOOL).apply {
               allFlag()
               addText("&f前のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pagePane.page > 0) {
-                pagePane.setPage(pagePane.page - 1)
-                gui.title = Tools.socialLikesLOGOShort + "&r 全ての建築 p${pagePane.page+1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pagePane.page > 0) {
+            pagePane.setPage(pagePane.page - 1)
+            gui.title = Tools.socialLikesLOGOShort + "&r 全ての建築 p${pagePane.page+1}".color()
+            gui.update()
+          }
+        },
         0,
         0,
     )
@@ -71,13 +72,14 @@ object AllBuild {
             ItemStack(Material.GREEN_WOOL).apply {
               allFlag()
               addText("&f次のページへ", mutableListOf())
-            }) { _: InventoryClickEvent? ->
-              if (pagePane.page < pagePane.pages - 1) {
-                pagePane.setPage(pagePane.page + 1)
-                gui.title = Tools.socialLikesLOGOShort + "&r 全ての建築 p${pagePane.page+1}".color()
-                gui.update()
-              }
-            },
+            }
+        ) { _: InventoryClickEvent? ->
+          if (pagePane.page < pagePane.pages - 1) {
+            pagePane.setPage(pagePane.page + 1)
+            gui.title = Tools.socialLikesLOGOShort + "&r 全ての建築 p${pagePane.page+1}".color()
+            gui.update()
+          }
+        },
         8,
         0,
     )
@@ -86,9 +88,10 @@ object AllBuild {
             ItemStack(Material.BARRIER).apply {
               allFlag()
               addText("&c閉じる", mutableListOf())
-            }) { event: InventoryClickEvent ->
-              event.whoClicked.closeInventory()
-            },
+            }
+        ) { event: InventoryClickEvent ->
+          event.whoClicked.closeInventory()
+        },
         4,
         0,
     )

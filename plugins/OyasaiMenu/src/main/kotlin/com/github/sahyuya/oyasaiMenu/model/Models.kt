@@ -6,7 +6,7 @@ data class MenuDefinition(
     val id: String,
     val title: String,
     val size: Int = 54,
-    val items: Map<String, MenuItemDefinition> = emptyMap()
+    val items: Map<String, MenuItemDefinition> = emptyMap(),
 )
 
 /**
@@ -21,7 +21,7 @@ data class MenuItemDefinition(
     val actions: List<MenuAction> = emptyList(),
     val permission: String? = null,
     val customTexture: String? = null,
-    val enchanted: Boolean = false
+    val enchanted: Boolean = false,
 )
 
 enum class ActionType {
@@ -55,14 +55,14 @@ enum class ActionType {
   OPEN_CARBUILDER,
   OPEN_LINKS,
   OPEN_SELL,
-  UNKNOWN
+  UNKNOWN,
 }
 
 data class MenuAction(
     val type: ActionType,
     val params: Map<String, Any> = emptyMap(),
     val success: List<MenuAction> = emptyList(),
-    val fail: List<MenuAction> = emptyList()
+    val fail: List<MenuAction> = emptyList(),
 ) {
   fun getString(key: String, default: String = ""): String = params[key]?.toString() ?: default
 }
@@ -74,5 +74,5 @@ data class PlayerMacro(
     val name: String,
     val ownerUUID: String,
     val commands: List<String>,
-    val cooldownSeconds: Int = 3
+    val cooldownSeconds: Int = 3,
 )

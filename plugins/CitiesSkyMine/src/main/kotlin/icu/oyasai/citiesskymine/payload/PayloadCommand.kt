@@ -37,7 +37,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     val sub = args.getOrNull(0)?.lowercase()
     if (sub == null || sub == "help") {
@@ -89,7 +89,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val maxSourceBlocks =
         plugin.config.getLong(
             "limits.max-source-blocks-csm",
-            plugin.config.getLong("limits.max-blocks-csm", 2_000_000L))
+            plugin.config.getLong("limits.max-blocks-csm", 2_000_000L),
+        )
     if (maxSourceBlocks > 0 && sourceBlockCount > maxSourceBlocks) {
       MessageUtil.error(sender, "復元元ブロック数が上限 ($maxSourceBlocks) を超えています: $sourceBlockCount")
       return true
@@ -100,7 +101,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             ?: run {
               MessageUtil.error(
                   sender,
-                  "配置指定は 0, 1, 2, 3 と L/R と hollow/solid を指定してください。例: /csm payload load <payload> 1 L hollow")
+                  "配置指定は 0, 1, 2, 3 と L/R と hollow/solid を指定してください。例: /csm payload load <payload> 1 L hollow",
+              )
               return true
             }
     val placementColumns =
@@ -158,14 +160,16 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     MessageUtil.success(
         sender,
-        "CitiesSkyMine payload を配置しました: ${placementColumns.size} columns / $blockCount blocks / rotation $buildingTurns / side ${placementOptions.side.code} / ${if (placementOptions.hollow) "hollow" else "solid"}")
+        "CitiesSkyMine payload を配置しました: ${placementColumns.size} columns / $blockCount blocks / rotation $buildingTurns / side ${placementOptions.side.code} / ${if (placementOptions.hollow) "hollow" else "solid"}",
+    )
     if (placementOptions.hollow) {
       MessageUtil.info(sender, "hollow: $sourceBlockCount -> $blockCount blocks")
     }
     if (selectionApplied && placementBounds != null) {
       MessageUtil.info(
           sender,
-          "配置範囲を選択しました: ${placementBounds.minX},${placementBounds.minY},${placementBounds.minZ} -> ${placementBounds.maxX},${placementBounds.maxY},${placementBounds.maxZ}")
+          "配置範囲を選択しました: ${placementBounds.minX},${placementBounds.minY},${placementBounds.minZ} -> ${placementBounds.maxX},${placementBounds.maxY},${placementBounds.maxZ}",
+      )
     }
     if (context.actor == null) {
       MessageUtil.warn(sender, "プレイヤー実行ではないため、FAWE の //undo 履歴には登録していません。")
@@ -181,21 +185,25 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     return when (args.size) {
       1 -> listOf("load", "load64", "help").filter { it.startsWith(args[0], ignoreCase = true) }
       3 ->
-          if (args[0].equals("load", ignoreCase = true) ||
-              args[0].equals("load64", ignoreCase = true)) {
+          if (
+              args[0].equals("load", ignoreCase = true) ||
+                  args[0].equals("load64", ignoreCase = true)
+          ) {
             placementSuggestions(args)
           } else {
             emptyList()
           }
       4,
       5 ->
-          if (args[0].equals("load", ignoreCase = true) ||
-              args[0].equals("load64", ignoreCase = true)) {
+          if (
+              args[0].equals("load", ignoreCase = true) ||
+                  args[0].equals("load64", ignoreCase = true)
+          ) {
             placementSuggestions(args)
           } else {
             emptyList()
@@ -236,7 +244,9 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
               "L2",
               "R2",
               "L3",
-              "R3"))
+              "R3",
+          )
+      )
     }
     if (!hasHollow) suggestions.addAll(listOf("hollow", "solid"))
     return suggestions.filter { it.startsWith(args.last(), ignoreCase = true) }
@@ -249,7 +259,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     MessageUtil.helpEntry(
         sender,
         "/csm payload load <payload> [0-3] [L|R] [hollow|solid]",
-        "建物回転、プレイヤー基準の左右、hollowを指定")
+        "建物回転、プレイヤー基準の左右、hollowを指定",
+    )
     MessageUtil.helpEntry(sender, "//undo", "直前のpayload配置をFAWEで取り消し")
   }
 
@@ -261,7 +272,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             world = sender.world,
             origin = BlockVector3.at(loc.blockX, loc.blockY, loc.blockZ),
             viewTurns = yawTurns(loc.yaw),
-            actor = sender)
+            actor = sender,
+        )
       }
       is BlockCommandSender -> {
         val block = sender.block
@@ -270,7 +282,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             world = block.world,
             origin = BlockVector3.at(loc.blockX, loc.blockY + 1, loc.blockZ),
             viewTurns = blockTurns(block.blockData as? Directional),
-            actor = null)
+            actor = null,
+        )
       }
       else -> null
     }
@@ -322,7 +335,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
   private fun buildRoofLoweringPlan(
       columns: List<Column>,
-      index: Map<Long, List<YRange>>
+      index: Map<Long, List<YRange>>,
   ): RoofLoweringPlan {
     val removedBlocks = HashSet<BlockPos>()
     val roofFloors = HashSet<BlockPos>()
@@ -377,7 +390,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             .thenBy { it.z }
             .thenBy { it.yMin }
             .thenBy { it.height }
-            .thenBy { it.block.ordinal })
+            .thenBy { it.block.ordinal }
+    )
     return result
   }
 
@@ -433,7 +447,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       index: Map<Long, List<YRange>>,
       x: Int,
       y: Int,
-      z: Int
+      z: Int,
   ): Boolean =
       containsBlock(index, x + 1, y, z) &&
           containsBlock(index, x - 1, y, z) &&
@@ -502,12 +516,14 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         mapOf(
             "payload.rotation" to options.buildingTurns.floorMod(4),
             "payload.side" to options.side.code,
-            "payload.hollow" to options.hollow))
+            "payload.hollow" to options.hollow,
+        ),
+    )
   }
 
   private fun parsePlacementOptions(
       args: Array<String>,
-      defaults: PlacementOptions
+      defaults: PlacementOptions,
   ): PlacementOptions? {
     var buildingTurns = defaults.buildingTurns
     var side = defaults.side
@@ -620,7 +636,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       columns: List<PlacementColumn>,
       buildingTurns: Int,
       viewTurns: Int,
-      side: PlacementSide
+      side: PlacementSide,
   ): PlacementPlan {
     val (frontX, frontZ) = rotate(0, 1, viewTurns)
     val rightX = -frontZ
@@ -653,12 +669,13 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     return PlacementPlan(
         buildingTurns = buildingTurns.floorMod(4),
         anchorX = frontX * anchorFront + rightX * anchorRight,
-        anchorZ = frontZ * anchorFront + rightZ * anchorRight)
+        anchorZ = frontZ * anchorFront + rightZ * anchorRight,
+    )
   }
 
   private fun placedColumnPosition(
       column: PlacementColumn,
-      placement: PlacementPlan
+      placement: PlacementPlan,
   ): Pair<Int, Int> {
     val (rx, rz) = rotate(column.x, column.z, placement.buildingTurns)
     return (rx - placement.anchorX) to (rz - placement.anchorZ)
@@ -667,7 +684,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun buildPlacementBounds(
       context: PlacementContext,
       columns: List<PlacementColumn>,
-      placement: PlacementPlan
+      placement: PlacementPlan,
   ): PlacementBounds? {
     if (columns.isEmpty()) {
       return null
@@ -801,7 +818,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
     reader.expectEnd()
     columns.sortWith(
-        compareBy<Column> { it.x }.thenBy { it.z }.thenBy { it.yMin }.thenBy { it.height })
+        compareBy<Column> { it.x }.thenBy { it.z }.thenBy { it.yMin }.thenBy { it.height }
+    )
     return columns
   }
 
@@ -877,7 +895,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val world: World,
       val origin: BlockVector3,
       val viewTurns: Int,
-      val actor: Player?
+      val actor: Player?,
   )
 
   private data class Column(val x: Int, val z: Int, val yMin: Int, val height: Int)
@@ -887,7 +905,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val z: Int,
       val yMin: Int,
       val height: Int,
-      val block: PayloadBlock
+      val block: PayloadBlock,
   )
 
   private data class BlockPos(val x: Int, val y: Int, val z: Int)
@@ -898,13 +916,13 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
   private data class RoofLoweringPlan(
       val removedBlocks: Set<BlockPos>,
-      val roofFloors: Set<BlockPos>
+      val roofFloors: Set<BlockPos>,
   )
 
   private data class VirtualShape(
       val index: Map<Long, List<YRange>>,
       val removedBlocks: Set<BlockPos>,
-      val roofFloors: Set<BlockPos>
+      val roofFloors: Set<BlockPos>,
   )
 
   private data class PlacementPlan(val buildingTurns: Int, val anchorX: Int, val anchorZ: Int)
@@ -915,39 +933,41 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val minZ: Int,
       val maxX: Int,
       val maxY: Int,
-      val maxZ: Int
+      val maxZ: Int,
   )
 
   private data class PlacementOptions(
       val buildingTurns: Int,
       val side: PlacementSide,
-      val hollow: Boolean
+      val hollow: Boolean,
   )
 
   private data class PlacementToken(
       val buildingTurns: Int?,
       val side: PlacementSide?,
-      val hollow: Boolean?
+      val hollow: Boolean?,
   )
 
   private enum class PlacementSide(val code: String) {
     LEFT("L"),
-    RIGHT("R")
+    RIGHT("R"),
   }
 
   private enum class PayloadBlock {
     WALL,
-    ROOF_FLOOR
+    ROOF_FLOOR,
   }
 
   private class ByteReader(private val data: ByteArray) {
     private var pos = 0
 
     fun readMagic(): String {
-      if (data.size < 4 ||
-          data[0] != 'C'.code.toByte() ||
-          data[1] != 'M'.code.toByte() ||
-          data[3] != 1.toByte()) {
+      if (
+          data.size < 4 ||
+              data[0] != 'C'.code.toByte() ||
+              data[1] != 'M'.code.toByte() ||
+              data[3] != 1.toByte()
+      ) {
         throw IllegalArgumentException("CM* v1 payload ではありません")
       }
       pos = 4

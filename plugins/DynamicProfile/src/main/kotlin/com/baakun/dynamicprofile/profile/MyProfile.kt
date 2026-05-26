@@ -31,7 +31,31 @@ object MyProfile {
     addBlackStandGlass(
         inventory,
         arrayOf(
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 18, 27, 36, 45, 46, 12, 13, 14, 15, 16, 51, 52, 53),
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            18,
+            27,
+            36,
+            45,
+            46,
+            12,
+            13,
+            14,
+            15,
+            16,
+            51,
+            52,
+            53,
+        ),
     )
     commonFunc(inventory, player, player.name)
 
@@ -105,7 +129,12 @@ object MyProfile {
     noticeSetting
         .guiRun {
           player.playSound(
-              player.eyeLocation, Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.75F, 1F)
+              player.eyeLocation,
+              Sound.UI_BUTTON_CLICK,
+              SoundCategory.MASTER,
+              0.75F,
+              1F,
+          )
           statsData.notice = statsData.notice.not()
           noticeSetting.addText(
               "&aレベルアップをタイトルで通知する",

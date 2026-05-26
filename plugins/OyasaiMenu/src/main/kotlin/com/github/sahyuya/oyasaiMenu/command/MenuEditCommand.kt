@@ -19,7 +19,7 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     val player =
         sender as? Player
@@ -73,7 +73,10 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
         player.closeInventory()
         Bukkit.getScheduler()
             .runTaskLater(
-                plugin, Runnable { plugin.announcementManager.openBookEditor(player) }, 1L)
+                plugin,
+                Runnable { plugin.announcementManager.openBookEditor(player) },
+                1L,
+            )
       }
       "show" -> {
         val ann = plugin.announcementManager.getAnnouncements().firstOrNull()
@@ -104,7 +107,8 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
       player.sendMessage(c("&f/menuedit shop &7<category> add <material> <buy> <sell>"))
       player.sendMessage(c("&f/menuedit shop &7<category> remove <index>"))
       player.sendMessage(
-          c("&7カテゴリ: ${plugin.shopLoader.getAllCategories().keys.joinToString(", ")}"))
+          c("&7カテゴリ: ${plugin.shopLoader.getAllCategories().keys.joinToString(", ")}")
+      )
       return
     }
     val category = plugin.shopLoader.getCategory(categoryId)
@@ -118,7 +122,9 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
         category.items.forEachIndexed { i, item ->
           player.sendMessage(
               c(
-                  "&7${i+1}. &f${item.customName ?: item.materialId} &7buy:&a${item.buyPrice} &7sell:&b${item.sellPrice}"))
+                  "&7${i+1}. &f${item.customName ?: item.materialId} &7buy:&a${item.buyPrice} &7sell:&b${item.sellPrice}"
+              )
+          )
         }
       }
       "add" -> {
@@ -144,8 +150,9 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
               player.sendMessage(c("&c不明なマテリアル: $matName"))
               return
             }
-        if (plugin.shopLoader.addItem(categoryId, matName.lowercase(), buyPrice, sellPrice) !=
-            null) {
+        if (
+            plugin.shopLoader.addItem(categoryId, matName.lowercase(), buyPrice, sellPrice) != null
+        ) {
           plugin.shopLoader.reload()
           player.sendMessage(c("&a'$categoryId' に ${matName.lowercase()} を追加しました。"))
         } else player.sendMessage(c("&cカテゴリ '$categoryId' が見つかりません。"))
@@ -182,7 +189,9 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
         entries.forEachIndexed { i, e ->
           player.sendMessage(
               c(
-                  "&7${i+1}. &f${e.displayName} &7(${e.materialName.lowercase()}) &a売値: ${e.sellPrice}"))
+                  "&7${i+1}. &f${e.displayName} &7(${e.materialName.lowercase()}) &a売値: ${e.sellPrice}"
+              )
+          )
         }
       }
       "add" -> {
@@ -214,7 +223,9 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
           player.sendMessage(c("&aホワイトリストに追加しました: &f$dispName &a売値: &f${sellPrice}"))
           player.sendMessage(
               c(
-                  "&7マテリアル: &f${item.type.name.lowercase()}  エンチャント: &f${item.itemMeta?.enchants?.size ?: 0}種"))
+                  "&7マテリアル: &f${item.type.name.lowercase()}  エンチャント: &f${item.itemMeta?.enchants?.size ?: 0}種"
+              )
+          )
         }
       }
       "remove" -> {
@@ -227,7 +238,8 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
         if (removed != null) player.sendMessage(c("&aホワイトリストから削除しました: &f$removed"))
         else
             player.sendMessage(
-                c("&c番号が不正です。1〜${plugin.sellWhitelistManager.getEntries().size} で指定してください。"))
+                c("&c番号が不正です。1〜${plugin.sellWhitelistManager.getEntries().size} で指定してください。")
+            )
       }
       else -> {
         player.sendMessage(c("&b--- /menuedit whitelist ---"))
@@ -259,7 +271,7 @@ class MenuEditCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComp
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String>? {
     val prefix = args.lastOrNull() ?: ""
     return when {

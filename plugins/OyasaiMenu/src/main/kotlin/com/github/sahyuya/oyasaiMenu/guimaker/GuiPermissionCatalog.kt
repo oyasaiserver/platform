@@ -8,7 +8,7 @@ data class PermissionGroupChoice(
     val name: String,
     val displayName: String,
     val category: String,
-    val weight: Int
+    val weight: Int,
 ) {
   val value: String = "lpgroup:$name"
 }
@@ -22,7 +22,8 @@ object GuiPermissionCatalog {
                   name = name,
                   displayName = displayName(name, group.displayName),
                   category = category(name),
-                  weight = group.weight.orElse(0))
+                  weight = group.weight.orElse(0),
+              )
             }
           }
           .getOrElse { emptyList() }
@@ -32,7 +33,8 @@ object GuiPermissionCatalog {
                     categoryOrder().indexOf(it.category).takeIf { index -> index >= 0 } ?: 999
                   }
                   .thenByDescending { it.weight }
-                  .thenBy { it.name })
+                  .thenBy { it.name }
+          )
 
   fun categoryMaterial(category: String): Material =
       when (category) {

@@ -7,7 +7,7 @@ data class PopupMenuDef(
     val title: String,
     val glass: Material,
     val navActive: Int,
-    val items: List<PopupItem>
+    val items: List<PopupItem>,
 )
 
 /**
@@ -39,7 +39,7 @@ data class PopupItem(
     val fallbackTexture: String? = null,
     val fallbackName: String = " ",
     val fallbackLore: List<String> = emptyList(),
-    val fallbackActions: List<PopupAction> = emptyList()
+    val fallbackActions: List<PopupAction> = emptyList(),
 ) {
   /**
    * このアイテムをプレイヤーが表示・操作できるかどうかを返す。
@@ -69,12 +69,12 @@ enum class PopupActionType {
   OPEN_MACRO,
   OPEN_POINT_SHOP,
   OPEN_MENU,
-  CLOSE
+  CLOSE,
 }
 
 data class PopupItemSpec(
     val material: Material,
     val amount: Int = 1,
     val blockState: Map<String, String> = emptyMap(),
-    val rawComponents: Map<String, Any> = emptyMap()
+    val rawComponents: Map<String, Any> = emptyMap(),
 )

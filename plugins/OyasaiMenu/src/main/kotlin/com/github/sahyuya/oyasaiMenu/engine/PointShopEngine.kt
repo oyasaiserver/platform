@@ -51,7 +51,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
   private fun buildInventory(
       player: Player,
       category: PointShopCategory,
-      state: PlayerPointShopState
+      state: PlayerPointShopState,
   ): Inventory {
     val tokens = TokenCurrencyManager.getTokens(player)
     val balanceText =
@@ -62,7 +62,8 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
         Bukkit.createInventory(
             holder,
             54,
-            comp("${c(category.displayName)} &8| &f${state.page+1}&8/&f${category.pageCount}"))
+            comp("${c(category.displayName)} &8| &f${state.page+1}&8/&f${category.pageCount}"),
+        )
     holder.attach(inv)
     category.getPage(state.page).forEachIndexed { i, item ->
       if (!item.icon.isAir) {
@@ -77,7 +78,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       player: Player,
       item: PointShopItem,
       tokens: Long,
-      balanceText: String
+      balanceText: String,
   ): ItemStack {
     val stack: ItemStack =
         when {
@@ -94,7 +95,8 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
                       .replace("%player%", player.name)
                       .replace("%tokens%", TokenCurrencyManager.format(tokens))
                       .replace("%price%", TokenCurrencyManager.format(item.cost))
-                      .replace("%balance%", balanceText))
+                      .replace("%balance%", balanceText)
+              )
             }
             .toMutableList()
     lore += comp("")
@@ -104,7 +106,8 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       lore += comp("&cポイントが不足しています")
       lore +=
           comp(
-              "&7必要: &c${TokenCurrencyManager.format(item.cost)}P &7/ 所持: &f${TokenCurrencyManager.format(tokens)}P")
+              "&7必要: &c${TokenCurrencyManager.format(item.cost)}P &7/ 所持: &f${TokenCurrencyManager.format(tokens)}P"
+          )
     }
     meta.lore(lore)
     stack.itemMeta = meta
@@ -116,7 +119,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       category: PointShopCategory,
       state: PlayerPointShopState,
       tokens: Long,
-      balanceText: String
+      balanceText: String,
   ) {
     val glass = makeItem(Material.BLACK_STAINED_GLASS_PANE, " ")
     listOf(46, 47, 51, 52).forEach { inv.setItem(it, glass) }
@@ -126,25 +129,33 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
         48,
         makeItem(
             if (hasPrev) Material.ARROW else Material.BLACK_STAINED_GLASS_PANE,
-            if (hasPrev) "&e← 前のページ" else "&8前のページなし"))
+            if (hasPrev) "&e← 前のページ" else "&8前のページなし",
+        ),
+    )
     inv.setItem(
         49,
         makeItem(
             Material.BOOK,
             "&fページ &e${state.page+1} &7/ &e${category.pageCount}",
-            listOf("&7全 ${category.itemList.size} 種")))
+            listOf("&7全 ${category.itemList.size} 種"),
+        ),
+    )
     val hasNext = state.page < category.pageCount - 1
     inv.setItem(
         50,
         makeItem(
             if (hasNext) Material.ARROW else Material.BLACK_STAINED_GLASS_PANE,
-            if (hasNext) "&e次のページ →" else "&8次のページなし"))
+            if (hasNext) "&e次のページ →" else "&8次のページなし",
+        ),
+    )
     inv.setItem(
         53,
         makeItem(
             Material.NETHER_STAR,
             "&f所持ポイント: &3${TokenCurrencyManager.format(tokens)}&fP",
-            listOf("&7所持金: &6$balanceText", "", "&eクリックで残高を更新")))
+            listOf("&7所持金: &6$balanceText", "", "&eクリックで残高を更新"),
+        ),
+    )
   }
 
   @EventHandler
@@ -185,7 +196,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       player: Player,
       item: PointShopItem,
       state: PlayerPointShopState,
-      category: PointShopCategory
+      category: PointShopCategory,
   ) {
     val err = TokenCurrencyManager.removeTokens(player, item.cost)
     if (err != null) {
@@ -198,7 +209,9 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
             .replace("%player%", player.name)
             .replace("%price%", item.cost.toString())
             .replace(
-                "%tokens%", TokenCurrencyManager.format(TokenCurrencyManager.getTokens(player)))
+                "%tokens%",
+                TokenCurrencyManager.format(TokenCurrencyManager.getTokens(player)),
+            )
     player.sendMessage(c(msg))
     player.playSound(player.location, org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.2f)
 
@@ -216,17 +229,21 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
                             Bukkit.dispatchCommand(
                                 Bukkit.getConsoleSender(),
                                 cmd.replace("%player%", player.name)
-                                    .replace("%price%", item.cost.toString()))
+                                    .replace("%price%", item.cost.toString()),
+                            )
                           }
                         },
-                        1L)
+                        1L,
+                    )
               },
-              1L)
+              1L,
+          )
     } else {
       item.commands.forEach { cmd ->
         Bukkit.dispatchCommand(
             Bukkit.getConsoleSender(),
-            cmd.replace("%player%", player.name).replace("%price%", item.cost.toString()))
+            cmd.replace("%player%", player.name).replace("%price%", item.cost.toString()),
+        )
       }
       val newTokens = TokenCurrencyManager.getTokens(player)
       val balanceText =
@@ -244,7 +261,7 @@ class PointShopEngine(private val plugin: OyasaiMenu) : Listener {
       player: Player,
       state: PlayerPointShopState,
       category: PointShopCategory,
-      newPage: Int
+      newPage: Int,
   ) {
     if (newPage !in 0 until category.pageCount) return
     val newState = state.copy(page = newPage)

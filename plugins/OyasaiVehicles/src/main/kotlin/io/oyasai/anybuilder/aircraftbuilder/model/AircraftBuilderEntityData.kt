@@ -38,7 +38,7 @@ data class AircraftBuilderEntityData(
     val baseData: AircraftBuilderBaseData,
     var setYaw: Float,
     val item: ItemStack? = null,
-    private val pluginRef: Plugin = requireNotNull(Tools.pl) { "Plugin is not initialized" }
+    private val pluginRef: Plugin = requireNotNull(Tools.pl) { "Plugin is not initialized" },
 ) :
     BaseVehicleEntityDataCore(
         seatArmorStandOffsets,
@@ -50,7 +50,9 @@ data class AircraftBuilderEntityData(
             NamespacedKey(pluginRef, vehicleBodyArmorStands[0].uniqueId.toString()),
             "| 0km/h |",
             BarColor.WHITE,
-            BarStyle.SOLID)) {
+            BarStyle.SOLID,
+        ),
+    ) {
   var pitch: Float = 0f
 
   override var exit: Boolean = false

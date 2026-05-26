@@ -28,7 +28,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     if (sender !is Player) {
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
@@ -69,7 +69,14 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     val fillTargets =
         if (plugin.config.getBoolean("window.fill-air-around-glass", true)) {
           fillTargets(
-              base, lateralPositive, facing, leftOffset, rightOffset, height, windowTargetKeys)
+              base,
+              lateralPositive,
+              facing,
+              leftOffset,
+              rightOffset,
+              height,
+              windowTargetKeys,
+          )
         } else {
           emptyList()
         }
@@ -88,15 +95,21 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         placements.add(
             WindowPlacement(
                 blockAt(base, lateralPositive, offset, facing, 0, y),
-                frameData(materials.frame, frameFace)))
+                frameData(materials.frame, frameFace),
+            )
+        )
         placements.add(
             WindowPlacement(
                 blockAt(base, lateralPositive, offset, facing, 1, y),
-                materials.glass.createBlockData()))
+                materials.glass.createBlockData(),
+            )
+        )
         placements.add(
             WindowPlacement(
                 blockAt(base, lateralPositive, offset, facing, 2, y),
-                materials.backing.createBlockData()))
+                materials.backing.createBlockData(),
+            )
+        )
       }
     }
     val filledBlocks = ArrayList<Block>()
@@ -113,7 +126,8 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             for (placement in placements) {
               editSession.setBlock(
                   BlockVector3.at(placement.block.x, placement.block.y, placement.block.z),
-                  BukkitAdapter.adapt(placement.data))
+                  BukkitAdapter.adapt(placement.data),
+              )
             }
             true
           }
@@ -134,14 +148,16 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
               rightOffset,
               height,
               includeBelow = filledBlocks.any { it.y < base.y },
-              includeAbove = filledBlocks.any { it.y >= base.y + height })
+              includeAbove = filledBlocks.any { it.y >= base.y + height },
+          )
         } else {
           false
         }
 
     MessageUtil.success(
         sender,
-        "窓を生成しました: ${width}x$height / frame=${materials.frame.key.key} / glass=${materials.glass.key.key} / backing=${materials.backing.key.key} / fill=${filledBlocks.size}")
+        "窓を生成しました: ${width}x$height / frame=${materials.frame.key.key} / glass=${materials.glass.key.key} / backing=${materials.backing.key.key} / fill=${filledBlocks.size}",
+    )
     if (faweUndoRecorded) {
       MessageUtil.info(sender, "FAWE の //undo でこの窓生成を取り消せます。")
     } else {
@@ -157,7 +173,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     val materialSuggestions =
         listOf(
@@ -168,7 +184,8 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             "GLASS",
             "DRIED_KELP_BLOCK",
             "BLACK_CONCRETE",
-            "SMOOTH_QUARTZ")
+            "SMOOTH_QUARTZ",
+        )
 
     return when (args.size) {
       1 ->
@@ -191,7 +208,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun parseArgs(
       sender: CommandSender,
       args: Array<String>,
-      defaults: WindowDefaults
+      defaults: WindowDefaults,
   ): ParsedWindowArgs? {
     var index = 0
     val width = args.getOrNull(index)?.toIntOrNull()?.also { index++ } ?: defaults.width
@@ -257,14 +274,15 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
                 ?: materialFromConfig("window.glass", Material.WHITE_STAINED_GLASS),
         backing =
             materialFromPlayerData(player, "window.backing")
-                ?: materialFromConfig("window.backing", Material.DRIED_KELP_BLOCK))
+                ?: materialFromConfig("window.backing", Material.DRIED_KELP_BLOCK),
+    )
   }
 
   private fun saveWindowDefaults(
       player: Player,
       width: Int,
       height: Int,
-      materials: WindowMaterials
+      materials: WindowMaterials,
   ) {
     plugin.playerDataStore.setMany(
         player,
@@ -273,7 +291,9 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
             "window.height" to height,
             "window.frame" to materials.frame.name,
             "window.glass" to materials.glass.name,
-            "window.backing" to materials.backing.name))
+            "window.backing" to materials.backing.name,
+        ),
+    )
   }
 
   private fun materialFromPlayerData(player: Player, path: String): Material? =
@@ -298,7 +318,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       front: BlockFace,
       leftOffset: Int,
       rightOffset: Int,
-      height: Int
+      height: Int,
   ): List<Block> {
     val byLocation = LinkedHashMap<String, Block>()
     for (y in 0 until height) {
@@ -320,7 +340,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       leftOffset: Int,
       rightOffset: Int,
       height: Int,
-      occupied: Set<String>
+      occupied: Set<String>,
   ): List<Block> {
     val byLocation = LinkedHashMap<String, Block>()
     for (y in 0 until height) {
@@ -331,7 +351,8 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
                 glassBlock.getRelative(BlockFace.UP),
                 glassBlock.getRelative(BlockFace.DOWN),
                 glassBlock.getRelative(lateralPositive),
-                glassBlock.getRelative(lateralPositive.oppositeFace))
+                glassBlock.getRelative(lateralPositive.oppositeFace),
+            )
         for (candidate in candidates) {
           val key = blockKey(candidate)
           if (key in occupied || !candidate.type.isAir) continue
@@ -351,7 +372,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       rightOffset: Int,
       height: Int,
       includeBelow: Boolean,
-      includeAbove: Boolean
+      includeAbove: Boolean,
   ): Boolean {
     val startY = if (includeBelow) -1 else 0
     val endY = if (includeAbove) height else height - 1
@@ -385,7 +406,10 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val world = BukkitAdapter.adapt(player.world)
       val selector =
           CuboidRegionSelector(
-              world, BlockVector3.at(minX, minY, minZ), BlockVector3.at(maxX, maxY, maxZ))
+              world,
+              BlockVector3.at(minX, minY, minZ),
+              BlockVector3.at(maxX, maxY, maxZ),
+          )
       val session = WorldEdit.getInstance().sessionManager.get(actor)
       session.setRegionSelector(world, selector)
       session.dispatchCUISelection(actor)
@@ -404,7 +428,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       lateralOffset: Int,
       front: BlockFace,
       depth: Int,
-      y: Int
+      y: Int,
   ): Block {
     var block = base.getRelative(BlockFace.UP, y).getRelative(front, depth)
     val steps = kotlin.math.abs(lateralOffset)
@@ -420,7 +444,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       leftOffset: Int,
       rightOffset: Int,
       front: BlockFace,
-      lateralPositive: BlockFace
+      lateralPositive: BlockFace,
   ): BlockFace {
     if (leftOffset == rightOffset) {
       return front
@@ -455,13 +479,13 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private data class ParsedWindowArgs(
       val width: Int,
       val height: Int,
-      val materials: WindowMaterials
+      val materials: WindowMaterials,
   )
 
   private data class WindowMaterials(
       val frame: Material,
       val glass: Material,
-      val backing: Material
+      val backing: Material,
   )
 
   private data class WindowDefaults(
@@ -469,7 +493,7 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val height: Int,
       val frame: Material,
       val glass: Material,
-      val backing: Material
+      val backing: Material,
   )
 
   private data class WindowPlacement(val block: Block, val data: BlockData)

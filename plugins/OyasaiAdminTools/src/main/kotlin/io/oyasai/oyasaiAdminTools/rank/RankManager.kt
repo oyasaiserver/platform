@@ -62,10 +62,12 @@ object RankManager {
                             DateTimeUtils.getCurrentJST(),
                         )
 
-                    if (hour >= nextRank.minPlayTimeHours &&
-                        joinDays >= nextRank.minJoinDays &&
-                        elapse >= nextRank.minElapse &&
-                        buildCount >= nextRank.minBuilds) {
+                    if (
+                        hour >= nextRank.minPlayTimeHours &&
+                            joinDays >= nextRank.minJoinDays &&
+                            elapse >= nextRank.minElapse &&
+                            buildCount >= nextRank.minBuilds
+                    ) {
                       future.complete(nextRank)
                       return@Runnable
                     }

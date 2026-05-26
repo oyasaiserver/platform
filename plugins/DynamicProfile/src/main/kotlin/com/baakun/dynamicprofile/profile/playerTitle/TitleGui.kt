@@ -97,7 +97,8 @@ object TitleGui {
 
     if (!targetPlayer.hasPlayedBefore() && !targetPlayer.isOnline) {
       player.sendMessage(
-          Component.text("プレイヤー $targetPlayerName が見つかりません").color(NamedTextColor.RED))
+          Component.text("プレイヤー $targetPlayerName が見つかりません").color(NamedTextColor.RED)
+      )
       return
     }
 

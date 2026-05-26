@@ -31,7 +31,7 @@ class SellWhitelistManager(private val plugin: OyasaiMenu) {
       val displayName: String,
       val materialName: String,
       val sellPrice: Double,
-      val itemDataB64: String
+      val itemDataB64: String,
   )
 
   private val entries: MutableList<WhitelistEntry> = mutableListOf()
@@ -54,7 +54,8 @@ class SellWhitelistManager(private val plugin: OyasaiMenu) {
 # /menuedit whitelist add hand <売値> でインゲームから追加できます。
 entries: []
 """,
-          Charsets.UTF_8)
+          Charsets.UTF_8,
+      )
     }
 
     val yaml = YamlConfiguration.loadConfiguration(file)
@@ -130,7 +131,9 @@ entries: []
           runCatching {
                 val bytes = Base64.getDecoder().decode(entry.itemDataB64)
                 matchesComponents(
-                    normalizeForComparison(ItemStack.deserializeBytes(bytes)), normalized)
+                    normalizeForComparison(ItemStack.deserializeBytes(bytes)),
+                    normalized,
+                )
               }
               .getOrElse { false }
         }
@@ -154,7 +157,9 @@ entries: []
             displayName = displayName,
             materialName = item.type.name,
             sellPrice = sellPrice,
-            itemDataB64 = itemDataB64))
+            itemDataB64 = itemDataB64,
+        )
+    )
     saveToFile()
     return null
   }
@@ -183,8 +188,10 @@ entries: []
               "display_name" to e.displayName,
               "material" to e.materialName,
               "sell_price" to e.sellPrice,
-              "item_data" to e.itemDataB64)
-        })
+              "item_data" to e.itemDataB64,
+          )
+        },
+    )
     runCatching { yaml.save(file) }
         .onFailure { plugin.logger.warning("sell-whitelist.yml 保存失敗: ${it.message}") }
   }
@@ -296,7 +303,7 @@ entries: []
       val floats: List<Float>,
       val flags: List<Boolean>,
       val strings: List<String>,
-      val colors: List<Color>
+      val colors: List<Color>,
   )
 
   @Suppress("UnstableApiUsage")
@@ -307,7 +314,8 @@ entries: []
         floats = component.floats.toList(),
         flags = component.flags.toList(),
         strings = component.strings.toList(),
-        colors = component.colors.toList())
+        colors = component.colors.toList(),
+    )
   }
 
   private fun generateUniqueId(baseId: String, existing: Set<String>): String {

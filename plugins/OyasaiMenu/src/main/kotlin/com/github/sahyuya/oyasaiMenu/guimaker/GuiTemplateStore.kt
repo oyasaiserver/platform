@@ -29,14 +29,14 @@ enum class GuiTemplateKind(val dirName: String, val displayName: String) {
 
 enum class GuiTemplateScope(val displayName: String) {
   PERSONAL("個人"),
-  SHARED("公式")
+  SHARED("公式"),
 }
 
 data class GuiTemplateEntry(
     val id: String,
     val kind: GuiTemplateKind,
     val scope: GuiTemplateScope,
-    val file: File
+    val file: File,
 )
 
 data class GuiBlockTemplate(val material: Material, val def: GuiSlotDef)
@@ -47,7 +47,7 @@ object GuiTemplateStore {
   fun saveMenuTemplate(
       plugin: OyasaiMenu,
       player: Player,
-      session: GuiEditorSession
+      session: GuiEditorSession,
   ): Result<String> = runCatching {
     val id = sanitizeId(session.menuId)
     val file = personalFile(plugin, player.uniqueId, GuiTemplateKind.MENU, id)
@@ -58,7 +58,7 @@ object GuiTemplateStore {
       plugin: OyasaiMenu,
       player: Player,
       session: GuiEditorSession,
-      slot: Int
+      slot: Int,
   ): Result<String> = runCatching {
     val inv = session.canvasInventory ?: error("編集キャンバスがありません。")
     val item = inv.getItem(slot)?.takeIf { it.type != Material.AIR } ?: error("スロット $slot は空です。")
@@ -72,7 +72,7 @@ object GuiTemplateStore {
       owner: UUID,
       kind: GuiTemplateKind,
       sourceId: String,
-      officialId: String
+      officialId: String,
   ): Result<String> = runCatching {
     val safeSourceId = sanitizeId(sourceId)
     val safeOfficialId = sanitizeId(officialId)
@@ -88,7 +88,7 @@ object GuiTemplateStore {
       plugin: OyasaiMenu,
       session: GuiEditorSession,
       entry: GuiTemplateEntry,
-      blockSlot: Int?
+      blockSlot: Int?,
   ): Result<String> = runCatching {
     when (entry.kind) {
       GuiTemplateKind.MENU -> GuiMakerExporter.saveSessionToFile(plugin, session, entry.file)
@@ -118,7 +118,7 @@ object GuiTemplateStore {
       plugin: OyasaiMenu,
       id: String,
       material: Material,
-      def: GuiSlotDef
+      def: GuiSlotDef,
   ): Result<String> = runCatching {
     val safeId = sanitizeId(id)
     val file = sharedFile(plugin, GuiTemplateKind.BLOCK, safeId)
@@ -131,7 +131,8 @@ object GuiTemplateStore {
         def.copy(
             lore = def.lore.toMutableList(),
             actions = def.actions.toMutableList(),
-            extras = def.extras.toMutableMap())
+            extras = def.extras.toMutableMap(),
+        )
     saveBlockTemplateToFile(plugin, file, session, 0, inv.getItem(0) ?: ItemStack(material))
   }
 
@@ -140,24 +141,30 @@ object GuiTemplateStore {
               listEntries(
                   personalDir(plugin, player.uniqueId, GuiTemplateKind.MENU),
                   GuiTemplateKind.MENU,
-                  GuiTemplateScope.PERSONAL),
+                  GuiTemplateScope.PERSONAL,
+              ),
               listEntries(
                   personalDir(plugin, player.uniqueId, GuiTemplateKind.BLOCK),
                   GuiTemplateKind.BLOCK,
-                  GuiTemplateScope.PERSONAL),
+                  GuiTemplateScope.PERSONAL,
+              ),
               listEntries(
                   sharedDir(plugin, GuiTemplateKind.MENU),
                   GuiTemplateKind.MENU,
-                  GuiTemplateScope.SHARED),
+                  GuiTemplateScope.SHARED,
+              ),
               listEntries(
                   sharedDir(plugin, GuiTemplateKind.BLOCK),
                   GuiTemplateKind.BLOCK,
-                  GuiTemplateScope.SHARED))
+                  GuiTemplateScope.SHARED,
+              ),
+          )
           .flatten()
           .sortedWith(
               compareBy<GuiTemplateEntry> { it.scope.ordinal }
                   .thenBy { it.kind.ordinal }
-                  .thenBy { it.id })
+                  .thenBy { it.id }
+          )
 
   fun loadBlockTemplate(file: File): GuiBlockTemplate {
     val yaml = YamlConfiguration.loadConfiguration(file)
@@ -172,7 +179,8 @@ object GuiTemplateStore {
             lore = section.getStringList("lore").toMutableList(),
             permission = section.getString("permission"),
             enchanted = section.getBoolean("enchanted", false),
-            actions = parseActions(section).toMutableList())
+            actions = parseActions(section).toMutableList(),
+        )
     return GuiBlockTemplate(material, def)
   }
 
@@ -180,7 +188,7 @@ object GuiTemplateStore {
       file: File,
       session: GuiEditorSession,
       slot: Int,
-      item: ItemStack
+      item: ItemStack,
   ) {
     file.parentFile.mkdirs()
     val yaml = YamlConfiguration()
@@ -218,7 +226,8 @@ object GuiTemplateStore {
             val map = mutableMapOf<String, Any>("type" to action.type)
             map.putAll(action.params)
             map
-          })
+          },
+      )
     }
     yaml.save(file)
   }
@@ -228,7 +237,7 @@ object GuiTemplateStore {
       file: File,
       session: GuiEditorSession,
       slot: Int,
-      item: ItemStack
+      item: ItemStack,
   ): String {
     writeBlockTemplate(file, session, slot, item)
     return file.relativeTo(plugin.dataFolder.parentFile).path
@@ -241,7 +250,8 @@ object GuiTemplateStore {
       meta.displayName(
           LegacyComponentSerializer.legacyAmpersand()
               .deserialize(def.name)
-              .decoration(TextDecoration.ITALIC, false))
+              .decoration(TextDecoration.ITALIC, false)
+      )
     }
     if (def.lore.isNotEmpty()) {
       meta.lore(
@@ -249,7 +259,8 @@ object GuiTemplateStore {
             LegacyComponentSerializer.legacyAmpersand()
                 .deserialize(it)
                 .decoration(TextDecoration.ITALIC, false)
-          })
+          }
+      )
     }
     ItemVisuals.applyEnchantVisual(meta, def.enchanted)
     item.itemMeta = meta
@@ -261,13 +272,14 @@ object GuiTemplateStore {
           map ->
         GuiActionDef(
             type = map["type"]?.toString() ?: "UNKNOWN",
-            params = map.filterKeys { it != "type" }.mapValues { it.value.toString() })
+            params = map.filterKeys { it != "type" }.mapValues { it.value.toString() },
+        )
       }
 
   private fun listEntries(
       dir: File,
       kind: GuiTemplateKind,
-      scope: GuiTemplateScope
+      scope: GuiTemplateScope,
   ): List<GuiTemplateEntry> {
     if (!dir.exists()) return emptyList()
     return dir.walkTopDown()
@@ -282,7 +294,7 @@ object GuiTemplateStore {
       plugin: OyasaiMenu,
       owner: UUID,
       kind: GuiTemplateKind,
-      id: String
+      id: String,
   ): File = personalDir(plugin, owner, kind).resolve("$id.yml")
 
   private fun sharedFile(plugin: OyasaiMenu, kind: GuiTemplateKind, id: String): File =

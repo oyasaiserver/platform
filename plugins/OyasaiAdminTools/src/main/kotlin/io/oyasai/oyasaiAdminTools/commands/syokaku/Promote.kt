@@ -50,7 +50,9 @@ object Promote : CommandExecutor {
               if (playerUUID == null) {
                 Bukkit.getScheduler()
                     .runTask(
-                        plugin, Runnable { sender.sendMessage("§cプレイヤー '$playerName' が見つかりません。") })
+                        plugin,
+                        Runnable { sender.sendMessage("§cプレイヤー '$playerName' が見つかりません。") },
+                    )
                 return@Runnable
               }
 
@@ -77,9 +79,11 @@ object Promote : CommandExecutor {
                                             if (!note.startsWith("GOOD")) {
                                               sender.sendMessage("§c！！昇格条件を満たしていません！！")
                                               sender.sendMessage(
-                                                  "§c特別に昇格させる場合は、noteの先頭に 'GOOD' を付けてください。")
+                                                  "§c特別に昇格させる場合は、noteの先頭に 'GOOD' を付けてください。"
+                                              )
                                               sender.sendMessage(
-                                                  "§c例：/syokaku promote ${player.name} GOOD:)")
+                                                  "§c例：/syokaku promote ${player.name} GOOD:)"
+                                              )
                                               return@Runnable
                                             } else {
                                               isForced = true
@@ -92,7 +96,8 @@ object Promote : CommandExecutor {
                                                     Runnable {
                                                       val nextGroupNode =
                                                           PermsUtils.getGroupNode(
-                                                              nextRank.groupName)
+                                                              nextRank.groupName
+                                                          )
                                                       user.data().add(nextGroupNode)
                                                       api.userManager.saveUser(user)
                                                       val statsData = getStats(player.uniqueId)
@@ -106,7 +111,8 @@ object Promote : CommandExecutor {
                                                           ?.logger
                                                           ?.info(temp.records.size.toString())
                                                       temp.records.addAll(
-                                                          statsData.promotions.records)
+                                                          statsData.promotions.records
+                                                      )
                                                       val record =
                                                           PromotionRecord(
                                                               type = PromotionType.PROMOTE,
@@ -116,13 +122,13 @@ object Promote : CommandExecutor {
                                                               isForced = isForced,
                                                               date =
                                                                   DateTimeUtils.formatToString(
-                                                                      DateTimeUtils
-                                                                          .getCurrentJST()),
+                                                                      DateTimeUtils.getCurrentJST()
+                                                                  ),
                                                               note = note,
                                                               playedSec =
                                                                   player.getStatistic(
-                                                                      Statistic.PLAY_ONE_MINUTE) /
-                                                                      20L,
+                                                                      Statistic.PLAY_ONE_MINUTE
+                                                                  ) / 20L,
                                                               lastBuildID =
                                                                   Data.getSLDataAll()
                                                                       .filter {
@@ -140,7 +146,8 @@ object Promote : CommandExecutor {
                                                       temp.records.add(record)
                                                       if (plugin != null && plugin.isEnabled) {
                                                         plugin.logger.info(
-                                                            temp.records.size.toString())
+                                                            temp.records.size.toString()
+                                                        )
                                                         temp.records.forEach {
                                                           plugin.logger.info(it.date)
                                                         }
@@ -162,7 +169,8 @@ object Promote : CommandExecutor {
                                                           )
                                                       PromotionNotifier.notifyAll(notification)
                                                       sender.sendMessage(
-                                                          "§a${player.name}さんを§e${nextRank.name}§aに§6「↑昇格↑」§aさせました。")
+                                                          "§a${player.name}さんを§e${nextRank.name}§aに§6「↑昇格↑」§aさせました。"
+                                                      )
                                                     },
                                                 )
                                           }
@@ -178,7 +186,8 @@ object Promote : CommandExecutor {
                         },
                     )
               }
-            })
+            },
+        )
 
     return true
   }

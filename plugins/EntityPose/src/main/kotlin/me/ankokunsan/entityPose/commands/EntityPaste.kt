@@ -55,7 +55,7 @@ class EntityPaste : CommandExecutor {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     val player = sender as Player
     val uuid = player.uniqueId

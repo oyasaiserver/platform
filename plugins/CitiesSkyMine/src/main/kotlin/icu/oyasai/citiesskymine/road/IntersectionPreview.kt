@@ -20,7 +20,7 @@ object IntersectionPreview {
       player: Player,
       center: Location,
       session: IntersectionSession,
-      settings: RoadSettings
+      settings: RoadSettings,
   ) {
     val cHW = (settings.centerLineWidth + 1) / 2
     val lW = settings.laneWidth
@@ -84,6 +84,16 @@ object IntersectionPreview {
 
   private fun dust(player: Player, x: Double, y: Double, z: Double, color: Color) {
     player.spawnParticle(
-        Particle.DUST, x, y, z, 1, 0.0, 0.0, 0.0, 0.0, Particle.DustOptions(color, 1.0f))
+        Particle.DUST,
+        x,
+        y,
+        z,
+        1,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        Particle.DustOptions(color, 1.0f),
+    )
   }
 }

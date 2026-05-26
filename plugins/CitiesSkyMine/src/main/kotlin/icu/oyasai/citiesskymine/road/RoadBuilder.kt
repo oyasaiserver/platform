@@ -56,7 +56,14 @@ object RoadBuilder {
 
     // 3. 取り除いた角セルを埋める
     fillRemovedCornersWithNeighbors(
-        pendingCornerFill, settings, hasLane, hasSidewalk, editSession, placed, occupancy)
+        pendingCornerFill,
+        settings,
+        hasLane,
+        hasSidewalk,
+        editSession,
+        placed,
+        occupancy,
+    )
   }
 
   // heading(ラジアン) を最近傍のカーディナル方向へ変換。
@@ -93,7 +100,7 @@ object RoadBuilder {
   private fun traceBlocksForOffset(
       path: List<PathPoint>,
       offset: Int,
-      avoidRightAngleCorners: Boolean
+      avoidRightAngleCorners: Boolean,
   ): TraceResult {
     if (path.isEmpty()) return TraceResult(emptyList(), emptyList())
     val traced = mutableListOf<TracedBlock>()
@@ -153,7 +160,7 @@ object RoadBuilder {
       endX: Double,
       endY: Double,
       endZ: Double,
-      defaultHeading: Double
+      defaultHeading: Double,
   ): List<TracedBlock> {
     val result = mutableListOf<TracedBlock>()
     val startBlockX = floor(startX).toInt()
@@ -270,7 +277,7 @@ object RoadBuilder {
       hasSidewalk: Boolean,
       editSession: EditSession,
       placed: MutableSet<Triple<Int, Int, Int>>,
-      occupancy: MutableMap<BlockPos, OffsetZone>
+      occupancy: MutableMap<BlockPos, OffsetZone>,
   ) {
     if (pending.isEmpty()) return
     for (request in pending) {
@@ -287,7 +294,7 @@ object RoadBuilder {
   private fun findNearestZoneForCorner(
       pos: BlockPos,
       occupancy: Map<BlockPos, OffsetZone>,
-      ignoreZone: OffsetZone
+      ignoreZone: OffsetZone,
   ): OffsetZone? {
     val dirs = arrayOf(intArrayOf(1, 0), intArrayOf(-1, 0), intArrayOf(0, 1), intArrayOf(0, -1))
     var sidewalkCandidate: OffsetZone? = null
@@ -306,7 +313,7 @@ object RoadBuilder {
   private fun fallbackFillerZone(
       slotZone: OffsetZone,
       hasLane: Boolean,
-      hasSidewalk: Boolean
+      hasSidewalk: Boolean,
   ): OffsetZone? =
       when (slotZone) {
         OffsetZone.CENTER_LINE ->
@@ -331,7 +338,7 @@ object RoadBuilder {
       settings: RoadSettings,
       editSession: EditSession,
       placed: MutableSet<Triple<Int, Int, Int>>,
-      occupancy: MutableMap<BlockPos, OffsetZone>
+      occupancy: MutableMap<BlockPos, OffsetZone>,
   ) {
     val key = Triple(pos.x, pos.y, pos.z)
     if (!placed.add(key)) return
@@ -354,7 +361,7 @@ object RoadBuilder {
       settings: RoadSettings,
       editSession: EditSession,
       placed: MutableSet<Triple<Int, Int, Int>>,
-      occupancy: MutableMap<BlockPos, OffsetZone>
+      occupancy: MutableMap<BlockPos, OffsetZone>,
   ) {
     val (x, y, z) = tracedBlock.pos
     val key = Triple(x, y, z)
@@ -403,7 +410,7 @@ object RoadBuilder {
 
   private data class TraceResult(
       val blocks: List<TracedBlock>,
-      val removedCorners: List<TracedBlock>
+      val removedCorners: List<TracedBlock>,
   )
 
   private data class CornerFillRequest(val slot: OffsetSlot, val corners: List<TracedBlock>)
@@ -418,6 +425,6 @@ object RoadBuilder {
     CENTER_LINE,
     LANE,
     OUTER_LINE,
-    SIDEWALK
+    SIDEWALK,
   }
 }

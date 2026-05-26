@@ -13,7 +13,7 @@ object AircraftBuilderCommand : BuilderCommandBase() {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     return handleAircraftBuilderCommand(sender, command, label, args)
   }

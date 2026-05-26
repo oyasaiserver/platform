@@ -17,7 +17,7 @@ object BuilderSchematic {
       dataName: String,
       builderPath: String,
       fileName: String,
-      onSaved: ((Clipboard) -> Unit)? = null
+      onSaved: ((Clipboard) -> Unit)? = null,
   ) {
     val we = WorldEdit.getInstance()
     if (we == null) {

@@ -16,7 +16,7 @@ object BuilderItemSupport {
       val regex: Regex,
       val defaultValue: Int,
       val strict: Boolean = false,
-      val fromEnd: Boolean = true
+      val fromEnd: Boolean = true,
   )
 
   fun checkCustomModelMinecart(item: ItemStack?, customModelData: Int): Boolean {
@@ -30,7 +30,7 @@ object BuilderItemSupport {
       baseName: String,
       playerName: String?,
       customModelData: Int,
-      lore: List<String>
+      lore: List<String>,
   ): ItemStack? {
     val item = ItemStack(Material.HOPPER_MINECART)
     val meta = item.itemMeta ?: return null
@@ -47,7 +47,7 @@ object BuilderItemSupport {
       meta: ItemMeta?,
       regex: Regex,
       prefix: String,
-      fromEnd: Boolean = false
+      fromEnd: Boolean = false,
   ): String? {
     val lore = meta?.legacyLore ?: return null
     val line =
@@ -62,7 +62,7 @@ object BuilderItemSupport {
       prefix: String,
       default: Int,
       strict: Boolean = false,
-      fromEnd: Boolean = false
+      fromEnd: Boolean = false,
   ): Int {
     val value = readLoreValue(meta, regex, prefix, fromEnd) ?: return default
     return if (strict) {
@@ -77,7 +77,7 @@ object BuilderItemSupport {
       regex: Regex,
       prefix: String,
       default: Boolean = false,
-      fromEnd: Boolean = false
+      fromEnd: Boolean = false,
   ): Boolean {
     val value = readLoreValue(meta, regex, prefix, fromEnd) ?: return default
     return value.toBoolean()
@@ -91,7 +91,8 @@ object BuilderItemSupport {
           "${spec.title}: ",
           spec.defaultValue,
           strict = spec.strict,
-          fromEnd = spec.fromEnd)
+          fromEnd = spec.fromEnd,
+      )
     }
   }
 
@@ -103,7 +104,7 @@ object BuilderItemSupport {
       item: ItemStack,
       replacements: List<LoreLineReplacement>,
       costRegex: Regex? = null,
-      costValue: Int? = null
+      costValue: Int? = null,
   ): Boolean {
     val meta = item.itemMeta ?: return false
     val lore = meta.legacyLore ?: return false
@@ -162,7 +163,7 @@ object BuilderItemSupport {
   fun rewriteLore(
       item: ItemStack,
       requireExistingLore: Boolean = true,
-      rewrite: (List<String>) -> MutableList<String>
+      rewrite: (List<String>) -> MutableList<String>,
   ): Boolean {
     val meta = item.itemMeta ?: return false
     val lore = meta.legacyLore ?: if (requireExistingLore) return false else mutableListOf<String>()
@@ -191,7 +192,7 @@ object BuilderItemSupport {
       delta: Int,
       rules: Map<String, VehicleIntRule>,
       costRegex: Regex,
-      currentCost: (ItemStack) -> Int?
+      currentCost: (ItemStack) -> Int?,
   ): Boolean {
     val meta = item.itemMeta ?: return false
     val lore = meta.legacyLore ?: return false

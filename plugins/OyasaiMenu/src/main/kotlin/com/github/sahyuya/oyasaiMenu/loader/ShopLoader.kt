@@ -26,7 +26,7 @@ class ShopLoader(private val plugin: OyasaiMenu) {
       val material: Material,
       val name: String,
       val lore: List<String>,
-      val enchantments: Map<Enchantment, Int>
+      val enchantments: Map<Enchantment, Int>,
   )
 
   private val customItems: MutableMap<String, CustomItemDef> = mutableMapOf()
@@ -114,7 +114,8 @@ class ShopLoader(private val plugin: OyasaiMenu) {
               id = catId,
               displayName = sec.getString("name", "&7$catId") ?: "&7$catId",
               command = sec.getString("command"),
-              items = items)
+              items = items,
+          )
     }
     plugin.logger.info("ショップ: ${categories.size} カテゴリ / $loaded アイテム ($skipped スキップ)")
   }
@@ -140,7 +141,7 @@ class ShopLoader(private val plugin: OyasaiMenu) {
       categoryId: String,
       materialLine: String,
       buyPrice: Double,
-      sellPrice: Double
+      sellPrice: Double,
   ): File? {
     val file = shopsFile()
     val yaml = YamlConfiguration.loadConfiguration(file)
@@ -230,7 +231,8 @@ class ShopLoader(private val plugin: OyasaiMenu) {
               material = mat,
               name = sec.getString("name", "") ?: "",
               lore = sec.getStringList("lore"),
-              enchantments = enchantMap)
+              enchantments = enchantMap,
+          )
     }
     plugin.logger.info("カスタムアイテム: ${customItems.size} 件をロード")
   }
@@ -259,7 +261,8 @@ class ShopLoader(private val plugin: OyasaiMenu) {
         customItems[key]
             ?: run {
               plugin.logger.warning(
-                  "カスタムアイテム未定義: $key ($catId) — menus/shop/custom_items.yml に追加してください")
+                  "カスタムアイテム未定義: $key ($catId) — menus/shop/custom_items.yml に追加してください"
+              )
               return null
             }
     return ShopItem(
@@ -269,7 +272,8 @@ class ShopLoader(private val plugin: OyasaiMenu) {
         sellPrice = sellPrice,
         customName = def.name.takeIf { it.isNotEmpty() },
         customLore = def.lore,
-        enchantments = def.enchantments)
+        enchantments = def.enchantments,
+    )
   }
 
   private fun parseItemLine(line: String, catId: String): ShopItem? {
@@ -290,6 +294,7 @@ class ShopLoader(private val plugin: OyasaiMenu) {
         material = material,
         materialId = parts[0].lowercase(),
         buyPrice = buyPrice,
-        sellPrice = sellPrice)
+        sellPrice = sellPrice,
+    )
   }
 }

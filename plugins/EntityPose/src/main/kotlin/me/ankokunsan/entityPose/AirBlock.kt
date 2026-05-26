@@ -84,9 +84,13 @@ object AirBlock {
             }
             val result =
                 player.world.rayTraceEntities(
-                    player.eyeLocation, player.location.direction, 5.0, 0.1) {
-                      it is LivingEntity && it !is Player
-                    }
+                    player.eyeLocation,
+                    player.location.direction,
+                    5.0,
+                    0.1,
+                ) {
+                  it is LivingEntity && it !is Player
+                }
             val newtarget = result?.hitEntity
             val lastTarget = glowingTarget[uuid]
             if (newtarget != lastTarget) {

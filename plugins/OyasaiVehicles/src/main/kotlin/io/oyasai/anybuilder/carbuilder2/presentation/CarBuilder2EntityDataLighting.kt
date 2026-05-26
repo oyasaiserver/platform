@@ -183,7 +183,8 @@ fun CarBuilder2EntityData.retractableTaskImpl(switch: Boolean) {
           Vector(
               defTrans.translation.x.toDouble(),
               defTrans.translation.y.toDouble(),
-              defTrans.translation.z.toDouble())
+              defTrans.translation.z.toDouble(),
+          )
 
       display.transformation =
           Transformation(
@@ -198,7 +199,8 @@ fun CarBuilder2EntityData.retractableTaskImpl(switch: Boolean) {
                   .rotateY(Math.toRadians(this.setYaw.toDouble()).toFloat()),
               rotation,
               display.transformation.scale,
-              Quaternionf())
+              Quaternionf(),
+          )
     }
   }
 }
@@ -233,7 +235,8 @@ fun CarBuilder2EntityData.headLightTaskImpl(yaw: Float) {
                 Material.LIGHT.createBlockData {
                   (it as org.bukkit.block.data.type.Light).level = 15
                 },
-                false)
+                false,
+            )
             this.lightBlockList.add(current.clone())
           }
           if (count > 25) {
@@ -249,7 +252,8 @@ fun CarBuilder2EntityData.headLightTaskImpl(yaw: Float) {
                 Material.LIGHT.createBlockData {
                   (it as org.bukkit.block.data.type.Light).level = level
                 },
-                false)
+                false,
+            )
             this.lightBlockList.add(current.clone())
           }
         }

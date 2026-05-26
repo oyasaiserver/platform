@@ -63,14 +63,18 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
             "&b可変コマンド",
             "&7OP限定で実行します",
             "&7左/右クリック: 値を増減・切替",
-            "&7Shiftクリックまたは中クリック: 手入力"))
+            "&7Shiftクリックまたは中クリック: 手入力",
+        ),
+    )
     inv.setItem(
         4,
         item(
             Material.PAPER,
             "&f実行内容",
             "&7テンプレート: &f${session.template}",
-            "&7現在: &e${expandCommand(player, session)}"))
+            "&7現在: &e${expandCommand(player, session)}",
+        ),
+    )
 
     val slots = valueSlots()
     session.specs.take(slots.size).forEachIndexed { index, spec ->
@@ -99,7 +103,10 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
         val command = expandCommand(player, session)
         if (session.action.getString("confirm", "false").toBoolean()) {
           plugin.specialMenuEngine.openConfirmCommand(
-              player, command, executionMode(session.action))
+              player,
+              command,
+              executionMode(session.action),
+          )
         } else {
           player.closeInventory()
           executeCommand(player, command, executionMode(session.action))
@@ -113,9 +120,11 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
       else -> {
         val index = valueSlots().indexOf(event.rawSlot)
         val spec = session.specs.getOrNull(index) ?: return
-        if (event.click == ClickType.MIDDLE ||
-            event.click == ClickType.SHIFT_LEFT ||
-            event.click == ClickType.SHIFT_RIGHT) {
+        if (
+            event.click == ClickType.MIDDLE ||
+                event.click == ClickType.SHIFT_LEFT ||
+                event.click == ClickType.SHIFT_RIGHT
+        ) {
           startTextInput(player, session, spec)
           return
         }
@@ -159,7 +168,8 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
               }
               pendingTextInput.remove(player.uniqueId)
               openSession(player, pending.session)
-            })
+            },
+        )
   }
 
   private fun startTextInput(player: Player, session: ParamCommandSession, spec: ParamSpec) {
@@ -172,7 +182,7 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
       player: Player,
       session: ParamCommandSession,
       spec: ParamSpec,
-      click: ClickType
+      click: ClickType,
   ) {
     val current = session.values[spec.name] ?: spec.defaultValue(player)
     val direction =
@@ -261,7 +271,8 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
               max = doubleValue(action, nestedSpec, name, "max"),
               step = doubleValue(action, nestedSpec, name, "step") ?: 1.0,
               defaultRaw = stringValue(action, nestedSpec, name, "default"),
-              enumOptions = listValue(action, nestedSpec, name, "options"))
+              enumOptions = listValue(action, nestedSpec, name, "options"),
+          )
         }
         .toList()
   }
@@ -270,7 +281,7 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
       action: MenuAction,
       nestedSpec: Map<*, *>?,
       name: String,
-      key: String
+      key: String,
   ): String? =
       nestedSpec?.get(key)?.toString()
           ?: action.params["param.$name.$key"]?.toString()
@@ -280,14 +291,14 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
       action: MenuAction,
       nestedSpec: Map<*, *>?,
       name: String,
-      key: String
+      key: String,
   ): Double? = stringValue(action, nestedSpec, name, key)?.toDoubleOrNull()
 
   private fun listValue(
       action: MenuAction,
       nestedSpec: Map<*, *>?,
       name: String,
-      key: String
+      key: String,
   ): List<String> {
     val raw = nestedSpec?.get(key) ?: action.params["param.$name.$key"] ?: return emptyList()
     return when (raw) {
@@ -331,7 +342,8 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
         "&7現在: &a$value",
         "&7左クリック: + / 次へ",
         "&7右クリック: - / 前へ",
-        "&7Shift・中クリック: 手入力")
+        "&7Shift・中クリック: 手入力",
+    )
   }
 
   private fun fill(inv: Inventory, mat: Material) {
@@ -353,7 +365,7 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
       val template: String,
       val specs: List<ParamSpec>,
       val values: MutableMap<String, String>,
-      val action: MenuAction
+      val action: MenuAction,
   )
 
   private data class PendingTextInput(val session: ParamCommandSession, val spec: ParamSpec)
@@ -368,7 +380,7 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
     TEXT,
     MATERIAL,
     PLAYER,
-    ENUM
+    ENUM,
   }
 
   private data class ParamSpec(
@@ -378,7 +390,7 @@ class ParameterCommandEngine(private val plugin: OyasaiMenu) : Listener {
       val max: Double?,
       val step: Double,
       val defaultRaw: String?,
-      val enumOptions: List<String>
+      val enumOptions: List<String>,
   ) {
     val defaultNumber: Double =
         defaultRaw?.toDoubleOrNull() ?: if (type == ParamType.FLOAT) 1.0 else 1.0

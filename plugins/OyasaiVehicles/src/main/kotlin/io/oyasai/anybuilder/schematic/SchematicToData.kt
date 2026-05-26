@@ -89,7 +89,7 @@ object SchematicToData {
       raw: MutableMap<Vector, BlockData>,
       box: BoundingBox,
       max: Vector,
-      min: Vector
+      min: Vector,
   ): MutableMap<Vector, Pair<BlockData, Vector>> {
     val checkList = mutableSetOf<Vector>()
     val compressData = LinkedHashMap<Vector, Pair<BlockData, Vector>>()
@@ -176,7 +176,7 @@ object SchematicToData {
       raw: MutableMap<Vector, BlockData>,
       box: BoundingBox,
       max: Vector,
-      min: Vector
+      min: Vector,
   ): MutableMap<Vector, Pair<BlockData, Vector>> {
     val checkList = mutableSetOf<Vector>()
     val compressData = LinkedHashMap<Vector, Pair<BlockData, Vector>>()

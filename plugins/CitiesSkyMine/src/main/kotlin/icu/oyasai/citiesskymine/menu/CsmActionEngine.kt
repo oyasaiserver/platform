@@ -108,7 +108,9 @@ class CsmActionEngine(private val plugin: Main, private val menuEngine: CsmMenuE
                       HoverEvent.showText(
                           Component.text("クリックで開く")
                               .color(NamedTextColor.GRAY)
-                              .decoration(TextDecoration.ITALIC, false)))
+                              .decoration(TextDecoration.ITALIC, false)
+                      )
+                  )
           player.sendMessage(msg)
         }
       }
@@ -129,7 +131,10 @@ class CsmActionEngine(private val plugin: Main, private val menuEngine: CsmMenuE
                               HoverEvent.showText(
                                   Component.text("クリックでクリップボードにコピー")
                                       .color(NamedTextColor.GRAY)
-                                      .decoration(TextDecoration.ITALIC, false))))
+                                      .decoration(TextDecoration.ITALIC, false)
+                              )
+                          )
+                  )
                   .build()
           player.sendMessage(msg)
         }
@@ -151,7 +156,10 @@ class CsmActionEngine(private val plugin: Main, private val menuEngine: CsmMenuE
                               HoverEvent.showText(
                                   Component.text("クリックでコマンドをチャット欄に入力")
                                       .color(NamedTextColor.GRAY)
-                                      .decoration(TextDecoration.ITALIC, false))))
+                                      .decoration(TextDecoration.ITALIC, false)
+                              )
+                          )
+                  )
                   .build()
           player.sendMessage(msg)
         }

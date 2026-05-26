@@ -125,10 +125,12 @@ object GetEvent : Listener {
       }
     }
     val block = e.clickedBlock ?: return
-    if (block.type == Material.CHISELED_BOOKSHELF ||
-        block.type == Material.DECORATED_POT ||
-        block.type == Material.CAMPFIRE ||
-        block.type == Material.SOUL_CAMPFIRE) {
+    if (
+        block.type == Material.CHISELED_BOOKSHELF ||
+            block.type == Material.DECORATED_POT ||
+            block.type == Material.CAMPFIRE ||
+            block.type == Material.SOUL_CAMPFIRE
+    ) {
       if (block.hasMetadata(META_TAG)) {
         // クリエブロック
         if (e.player.gameMode != GameMode.CREATIVE) {
@@ -267,8 +269,10 @@ object GetEvent : Listener {
       e.item.itemStack.editMeta { it.persistentDataContainer.remove(NAMESPACE) }
       return
     }
-    if (e.item.itemStack.persistentDataContainer.has(NAMESPACE) ||
-        e.item.persistentDataContainer.has(NAMESPACE)) {
+    if (
+        e.item.itemStack.persistentDataContainer.has(NAMESPACE) ||
+            e.item.persistentDataContainer.has(NAMESPACE)
+    ) {
       if (e.player.gameMode != GameMode.CREATIVE) {
         // クリエじゃないので拾えない
         e.isCancelled = true
@@ -299,15 +303,20 @@ object GetEvent : Listener {
     val i2 = e.target
     if (i1.persistentDataContainer.has(NAMESPACE) && i2.persistentDataContainer.has(NAMESPACE)) {
       return
-    } else if ((!i1.persistentDataContainer.has(NAMESPACE) &&
-        !i2.persistentDataContainer.has(NAMESPACE))) {
+    } else if (
+        (!i1.persistentDataContainer.has(NAMESPACE) && !i2.persistentDataContainer.has(NAMESPACE))
+    ) {
       return
     }
-    if (i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
-        i2.itemStack.persistentDataContainer.has(NAMESPACE)) {
+    if (
+        i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
+            i2.itemStack.persistentDataContainer.has(NAMESPACE)
+    ) {
       return
-    } else if ((!i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
-        !i2.itemStack.persistentDataContainer.has(NAMESPACE))) {
+    } else if (
+        (!i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
+            !i2.itemStack.persistentDataContainer.has(NAMESPACE))
+    ) {
       return
     }
     // 片方がクリエアイテム
@@ -326,8 +335,10 @@ object GetEvent : Listener {
   fun itemFrameEvent(e: PlayerItemFrameChangeEvent) {
     if (e.isCancelled) return
     if (e.action != PlayerItemFrameChangeEvent.ItemFrameChangeAction.PLACE) {
-      if (e.action == PlayerItemFrameChangeEvent.ItemFrameChangeAction.REMOVE &&
-          e.player.gameMode == GameMode.CREATIVE) {
+      if (
+          e.action == PlayerItemFrameChangeEvent.ItemFrameChangeAction.REMOVE &&
+              e.player.gameMode == GameMode.CREATIVE
+      ) {
         if (!e.itemStack.persistentDataContainer.has(NAMESPACE)) {
           // サバイバルアイテムを外した場合
           val item = e.itemStack.clone()

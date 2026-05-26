@@ -12,7 +12,7 @@ abstract class CarVehicle(
     maxSize2: Double,
     underBlockCheck2: Boolean,
     val maximumGears: Int,
-    val manualTransmission: Boolean
+    val manualTransmission: Boolean,
 ) : LandVehicle(speedLimit2, power2, brake2, maxSize2, underBlockCheck2) {
 
   companion object {
@@ -65,8 +65,9 @@ abstract class CarVehicle(
   fun autoTrans(per: Double) {
     if (per >= 0.975) {
       if (maximumGears > nowGear) gearShift(1)
-    } else if (nowGear > 1 &&
-        gearSpeedList.getOrNull(nowGear - 1)?.let { speed.z / it < 0.875 } == true) {
+    } else if (
+        nowGear > 1 && gearSpeedList.getOrNull(nowGear - 1)?.let { speed.z / it < 0.875 } == true
+    ) {
       gearShift(-1)
     }
   }
@@ -81,7 +82,7 @@ abstract class CarVehicle(
       wasd: ControlKey?,
       per: Double,
       slipstream: Boolean,
-      ubc: Double
+      ubc: Double,
   ): Double {
     var addSpeed = 0.0
     val ratio = currentGearRatio
@@ -145,7 +146,7 @@ abstract class CarVehicle(
       slot: Int,
       slipstream: Boolean,
       ubc: Double,
-      slipMultiplier: Double = 1.0
+      slipMultiplier: Double = 1.0,
   ): Vector {
     if (slot == 4 && speed.z >= 0.05) {
       cruiseMode = !cruiseMode

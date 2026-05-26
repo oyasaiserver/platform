@@ -16,7 +16,7 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     val player =
         sender as? Player
@@ -40,7 +40,7 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String>? {
     if (args.size > 1) return emptyList()
     val prefix = args.firstOrNull() ?: ""
@@ -70,8 +70,8 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
     EconomyManager.deposit(player, total)
     player.inventory.setItemInMainHand(null)
     player.sendMessage(
-        c(
-            "&b売却: &f${item.type.name.lowercase()} ×${item.amount}  +${EconomyManager.format(total)}"))
+        c("&b売却: &f${item.type.name.lowercase()} ×${item.amount}  +${EconomyManager.format(total)}")
+    )
     player.playSound(player.location, org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 0.8f)
   }
 
@@ -99,7 +99,8 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
 
     if (count == 0) {
       player.sendMessage(
-          c("&c売却できるアイテムがありませんでした." + if (skipped > 0) " &7(売却不可 ${skipped}種あり)" else ""))
+          c("&c売却できるアイテムがありませんでした." + if (skipped > 0) " &7(売却不可 ${skipped}種あり)" else "")
+      )
       return
     }
 
@@ -107,7 +108,9 @@ class SellCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabComplete
     val suffix = if (skipped > 0) " &7(スキップ ${skipped}種)" else ""
     player.sendMessage(
         c(
-            "&a全売却: &f${count}個  +${EconomyManager.format(earned)} &7残高: &f${EconomyManager.format(EconomyManager.getBalance(player))}$suffix"))
+            "&a全売却: &f${count}個  +${EconomyManager.format(earned)} &7残高: &f${EconomyManager.format(EconomyManager.getBalance(player))}$suffix"
+        )
+    )
     player.playSound(player.location, org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
   }
 }

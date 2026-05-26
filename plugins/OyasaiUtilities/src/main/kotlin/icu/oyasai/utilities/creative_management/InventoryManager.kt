@@ -32,10 +32,12 @@ class InventoryManager(private val p: Player) {
   fun loadInventory(gm: GameMode) {
     if (p.hasPermission("cm.bypass")) return
     val gameMode = gm.name
-    if (cm.contains("$gameMode.content") &&
-        cm.isString("$gameMode.content") &&
-        cm.contains("$gameMode.armor") &&
-        cm.isString("$gameMode.armor")) {
+    if (
+        cm.contains("$gameMode.content") &&
+            cm.isString("$gameMode.content") &&
+            cm.contains("$gameMode.armor") &&
+            cm.isString("$gameMode.armor")
+    ) {
       try {
         cm.getString("$gameMode.content")?.let {
           p.inventory.contents = this.itemStackArrayFromBase64(it)
@@ -52,7 +54,8 @@ class InventoryManager(private val p: Player) {
               " in file " +
               p.uniqueId +
               ".yml for gamemode " +
-              gameMode)
+              gameMode
+      )
     } else {
       p.inventory.clear()
       plugin.logger.info(
@@ -61,7 +64,8 @@ class InventoryManager(private val p: Player) {
               " (" +
               p.uniqueId +
               ") because no saved inventory found for gamemode " +
-              gameMode)
+              gameMode
+      )
     }
   }
 
@@ -76,10 +80,12 @@ class InventoryManager(private val p: Player) {
     val encoded = this.playerInventoryToBase64(p.inventory)
     cm.set("$gameMode.content", encoded[0])
     cm.set("$gameMode.armor", encoded[1])
-    if (cm.contains("$gameMode.content") &&
-        cm.isString("$gameMode.content") &&
-        cm.contains("$gameMode.armor") &&
-        cm.isString("$gameMode.armor")) {
+    if (
+        cm.contains("$gameMode.content") &&
+            cm.isString("$gameMode.content") &&
+            cm.contains("$gameMode.armor") &&
+            cm.isString("$gameMode.armor")
+    ) {
       cm.save(file)
       plugin.logger.info(
           "Save inventory of user " +
@@ -87,7 +93,8 @@ class InventoryManager(private val p: Player) {
               " in file " +
               p.uniqueId +
               ".yml for gamemode " +
-              gameMode)
+              gameMode
+      )
     }
   }
 

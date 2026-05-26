@@ -204,7 +204,8 @@ data class Stats(
         if (this.notice) {
           Bukkit.getLogger()
               .info(
-                  "${onlinePlayer.name} さんのレベルが $newLevel に上がりました！, LastAction: $type, Exp: $currentExp -> ${currentExp + expGain}")
+                  "${onlinePlayer.name} さんのレベルが $newLevel に上がりました！, LastAction: $type, Exp: $currentExp -> ${currentExp + expGain}"
+              )
           onlinePlayer.playSound(
               onlinePlayer.eyeLocation,
               Sound.ENTITY_PLAYER_LEVELUP,
@@ -224,14 +225,17 @@ data class Stats(
                       Duration.ofSeconds(3),
                       Duration.ofMillis(500),
                   ),
-              ))
+              )
+          )
         } else {
           onlinePlayer.sendMessage(Component.text("§6You are now Lv. $newLevel !"))
         }
         if (Tools.plugin.config.getIntegerList("noticeLvs").contains(newLevel)) {
           Bukkit.broadcast(
               Component.text(
-                  "[§eLEVEL UP!§f] §a${onlinePlayer.name} §fさんのレベルが §6$newLevel §fに上がりました！"))
+                  "[§eLEVEL UP!§f] §a${onlinePlayer.name} §fさんのレベルが §6$newLevel §fに上がりました！"
+              )
+          )
         }
       }
       if (onlinePlayer.isOnline) lastLv = newLevel

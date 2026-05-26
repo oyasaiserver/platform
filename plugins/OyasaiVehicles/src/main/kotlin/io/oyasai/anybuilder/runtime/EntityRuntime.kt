@@ -84,7 +84,7 @@ object EntityRuntime {
       addYaw: Float,
       bodyArmorStand: MutableList<ArmorStand>,
       seatArmorStand: MutableMap<Pair<Int, ArmorStand>, Vector>,
-      players: List<Player>
+      players: List<Player>,
   ) {
     if (bodyArmorStand.isEmpty()) return
     val leadArmorStand = bodyArmorStand[0]
@@ -118,7 +118,9 @@ object EntityRuntime {
                   seatOffset
                       .clone()
                       .rotateAroundY(
-                          -Math.toRadians(setYaw.toDouble() + (addYaw.toDouble() * distance))))
+                          -Math.toRadians(setYaw.toDouble() + (addYaw.toDouble() * distance))
+                      )
+              )
       movePos(seatArmorStandEntity, targetLocation)
     }
 

@@ -15,7 +15,7 @@ object CsmEditSession {
       world: World,
       player: Player?,
       logger: Logger? = null,
-      edit: (EditSession) -> Boolean
+      edit: (EditSession) -> Boolean,
   ): Result {
     var changed = false
     var undoRecorded = false

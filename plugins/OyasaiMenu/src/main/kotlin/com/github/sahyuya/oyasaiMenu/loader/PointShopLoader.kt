@@ -69,7 +69,8 @@ class PointShopLoader(private val plugin: OyasaiMenu) {
                 message = sec.getString("message", "&a${cost}P 使用しました") ?: "",
                 commands = sec.getStringList("commands"),
                 closeOnPurchase = sec.getBoolean("close-on-purchase", false),
-                customTexture = customTexture)
+                customTexture = customTexture,
+            )
         loaded++
       }
 

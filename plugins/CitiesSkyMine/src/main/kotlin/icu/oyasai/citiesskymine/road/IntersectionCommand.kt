@@ -17,7 +17,7 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     if (sender !is Player) {
       sender.sendMessage("§cプレイヤーのみ使用できます。")
@@ -48,7 +48,7 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String> {
     if (sender !is Player) return emptyList()
     if (args.size == 1) return SUBCOMMANDS.filter { it.startsWith(args[0].lowercase()) }
@@ -91,7 +91,8 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
     player.sendMessage("§a[RI] 交差点中心を §f(${loc.blockX}, ${loc.blockY}, ${loc.blockZ}) §aに設定しました。")
     player.sendMessage(
         "§7向き: §f${session.rotationDeg.toInt()}°スナップ  腕数: §f${session.arms}  " +
-            "長さ: §f${session.armLength}  コーナー: §f${session.cornerRadius}")
+            "長さ: §f${session.armLength}  コーナー: §f${session.cornerRadius}"
+    )
     plugin.updateIntersectionPreview(player)
   }
 
@@ -115,7 +116,7 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
       player: Player,
       session: IntersectionSession,
       param: String,
-      value: String
+      value: String,
   ): Boolean {
     try {
       when (param.lowercase()) {
@@ -167,7 +168,12 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
             val result =
                 CsmEditSession.run(world, player, plugin.logger) { editSession ->
                   IntersectionBuilder.buildInto(
-                      editSession, world, buildCenter, buildSession, roadSettings)
+                      editSession,
+                      world,
+                      buildCenter,
+                      buildSession,
+                      roadSettings,
+                  )
                   true
                 }
             plugin.server.scheduler.runTask(
@@ -178,16 +184,19 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
                   } else {
                     player.sendMessage("§e[RI] 交差点の設置は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
                   }
-                })
+                },
+            )
           } catch (e: Exception) {
             plugin.server.scheduler.runTask(
                 plugin,
                 Runnable {
                   player.sendMessage("§c[RI] エラーが発生しました: ${e.message}")
                   plugin.logger.severe("IntersectionBuilder error: ${e.stackTraceToString()}")
-                })
+                },
+            )
           }
-        })
+        },
+    )
   }
 
   private fun snapshot(session: IntersectionSession): IntersectionSession =
@@ -212,7 +221,8 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
     player.sendMessage("§7道路半幅:       §f$totalHW ブロック  §8（/rc で変更）")
     val c = session.center
     player.sendMessage(
-        "§7中心:           §f${if (c != null) "(${c.blockX}, ${c.blockY}, ${c.blockZ})" else "未設定"}")
+        "§7中心:           §f${if (c != null) "(${c.blockX}, ${c.blockY}, ${c.blockZ})" else "未設定"}"
+    )
     player.sendMessage("§7プレビュー:     $previewState")
   }
 

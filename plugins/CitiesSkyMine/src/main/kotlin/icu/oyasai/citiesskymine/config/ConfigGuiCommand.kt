@@ -25,7 +25,7 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     if (sender !is Player) {
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
@@ -49,7 +49,7 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     if (args.size != 1) return emptyList()
     return listOf("road", "win", "ri", "pl").filter { it.startsWith(args[0], ignoreCase = true) }
@@ -120,11 +120,16 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     inv.setItem(11, item(Material.TORCH, "Sidewalk +1", "現在: ${road.sidewalkWidth}"))
     inv.setItem(
         13,
-        item(Material.REDSTONE_TORCH, "Transition -5", "現在: ${road.transitionLength.roundToInt()}"))
+        item(Material.REDSTONE_TORCH, "Transition -5", "現在: ${road.transitionLength.roundToInt()}"),
+    )
     inv.setItem(
-        14, item(Material.RAIL, "Transition", "${road.transitionLength.roundToInt()} blocks"))
+        14,
+        item(Material.RAIL, "Transition", "${road.transitionLength.roundToInt()} blocks"),
+    )
     inv.setItem(
-        15, item(Material.TORCH, "Transition +5", "現在: ${road.transitionLength.roundToInt()}"))
+        15,
+        item(Material.TORCH, "Transition +5", "現在: ${road.transitionLength.roundToInt()}"),
+    )
     inv.setItem(25, item(Material.ARROW, "← Back", "ホームに戻る"))
     inv.setItem(26, item(Material.BARRIER, "Close", "閉じる"))
     player.openInventory(inv)
@@ -214,7 +219,9 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     inv.setItem(5, item(Material.POWERED_RAIL, "Arm Length", "${session.armLength} blocks"))
     inv.setItem(6, item(Material.TORCH, "Arm Length +2", "現在: ${session.armLength}"))
     inv.setItem(
-        10, item(Material.REDSTONE_TORCH, "Corner Radius -1", "現在: ${session.cornerRadius}"))
+        10,
+        item(Material.REDSTONE_TORCH, "Corner Radius -1", "現在: ${session.cornerRadius}"),
+    )
     inv.setItem(11, item(Material.STONE_BUTTON, "Corner Radius", "${session.cornerRadius} blocks"))
     inv.setItem(12, item(Material.TORCH, "Corner Radius +1", "現在: ${session.cornerRadius}"))
     inv.setItem(25, item(Material.ARROW, "← Back", "ホームに戻る"))
@@ -370,7 +377,10 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
   private fun cyclePayloadRotation(player: Player) {
     plugin.playerDataStore.set(
-        player, "payload.rotation", (payloadRotation(player) + 1).floorMod(4))
+        player,
+        "payload.rotation",
+        (payloadRotation(player) + 1).floorMod(4),
+    )
   }
 
   private fun payloadSide(player: Player): String =

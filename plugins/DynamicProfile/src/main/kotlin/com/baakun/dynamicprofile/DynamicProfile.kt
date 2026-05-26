@@ -80,7 +80,8 @@ class DynamicProfile : JavaPlugin() {
     totalPlayTimes.right.addAll(
         allUser.sortedByDescending {
           Bukkit.getOfflinePlayer(it).getStatistic(Statistic.PLAY_ONE_MINUTE)
-        })
+        }
+    )
     saveDefaultConfig()
     NumberBanner.createBanner()
     setupPermissions()

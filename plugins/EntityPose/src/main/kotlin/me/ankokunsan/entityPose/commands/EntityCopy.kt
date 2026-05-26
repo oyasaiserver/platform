@@ -30,7 +30,7 @@ class EntityCopy : CommandExecutor {
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     val player = sender as Player
     val uuid = player.uniqueId
@@ -70,7 +70,8 @@ class EntityCopy : CommandExecutor {
                     EquipmentSlot.HEAD,
                     EquipmentSlot.CHEST,
                     EquipmentSlot.LEGS,
-                    EquipmentSlot.FEET)
+                    EquipmentSlot.FEET,
+                )
             for (slot in slots) {
               val item = equip.getItem(slot)
               if (item.type != Material.AIR) {
@@ -108,7 +109,8 @@ class EntityCopy : CommandExecutor {
               leftArmPose = armorStands?.leftArmPose,
               rightArmPose = armorStands?.rightArmPose,
               leftLegPose = armorStands?.leftLegPose,
-              rightLegPose = armorStands?.rightLegPose)
+              rightLegPose = armorStands?.rightLegPose,
+          )
         }
     clipboard[uuid] = snapshot
     player.sendMessage("§6[EntityPose] §a${snapshot.size}体のエンティティをコピーしました")

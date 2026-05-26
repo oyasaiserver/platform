@@ -48,7 +48,8 @@ object LevelReward {
             Material.IRON_INGOT -> {
               val text = reward.lores
               text.add(
-                  econ?.format(item.itemMeta.displayName.split(",").get(1).toDouble()).toString())
+                  econ?.format(item.itemMeta.displayName.split(",").get(1).toDouble()).toString()
+              )
 
               reward.runnables.add {
                 econ?.depositPlayer(

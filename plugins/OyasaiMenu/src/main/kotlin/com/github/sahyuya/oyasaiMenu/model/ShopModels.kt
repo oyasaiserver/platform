@@ -7,7 +7,7 @@ data class ShopCategory(
     val id: String,
     val displayName: String,
     val command: String?,
-    val items: List<ShopItem>
+    val items: List<ShopItem>,
 ) {
   val itemsPerPage: Int = 45
   val pageCount: Int
@@ -27,7 +27,7 @@ data class ShopItem(
     val sellPrice: Double,
     val customName: String? = null,
     val customLore: List<String> = emptyList(),
-    val enchantments: Map<Enchantment, Int> = emptyMap()
+    val enchantments: Map<Enchantment, Int> = emptyMap(),
 ) {
   val canBuy: Boolean
     get() = material != null && buyPrice > 0
@@ -49,5 +49,5 @@ data class PlayerShopState(
     val categoryId: String,
     val page: Int = 0,
     val quantity: ShopQuantity = ShopQuantity.ONE,
-    val isInverted: Boolean = false
+    val isInverted: Boolean = false,
 )

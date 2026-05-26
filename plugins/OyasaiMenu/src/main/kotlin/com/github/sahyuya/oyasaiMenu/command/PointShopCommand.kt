@@ -14,7 +14,7 @@ class PointShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCom
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     val player =
         sender as? Player
@@ -36,7 +36,7 @@ class PointShopCommand(private val plugin: OyasaiMenu) : CommandExecutor, TabCom
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String>? {
     if (args.size > 1) return emptyList()
     val prefix = args.firstOrNull() ?: ""

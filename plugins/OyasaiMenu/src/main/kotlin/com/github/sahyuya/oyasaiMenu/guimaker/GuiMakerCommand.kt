@@ -33,7 +33,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
             "perm",
             "action",
             "clearactions",
-            "clearslot")
+            "clearslot",
+        )
     private val MENU_ID_PATTERN = Regex("[a-zA-Z0-9_.-]+(?:/[a-zA-Z0-9_.-]+)*")
     private val POPUP_ID_PATTERN = Regex("[a-zA-Z0-9_.-]+")
   }
@@ -42,7 +43,7 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<String>
+      args: Array<String>,
   ): Boolean {
     if (sender !is Player) {
       sender.sendMessage("このコマンドはプレイヤーのみ使用できます。")
@@ -73,7 +74,7 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<String>
+      args: Array<String>,
   ): List<String> {
     if (!sender.isOp) return emptyList()
     if (args.size == 1) return ROOT_SUBCOMMANDS.filter { it.startsWith(args[0], ignoreCase = true) }
@@ -162,7 +163,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
             PopupMenuAdapter.load(plugin, popupId)
                 ?: run {
                   sender.sendMessage(
-                      comp("&cPopup '$popupId' が見つかりません。新規作成は /guimaker popup new $popupId です。"))
+                      comp("&cPopup '$popupId' が見つかりません。新規作成は /guimaker popup new $popupId です。")
+                  )
                   return
                 }
         engine.sessions[sender.uniqueId] = session
@@ -198,7 +200,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
         args.getOrNull(2)
             ?: run {
               sender.sendMessage(
-                  comp("&c使用方法: /guimaker popup set <id> glass|nav_active|title <value>"))
+                  comp("&c使用方法: /guimaker popup set <id> glass|nav_active|title <value>")
+              )
               return
             }
     if (!validatePopupId(sender, popupId)) return
@@ -278,7 +281,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
                 sender,
                 session,
                 args.getOrNull(3),
-                "&c使用方法: /guimaker edit $menuId name <slot> <text>") ?: return
+                "&c使用方法: /guimaker edit $menuId name <slot> <text>",
+            ) ?: return
         val text = args.drop(4).joinToString(" ")
         if (text.isBlank()) {
           sender.sendMessage(comp("&c使用方法: /guimaker edit $menuId name <slot> <text>"))
@@ -292,7 +296,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
                 sender,
                 session,
                 args.getOrNull(3),
-                "&c使用方法: /guimaker edit $menuId lore <slot> <text>") ?: return
+                "&c使用方法: /guimaker edit $menuId lore <slot> <text>",
+            ) ?: return
         val text = args.drop(4).joinToString(" ")
         if (text.isBlank()) {
           sender.sendMessage(comp("&c使用方法: /guimaker edit $menuId lore <slot> <text>"))
@@ -306,7 +311,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
                 sender,
                 session,
                 args.getOrNull(3),
-                "&c使用方法: /guimaker edit $menuId clearlore <slot>") ?: return
+                "&c使用方法: /guimaker edit $menuId clearlore <slot>",
+            ) ?: return
         engine.cmdClearLore(sender, session, slot)
       }
       "perm" -> {
@@ -315,7 +321,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
                 sender,
                 session,
                 args.getOrNull(3),
-                "&c使用方法: /guimaker edit $menuId perm <slot> [permission]") ?: return
+                "&c使用方法: /guimaker edit $menuId perm <slot> [permission]",
+            ) ?: return
         engine.cmdSetPerm(sender, session, slot, args.getOrNull(4)?.takeIf { it.isNotBlank() })
       }
       "action" -> {
@@ -324,12 +331,14 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
                 sender,
                 session,
                 args.getOrNull(3),
-                "&c使用方法: /guimaker edit $menuId action <slot> <type> [value]") ?: return
+                "&c使用方法: /guimaker edit $menuId action <slot> <type> [value]",
+            ) ?: return
         val type =
             args.getOrNull(4)?.uppercase()
                 ?: run {
                   sender.sendMessage(
-                      comp("&c使用方法: /guimaker edit $menuId action <slot> <type> [value]"))
+                      comp("&c使用方法: /guimaker edit $menuId action <slot> <type> [value]")
+                  )
                   return
                 }
         if (type !in GuiActionCatalog.types) {
@@ -349,7 +358,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
                 sender,
                 session,
                 args.getOrNull(3),
-                "&c使用方法: /guimaker edit $menuId clearactions <slot>") ?: return
+                "&c使用方法: /guimaker edit $menuId clearactions <slot>",
+            ) ?: return
         engine.cmdClearActions(sender, session, slot)
       }
       "clearslot" -> {
@@ -358,7 +368,8 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
                 sender,
                 session,
                 args.getOrNull(3),
-                "&c使用方法: /guimaker edit $menuId clearslot <slot>") ?: return
+                "&c使用方法: /guimaker edit $menuId clearslot <slot>",
+            ) ?: return
         engine.cmdClearSlot(sender, session, slot)
       }
       else -> {
@@ -373,14 +384,17 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
       null -> engine.openUiScreenList(sender)
       "list" ->
           sender.sendMessage(
-              comp("&e[GuiMaker] &f編集可能なUI画面: &a${engine.uiScreenNames().joinToString("&7, &a")}"))
+              comp("&e[GuiMaker] &f編集可能なUI画面: &a${engine.uiScreenNames().joinToString("&7, &a")}")
+          )
       "edit" -> {
         val screen =
             args.getOrNull(2)
                 ?: run {
                   sender.sendMessage(
                       comp(
-                          "&c使用方法: /guimaker ui edit <screen>  画面: ${engine.uiScreenNames().joinToString(", ")}"))
+                          "&c使用方法: /guimaker ui edit <screen>  画面: ${engine.uiScreenNames().joinToString(", ")}"
+                      )
+                  )
                   return
                 }
         engine.openUiSkinEditor(sender, screen)
@@ -415,7 +429,9 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
         sender.sendMessage(comp("&e[GuiMaker] テンプレート管理"))
         sender.sendMessage(
             comp(
-                "&7/guimaker template approve <player|uuid> <menu|block> <template-id> [official-id]"))
+                "&7/guimaker template approve <player|uuid> <menu|block> <template-id> [official-id]"
+            )
+        )
         sender.sendMessage(comp("&7個人テンプレートを公式テンプレートとして shared フォルダへ保存します。"))
       }
     }
@@ -427,7 +443,9 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
             ?: run {
               sender.sendMessage(
                   comp(
-                      "&c使用方法: /guimaker template approve <player|uuid> <menu|block> <template-id> [official-id]"))
+                      "&c使用方法: /guimaker template approve <player|uuid> <menu|block> <template-id> [official-id]"
+                  )
+              )
               return
             }
     val kind =
@@ -533,7 +551,7 @@ class GuiMakerCommand(private val plugin: OyasaiMenu, private val engine: GuiEdi
       sender: Player,
       session: GuiEditorSession,
       raw: String?,
-      usage: String
+      usage: String,
   ): Int? {
     val slot = raw?.toIntOrNull()
     if (slot == null) {

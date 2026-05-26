@@ -15,7 +15,8 @@ object CarBuilder2 {
         tabCompleter = CarBuilder2CommandTab,
         events = CarBuilder2Events,
         entityList = CarBuilder2EntityList,
-        cache = CarBuilder2BaseCache)
+        cache = CarBuilder2BaseCache,
+    )
   }
 
   fun onDisable() {

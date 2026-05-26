@@ -27,7 +27,7 @@ object NavBar {
       val tps: String,
       val dpLevel: String,
       val balance: String,
-      val tokens: String
+      val tokens: String,
   )
 
   private val playerStatsCache: MutableMap<UUID, PlayerStatsSnapshot> = mutableMapOf()
@@ -37,7 +37,7 @@ object NavBar {
       val material: Material,
       val name: String,
       val popupId: String,
-      val lore: List<String> = emptyList()
+      val lore: List<String> = emptyList(),
   )
 
   val entries =
@@ -47,49 +47,58 @@ object NavBar {
               Material.RED_CONCRETE_POWDER,
               "&cチャンネルメニュー",
               "channel",
-              listOf("&7チャットチャンネルを切り替えます", "&7メンバー確認もここから")),
+              listOf("&7チャットチャンネルを切り替えます", "&7メンバー確認もここから"),
+          ),
           NavEntry(
               47,
               Material.ORANGE_CONCRETE_POWDER,
               "&6一括売却",
               "sellmenu",
-              listOf("&7アイテムを一括で売却します", "&7ショップでも買取可のアイテムのみ換金")),
+              listOf("&7アイテムを一括で売却します", "&7ショップでも買取可のアイテムのみ換金"),
+          ),
           NavEntry(
               48,
               Material.YELLOW_CONCRETE_POWDER,
               "&eサーバーショップ",
               "shopindex",
-              listOf("&7ブロック・鉱石・ツール等を", "&7購入・売却できます")),
+              listOf("&7ブロック・鉱石・ツール等を", "&7購入・売却できます"),
+          ),
           NavEntry(
               49,
               Material.LIME_CONCRETE_POWDER,
               "&aSocialLikes",
               "sociallikes",
-              listOf("&7建築を投稿・閲覧したり", "&7空き地へテレポートできます")),
+              listOf("&7建築を投稿・閲覧したり", "&7空き地へテレポートできます"),
+          ),
           NavEntry(
               50,
               Material.CYAN_CONCRETE_POWDER,
               "&bCarBuilder",
               "carbuilder",
-              listOf("&7ユーザー車両建造プラグイン", "&7スポーン、カスタム、車両設定など")),
+              listOf("&7ユーザー車両建造プラグイン", "&7スポーン、カスタム、車両設定など"),
+          ),
           NavEntry(
               51,
               Material.BLUE_CONCRETE_POWDER,
               "&9ユーティリティ",
               "utility",
-              listOf("&7ワープ・各種コマンドの", "&7ショートカット集です")),
+              listOf("&7ワープ・各種コマンドの", "&7ショートカット集です"),
+          ),
           NavEntry(
               52,
               Material.PURPLE_CONCRETE_POWDER,
               "&5マクロ",
               "macromenu",
-              listOf("&7コマンドを登録・実行できる", "&7マクロ機能を管理します")),
+              listOf("&7コマンドを登録・実行できる", "&7マクロ機能を管理します"),
+          ),
           NavEntry(
               53,
               Material.PINK_CONCRETE_POWDER,
               "&dリンク集",
               "links",
-              listOf("&7Wiki・Discord・WebMAP など", "&7各種リンクを表示します")))
+              listOf("&7Wiki・Discord・WebMAP など", "&7各種リンクを表示します"),
+          ),
+      )
 
   /**
    * インベントリの下1列 (45〜53) にナビバーを描画する。
@@ -148,7 +157,9 @@ object NavBar {
             comp("&7所持金: &6${stats.balance}"),
             comp("&7ポイント: &3${stats.tokens}"),
             comp(""),
-            comp("&eクリックで自分のプロフィールへ")))
+            comp("&eクリックで自分のプロフィールへ"),
+        )
+    )
     skull.itemMeta = meta
     return skull
   }
@@ -180,7 +191,8 @@ object NavBar {
             tokens =
                 if (TokenCurrencyManager.isAvailable)
                     "${TokenCurrencyManager.format(TokenCurrencyManager.getTokens(player))}&fP"
-                else "---")
+                else "---",
+        )
     playerStatsCache[player.uniqueId] = snapshot
     return snapshot
   }

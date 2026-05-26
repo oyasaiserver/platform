@@ -148,7 +148,10 @@ class ActionEngine(private val plugin: OyasaiMenu) {
                       HoverEvent.showText(
                           Component.text("クリックで開く")
                               .color(NamedTextColor.GRAY)
-                              .decoration(TextDecoration.ITALIC, false))))
+                              .decoration(TextDecoration.ITALIC, false)
+                      )
+                  )
+          )
         }
       }
 
@@ -167,8 +170,12 @@ class ActionEngine(private val plugin: OyasaiMenu) {
                               HoverEvent.showText(
                                   Component.text("クリックでクリップボードにコピー")
                                       .color(NamedTextColor.GRAY)
-                                      .decoration(TextDecoration.ITALIC, false))))
-                  .build())
+                                      .decoration(TextDecoration.ITALIC, false)
+                              )
+                          )
+                  )
+                  .build()
+          )
         }
       }
 
@@ -188,8 +195,12 @@ class ActionEngine(private val plugin: OyasaiMenu) {
                               HoverEvent.showText(
                                   Component.text("クリックでコマンドをチャット欄に入力")
                                       .color(NamedTextColor.GRAY)
-                                      .decoration(TextDecoration.ITALIC, false))))
-                  .build())
+                                      .decoration(TextDecoration.ITALIC, false)
+                              )
+                          )
+                  )
+                  .build()
+          )
         }
       }
 
@@ -273,6 +284,7 @@ class ActionEngine(private val plugin: OyasaiMenu) {
             ActionType.OPEN_CHANNEL to "channel",
             ActionType.OPEN_SOCIALLIKES to "sociallikes",
             ActionType.OPEN_CARBUILDER to "carbuilder",
-            ActionType.OPEN_LINKS to "links")
+            ActionType.OPEN_LINKS to "links",
+        )
   }
 }

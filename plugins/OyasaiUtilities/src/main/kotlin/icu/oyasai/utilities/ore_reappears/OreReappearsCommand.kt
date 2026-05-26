@@ -22,7 +22,8 @@ object OreReappearsCommand : CommandExecutor {
       if (!sender.isOp) return false
       sender.sendMessage(
           "[OreReappears] 機能を${if (OreReappears.switching()) {"&c無効化"} else {"&a有効化"}}&rしました"
-              .color())
+              .color()
+      )
       return true
     }
     return false

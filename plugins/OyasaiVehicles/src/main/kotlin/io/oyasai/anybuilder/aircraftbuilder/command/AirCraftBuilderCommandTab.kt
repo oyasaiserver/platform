@@ -19,7 +19,7 @@ object AircraftBuilderCommandTab : TabCompleter {
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): MutableList<String>? {
     return handleAircraftBuilderTab(sender, command, args)
   }
@@ -28,7 +28,7 @@ object AircraftBuilderCommandTab : TabCompleter {
 fun handleAircraftBuilderTab(
     sender: CommandSender,
     command: Command,
-    args: Array<out String>
+    args: Array<out String>,
 ): MutableList<String>? {
   if (command.name != "aircraftbuilder") return null
 

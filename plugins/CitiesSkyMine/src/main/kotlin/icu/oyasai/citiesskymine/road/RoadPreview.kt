@@ -44,6 +44,16 @@ object RoadPreview {
 
   private fun spawnDust(player: Player, x: Double, y: Double, z: Double, color: Color) {
     player.spawnParticle(
-        Particle.DUST, x, y, z, 1, 0.0, 0.0, 0.0, 0.0, Particle.DustOptions(color, 1.0f))
+        Particle.DUST,
+        x,
+        y,
+        z,
+        1,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        Particle.DustOptions(color, 1.0f),
+    )
   }
 }

@@ -26,7 +26,8 @@ fun AircraftBuilderEntityData.soundTaskImpl(wasd: ControlKey?) {
       Sound.ENTITY_WARDEN_AMBIENT,
       SoundCategory.PLAYERS,
       roadNoise * 0.25f,
-      0.5f + roadNoise * 0.18f)
+      0.5f + roadNoise * 0.18f,
+  )
 
   when (wasd) {
     ControlKey.W,
@@ -65,19 +66,22 @@ fun AircraftBuilderEntityData.soundTaskImpl(wasd: ControlKey?) {
       Sound.ENTITY_COW_STEP,
       SoundCategory.PLAYERS,
       this.gasDouble.toFloat() * 0.45f,
-      0.5f + this.gasDouble.toFloat())
+      0.5f + this.gasDouble.toFloat(),
+  )
   world.playSound(
       loc,
       Sound.ENTITY_COW_STEP,
       SoundCategory.PLAYERS,
       0.15f + speedVolumeBase,
-      0.5f + speedPitchBase)
+      0.5f + speedPitchBase,
+  )
   world.playSound(
       loc,
       Sound.ENTITY_HORSE_STEP_WOOD,
       SoundCategory.PLAYERS,
       0.375f + speedVolumeBase,
-      0.5f + speedPitchRpm)
+      0.5f + speedPitchRpm,
+  )
 }
 
 fun AircraftBuilderEntityData.updateBarImpl() {
@@ -137,7 +141,9 @@ fun AircraftBuilderEntityData.setDisplayRotateImpl() {
                     .rotationY(Math.toRadians(this.setYaw.toDouble()).toFloat())
                     .rotateX(Math.toRadians(this.pitch.toDouble()).toFloat()),
                 def.scale,
-                def.rightRotation))
+                def.rightRotation,
+            )
+        )
       }
     }
   }

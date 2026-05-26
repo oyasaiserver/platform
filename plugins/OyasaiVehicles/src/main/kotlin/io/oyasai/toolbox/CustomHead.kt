@@ -111,13 +111,15 @@ object CustomHead {
           '↓' to
               "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODgyZmFmOWE1ODRjNGQ2NzZkNzMwYjIzZjg5NDJiYjk5N2ZhM2RhZDQ2ZDRmNjVlMjg4YzM5ZWI0NzFjZTcifX19",
           '↑' to
-              "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWFkNmM4MWY4OTlhNzg1ZWNmMjZiZTFkYzQ4ZWFlMmJjZmU3NzdhODYyMzkwZjU3ODVlOTViZDgzYmQxNGQifX19")
+              "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWFkNmM4MWY4OTlhNzg1ZWNmMjZiZTFkYzQ4ZWFlMmJjZmU3NzdhODYyMzkwZjU3ODVlOTViZDgzYmQxNGQifX19",
+      )
   private val headList = mutableMapOf<Char, ItemStack>()
 
   private val urlList2 =
       mapOf(
           "camera" to
-              "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmZiNWVlZTQwYzNkZDY2ODNjZWM4ZGQxYzZjM2ZjMWIxZjAxMzcxNzg2NjNkNzYxMDljZmUxMmVkN2JmMjc4ZSJ9fX0=")
+              "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmZiNWVlZTQwYzNkZDY2ODNjZWM4ZGQxYzZjM2ZjMWIxZjAxMzcxNzg2NjNkNzYxMDljZmUxMmVkN2JmMjc4ZSJ9fX0="
+      )
   private val headList2 = mutableMapOf<String, ItemStack>()
   private val bannerList = mutableMapOf<Char, ItemStack>()
 
@@ -162,21 +164,24 @@ object CustomHead {
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
             '1' to
                 listOf(
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_CENTER),
                     Pattern(DyeColor.WHITE, PatternType.SQUARE_TOP_LEFT),
                     Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
             '2' to
                 listOf(
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
                     Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
             '3' to
                 listOf(
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
@@ -184,21 +189,24 @@ object CustomHead {
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
                     Pattern(DyeColor.BLACK, PatternType.CURLY_BORDER),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
             '4' to
                 listOf(
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
                     Pattern(DyeColor.BLACK, PatternType.HALF_HORIZONTAL_BOTTOM),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
             '5' to
                 listOf(
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
                     Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNRIGHT),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
             '6' to
                 listOf(
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
@@ -207,12 +215,14 @@ object CustomHead {
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
             '7' to
                 listOf(
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_DOWNLEFT),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
             '8' to
                 listOf(
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
@@ -220,7 +230,8 @@ object CustomHead {
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_MIDDLE),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)),
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
             '9' to
                 listOf(
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_LEFT),
@@ -229,7 +240,9 @@ object CustomHead {
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_RIGHT),
                     Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM),
-                    Pattern(DyeColor.BLACK, PatternType.BORDER)))
+                    Pattern(DyeColor.BLACK, PatternType.BORDER),
+                ),
+        )
 
     patterns.forEach { (c, patternList) ->
       val item = ItemStack(Material.BLACK_BANNER)

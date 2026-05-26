@@ -64,7 +64,12 @@ fun CarBuilder2EntityData.startImpl() {
           val oldSpeed = this@startImpl.vehicle.speed.z
           val velocity =
               this@startImpl.computeVelocity(
-                  wasd, slot, slipstreamActive, setYaw0, slipYaw.toFloat())
+                  wasd,
+                  slot,
+                  slipstreamActive,
+                  setYaw0,
+                  slipYaw.toFloat(),
+              )
           velocity.y = this@startImpl.computeVerticalMotion()
           this@startImpl.setYaw = -setYaw0
 
@@ -75,7 +80,8 @@ fun CarBuilder2EntityData.startImpl() {
                 addYaw,
                 this@startImpl.bodyArmorStands,
                 this@startImpl.seatArmorStands,
-                this@startImpl.getCarPlayers())
+                this@startImpl.getCarPlayers(),
+            )
           }
 
           this@startImpl.setBodyRotate(oldSpeed)
@@ -84,15 +90,23 @@ fun CarBuilder2EntityData.startImpl() {
           CarBuilder2EntityList.updateBarPlayer(player, this@startImpl.bossBar)
           this@startImpl.bodyLightTask(slot, wasd)
           this@startImpl.smokeParticle(
-              this@startImpl.vehicle.speed.z, slipYaw.toFloat(), setYaw0, player)
+              this@startImpl.vehicle.speed.z,
+              slipYaw.toFloat(),
+              setYaw0,
+              player,
+          )
 
           if (!VehicleMenuCommand.eventMode) {
             if (this@startImpl.realMode) {
               this@startImpl.wheelTask(
-                  this@startImpl.vehicle.speed.z, this@startImpl.vehicle.handleAngle)
+                  this@startImpl.vehicle.speed.z,
+                  this@startImpl.vehicle.handleAngle,
+              )
             } else {
               this@startImpl.wheelTask(
-                  this@startImpl.vehicle.speed.z, this@startImpl.vehicle.oldHandlingFloat)
+                  this@startImpl.vehicle.speed.z,
+                  this@startImpl.vehicle.oldHandlingFloat,
+              )
             }
             this@startImpl.headLightTask(setYaw0)
           }

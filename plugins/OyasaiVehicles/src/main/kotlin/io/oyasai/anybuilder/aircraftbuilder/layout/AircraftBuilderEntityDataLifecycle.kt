@@ -33,7 +33,9 @@ fun AircraftBuilderEntityData.reOffsetDisplayImpl(
                   Vector3f(blockDisplay.transformation.translation).add(addVec.toVector3f()),
                   blockDisplay.transformation.leftRotation,
                   blockDisplay.transformation.scale,
-                  blockDisplay.transformation.rightRotation))
+                  blockDisplay.transformation.rightRotation,
+              )
+          )
         }
       }
     }

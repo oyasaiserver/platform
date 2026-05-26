@@ -137,20 +137,23 @@ object Events : Listener {
     Bukkit.spigot()
         .broadcast(
             TextComponent(
-                    Tools.socialLikesLOGO + "&f${e.player.name}さん&rが「&a${title}&r」を建てました！".color())
+                    Tools.socialLikesLOGO + "&f${e.player.name}さん&rが「&a${title}&r」を建てました！".color()
+                )
                 .apply {
                   this.clickEvent =
                       ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
                   this.hoverEvent =
                       HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでテレポート&rします".color()))
-                })
+                }
+        )
     Bukkit.spigot()
         .broadcast(
             TextComponent("&l&n/sltp ${id}&rで見に行きましょう！".color()).apply {
               this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
               this.hoverEvent =
                   HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでテレポート&rします".color()))
-            })
+            }
+        )
     Bukkit.spigot().broadcast(TextComponent(" "))
 
     // 通知音
@@ -322,11 +325,13 @@ object Events : Listener {
           SLUpdate.switch[e.player.uniqueId] = false
         } else {
           e.player.sendMessage(
-              Tools.socialLikesLOGO + "&f旧Like看板です。登録データの座標と違います。 運営に報告お願いします".color())
+              Tools.socialLikesLOGO + "&f旧Like看板です。登録データの座標と違います。 運営に報告お願いします".color()
+          )
           Bukkit.getLogger().warning("[SocialLikes3] 旧Like看板の座標違いがクリックされました")
           Bukkit.getLogger()
               .warning(
-                  "[SocialLikes3] world:${block.location.world.name},x${block.location.x},y${block.location.y},z${block.location.z}")
+                  "[SocialLikes3] world:${block.location.world.name},x${block.location.x},y${block.location.y},z${block.location.z}"
+              )
         }
         return
       }
@@ -503,7 +508,9 @@ object Events : Listener {
     val sourceSign = itemMeta.blockState as? Sign ?: return
     val teleportId =
         sourceSign.persistentDataContainer.get(
-            SLSignSetting.sltpSignKey, PersistentDataType.INTEGER) ?: return
+            SLSignSetting.sltpSignKey,
+            PersistentDataType.INTEGER,
+        ) ?: return
     val ownerId =
         sourceSign.persistentDataContainer.get(
             SLSignSetting.sltpSignUUIDKey,

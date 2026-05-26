@@ -18,7 +18,7 @@ object CarBuilder2Schematic {
       sender: Player,
       data: CarBuilder2BaseData,
       type: CarBuilder2BaseDataType,
-      size: Double
+      size: Double,
   ) {
     val fileName = "${data.name}_${type.name.lowercase(Locale.ROOT)}.schem"
     BuilderSchematic.saveFile(sender, data.name, "CarBuilder2", fileName) { clipboard ->
@@ -75,7 +75,8 @@ object CarBuilder2Schematic {
       return Vector(
           Math.round(vec.x * 1000.0) * 0.001,
           Math.round(vec.y * 1000.0) * 0.001,
-          Math.round(vec.z * 1000.0) * 0.001)
+          Math.round(vec.z * 1000.0) * 0.001,
+      )
     }
 
     for ((offset, pair) in compressed) {
@@ -95,7 +96,8 @@ object CarBuilder2Schematic {
               Vector(
                       offset.x + (pair.second.x / 2.0),
                       offset.y + (pair.second.y / 2.0),
-                      offset.z + (pair.second.z / 2.0))
+                      offset.z + (pair.second.z / 2.0),
+                  )
                   .add(bodyCenterShift)
                   .multiply(fixWidth)
           wheelOffset[wheelCount] = roundVec(vec)
@@ -108,7 +110,8 @@ object CarBuilder2Schematic {
               Vector(
                       offset.x + (pair.second.x / 2.0),
                       offset.y + (pair.second.y / 2.0),
-                      offset.z + (pair.second.z / 2.0))
+                      offset.z + (pair.second.z / 2.0),
+                  )
                   .add(bodyCenterShift)
                   .multiply(fixWidth)
           wheel2Offset[wheel2Count] = roundVec(vec)

@@ -52,7 +52,9 @@ class MacroManager(private val plugin: OyasaiMenu) {
                 ownerUUID = uuid.toString(),
                 commands = sec.getStringList("commands"),
                 cooldownSeconds =
-                    sec.getInt("cooldown", plugin.config.getInt("macro.cooldown-seconds", 3))))
+                    sec.getInt("cooldown", plugin.config.getInt("macro.cooldown-seconds", 3)),
+            )
+        )
       }
     }
     cache[uuid.toString()] = list
@@ -124,7 +126,7 @@ class MacroManager(private val plugin: OyasaiMenu) {
       uuid: UUID,
       macro: PlayerMacro,
       maxOverride: Int? = null,
-      player: Player? = null
+      player: Player? = null,
   ): String? {
     val list = cache.getOrPut(uuid.toString()) { mutableListOf() }
     val max = maxOverride ?: plugin.config.getInt("macro.max-per-player", 10)
@@ -161,7 +163,7 @@ class MacroManager(private val plugin: OyasaiMenu) {
       macroId: String,
       index: Int,
       value: String,
-      player: Player? = null
+      player: Player? = null,
   ): String? {
     val macro = getMacro(uuid, macroId) ?: return "マクロ '$macroId' が見つかりません。"
     val commands = macro.commands.toMutableList()
@@ -217,7 +219,9 @@ class MacroManager(private val plugin: OyasaiMenu) {
               name = name,
               ownerUUID = player.uniqueId.toString(),
               commands = commands,
-              cooldownSeconds = cooldown))
+              cooldownSeconds = cooldown,
+          )
+      )
       added++
     }
 
@@ -228,9 +232,11 @@ class MacroManager(private val plugin: OyasaiMenu) {
               plugin,
               Runnable {
                 player.sendMessage(
-                    c("&b[OyasaiMenu] &a${added}個のOPマクロテンプレートを追加しました。(&e/macro &aで確認)"))
+                    c("&b[OyasaiMenu] &a${added}個のOPマクロテンプレートを追加しました。(&e/macro &aで確認)")
+                )
               },
-              20L)
+              20L,
+          )
     }
   }
 
@@ -275,17 +281,26 @@ class MacroManager(private val plugin: OyasaiMenu) {
       val delayTick = secondsToTicks(seconds).coerceAtLeast(minDelay)
       Bukkit.getScheduler()
           .runTaskLater(
-              plugin, Runnable { executeCommandsFrom(player, commands, index + 1) }, delayTick)
+              plugin,
+              Runnable { executeCommandsFrom(player, commands, index + 1) },
+              delayTick,
+          )
     } else if (cmd.startsWith("/")) {
       player.performCommand(cmd.removePrefix("/"))
       Bukkit.getScheduler()
           .runTaskLater(
-              plugin, Runnable { executeCommandsFrom(player, commands, index + 1) }, minDelay)
+              plugin,
+              Runnable { executeCommandsFrom(player, commands, index + 1) },
+              minDelay,
+          )
     } else {
       @Suppress("DEPRECATION") player.chat(cmd)
       Bukkit.getScheduler()
           .runTaskLater(
-              plugin, Runnable { executeCommandsFrom(player, commands, index + 1) }, minDelay)
+              plugin,
+              Runnable { executeCommandsFrom(player, commands, index + 1) },
+              minDelay,
+          )
     }
   }
 

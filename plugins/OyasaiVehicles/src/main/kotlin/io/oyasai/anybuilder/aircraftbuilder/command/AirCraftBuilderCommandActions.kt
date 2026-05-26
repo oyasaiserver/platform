@@ -32,7 +32,7 @@ import org.bukkit.util.Vector
 fun AircraftBuilderCommand.handleAircraftBuilderMachineSet(
     data: AircraftBuilderBaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   if (data == null) {
     sender.sendMessage("[AircraftBuilder] Data does not exist!")
@@ -52,9 +52,11 @@ fun AircraftBuilderCommand.handleAircraftBuilderMachineSet(
   val power = args[3].toIntOrNull() ?: return
   val brake = args[4].toIntOrNull() ?: return
 
-  if (topSpeed !in 1..AircraftBuilderItem.TOP_SPEED_MAX ||
-      power !in 1..AircraftBuilderItem.POWER_MAX ||
-      brake !in 1..AircraftBuilderItem.BRAKE_MAX) {
+  if (
+      topSpeed !in 1..AircraftBuilderItem.TOP_SPEED_MAX ||
+          power !in 1..AircraftBuilderItem.POWER_MAX ||
+          brake !in 1..AircraftBuilderItem.BRAKE_MAX
+  ) {
     sender.sendMessage("[AircraftBuilder] Stat values are out of range")
     return
   }
@@ -88,7 +90,8 @@ fun AircraftBuilderCommand.handleAircraftBuilderMachineSet(
       AircraftBuilderSpawn.spawn(requestedPlayer.location, item, null, requestedPlayer, data)
       requestedPlayer.sendMessage("[AircraftBuilder] Spawned custom trial vehicle for ${args[0]}")
       sender.sendMessage(
-          "[AircraftBuilder] Spawned custom trial vehicle for ${args[0]} to ${requestedPlayer.name}")
+          "[AircraftBuilder] Spawned custom trial vehicle for ${args[0]} to ${requestedPlayer.name}"
+      )
     } else {
       AircraftBuilderSpawn.spawn(sender.location, item, null, null, data)
       sender.sendMessage("[AircraftBuilder] Spawned custom trial vehicle for ${args[0]}")
@@ -108,7 +111,8 @@ fun AircraftBuilderCommand.handleAircraftBuilderMachineSet(
     AircraftBuilderSpawn.spawn(targetPlayer.location, item, null, targetPlayer, data)
     targetPlayer.sendMessage("[AircraftBuilder] Spawned custom trial vehicle for ${args[0]}")
     sender.sendMessage(
-        "[AircraftBuilder] Spawned custom trial vehicle for ${args[0]} to ${targetPlayer.name}")
+        "[AircraftBuilder] Spawned custom trial vehicle for ${args[0]} to ${targetPlayer.name}"
+    )
     return
   }
 
@@ -127,7 +131,8 @@ fun AircraftBuilderCommand.handleAircraftBuilderMachineSet(
     AircraftBuilderSpawn.spawn(nearbyPlayer.location, item, null, nearbyPlayer, data, yaw.toFloat())
     nearbyPlayer.sendMessage("[AircraftBuilder] Spawned custom trial vehicle for ${args[0]}")
     sender.sendMessage(
-        "[AircraftBuilder] Spawned custom trial vehicle for ${args[0]} to ${nearbyPlayer.name}")
+        "[AircraftBuilder] Spawned custom trial vehicle for ${args[0]} to ${nearbyPlayer.name}"
+    )
     return
   }
 }
@@ -135,7 +140,7 @@ fun AircraftBuilderCommand.handleAircraftBuilderMachineSet(
 fun AircraftBuilderCommand.handleAircraftBuilderEventCar(
     data: AircraftBuilderBaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   if (data == null) {
     sender.sendMessage("[AircraftBuilder] Data does not exist!")
@@ -166,7 +171,7 @@ fun AircraftBuilderCommand.handleAircraftBuilderEventCar(
 fun AircraftBuilderCommand.handleAircraftBuilderSetting(
     data: AircraftBuilderBaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   if (args.size < 2) return
   if (!sender.canManageAircraftBuilder(data)) {
@@ -207,7 +212,8 @@ fun AircraftBuilderCommand.handleAircraftBuilderSetting(
       if (!updateAircraftOffset(config, partTypeName, index, offsetVector)) return
       config.save()
       sender.sendMessage(
-          "[AircraftBuilder] Set $partTypeName offset $index: X_$x|Y_$y|Z_$z for ${args[0]}")
+          "[AircraftBuilder] Set $partTypeName offset $index: X_$x|Y_$y|Z_$z for ${args[0]}"
+      )
     }
     "save" -> handleAircraftBuilderSave(data, sender, args)
     "size" -> {
@@ -229,7 +235,7 @@ private fun updateAircraftOffset(
     config: AircraftBuilderConfig,
     partTypeName: String,
     index: Int,
-    offset: Vector?
+    offset: Vector?,
 ): Boolean {
   when (partTypeName) {
     "body" -> config.setBodyOffset(offset ?: Vector(0.0, 0.0, 0.0))
@@ -243,14 +249,18 @@ private fun updateAircraftOffset(
 
 private fun findNearbyAircraftBuilderPlayer(location: Location): Player? {
   return Tools.getNearbyPlayers(
-          location, COMMAND_BLOCK_SEARCH_XZ, COMMAND_BLOCK_SEARCH_Y, COMMAND_BLOCK_SEARCH_XZ)
+          location,
+          COMMAND_BLOCK_SEARCH_XZ,
+          COMMAND_BLOCK_SEARCH_Y,
+          COMMAND_BLOCK_SEARCH_XZ,
+      )
       .firstOrNull()
 }
 
 fun AircraftBuilderCommand.handleAircraftBuilderBuy(
     sender: CommandSender,
     name: String,
-    data: AircraftBuilderBaseData?
+    data: AircraftBuilderBaseData?,
 ) {
   handlePlayerPurchase(
       sender = sender,
@@ -276,13 +286,14 @@ fun AircraftBuilderCommand.handleAircraftBuilderBuy(
       onPaymentFailure = {
         it.playSound(it.location, Sound.BLOCK_AMETHYST_BLOCK_STEP, 0.35f, 0.5f)
         it.sendMessage("[AircraftBuilder] Not enough points!")
-      })
+      },
+  )
 }
 
 fun AircraftBuilderCommand.handleAircraftBuilderSave(
     existingData: AircraftBuilderBaseData?,
     sender: CommandSender,
-    args: Array<out String>
+    args: Array<out String>,
 ) {
   val name = args[0]
   executeSaveFlow(
@@ -318,15 +329,19 @@ fun AircraftBuilderCommand.handleAircraftBuilderSave(
                 vehicleData.config.set("owner", ownerUUID.toString())
                 vehicleData.config.save()
                 player.sendMessage(
-                    "[AircraftBuilder] Finished saving $name. Entity count: ${vehicleData.totalEntity()}")
+                    "[AircraftBuilder] Finished saving $name. Entity count: ${vehicleData.totalEntity()}"
+                )
                 val entityLimit = player.getEntityLimitByPermission()
                 if (vehicleData.totalEntity() > entityLimit) {
                   player.sendMessage(
-                      "[AircraftBuilder] Total entities exceed $entityLimit! Cannot spawn!")
+                      "[AircraftBuilder] Total entities exceed $entityLimit! Cannot spawn!"
+                  )
                 }
               } else {
                 player.sendMessage("[AircraftBuilder] Saving finished. (No block data!)")
               }
-            })
-      })
+            },
+        )
+      },
+  )
 }

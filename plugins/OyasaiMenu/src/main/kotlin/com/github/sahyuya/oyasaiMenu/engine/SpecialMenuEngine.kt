@@ -49,7 +49,10 @@ class SpecialMenuEngine(private val plugin: OyasaiMenu) : Listener {
     val safePage = page.coerceIn(0, maxPage)
     val inv =
         Bukkit.createInventory(
-            OnlinePlayersHolder(safePage), 54, comp("&8オンラインプレイヤー (${players.size})"))
+            OnlinePlayersHolder(safePage),
+            54,
+            comp("&8オンラインプレイヤー (${players.size})"),
+        )
     fill(inv, Material.GRAY_STAINED_GLASS_PANE)
     players.drop(safePage * 45).take(45).forEachIndexed { index, target ->
       inv.setItem(index, playerHead(target))
@@ -68,7 +71,9 @@ class SpecialMenuEngine(private val plugin: OyasaiMenu) : Listener {
     val inv = Bukkit.createInventory(ConfirmCommandHolder(command, mode), 54, comp("&8コマンド実行確認"))
     fill(inv, Material.GRAY_STAINED_GLASS_PANE)
     inv.setItem(
-        13, item(Material.COMMAND_BLOCK, "&f実行予定", "&7mode: &f$mode", "&7command: &e$command"))
+        13,
+        item(Material.COMMAND_BLOCK, "&f実行予定", "&7mode: &f$mode", "&7command: &e$command"),
+    )
     inv.setItem(20, item(Material.LIME_CONCRETE, "&a実行する", "&7このコマンドを実行します"))
     inv.setItem(24, item(Material.RED_CONCRETE, "&cキャンセル", "&7何もせず閉じます"))
     player.openInventory(inv)
@@ -87,7 +92,7 @@ class SpecialMenuEngine(private val plugin: OyasaiMenu) : Listener {
   private fun handleOnlinePlayersClick(
       event: InventoryClickEvent,
       player: Player,
-      holder: OnlinePlayersHolder
+      holder: OnlinePlayersHolder,
   ) {
     event.isCancelled = true
     if (event.clickedInventory != event.inventory) return
@@ -115,7 +120,7 @@ class SpecialMenuEngine(private val plugin: OyasaiMenu) : Listener {
   private fun handleConfirmClick(
       event: InventoryClickEvent,
       player: Player,
-      holder: ConfirmCommandHolder
+      holder: ConfirmCommandHolder,
   ) {
     event.isCancelled = true
     if (event.clickedInventory != event.inventory) return

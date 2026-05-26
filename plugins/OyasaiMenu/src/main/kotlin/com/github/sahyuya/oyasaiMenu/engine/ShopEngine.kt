@@ -53,14 +53,15 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
   private fun buildShopInventory(
       player: Player,
       category: ShopCategory,
-      state: PlayerShopState
+      state: PlayerShopState,
   ): Inventory {
     val holder = ShopMenuHolder(state)
     val inv =
         Bukkit.createInventory(
             holder,
             54,
-            comp("${c(category.displayName)} &8| &f${state.page + 1}&8/&f${category.pageCount}"))
+            comp("${c(category.displayName)} &8| &f${state.page + 1}&8/&f${category.pageCount}"),
+        )
     holder.attach(inv)
     category.getPage(state.page).forEachIndexed { i, item ->
       if (item.material != null)
@@ -69,7 +70,9 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
               buildShopItemStack(
                   item,
                   if (item.enchantments.isNotEmpty()) 1 else state.quantity.amount,
-                  state.isInverted))
+                  state.isInverted,
+              ),
+          )
     }
     buildBottomBar(inv, player, category, state)
     return inv
@@ -78,7 +81,7 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
   private fun buildShopItemStack(
       item: ShopItem,
       quantity: Int,
-      isInverted: Boolean = false
+      isInverted: Boolean = false,
   ): ItemStack {
     val stack = ItemStack(item.material!!, quantity.coerceIn(1, 64))
     val meta = stack.itemMeta ?: return stack
@@ -89,12 +92,14 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     if (item.canBuy)
         lore +=
             comp(
-                "&a購入: &f${EconomyManager.format(item.buyPrice)} &7× $quantity = &f${EconomyManager.format(item.buyPrice * quantity)}")
+                "&a購入: &f${EconomyManager.format(item.buyPrice)} &7× $quantity = &f${EconomyManager.format(item.buyPrice * quantity)}"
+            )
     else lore += comp("&7購入: &c不可")
     if (item.canSell)
         lore +=
             comp(
-                "&b売却: &f${EconomyManager.format(item.sellPrice)} &7× $quantity = &f${EconomyManager.format(item.sellPrice * quantity)}")
+                "&b売却: &f${EconomyManager.format(item.sellPrice)} &7× $quantity = &f${EconomyManager.format(item.sellPrice * quantity)}"
+            )
     else lore += comp("&7売却: &c不可")
     lore += comp("")
     if (item.enchantments.isEmpty()) {
@@ -130,7 +135,7 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       inv: Inventory,
       player: Player,
       category: ShopCategory,
-      state: PlayerShopState
+      state: PlayerShopState,
   ) {
     val glass = makeItem(Material.BLACK_STAINED_GLASS_PANE, " ")
     listOf(46, 47, 51).forEach { inv.setItem(it, glass) }
@@ -142,19 +147,25 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
         48,
         makeItem(
             if (hasPrev) Material.ARROW else Material.BLACK_STAINED_GLASS_PANE,
-            if (hasPrev) "&e← 前のページ" else "&8前のページなし"))
+            if (hasPrev) "&e← 前のページ" else "&8前のページなし",
+        ),
+    )
     inv.setItem(
         49,
         makeItem(
             Material.BOOK,
             "&fページ &e${state.page+1} &7/ &e${category.pageCount}",
-            listOf("&7全 ${category.items.size} 種 / このページ ${category.getPage(state.page).size} 種")))
+            listOf("&7全 ${category.items.size} 種 / このページ ${category.getPage(state.page).size} 種"),
+        ),
+    )
     val hasNext = state.page < category.pageCount - 1
     inv.setItem(
         50,
         makeItem(
             if (hasNext) Material.ARROW else Material.BLACK_STAINED_GLASS_PANE,
-            if (hasNext) "&e次のページ →" else "&8次のページなし"))
+            if (hasNext) "&e次のページ →" else "&8次のページなし",
+        ),
+    )
 
     val qty = state.quantity
     val quantitySelector =
@@ -166,7 +177,9 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
                 "${mark(qty,ShopQuantity.ONE)} 1個",
                 "${mark(qty,ShopQuantity.FOUR)} 4個",
                 "${mark(qty,ShopQuantity.SIXTEEN)} 16個",
-                "${mark(qty,ShopQuantity.SIXTY_FOUR)} 64個"))
+                "${mark(qty,ShopQuantity.SIXTY_FOUR)} 64個",
+            ),
+        )
     quantitySelector.itemMeta?.let { meta ->
       meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
       quantitySelector.itemMeta = meta
@@ -191,7 +204,10 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
                 "&7現在: $invertDesc",
                 "&7※統合版は左クリックとして実行されます",
                 "",
-                "&eクリックで左右クリックを反転")))
+                "&eクリックで左右クリックを反転",
+            ),
+        ),
+    )
   }
 
   private fun mark(c: ShopQuantity, t: ShopQuantity) = if (c == t) "&a▶" else "&7 "
@@ -253,7 +269,9 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     leftover.values.forEach { player.world.dropItemNaturally(player.location, it) }
     player.sendMessage(
         c(
-            "&a購入: &7${item.materialId} ×$actualQty  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"))
+            "&a購入: &7${item.materialId} ×$actualQty  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"
+        )
+    )
     player.playSound(player.location, org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.2f)
   }
 
@@ -270,7 +288,9 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     EconomyManager.deposit(player, item.sellPrice * removed)
     player.sendMessage(
         c(
-            "&b売却: &7${item.materialId} ×$removed  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"))
+            "&b売却: &7${item.materialId} ×$removed  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"
+        )
+    )
     player.playSound(player.location, org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 0.8f)
   }
 
@@ -288,7 +308,9 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
     EconomyManager.deposit(player, item.sellPrice * total)
     player.sendMessage(
         c(
-            "&b全売却: &7${item.materialId} ×$total  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"))
+            "&b全売却: &7${item.materialId} ×$total  残高: &7${EconomyManager.format(EconomyManager.getBalance(player))}"
+        )
+    )
     player.playSound(player.location, org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 0.8f)
   }
 
@@ -296,7 +318,7 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
       player: Player,
       state: PlayerShopState,
       category: ShopCategory,
-      newPage: Int
+      newPage: Int,
   ) {
     if (newPage !in 0 until category.pageCount) return
     val newState = state.copy(page = newPage)
@@ -317,7 +339,8 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
         player.location,
         org.bukkit.Sound.UI_BUTTON_CLICK,
         0.5f,
-        if (newState.isInverted) 0.8f else 1.2f)
+        if (newState.isInverted) 0.8f else 1.2f,
+    )
   }
 
   private fun refreshInventory(player: Player, category: ShopCategory, state: PlayerShopState) {
@@ -331,7 +354,9 @@ class ShopEngine(private val plugin: OyasaiMenu) : Listener {
               buildShopItemStack(
                   item,
                   if (item.enchantments.isNotEmpty()) 1 else state.quantity.amount,
-                  state.isInverted))
+                  state.isInverted,
+              ),
+          )
     }
     buildBottomBar(inv, player, category, state)
   }

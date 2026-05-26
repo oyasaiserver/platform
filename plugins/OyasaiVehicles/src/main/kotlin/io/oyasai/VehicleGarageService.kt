@@ -87,7 +87,7 @@ object VehicleGarageService : Listener {
   private fun addItemInternal(
       player: OfflinePlayer,
       item: ItemStack,
-      notifyOnline: Boolean
+      notifyOnline: Boolean,
   ): Boolean {
     val uuid = player.uniqueId
     var itemList = itemCache[uuid]
@@ -190,7 +190,8 @@ object VehicleGarageService : Listener {
     if (requestedSize > GARAGE_MAX_SIZE) {
       Bukkit.getLogger()
           .warning(
-              "[VehicleGarage] Garage for $uuid exceeded $GARAGE_MAX_SIZE slots. Truncating on load.")
+              "[VehicleGarage] Garage for $uuid exceeded $GARAGE_MAX_SIZE slots. Truncating on load."
+          )
     }
     return (1..size).map { file.getItemStack(it.toString()) }.toMutableList()
   }
@@ -198,7 +199,7 @@ object VehicleGarageService : Listener {
   private fun persistGarageContents(
       file: CustomYaml,
       uuid: UUID,
-      newList: MutableList<ItemStack?>
+      newList: MutableList<ItemStack?>,
   ) {
     val oldSize = file.getInt(GARAGE_ITEM_SIZE_KEY, GARAGE_MAX_SIZE)
     (1..oldSize).forEach { file.set(it.toString(), null) }
@@ -207,7 +208,8 @@ object VehicleGarageService : Listener {
     if (newList.size > GARAGE_MAX_SIZE) {
       Bukkit.getLogger()
           .warning(
-              "[VehicleGarage] VehicleGarage for $uuid exceeded $GARAGE_MAX_SIZE slots. Truncating on save.")
+              "[VehicleGarage] VehicleGarage for $uuid exceeded $GARAGE_MAX_SIZE slots. Truncating on save."
+          )
     }
 
     file.set(GARAGE_ITEM_SIZE_KEY, normalizedList.size)

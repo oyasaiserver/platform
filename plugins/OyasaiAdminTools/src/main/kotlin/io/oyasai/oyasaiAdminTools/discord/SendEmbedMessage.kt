@@ -89,7 +89,8 @@ object SendEmbedMessage {
                 WebhookEmbed.EmbedFooter(
                     "Promoted by ${promoterName}・業務ありがとう",
                     "https://vzge.me/bust/${promoterName}?${rotate}",
-                ))
+                )
+            )
             .build()
     val message = WebhookMessageBuilder().addEmbeds(emb).build()
     client.send(message)

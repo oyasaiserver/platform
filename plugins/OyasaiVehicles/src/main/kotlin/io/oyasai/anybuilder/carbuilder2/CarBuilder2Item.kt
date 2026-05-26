@@ -32,7 +32,8 @@ object CarBuilder2Item {
           BuilderItemSupport.VehicleStatSpec("パワー", powerMaxRegex, 64),
           BuilderItemSupport.VehicleStatSpec("ギア数", gearMaxRegex, 4),
           BuilderItemSupport.VehicleStatSpec("ブレーキ", brakeMaxRegex, 128),
-          BuilderItemSupport.VehicleStatSpec("タイヤ", gripRegex, 100))
+          BuilderItemSupport.VehicleStatSpec("タイヤ", gripRegex, 100),
+      )
 
   private data class CarStats(
       val topSpeed: Int = 68,
@@ -40,7 +41,7 @@ object CarBuilder2Item {
       val gears: Int = 4,
       val brake: Int = 128,
       val isMT: Boolean = false,
-      val grip: Int = 100
+      val grip: Int = 100,
   ) {
     fun clamped(): CarStats {
       return copy(
@@ -48,7 +49,8 @@ object CarBuilder2Item {
           power = power.coerceIn(1, POWER_MAX),
           gears = gears.coerceIn(1, GEAR_MAX),
           brake = brake.coerceIn(1, BRAKE_MAX),
-          grip = grip.coerceIn(1, GRIP_MAX))
+          grip = grip.coerceIn(1, GRIP_MAX),
+      )
     }
   }
 
@@ -60,7 +62,8 @@ object CarBuilder2Item {
         gears = stats[2],
         brake = stats[3],
         isMT = BuilderItemSupport.readLoreBoolean(meta, isMTRegex, "MT車: ", false, fromEnd = true),
-        grip = stats[4])
+        grip = stats[4],
+    )
   }
 
   fun buyCarItem(carName: String, playerName: String?): ItemStack? {
@@ -78,7 +81,9 @@ object CarBuilder2Item {
             "ギア数: 4",
             "MT車: false",
             "タイヤ: 100",
-            "Mode: Normal"))
+            "Mode: Normal",
+        ),
+    )
   }
 
   fun eventCarItem(carName: String, costLimit: Int): ItemStack? {
@@ -94,7 +99,7 @@ object CarBuilder2Item {
       power: Int,
       brake: Int,
       gears: Int,
-      grip: Int
+      grip: Int,
   ): Boolean {
     return BuilderItemSupport.replaceLoreLines(
         item,
@@ -103,11 +108,15 @@ object CarBuilder2Item {
             BuilderItemSupport.LoreLineReplacement(powerMaxRegex, "パワー: $power"),
             BuilderItemSupport.LoreLineReplacement(brakeMaxRegex, "ブレーキ: $brake"),
             BuilderItemSupport.LoreLineReplacement(gearMaxRegex, "ギア数: $gears"),
-            BuilderItemSupport.LoreLineReplacement(gripRegex, "タイヤ: $grip")),
+            BuilderItemSupport.LoreLineReplacement(gripRegex, "タイヤ: $grip"),
+        ),
         costRegex = costRegex,
         costValue =
             BuilderItemSupport.getCostFromStats(
-                listOf(topSpeed, power, brake, gears, grip), listOf(68, 64, 128, 4, 100)) ?: 0)
+                listOf(topSpeed, power, brake, gears, grip),
+                listOf(68, 64, 128, 4, 100),
+            ) ?: 0,
+    )
   }
 
   fun getCarMode(meta: ItemMeta?): String {
@@ -155,14 +164,15 @@ object CarBuilder2Item {
         ubc,
         stats.gears,
         stats.isMT,
-        (200 - stats.grip) / 15.0)
+        (200 - stats.grip) / 15.0,
+    )
   }
 
   fun getCarProVehicle(
       meta: ItemMeta?,
       maxSize: Double,
       ubc: Boolean,
-      plus: Boolean
+      plus: Boolean,
   ): CarProVehicle {
     val stats = readStats(meta).clamped()
     return CarProVehicle(
@@ -174,7 +184,8 @@ object CarBuilder2Item {
         stats.gears,
         stats.isMT,
         stats.grip,
-        plus)
+        plus,
+    )
   }
 
   fun getCarRealVehicle(meta: ItemMeta?, maxSize: Double): CarRealVehicle {
@@ -187,7 +198,8 @@ object CarBuilder2Item {
         true,
         stats.gears,
         stats.isMT,
-        stats.grip)
+        stats.grip,
+    )
   }
 
   fun getCarName(meta: ItemMeta): String? {
@@ -235,7 +247,8 @@ object CarBuilder2Item {
             "タイヤ" to BuilderItemSupport.VehicleIntRule(gripRegex, GRIP_MAX),
             "パワー" to BuilderItemSupport.VehicleIntRule(powerMaxRegex, POWER_MAX),
             "最高速" to BuilderItemSupport.VehicleIntRule(topSpeedRegex, TOP_SPEED_MAX),
-            "ブレーキ" to BuilderItemSupport.VehicleIntRule(brakeMaxRegex, BRAKE_MAX))
+            "ブレーキ" to BuilderItemSupport.VehicleIntRule(brakeMaxRegex, BRAKE_MAX),
+        )
     return BuilderItemSupport.changeVehicleInt(item, str, value, rules, costRegex, ::getCarVCCost)
   }
 }

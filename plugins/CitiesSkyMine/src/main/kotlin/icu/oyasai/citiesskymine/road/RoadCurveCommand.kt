@@ -21,7 +21,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       sender: CommandSender,
       command: Command,
       label: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): Boolean {
     if (sender !is Player) {
       sender.sendMessage("§cプレイヤーのみ使用できます。")
@@ -59,7 +59,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       sender: CommandSender,
       command: Command,
       alias: String,
-      args: Array<out String>
+      args: Array<out String>,
   ): List<String> {
     if (sender !is Player) return emptyList()
     if (args.size == 1) return SUBCOMMANDS.filter { it.startsWith(args[0].lowercase()) }
@@ -149,16 +149,19 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
                   } else {
                     player.sendMessage("§e[RC] 道路の設置は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
                   }
-                })
+                },
+            )
           } catch (e: Exception) {
             plugin.server.scheduler.runTask(
                 plugin,
                 Runnable {
                   player.sendMessage("§c[RC] エラーが発生しました: ${e.message}")
                   plugin.logger.severe("RoadBuilder error: ${e.stackTraceToString()}")
-                })
+                },
+            )
           }
-        })
+        },
+    )
   }
 
   private fun handleSmoothLines(player: Player, session: RoadSession) {
@@ -203,19 +206,24 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
                         " §eFAWE undo 履歴への登録に失敗しました。"
                       }
                   player.sendMessage("§a[RC] 白線スムージング完了: §f${affectedBlocks} ブロック$undoText")
-                })
+                },
+            )
           } catch (e: IllegalArgumentException) {
             plugin.server.scheduler.runTask(
-                plugin, Runnable { player.sendMessage("§c[RC] ${e.message}") })
+                plugin,
+                Runnable { player.sendMessage("§c[RC] ${e.message}") },
+            )
           } catch (e: Exception) {
             plugin.server.scheduler.runTask(
                 plugin,
                 Runnable {
                   player.sendMessage("§c[RC] 白線スムージング中にエラー: ${e.message}")
                   plugin.logger.severe("WhiteLineSmoother error: ${e.stackTraceToString()}")
-                })
+                },
+            )
           }
-        })
+        },
+    )
   }
 
   private fun handleSet(player: Player, session: RoadSession, args: Array<out String>) {
@@ -241,7 +249,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       player: Player,
       s: RoadSettings,
       param: String,
-      value: String
+      value: String,
   ): Boolean {
     try {
       when (param.lowercase()) {
@@ -395,6 +403,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
             "sidewalk",
             "roadmat",
             "sidewalkmat",
-            "linemat")
+            "linemat",
+        )
   }
 }
