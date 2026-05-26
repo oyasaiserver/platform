@@ -4,11 +4,13 @@ oyasaiPurpur rec {
   name = "oyasai-minecraft-axiom";
   version = "1.21.10";
 
-  # NOMERGE set properly
   properties = {
     # keep-sorted start
     enable-rcon = true;
+    force-gamemode = true;
+    gamemode = "creative";
     online-mode = false; # handled by velocity
+    white-list = true;
     # keep-sorted endt
   };
 
