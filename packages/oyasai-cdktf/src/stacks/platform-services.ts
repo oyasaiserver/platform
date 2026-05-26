@@ -55,6 +55,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       mysqlBackup: imageIds["mysql-backup"],
       minecraftLobby: imageIds["oyasai-minecraft-lobby"],
       minecraftMain: imageIds["oyasai-minecraft-main"],
+      minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
       minecraftBackup: imageIds["mc-backup"],
       velocity: imageIds["oyasai-velocity"],
     } as const;
@@ -109,11 +110,9 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
         env: envs({
           MEMORY: this.isMaster
-            ? // On-prem has 64GB but looks like 28GB is the most stable because
-              // JVM GC overhead. No calculation, based on experiments.
-              "28G"
-            : // GitHub Action runners have 16GB, but also runs other containers
-              // so limiting to 10GB.
+            ? // On-prem has 64GB
+              "20G"
+            : // GitHub Action runners have 16GB
               "10G",
           RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
 
@@ -157,6 +156,32 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           {
             containerPath: "/data",
             hostPath: join(this.workdir, "minecraft-lobby"),
+          },
+        ],
+      },
+    );
+
+    const minecraftAxiomContainer = new Container(
+      this,
+      this.t("minecraft-axiom-container"),
+      {
+        image: images.minecraftAxiom,
+        name: "oyasai-minecraft-axiom",
+        dependsOn: [mariadbContainer],
+        restart: "unless-stopped",
+        tty: true,
+        stdinOpen: true,
+        destroyGraceSeconds: 2 * 60,
+        init: true,
+        networksAdvanced: [network],
+        env: envs({
+          MEMORY: "8G",
+          PAPER_VELOCITY_SECRET: secrets.get("VELOCITY_FORWARDING_SECRET"),
+        }),
+        volumes: [
+          {
+            containerPath: "/data",
+            hostPath: join(this.workdir, "minecraft-axiom"),
           },
         ],
       },
