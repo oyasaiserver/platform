@@ -7,6 +7,7 @@
       enable = true;
       excludes = [ "plugins/*" ];
     };
+    flake-edit.enable = true;
     json-sort-cli = {
       enable = true;
       autofix = true;
