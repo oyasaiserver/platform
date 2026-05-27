@@ -17,8 +17,6 @@ type Props = Readonly<{
 }>;
 
 export class PlatformServices extends OyasaiPlatformTerraformStack {
-  private readonly workdir = join("/opt/platform", this.environment);
-
   constructor(
     scope: Construct,
     id: string,
@@ -51,13 +49,26 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
 
     const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
+      // keep-sorted start
       mariadb: imageIds.mariadb,
-      mysqlBackup: imageIds["mysql-backup"],
-      minecraftLobby: imageIds["oyasai-minecraft-lobby"],
-      minecraftMain: imageIds["oyasai-minecraft-main"],
       minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
       minecraftBackup: imageIds["mc-backup"],
+      minecraftLobby: imageIds["oyasai-minecraft-lobby"],
+      minecraftMain: imageIds["oyasai-minecraft-main"],
+      mysqlBackup: imageIds["mysql-backup"],
       velocity: imageIds["oyasai-velocity"],
+      // keep-sorted end
+    } as const;
+
+    const baseHostPath = join("/opt/platform", this.environment);
+    const hostPaths = {
+      // keep-sorted start
+      mariadb: join(baseHostPath, "mariadb"),
+      minecraftAxiom: join(baseHostPath, "minecraft-axiom"),
+      minecraftLobby: join(baseHostPath, "minecraft-lobby"),
+      minecraftMain: join(baseHostPath, "minecraft-main"),
+      velocity: join(baseHostPath, "velocity"),
+      // keep-sorted end
     } as const;
 
     const network = new Network(this, this.t("network"), {
@@ -75,18 +86,14 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       volumes: [
         {
           containerPath: "/var/lib/mysql",
-          hostPath: join(this.workdir, "mariadb"),
+          hostPath: hostPaths.mariadb,
         },
         {
           containerPath: "/docker-entrypoint-initdb.d",
-          hostPath: join(this.workdir, "mariadb"),
+          hostPath: hostPaths.mariadb,
         },
       ],
     });
-
-    // Can change to "oyasai-minecraft-main" for naming consistency but too lazy
-    // to do the data migration - shun 2026-05
-    const minecraftMainWorkDir = join(this.workdir, "minecraft-main");
 
     const minecraftMainContainer = new Container(
       this,
@@ -124,7 +131,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         volumes: [
           {
             containerPath: "/data",
-            hostPath: minecraftMainWorkDir,
+            hostPath: hostPaths.minecraftMain,
           },
         ],
         ...(this.isMaster && {
@@ -155,7 +162,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         volumes: [
           {
             containerPath: "/data",
-            hostPath: join(this.workdir, "minecraft-lobby"),
+            hostPath: hostPaths.minecraftLobby,
           },
         ],
       },
@@ -181,7 +188,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         volumes: [
           {
             containerPath: "/data",
-            hostPath: join(this.workdir, "minecraft-axiom"),
+            hostPath: hostPaths.minecraftAxiom,
           },
         ],
       },
@@ -203,7 +210,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       volumes: [
         {
           containerPath: "/data",
-          hostPath: join(this.workdir, "velocity"),
+          hostPath: hostPaths.velocity,
         },
       ],
     });
@@ -250,7 +257,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
         volumes: [
           {
-            hostPath: minecraftMainWorkDir,
+            hostPath: hostPaths.minecraftMain,
             containerPath: "/data",
             readOnly: true,
           },
