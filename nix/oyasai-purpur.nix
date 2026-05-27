@@ -85,6 +85,7 @@ let
         -XX:-OmitStackTraceInFastThrow \
         -Dfile.encoding=UTF-8 \
         -Dcom.mojang.eula.agree=true \
+        -Dpaper.disableStartupVersionCheck \
         -jar "${package}/lib/minecraft/server.jar" \
         nogui \
         "$@"
