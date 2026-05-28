@@ -13,6 +13,7 @@ let
     datasources = [
       {
         name = "Prometheus";
+        uid = "prometheus";
         type = "prometheus";
         url = "http://prometheus:9090";
         isDefault = true;
@@ -26,6 +27,7 @@ let
     datasources = [
       {
         name = "Loki";
+        uid = "loki";
         type = "loki";
         url = "http://loki:3100";
         access = "proxy";
@@ -33,12 +35,30 @@ let
     ];
   };
 
-  # Bake data sources into the image via provisioning directory.
+  dashboardsDir = runCommandLocal "grafana-dashboards" { } ''
+    mkdir -p $out
+    cp ${./oyasai-grafana-dashboard.json} $out/minecraft.json
+  '';
+
+  dashboardsProvisionerYml = (formats.yaml { }).generate "dashboards.yaml" {
+    apiVersion = 1;
+    providers = [
+      {
+        name = "oyasai";
+        type = "file";
+        disableDeletion = true;
+        options.path = "${dashboardsDir}";
+      }
+    ];
+  };
+
+  # Bake data sources and dashboards into the image via provisioning directory.
   # Grafana reads this on startup and auto-configures them.
   provisioningDir = runCommandLocal "grafana-provisioning" { } ''
-    mkdir -p $out/datasources
+    mkdir -p $out/datasources $out/dashboards
     cp ${datasourceYml} $out/datasources/prometheus.yaml
     cp ${lokiYml} $out/datasources/loki.yaml
+    cp ${dashboardsProvisionerYml} $out/dashboards/oyasai.yaml
   '';
 in
 lib.optionalAttrs stdenv.hostPlatform.isLinux {
