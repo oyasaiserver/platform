@@ -68,7 +68,6 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const baseHostPath = join("/opt/platform", this.environment);
     const hostPaths = {
       // keep-sorted start
-      grafana: join(baseHostPath, "grafana"),
       loki: join(baseHostPath, "loki"),
       mariadb: join(baseHostPath, "mariadb"),
       minecraftAxiom: join(baseHostPath, "minecraft-axiom"),
@@ -357,12 +356,6 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       restart: "unless-stopped",
       networksAdvanced: [network],
       ports: ports({ tcp: [3000] }),
-      volumes: [
-        {
-          containerPath: "/data",
-          hostPath: hostPaths.grafana,
-        },
-      ],
     });
   }
 }

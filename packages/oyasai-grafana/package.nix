@@ -47,6 +47,7 @@ let
         name = "oyasai";
         type = "file";
         disableDeletion = true;
+        allowUiUpdates = false;
         options.path = "${dashboardsDir}";
       }
     ];
@@ -77,6 +78,10 @@ lib.optionalAttrs stdenv.hostPlatform.isLinux {
         "GF_PATHS_LOGS=/data/log"
         "GF_PATHS_PLUGINS=/data/plugins"
         "GF_SERVER_HTTP_PORT=3000"
+        "GF_AUTH_ANONYMOUS_ENABLED=true"
+        "GF_AUTH_ANONYMOUS_ORG_ROLE=Admin"
+        "GF_AUTH_DISABLE_LOGIN_FORM=true"
+        "GF_USERS_ALLOW_SIGN_UP=false"
       ];
       ExposedPorts = {
         "3000/tcp" = { };
