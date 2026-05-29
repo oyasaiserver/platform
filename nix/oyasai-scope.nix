@@ -50,7 +50,7 @@ lib.makeScope pkgs.newScope (
   in
   {
     inherit inputs oyasaiTerraformProviders;
-    inherit (pkgs) bore-cli;
+    inherit (pkgs) bore-cli nix-fast-build;
     inherit (inputs.gradle2nix.packages.${system}) gradle2nix;
     inherit (inputs.tools.packages.${system}) nix-flake-check-changed nix-grep-to-build npm-list;
     inherit (inputs.nix-minecraft.legacyPackages.${system})
