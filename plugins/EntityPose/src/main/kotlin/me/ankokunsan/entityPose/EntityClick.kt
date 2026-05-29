@@ -65,6 +65,32 @@ class EntityClick : Listener {
   }
 
   @EventHandler
+  fun rightarmitem(event: PlayerInteractAtEntityEvent) {
+    if (event.hand == EquipmentSlot.OFF_HAND) return
+
+    val player = event.player
+    val armorStand = event.rightClicked as? ArmorStand ?: return
+    if (!player.isSneaking) return
+
+    val hand = player.inventory.itemInMainHand
+    if (hand.type == Material.AIR || isEntiStick(hand) || isCopyWand(hand)) return
+
+    event.isCancelled = true
+
+    val place = hand.clone()
+    place.amount = 1
+
+    armorStand.equipment.setItemInOffHand(place)
+
+    if (hand.amount > 1) {
+      hand.amount -= 1
+      player.inventory.setItemInMainHand(hand)
+    } else {
+      player.inventory.setItemInMainHand(ItemStack(Material.AIR))
+    }
+  }
+
+  @EventHandler
   fun onManipulate(event: PlayerArmorStandManipulateEvent) {
     val hand = event.player.inventory.itemInMainHand
     val armor = event.rightClicked
