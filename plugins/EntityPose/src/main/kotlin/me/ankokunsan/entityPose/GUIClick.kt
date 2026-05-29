@@ -106,7 +106,7 @@ class GUIClick : Listener {
 
   @EventHandler
   fun onALLSettingClick(event: InventoryClickEvent) {
-    if (event.view.title != "§3範囲選択済みエンティティの設定変更") return
+    if (event.view.title != "§3範囲選択済みエンティティNOMERGE") return
     event.isCancelled = true
 
     val player = event.whoClicked as? Player ?: return
