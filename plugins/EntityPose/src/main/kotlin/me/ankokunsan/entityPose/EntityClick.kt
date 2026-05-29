@@ -70,10 +70,10 @@ class EntityClick : Listener {
 
     val player = event.player
     val armorStand = event.rightClicked as? ArmorStand ?: return
-    if(!player.isSneaking) return
+    if (!player.isSneaking) return
 
     val hand = player.inventory.itemInMainHand
-    if (hand.type == Material.AIR||isEntiStick(hand)||isCopyWand(hand)) return
+    if (hand.type == Material.AIR || isEntiStick(hand) || isCopyWand(hand)) return
 
     event.isCancelled = true
 
@@ -82,7 +82,7 @@ class EntityClick : Listener {
 
     armorStand.equipment.setItemInOffHand(place)
 
-    if(hand.amount > 1) {
+    if (hand.amount > 1) {
       hand.amount -= 1
       player.inventory.setItemInMainHand(hand)
     } else {
