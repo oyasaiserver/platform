@@ -35,7 +35,7 @@ let
 
     # TODO: this feels like a weird place to set these options, but without the
     # build fails with OOM.
-    _JAVA_OPTIONS = "-Xmx12g -Xms1g -XX:MaxMetaspaceSize=512m";
+    _JAVA_OPTIONS = "-Xmx12g -Xms4g -XX:MaxMetaspaceSize=512m";
 
     installPhase = ''
       runHook preInstall
