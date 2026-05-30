@@ -30,6 +30,8 @@ oyasaiPurpur rec {
     fastasyncvoxelsniper
     fastasyncworldedit
     floodgate
+    luckperms
+    lunachat
     multiversecore
     multiverseportals
     plugmanx
