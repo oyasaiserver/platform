@@ -65,7 +65,7 @@ class EntityClick : Listener {
   }
 
   @EventHandler
-  fun rightarmitem(event: PlayerInteractAtEntityEvent) {
+  fun offhandItem(event: PlayerInteractAtEntityEvent) {
     if (event.hand == EquipmentSlot.OFF_HAND) return
 
     val player = event.player
@@ -74,13 +74,23 @@ class EntityClick : Listener {
 
     val hand = player.inventory.itemInMainHand
     if (hand.type == Material.AIR || isEntiStick(hand) || isCopyWand(hand)) return
+    if(!armorStand.hasArms()) return
 
     event.isCancelled = true
+
+    val oldItem = armorStand.equipment.itemInOffHand
 
     val place = hand.clone()
     place.amount = 1
 
     armorStand.equipment.setItemInOffHand(place)
+
+    if (oldItem.type != Material.AIR) {
+      val leftover = player.inventory.addItem(oldItem)
+      for (item in leftover.values) {
+        player.world.dropItemNaturally(player.location,item)
+      }
+    }
 
     if (hand.amount > 1) {
       hand.amount -= 1
