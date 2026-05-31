@@ -74,7 +74,7 @@ class EntityClick : Listener {
 
     val hand = player.inventory.itemInMainHand
     if (hand.type == Material.AIR || isEntiStick(hand) || isCopyWand(hand)) return
-    if(!armorStand.hasArms()) return
+    if (!armorStand.hasArms()) return
 
     event.isCancelled = true
 
@@ -88,7 +88,7 @@ class EntityClick : Listener {
     if (oldItem.type != Material.AIR) {
       val leftover = player.inventory.addItem(oldItem)
       for (item in leftover.values) {
-        player.world.dropItemNaturally(player.location,item)
+        player.world.dropItemNaturally(player.location, item)
       }
     }
 
