@@ -118,8 +118,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         env: envs({
           MEMORY: this.isMaster
             ? // On-prem has 64GB
-              "20G"
-            : // GitHub Action runners have 16GB
+              "28G"
+            : // GitHub Action runners have 16G
               "10G",
           RCON_PASSWORD: secrets.get("RCON_PASSWORD"),
 

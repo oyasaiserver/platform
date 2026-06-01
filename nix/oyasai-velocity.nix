@@ -34,7 +34,12 @@ let
       ''}
 
       MEMORY="''${MEMORY:-512M}"
-      exec ${lib.getExe package} -Xmx"''${MEMORY}" -Xms"''${MEMORY}" "$@"
+      exec ${lib.getExe package} \
+        -Xmx"''${MEMORY}" \
+        -Xms"''${MEMORY}" \
+        -Dvelocity.max-plugin-message-payload-size=2100000 \
+        -Dvelocity.max-compression-ratio=2000000 \
+        "$@"
     '';
 
     passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
