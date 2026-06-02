@@ -30,6 +30,8 @@ commands:
   tpdata:
     description: "全てのプレイヤーのTP履歴を表示"
     permission: oyasaiutilities.tpdata
+  pita:
+    description: "ピタッ！と止まるモードの切り替え"
 permissions:
   oyasaiutilities.timerbar:
     description: "TimerBarコマンドの使用権限"
