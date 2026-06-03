@@ -30,7 +30,7 @@ oyasaiPurpur rec {
     };
   };
 
-  plugins = with oyasai-plugin-registry.forVersion version; [
+  plugins = with oyasai-plugin-registry.forPlatform "paper" version; [
     # keep-sorted start
     floodgate
     viaversion

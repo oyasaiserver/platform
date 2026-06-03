@@ -9,7 +9,7 @@
 oyasaiVelocity {
   name = "oyasai-velocity";
 
-  plugins = with oyasai-plugin-registry.forVersion "velocity"; [
+  plugins = with oyasai-plugin-registry.forPlatform "velocity"; [
     # keep-sorted start
     floodgate-velocity
     geyser-velocity

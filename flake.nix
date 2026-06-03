@@ -43,7 +43,7 @@
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.systems.follows = "systems";
     };
-    systems.url = "github:nix-systems/default";
+    systems.url = "github:nix-systems/triplet";
     tools = {
       url = "github:anteriorcore/tools";
       inputs.nixpkgs.follows = "nixpkgs";

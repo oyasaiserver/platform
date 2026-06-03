@@ -5,7 +5,7 @@ import { stderr, stdin } from "node:process";
 import { json } from "node:stream/consumers";
 
 type RegistryEntry =
-  | { type: "modrinth"; slug: string }
+  | { type: "modrinth"; slug: string; version: string }
   | { type: "spiget"; id: number }
   | { type: "github"; owner: string; repo: string; tag: string; name: string }
   | { type: "url"; url: string };
@@ -15,7 +15,6 @@ type LockFile = Record<string, Record<string, LockEntry>>;
 
 async function resolveStableUrl(
   id: string,
-  version: string,
   entry: RegistryEntry,
 ): Promise<string> {
   switch (entry.type) {
@@ -24,7 +23,7 @@ async function resolveStableUrl(
 
     case "modrinth": {
       const params = new URLSearchParams({
-        game_versions: JSON.stringify([version]),
+        game_versions: JSON.stringify([entry.version]),
         loaders: JSON.stringify(["paper", "spigot", "bukkit"]),
       });
       const response = await fetch(
@@ -37,7 +36,7 @@ async function resolveStableUrl(
         .flatMap((v) => v.files)
         .map((f) => f.url)
         .at(0);
-      ok(url, `No modrinth URL for ${id}@${version}`);
+      ok(url, `No modrinth URL for ${id}@${entry.version}`);
       return url;
     }
 
@@ -85,13 +84,13 @@ if (import.meta.main) {
 
   const lock: LockFile = {};
 
-  for (const [id, versions] of Object.entries(registry)) {
-    for (const [version, entry] of Object.entries(versions)) {
-      stderr.write(`lock  ${id}@${version} ... `);
-      const url = await resolveStableUrl(id, version, entry);
+  for (const [id, platforms] of Object.entries(registry)) {
+    for (const [platform, entry] of Object.entries(platforms)) {
+      stderr.write(`lock  ${id}@${platform} ... `);
+      const url = await resolveStableUrl(id, entry);
       const hash = await computeHash(url);
       lock[id] ??= {};
-      lock[id][version] = { url, hash };
+      lock[id][platform] = { url, hash };
       stderr.write("done\n");
     }
   }

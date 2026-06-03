@@ -1,90 +1,97 @@
 {
   "advancedban": {
-    "1.21.10": {
+    "paper": {
       "id": 8695,
       "type": "spiget"
     }
   },
   "axiom-paper-plugin": {
-    "1.21.10": {
+    "paper": {
       "slug": "axiom-paper-plugin",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "bkcommonlib": {
-    "1.21.10": {
+    "paper": {
       "slug": "bkcommonlib",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "bluemap": {
-    "1.21.10": {
+    "paper": {
       "slug": "bluemap",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "coreprotect": {
-    "1.21.10": {
+    "paper": {
       "slug": "coreprotect",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "crackshotguns": {
-    "1.21.10": {
+    "paper": {
       "id": 48301,
       "type": "spiget"
     }
   },
   "decentholograms": {
-    "1.21.10": {
+    "paper": {
       "slug": "decentholograms",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "discordsrv": {
-    "1.21.10": {
+    "paper": {
       "slug": "discordsrv",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "fastasyncvoxelsniper": {
-    "1.21.10": {
+    "paper": {
       "slug": "fastasyncvoxelsniper",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "fastasyncworldedit": {
-    "1.21.10": {
+    "paper": {
       "slug": "fastasyncworldedit",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "floodgate": {
-    "1.21.10": {
+    "paper": {
       "type": "url",
       "url": "https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot"
-    }
-  },
-  "floodgate-velocity": {
+    },
     "velocity": {
       "type": "url",
       "url": "https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity"
     }
   },
-  "geyser-velocity": {
+  "geyser": {
     "velocity": {
       "type": "url",
       "url": "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity"
     }
   },
   "gsit": {
-    "1.21.10": {
+    "paper": {
       "slug": "gsit",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "imageonmap": {
-    "1.21.10": {
+    "paper": {
       "name": "ImageOnMap-5.1.1.jar",
       "owner": "okocraft",
       "repo": "ImageOnMap",
@@ -93,25 +100,26 @@
     }
   },
   "inventoryshop": {
-    "1.21.10": {
+    "paper": {
       "id": 47694,
       "type": "spiget"
     }
   },
   "joincommands": {
-    "1.21.10": {
+    "paper": {
       "id": 51758,
       "type": "spiget"
     }
   },
   "luckperms": {
-    "1.21.10": {
+    "paper": {
       "slug": "luckperms",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "lunachat": {
-    "1.21.10": {
+    "paper": {
       "name": "LunaChat.jar",
       "owner": "f1w3",
       "repo": "LunaChat",
@@ -120,37 +128,40 @@
     }
   },
   "lwc": {
-    "1.21.10": {
+    "paper": {
       "slug": "lwc",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "minepacks": {
-    "1.21.10": {
+    "paper": {
       "id": 19286,
       "type": "spiget"
     }
   },
   "multiversecore": {
-    "1.21.10": {
+    "paper": {
       "slug": "multiverse-core",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "multiverseportals": {
-    "1.21.10": {
+    "paper": {
       "slug": "multiverse-portals",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "mycommand": {
-    "1.21.10": {
+    "paper": {
       "id": 22272,
       "type": "spiget"
     }
   },
   "nuvotifier": {
-    "1.21.10": {
+    "paper": {
       "name": "nuvotifier.jar",
       "owner": "NuVotifier",
       "repo": "NuVotifier",
@@ -159,7 +170,7 @@
     }
   },
   "openinv": {
-    "1.21.10": {
+    "paper": {
       "name": "OpenInv.jar",
       "owner": "JiKoo",
       "repo": "OpenInv",
@@ -168,25 +179,27 @@
     }
   },
   "particlehats": {
-    "1.21.10": {
+    "paper": {
       "id": 1007,
       "type": "spiget"
     }
   },
   "placeholderapi": {
-    "1.21.10": {
+    "paper": {
       "slug": "placeholderapi",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "plugmanx": {
-    "1.21.10": {
+    "paper": {
       "slug": "plugmanx",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "protocollib": {
-    "1.21.10": {
+    "paper": {
       "name": "ProtocolLib.jar",
       "owner": "dmulloy2",
       "repo": "ProtocolLib",
@@ -195,79 +208,88 @@
     }
   },
   "pvparena": {
-    "1.21.10": {
+    "paper": {
       "id": 16584,
       "type": "spiget"
     }
   },
   "signshop": {
-    "1.21.10": {
+    "paper": {
       "id": 10997,
       "type": "spiget"
     }
   },
   "simpleelevator": {
-    "1.21.10": {
+    "paper": {
       "id": 44462,
       "type": "spiget"
     }
   },
   "skinsrestorer": {
-    "1.21.10": {
+    "paper": {
+      "slug": "skinsrestorer",
+      "type": "modrinth",
+      "version": "1.21.10"
+    },
+    "velocity": {
       "slug": "skinsrestorer",
       "type": "modrinth"
     }
   },
   "skript": {
-    "1.21.10": {
+    "paper": {
       "slug": "skript",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "slotmachine": {
-    "1.21.10": {
+    "paper": {
       "id": 22023,
       "type": "spiget"
     }
   },
   "tab": {
-    "1.21.10": {
+    "paper": {
       "slug": "tab-was-taken",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "tntruneloaded": {
-    "1.21.10": {
+    "paper": {
       "id": 53359,
       "type": "spiget"
     }
   },
   "vault": {
-    "1.21.10": {
+    "paper": {
       "id": 34315,
       "type": "spiget"
     }
   },
   "veinminer": {
-    "1.21.10": {
+    "paper": {
       "slug": "veinminer",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "venturechat": {
-    "1.21.10": {
+    "paper": {
       "id": 771,
       "type": "spiget"
     }
   },
   "viaversion": {
-    "1.21.10": {
+    "paper": {
       "slug": "viaversion",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "worldborder": {
-    "1.21.10": {
+    "paper": {
       "name": "WorldBorder.jar",
       "owner": "PryPurity",
       "repo": "WorldBorder",
@@ -276,7 +298,7 @@
     }
   },
   "worldeditsui": {
-    "1.21.10": {
+    "paper": {
       "name": "WorldEditSUI-1.7.4.jar",
       "owner": "kennytv",
       "repo": "WorldEditSUI",
@@ -285,13 +307,14 @@
     }
   },
   "worldguard": {
-    "1.21.10": {
+    "paper": {
       "slug": "worldguard",
-      "type": "modrinth"
+      "type": "modrinth",
+      "version": "1.21.10"
     }
   },
   "zvoteparty": {
-    "1.21.10": {
+    "paper": {
       "id": 95603,
       "type": "spiget"
     }
