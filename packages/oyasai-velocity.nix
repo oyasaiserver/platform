@@ -13,6 +13,7 @@ oyasaiVelocity {
     # keep-sorted start
     floodgate-velocity
     geyser-velocity
+    skinrestorer
     # keep-sorted end
   ];
 
