@@ -8,29 +8,25 @@
   "axiom-paper-plugin": {
     "paper": {
       "slug": "axiom-paper-plugin",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "bkcommonlib": {
     "paper": {
       "slug": "bkcommonlib",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "bluemap": {
     "paper": {
       "slug": "bluemap",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "coreprotect": {
     "paper": {
       "slug": "coreprotect",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "crackshotguns": {
@@ -42,53 +38,46 @@
   "decentholograms": {
     "paper": {
       "slug": "decentholograms",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "discordsrv": {
     "paper": {
       "slug": "discordsrv",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "essentialsx": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "essentialsx",
-      "type": "modrinth",
-      "version": "1.21.10",
-      "versionOverride": "1.21.11"
+      "type": "modrinth"
     }
   },
   "essentialsx-chat-module": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "essentialsx-chat-module",
-      "type": "modrinth",
-      "version": "1.21.10",
-      "versionOverride": "1.21.11"
+      "type": "modrinth"
     }
   },
   "essentialsx-spawn": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "essentialsx-spawn",
-      "type": "modrinth",
-      "version": "1.21.10",
-      "versionOverride": "1.21.11"
+      "type": "modrinth"
     }
   },
   "fastasyncvoxelsniper": {
     "paper": {
       "slug": "fastasyncvoxelsniper",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "fastasyncworldedit": {
     "paper": {
       "slug": "fastasyncworldedit",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "floodgate": {
@@ -110,8 +99,7 @@
   "gsit": {
     "paper": {
       "slug": "gsit",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "imageonmap": {
@@ -138,8 +126,7 @@
   "luckperms": {
     "paper": {
       "slug": "luckperms",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "lunachat": {
@@ -154,8 +141,7 @@
   "lwc": {
     "paper": {
       "slug": "lwc",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "minepacks": {
@@ -167,15 +153,13 @@
   "multiversecore": {
     "paper": {
       "slug": "multiverse-core",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "multiverseportals": {
     "paper": {
       "slug": "multiverse-portals",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "mycommand": {
@@ -211,15 +195,13 @@
   "placeholderapi": {
     "paper": {
       "slug": "placeholderapi",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "plugmanx": {
     "paper": {
       "slug": "plugmanx",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "protocollib": {
@@ -252,10 +234,10 @@
   "skinsrestorer": {
     "paper": {
       "slug": "skinsrestorer",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     },
     "velocity": {
+      "skipVersionCheck": true,
       "slug": "skinsrestorer",
       "type": "modrinth"
     }
@@ -263,8 +245,7 @@
   "skript": {
     "paper": {
       "slug": "skript",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "slotmachine": {
@@ -276,8 +257,7 @@
   "tab": {
     "paper": {
       "slug": "tab-was-taken",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "tntruneloaded": {
@@ -295,8 +275,7 @@
   "veinminer": {
     "paper": {
       "slug": "veinminer",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "venturechat": {
@@ -308,8 +287,7 @@
   "viaversion": {
     "paper": {
       "slug": "viaversion",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "worldborder": {
@@ -333,8 +311,7 @@
   "worldguard": {
     "paper": {
       "slug": "worldguard",
-      "type": "modrinth",
-      "version": "1.21.10"
+      "type": "modrinth"
     }
   },
   "zvoteparty": {

@@ -1,16 +1,12 @@
 #!/usr/bin/env node --enable-source-maps
 import { ok } from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { stderr, stdin } from "node:process";
+import { argv, stderr, stdin } from "node:process";
 import { json } from "node:stream/consumers";
+import { parseArgs } from "node:util";
 
 type RegistryEntry =
-  | {
-      type: "modrinth";
-      slug: string;
-      version: string;
-      versionOverride?: string;
-    }
+  | { type: "modrinth"; slug: string; skipVersionCheck?: boolean }
   | { type: "spiget"; id: number }
   | { type: "github"; owner: string; repo: string; tag: string; name: string }
   | { type: "url"; url: string };
@@ -21,6 +17,7 @@ type LockFile = Record<string, Record<string, LockEntry>>;
 async function resolveStableUrl(
   id: string,
   platform: string,
+  mcVersion: string,
   entry: RegistryEntry,
 ): Promise<string> {
   switch (entry.type) {
@@ -28,21 +25,17 @@ async function resolveStableUrl(
       return `https://github.com/${entry.owner}/${entry.repo}/releases/download/${entry.tag}/${entry.name}`;
 
     case "modrinth": {
-      const gameVersion = entry.versionOverride ?? entry.version;
-      const params = new URLSearchParams({
-        game_versions: JSON.stringify([gameVersion]),
-        loaders: JSON.stringify([platform]),
-      });
-      const response = await fetch(
-        `https://api.modrinth.com/v2/project/${entry.slug}/version?${params}`,
+      const modrinthUrl = new URL(
+        `https://api.modrinth.com/v2/project/${entry.slug}/version`,
       );
-      const versions = (await response.json()) as {
-        files: { url: string }[];
-      }[];
-      const url = versions
-        .flatMap((v) => v.files)
-        .map((f) => f.url)
-        .at(0);
+      if (!entry.skipVersionCheck) {
+        modrinthUrl.searchParams.set("game_versions", JSON.stringify([mcVersion]));
+      }
+      modrinthUrl.searchParams.set("loaders", JSON.stringify([platform]));
+      const results = (await (
+        await fetch(modrinthUrl)
+      ).json()) as { files: { url: string }[] }[];
+      const url = results.flatMap((v) => v.files).map((f) => f.url).at(0);
       ok(url, `No modrinth URL for ${id} (${platform})`);
       return url;
     }
@@ -84,6 +77,12 @@ async function computeHash(url: string): Promise<string> {
 }
 
 if (import.meta.main) {
+  const { values: { "mc-version": mcVersion } } = parseArgs({
+    args: argv.slice(2),
+    options: { "mc-version": { type: "string" } },
+  });
+  ok(mcVersion, "Usage: plugin-registry-lock --mc-version <version> < registry.json > lock.json");
+
   const registry = (await json(stdin)) as Record<
     string,
     Record<string, RegistryEntry>
@@ -94,7 +93,7 @@ if (import.meta.main) {
   for (const [id, platforms] of Object.entries(registry)) {
     for (const [platform, entry] of Object.entries(platforms)) {
       stderr.write(`lock  ${id}@${platform} ... `);
-      const url = await resolveStableUrl(id, platform, entry);
+      const url = await resolveStableUrl(id, platform, mcVersion, entry);
       const hash = await computeHash(url);
       lock[id] ??= {};
       lock[id][platform] = { url, hash };

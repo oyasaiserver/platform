@@ -17,7 +17,7 @@ let
         name = "plugin-registry-update";
         runtimeInputs = [ final ];
         text = ''
-          <${./registry.json} plugin-registry-lock >lock.json
+          <${./registry.json} plugin-registry-lock --mc-version "$1" >lock.json
         '';
       };
 
