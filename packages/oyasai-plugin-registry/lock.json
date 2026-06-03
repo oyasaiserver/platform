@@ -19,8 +19,8 @@
   },
   "bluemap": {
     "paper": {
-      "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/nTnTxZjy/bluemap-5.16-spigot.jar",
-      "hash": "sha256-ox5s+64I2ogtRrL8PECSd4SrF/cNvk/rXQdVfcRdZaE="
+      "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/Vb2ZE8bR/bluemap-5.16-paper.jar",
+      "hash": "sha256-eduusmBTLb1WYk+LzoqyL7yhWK5KKGCwT8zv+55Gdso="
     }
   },
   "coreprotect": {
@@ -47,6 +47,24 @@
       "hash": "sha256-7y+h8usUbHx3QStxkKfdM/H8kSgmg/5FQHc5VUyK7+8="
     }
   },
+  "essentialsx": {
+    "paper": {
+      "url": "https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar",
+      "hash": "sha256-vaRoUQWXf8ouIJggqfCtJCdb0QM5CgMjbzjlm/2sWOY="
+    }
+  },
+  "essentialsx-chat-module": {
+    "paper": {
+      "url": "https://cdn.modrinth.com/data/2qgyQbO1/versions/2k7YvKOk/EssentialsXChat-2.22.0.jar",
+      "hash": "sha256-5bAhH5ivHqunEtkpSZdjmjkgnbH8hCOUoJI4IAc+xlo="
+    }
+  },
+  "essentialsx-spawn": {
+    "paper": {
+      "url": "https://cdn.modrinth.com/data/sYpvDxGJ/versions/lc5JHiNJ/EssentialsXSpawn-2.22.0.jar",
+      "hash": "sha256-3VN3xMkhubZ4FCCfT2ZG/7uVlykAPnIexeY8R8fAELg="
+    }
+  },
   "fastasyncvoxelsniper": {
     "paper": {
       "url": "https://cdn.modrinth.com/data/D7XBSI1y/versions/n77tXMjA/fastasyncvoxelsniper-3.2.4.jar",
@@ -55,8 +73,8 @@
   },
   "fastasyncworldedit": {
     "paper": {
-      "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/Dx0x0kQW/FastAsyncWorldEdit-Bukkit-2.15.1.jar",
-      "hash": "sha256-PXZSI0nORW/W2sd9VGCns/yLbsf1IG+qPWy86Y6cgMM="
+      "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/zAlVhTdU/FastAsyncWorldEdit-Paper-2.15.1.jar",
+      "hash": "sha256-+osfGr83ReNaAs+dxYgtgB7UOQeoS2IbYQrzZS/WBlY="
     }
   },
   "floodgate": {

@@ -5,7 +5,12 @@ import { stderr, stdin } from "node:process";
 import { json } from "node:stream/consumers";
 
 type RegistryEntry =
-  | { type: "modrinth"; slug: string; version: string }
+  | {
+      type: "modrinth";
+      slug: string;
+      version: string;
+      versionOverride?: string;
+    }
   | { type: "spiget"; id: number }
   | { type: "github"; owner: string; repo: string; tag: string; name: string }
   | { type: "url"; url: string };
@@ -15,6 +20,7 @@ type LockFile = Record<string, Record<string, LockEntry>>;
 
 async function resolveStableUrl(
   id: string,
+  platform: string,
   entry: RegistryEntry,
 ): Promise<string> {
   switch (entry.type) {
@@ -22,9 +28,10 @@ async function resolveStableUrl(
       return `https://github.com/${entry.owner}/${entry.repo}/releases/download/${entry.tag}/${entry.name}`;
 
     case "modrinth": {
+      const gameVersion = entry.versionOverride ?? entry.version;
       const params = new URLSearchParams({
-        game_versions: JSON.stringify([entry.version]),
-        loaders: JSON.stringify(["paper", "spigot", "bukkit"]),
+        game_versions: JSON.stringify([gameVersion]),
+        loaders: JSON.stringify([platform]),
       });
       const response = await fetch(
         `https://api.modrinth.com/v2/project/${entry.slug}/version?${params}`,
@@ -36,7 +43,7 @@ async function resolveStableUrl(
         .flatMap((v) => v.files)
         .map((f) => f.url)
         .at(0);
-      ok(url, `No modrinth URL for ${id}@${entry.version}`);
+      ok(url, `No modrinth URL for ${id} (${platform})`);
       return url;
     }
 
@@ -87,7 +94,7 @@ if (import.meta.main) {
   for (const [id, platforms] of Object.entries(registry)) {
     for (const [platform, entry] of Object.entries(platforms)) {
       stderr.write(`lock  ${id}@${platform} ... `);
-      const url = await resolveStableUrl(id, entry);
+      const url = await resolveStableUrl(id, platform, entry);
       const hash = await computeHash(url);
       lock[id] ??= {};
       lock[id][platform] = { url, hash };

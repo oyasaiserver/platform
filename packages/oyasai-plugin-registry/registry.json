@@ -53,6 +53,30 @@
       "version": "1.21.10"
     }
   },
+  "essentialsx": {
+    "paper": {
+      "slug": "essentialsx",
+      "type": "modrinth",
+      "version": "1.21.10",
+      "versionOverride": "1.21.11"
+    }
+  },
+  "essentialsx-chat-module": {
+    "paper": {
+      "slug": "essentialsx-chat-module",
+      "type": "modrinth",
+      "version": "1.21.10",
+      "versionOverride": "1.21.11"
+    }
+  },
+  "essentialsx-spawn": {
+    "paper": {
+      "slug": "essentialsx-spawn",
+      "type": "modrinth",
+      "version": "1.21.10",
+      "versionOverride": "1.21.11"
+    }
+  },
   "fastasyncvoxelsniper": {
     "paper": {
       "slug": "fastasyncvoxelsniper",
