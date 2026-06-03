@@ -51,8 +51,8 @@ oyasaiPurpur rec {
     dynamicprofile
     entitypose
     essentialsx
-    essentialsxchat
-    essentialsxspawn
+    essentialsx-chat
+    essentialsx-spawn
     ezedits
     fastasyncvoxelsniper
     fastasyncworldedit

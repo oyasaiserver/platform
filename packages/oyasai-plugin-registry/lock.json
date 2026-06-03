@@ -53,7 +53,7 @@
       "hash": "sha256-vaRoUQWXf8ouIJggqfCtJCdb0QM5CgMjbzjlm/2sWOY="
     }
   },
-  "essentialsx-chat-module": {
+  "essentialsx-chat": {
     "paper": {
       "url": "https://cdn.modrinth.com/data/2qgyQbO1/versions/2k7YvKOk/EssentialsXChat-2.22.0.jar",
       "hash": "sha256-5bAhH5ivHqunEtkpSZdjmjkgnbH8hCOUoJI4IAc+xlo="
@@ -113,7 +113,7 @@
   },
   "joincommands": {
     "paper": {
-      "url": "https://cdn.spiget.org/file/spiget-resources/51758.jar",
+      "url": "https://hangarcdn.papermc.io/plugins/SirBlobman/JoinCommands/versions/3.1.0.120/PAPER/JoinCommands-3.1.0.120.jar",
       "hash": "sha256-nvbcJR9gp3CFlY+bxe+iBxeDVi21YoOY7YIjsCRgwu0="
     }
   },
@@ -125,8 +125,8 @@
   },
   "lunachat": {
     "paper": {
-      "url": "https://github.com/f1w3/LunaChat/releases/download/v3.0.16-fix/LunaChat.jar",
-      "hash": "sha256-0yGJMl1/F/BpWOBGJ27f+QXrkoyrdYVdIuWfVHyNESc="
+      "url": "https://cdn.modrinth.com/data/gr738FKw/versions/VnKre5xb/LunaChat.jar",
+      "hash": "sha256-nZP7aCQa3ofzfvAoiBS9hyCMk2GDdKvQrJMTqJkTy8Q="
     }
   },
   "lwc": {
@@ -167,8 +167,8 @@
   },
   "openinv": {
     "paper": {
-      "url": "https://github.com/JiKoo/OpenInv/releases/download/5.1.14/OpenInv.jar",
-      "hash": "sha256-x43CSG3nB9rlNHB84LBp8kGOfl4VYDagY8eOU7fZE10="
+      "url": "https://hangarcdn.papermc.io/plugins/jikoo/OpenInv/versions/5.3.2/PAPER/OpenInv.jar",
+      "hash": "sha256-wAPZe+2IidTolxgHCEJJ4Cjs7puTwCTN0xUVTe6wGQk="
     }
   },
   "particlehats": {
@@ -279,7 +279,7 @@
   },
   "worldeditsui": {
     "paper": {
-      "url": "https://github.com/kennytv/WorldEditSUI/releases/download/1.7.4/WorldEditSUI-1.7.4.jar",
+      "url": "https://hangarcdn.papermc.io/plugins/kennytv/WorldEditSUI/versions/1.7.4/PAPER/WorldEditSUI-1.7.4.jar",
       "hash": "sha256-cAbPnllEx14bV8wZ3IjtF/wXmg4oNU/aQkqjKpWqw9g="
     }
   },

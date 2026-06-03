@@ -54,7 +54,7 @@
       "type": "modrinth"
     }
   },
-  "essentialsx-chat-module": {
+  "essentialsx-chat": {
     "paper": {
       "skipVersionCheck": true,
       "slug": "essentialsx-chat-module",
@@ -119,8 +119,8 @@
   },
   "joincommands": {
     "paper": {
-      "id": 51758,
-      "type": "spiget"
+      "slug": "sirblobman/joincommands",
+      "type": "hangar"
     }
   },
   "luckperms": {
@@ -131,11 +131,8 @@
   },
   "lunachat": {
     "paper": {
-      "name": "LunaChat.jar",
-      "owner": "f1w3",
-      "repo": "LunaChat",
-      "tag": "v3.0.16-fix",
-      "type": "github"
+      "slug": "lunachat",
+      "type": "modrinth"
     }
   },
   "lwc": {
@@ -179,11 +176,8 @@
   },
   "openinv": {
     "paper": {
-      "name": "OpenInv.jar",
-      "owner": "JiKoo",
-      "repo": "OpenInv",
-      "tag": "5.1.14",
-      "type": "github"
+      "slug": "jikoo/openinv",
+      "type": "hangar"
     }
   },
   "particlehats": {
@@ -206,11 +200,9 @@
   },
   "protocollib": {
     "paper": {
-      "name": "ProtocolLib.jar",
-      "owner": "dmulloy2",
-      "repo": "ProtocolLib",
-      "tag": "5.4.0",
-      "type": "github"
+      "skipVersionCheck": true,
+      "slug": "dmulloy2/protocollib",
+      "type": "hangar"
     }
   },
   "pvparena": {
@@ -301,11 +293,8 @@
   },
   "worldeditsui": {
     "paper": {
-      "name": "WorldEditSUI-1.7.4.jar",
-      "owner": "kennytv",
-      "repo": "WorldEditSUI",
-      "tag": "1.7.4",
-      "type": "github"
+      "slug": "kennytv/worldeditsui",
+      "type": "hangar"
     }
   },
   "worldguard": {

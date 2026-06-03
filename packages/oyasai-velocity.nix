@@ -11,8 +11,9 @@ oyasaiVelocity {
 
   plugins = with oyasai-plugin-registry.forPlatform "velocity"; [
     # keep-sorted start
-    floodgate-velocity
-    geyser-velocity
+    floodgate
+    geyser
+    skinsrestorer
     # keep-sorted end
   ];
 

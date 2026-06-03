@@ -33,6 +33,7 @@ oyasaiPurpur rec {
   plugins = with oyasai-plugin-registry.forPlatform "paper" version; [
     # keep-sorted start
     floodgate
+    skinsrestorer
     viaversion
     # keep-sorted end
   ];
