@@ -17,26 +17,33 @@ let
         name = "plugin-registry-update";
         runtimeInputs = [ final ];
         text = ''
-          <${./registry.json} plugin-registry-lock >lock.json
+          <${./registry.json} plugin-registry-lock --mc-version "$1" >lock.json
         '';
       };
 
-      forVersion = (
-        version:
+      forPlatform = (
+        platform:
         let
-          staticDir = ./static + "/${version}";
-          fromStatic = lib.optionalAttrs (builtins.pathExists staticDir) (
-            lib.pipe (builtins.readDir staticDir) [
-              (lib.filterAttrs (_: t: t == "regular"))
-              (lib.mapAttrs' (name: _: lib.nameValuePair (lib.removeSuffix ".jar" name) (staticDir + "/${name}")))
-            ]
-          );
+          fromLock = lib.pipe lock [
+            (lib.filterAttrs (_: platforms: lib.hasAttr platform platforms))
+            (lib.mapAttrs (id: platforms: fetchurl (platforms.${platform} // { name = "${id}.jar"; })))
+          ];
+          mkResult =
+            staticDir:
+            let
+              fromStatic = lib.optionalAttrs (builtins.pathExists staticDir) (
+                lib.pipe (builtins.readDir staticDir) [
+                  (lib.filterAttrs (_: t: t == "regular"))
+                  (lib.mapAttrs' (name: _: lib.nameValuePair (lib.removeSuffix ".jar" name) (staticDir + "/${name}")))
+                ]
+              );
+            in
+            fromLock // fromStatic // lib.optionalAttrs (platform == "paper") oyasai-plugins;
         in
-        lib.pipe lock [
-          (lib.filterAttrs (_: versions: lib.hasAttr version versions))
-          (lib.mapAttrs (id: versions: fetchurl (versions.${version} // { name = "${id}.jar"; })))
-          (fromLock: fromLock // fromStatic // oyasai-plugins)
-        ]
+        if platform == "paper" then
+          (version: mkResult (./static/paper + "/${version}"))
+        else
+          mkResult (./static + "/${platform}")
       );
     };
   };

@@ -1,11 +1,13 @@
 #!/usr/bin/env node --enable-source-maps
 import { ok } from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { stderr, stdin } from "node:process";
+import { argv, stderr, stdin } from "node:process";
 import { json } from "node:stream/consumers";
+import { parseArgs } from "node:util";
 
 type RegistryEntry =
-  | { type: "modrinth"; slug: string }
+  | { type: "modrinth"; slug: string; skipVersionCheck?: boolean }
+  | { type: "hangar"; slug: string; skipVersionCheck?: boolean }
   | { type: "spiget"; id: number }
   | { type: "github"; owner: string; repo: string; tag: string; name: string }
   | { type: "url"; url: string };
@@ -15,7 +17,8 @@ type LockFile = Record<string, Record<string, LockEntry>>;
 
 async function resolveStableUrl(
   id: string,
-  version: string,
+  platform: string,
+  mcVersion: string,
   entry: RegistryEntry,
 ): Promise<string> {
   switch (entry.type) {
@@ -23,21 +26,51 @@ async function resolveStableUrl(
       return `https://github.com/${entry.owner}/${entry.repo}/releases/download/${entry.tag}/${entry.name}`;
 
     case "modrinth": {
-      const params = new URLSearchParams({
-        game_versions: JSON.stringify([version]),
-        loaders: JSON.stringify(["paper", "spigot", "bukkit"]),
-      });
-      const response = await fetch(
-        `https://api.modrinth.com/v2/project/${entry.slug}/version?${params}`,
-      );
-      const versions = (await response.json()) as {
-        files: { url: string }[];
-      }[];
-      const url = versions
-        .flatMap((v) => v.files)
-        .map((f) => f.url)
-        .at(0);
-      ok(url, `No modrinth URL for ${id}@${version}`);
+      const queryModrinth = async (withVersion: boolean) => {
+        const url = new URL(
+          `https://api.modrinth.com/v2/project/${entry.slug}/version`,
+        );
+        if (withVersion)
+          url.searchParams.set("game_versions", JSON.stringify([mcVersion]));
+        url.searchParams.set("loaders", JSON.stringify([platform]));
+        const results = (await (await fetch(url)).json()) as {
+          files: { url: string }[];
+        }[];
+        return results
+          .flatMap((v) => v.files)
+          .map((f) => f.url)
+          .at(0);
+      };
+      const url =
+        (entry.skipVersionCheck ? undefined : await queryModrinth(true)) ??
+        (await queryModrinth(false));
+      ok(url, `No modrinth URL for ${id} (${platform})`);
+      return url;
+    }
+
+    case "hangar": {
+      const queryHangar = async (withVersion: boolean) => {
+        const url = new URL(
+          `https://hangar.papermc.io/api/v1/projects/${entry.slug}/versions`,
+        );
+        url.searchParams.set("platform", platform.toUpperCase());
+        url.searchParams.set("limit", "1");
+        if (withVersion) url.searchParams.set("platformVersion", mcVersion);
+        const response = (await (await fetch(url)).json()) as {
+          result?: {
+            downloads: Record<
+              string,
+              { downloadUrl?: string; externalUrl?: string }
+            >;
+          }[];
+        };
+        const d = response.result?.[0]?.downloads?.[platform.toUpperCase()];
+        return d?.downloadUrl ?? d?.externalUrl;
+      };
+      const url =
+        (entry.skipVersionCheck ? undefined : await queryHangar(true)) ??
+        (await queryHangar(false));
+      ok(url, `No hangar URL for ${id} (${platform})`);
       return url;
     }
 
@@ -78,6 +111,17 @@ async function computeHash(url: string): Promise<string> {
 }
 
 if (import.meta.main) {
+  const {
+    values: { "mc-version": mcVersion },
+  } = parseArgs({
+    args: argv.slice(2),
+    options: { "mc-version": { type: "string" } },
+  });
+  ok(
+    mcVersion,
+    "Usage: plugin-registry-lock --mc-version <version> < registry.json > lock.json",
+  );
+
   const registry = (await json(stdin)) as Record<
     string,
     Record<string, RegistryEntry>
@@ -85,13 +129,13 @@ if (import.meta.main) {
 
   const lock: LockFile = {};
 
-  for (const [id, versions] of Object.entries(registry)) {
-    for (const [version, entry] of Object.entries(versions)) {
-      stderr.write(`lock  ${id}@${version} ... `);
-      const url = await resolveStableUrl(id, version, entry);
+  for (const [id, platforms] of Object.entries(registry)) {
+    for (const [platform, entry] of Object.entries(platforms)) {
+      stderr.write(`lock  ${id}@${platform} ... `);
+      const url = await resolveStableUrl(id, platform, mcVersion, entry);
       const hash = await computeHash(url);
       lock[id] ??= {};
-      lock[id][version] = { url, hash };
+      lock[id][platform] = { url, hash };
       stderr.write("done\n");
     }
   }

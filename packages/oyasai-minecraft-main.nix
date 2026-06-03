@@ -37,7 +37,7 @@ oyasaiPurpur rec {
     };
   };
 
-  plugins = with oyasai-plugin-registry.forVersion version; [
+  plugins = with oyasai-plugin-registry.forPlatform "paper" version; [
     # keep-sorted start
     advancedban
     arceon
@@ -51,8 +51,8 @@ oyasaiPurpur rec {
     dynamicprofile
     entitypose
     essentialsx
-    essentialsxchat
-    essentialsxspawn
+    essentialsx-chat
+    essentialsx-spawn
     ezedits
     fastasyncvoxelsniper
     fastasyncworldedit
