@@ -30,7 +30,22 @@ commands:
     description: 個人ワールド拡張用マクロ
     usage: /kakutyo <プレイヤー名> <ポイント>
     permission: oyasai.kakutyo
+  sv:
+    description: アンケート用コマンド
+    aliases: [survey, suv]
+    usage: /sv <survey_id>
+    permission: oyasai.survey
+  svo:
+    description: 最新のアンケートを開く (短縮用)
+    aliases: [suvo, svop]
+    permission: oyasai.survey
 permissions:
+  oyasai.survey:
+    description: svコマンドの使用権限
+    default: true
+  oyasai.admin:
+    description: 管理者用権限
+    default: op
   oyasai.syokaku:
     description: syokakuコマンドの使用権限
     default: op

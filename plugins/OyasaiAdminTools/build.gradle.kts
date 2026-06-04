@@ -8,4 +8,5 @@ dependencies {
   implementation(libs.kotlin.stdlib)
   implementation(libs.gson)
   implementation(libs.discord.webhooks)
+  implementation(libs.inventoryframework)
 }

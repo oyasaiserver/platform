@@ -14,7 +14,7 @@ import java.io.File
 import java.util.UUID
 
 object JsonUtils {
-  val gson = GsonBuilder().setPrettyPrinting().create()
+  val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
 
   inline fun <reified T> toJson(data: T): String = gson.toJson(data)
 
@@ -34,6 +34,24 @@ object JsonUtils {
 
   inline fun <reified T> writeJsonFile(path: String, data: T) {
     submitWriteTask { writeFile(plugin?.dataFolder?.path + File.separator + path, toJson(data)) }
+  }
+
+  // メンバが欠けていた場合、デフォルト値で読み込み
+  inline fun <reified T> readJsonFileSafe(path: String, default: T): T {
+    val file = File(plugin?.dataFolder?.path + File.separator + path)
+    if (!file.exists() || file.length() == 0L) {
+      writeJsonFile(path, default)
+      return default
+    }
+    return try {
+      val json = file.readText()
+      val result: T? = gson.fromJson(json, object : TypeToken<T>() {}.type)
+      result ?: default
+    } catch (e: Exception) {
+      plugin.logger.severe("Failed to parse JSON file: $path. Error: ${e.message}")
+      plugin.logger.severe("To prevent data loss, the file was NOT overwritten. Please check the syntax.")
+      default
+    }
   }
 
   fun saveUserJson(uuid: UUID) {

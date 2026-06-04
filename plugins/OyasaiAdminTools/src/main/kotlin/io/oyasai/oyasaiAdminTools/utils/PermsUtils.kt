@@ -8,7 +8,7 @@ import net.luckperms.api.model.group.Group
 import net.luckperms.api.node.types.InheritanceNode
 
 object PermsUtils {
-  fun aa(player: UUID, group: String): CompletableFuture<Boolean> {
+  fun hasGroup(player: UUID, group: String): CompletableFuture<Boolean> {
     val api = LuckPermsProvider.get()
 
     return api.userManager
@@ -18,6 +18,18 @@ object PermsUtils {
           // userに対しての、過去のPermission操作タイムスタンプを取得
 
           return@thenApplyAsync inheritedGroups.stream().anyMatch { g: Group -> g.name == group }
+        })
+  }
+
+  fun hasAnyGroup(player: UUID, groups: List<String>): CompletableFuture<Boolean> {
+    if (groups.isEmpty()) return CompletableFuture.completedFuture(true)
+    val api = LuckPermsProvider.get()
+
+    return api.userManager
+        .loadUser(player)
+        .thenApplyAsync({ user ->
+          val inheritedGroups: MutableCollection<Group> = user.getInheritedGroups(user.queryOptions)
+          return@thenApplyAsync inheritedGroups.stream().anyMatch { g: Group -> groups.contains(g.name) }
         })
   }
 
