@@ -5,5 +5,7 @@ data class Broadcast(
     val message: String = "",
     val interval: Long = 0,
     val enabled: Boolean = true,
-    val requiredGroups: List<String> = emptyList()
+    val requiredGroups: List<String> = emptyList(),
+    val sound: String? = null,
+    val expiresAt: Long? = null
 )

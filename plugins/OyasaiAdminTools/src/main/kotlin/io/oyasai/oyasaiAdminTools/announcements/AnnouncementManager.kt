@@ -35,19 +35,41 @@ object AnnouncementManager {
     }
 
     fun startAll() {
-        broadcasts.filter { it.enabled }.forEach { broadcast ->
+        val now = System.currentTimeMillis()
+        
+        broadcasts.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { broadcast ->
             startAnnouncementTimer(
                 interval = broadcast.interval,
                 message = broadcast.message,
-                requiredGroups = broadcast.requiredGroups
+                requiredGroups = broadcast.requiredGroups,
+                sound = broadcast.sound,
+                expiresAt = broadcast.expiresAt,
+                onExpire = {
+                    val target = broadcasts.find { it.id == broadcast.id }
+                    if (target != null) {
+                        broadcasts[broadcasts.indexOf(target)] = target.copy(enabled = false)
+                        save()
+                        plugin.logger.info("Broadcast ${broadcast.id} has expired and was disabled.")
+                    }
+                }
             )
         }
 
-        surveys.filter { it.enabled }.forEach { survey ->
+        surveys.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { survey ->
             startAnnouncementTimer(
                 interval = survey.broadcastInterval,
                 message = survey.broadcastMessage,
                 requiredGroups = survey.requiredGroups,
+                sound = survey.sound,
+                expiresAt = survey.expiresAt,
+                onExpire = {
+                    val target = surveys.find { it.id == survey.id }
+                    if (target != null) {
+                        surveys[surveys.indexOf(target)] = target.copy(enabled = false)
+                        save()
+                        plugin.logger.info("Survey ${survey.id} has expired and was disabled.")
+                    }
+                },
                 onTick = { lastBroadcastedSurveyId = survey.id },
                 playerFilter = { player ->
                     val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId, 0)
@@ -61,29 +83,52 @@ object AnnouncementManager {
         interval: Long,
         message: String,
         requiredGroups: List<String>,
+        sound: String? = null,
+        expiresAt: Long? = null,
+        onExpire: (() -> Unit)? = null,
         onTick: (() -> Unit)? = null,
         playerFilter: ((org.bukkit.entity.Player) -> Boolean)? = null
     ) {
-        val task = Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
-            onTick?.invoke()
-            Bukkit.getOnlinePlayers().forEach { player ->
-                if (playerFilter != null && !playerFilter(player)) return@forEach
-
-                val sendMsg = {
-                    val msg = message.replace("%player%", player.name)
-                    player.sendMessage(miniMessage.deserialize(msg))
+        val taskWrapper = object : Runnable {
+            var task: BukkitTask? = null
+            
+            override fun run() {
+                if (expiresAt != null && System.currentTimeMillis() > expiresAt) {
+                    onExpire?.invoke()
+                    task?.cancel()
+                    return
                 }
+                
+                onTick?.invoke()
+                Bukkit.getOnlinePlayers().forEach { player ->
+                    if (playerFilter != null && !playerFilter(player)) return@forEach
 
-                if (requiredGroups.isNotEmpty()) {
-                    PermsUtils.hasAnyGroup(player.uniqueId, requiredGroups).thenAccept { hasGroup ->
-                        if (hasGroup) Bukkit.getScheduler().runTask(plugin, Runnable { sendMsg() })
+                    val sendMsg = {
+                        val msg = message.replace("%player%", player.name)
+                        player.sendMessage(miniMessage.deserialize(msg))
+                        
+                        sound?.let { soundStr ->
+                            try {
+                                player.playSound(player.location, soundStr, 1.0f, 1.0f)
+                            } catch (e: Exception) {
+                                // Ignore invalid sound
+                            }
+                        }
                     }
-                } else {
-                    sendMsg()
+
+                    if (requiredGroups.isNotEmpty()) {
+                        PermsUtils.hasAnyGroup(player.uniqueId, requiredGroups).thenAccept { hasGroup ->
+                            if (hasGroup) Bukkit.getScheduler().runTask(plugin, Runnable { sendMsg() })
+                        }
+                    } else {
+                        sendMsg()
+                    }
                 }
             }
-        }, interval * 20L, interval * 20L)
-        tasks.add(task)
+        }
+        
+        taskWrapper.task = Bukkit.getScheduler().runTaskTimer(plugin, taskWrapper, interval * 20L, interval * 20L)
+        tasks.add(taskWrapper.task!!)
     }
 
     fun stopAll() {
@@ -93,5 +138,10 @@ object AnnouncementManager {
 
     fun reload() {
         load()
+    }
+
+    fun refreshTimers() {
+        stopAll()
+        startAll()
     }
 }

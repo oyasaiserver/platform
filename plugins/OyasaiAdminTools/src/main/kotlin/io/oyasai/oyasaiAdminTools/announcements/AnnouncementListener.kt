@@ -8,6 +8,7 @@ import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerEditBookEvent
+import org.bukkit.persistence.PersistentDataType
 
 object AnnouncementListener : Listener {
     private val plainSerializer = PlainTextComponentSerializer.plainText()
@@ -22,13 +23,18 @@ object AnnouncementListener : Listener {
         val question = survey.questions.getOrNull(progress.currentQuestionIndex) ?: return
 
         if (question.type == QuestionType.WRITE_IN_BOOK) {
-            val content = event.newBookMeta.pages().joinToString("\n") { plainSerializer.serialize(it) }
+            val bookMeta = event.newBookMeta
+            if (!bookMeta.persistentDataContainer.has(SurveyManager.surveyBookKey, PersistentDataType.BYTE)) {
+                return
+            }
+
+            val content = bookMeta.pages().joinToString("\n") { plainSerializer.serialize(it) }
 
             SurveyManager.handleAnswer(player, progress.currentQuestionIndex, content)
 
             Bukkit.getScheduler().runTask(plugin, Runnable {
                 val item = player.inventory.itemInMainHand
-                if (item.type == Material.WRITABLE_BOOK || item.type == Material.WRITTEN_BOOK) {
+                if (item.itemMeta?.persistentDataContainer?.has(SurveyManager.surveyBookKey, PersistentDataType.BYTE) == true) {
                     player.inventory.setItemInMainHand(null)
                 }
             })

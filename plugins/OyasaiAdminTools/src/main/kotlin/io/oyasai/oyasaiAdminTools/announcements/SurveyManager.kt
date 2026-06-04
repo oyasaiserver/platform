@@ -25,6 +25,7 @@ object SurveyManager {
     private val plugin = OyasaiAdminTools.plugin
     private val miniMessage = MiniMessage.miniMessage()
     private val plainSerializer = PlainTextComponentSerializer.plainText()
+    val surveyBookKey = org.bukkit.NamespacedKey(plugin, "survey_book")
 
     private val playerProgress = mutableMapOf<UUID, SurveyProgress>()
 
@@ -115,15 +116,25 @@ object SurveyManager {
                 }
             }
             QuestionType.WRITE_IN_BOOK -> {
-                val item = ItemStack(Material.WRITABLE_BOOK)
-                val meta = item.itemMeta as BookMeta
-                meta.displayName(miniMessage.deserialize("<gold>${survey.title} - 回答用</gold>"))
-                meta.lore(listOf(miniMessage.deserialize("<gray>内容を記入して「署名」してください。</gray>")))
-                item.itemMeta = meta
+                val hasBook = player.inventory.contents.filterNotNull().any {
+                    it.itemMeta?.persistentDataContainer?.has(surveyBookKey, org.bukkit.persistence.PersistentDataType.BYTE) == true
+                }
 
-                player.inventory.addItem(item)
-                player.sendMessage(miniMessage.deserialize("<green>本を付与しました。質問: ${question.text}</green>"))
-                player.sendMessage(miniMessage.deserialize("<green>回答を記入して署名（Sign）してください。</green>"))
+                if (hasBook) {
+                    player.sendMessage(miniMessage.deserialize("<yellow>既にアンケート回答用の本を持っています。インベントリを確認してください。</yellow>"))
+                    player.sendMessage(miniMessage.deserialize("<green>質問: ${question.text}</green>"))
+                } else {
+                    val item = ItemStack(Material.WRITABLE_BOOK)
+                    val meta = item.itemMeta as BookMeta
+                    meta.displayName(miniMessage.deserialize("<gold>${survey.title} - 回答用</gold>"))
+                    meta.lore(listOf(miniMessage.deserialize("<gray>内容を記入して「署名」してください。</gray>")))
+                    meta.persistentDataContainer.set(surveyBookKey, org.bukkit.persistence.PersistentDataType.BYTE, 1.toByte())
+                    item.itemMeta = meta
+
+                    player.inventory.addItem(item)
+                    player.sendMessage(miniMessage.deserialize("<green>本を付与しました。質問: ${question.text}</green>"))
+                    player.sendMessage(miniMessage.deserialize("<green>回答を記入して署名（Sign）してください。</green>"))
+                }
             }
         }
     }

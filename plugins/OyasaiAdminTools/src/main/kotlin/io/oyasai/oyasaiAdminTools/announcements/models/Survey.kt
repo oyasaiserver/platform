@@ -15,7 +15,9 @@ data class Survey(
     val rewardedPlayers: MutableMap<UUID, Int> = mutableMapOf(), // UUID to reward cnt
     val maxRewards: Int = 1,
     val requiredGroups: List<String> = emptyList(),
-    val discordWebhookUrl: String? = null
+    val discordWebhookUrl: String? = null,
+    val sound: String? = null,
+    val expiresAt: Long? = null
 )
 
 data class Question(
