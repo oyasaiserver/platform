@@ -36,6 +36,13 @@ object SurveyManager {
         var currentQuestionIndex: Int = 0
     )
 
+    data class SurveyResult(
+        val uuid: String,
+        val name: String,
+        val timestamp: Long,
+        val answers: List<String>
+    )
+
     fun startSurvey(player: Player, surveyId: String) {
         val survey = AnnouncementManager.surveys.find { it.id == surveyId } ?: run {
             player.sendMessage(miniMessage.deserialize("<red>アンケートが見つかりません。</red>"))
@@ -201,7 +208,7 @@ object SurveyManager {
 
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             try {
-                val results: List<Map<String, Any>> = JsonUtils.fromJson(file.readText())
+                val results: List<SurveyResult> = JsonUtils.fromJson(file.readText())
                 if (results.isEmpty()) {
                     player.sendMessage(miniMessage.deserialize("<red>収集されたデータが空です。</red>"))
                     return@Runnable
@@ -217,15 +224,13 @@ object SurveyManager {
 
                 results.forEach { result ->
                     val row = mutableListOf<String>()
-                    val ts = result["timestamp"]?.toString()?.toLongOrNull() ?: 0L
-                    val date = java.time.Instant.ofEpochMilli(ts).atZone(java.time.ZoneId.systemDefault()).toLocalDateTime()
-                    row.add(date.toString())
-                    row.add(result["uuid"]?.toString() ?: "")
-                    row.add(result["name"]?.toString() ?: "")
+                    row.add(result.timestamp.toString())
+                    row.add(result.uuid)
+                    row.add(result.name)
 
-                    val answers = result["answers"] as? List<*>
+                    val answers = result.answers
                     survey.questions.forEachIndexed { i, _ ->
-                        val answer = answers?.getOrNull(i)?.toString() ?: ""
+                        val answer = answers.getOrNull(i) ?: ""
                         row.add(answer)
                     }
                     csvContent.append(row.joinToString(",") { "\"${it.replace("\"", "\"\"")}\"" }).append("\n")
@@ -274,13 +279,13 @@ object SurveyManager {
 
     private fun saveResult(surveyId: String, uuid: UUID, name: String, answers: List<String>) {
         val resultFile = "surveys/results_${surveyId}.json"
-        val results = JsonUtils.readJsonFileSafe(resultFile, mutableListOf<Map<String, Any>>())
+        val results = JsonUtils.readJsonFileSafe(resultFile, mutableListOf<SurveyResult>())
 
-        val newResult = mapOf(
-            "uuid" to uuid.toString(),
-            "name" to name,
-            "timestamp" to System.currentTimeMillis(),
-            "answers" to answers
+        val newResult = SurveyResult(
+            uuid = uuid.toString(),
+            name = name,
+            timestamp = System.currentTimeMillis(),
+            answers = answers
         )
 
         results.add(newResult)
