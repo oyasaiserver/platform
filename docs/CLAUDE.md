@@ -1,12 +1,5 @@
-# Claude Instructions (docs/)
+# Claude Entry
 
-このディレクトリ（docs/）で作業するClaude向けの入口ファイル。
+Read `docs/_MANIFEST.md` first.
 
-## 必読
-タスク開始前に必ず `_MANIFEST.md` を読むこと。
-構造・Tier分類・書き込み権限・SOT位置はすべてそこに集約されている。
-
-## 文体
-- 日本語で記述
-- 客観的な事実のみ述べる
-- 不確かな情報は不確実性を明示する
+Shared context starts at `docs/00_Context/CONTEXT.md`.

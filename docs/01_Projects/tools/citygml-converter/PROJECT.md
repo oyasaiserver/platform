@@ -4,8 +4,13 @@ category: tool
 status: active
 owner: marzipan99
 source_of_truth: "https://github.com/marzipan99/citygml-converter"
-related_paths: []
-last_validated: "2026-05-20"
+related_paths:
+  - docs/01_Projects/tools/citygml-converter/
+  - plugins/CitiesSkyMine/
+project_kind: tool
+runtime_kind: browser-tool
+minecraft_related: true
+last_validated: "2026-06-05"
 agent_task: null
 ---
 
@@ -13,6 +18,17 @@ agent_task: null
 
 PLATEAU CityGML（EPSG:6697, JGD2011）の3D建物データを
 glTF 2.0バイナリ形式（`.glb`）に変換するブラウザツール。
+
+## AI 作業入口
+
+| 項目 | 内容 |
+|---|---|
+| 実装の正本 | 外部リポジトリ `https://github.com/marzipan99/citygml-converter` |
+| Platform内ミラー | `docs/01_Projects/tools/citygml-converter/` |
+| 実行入口 | `index.html`, `citygml_to_gltf.py`, `citygml_to_schem.py`, `api.py` |
+| Minecraft連携 | CityGMLから `.schem` を生成し、WorldEdit/FAWE や CitiesSkyMine 周辺作業へ渡す |
+| 関連プラグイン | `plugins/CitiesSkyMine/` |
+| 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置き、このファイルには公開可能な判断だけを書く |
 
 ## 使用方法
 
