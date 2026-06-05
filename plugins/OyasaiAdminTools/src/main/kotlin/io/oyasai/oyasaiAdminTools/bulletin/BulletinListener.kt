@@ -1,25 +1,24 @@
-package io.oyasai.oyasaiAdminTools.announcements
+package io.oyasai.oyasaiAdminTools.bulletin
 
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.announcements.models.QuestionType
+import io.oyasai.oyasaiAdminTools.bulletin.models.QuestionType
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerEditBookEvent
 import org.bukkit.persistence.PersistentDataType
 
-object AnnouncementListener : Listener {
+object BulletinListener : Listener {
     private val plainSerializer = PlainTextComponentSerializer.plainText()
 
     @EventHandler
-    fun onBookEdit(event: PlayerEditBookEvent) {
+    fun onBookSign(event: PlayerEditBookEvent) {
         if (!event.isSigning) return
 
         val player = event.player
         val progress = getProgressFor(player.uniqueId) ?: return
-        val survey = AnnouncementManager.surveys.find { it.id == progress.surveyId } ?: return
+        val survey = BulletinManager.surveys.find { it.id == progress.surveyId } ?: return
         val question = survey.questions.getOrNull(progress.currentQuestionIndex) ?: return
 
         if (question.type == QuestionType.WRITE_IN_BOOK) {

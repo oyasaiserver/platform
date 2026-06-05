@@ -28,9 +28,17 @@ object PermsUtils {
     return api.userManager
         .loadUser(player)
         .thenApplyAsync({ user ->
-          val inheritedGroups: MutableCollection<Group> = user.getInheritedGroups(user.queryOptions)
+          val inheritedGroups = user.getInheritedGroups(user.queryOptions)
           return@thenApplyAsync inheritedGroups.stream().anyMatch { g: Group -> groups.contains(g.name) }
         })
+  }
+
+  fun hasAnyGroupSync(player: UUID, groups: List<String>): Boolean {
+    if (groups.isEmpty()) return true
+    val api = LuckPermsProvider.get()
+    val user = api.userManager.getUser(player) ?: return false
+    val inheritedGroups = user.getInheritedGroups(user.queryOptions)
+    return inheritedGroups.any { groups.contains(it.name) }
   }
 
   fun getCurrentRank(player: UUID): CompletableFuture<io.oyasai.oyasaiAdminTools.rank.Rank?> {

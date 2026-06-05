@@ -1,12 +1,12 @@
-package io.oyasai.oyasaiAdminTools.announcements
+package io.oyasai.oyasaiAdminTools.bulletin
 
 import club.minnced.discord.webhook.WebhookClient
 import club.minnced.discord.webhook.send.WebhookEmbed
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
-import io.oyasai.oyasaiAdminTools.announcements.models.Question
-import io.oyasai.oyasaiAdminTools.announcements.models.QuestionType
-import io.oyasai.oyasaiAdminTools.announcements.models.Survey
+import io.oyasai.oyasaiAdminTools.bulletin.models.Question
+import io.oyasai.oyasaiAdminTools.bulletin.models.QuestionType
+import io.oyasai.oyasaiAdminTools.bulletin.models.Survey
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import net.kyori.adventure.inventory.Book
@@ -45,13 +45,13 @@ object SurveyManager {
     )
 
     fun startSurvey(player: Player, surveyId: String) {
-        val survey = AnnouncementManager.surveys.find { it.id == surveyId } ?: run {
+        val survey = BulletinManager.surveys.find { it.id == surveyId } ?: run {
             player.sendMessage(miniMessage.deserialize("<red>アンケートが見つかりません。</red>"))
             return
         }
 
-        if (survey.requiredGroups.isNotEmpty()) {
-            PermsUtils.hasAnyGroup(player.uniqueId, survey.requiredGroups).thenAccept { hasGroup ->
+        if (survey.targetGroups.isNotEmpty()) {
+            PermsUtils.hasAnyGroup(player.uniqueId, survey.targetGroups).thenAccept { hasGroup ->
                 Bukkit.getScheduler().runTask(plugin, Runnable {
                     if (!hasGroup) {
                         player.sendMessage(miniMessage.deserialize("<red>このアンケートに回答する権限がありません。</red>"))
@@ -94,13 +94,13 @@ object SurveyManager {
 
         when (question.type) {
             QuestionType.CLICK_TO_ANSWER -> {
-                player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/sv resume</yellow> か <click:run_command:/sv resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
+                player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/bl resume</yellow> か <click:run_command:/bl resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
                 showBookChoice(player, survey, question, index)
             }
             QuestionType.CHAT_CHOICE -> {
                 if (player.name.startsWith(".")) {
                     // Bedrock フォールバック
-                    player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/sv resume</yellow> か <click:run_command:/sv resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
+                    player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/bl resume</yellow> か <click:run_command:/bl resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
                     showBookChoice(player, survey, question, index)
                 } else {
                     // Java はチャットでクリックして回答できる
@@ -108,7 +108,7 @@ object SurveyManager {
                     val optionsComponent = Component.text()
                     question.options.forEachIndexed { i, option ->
                         val choice = miniMessage.deserialize("<blue><u>[${option}]</u></blue>")
-                            .clickEvent(ClickEvent.runCommand("/sv answer $index $option"))
+                            .clickEvent(ClickEvent.runCommand("/bl answer $index $option"))
                         optionsComponent.append(choice)
                         if (i < question.options.size - 1) optionsComponent.append(Component.text(" "))
                     }
@@ -148,7 +148,7 @@ object SurveyManager {
 
         question.options.forEach { option ->
             val optionComponent = miniMessage.deserialize("<blue><u>[${option}]</u></blue>")
-                .clickEvent(ClickEvent.runCommand("/sv answer $index $option"))
+                .clickEvent(ClickEvent.runCommand("/bl answer $index $option"))
             page.append(Component.newline()).append(optionComponent)
         }
 
@@ -163,7 +163,7 @@ object SurveyManager {
             return
         }
 
-        val survey = AnnouncementManager.surveys.find { it.id == progress.surveyId } ?: return
+        val survey = BulletinManager.surveys.find { it.id == progress.surveyId } ?: return
 
         val cleanAnswer = plainSerializer.serialize(miniMessage.deserialize(answer))
 
@@ -176,7 +176,7 @@ object SurveyManager {
 
         val currentCount = survey.respondedPlayers.getOrDefault(player.uniqueId, 0)
         survey.respondedPlayers[player.uniqueId] = currentCount + 1
-        AnnouncementManager.save()
+        BulletinManager.save()
 
         player.sendMessage(miniMessage.deserialize("<green>アンケートにご協力ありがとうございました！</green>"))
 
@@ -187,7 +187,7 @@ object SurveyManager {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd)
             }
             survey.rewardedPlayers[player.uniqueId] = rewardCount + 1
-            AnnouncementManager.save()
+            BulletinManager.save()
         } else {
             player.sendMessage(miniMessage.deserialize("<gray>報酬は既に上限回数（${survey.maxRewards}回）受け取っているため、今回は付与されません。</gray>"))
         }
@@ -200,7 +200,7 @@ object SurveyManager {
     }
 
     fun exportResultsToDiscord(player: Player, surveyId: String) {
-        val survey = AnnouncementManager.surveys.find { it.id == surveyId } ?: run {
+        val survey = BulletinManager.surveys.find { it.id == surveyId } ?: run {
             player.sendMessage(miniMessage.deserialize("<red>アンケートが見つかりません。</red>"))
             return
         }

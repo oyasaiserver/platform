@@ -1,13 +1,7 @@
 package io.oyasai.oyasaiAdminTools
 
-import io.oyasai.oyasaiAdminTools.commands.GrieferCommandExecutor
-import io.oyasai.oyasaiAdminTools.commands.KakutyoCommandExecutor
-import io.oyasai.oyasaiAdminTools.commands.PlayerManagerCommandExecutor
-import io.oyasai.oyasaiAdminTools.commands.SyokakuCommandExecutor
-import io.oyasai.oyasaiAdminTools.commands.SyokakuManagerCommandExecutor
-import io.oyasai.oyasaiAdminTools.commands.SurveyCommandExecutor
-import io.oyasai.oyasaiAdminTools.announcements.AnnouncementListener
-import io.oyasai.oyasaiAdminTools.announcements.AnnouncementManager
+import io.oyasai.oyasaiAdminTools.commands.*
+import io.oyasai.oyasaiAdminTools.bulletin.*
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -22,7 +16,7 @@ class OyasaiAdminTools : JavaPlugin() {
     plugin = this
     plugin.saveDefaultConfig()
 
-    AnnouncementManager.load()
+    BulletinManager.load()
 
     val commandMap = Bukkit.getCommandMap()
     val knownCommands = commandMap.knownCommands
@@ -39,18 +33,21 @@ class OyasaiAdminTools : JavaPlugin() {
     this.getCommand("ban")?.tabCompleter = GrieferCommandExecutor
     this.getCommand("kakutyo")?.setExecutor(KakutyoCommandExecutor)
     this.getCommand("kakutyo")?.tabCompleter = KakutyoCommandExecutor
-    this.getCommand("sv")?.setExecutor(SurveyCommandExecutor)
-    this.getCommand("sv")?.tabCompleter = SurveyCommandExecutor
-    this.getCommand("svo")?.setExecutor(SurveyCommandExecutor)
-    this.getCommand("svo")?.tabCompleter = SurveyCommandExecutor
 
-    Bukkit.getPluginManager().registerEvents(AnnouncementListener, this)
+    // Bulletin Commands
+    this.getCommand("bl")?.setExecutor(BulletinCommandExecutor)
+    this.getCommand("bl")?.tabCompleter = BulletinCommandExecutor
+    this.getCommand("anke")?.setExecutor(BulletinCommandExecutor)
+    this.getCommand("anke")?.tabCompleter = BulletinCommandExecutor
+
+    Bukkit.getPluginManager().registerEvents(BulletinListener, this)
+    Bukkit.getPluginManager().registerEvents(BookInputHandler, this)
   }
 
   override fun onDisable() {
     // Plugin shutdown logic
-    AnnouncementManager.stopAll()
-    AnnouncementManager.save()
+    BulletinManager.stopAll()
+    BulletinManager.save()
     JsonUtils.writeJsonFile("ranks.json", io.oyasai.oyasaiAdminTools.rank.RankManager.ranks)
   }
 }

@@ -1,65 +1,63 @@
-package io.oyasai.oyasaiAdminTools.announcements
+package io.oyasai.oyasaiAdminTools.bulletin
 
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
-import io.oyasai.oyasaiAdminTools.announcements.models.Broadcast
-import io.oyasai.oyasaiAdminTools.announcements.models.Survey
+import io.oyasai.oyasaiAdminTools.bulletin.models.Notice
+import io.oyasai.oyasaiAdminTools.bulletin.models.Survey
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitTask
 
-object AnnouncementManager {
+object BulletinManager {
     private val plugin = OyasaiAdminTools.plugin
     private val miniMessage = MiniMessage.miniMessage()
 
-    var broadcasts = mutableListOf<Broadcast>()
+    var notices = mutableListOf<Notice>()
     var surveys = mutableListOf<Survey>()
-
-    var lastBroadcastedSurveyId: String? = null
+    
+    val surveyBroadcastHistory = mutableListOf<String>()
 
     private val tasks = mutableListOf<BukkitTask>()
 
     fun load() {
         stopAll()
-
-        broadcasts = JsonUtils.readJsonFileSafe("broadcasts.json", mutableListOf<Broadcast>()).toMutableList()
+        notices = JsonUtils.readJsonFileSafe("notices.json", mutableListOf<Notice>()).toMutableList()
         surveys = JsonUtils.readJsonFileSafe("surveys.json", mutableListOf<Survey>()).toMutableList()
-
         startAll()
     }
 
     fun save() {
-        JsonUtils.writeJsonFile("broadcasts.json", broadcasts)
+        JsonUtils.writeJsonFile("notices.json", notices)
         JsonUtils.writeJsonFile("surveys.json", surveys)
     }
 
     fun startAll() {
         val now = System.currentTimeMillis()
-        
-        broadcasts.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { broadcast ->
-            startAnnouncementTimer(
-                interval = broadcast.interval,
-                message = broadcast.message,
-                requiredGroups = broadcast.requiredGroups,
-                sound = broadcast.sound,
-                expiresAt = broadcast.expiresAt,
+
+        notices.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { notice ->
+            startBulletinTimer(
+                interval = notice.interval,
+                message = notice.message,
+                targetGroups = notice.targetGroups,
+                sound = notice.sound,
+                expiresAt = notice.expiresAt,
                 onExpire = {
-                    val target = broadcasts.find { it.id == broadcast.id }
+                    val target = notices.find { it.id == notice.id }
                     if (target != null) {
-                        broadcasts[broadcasts.indexOf(target)] = target.copy(enabled = false)
+                        notices[notices.indexOf(target)] = target.copy(enabled = false)
                         save()
-                        plugin.logger.info("Broadcast ${broadcast.id} has expired and was disabled.")
+                        plugin.logger.info("Notice ${notice.id} has expired and was disabled.")
                     }
                 }
             )
         }
 
         surveys.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { survey ->
-            startAnnouncementTimer(
+            startBulletinTimer(
                 interval = survey.broadcastInterval,
                 message = survey.broadcastMessage,
-                requiredGroups = survey.requiredGroups,
+                targetGroups = survey.targetGroups,
                 sound = survey.sound,
                 expiresAt = survey.expiresAt,
                 onExpire = {
@@ -70,7 +68,10 @@ object AnnouncementManager {
                         plugin.logger.info("Survey ${survey.id} has expired and was disabled.")
                     }
                 },
-                onTick = { lastBroadcastedSurveyId = survey.id },
+                onTick = {
+                    surveyBroadcastHistory.add(survey.id)
+                    if (surveyBroadcastHistory.size > 50) surveyBroadcastHistory.removeAt(0)
+                },
                 playerFilter = { player ->
                     val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId, 0)
                     responseCount < survey.maxResponses
@@ -79,10 +80,10 @@ object AnnouncementManager {
         }
     }
 
-    private fun startAnnouncementTimer(
+    private fun startBulletinTimer(
         interval: Long,
         message: String,
-        requiredGroups: List<String>,
+        targetGroups: List<String>,
         sound: String? = null,
         expiresAt: Long? = null,
         onExpire: (() -> Unit)? = null,
@@ -91,14 +92,14 @@ object AnnouncementManager {
     ) {
         val taskWrapper = object : Runnable {
             var task: BukkitTask? = null
-            
+
             override fun run() {
                 if (expiresAt != null && System.currentTimeMillis() > expiresAt) {
                     onExpire?.invoke()
                     task?.cancel()
                     return
                 }
-                
+
                 onTick?.invoke()
                 Bukkit.getOnlinePlayers().forEach { player ->
                     if (playerFilter != null && !playerFilter(player)) return@forEach
@@ -106,7 +107,7 @@ object AnnouncementManager {
                     val sendMsg = {
                         val msg = message.replace("%player%", player.name)
                         player.sendMessage(miniMessage.deserialize(msg))
-                        
+
                         sound?.let { soundStr ->
                             try {
                                 player.playSound(player.location, soundStr, 1.0f, 1.0f)
@@ -116,8 +117,8 @@ object AnnouncementManager {
                         }
                     }
 
-                    if (requiredGroups.isNotEmpty()) {
-                        PermsUtils.hasAnyGroup(player.uniqueId, requiredGroups).thenAccept { hasGroup ->
+                    if (targetGroups.isNotEmpty()) {
+                        PermsUtils.hasAnyGroup(player.uniqueId, targetGroups).thenAccept { hasGroup ->
                             if (hasGroup) Bukkit.getScheduler().runTask(plugin, Runnable { sendMsg() })
                         }
                     } else {
@@ -126,7 +127,7 @@ object AnnouncementManager {
                 }
             }
         }
-        
+
         taskWrapper.task = Bukkit.getScheduler().runTaskTimer(plugin, taskWrapper, interval * 20L, interval * 20L)
         tasks.add(taskWrapper.task!!)
     }
