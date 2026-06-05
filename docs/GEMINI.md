@@ -1,10 +1,5 @@
-# Gemini Instructions (docs/)
+# Gemini Entry
 
-Gemini向けの入口ファイル。
+Read `docs/_MANIFEST.md` first.
 
-## 必読
-`_MANIFEST.md` を読んでから作業を開始すること。
-
-## 役割
-- 調査・外部情報収集・ドキュメント生成
-- `02_Docs/` 配下のドキュメント整備
+Shared context starts at `docs/00_Context/CONTEXT.md`.
