@@ -46,37 +46,39 @@ object BulletinGUI {
         gui.setOnTopDrag { it.isCancelled = true }
         val pane = PaginatedPane(9, 5)
 
-        val items = BulletinManager.notices.map { broadcast ->
-            val item = ItemStack(if (broadcast.enabled) Material.LIME_STAINED_GLASS_PANE else Material.RED_STAINED_GLASS_PANE)
+        val items = BulletinManager.notices.map { notice ->
+            val item = ItemStack(if (notice.enabled) Material.LIME_STAINED_GLASS_PANE else Material.RED_STAINED_GLASS_PANE)
             val meta = item.itemMeta
-            meta.displayName(miniMessage.deserialize("<yellow>ID: ${broadcast.id}</yellow>"))
+            meta.displayName(miniMessage.deserialize("<yellow>ID: ${notice.id}</yellow>"))
             val lore = mutableListOf(
-                miniMessage.deserialize("<gray>内容: </gray>${broadcast.message}"),
-                miniMessage.deserialize("<gray>間隔: ${broadcast.interval}s</gray>"),
-                miniMessage.deserialize("<gray>状態: </gray>${if (broadcast.enabled) "<green>有効" else "<red>無効"}")
+                miniMessage.deserialize("<gray>内容: </gray>${notice.message}"),
+                miniMessage.deserialize("<gray>間隔: ${notice.interval}s</gray>"),
+                miniMessage.deserialize("<gray>状態: </gray>${if (notice.enabled) "<green>有効" else "<red>無効"}")
             )
-            broadcast.expiresAt?.let { lore.add(miniMessage.deserialize("<gray>期限: </gray><aqua>${dateFormat.format(Date(it))}</aqua>")) }
-            if (broadcast.targetGroups.isNotEmpty()) lore.add(miniMessage.deserialize("<gray>対象: </gray><white>${broadcast.targetGroups.joinToString(", ")}</white>"))
+            notice.expiresAt?.let { lore.add(miniMessage.deserialize("<gray>期限: </gray><aqua>${dateFormat.format(Date(it))}</aqua>")) }
+            if (notice.targetGroups.isNotEmpty()) lore.add(miniMessage.deserialize("<gray>対象: </gray><white>${notice.targetGroups.joinToString(", ")}</white>"))
             
             lore.add(Component.empty())
-            lore.add(miniMessage.deserialize("<yellow>左クリック: 有効/無効の切替</yellow>"))
-            lore.add(miniMessage.deserialize("<aqua>Shift+左クリック: 詳細編集</aqua>"))
+            lore.add(miniMessage.deserialize("<yellow>左クリック: 詳細編集</yellow>"))
+            lore.add(miniMessage.deserialize("<aqua>右クリック: 有効/無効の切替</aqua>"))
             
             meta.lore(lore)
             item.itemMeta = meta
 
             GuiItem(item) { event ->
-                val target = BulletinManager.notices.find { it.id == broadcast.id } ?: return@GuiItem
-                if (event.isShiftClick && event.isLeftClick) {
+                val target = BulletinManager.notices.find { it.id == notice.id } ?: return@GuiItem
+                
+                if (event.isLeftClick) {
                     openNoticeEditor(player, target)
-                    return@GuiItem
-                }
-                val index = BulletinManager.notices.indexOf(target)
-                if (index != -1) {
-                    BulletinManager.notices[index] = target.copy(enabled = !target.enabled)
-                    BulletinManager.save()
-                    BulletinManager.refreshTimers()
-                    Bukkit.getScheduler().runTask(plugin, Runnable { openNoticesMenu(player) })
+                } else if (event.isRightClick) {
+                    val index = BulletinManager.notices.indexOf(target)
+                    if (index != -1) {
+                        BulletinManager.notices[index] = target.copy(enabled = !target.enabled)
+                        BulletinManager.save()
+                        BulletinManager.refreshTimers()
+                        player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
+                        Bukkit.getScheduler().runTask(plugin, Runnable { openNoticesMenu(player) })
+                    }
                 }
             }
         }
@@ -105,30 +107,26 @@ object BulletinGUI {
             survey.expiresAt?.let { lore.add(miniMessage.deserialize("<gray>期限: </gray><aqua>${dateFormat.format(Date(it))}</aqua>")) }
             
             lore.add(Component.empty())
-            lore.add(miniMessage.deserialize("<yellow>左クリック: 有効/無効の切替</yellow>"))
-            lore.add(miniMessage.deserialize("<aqua>Shift+左クリック: 詳細編集</aqua>"))
-            lore.add(miniMessage.deserialize("<green>右クリック: 結果をDiscordに送信</green>"))
+            lore.add(miniMessage.deserialize("<yellow>左クリック: 詳細編集</yellow>"))
+            lore.add(miniMessage.deserialize("<aqua>右クリック: 有効/無効の切替</aqua>"))
             
             meta.lore(lore)
             item.itemMeta = meta
 
             GuiItem(item) { event ->
                 val target = BulletinManager.surveys.find { it.id == survey.id } ?: return@GuiItem
-                if (event.isShiftClick && event.isLeftClick) {
+                
+                if (event.isLeftClick) {
                     openSurveyEditor(player, target)
-                    return@GuiItem
-                }
-                if (event.isRightClick) {
-                    SurveyManager.exportResultsToDiscord(player, target.id)
-                    player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
-                    return@GuiItem
-                }
-                val index = BulletinManager.surveys.indexOf(target)
-                if (index != -1) {
-                    BulletinManager.surveys[index] = target.copy(enabled = !target.enabled)
-                    BulletinManager.save()
-                    BulletinManager.refreshTimers()
-                    Bukkit.getScheduler().runTask(plugin, Runnable { openSurveysMenu(player) })
+                } else if (event.isRightClick) {
+                    val index = BulletinManager.surveys.indexOf(target)
+                    if (index != -1) {
+                        BulletinManager.surveys[index] = target.copy(enabled = !target.enabled)
+                        BulletinManager.save()
+                        BulletinManager.refreshTimers()
+                        player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
+                        Bukkit.getScheduler().runTask(plugin, Runnable { openSurveysMenu(player) })
+                    }
                 }
             }
         }
@@ -139,8 +137,8 @@ object BulletinGUI {
         gui.show(player)
     }
 
-    private fun openNoticeEditor(player: Player, broadcast: io.oyasai.oyasaiAdminTools.bulletin.models.Notice) {
-        val gui = ChestGui(3, "編集: ${broadcast.id}")
+    private fun openNoticeEditor(player: Player, notice: io.oyasai.oyasaiAdminTools.bulletin.models.Notice) {
+        val gui = ChestGui(3, "編集: ${notice.id}")
         gui.setOnTopClick { it.isCancelled = true }
         val pane = StaticPane(9, 3)
 
@@ -148,17 +146,17 @@ object BulletinGUI {
         pane.addItem(GuiItem(ItemStack(Material.WRITABLE_BOOK).apply {
             itemMeta = itemMeta.apply { 
                 displayName(miniMessage.deserialize("<yellow>メッセージ変更</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${broadcast.message}</gray>")))
+                lore(listOf(miniMessage.deserialize("<gray>現在: ${notice.message}</gray>")))
             }
         }) {
             BookInputHandler.requestInput(
                 player, 
                 "告知メッセージ", 
                 "定期放送されるメッセージを入力してください。\nMiniMessage形式が使用可能です。\n(例: <green>投票してね！</green>)",
-                broadcast.message
+                notice.message
             ) { input ->
-                updateNotice(broadcast.id) { it.copy(message = input) }
-                openNoticeEditor(player, BulletinManager.notices.find { it.id == broadcast.id }!!)
+                updateNotice(notice.id) { it.copy(message = input) }
+                openNoticeEditor(player, BulletinManager.notices.find { it.id == notice.id }!!)
             }
         }, 1, 1)
 
@@ -166,18 +164,18 @@ object BulletinGUI {
         pane.addItem(GuiItem(ItemStack(Material.CLOCK).apply {
             itemMeta = itemMeta.apply { 
                 displayName(miniMessage.deserialize("<yellow>間隔変更 (秒)</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${broadcast.interval}秒</gray>")))
+                lore(listOf(miniMessage.deserialize("<gray>現在: ${notice.interval}秒</gray>")))
             }
         }) {
             BookInputHandler.requestInput(
                 player, 
                 "間隔 (秒)", 
                 "放送する間隔を秒単位の数字で入力してください。\n(例: 1800 -> 30分間隔)",
-                broadcast.interval.toString()
+                notice.interval.toString()
             ) { input ->
                 val sec = input.trim().toLongOrNull() ?: return@requestInput
-                updateNotice(broadcast.id) { it.copy(interval = sec) }
-                openNoticeEditor(player, BulletinManager.notices.find { it.id == broadcast.id }!!)
+                updateNotice(notice.id) { it.copy(interval = sec) }
+                openNoticeEditor(player, BulletinManager.notices.find { it.id == notice.id }!!)
             }
         }, 2, 1)
 
@@ -185,18 +183,18 @@ object BulletinGUI {
         pane.addItem(GuiItem(ItemStack(Material.JUKEBOX).apply {
             itemMeta = itemMeta.apply { 
                 displayName(miniMessage.deserialize("<yellow>効果音設定</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${broadcast.sound ?: "なし"}</gray>")))
+                lore(listOf(miniMessage.deserialize("<gray>現在: ${notice.sound ?: "なし"}</gray>")))
             }
         }) {
             BookInputHandler.requestInput(
                 player, 
                 "効果音ID", 
-                "告知時に流す効果音のIDを入力してください。\n'none' と入力すると無効になります。\n(例: entity.experience_orb.pickup)",
-                broadcast.sound ?: "none"
+                "告知時に流す効果音のIDを入力してください。\n内容を空にして署名すると無効になります。\n(例: entity.experience_orb.pickup)",
+                notice.sound ?: ""
             ) { input ->
                 val cleaned = input.trim()
-                updateNotice(broadcast.id) { it.copy(sound = if (cleaned == "none") null else cleaned) }
-                openNoticeEditor(player, BulletinManager.notices.find { it.id == broadcast.id }!!)
+                updateNotice(notice.id) { it.copy(sound = cleaned.ifBlank { null }) }
+                openNoticeEditor(player, BulletinManager.notices.find { it.id == notice.id }!!)
             }
         }, 3, 1)
 
@@ -204,19 +202,19 @@ object BulletinGUI {
         pane.addItem(GuiItem(ItemStack(Material.COMPASS).apply {
             itemMeta = itemMeta.apply { 
                 displayName(miniMessage.deserialize("<yellow>期限設定 (UNIXミリ秒)</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${broadcast.expiresAt ?: "なし"}</gray>")))
+                lore(listOf(miniMessage.deserialize("<gray>現在: ${notice.expiresAt ?: "なし"}</gray>")))
             }
         }) {
             BookInputHandler.requestInput(
                 player, 
                 "期限 (UNIXミリ秒)", 
-                "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。\n'none' で無期限になります。\n(現在の時刻: ${System.currentTimeMillis()})",
-                broadcast.expiresAt?.toString() ?: "none"
+                "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。\n内容を空にして署名すると無期限になります。\n(現在の時刻: ${System.currentTimeMillis()})",
+                notice.expiresAt?.toString() ?: ""
             ) { input ->
                 val cleaned = input.trim()
-                val time = if (cleaned == "none") null else cleaned.toLongOrNull()
-                updateNotice(broadcast.id) { it.copy(expiresAt = time) }
-                openNoticeEditor(player, BulletinManager.notices.find { it.id == broadcast.id }!!)
+                val time = cleaned.ifBlank { null }?.toLongOrNull()
+                updateNotice(notice.id) { it.copy(expiresAt = time) }
+                openNoticeEditor(player, BulletinManager.notices.find { it.id == notice.id }!!)
             }
         }, 4, 1)
 
@@ -225,19 +223,19 @@ object BulletinGUI {
             itemMeta = itemMeta.apply { 
                 displayName(miniMessage.deserialize("<yellow>ターゲットグループ設定</yellow>"))
                 lore(listOf(
-                    miniMessage.deserialize("<gray>現在: ${broadcast.targetGroups.joinToString(", ").ifEmpty { "全員" }}</gray>"),
+                    miniMessage.deserialize("<gray>現在: ${notice.targetGroups.joinToString(", ").ifEmpty { "全員" }}</gray>"),
                     miniMessage.deserialize("<gray>クリックしてGUIで選択</gray>")
                 ))
             }
         }) {
-            openTargetGroupsEditor(player, broadcast.id, "notice")
+            openTargetGroupsEditor(player, notice.id, "notice")
         }, 5, 1)
 
         // Delete
         pane.addItem(GuiItem(ItemStack(Material.BARRIER).apply {
             itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("<red>削除する</red>")) }
         }) {
-            BulletinManager.notices.removeIf { it.id == broadcast.id }
+            BulletinManager.notices.removeIf { it.id == notice.id }
             BulletinManager.save()
             BulletinManager.refreshTimers()
             openNoticesMenu(player)
@@ -381,11 +379,11 @@ object BulletinGUI {
             BookInputHandler.requestInput(
                 player, 
                 "効果音ID", 
-                "告知時に流す効果音のIDを入力してください。\n'none' で無効になります。",
-                survey.sound ?: "none"
+                "告知時に流す効果音のIDを入力してください。\n内容を空にして署名すると無効になります。",
+                survey.sound ?: ""
             ) { input ->
                 val cleaned = input.trim()
-                updateSurvey(survey.id) { it.copy(sound = if (cleaned == "none") null else cleaned) }
+                updateSurvey(survey.id) { it.copy(sound = cleaned.ifBlank { null }) }
                 openSurveyEditor(player, BulletinManager.surveys.find { it.id == survey.id }!!)
             }
         }, 3, 2)
@@ -400,11 +398,11 @@ object BulletinGUI {
             BookInputHandler.requestInput(
                 player, 
                 "期限 (UNIXミリ秒)", 
-                "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。\n'none' で無期限になります。\n(現在の時刻: ${System.currentTimeMillis()})",
-                survey.expiresAt?.toString() ?: "none"
+                "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。\n内容を空にして署名すると無期限になります。\n(現在の時刻: ${System.currentTimeMillis()})",
+                survey.expiresAt?.toString() ?: ""
             ) { input ->
                 val cleaned = input.trim()
-                val time = if (cleaned == "none") null else cleaned.toLongOrNull()
+                val time = cleaned.ifBlank { null }?.toLongOrNull()
                 updateSurvey(survey.id) { it.copy(expiresAt = time) }
                 openSurveyEditor(player, BulletinManager.surveys.find { it.id == survey.id }!!)
             }
@@ -422,6 +420,17 @@ object BulletinGUI {
         }) {
             openTargetGroupsEditor(player, survey.id, "survey")
         }, 1, 2)
+
+        // Discord Export Button
+        pane.addItem(GuiItem(ItemStack(Material.DISPENSER).apply {
+            itemMeta = itemMeta.apply { 
+                displayName(miniMessage.deserialize("<aqua>結果をDiscordに送信</aqua>"))
+                lore(listOf(miniMessage.deserialize("<gray>現在の回答結果をCSV形式で送信します</gray>")))
+            }
+        }) {
+            SurveyManager.exportResultsToDiscord(player, survey.id)
+            player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
+        }, 6, 2)
 
         // Questions Editor Button
         pane.addItem(GuiItem(ItemStack(Material.BOOK).apply {
