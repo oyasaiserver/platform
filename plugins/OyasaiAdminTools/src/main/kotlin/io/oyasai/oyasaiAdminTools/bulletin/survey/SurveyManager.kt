@@ -294,27 +294,18 @@ object SurveyManager {
                     return@Runnable
                 }
 
-                // Generate CSV
-                val csvContent = StringBuilder()
-
-                // Header
+                // Prepare data for CSV
                 val headers = mutableListOf("Timestamp", "UUID", "Name")
-                survey.questions.forEachIndexed { i, q -> headers.add("Q${i+1}: ${q.text}") }
-                csvContent.append(headers.joinToString(",") { "\"${it.replace("\"", "\"\"")}\"" }).append("\n")
+                headers.addAll(survey.questions.mapIndexed { i, q -> "Q${i+1}: ${q.text}" })
 
-                results.forEach { result ->
-                    val row = mutableListOf<String>()
-                    row.add(result.timestamp.toString())
-                    row.add(result.uuid)
-                    row.add(result.name)
-
-                    val answers = result.answers
-                    survey.questions.forEachIndexed { i, _ ->
-                        val answer = answers.getOrNull(i) ?: ""
-                        row.add(answer)
-                    }
-                    csvContent.append(row.joinToString(",") { "\"${it.replace("\"", "\"\"")}\"" }).append("\n")
+                val rows = results.map { result ->
+                    val row = mutableListOf(result.timestamp.toString(), result.uuid, result.name)
+                    row.addAll(survey.questions.indices.map { i -> result.answers.getOrNull(i) ?: "" })
+                    row
                 }
+
+                // Generate CSV using utility
+                val csvContent = io.oyasai.oyasaiAdminTools.utils.CSVUtils.createCsv(headers, rows)
 
                 val client = WebhookClient.withUrl(webhookUrl)
 
