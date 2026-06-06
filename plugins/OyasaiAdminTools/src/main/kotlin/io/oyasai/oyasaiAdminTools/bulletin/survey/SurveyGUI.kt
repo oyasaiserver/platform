@@ -11,20 +11,16 @@ import io.oyasai.oyasaiAdminTools.bulletin.survey.models.QuestionType
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Survey
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinGUIUtils
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.minimessage.MiniMessage
+import io.oyasai.oyasaiAdminTools.utils.MMUtils.mm
+import io.oyasai.oyasaiAdminTools.utils.MMUtils.msg
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import java.text.SimpleDateFormat
 import java.util.*
 
 object SurveyGUI {
-    private val miniMessage = MiniMessage.miniMessage()
-    private val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
-
     fun openMenu(player: Player) {
         val gui = ChestGui(6, "アンケート一覧")
         gui.setOnTopClick { it.isCancelled = true }
@@ -34,17 +30,17 @@ object SurveyGUI {
         val items = SurveyManager.surveys.map { survey ->
             val item = ItemStack(if (survey.enabled) Material.BOOK else Material.ENCHANTED_BOOK)
             val meta = item.itemMeta
-            meta.displayName(miniMessage.deserialize("<yellow>ID: ${survey.id}</yellow>"))
+            meta.displayName("<yellow>ID: ${survey.id}</yellow>".mm())
             val lore = mutableListOf(
-                miniMessage.deserialize("<gray>タイトル: ${survey.title}</gray>"),
-                miniMessage.deserialize("<gray>状態: </gray>${if (survey.enabled) "<green>有効" else "<red>無効"}")
+                "<gray>タイトル: ${survey.title}</gray>".mm(),
+                "<gray>状態: </gray>${if (survey.enabled) "<green>有効" else "<red>無効"}".mm()
             )
-            lore.add(miniMessage.deserialize("<gray>回答者数: </gray><yellow>${survey.respondedPlayers.size}名</yellow>"))
-            survey.expiresAt?.let { lore.add(miniMessage.deserialize("<gray>期限: </gray><aqua>${dateFormat.format(Date(it))}</aqua>")) }
+            lore.add("<gray>回答者数: </gray><yellow>${survey.respondedPlayers.size}名</yellow>".mm())
+            survey.expiresAt?.let { lore.add("<gray>期限: </gray><aqua>${BulletinGUIUtils.dateFormat.format(Date(it))}</aqua>".mm()) }
             
-            lore.add(Component.empty())
-            lore.add(miniMessage.deserialize("<yellow>左クリック: 詳細編集</yellow>"))
-            lore.add(miniMessage.deserialize("<aqua>右クリック: 有効/無効の切替</aqua>"))
+            lore.add(net.kyori.adventure.text.Component.empty())
+            lore.add("<yellow>左クリック: 詳細編集</yellow>".mm())
+            lore.add("<aqua>右クリック: 有効/無効の切替</aqua>".mm())
             
             meta.lore(lore)
             item.itemMeta = meta
@@ -99,7 +95,7 @@ object SurveyGUI {
             "告知間隔 (秒)", "告知を流す間隔を秒単位で入力してください。",
             "survey:${survey.id}:broadcastInterval"
         ) { input ->
-            val sec = input.trim().toLongOrNull() ?: return@createSettingItem
+            val sec = input.trim().toLongOrNull() ?: run { player.msg("<red>数字を入力してください。</red>"); return@createSettingItem }
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(broadcastInterval = sec) }
             openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 3, 1)
@@ -111,7 +107,7 @@ object SurveyGUI {
             "survey:${survey.id}:maxResponsesRewards"
         ) { input ->
             val parts = input.trim().split(Regex("\\s+"))
-            val resp = parts.getOrNull(0)?.toIntOrNull() ?: return@createSettingItem
+            val resp = parts.getOrNull(0)?.toIntOrNull() ?: run { player.msg("<red>無効な入力です。</red>"); return@createSettingItem }
             val rew = parts.getOrNull(1)?.toIntOrNull() ?: resp
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(maxResponses = resp, maxRewards = rew) }
             openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
@@ -156,7 +152,12 @@ object SurveyGUI {
             "期限 (UNIXミリ秒)", "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。",
             "survey:${survey.id}:expiresAt"
         ) { input ->
-            val time = input.trim().ifBlank { null }?.toLongOrNull()
+            val cleaned = input.trim()
+            if (cleaned.isNotEmpty() && cleaned.toLongOrNull() == null) {
+                player.msg("<red>無効なUNIXタイムスタンプです。</red>")
+                return@createSettingItem
+            }
+            val time = cleaned.ifBlank { null }?.toLongOrNull()
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(expiresAt = time) }
             openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 2, 2)
@@ -164,10 +165,10 @@ object SurveyGUI {
         // Groups
         pane.addItem(GuiItem(ItemStack(Material.WHITE_BANNER).apply {
             itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>ターゲットグループ設定</yellow>"))
+                displayName("<yellow>ターゲットグループ設定</yellow>".mm())
                 lore(listOf(
-                    miniMessage.deserialize("<gray>現在: ${survey.targetGroups.joinToString(", ").ifEmpty { "全員" }}</gray>"),
-                    miniMessage.deserialize("<gray>クリックしてGUIで選択</gray>")
+                    "<gray>現在: ${survey.targetGroups.joinToString(", ").ifEmpty { "全員" }}</gray>".mm(),
+                    "<gray>クリックしてGUIで選択</gray>".mm()
                 ))
             }
         }) {
@@ -183,8 +184,8 @@ object SurveyGUI {
         // Discord Export Button
         pane.addItem(GuiItem(ItemStack(Material.DISPENSER).apply {
             itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<aqua>結果をDiscordに送信</aqua>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在の回答結果をCSV形式で送信します</gray>")))
+                displayName("<aqua>結果をDiscordに送信</aqua>".mm())
+                lore(listOf("<gray>現在の回答結果をCSV形式で送信します</gray>".mm()))
             }
         }) {
             SurveyManager.exportResultsToDiscord(player, survey.id)
@@ -193,24 +194,31 @@ object SurveyGUI {
 
         // Questions Editor Button
         pane.addItem(GuiItem(ItemStack(Material.BOOK).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("<gold>質問の管理</gold>")) }
+            itemMeta = itemMeta.apply { displayName("<gold>質問の管理</gold>".mm()) }
         }) {
             openQuestionsEditor(player, survey)
         }, 4, 2)
 
         // Delete
         pane.addItem(GuiItem(ItemStack(Material.BARRIER).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("<red>削除する</red>")) }
+            itemMeta = itemMeta.apply { displayName("<red>削除する</red>".mm()) }
         }) {
-            SurveyManager.surveys.removeIf { it.id == survey.id }
-            SurveyManager.save()
-            SurveyManager.refreshTimers()
-            openMenu(player)
+            BulletinGUIUtils.openConfirmationGUI(
+                player, "削除の確認", survey.id,
+                {
+                    SurveyManager.surveys.removeIf { it.id == survey.id }
+                    SurveyManager.save()
+                    SurveyManager.refreshTimers()
+                    openMenu(player)
+                    player.msg("<green>削除しました。</green>")
+                },
+                { openEditor(player, survey) }
+            )
         }, 7, 2)
 
         // Back
         pane.addItem(GuiItem(ItemStack(Material.ARROW).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("戻る")) }
+            itemMeta = itemMeta.apply { displayName("戻る".mm()) }
         }) { openMenu(player) }, 8, 3)
 
         gui.addPane(Slot.fromXY(0, 0), pane)
@@ -225,22 +233,28 @@ object SurveyGUI {
         val items = survey.questions.mapIndexed { idx, q ->
             val item = ItemStack(Material.PAPER)
             val meta = item.itemMeta
-            meta.displayName(miniMessage.deserialize("<yellow>Q${idx+1}: ${q.text}</yellow>"))
+            meta.displayName("<yellow>Q${idx+1}: ${q.text}</yellow>".mm())
             meta.lore(listOf(
-                miniMessage.deserialize("<gray>タイプ: ${q.type}</gray>"),
-                miniMessage.deserialize("<gray>選択肢: ${q.options.joinToString(", ")}</gray>"),
-                Component.empty(),
-                miniMessage.deserialize("<red>左クリック: 削除</red>"),
-                miniMessage.deserialize("<yellow>右クリック: 編集</yellow>")
+                "<gray>タイプ: ${q.type}</gray>".mm(),
+                "<gray>選択肢: ${q.options.joinToString(", ")}</gray>".mm(),
+                net.kyori.adventure.text.Component.empty(),
+                "<red>左クリック: 削除</red>".mm(),
+                "<yellow>右クリック: 編集</yellow>".mm()
             ))
             item.itemMeta = meta
             GuiItem(item) { event ->
                 if (event.isLeftClick) {
-                    BulletinManagerUtils.updateSurvey(survey.id) { s ->
-                        val newQs = s.questions.toMutableList().apply { removeAt(idx) }
-                        s.copy(questions = newQs)
-                    }
-                    openQuestionsEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+                    BulletinGUIUtils.openConfirmationGUI(
+                        player, "質問削除", "Q${idx+1}",
+                        {
+                            BulletinManagerUtils.updateSurvey(survey.id) { s ->
+                                val newQs = s.questions.toMutableList().apply { removeAt(idx) }
+                                s.copy(questions = newQs)
+                            }
+                            openQuestionsEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+                        },
+                        { openQuestionsEditor(player, survey) }
+                    )
                 } else if (event.isRightClick) {
                     openQuestionDetailEditor(player, survey, idx)
                 }
@@ -250,7 +264,7 @@ object SurveyGUI {
 
         val actions = StaticPane(9, 1)
         actions.addItem(GuiItem(ItemStack(Material.NETHER_STAR).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("<green>質問を追加</green>")) }
+            itemMeta = itemMeta.apply { displayName("<green>質問を追加</green>".mm()) }
         }) {
             BulletinManagerUtils.updateSurvey(survey.id) { s ->
                 val newQs = s.questions.toMutableList().apply { add(Question(text = "新しい質問", type = QuestionType.CLICK_TO_ANSWER)) }
@@ -259,7 +273,7 @@ object SurveyGUI {
             openQuestionsEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 4, 0)
         actions.addItem(GuiItem(ItemStack(Material.ARROW).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("戻る")) }
+            itemMeta = itemMeta.apply { displayName("戻る".mm()) }
         }) { openEditor(player, survey) }, 8, 0)
 
         gui.addPane(Slot.fromXY(0, 0), pane)
@@ -286,8 +300,8 @@ object SurveyGUI {
         // Type
         pane.addItem(GuiItem(ItemStack(Material.REPEATER).apply {
             itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>タイプ切り替え</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${q.type}</gray>"), miniMessage.deserialize("<gray>クリックで次へ</gray>")))
+                displayName("<yellow>タイプ切り替え</yellow>".mm())
+                lore(listOf("<gray>現在: ${q.type}</gray>".mm(), "<gray>クリックで次へ</gray>".mm()))
             }
         }) {
             val nextType = QuestionType.entries[(q.type.ordinal + 1) % QuestionType.entries.size]
@@ -307,7 +321,7 @@ object SurveyGUI {
         }, 6, 1)
 
         pane.addItem(GuiItem(ItemStack(Material.ARROW).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("戻る")) }
+            itemMeta = itemMeta.apply { displayName("戻る".mm()) }
         }) { openQuestionsEditor(player, survey) }, 8, 2)
 
         gui.addPane(Slot.fromXY(0, 0), pane)

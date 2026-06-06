@@ -9,20 +9,16 @@ import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.bulletin.announcement.models.Announcement
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinGUIUtils
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.minimessage.MiniMessage
+import io.oyasai.oyasaiAdminTools.utils.MMUtils.mm
+import io.oyasai.oyasaiAdminTools.utils.MMUtils.msg
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import java.text.SimpleDateFormat
 import java.util.*
 
 object AnnouncementGUI {
-    private val miniMessage = MiniMessage.miniMessage()
-    private val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
-
     fun openMenu(player: Player) {
         val gui = ChestGui(6, "お知らせ一覧")
         gui.setOnTopClick { it.isCancelled = true }
@@ -32,18 +28,18 @@ object AnnouncementGUI {
         val items = AnnouncementManager.announcements.map { announcement ->
             val item = ItemStack(if (announcement.enabled) Material.LIME_STAINED_GLASS_PANE else Material.RED_STAINED_GLASS_PANE)
             val meta = item.itemMeta
-            meta.displayName(miniMessage.deserialize("<yellow>ID: ${announcement.id}</yellow>"))
+            meta.displayName("<yellow>ID: ${announcement.id}</yellow>".mm())
             val lore = mutableListOf(
-                miniMessage.deserialize("<gray>内容: </gray><white>${announcement.message}</white>"),
-                miniMessage.deserialize("<gray>間隔: ${announcement.interval}s</gray>"),
-                miniMessage.deserialize("<gray>状態: </gray>${if (announcement.enabled) "<green>有効" else "<red>無効"}")
+                "<gray>内容: </gray><white>${announcement.message}</white>".mm(),
+                "<gray>間隔: ${announcement.interval}s</gray>".mm(),
+                "<gray>状態: </gray>${if (announcement.enabled) "<green>有効" else "<red>無効"}".mm()
             )
-            announcement.expiresAt?.let { lore.add(miniMessage.deserialize("<gray>期限: </gray><aqua>${dateFormat.format(Date(it))}</aqua>")) }
-            if (announcement.targetGroups.isNotEmpty()) lore.add(miniMessage.deserialize("<gray>対象: </gray><white>${announcement.targetGroups.joinToString(", ")}</white>"))
+            announcement.expiresAt?.let { lore.add("<gray>期限: </gray><aqua>${BulletinGUIUtils.dateFormat.format(Date(it))}</aqua>".mm()) }
+            if (announcement.targetGroups.isNotEmpty()) lore.add("<gray>対象: </gray><white>${announcement.targetGroups.joinToString(", ")}</white>".mm())
             
-            lore.add(Component.empty())
-            lore.add(miniMessage.deserialize("<yellow>左クリック: 詳細編集</yellow>"))
-            lore.add(miniMessage.deserialize("<aqua>右クリック: 有効/無効の切替</aqua>"))
+            lore.add(net.kyori.adventure.text.Component.empty())
+            lore.add("<yellow>左クリック: 詳細編集</yellow>".mm())
+            lore.add("<aqua>右クリック: 有効/無効の切替</aqua>".mm())
             
             meta.lore(lore)
             item.itemMeta = meta
@@ -88,7 +84,7 @@ object AnnouncementGUI {
             "間隔 (秒)", "放送する間隔を秒単位の数字で入力してください。",
             "announcement:${announcement.id}:interval"
         ) { input ->
-            val sec = input.trim().toLongOrNull() ?: return@createSettingItem
+            val sec = input.trim().toLongOrNull() ?: run { player.msg("<red>数字を入力してください。</red>"); return@createSettingItem }
             BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(interval = sec) }
             openEditor(player, AnnouncementManager.announcements.find { it.id == announcement.id }!!)
         }, 2, 1)
@@ -110,7 +106,12 @@ object AnnouncementGUI {
             "期限 (UNIXミリ秒)", "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。",
             "announcement:${announcement.id}:expiresAt"
         ) { input ->
-            val time = input.trim().ifBlank { null }?.toLongOrNull()
+            val cleaned = input.trim()
+            if (cleaned.isNotEmpty() && cleaned.toLongOrNull() == null) {
+                player.msg("<red>無効なUNIXタイムスタンプです。</red>")
+                return@createSettingItem
+            }
+            val time = cleaned.ifBlank { null }?.toLongOrNull()
             BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(expiresAt = time) }
             openEditor(player, AnnouncementManager.announcements.find { it.id == announcement.id }!!)
         }, 4, 1)
@@ -118,10 +119,10 @@ object AnnouncementGUI {
         // Groups
         pane.addItem(GuiItem(ItemStack(Material.WHITE_BANNER).apply {
             itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>ターゲットグループ設定</yellow>"))
+                displayName("<yellow>ターゲットグループ設定</yellow>".mm())
                 lore(listOf(
-                    miniMessage.deserialize("<gray>現在: ${announcement.targetGroups.joinToString(", ").ifEmpty { "全員" }}</gray>"),
-                    miniMessage.deserialize("<gray>クリックしてGUIで選択</gray>")
+                    "<gray>現在: ${announcement.targetGroups.joinToString(", ").ifEmpty { "全員" }}</gray>".mm(),
+                    "<gray>クリックしてGUIで選択</gray>".mm()
                 ))
             }
         }) {
@@ -136,17 +137,24 @@ object AnnouncementGUI {
 
         // Delete
         pane.addItem(GuiItem(ItemStack(Material.BARRIER).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("<red>削除する</red>")) }
+            itemMeta = itemMeta.apply { displayName("<red>削除する</red>".mm()) }
         }) {
-            AnnouncementManager.announcements.removeIf { it.id == announcement.id }
-            AnnouncementManager.save()
-            AnnouncementManager.refreshTimers()
-            openMenu(player)
+            BulletinGUIUtils.openConfirmationGUI(
+                player, "削除の確認", announcement.id,
+                {
+                    AnnouncementManager.announcements.removeIf { it.id == announcement.id }
+                    AnnouncementManager.save()
+                    AnnouncementManager.refreshTimers()
+                    openMenu(player)
+                    player.msg("<green>削除しました。</green>")
+                },
+                { openEditor(player, announcement) }
+            )
         }, 7, 1)
 
         // Back
         pane.addItem(GuiItem(ItemStack(Material.ARROW).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("戻る")) }
+            itemMeta = itemMeta.apply { displayName("戻る".mm()) }
         }) { openMenu(player) }, 8, 2)
 
         gui.addPane(Slot.fromXY(0, 0), pane)
