@@ -5,6 +5,7 @@ website: "https://github.com/OyasaiServer"
 main: icu.oyasai.utilities.Main
 api-version: "1.21"
 version: "0.1.0"
+softdepend: [Veinminer]
 commands:
   orerepopreload:
     description: "OreReappearsのconfigリロードコマンド"
