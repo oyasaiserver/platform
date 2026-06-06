@@ -7,6 +7,8 @@ import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Question
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.QuestionType
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Survey
+import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
+import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTaskRegistry
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTimerHandler
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.PermsUtils
@@ -20,18 +22,17 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
-import org.bukkit.scheduler.BukkitTask
 import java.util.UUID
 
 object SurveyManager {
     private val plugin = OyasaiAdminTools.plugin
     private val miniMessage = MiniMessage.miniMessage()
     private val plainSerializer = PlainTextComponentSerializer.plainText()
+    private val taskRegistry = BulletinTaskRegistry()
     val surveyBookKey = org.bukkit.NamespacedKey(plugin, "survey_book")
 
     var surveys = mutableListOf<Survey>()
     val surveyBroadcastHistory = mutableListOf<String>()
-    private val tasks = mutableListOf<BukkitTask>()
     private val playerProgress = mutableMapOf<UUID, SurveyProgress>()
 
     fun load() {
@@ -55,12 +56,8 @@ object SurveyManager {
                 sound = survey.sound,
                 expiresAt = survey.expiresAt,
                 onExpire = {
-                    val target = surveys.find { it.id == survey.id }
-                    if (target != null) {
-                        surveys[surveys.indexOf(target)] = target.copy(enabled = false)
-                        save()
-                        plugin.logger.info("Survey ${survey.id} has expired and was disabled.")
-                    }
+                    BulletinManagerUtils.updateSurvey(survey.id) { it.copy(enabled = false) }
+                    plugin.logger.info("Survey ${survey.id} has expired and was disabled.")
                 },
                 onTick = {
                     surveyBroadcastHistory.add(survey.id)
@@ -71,7 +68,7 @@ object SurveyManager {
                     responseCount < survey.maxResponses
                 }
             )
-            tasks.add(task)
+            taskRegistry.register(task)
         }
     }
 
@@ -93,8 +90,7 @@ object SurveyManager {
     }
 
     fun stopAll() {
-        tasks.forEach { it.cancel() }
-        tasks.clear()
+        taskRegistry.cancelAll()
     }
 
     fun reload() {

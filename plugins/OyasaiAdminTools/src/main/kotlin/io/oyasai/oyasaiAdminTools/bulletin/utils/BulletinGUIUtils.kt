@@ -149,10 +149,11 @@ object BulletinGUIUtils {
         sessionId: String,
         onUpdate: (String) -> Unit
     ): GuiItem {
+        val displayValue = if (currentValue.isBlank()) "<gray>なし</gray>" else currentValue
         val item = ItemStack(material).apply {
             itemMeta = itemMeta.apply {
                 displayName("<yellow>$displayName</yellow>".mm())
-                lore(listOf("<gray>現在: $currentValue</gray>".mm()))
+                lore(listOf("<gray>現在: </gray><white>$displayValue</white>".mm()))
             }
         }
 

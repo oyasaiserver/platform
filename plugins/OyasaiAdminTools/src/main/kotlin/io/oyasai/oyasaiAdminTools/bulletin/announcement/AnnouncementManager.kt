@@ -2,15 +2,16 @@ package io.oyasai.oyasaiAdminTools.bulletin.announcement
 
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import io.oyasai.oyasaiAdminTools.bulletin.announcement.models.Announcement
+import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
+import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTaskRegistry
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTimerHandler
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
-import org.bukkit.scheduler.BukkitTask
 
 object AnnouncementManager {
     private val plugin = OyasaiAdminTools.plugin
+    private val taskRegistry = BulletinTaskRegistry()
 
     var announcements = mutableListOf<Announcement>()
-    private val tasks = mutableListOf<BukkitTask>()
 
     fun load() {
         stopAll()
@@ -33,21 +34,16 @@ object AnnouncementManager {
                 sound = announcement.sound,
                 expiresAt = announcement.expiresAt,
                 onExpire = {
-                    val target = announcements.find { it.id == announcement.id }
-                    if (target != null) {
-                        announcements[announcements.indexOf(target)] = target.copy(enabled = false)
-                        save()
-                        plugin.logger.info("Announcement ${announcement.id} has expired and was disabled.")
-                    }
+                    BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(enabled = false) }
+                    plugin.logger.info("Announcement ${announcement.id} has expired and was disabled.")
                 }
             )
-            tasks.add(task)
+            taskRegistry.register(task)
         }
     }
 
     fun stopAll() {
-        tasks.forEach { it.cancel() }
-        tasks.clear()
+        taskRegistry.cancelAll()
     }
 
     fun reload() {
