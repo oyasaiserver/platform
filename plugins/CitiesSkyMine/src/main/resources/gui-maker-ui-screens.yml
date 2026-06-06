@@ -1,0 +1,183 @@
+schema: 1
+fallback-glass: GRAY_STAINED_GLASS_PANE
+restore-slots: [47, 48, 50, 51]
+
+screens:
+  context:
+    default-glass: BLUE_STAINED_GLASS_PANE
+    slots:
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      9: {label: "表示カテゴリ", material: CYAN_CANDLE}
+      10: {label: "名前を設定", material: NAME_TAG}
+      11: {label: "ロアを追加", material: BOOK}
+      12: {label: "ロア編集", material: WRITABLE_BOOK}
+      13: {label: "エンチャント切替", material: ENCHANTED_BOOK}
+      18: {label: "条件と動作カテゴリ", material: BLUE_CANDLE}
+      19: {label: "権限を設定", material: IRON_DOOR}
+      20: {label: "アクションを追加", material: LIME_DYE}
+      21: {label: "アクション管理", material: COMMAND_BLOCK}
+      27: {label: "危険操作カテゴリ", material: RED_CANDLE}
+      28: {label: "スロットをクリア", material: BARRIER}
+      36: {label: "お気に入りカテゴリ", material: ORANGE_CANDLE}
+      37: {label: "お気に入りを管理", material: PAPER}
+
+  action_type:
+    default-glass: BLUE_STAINED_GLASS_PANE
+    slots:
+      0: {label: "アクション追加 (情報)", material: LIME_DYE}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      9: {label: "メニュー系カテゴリ", material: ENDER_CHEST}
+      10: {label: "メニューを開く", material: ENDER_CHEST}
+      11: {label: "ポップアップ", material: CHORUS_FRUIT}
+      12: {label: "メニューを閉じる", material: OAK_DOOR}
+      18: {label: "コマンド系カテゴリ", material: COMMAND_BLOCK}
+      19: {label: "プレイヤーコマンド", material: COMMAND_BLOCK}
+      20: {label: "コンソールコマンド", material: COMPARATOR}
+      21: {label: "OPコマンド", material: NETHER_STAR}
+      22: {label: "コマンドを提案", material: BOOK}
+      27: {label: "メッセージ系カテゴリ", material: PAPER}
+      28: {label: "メッセージ送信", material: PAPER}
+      29: {label: "ブロードキャスト", material: BEACON}
+      30: {label: "URL", material: MAP}
+      31: {label: "チャットペースト", material: WRITABLE_BOOK}
+      36: {label: "サウンド系カテゴリ", material: NOTE_BLOCK}
+      37: {label: "サウンドを再生", material: NOTE_BLOCK}
+
+  action_manage:
+    default-glass: PURPLE_STAINED_GLASS_PANE
+    slots:
+      0: {label: "アクション管理 (情報)", material: COMMAND_BLOCK}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      37: {label: "アクションを追加", material: LIME_DYE}
+      43: {label: "全アクション削除", material: TNT}
+
+  action_edit:
+    default-glass: PURPLE_STAINED_GLASS_PANE
+    slots:
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      10: {label: "値を編集", material: WRITABLE_BOOK}
+      12: {label: "上へ移動", material: ARROW}
+      14: {label: "下へ移動", material: ARROW}
+      22: {label: "現在の値", material: BOOK}
+      37: {label: "アクションを追加", material: COMMAND_BLOCK}
+      43: {label: "このアクションを削除", material: BARRIER}
+
+  lore_manage:
+    default-glass: YELLOW_STAINED_GLASS_PANE
+    slots:
+      0: {label: "ロア編集 (情報)", material: WRITABLE_BOOK}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      37: {label: "ロアを追加", material: BOOK}
+      43: {label: "ロアを全削除", material: TNT}
+
+  lore_edit:
+    default-glass: YELLOW_STAINED_GLASS_PANE
+    slots:
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      10: {label: "本文を編集", material: WRITABLE_BOOK}
+      12: {label: "上へ移動", material: ARROW}
+      14: {label: "下へ移動", material: ARROW}
+      37: {label: "ロアを追加", material: BOOK}
+      43: {label: "この行を削除", material: BARRIER}
+
+  permission:
+    default-glass: LIGHT_BLUE_STAINED_GLASS_PANE
+    slots:
+      0: {label: "権限を設定 (情報)", material: IRON_DOOR}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      9: {label: "プレイヤーランク", material: EMERALD}
+      18: {label: "建築ランク / 特別ロール", material: BRICKS}
+      27: {label: "スタッフ / その他", material: NETHER_STAR}
+      40: {label: "権限をクリア", material: BARRIER}
+      42: {label: "手入力", material: WRITABLE_BOOK}
+
+  sound_category:
+    default-glass: LIGHT_BLUE_STAINED_GLASS_PANE
+    slots:
+      0: {label: "効果音 (情報)", material: NOTE_BLOCK}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      10: {label: "ui", material: NOTE_BLOCK}
+      11: {label: "entity", material: PLAYER_HEAD}
+      12: {label: "block", material: STONE}
+      13: {label: "item", material: CHEST}
+      14: {label: "music", material: JUKEBOX}
+      15: {label: "ambient", material: AMETHYST_BLOCK}
+      16: {label: "weather", material: WATER_BUCKET}
+      19: {label: "event", material: BELL}
+      37: {label: "音量 -0.25", material: REDSTONE_TORCH}
+      39: {label: "音量", material: NOTE_BLOCK}
+      41: {label: "音量 +0.25", material: TORCH}
+      42: {label: "手入力", material: WRITABLE_BOOK}
+      43: {label: "音量リセット", material: LEVER}
+
+  sound_pick:
+    default-glass: LIGHT_BLUE_STAINED_GLASS_PANE
+    slots:
+      0: {label: "効果音 (情報)", material: NOTE_BLOCK}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      36: {label: "前のページ", material: ARROW}
+      37: {label: "音量 -0.25", material: REDSTONE_TORCH}
+      39: {label: "音量", material: NOTE_BLOCK}
+      40: {label: "カテゴリへ戻る", material: BOOK}
+      41: {label: "音量 +0.25", material: TORCH}
+      42: {label: "手入力", material: WRITABLE_BOOK}
+      43: {label: "音量リセット", material: LEVER}
+      44: {label: "次のページ", material: ARROW}
+
+  color:
+    default-glass: LIGHT_BLUE_STAINED_GLASS_PANE
+    slots:
+      0: {label: "カラー (情報)", material: LIGHT_BLUE_CANDLE}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      10: {label: "黒 &0", material: BLACK_WOOL}
+      11: {label: "濃紺 &1", material: BLUE_WOOL}
+      12: {label: "緑 &2", material: GREEN_WOOL}
+      13: {label: "シアン &3", material: CYAN_WOOL}
+      14: {label: "濃赤 &4", material: RED_WOOL}
+      15: {label: "紫 &5", material: PURPLE_WOOL}
+      16: {label: "金色 &6", material: ORANGE_WOOL}
+      17: {label: "灰色 &7", material: LIGHT_GRAY_WOOL}
+      19: {label: "暗灰 &8", material: GRAY_WOOL}
+      20: {label: "青 &9", material: LIGHT_BLUE_WOOL}
+      21: {label: "黄緑 &a", material: LIME_WOOL}
+      22: {label: "水色 &b", material: CYAN_WOOL}
+      23: {label: "赤 &c", material: PINK_WOOL}
+      24: {label: "ピンク &d", material: MAGENTA_WOOL}
+      25: {label: "黄色 &e", material: YELLOW_WOOL}
+      26: {label: "白 &f", material: WHITE_WOOL}
+      40: {label: "カラーなし / 手動入力", material: PAPER}
+
+  popup_pick:
+    default-glass: PURPLE_STAINED_GLASS_PANE
+    slots:
+      0: {label: "ポップアップ (情報)", material: CHORUS_FRUIT}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      10: {label: "shopindex", material: CHEST}
+      11: {label: "utility", material: CRAFTING_TABLE}
+      12: {label: "channel", material: JUKEBOX}
+      19: {label: "sociallikes", material: HEART_OF_THE_SEA}
+      20: {label: "carbuilder", material: MINECART}
+      21: {label: "links", material: MAP}
+      44: {label: "IDを手入力", material: WRITABLE_BOOK}
+
+  menu_pick:
+    default-glass: LIME_STAINED_GLASS_PANE
+    slots:
+      0: {label: "通常メニュー (情報)", material: ENDER_CHEST}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      44: {label: "IDを手入力", material: WRITABLE_BOOK}
+
+  favorites:
+    default-glass: YELLOW_STAINED_GLASS_PANE
+    slots:
+      0: {label: "お気に入り管理 (情報)", material: GOLD_NUGGET}
+      4: {label: "アイテムプレビュー", material: ITEM_FRAME}
+      37: {label: "お気に入りを追加", material: PAPER}
+      43: {label: "全削除", material: TNT}
+
+  confirm:
+    default-glass: RED_STAINED_GLASS_PANE
+    slots:
+      13: {label: "実行内容", material: TNT}
+      20: {label: "実行する", material: LIME_CONCRETE}
+      24: {label: "キャンセル", material: RED_CONCRETE}
