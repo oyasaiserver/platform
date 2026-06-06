@@ -1,16 +1,15 @@
 package io.oyasai.oyasaiAdminTools.bulletin.survey
 
-import club.minnced.discord.webhook.WebhookClient
-import club.minnced.discord.webhook.send.WebhookEmbed
-import club.minnced.discord.webhook.send.WebhookEmbedBuilder
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Question
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.QuestionType
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Survey
+import io.oyasai.oyasaiAdminTools.bulletin.survey.models.SurveyProgress
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTaskRegistry
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTimerHandler
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
+import io.oyasai.oyasaiAdminTools.utils.MMUtils.mm
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -86,7 +85,7 @@ object SurveyManager {
                 return
             }
         }
-        player.sendMessage(miniMessage.deserialize("<red>現在回答可能な新しいアンケートはありません。</red>"))
+        player.sendMessage("<red>現在回答可能な新しいアンケートはありません。</red>".mm())
     }
 
     fun stopAll() {
@@ -104,28 +103,15 @@ object SurveyManager {
 
     fun getProgress(uuid: UUID): SurveyProgress? = playerProgress[uuid]
 
-    data class SurveyProgress(
-        val surveyId: String,
-        val answers: MutableList<String> = mutableListOf(),
-        var currentQuestionIndex: Int = 0
-    )
-
-    data class SurveyResult(
-        val uuid: String,
-        val name: String,
-        val timestamp: Long,
-        val answers: List<String>
-    )
-
     fun startSurvey(player: Player, surveyId: String) {
         val survey = surveys.find { it.id == surveyId } ?: run {
-            player.sendMessage(miniMessage.deserialize("<red>アンケートが見つかりません。</red>"))
+            player.sendMessage("<red>アンケートが見つかりません。</red>".mm())
             return
         }
 
         val hasAccess = survey.targetGroups.isEmpty() || survey.targetGroups.any { player.hasPermission("group.$it") }
         if (!hasAccess) {
-            player.sendMessage(miniMessage.deserialize("<red>このアンケートに回答する権限がありません。</red>"))
+            player.sendMessage("<red>このアンケートに回答する権限がありません。</red>".mm())
         } else {
             proceedToStartSurvey(player, survey)
         }
@@ -134,7 +120,7 @@ object SurveyManager {
     private fun proceedToStartSurvey(player: Player, survey: Survey) {
         val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
         if (responseCount >= survey.maxResponses) {
-            player.sendMessage(miniMessage.deserialize("<red>このアンケートは既に上限回数（${survey.maxResponses}回）回答済みです。</red>"))
+            player.sendMessage("<red>このアンケートは既に上限回数（${survey.maxResponses}回）回答済みです。</red>".mm())
             return
         }
 
@@ -160,17 +146,17 @@ object SurveyManager {
 
         when (question.type) {
             QuestionType.CLICK_TO_ANSWER -> {
-                player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/anke resume</yellow> か <click:run_command:/anke resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
+                player.sendMessage("<gray>本を閉じてしまった場合は <yellow>/anke resume</yellow> か <click:run_command:/anke resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>".mm())
                 showBookChoice(player, survey, question, index)
             }
             QuestionType.CHAT_CHOICE -> {
                 if (player.name.startsWith(".")) {
                     // Bedrock フォールバック
-                    player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/anke resume</yellow> か <click:run_command:/anke resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
+                    player.sendMessage("<gray>本を閉じてしまった場合は <yellow>/anke resume</yellow> か <click:run_command:/anke resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>".mm())
                     showBookChoice(player, survey, question, index)
                 } else {
                     // Java はチャットでクリックして回答できる
-                    player.sendMessage(miniMessage.deserialize("<gold>[アンケート] ${question.text}</gold>"))
+                    player.sendMessage("<gold>[アンケート] ${question.text}</gold>".mm())
                     val optionsComponent = Component.text()
                     question.options.forEachIndexed { i, option ->
                         val choice = miniMessage.deserialize("<blue><u>[${option}]</u></blue>")
@@ -187,19 +173,19 @@ object SurveyManager {
                 }
 
                 if (hasBook) {
-                    player.sendMessage(miniMessage.deserialize("<yellow>既にアンケート回答用の本を持っています。インベントリを確認してください。</yellow>"))
-                    player.sendMessage(miniMessage.deserialize("<green>質問: ${question.text}</green>"))
+                    player.sendMessage("<yellow>既にアンケート回答用の本を持っています。インベントリを確認してください。</yellow>".mm())
+                    player.sendMessage("<green>質問: ${question.text}</green>".mm())
                 } else {
                     val item = ItemStack(Material.WRITABLE_BOOK)
                     val meta = item.itemMeta as BookMeta
-                    meta.displayName(miniMessage.deserialize("<gold>${survey.title} - 回答用</gold>"))
-                    meta.lore(listOf(miniMessage.deserialize("<gray>内容を記入して「署名」してください。</gray>")))
+                    meta.displayName("<gold>${survey.title} - 回答用</gold>".mm())
+                    meta.lore(listOf("<gray>内容を記入して「署名」してください。</gray>".mm()))
                     meta.persistentDataContainer.set(surveyBookKey, org.bukkit.persistence.PersistentDataType.BYTE, 1.toByte())
                     item.itemMeta = meta
 
                     player.inventory.addItem(item)
-                    player.sendMessage(miniMessage.deserialize("<green>本を付与しました。質問: ${question.text}</green>"))
-                    player.sendMessage(miniMessage.deserialize("<green>回答を記入して署名（Sign）してください。</green>"))
+                    player.sendMessage("<green>本を付与しました。質問: ${question.text}</green>".mm())
+                    player.sendMessage("<green>回答を記入して署名（Sign）してください。</green>".mm())
                 }
             }
         }
@@ -247,7 +233,7 @@ object SurveyManager {
         survey.respondedPlayers[player.uniqueId.toString()] = currentCount + 1
         save()
 
-        player.sendMessage(miniMessage.deserialize("<green>アンケートにご協力ありがとうございました！</green>"))
+        player.sendMessage("<green>アンケートにご協力ありがとうございました！</green>".mm())
 
         val rewardCount = survey.rewardedPlayers.getOrDefault(player.uniqueId.toString(), 0)
         if (rewardCount < survey.maxRewards) {
@@ -258,108 +244,13 @@ object SurveyManager {
             survey.rewardedPlayers[player.uniqueId.toString()] = rewardCount + 1
             save()
         } else {
-            player.sendMessage(miniMessage.deserialize("<gray>報酬は既に上限回数（${survey.maxRewards}回）受け取っているため、今回は付与されません。</gray>"))
+            player.sendMessage("<gray>報酬は既に上限回数（${survey.maxRewards}回）受け取っているため、今回は付与されません。</gray>".mm())
         }
 
         // Log answers
         plugin.logger.info("Player ${player.name} finished survey ${survey.id}: ${progress.answers}")
 
-        saveResult(survey.id, player.uniqueId, player.name, progress.answers)
-        sendDiscordNotification(survey, player, progress.answers)
-    }
-
-    fun exportResultsToDiscord(player: Player, surveyId: String) {
-        val survey = surveys.find { it.id == surveyId } ?: run {
-            player.sendMessage(miniMessage.deserialize("<red>アンケートが見つかりません。</red>"))
-            return
-        }
-
-        val webhookUrl = survey.discordWebhookUrl
-        if (webhookUrl == null || webhookUrl.isBlank()) {
-            player.sendMessage(miniMessage.deserialize("<red>このアンケートにはDiscord Webhookが設定されていません。</red>"))
-            return
-        }
-
-        val file = java.io.File(plugin.dataFolder, "surveys/results_${surveyId}.json")
-        if (!file.exists()) {
-            player.sendMessage(miniMessage.deserialize("<red>収集されたデータがまだありません。</red>"))
-            return
-        }
-
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
-            try {
-                val results: List<SurveyResult> = JsonUtils.fromJson(file.readText())
-                if (results.isEmpty()) {
-                    player.sendMessage(miniMessage.deserialize("<red>収集されたデータが空です。</red>"))
-                    return@Runnable
-                }
-
-                // Prepare data for CSV
-                val headers = mutableListOf("Timestamp", "UUID", "Name")
-                headers.addAll(survey.questions.mapIndexed { i, q -> "Q${i+1}: ${q.text}" })
-
-                val rows = results.map { result ->
-                    val row = mutableListOf(result.timestamp.toString(), result.uuid, result.name)
-                    row.addAll(survey.questions.indices.map { i -> result.answers.getOrNull(i) ?: "" })
-                    row
-                }
-
-                // Generate CSV using utility
-                val csvContent = io.oyasai.oyasaiAdminTools.utils.CSVUtils.createCsv(headers, rows)
-
-                val client = WebhookClient.withUrl(webhookUrl)
-
-                // Send as CSV file
-                client.send("📊 **アンケート結果エクスポート (CSV): ${survey.title}**")
-                client.send(csvContent.toString().toByteArray(), "results_${surveyId}.csv")
-
-                client.close()
-                player.sendMessage(miniMessage.deserialize("<green>データをCSV形式でDiscordに送信しました。</green>"))
-            } catch (e: Exception) {
-                player.sendMessage(miniMessage.deserialize("<red>Discordへの送信に失敗しました: ${e.message}</red>"))
-                plugin.logger.warning("Failed to export results for survey ${surveyId}: ${e.message}")
-                e.printStackTrace()
-            }
-        })
-    }
-
-    private fun sendDiscordNotification(survey: Survey, player: Player, answers: List<String>) {
-        val webhookUrl = survey.discordWebhookUrl ?: return
-        if (webhookUrl.isBlank()) return
-
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
-            try {
-                val client = WebhookClient.withUrl(webhookUrl)
-                val embed = WebhookEmbedBuilder()
-                    .setTitle(WebhookEmbed.EmbedTitle(survey.title, null))
-                    .setDescription("プレイヤー **${player.name}** がアンケートに回答しました。")
-                    .setColor(0x00FF00)
-
-                survey.questions.forEachIndexed { i, q ->
-                    val answer = answers.getOrNull(i) ?: "未回答"
-                    embed.addField(WebhookEmbed.EmbedField(true, q.text, answer))
-                }
-
-                client.send(embed.build())
-                client.close()
-            } catch (e: Exception) {
-                plugin.logger.warning("Failed to send discord notification for survey ${survey.id}: ${e.message}")
-            }
-        })
-    }
-
-    private fun saveResult(surveyId: String, uuid: UUID, name: String, answers: List<String>) {
-        val resultFile = "surveys/results_${surveyId}.json"
-        val results = JsonUtils.readJsonFileSafe(resultFile, mutableListOf<SurveyResult>())
-
-        val newResult = SurveyResult(
-            uuid = uuid.toString(),
-            name = name,
-            timestamp = System.currentTimeMillis(),
-            answers = answers
-        )
-
-        results.add(newResult)
-        JsonUtils.writeJsonFile(resultFile, results)
+        SurveyExporter.saveResult(survey.id, player.uniqueId, player.name, progress.answers)
+        SurveyExporter.sendDiscordNotification(survey, player, progress.answers)
     }
 }

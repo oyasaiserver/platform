@@ -4,6 +4,7 @@ import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
+import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyExporter
 import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyManager
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Survey
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinGUIUtils
@@ -143,7 +144,7 @@ object SurveyEditor {
                 lore(listOf("<gray>現在の回答結果をCSV形式で送信します</gray>".mm()))
             }
         }) {
-            SurveyManager.exportResultsToDiscord(player, survey.id)
+            SurveyExporter.exportResultsToDiscord(player, survey.id)
             player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
         }, 6, 2)
 

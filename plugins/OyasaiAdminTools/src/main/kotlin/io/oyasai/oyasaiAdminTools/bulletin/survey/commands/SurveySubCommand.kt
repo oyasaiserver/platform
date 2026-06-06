@@ -1,5 +1,6 @@
 package io.oyasai.oyasaiAdminTools.bulletin.survey.commands
 
+import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyExporter
 import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyManager
 import io.oyasai.oyasaiAdminTools.bulletin.survey.gui.SurveyBrowser
 import io.oyasai.oyasaiAdminTools.bulletin.survey.gui.SurveyEditor
@@ -69,7 +70,7 @@ object SurveySubCommand {
                     sender.msg("<red>使用法: /bl survey send <ID></red>")
                     return
                 }
-                SurveyManager.exportResultsToDiscord(sender, args[1])
+                SurveyExporter.exportResultsToDiscord(sender, args[1])
             }
             "reload" -> {
                 if (!sender.hasPermission("oyasai.admin")) return

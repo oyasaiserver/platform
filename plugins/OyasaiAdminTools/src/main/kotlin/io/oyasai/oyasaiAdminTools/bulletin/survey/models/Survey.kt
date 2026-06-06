@@ -31,3 +31,16 @@ enum class QuestionType {
     WRITE_IN_BOOK,
     CHAT_CHOICE
 }
+
+data class SurveyProgress(
+    val surveyId: String,
+    val answers: MutableList<String> = mutableListOf(),
+    var currentQuestionIndex: Int = 0
+)
+
+data class SurveyResult(
+    val uuid: String,
+    val name: String,
+    val timestamp: Long,
+    val answers: List<String>
+)
