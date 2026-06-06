@@ -21,13 +21,15 @@ object AnnouncementEditor {
         gui.setOnTopClick { it.isCancelled = true }
         val pane = StaticPane(9, 3)
 
-        // Message
+        // Messages
         pane.addItem(BulletinGUIUtils.createSettingItem(
-            player, Material.WRITABLE_BOOK, "メッセージ変更", announcement.message,
-            "告知メッセージ", "定期放送されるメッセージを入力してください。\nMiniMessage形式が使用可能です。",
-            "announcement:${announcement.id}:message"
+            player, Material.WRITABLE_BOOK, "メッセージ管理", 
+            if (announcement.messages.isEmpty()) "" else "${announcement.messages.size}個登録済み",
+            "メッセージ一覧", "1行につき1つのメッセージを入力してください。\n放送時にランダムで選択されます。",
+            "announcement:${announcement.id}:messages"
         ) { input ->
-            BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(message = input) }
+            val list = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
+            BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(messages = list) }
             open(player, AnnouncementManager.announcements.find { it.id == announcement.id }!!)
         }, 1, 1)
 

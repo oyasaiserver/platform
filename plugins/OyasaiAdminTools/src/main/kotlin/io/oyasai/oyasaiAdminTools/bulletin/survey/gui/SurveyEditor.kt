@@ -32,13 +32,15 @@ object SurveyEditor {
             open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 1, 1)
 
-        // Broadcast Message
+        // Broadcast Messages
         pane.addItem(BulletinGUIUtils.createSettingItem(
-            player, Material.WRITABLE_BOOK, "告知メッセージ変更", survey.broadcastMessage,
-            "告知メッセージ", "開始を促すメッセージを入力してください。",
-            "survey:${survey.id}:broadcastMessage"
+            player, Material.WRITABLE_BOOK, "告知メッセージ管理", 
+            if (survey.broadcastMessages.isEmpty()) "" else "${survey.broadcastMessages.size}個登録済み",
+            "告知メッセージ一覧", "1行につき1つのメッセージを入力してください。\n放送時にランダムで選択されます。",
+            "survey:${survey.id}:broadcastMessages"
         ) { input ->
-            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(broadcastMessage = input) }
+            val list = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
+            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(broadcastMessages = list) }
             open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 2, 1)
 

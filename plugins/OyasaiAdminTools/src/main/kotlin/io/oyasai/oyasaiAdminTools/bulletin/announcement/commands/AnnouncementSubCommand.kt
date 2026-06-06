@@ -37,7 +37,7 @@ object AnnouncementSubCommand {
                     sender.msg("<red>そのIDのお知らせは既に存在します。</red>")
                     return
                 }
-                val newAnnouncement = Announcement(id = id, message = "新しいお知らせ", interval = 300)
+                val newAnnouncement = Announcement(id = id, messages = listOf("新しいお知らせ"), interval = 300)
                 AnnouncementManager.announcements.add(newAnnouncement)
                 AnnouncementManager.save()
                 AnnouncementManager.refreshTimers()

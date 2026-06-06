@@ -51,7 +51,7 @@ object SurveyManager {
         surveys.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { survey ->
             val task = BulletinTimerHandler.startTimer(
                 interval = survey.broadcastInterval,
-                message = survey.broadcastMessage,
+                messages = survey.broadcastMessages,
                 targetGroups = survey.targetGroups,
                 sound = survey.sound,
                 expiresAt = survey.expiresAt,

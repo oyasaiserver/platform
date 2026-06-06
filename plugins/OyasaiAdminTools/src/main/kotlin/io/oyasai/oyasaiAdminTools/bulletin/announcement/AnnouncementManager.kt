@@ -29,7 +29,7 @@ object AnnouncementManager {
         announcements.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { announcement ->
             val task = BulletinTimerHandler.startTimer(
                 interval = announcement.interval,
-                message = announcement.message,
+                messages = announcement.messages,
                 targetGroups = announcement.targetGroups,
                 sound = announcement.sound,
                 expiresAt = announcement.expiresAt,

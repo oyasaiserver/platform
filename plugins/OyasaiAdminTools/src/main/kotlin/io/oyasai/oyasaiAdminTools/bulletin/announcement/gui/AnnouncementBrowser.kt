@@ -28,8 +28,9 @@ object AnnouncementBrowser {
             val item = ItemStack(if (announcement.enabled) Material.LIME_STAINED_GLASS_PANE else Material.RED_STAINED_GLASS_PANE)
             val meta = item.itemMeta
             meta.displayName("<yellow>ID: ${announcement.id}</yellow>".mm())
+            val firstMsg = announcement.messages.firstOrNull() ?: "<gray>なし</gray>"
             val lore = mutableListOf(
-                "<gray>内容: </gray><white>${announcement.message}</white>".mm(),
+                "<gray>内容: </gray><white>$firstMsg</white>".mm(),
                 "<gray>間隔: ${announcement.interval}s</gray>".mm(),
                 "<gray>状態: </gray>${if (announcement.enabled) "<green>有効" else "<red>無効"}".mm()
             )

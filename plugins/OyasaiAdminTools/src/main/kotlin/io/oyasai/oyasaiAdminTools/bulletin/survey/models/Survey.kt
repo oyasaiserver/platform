@@ -5,7 +5,7 @@ import java.util.UUID
 data class Survey(
   val id: String = "",
   val title: String = "",
-  val broadcastMessage: String = "",
+  val broadcastMessages: List<String> = emptyList(),
   val broadcastInterval: Long = 0,
   val questions: List<Question> = emptyList(),
   val rewardCommands: List<String> = emptyList(),

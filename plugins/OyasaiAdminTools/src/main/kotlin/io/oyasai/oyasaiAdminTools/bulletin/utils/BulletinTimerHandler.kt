@@ -12,7 +12,7 @@ object BulletinTimerHandler {
 
     fun startTimer(
         interval: Long,
-        message: String,
+        messages: List<String>,
         targetGroups: List<String>,
         sound: String? = null,
         expiresAt: Long? = null,
@@ -30,12 +30,15 @@ object BulletinTimerHandler {
                     return
                 }
 
+                if (messages.isEmpty()) return
+
                 onTick?.invoke()
                 Bukkit.getOnlinePlayers().forEach { player ->
                     if (playerFilter != null && !playerFilter(player)) return@forEach
 
                     val sendMsg = {
-                        val msg = message.replace("%player%", player.name)
+                        val rawMsg = messages.random()
+                        val msg = rawMsg.replace("%player%", player.name)
                         player.sendMessage(miniMessage.deserialize(msg))
 
                         sound?.let { soundStr ->
