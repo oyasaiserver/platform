@@ -62,6 +62,7 @@ object BulletinCommandExecutor : CommandExecutor, TabCompleter {
                 if (!adminCheck(sender)) return true
                 openMainMenu(sender)
             }
+            // Compatibility or direct access
             else -> {
                 // survey ID
                 if (SurveyManager.surveys.any { it.id == subCommand }) {
@@ -214,7 +215,8 @@ object BulletinCommandExecutor : CommandExecutor, TabCompleter {
                 list.add("gui")
                 list.add("reload")
             }
-            list.addAll(SurveyManager.surveys.map { it.id })
+            // Add survey IDs for quick start (for users)
+            list.addAll(SurveyManager.surveys.filter { it.enabled }.map { it.id })
             return list.filter { it.startsWith(args[0], true) }
         }
 
@@ -236,7 +238,12 @@ object BulletinCommandExecutor : CommandExecutor, TabCompleter {
                             list.add("reload")
                             list.add("send")
                         }
-                        list.addAll(SurveyManager.surveys.map { it.id })
+                        val surveyIds = if (sender.hasPermission("oyasai.admin")) {
+                            SurveyManager.surveys.map { it.id }
+                        } else {
+                            SurveyManager.surveys.filter { it.enabled }.map { it.id }
+                        }
+                        list.addAll(surveyIds)
                         return list.filter { it.startsWith(args[1], true) }
                     }
                     if (args.size == 3 && args[1].equals("send", true) && sender.hasPermission("oyasai.admin")) {

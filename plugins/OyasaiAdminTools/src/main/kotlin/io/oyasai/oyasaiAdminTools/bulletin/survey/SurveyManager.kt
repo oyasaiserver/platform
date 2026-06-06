@@ -7,6 +7,7 @@ import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Question
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.QuestionType
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Survey
+import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTimerHandler
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import net.kyori.adventure.inventory.Book
@@ -47,7 +48,7 @@ object SurveyManager {
         val now = System.currentTimeMillis()
 
         surveys.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { survey ->
-            startTimer(
+            val task = BulletinTimerHandler.startTimer(
                 interval = survey.broadcastInterval,
                 message = survey.broadcastMessage,
                 targetGroups = survey.targetGroups,
@@ -70,59 +71,25 @@ object SurveyManager {
                     responseCount < survey.maxResponses
                 }
             )
+            tasks.add(task)
         }
     }
 
-    private fun startTimer(
-        interval: Long,
-        message: String,
-        targetGroups: List<String>,
-        sound: String? = null,
-        expiresAt: Long? = null,
-        onExpire: (() -> Unit)? = null,
-        onTick: (() -> Unit)? = null,
-        playerFilter: ((org.bukkit.entity.Player) -> Boolean)? = null
-    ) {
-        val taskWrapper = object : Runnable {
-            var task: BukkitTask? = null
+    fun startLastAvailableSurvey(player: Player) {
+        val recentIds = surveyBroadcastHistory.reversed().distinct()
+        for (id in recentIds) {
+            val survey = surveys.find { it.id == id } ?: continue
+            if (!survey.enabled) continue
 
-            override fun run() {
-                if (expiresAt != null && System.currentTimeMillis() > expiresAt) {
-                    onExpire?.invoke()
-                    task?.cancel()
-                    return
-                }
+            val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
+            if (responseCount >= survey.maxResponses) continue
 
-                onTick?.invoke()
-                Bukkit.getOnlinePlayers().forEach { player ->
-                    if (playerFilter != null && !playerFilter(player)) return@forEach
-
-                    val sendMsg = {
-                        val msg = message.replace("%player%", player.name)
-                        player.sendMessage(miniMessage.deserialize(msg))
-
-                        sound?.let { soundStr ->
-                            try {
-                                player.playSound(player.location, soundStr, 1.0f, 1.0f)
-                            } catch (e: Exception) {
-                                // Ignore invalid sound
-                            }
-                        }
-                    }
-
-                    if (targetGroups.isNotEmpty()) {
-                        PermsUtils.hasAnyGroup(player.uniqueId, targetGroups).thenAccept { hasGroup ->
-                            if (hasGroup) Bukkit.getScheduler().runTask(plugin, Runnable { sendMsg() })
-                        }
-                    } else {
-                        sendMsg()
-                    }
-                }
+            if (PermsUtils.hasAnyGroupSync(player.uniqueId, survey.targetGroups)) {
+                startSurvey(player, id)
+                return
             }
         }
-
-        taskWrapper.task = Bukkit.getScheduler().runTaskTimer(plugin, taskWrapper, interval * 20L, interval * 20L)
-        tasks.add(taskWrapper.task!!)
+        player.sendMessage(miniMessage.deserialize("<red>現在回答可能な新しいアンケートはありません。</red>"))
     }
 
     fun stopAll() {
@@ -247,23 +214,6 @@ object SurveyManager {
                 }
             }
         }
-    }
-
-    fun startLastAvailableSurvey(player: Player) {
-        val recentIds = surveyBroadcastHistory.reversed().distinct()
-        for (id in recentIds) {
-            val survey = surveys.find { it.id == id } ?: continue
-            if (!survey.enabled) continue
-
-            val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
-            if (responseCount >= survey.maxResponses) continue
-
-            if (PermsUtils.hasAnyGroupSync(player.uniqueId, survey.targetGroups)) {
-                startSurvey(player, id)
-                return
-            }
-        }
-        player.sendMessage(miniMessage.deserialize("<red>現在回答可能な新しいアンケートはありません。</red>"))
     }
 
     private fun showBookChoice(player: Player, survey: Survey, question: Question, index: Int) {

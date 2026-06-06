@@ -9,7 +9,8 @@ import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Question
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.QuestionType
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Survey
-import io.oyasai.oyasaiAdminTools.utils.BookInputHandler
+import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinGUIUtils
+import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
@@ -54,21 +55,16 @@ object SurveyGUI {
                 if (event.isLeftClick) {
                     openEditor(player, target)
                 } else if (event.isRightClick) {
-                    val index = SurveyManager.surveys.indexOf(target)
-                    if (index != -1) {
-                        SurveyManager.surveys[index] = target.copy(enabled = !target.enabled)
-                        SurveyManager.save()
-                        SurveyManager.refreshTimers()
-                        player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
-                        Bukkit.getScheduler().runTask(plugin, Runnable { openMenu(player) })
-                    }
+                    BulletinManagerUtils.updateSurvey(target.id) { it.copy(enabled = !it.enabled) }
+                    player.playSound(player.location, Sound.UI_BUTTON_CLICK, 1.0f, 1.0f)
+                    Bukkit.getScheduler().runTask(plugin, Runnable { openMenu(player) })
                 }
             }
         }
 
         pane.populateWithGuiItems(items)
         gui.addPane(Slot.fromXY(0, 0), pane)
-        gui.addPane(Slot.fromXY(0, 5), createNavigationPane(gui, pane, player))
+        gui.addPane(Slot.fromXY(0, 5), BulletinGUIUtils.createNavigationPane(gui, pane, player, { SurveyManager.reload() }, { openMenu(player) }))
         gui.show(player)
     }
 
@@ -78,164 +74,91 @@ object SurveyGUI {
         val pane = StaticPane(9, 4)
 
         // Title
-        pane.addItem(GuiItem(ItemStack(Material.NAME_TAG).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>タイトル変更</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${survey.title}</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:title",
-                "タイトル", 
-                "アンケートのタイトルを入力してください。\nこのタイトルは本を開いた際や管理画面で表示されます。",
-                survey.title
-            ) { input ->
-                updateSurvey(survey.id) { it.copy(title = input.trim()) }
-                openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.NAME_TAG, "タイトル変更", survey.title,
+            "タイトル", "アンケートのタイトルを入力してください。",
+            "survey:${survey.id}:title"
+        ) { input ->
+            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(title = input.trim()) }
+            openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 1, 1)
 
         // Broadcast Message
-        pane.addItem(GuiItem(ItemStack(Material.WRITABLE_BOOK).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>告知メッセージ変更</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${survey.broadcastMessage}</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:broadcastMessage",
-                "告知メッセージ", 
-                "アンケートの開始を促す告知メッセージを入力してください。\nMiniMessage形式が使用可能です。",
-                survey.broadcastMessage
-            ) { input ->
-                updateSurvey(survey.id) { it.copy(broadcastMessage = input) }
-                openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.WRITABLE_BOOK, "告知メッセージ変更", survey.broadcastMessage,
+            "告知メッセージ", "開始を促すメッセージを入力してください。",
+            "survey:${survey.id}:broadcastMessage"
+        ) { input ->
+            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(broadcastMessage = input) }
+            openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 2, 1)
 
         // Interval
-        pane.addItem(GuiItem(ItemStack(Material.CLOCK).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>間隔変更 (秒)</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${survey.broadcastInterval}秒</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:broadcastInterval",
-                "告知間隔 (秒)", 
-                "告知を流す間隔を秒単位の数字で入力してください。\n(例: 3600 -> 1時間間隔)",
-                survey.broadcastInterval.toString()
-            ) { input ->
-                val sec = input.trim().toLongOrNull() ?: return@requestInput
-                updateSurvey(survey.id) { it.copy(broadcastInterval = sec) }
-                openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.CLOCK, "告知間隔 (秒)", survey.broadcastInterval.toString(),
+            "告知間隔 (秒)", "告知を流す間隔を秒単位で入力してください。",
+            "survey:${survey.id}:broadcastInterval"
+        ) { input ->
+            val sec = input.trim().toLongOrNull() ?: return@createSettingItem
+            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(broadcastInterval = sec) }
+            openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 3, 1)
 
         // Max Responses / Rewards
-        pane.addItem(GuiItem(ItemStack(Material.GOLD_INGOT).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>回答/報酬上限</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>回答上限: ${survey.maxResponses}</gray>"), miniMessage.deserialize("<gray>報酬上限: ${survey.maxRewards}</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:maxResponsesRewards",
-                "回答上限と報酬上限", 
-                "回答できる最大回数と、報酬を貰える最大回数をスペース区切りで入力してください。\n(例: '1 1' -> 回答も報酬も1回まで)\n(例: '5 1' -> 回答は5回できるが報酬は1回のみ)",
-                "${survey.maxResponses} ${survey.maxRewards}"
-            ) { input ->
-                val parts = input.trim().split(Regex("\\s+"))
-                val resp = parts.getOrNull(0)?.toIntOrNull() ?: return@requestInput
-                val rew = parts.getOrNull(1)?.toIntOrNull() ?: resp
-                updateSurvey(survey.id) { it.copy(maxResponses = resp, maxRewards = rew) }
-                openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.GOLD_INGOT, "回答/報酬上限", "${survey.maxResponses} ${survey.maxRewards}",
+            "回答上限と報酬上限", "回答できる最大回数と、報酬を貰える最大回数をスペース区切りで入力してください。",
+            "survey:${survey.id}:maxResponsesRewards"
+        ) { input ->
+            val parts = input.trim().split(Regex("\\s+"))
+            val resp = parts.getOrNull(0)?.toIntOrNull() ?: return@createSettingItem
+            val rew = parts.getOrNull(1)?.toIntOrNull() ?: resp
+            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(maxResponses = resp, maxRewards = rew) }
+            openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 4, 1)
 
         // Webhook
-        pane.addItem(GuiItem(ItemStack(Material.BLUE_STAINED_GLASS_PANE).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<blue>Discord Webhook</blue>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${survey.discordWebhookUrl ?: "未設定"}</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:discordWebhookUrl",
-                "Discord Webhook", 
-                "結果を通知するDiscordのWebhook URLを入力してください。\n'none' と入力すると解除されます。",
-                survey.discordWebhookUrl ?: "none"
-            ) { input ->
-                val cleaned = input.trim()
-                updateSurvey(survey.id) { it.copy(discordWebhookUrl = if (cleaned == "none") null else cleaned) }
-                openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.BLUE_STAINED_GLASS_PANE, "Discord Webhook", survey.discordWebhookUrl ?: "未設定",
+            "Discord Webhook", "Webhook URLを入力してください。'none' で解除されます。",
+            "survey:${survey.id}:discordWebhookUrl"
+        ) { input ->
+            val cleaned = input.trim()
+            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(discordWebhookUrl = if (cleaned == "none") null else cleaned) }
+            openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 5, 1)
 
         // Reward Commands
-        pane.addItem(GuiItem(ItemStack(Material.COMMAND_BLOCK).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>報酬コマンド</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${survey.rewardCommands.joinToString(" | ")}</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:rewardCommands",
-                "報酬コマンド", 
-                "アンケート完了時に実行されるコマンドを入力してください。\n1行につき1つのコマンドを入力してください。\n'%player%' はプレイヤー名に置き換わります。\n(例: give %player% diamond 1)",
-                survey.rewardCommands.joinToString("\n")
-            ) { input ->
-                val cmds = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
-                updateSurvey(survey.id) { it.copy(rewardCommands = cmds) }
-                openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.COMMAND_BLOCK, "報酬コマンド", survey.rewardCommands.joinToString(" | "),
+            "報酬コマンド", "1行につき1つのコマンドを入力してください。",
+            "survey:${survey.id}:rewardCommands"
+        ) { input ->
+            val cmds = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
+            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(rewardCommands = cmds) }
+            openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 6, 1)
 
         // Sound
-        pane.addItem(GuiItem(ItemStack(Material.JUKEBOX).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>効果音設定</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${survey.sound ?: "なし"}</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:sound",
-                "効果音ID", 
-                "告知時に流す効果音のIDを入力してください。\n内容を空にして署名すると無効になります。",
-                survey.sound ?: ""
-            ) { input ->
-                val cleaned = input.trim()
-                updateSurvey(survey.id) { it.copy(sound = cleaned.ifBlank { null }) }
-                openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.JUKEBOX, "効果音設定", survey.sound ?: "なし",
+            "効果音ID", "告知時に流す効果音のIDを入力してください。",
+            "survey:${survey.id}:sound"
+        ) { input ->
+            val cleaned = input.trim()
+            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(sound = cleaned.ifBlank { null }) }
+            openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 3, 2)
 
         // Expiration
-        pane.addItem(GuiItem(ItemStack(Material.COMPASS).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>期限設定 (UNIXミリ秒)</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${survey.expiresAt ?: "なし"}</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:expiresAt",
-                "期限 (UNIXミリ秒)", 
-                "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。\n内容を空にして署名すると無期限になります。\n(現在の時刻: ${System.currentTimeMillis()})",
-                survey.expiresAt?.toString() ?: ""
-            ) { input ->
-                val cleaned = input.trim()
-                val time = cleaned.ifBlank { null }?.toLongOrNull()
-                updateSurvey(survey.id) { it.copy(expiresAt = time) }
-                openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.COMPASS, "期限設定 (UNIXミリ秒)", survey.expiresAt?.toString() ?: "なし",
+            "期限 (UNIXミリ秒)", "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。",
+            "survey:${survey.id}:expiresAt"
+        ) { input ->
+            val time = input.trim().ifBlank { null }?.toLongOrNull()
+            BulletinManagerUtils.updateSurvey(survey.id) { it.copy(expiresAt = time) }
+            openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 2, 2)
 
         // Groups
@@ -248,7 +171,13 @@ object SurveyGUI {
                 ))
             }
         }) {
-            openTargetGroupsEditor(player, survey.id)
+            BulletinGUIUtils.openTargetGroupsEditor(
+                player, 
+                survey.id,
+                survey.targetGroups,
+                { newGroups -> BulletinManagerUtils.updateSurvey(survey.id) { it.copy(targetGroups = newGroups) } },
+                { openEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!) }
+            )
         }, 1, 2)
 
         // Discord Export Button
@@ -307,8 +236,10 @@ object SurveyGUI {
             item.itemMeta = meta
             GuiItem(item) { event ->
                 if (event.isLeftClick) {
-                    val newQs = survey.questions.toMutableList().apply { removeAt(idx) }
-                    updateSurvey(survey.id) { it.copy(questions = newQs) }
+                    BulletinManagerUtils.updateSurvey(survey.id) { s ->
+                        val newQs = s.questions.toMutableList().apply { removeAt(idx) }
+                        s.copy(questions = newQs)
+                    }
                     openQuestionsEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
                 } else if (event.isRightClick) {
                     openQuestionDetailEditor(player, survey, idx)
@@ -321,8 +252,10 @@ object SurveyGUI {
         actions.addItem(GuiItem(ItemStack(Material.NETHER_STAR).apply {
             itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("<green>質問を追加</green>")) }
         }) {
-            val newQs = survey.questions.toMutableList().apply { add(Question(text = "新しい質問", type = QuestionType.CLICK_TO_ANSWER)) }
-            updateSurvey(survey.id) { it.copy(questions = newQs) }
+            BulletinManagerUtils.updateSurvey(survey.id) { s ->
+                val newQs = s.questions.toMutableList().apply { add(Question(text = "新しい質問", type = QuestionType.CLICK_TO_ANSWER)) }
+                s.copy(questions = newQs)
+            }
             openQuestionsEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!)
         }, 4, 0)
         actions.addItem(GuiItem(ItemStack(Material.ARROW).apply {
@@ -341,22 +274,13 @@ object SurveyGUI {
         val pane = StaticPane(9, 3)
 
         // Text
-        pane.addItem(GuiItem(ItemStack(Material.NAME_TAG).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>質問文変更</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${q.text}</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:question:${qIdx}:text",
-                "質問文", 
-                "質問の本文を入力してください。",
-                q.text
-            ) { input ->
-                updateQuestion(survey.id, qIdx) { it.copy(text = input) }
-                openQuestionDetailEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!, qIdx)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.NAME_TAG, "質問文変更", q.text,
+            "質問文", "質問の本文を入力してください。",
+            "survey:${survey.id}:question:${qIdx}:text"
+        ) { input ->
+            updateQuestion(survey.id, qIdx) { it.copy(text = input) }
+            openQuestionDetailEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!, qIdx)
         }, 2, 1)
 
         // Type
@@ -372,23 +296,14 @@ object SurveyGUI {
         }, 4, 1)
 
         // Options
-        pane.addItem(GuiItem(ItemStack(Material.PAPER).apply {
-            itemMeta = itemMeta.apply { 
-                displayName(miniMessage.deserialize("<yellow>選択肢変更</yellow>"))
-                lore(listOf(miniMessage.deserialize("<gray>現在: ${q.options.joinToString(", ")}</gray>")))
-            }
-        }) {
-            BookInputHandler.requestInput(
-                player, 
-                "survey:${survey.id}:question:${qIdx}:options",
-                "選択肢", 
-                "質問の選択肢を入力してください。\n1行につき1つの選択肢を入力してください。",
-                q.options.joinToString("\n")
-            ) { input ->
-                val opts = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
-                updateQuestion(survey.id, qIdx) { it.copy(options = opts) }
-                openQuestionDetailEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!, qIdx)
-            }
+        pane.addItem(BulletinGUIUtils.createSettingItem(
+            player, Material.PAPER, "選択肢変更", q.options.joinToString(", "),
+            "選択肢", "1行につき1つの選択肢を入力してください。",
+            "survey:${survey.id}:question:${qIdx}:options"
+        ) { input ->
+            val opts = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
+            updateQuestion(survey.id, qIdx) { it.copy(options = opts) }
+            openQuestionDetailEditor(player, SurveyManager.surveys.find { it.id == survey.id }!!, qIdx)
         }, 6, 1)
 
         pane.addItem(GuiItem(ItemStack(Material.ARROW).apply {
@@ -399,93 +314,13 @@ object SurveyGUI {
         gui.show(player)
     }
 
-    private fun openTargetGroupsEditor(player: Player, id: String) {
-        val gui = ChestGui(6, "グループ選択")
-        gui.setOnTopClick { it.isCancelled = true }
-        val pane = PaginatedPane(9, 5)
-
-        val lpApi = net.luckperms.api.LuckPermsProvider.get()
-        val allGroups = lpApi.groupManager.loadedGroups.sortedBy { it.weight.orElse(0) }.reversed()
-        
-        val currentGroups = SurveyManager.surveys.find { it.id == id }?.targetGroups ?: emptyList()
-
-        val items = allGroups.map { group ->
-            val isSelected = currentGroups.contains(group.name)
-            val item = ItemStack(if (isSelected) Material.LIME_BANNER else Material.WHITE_BANNER)
-            val meta = item.itemMeta
-            meta.displayName(miniMessage.deserialize("<yellow>${group.displayName ?: group.name}</yellow>"))
-            meta.lore(listOf(
-                miniMessage.deserialize("<gray>内部名: ${group.name}</gray>"),
-                miniMessage.deserialize("<gray>状態: </gray>${if (isSelected) "<green>選択中" else "<red>未選択"}")
-            ))
-            item.itemMeta = meta
-            
-            GuiItem(item) { _ ->
-                val newGroups = if (isSelected) {
-                    currentGroups.filter { it != group.name }
-                } else {
-                    currentGroups + group.name
-                }
-                
-                updateSurvey(id) { it.copy(targetGroups = newGroups) }
-                openTargetGroupsEditor(player, id)
-            }
-        }
-
-        pane.populateWithGuiItems(items)
-        gui.addPane(Slot.fromXY(0, 0), pane)
-
-        val actions = StaticPane(9, 1)
-        actions.addItem(GuiItem(ItemStack(Material.ARROW).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("保存して戻る")) }
-        }) {
-            openEditor(player, SurveyManager.surveys.find { it.id == id }!!)
-        }, 8, 0)
-        
-        gui.addPane(Slot.fromXY(0, 5), actions)
-        gui.show(player)
-    }
-
-    private fun updateSurvey(id: String, action: (Survey) -> Survey) {
-        val target = SurveyManager.surveys.find { it.id == id } ?: return
-        val index = SurveyManager.surveys.indexOf(target)
-        if (index != -1) {
-            SurveyManager.surveys[index] = action(target)
-            SurveyManager.save()
-            SurveyManager.refreshTimers()
-        }
-    }
-
     private fun updateQuestion(surveyId: String, qIdx: Int, action: (Question) -> Question) {
-        updateSurvey(surveyId) { survey ->
+        BulletinManagerUtils.updateSurvey(surveyId) { survey ->
             val newQs = survey.questions.toMutableList()
             if (qIdx in newQs.indices) {
                 newQs[qIdx] = action(newQs[qIdx])
             }
             survey.copy(questions = newQs)
         }
-    }
-
-    private fun createNavigationPane(gui: ChestGui, pane: PaginatedPane, player: Player): StaticPane {
-        val navigation = StaticPane(9, 1)
-        navigation.addItem(GuiItem(ItemStack(Material.ARROW).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("前のページ")) }
-        }) {
-            if (pane.page > 0) { pane.page--; gui.update() }
-        }, 0, 0)
-        navigation.addItem(GuiItem(ItemStack(Material.ARROW).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("次のページ")) }
-        }) {
-            if (pane.page < pane.pages - 1) { pane.page++; gui.update() }
-        }, 8, 0)
-        navigation.addItem(GuiItem(ItemStack(Material.SUNFLOWER).apply {
-            itemMeta = itemMeta.apply { displayName(miniMessage.deserialize("<green>リロード</green>")) }
-        }) {
-            SurveyManager.reload()
-            player.sendMessage(miniMessage.deserialize("<green>設定をリロードしました。</green>"))
-            player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.2f)
-            Bukkit.getScheduler().runTask(plugin, Runnable { openMenu(player) })
-        }, 4, 0)
-        return navigation
     }
 }
