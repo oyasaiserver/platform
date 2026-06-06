@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault
+// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,37 @@ export interface AppConnectionHashicorpVaultConfig extends cdktf.TerraformMetaAr
   /**
   * The credentials for the HashiCorp Vault App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#credentials AppConnectionHashicorpVault#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#credentials AppConnectionHashicorpVault#credentials}
   */
   readonly credentials: AppConnectionHashicorpVaultCredentials;
   /**
   * An optional description for the HashiCorp Vault App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#description AppConnectionHashicorpVault#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#description AppConnectionHashicorpVault#description}
   */
   readonly description?: string;
   /**
+  * The Gateway ID to use for the app connection. If not specified, the Internet Gateway will be used.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#gateway_id AppConnectionHashicorpVault#gateway_id}
+  */
+  readonly gatewayId?: string;
+  /**
   * The method used to authenticate with HashiCorp Vault. Possible values are: access-token, app-role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#method AppConnectionHashicorpVault#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#method AppConnectionHashicorpVault#method}
   */
   readonly method: string;
   /**
   * The name of the HashiCorp Vault App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#name AppConnectionHashicorpVault#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#name AppConnectionHashicorpVault#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#project_id AppConnectionHashicorpVault#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#project_id AppConnectionHashicorpVault#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,31 +48,31 @@ export interface AppConnectionHashicorpVaultCredentials {
   /**
   * The Vault access token. Required for the `access-token` method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#access_token AppConnectionHashicorpVault#access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#access_token AppConnectionHashicorpVault#access_token}
   */
   readonly accessToken?: string;
   /**
   * The URL of the HashiCorp Vault instance, e.g. `https://vault.example.com`. Required for all methods.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#instance_url AppConnectionHashicorpVault#instance_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#instance_url AppConnectionHashicorpVault#instance_url}
   */
   readonly instanceUrl?: string;
   /**
   * Optional Vault namespace. Only applicable to HCP Vault Dedicated and Enterprise deployments.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#namespace AppConnectionHashicorpVault#namespace}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#namespace AppConnectionHashicorpVault#namespace}
   */
   readonly namespace?: string;
   /**
   * The AppRole role ID. Required for the `app-role` method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#role_id AppConnectionHashicorpVault#role_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#role_id AppConnectionHashicorpVault#role_id}
   */
   readonly roleId?: string;
   /**
   * The AppRole secret ID. Required for the `app-role` method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#secret_id AppConnectionHashicorpVault#secret_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#secret_id AppConnectionHashicorpVault#secret_id}
   */
   readonly secretId?: string;
 }
@@ -276,7 +282,7 @@ export class AppConnectionHashicorpVaultCredentialsOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault infisical_app_connection_hashicorp_vault}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault infisical_app_connection_hashicorp_vault}
 */
 export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
 
@@ -292,7 +298,7 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionHashicorpVault resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionHashicorpVault to import
-  * @param importFromId The id of the existing AppConnectionHashicorpVault that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionHashicorpVault that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionHashicorpVault to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -304,7 +310,7 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_hashicorp_vault infisical_app_connection_hashicorp_vault} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_hashicorp_vault infisical_app_connection_hashicorp_vault} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -315,7 +321,7 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_hashicorp_vault',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.16.28'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -327,6 +333,7 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
     });
     this._credentials.internalValue = config.credentials;
     this._description = config.description;
+    this._gatewayId = config.gatewayId;
     this._method = config.method;
     this._name = config.name;
     this._projectId = config.projectId;
@@ -368,6 +375,22 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get descriptionInput() {
     return this._description;
+  }
+
+  // gateway_id - computed: false, optional: true, required: false
+  private _gatewayId?: string; 
+  public get gatewayId() {
+    return this.getStringAttribute('gateway_id');
+  }
+  public set gatewayId(value: string) {
+    this._gatewayId = value;
+  }
+  public resetGatewayId() {
+    this._gatewayId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get gatewayIdInput() {
+    return this._gatewayId;
   }
 
   // id - computed: true, optional: false, required: false
@@ -425,6 +448,7 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
     return {
       credentials: appConnectionHashicorpVaultCredentialsToTerraform(this._credentials.internalValue),
       description: cdktf.stringToTerraform(this._description),
+      gateway_id: cdktf.stringToTerraform(this._gatewayId),
       method: cdktf.stringToTerraform(this._method),
       name: cdktf.stringToTerraform(this._name),
       project_id: cdktf.stringToTerraform(this._projectId),
@@ -441,6 +465,12 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
       },
       description: {
         value: cdktf.stringToHclTerraform(this._description),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      gateway_id: {
+        value: cdktf.stringToHclTerraform(this._gatewayId),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

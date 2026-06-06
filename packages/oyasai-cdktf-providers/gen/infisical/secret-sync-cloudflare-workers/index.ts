@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers
+// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncCloudflareWorkersConfig extends cdktf.TerraformMetaAr
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#auto_sync_enabled SecretSyncCloudflareWorkers#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#auto_sync_enabled SecretSyncCloudflareWorkers#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the cloudflare Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#connection_id SecretSyncCloudflareWorkers#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#connection_id SecretSyncCloudflareWorkers#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the Cloudflare Workers sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#description SecretSyncCloudflareWorkers#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#description SecretSyncCloudflareWorkers#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#destination_config SecretSyncCloudflareWorkers#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#destination_config SecretSyncCloudflareWorkers#destination_config}
   */
   readonly destinationConfig: SecretSyncCloudflareWorkersDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#environment SecretSyncCloudflareWorkers#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#environment SecretSyncCloudflareWorkers#environment}
   */
   readonly environment: string;
   /**
   * The name of the Cloudflare Workers sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#name SecretSyncCloudflareWorkers#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#name SecretSyncCloudflareWorkers#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#project_id SecretSyncCloudflareWorkers#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#project_id SecretSyncCloudflareWorkers#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#secret_path SecretSyncCloudflareWorkers#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#secret_path SecretSyncCloudflareWorkers#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#sync_options SecretSyncCloudflareWorkers#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#sync_options SecretSyncCloudflareWorkers#sync_options}
   */
   readonly syncOptions: SecretSyncCloudflareWorkersSyncOptions;
 }
@@ -66,7 +66,7 @@ export interface SecretSyncCloudflareWorkersDestinationConfig {
   /**
   * The Cloudflare Workers script ID where the secrets will be synced
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#script_id SecretSyncCloudflareWorkers#script_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#script_id SecretSyncCloudflareWorkers#script_id}
   */
   readonly scriptId: string;
 }
@@ -159,19 +159,19 @@ export interface SecretSyncCloudflareWorkersSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from Cloudflare Workers. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#disable_secret_deletion SecretSyncCloudflareWorkers#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#disable_secret_deletion SecretSyncCloudflareWorkers#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination, import-prioritize-source, import-prioritize-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#initial_sync_behavior SecretSyncCloudflareWorkers#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#initial_sync_behavior SecretSyncCloudflareWorkers#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the Cloudflare Workers destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#key_schema SecretSyncCloudflareWorkers#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#key_schema SecretSyncCloudflareWorkers#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -320,7 +320,7 @@ export class SecretSyncCloudflareWorkersSyncOptionsOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers infisical_secret_sync_cloudflare_workers}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers infisical_secret_sync_cloudflare_workers}
 */
 export class SecretSyncCloudflareWorkers extends cdktf.TerraformResource {
 
@@ -336,7 +336,7 @@ export class SecretSyncCloudflareWorkers extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncCloudflareWorkers resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncCloudflareWorkers to import
-  * @param importFromId The id of the existing SecretSyncCloudflareWorkers that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncCloudflareWorkers that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncCloudflareWorkers to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -348,7 +348,7 @@ export class SecretSyncCloudflareWorkers extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_cloudflare_workers infisical_secret_sync_cloudflare_workers} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_sync_cloudflare_workers infisical_secret_sync_cloudflare_workers} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -359,7 +359,7 @@ export class SecretSyncCloudflareWorkers extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_cloudflare_workers',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.16.28'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
