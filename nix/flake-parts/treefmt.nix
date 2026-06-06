@@ -1,8 +1,6 @@
-{ flake-parts-lib, ... }:
-{
+{ flake-parts-lib, ... }: {
   options.perSystem = flake-parts-lib.mkPerSystemOption (
-    { lib, config, ... }:
-    {
+    { lib, config, ... }: {
       treefmt =
         let
           inherit (config.oyasai.scope) callPackage;

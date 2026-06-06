@@ -1,5 +1,4 @@
-{ prettier-plugins }:
-{
+{ prettier-plugins }: {
   programs = {
     # keep-sorted start block=yes
     actionlint.enable = true;

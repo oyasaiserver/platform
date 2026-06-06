@@ -1,5 +1,4 @@
-{ ... }:
-{
+{ ... }: {
   perSystem =
     {
       config,
@@ -41,13 +40,10 @@
         // {
           all-docker-images = aggregate pkgs (
             builtins.listToAttrs (
-              map (
-                { image, name }:
-                {
-                  inherit name;
-                  value = image;
-                }
-              ) docker-image-derivs
+              map ({ image, name }: {
+                inherit name;
+                value = image;
+              }) docker-image-derivs
             )
           );
           all-docker-tags = pkgs.writeTextFile {

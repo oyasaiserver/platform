@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy
+// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,49 @@ export interface CertManagerCertificatePolicyConfig extends cdktf.TerraformMetaA
   /**
   * The description of the certificate policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#description CertManagerCertificatePolicy#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#description CertManagerCertificatePolicy#description}
   */
   readonly description?: string;
   /**
   * The name of the certificate policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#name CertManagerCertificatePolicy#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#name CertManagerCertificatePolicy#name}
   */
   readonly name: string;
   /**
-  * The slug of the cert-manager project
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#project_slug CertManagerCertificatePolicy#project_slug}
-  */
-  readonly projectSlug: string;
-  /**
   * algorithms block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#algorithms CertManagerCertificatePolicy#algorithms}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#algorithms CertManagerCertificatePolicy#algorithms}
   */
   readonly algorithms: CertManagerCertificatePolicyAlgorithms;
   /**
   * extended_key_usages block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#extended_key_usages CertManagerCertificatePolicy#extended_key_usages}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#extended_key_usages CertManagerCertificatePolicy#extended_key_usages}
   */
   readonly extendedKeyUsages?: CertManagerCertificatePolicyExtendedKeyUsages;
   /**
   * key_usages block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#key_usages CertManagerCertificatePolicy#key_usages}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#key_usages CertManagerCertificatePolicy#key_usages}
   */
   readonly keyUsages?: CertManagerCertificatePolicyKeyUsages;
   /**
   * sans block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#sans CertManagerCertificatePolicy#sans}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#sans CertManagerCertificatePolicy#sans}
   */
   readonly sans?: CertManagerCertificatePolicySans[] | cdktf.IResolvable;
   /**
   * subject block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#subject CertManagerCertificatePolicy#subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#subject CertManagerCertificatePolicy#subject}
   */
   readonly subject?: CertManagerCertificatePolicySubject[] | cdktf.IResolvable;
   /**
   * validity block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#validity CertManagerCertificatePolicy#validity}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#validity CertManagerCertificatePolicy#validity}
   */
   readonly validity?: CertManagerCertificatePolicyValidity;
 }
@@ -66,13 +60,13 @@ export interface CertManagerCertificatePolicyAlgorithms {
   /**
   * List of allowed key algorithms (at least one required). Supported values: RSA-2048, RSA-3072, RSA-4096, ECDSA-P256, ECDSA-P521, ECDSA-P384
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#key_algorithm CertManagerCertificatePolicy#key_algorithm}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#key_algorithm CertManagerCertificatePolicy#key_algorithm}
   */
   readonly keyAlgorithm: string[];
   /**
   * List of allowed signature algorithms (at least one required). Supported values: SHA256-RSA, SHA512-RSA, SHA384-ECDSA, SHA384-RSA, SHA256-ECDSA, SHA512-ECDSA
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#signature CertManagerCertificatePolicy#signature}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#signature CertManagerCertificatePolicy#signature}
   */
   readonly signature: string[];
 }
@@ -191,19 +185,19 @@ export interface CertManagerCertificatePolicyExtendedKeyUsages {
   /**
   * List of allowed extended key usages. Possible values: client_auth, server_auth, code_signing, email_protection, ocsp_signing, time_stamping
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#allowed CertManagerCertificatePolicy#allowed}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#allowed CertManagerCertificatePolicy#allowed}
   */
   readonly allowed?: string[];
   /**
   * List of denied extended key usages. Possible values: client_auth, server_auth, code_signing, email_protection, ocsp_signing, time_stamping
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#denied CertManagerCertificatePolicy#denied}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#denied CertManagerCertificatePolicy#denied}
   */
   readonly denied?: string[];
   /**
   * List of required extended key usages. Possible values: client_auth, server_auth, code_signing, email_protection, ocsp_signing, time_stamping
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#required CertManagerCertificatePolicy#required}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#required CertManagerCertificatePolicy#required}
   */
   readonly required?: string[];
 }
@@ -357,19 +351,19 @@ export interface CertManagerCertificatePolicyKeyUsages {
   /**
   * List of allowed key usages. Possible values: digital_signature, key_encipherment, non_repudiation, data_encipherment, key_agreement, key_cert_sign, crl_sign, encipher_only, decipher_only
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#allowed CertManagerCertificatePolicy#allowed}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#allowed CertManagerCertificatePolicy#allowed}
   */
   readonly allowed?: string[];
   /**
   * List of denied key usages. Possible values: digital_signature, key_encipherment, non_repudiation, data_encipherment, key_agreement, key_cert_sign, crl_sign, encipher_only, decipher_only
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#denied CertManagerCertificatePolicy#denied}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#denied CertManagerCertificatePolicy#denied}
   */
   readonly denied?: string[];
   /**
   * List of required key usages. Possible values: digital_signature, key_encipherment, non_repudiation, data_encipherment, key_agreement, key_cert_sign, crl_sign, encipher_only, decipher_only
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#required CertManagerCertificatePolicy#required}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#required CertManagerCertificatePolicy#required}
   */
   readonly required?: string[];
 }
@@ -523,25 +517,25 @@ export interface CertManagerCertificatePolicySans {
   /**
   * List of allowed values for this SAN type
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#allowed CertManagerCertificatePolicy#allowed}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#allowed CertManagerCertificatePolicy#allowed}
   */
   readonly allowed?: string[];
   /**
   * List of denied values for this SAN type
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#denied CertManagerCertificatePolicy#denied}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#denied CertManagerCertificatePolicy#denied}
   */
   readonly denied?: string[];
   /**
   * List of required values for this SAN type
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#required CertManagerCertificatePolicy#required}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#required CertManagerCertificatePolicy#required}
   */
   readonly required?: string[];
   /**
   * The SAN type. Possible values: dns_name, ip_address, email, uri
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#type CertManagerCertificatePolicy#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#type CertManagerCertificatePolicy#type}
   */
   readonly type: string;
 }
@@ -743,25 +737,25 @@ export interface CertManagerCertificatePolicySubject {
   /**
   * List of allowed values for this subject attribute
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#allowed CertManagerCertificatePolicy#allowed}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#allowed CertManagerCertificatePolicy#allowed}
   */
   readonly allowed?: string[];
   /**
   * List of denied values for this subject attribute
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#denied CertManagerCertificatePolicy#denied}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#denied CertManagerCertificatePolicy#denied}
   */
   readonly denied?: string[];
   /**
   * List of required values for this subject attribute
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#required CertManagerCertificatePolicy#required}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#required CertManagerCertificatePolicy#required}
   */
   readonly required?: string[];
   /**
   * The subject attribute type. Possible values: common_name, organization, country
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#type CertManagerCertificatePolicy#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#type CertManagerCertificatePolicy#type}
   */
   readonly type: string;
 }
@@ -963,7 +957,7 @@ export interface CertManagerCertificatePolicyValidity {
   /**
   * Maximum validity period (e.g., '90d', '2y', '6m')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#max CertManagerCertificatePolicy#max}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#max CertManagerCertificatePolicy#max}
   */
   readonly max?: string;
 }
@@ -1057,7 +1051,7 @@ export class CertManagerCertificatePolicyValidityOutputReference extends cdktf.C
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy infisical_cert_manager_certificate_policy}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy infisical_cert_manager_certificate_policy}
 */
 export class CertManagerCertificatePolicy extends cdktf.TerraformResource {
 
@@ -1073,7 +1067,7 @@ export class CertManagerCertificatePolicy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerCertificatePolicy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerCertificatePolicy to import
-  * @param importFromId The id of the existing CertManagerCertificatePolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerCertificatePolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerCertificatePolicy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1085,7 +1079,7 @@ export class CertManagerCertificatePolicy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_policy infisical_cert_manager_certificate_policy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_certificate_policy infisical_cert_manager_certificate_policy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1096,7 +1090,7 @@ export class CertManagerCertificatePolicy extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_certificate_policy',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.16.28'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -1108,7 +1102,6 @@ export class CertManagerCertificatePolicy extends cdktf.TerraformResource {
     });
     this._description = config.description;
     this._name = config.name;
-    this._projectSlug = config.projectSlug;
     this._algorithms.internalValue = config.algorithms;
     this._extendedKeyUsages.internalValue = config.extendedKeyUsages;
     this._keyUsages.internalValue = config.keyUsages;
@@ -1153,19 +1146,6 @@ export class CertManagerCertificatePolicy extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get nameInput() {
     return this._name;
-  }
-
-  // project_slug - computed: false, optional: false, required: true
-  private _projectSlug?: string; 
-  public get projectSlug() {
-    return this.getStringAttribute('project_slug');
-  }
-  public set projectSlug(value: string) {
-    this._projectSlug = value;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get projectSlugInput() {
-    return this._projectSlug;
   }
 
   // algorithms - computed: false, optional: false, required: true
@@ -1269,7 +1249,6 @@ export class CertManagerCertificatePolicy extends cdktf.TerraformResource {
     return {
       description: cdktf.stringToTerraform(this._description),
       name: cdktf.stringToTerraform(this._name),
-      project_slug: cdktf.stringToTerraform(this._projectSlug),
       algorithms: certManagerCertificatePolicyAlgorithmsToTerraform(this._algorithms.internalValue),
       extended_key_usages: certManagerCertificatePolicyExtendedKeyUsagesToTerraform(this._extendedKeyUsages.internalValue),
       key_usages: certManagerCertificatePolicyKeyUsagesToTerraform(this._keyUsages.internalValue),
@@ -1289,12 +1268,6 @@ export class CertManagerCertificatePolicy extends cdktf.TerraformResource {
       },
       name: {
         value: cdktf.stringToHclTerraform(this._name),
-        isBlock: false,
-        type: "simple",
-        storageClassType: "string",
-      },
-      project_slug: {
-        value: cdktf.stringToHclTerraform(this._projectSlug),
         isBlock: false,
         type: "simple",
         storageClassType: "string",
