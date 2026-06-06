@@ -1,86 +1,53 @@
-package io.oyasai.oyasaiAdminTools.bulletin
+package io.oyasai.oyasaiAdminTools.bulletin.announcement
 
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
-import io.oyasai.oyasaiAdminTools.bulletin.models.Notice
-import io.oyasai.oyasaiAdminTools.bulletin.models.Survey
+import io.oyasai.oyasaiAdminTools.bulletin.announcement.models.Announcement
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitTask
 
-object BulletinManager {
+object AnnouncementManager {
     private val plugin = OyasaiAdminTools.plugin
     private val miniMessage = MiniMessage.miniMessage()
 
-    var notices = mutableListOf<Notice>()
-    var surveys = mutableListOf<Survey>()
-    
-    val surveyBroadcastHistory = mutableListOf<String>()
-
+    var announcements = mutableListOf<Announcement>()
     private val tasks = mutableListOf<BukkitTask>()
 
     fun load() {
         stopAll()
-        notices = JsonUtils.readJsonFileSafe("notices.json", mutableListOf<Notice>()).toMutableList()
-        surveys = JsonUtils.readJsonFileSafe("surveys.json", mutableListOf<Survey>()).toMutableList()
+        announcements = JsonUtils.readJsonFileSafe("announcements.json", mutableListOf<Announcement>()).toMutableList()
         startAll()
     }
 
     fun save() {
-        JsonUtils.writeJsonFile("notices.json", notices)
-        JsonUtils.writeJsonFile("surveys.json", surveys)
+        JsonUtils.writeJsonFile("announcements.json", announcements)
     }
 
     fun startAll() {
         val now = System.currentTimeMillis()
 
-        notices.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { notice ->
-            startBulletinTimer(
-                interval = notice.interval,
-                message = notice.message,
-                targetGroups = notice.targetGroups,
-                sound = notice.sound,
-                expiresAt = notice.expiresAt,
+        announcements.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { announcement ->
+            startTimer(
+                interval = announcement.interval,
+                message = announcement.message,
+                targetGroups = announcement.targetGroups,
+                sound = announcement.sound,
+                expiresAt = announcement.expiresAt,
                 onExpire = {
-                    val target = notices.find { it.id == notice.id }
+                    val target = announcements.find { it.id == announcement.id }
                     if (target != null) {
-                        notices[notices.indexOf(target)] = target.copy(enabled = false)
+                        announcements[announcements.indexOf(target)] = target.copy(enabled = false)
                         save()
-                        plugin.logger.info("Notice ${notice.id} has expired and was disabled.")
+                        plugin.logger.info("Announcement ${announcement.id} has expired and was disabled.")
                     }
-                }
-            )
-        }
-
-        surveys.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { survey ->
-            startBulletinTimer(
-                interval = survey.broadcastInterval,
-                message = survey.broadcastMessage,
-                targetGroups = survey.targetGroups,
-                sound = survey.sound,
-                expiresAt = survey.expiresAt,
-                onExpire = {
-                    val target = surveys.find { it.id == survey.id }
-                    if (target != null) {
-                        surveys[surveys.indexOf(target)] = target.copy(enabled = false)
-                        save()
-                        plugin.logger.info("Survey ${survey.id} has expired and was disabled.")
-                    }
-                },
-                onTick = {
-                    surveyBroadcastHistory.add(survey.id)
-                    if (surveyBroadcastHistory.size > 50) surveyBroadcastHistory.removeAt(0)
-                },
-                playerFilter = { player ->
-                    val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId, 0)
-                    responseCount < survey.maxResponses
                 }
             )
         }
     }
 
-    private fun startBulletinTimer(
+    private fun startTimer(
         interval: Long,
         message: String,
         targetGroups: List<String>,

@@ -1,7 +1,10 @@
 package io.oyasai.oyasaiAdminTools
 
 import io.oyasai.oyasaiAdminTools.commands.*
-import io.oyasai.oyasaiAdminTools.bulletin.*
+import io.oyasai.oyasaiAdminTools.bulletin.announcement.AnnouncementManager
+import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyManager
+import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyListener
+import io.oyasai.oyasaiAdminTools.utils.BookInputHandler
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -16,7 +19,8 @@ class OyasaiAdminTools : JavaPlugin() {
     plugin = this
     plugin.saveDefaultConfig()
 
-    BulletinManager.load()
+    AnnouncementManager.load()
+    SurveyManager.load()
 
     val commandMap = Bukkit.getCommandMap()
     val knownCommands = commandMap.knownCommands
@@ -35,19 +39,22 @@ class OyasaiAdminTools : JavaPlugin() {
     this.getCommand("kakutyo")?.tabCompleter = KakutyoCommandExecutor
 
     // Bulletin Commands
-    this.getCommand("bl")?.setExecutor(BulletinCommandExecutor)
-    this.getCommand("bl")?.tabCompleter = BulletinCommandExecutor
-    this.getCommand("anke")?.setExecutor(BulletinCommandExecutor)
-    this.getCommand("anke")?.tabCompleter = BulletinCommandExecutor
+    val bulletinExecutor = io.oyasai.oyasaiAdminTools.bulletin.BulletinCommandExecutor
+    this.getCommand("bulletin")?.setExecutor(bulletinExecutor)
+    this.getCommand("bulletin")?.tabCompleter = bulletinExecutor
+    this.getCommand("anke")?.setExecutor(bulletinExecutor)
+    this.getCommand("anke")?.tabCompleter = bulletinExecutor
 
-    Bukkit.getPluginManager().registerEvents(BulletinListener, this)
+    Bukkit.getPluginManager().registerEvents(SurveyListener, this)
     Bukkit.getPluginManager().registerEvents(BookInputHandler, this)
   }
 
   override fun onDisable() {
     // Plugin shutdown logic
-    BulletinManager.stopAll()
-    BulletinManager.save()
+    AnnouncementManager.stopAll()
+    AnnouncementManager.save()
+    SurveyManager.stopAll()
+    SurveyManager.save()
     JsonUtils.writeJsonFile("ranks.json", io.oyasai.oyasaiAdminTools.rank.RankManager.ranks)
   }
 }

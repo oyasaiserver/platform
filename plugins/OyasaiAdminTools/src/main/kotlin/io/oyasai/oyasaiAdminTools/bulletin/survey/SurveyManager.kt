@@ -1,12 +1,12 @@
-package io.oyasai.oyasaiAdminTools.bulletin
+package io.oyasai.oyasaiAdminTools.bulletin.survey
 
 import club.minnced.discord.webhook.WebhookClient
 import club.minnced.discord.webhook.send.WebhookEmbed
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools
-import io.oyasai.oyasaiAdminTools.bulletin.models.Question
-import io.oyasai.oyasaiAdminTools.bulletin.models.QuestionType
-import io.oyasai.oyasaiAdminTools.bulletin.models.Survey
+import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Question
+import io.oyasai.oyasaiAdminTools.bulletin.survey.models.QuestionType
+import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Survey
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
 import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import net.kyori.adventure.inventory.Book
@@ -19,6 +19,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
+import org.bukkit.scheduler.BukkitTask
 import java.util.UUID
 
 object SurveyManager {
@@ -27,7 +28,116 @@ object SurveyManager {
     private val plainSerializer = PlainTextComponentSerializer.plainText()
     val surveyBookKey = org.bukkit.NamespacedKey(plugin, "survey_book")
 
+    var surveys = mutableListOf<Survey>()
+    val surveyBroadcastHistory = mutableListOf<String>()
+    private val tasks = mutableListOf<BukkitTask>()
     private val playerProgress = mutableMapOf<UUID, SurveyProgress>()
+
+    fun load() {
+        stopAll()
+        surveys = JsonUtils.readJsonFileSafe("surveys.json", mutableListOf<Survey>()).toMutableList()
+        startAll()
+    }
+
+    fun save() {
+        JsonUtils.writeJsonFile("surveys.json", surveys)
+    }
+
+    fun startAll() {
+        val now = System.currentTimeMillis()
+
+        surveys.filter { it.enabled && (it.expiresAt == null || it.expiresAt > now) }.forEach { survey ->
+            startTimer(
+                interval = survey.broadcastInterval,
+                message = survey.broadcastMessage,
+                targetGroups = survey.targetGroups,
+                sound = survey.sound,
+                expiresAt = survey.expiresAt,
+                onExpire = {
+                    val target = surveys.find { it.id == survey.id }
+                    if (target != null) {
+                        surveys[surveys.indexOf(target)] = target.copy(enabled = false)
+                        save()
+                        plugin.logger.info("Survey ${survey.id} has expired and was disabled.")
+                    }
+                },
+                onTick = {
+                    surveyBroadcastHistory.add(survey.id)
+                    if (surveyBroadcastHistory.size > 50) surveyBroadcastHistory.removeAt(0)
+                },
+                playerFilter = { player ->
+                    val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
+                    responseCount < survey.maxResponses
+                }
+            )
+        }
+    }
+
+    private fun startTimer(
+        interval: Long,
+        message: String,
+        targetGroups: List<String>,
+        sound: String? = null,
+        expiresAt: Long? = null,
+        onExpire: (() -> Unit)? = null,
+        onTick: (() -> Unit)? = null,
+        playerFilter: ((org.bukkit.entity.Player) -> Boolean)? = null
+    ) {
+        val taskWrapper = object : Runnable {
+            var task: BukkitTask? = null
+
+            override fun run() {
+                if (expiresAt != null && System.currentTimeMillis() > expiresAt) {
+                    onExpire?.invoke()
+                    task?.cancel()
+                    return
+                }
+
+                onTick?.invoke()
+                Bukkit.getOnlinePlayers().forEach { player ->
+                    if (playerFilter != null && !playerFilter(player)) return@forEach
+
+                    val sendMsg = {
+                        val msg = message.replace("%player%", player.name)
+                        player.sendMessage(miniMessage.deserialize(msg))
+
+                        sound?.let { soundStr ->
+                            try {
+                                player.playSound(player.location, soundStr, 1.0f, 1.0f)
+                            } catch (e: Exception) {
+                                // Ignore invalid sound
+                            }
+                        }
+                    }
+
+                    if (targetGroups.isNotEmpty()) {
+                        PermsUtils.hasAnyGroup(player.uniqueId, targetGroups).thenAccept { hasGroup ->
+                            if (hasGroup) Bukkit.getScheduler().runTask(plugin, Runnable { sendMsg() })
+                        }
+                    } else {
+                        sendMsg()
+                    }
+                }
+            }
+        }
+
+        taskWrapper.task = Bukkit.getScheduler().runTaskTimer(plugin, taskWrapper, interval * 20L, interval * 20L)
+        tasks.add(taskWrapper.task!!)
+    }
+
+    fun stopAll() {
+        tasks.forEach { it.cancel() }
+        tasks.clear()
+    }
+
+    fun reload() {
+        load()
+    }
+
+    fun refreshTimers() {
+        stopAll()
+        startAll()
+    }
 
     fun getProgress(uuid: UUID): SurveyProgress? = playerProgress[uuid]
 
@@ -45,7 +155,7 @@ object SurveyManager {
     )
 
     fun startSurvey(player: Player, surveyId: String) {
-        val survey = BulletinManager.surveys.find { it.id == surveyId } ?: run {
+        val survey = surveys.find { it.id == surveyId } ?: run {
             player.sendMessage(miniMessage.deserialize("<red>アンケートが見つかりません。</red>"))
             return
         }
@@ -66,7 +176,7 @@ object SurveyManager {
     }
 
     private fun proceedToStartSurvey(player: Player, survey: Survey) {
-        val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId, 0)
+        val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
         if (responseCount >= survey.maxResponses) {
             player.sendMessage(miniMessage.deserialize("<red>このアンケートは既に上限回数（${survey.maxResponses}回）回答済みです。</red>"))
             return
@@ -94,13 +204,13 @@ object SurveyManager {
 
         when (question.type) {
             QuestionType.CLICK_TO_ANSWER -> {
-                player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/bl resume</yellow> か <click:run_command:/bl resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
+                player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/anke resume</yellow> か <click:run_command:/anke resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
                 showBookChoice(player, survey, question, index)
             }
             QuestionType.CHAT_CHOICE -> {
                 if (player.name.startsWith(".")) {
                     // Bedrock フォールバック
-                    player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/bl resume</yellow> か <click:run_command:/bl resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
+                    player.sendMessage(miniMessage.deserialize("<gray>本を閉じてしまった場合は <yellow>/anke resume</yellow> か <click:run_command:/anke resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"))
                     showBookChoice(player, survey, question, index)
                 } else {
                     // Java はチャットでクリックして回答できる
@@ -108,7 +218,7 @@ object SurveyManager {
                     val optionsComponent = Component.text()
                     question.options.forEachIndexed { i, option ->
                         val choice = miniMessage.deserialize("<blue><u>[${option}]</u></blue>")
-                            .clickEvent(ClickEvent.runCommand("/bl answer $index $option"))
+                            .clickEvent(ClickEvent.runCommand("/anke answer $index $option"))
                         optionsComponent.append(choice)
                         if (i < question.options.size - 1) optionsComponent.append(Component.text(" "))
                     }
@@ -139,6 +249,23 @@ object SurveyManager {
         }
     }
 
+    fun startLastAvailableSurvey(player: Player) {
+        val recentIds = surveyBroadcastHistory.reversed().distinct()
+        for (id in recentIds) {
+            val survey = surveys.find { it.id == id } ?: continue
+            if (!survey.enabled) continue
+
+            val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
+            if (responseCount >= survey.maxResponses) continue
+
+            if (PermsUtils.hasAnyGroupSync(player.uniqueId, survey.targetGroups)) {
+                startSurvey(player, id)
+                return
+            }
+        }
+        player.sendMessage(miniMessage.deserialize("<red>現在回答可能な新しいアンケートはありません。</red>"))
+    }
+
     private fun showBookChoice(player: Player, survey: Survey, question: Question, index: Int) {
         val bookBuilder = Book.builder()
             .title(Component.text(survey.title))
@@ -148,12 +275,15 @@ object SurveyManager {
 
         question.options.forEach { option ->
             val optionComponent = miniMessage.deserialize("<blue><u>[${option}]</u></blue>")
-                .clickEvent(ClickEvent.runCommand("/bl answer $index $option"))
+                .clickEvent(ClickEvent.runCommand("/anke answer $index $option"))
             page.append(Component.newline()).append(optionComponent)
         }
 
         bookBuilder.addPage(page.build())
-        player.openBook(bookBuilder.build())
+        val book = bookBuilder.build()
+        Bukkit.getScheduler().runTask(plugin, Runnable {
+            player.openBook(book)
+        })
     }
 
     fun handleAnswer(player: Player, questionIndex: Int, answer: String) {
@@ -163,7 +293,7 @@ object SurveyManager {
             return
         }
 
-        val survey = BulletinManager.surveys.find { it.id == progress.surveyId } ?: return
+        val survey = surveys.find { it.id == progress.surveyId } ?: return
 
         val cleanAnswer = plainSerializer.serialize(miniMessage.deserialize(answer))
 
@@ -174,20 +304,20 @@ object SurveyManager {
     private fun finishSurvey(player: Player, survey: Survey) {
         val progress = playerProgress.remove(player.uniqueId) ?: return
 
-        val currentCount = survey.respondedPlayers.getOrDefault(player.uniqueId, 0)
-        survey.respondedPlayers[player.uniqueId] = currentCount + 1
-        BulletinManager.save()
+        val currentCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
+        survey.respondedPlayers[player.uniqueId.toString()] = currentCount + 1
+        save()
 
         player.sendMessage(miniMessage.deserialize("<green>アンケートにご協力ありがとうございました！</green>"))
 
-        val rewardCount = survey.rewardedPlayers.getOrDefault(player.uniqueId, 0)
+        val rewardCount = survey.rewardedPlayers.getOrDefault(player.uniqueId.toString(), 0)
         if (rewardCount < survey.maxRewards) {
             survey.rewardCommands.forEach { cmd ->
                 val finalCmd = cmd.replace("%player%", player.name)
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd)
             }
-            survey.rewardedPlayers[player.uniqueId] = rewardCount + 1
-            BulletinManager.save()
+            survey.rewardedPlayers[player.uniqueId.toString()] = rewardCount + 1
+            save()
         } else {
             player.sendMessage(miniMessage.deserialize("<gray>報酬は既に上限回数（${survey.maxRewards}回）受け取っているため、今回は付与されません。</gray>"))
         }
@@ -200,7 +330,7 @@ object SurveyManager {
     }
 
     fun exportResultsToDiscord(player: Player, surveyId: String) {
-        val survey = BulletinManager.surveys.find { it.id == surveyId } ?: run {
+        val survey = surveys.find { it.id == surveyId } ?: run {
             player.sendMessage(miniMessage.deserialize("<red>アンケートが見つかりません。</red>"))
             return
         }

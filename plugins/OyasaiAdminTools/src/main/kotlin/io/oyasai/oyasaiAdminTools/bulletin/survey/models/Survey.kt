@@ -1,4 +1,4 @@
-package io.oyasai.oyasaiAdminTools.bulletin.models
+package io.oyasai.oyasaiAdminTools.bulletin.survey.models
 
 import java.util.UUID
 
@@ -10,9 +10,9 @@ data class Survey(
   val questions: List<Question> = emptyList(),
   val rewardCommands: List<String> = emptyList(),
   val enabled: Boolean = true,
-  val respondedPlayers: MutableMap<UUID, Int> = mutableMapOf(), // UUID to response cnt
+  val respondedPlayers: MutableMap<String, Int> = mutableMapOf(), // UUID to response cnt
   val maxResponses: Int = 1,
-  val rewardedPlayers: MutableMap<UUID, Int> = mutableMapOf(), // UUID to reward cnt
+  val rewardedPlayers: MutableMap<String, Int> = mutableMapOf(), // UUID to reward cnt
   val maxRewards: Int = 1,
   val targetGroups: List<String> = emptyList(),
   val discordWebhookUrl: String? = null,

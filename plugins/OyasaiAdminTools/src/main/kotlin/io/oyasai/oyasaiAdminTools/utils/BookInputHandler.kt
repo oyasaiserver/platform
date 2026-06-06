@@ -1,4 +1,4 @@
-package io.oyasai.oyasaiAdminTools.bulletin
+package io.oyasai.oyasaiAdminTools.utils
 
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import net.kyori.adventure.text.Component
@@ -22,11 +22,13 @@ import java.util.concurrent.ConcurrentHashMap
 object BookInputHandler : Listener {
     private val miniMessage = MiniMessage.miniMessage()
     private val plainSerializer = PlainTextComponentSerializer.plainText()
-    private val editorKey = NamespacedKey(plugin, "bulletin_editor")
+    private val editorKey = NamespacedKey(plugin, "oyasai_editor")
+    private val sessionIdKey = NamespacedKey(plugin, "oyasai_session_id")
     
-    private val sessions = ConcurrentHashMap<UUID, (String) -> Unit>()
+    private val sessions = ConcurrentHashMap<String, (String) -> Unit>()
 
-    fun requestInput(player: Player, title: String, description: String, currentValue: String, callback: (String) -> Unit) {
+    fun requestInput(player: Player, id: String, title: String, description: String, currentValue: String, callback: (String) -> Unit) {
+        val sessionId = "${player.uniqueId}:$id"
         val item = ItemStack(Material.WRITABLE_BOOK)
         val meta = item.itemMeta as BookMeta
         
@@ -44,9 +46,10 @@ object BookInputHandler : Listener {
         meta.addPages(Component.text(currentValue))
         
         meta.persistentDataContainer.set(editorKey, PersistentDataType.BYTE, 1.toByte())
+        meta.persistentDataContainer.set(sessionIdKey, PersistentDataType.STRING, sessionId)
         item.itemMeta = meta
         
-        sessions[player.uniqueId] = callback
+        sessions[sessionId] = callback
         player.inventory.addItem(item)
         player.closeInventory()
         player.sendMessage(miniMessage.deserialize("<gold>[Editor]</gold> <yellow>回答用の本を付与しました。2ページ目から編集し、署名すると保存されます。</yellow>"))
@@ -56,10 +59,11 @@ object BookInputHandler : Listener {
     fun onBookSign(event: PlayerEditBookEvent) {
         val meta = event.newBookMeta
         if (!meta.persistentDataContainer.has(editorKey, PersistentDataType.BYTE)) return
+        val sessionId = meta.persistentDataContainer.get(sessionIdKey, PersistentDataType.STRING) ?: return
         if (!event.isSigning) return
 
         val player = event.player
-        val callback = sessions.remove(player.uniqueId) ?: return
+        val callback = sessions.remove(sessionId) ?: return
 
         // Join pages starting from the second page (index 1)
         val pages = meta.pages()
@@ -72,15 +76,10 @@ object BookInputHandler : Listener {
         // Remove the book from hand in the next tick
         Bukkit.getScheduler().runTask(plugin, Runnable {
             val item = player.inventory.itemInMainHand
-            if (item.itemMeta?.persistentDataContainer?.has(editorKey, PersistentDataType.BYTE) == true) {
+            if (item.itemMeta?.persistentDataContainer?.get(sessionIdKey, PersistentDataType.STRING) == sessionId) {
                 player.inventory.setItemInMainHand(null)
             }
             callback(content)
         })
-    }
-
-    @EventHandler
-    fun onQuit(event: PlayerQuitEvent) {
-        sessions.remove(event.player.uniqueId)
     }
 }

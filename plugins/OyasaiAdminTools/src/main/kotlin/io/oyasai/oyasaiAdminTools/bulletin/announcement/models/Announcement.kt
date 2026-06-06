@@ -1,6 +1,6 @@
-package io.oyasai.oyasaiAdminTools.bulletin.models
+package io.oyasai.oyasaiAdminTools.bulletin.announcement.models
 
-data class Notice(
+data class Announcement(
   val id: String = "",
   val message: String = "", // MiniMessage format
   val interval: Long = 0,  // seconds
