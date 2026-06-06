@@ -11,7 +11,6 @@ import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTaskRegistry
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinTimerHandler
 import io.oyasai.oyasaiAdminTools.utils.JsonUtils
-import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import net.kyori.adventure.inventory.Book
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -81,7 +80,8 @@ object SurveyManager {
             val responseCount = survey.respondedPlayers.getOrDefault(player.uniqueId.toString(), 0)
             if (responseCount >= survey.maxResponses) continue
 
-            if (PermsUtils.hasAnyGroupSync(player.uniqueId, survey.targetGroups)) {
+            val hasAccess = survey.targetGroups.isEmpty() || survey.targetGroups.any { player.hasPermission("group.$it") }
+            if (hasAccess) {
                 startSurvey(player, id)
                 return
             }
@@ -123,16 +123,9 @@ object SurveyManager {
             return
         }
 
-        if (survey.targetGroups.isNotEmpty()) {
-            PermsUtils.hasAnyGroup(player.uniqueId, survey.targetGroups).thenAccept { hasGroup ->
-                Bukkit.getScheduler().runTask(plugin, Runnable {
-                    if (!hasGroup) {
-                        player.sendMessage(miniMessage.deserialize("<red>このアンケートに回答する権限がありません。</red>"))
-                    } else {
-                        proceedToStartSurvey(player, survey)
-                    }
-                })
-            }
+        val hasAccess = survey.targetGroups.isEmpty() || survey.targetGroups.any { player.hasPermission("group.$it") }
+        if (!hasAccess) {
+            player.sendMessage(miniMessage.deserialize("<red>このアンケートに回答する権限がありません。</red>"))
         } else {
             proceedToStartSurvey(player, survey)
         }

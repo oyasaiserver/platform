@@ -1,7 +1,6 @@
 package io.oyasai.oyasaiAdminTools.bulletin.utils
 
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
-import io.oyasai.oyasaiAdminTools.utils.PermsUtils
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -50,11 +49,8 @@ object BulletinTimerHandler {
                         }
                     }
 
-                    if (targetGroups.isNotEmpty()) {
-                        PermsUtils.hasAnyGroup(player.uniqueId, targetGroups).thenAccept { hasGroup ->
-                            if (hasGroup) Bukkit.getScheduler().runTask(plugin, Runnable { sendMsg() })
-                        }
-                    } else {
+                    val hasAccess = targetGroups.isEmpty() || targetGroups.any { player.hasPermission("group.$it") }
+                    if (hasAccess) {
                         sendMsg()
                     }
                 }
