@@ -81,8 +81,6 @@ oyasaiPurpur rec {
     plugmanx
     protocollib
     pvparena
-    sba
-    screamingbedwars
     signshop
     simpleelevator
     skinsrestorer

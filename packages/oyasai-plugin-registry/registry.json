@@ -211,18 +211,6 @@
       "type": "spiget"
     }
   },
-  "sba": {
-    "paper": {
-      "slug": "sba",
-      "type": "modrinth"
-    }
-  },
-  "screamingbedwars": {
-    "paper": {
-      "slug": "screamingbedwars",
-      "type": "modrinth"
-    }
-  },
   "signshop": {
     "paper": {
       "id": 10997,
