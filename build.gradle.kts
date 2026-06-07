@@ -43,7 +43,6 @@ allprojects {
     maven("https://repo.purpurmc.org/snapshots")
     maven("https://nexus.scarsz.me/content/groups/public/")
     maven("https://maven.enginehub.org/repo/")
-    maven("https://jitpack.io")
   }
 }
 
