@@ -8,7 +8,7 @@ import net.luckperms.api.model.group.Group
 import net.luckperms.api.node.types.InheritanceNode
 
 object PermsUtils {
-  fun aa(player: UUID, group: String): CompletableFuture<Boolean> {
+  fun hasGroup(player: UUID, group: String): CompletableFuture<Boolean> {
     val api = LuckPermsProvider.get()
 
     return api.userManager
@@ -19,6 +19,28 @@ object PermsUtils {
 
           return@thenApplyAsync inheritedGroups.stream().anyMatch { g: Group -> g.name == group }
         })
+  }
+
+  fun hasAnyGroup(player: UUID, groups: List<String>): CompletableFuture<Boolean> {
+    if (groups.isEmpty()) return CompletableFuture.completedFuture(true)
+    val api = LuckPermsProvider.get()
+
+    return api.userManager
+        .loadUser(player)
+        .thenApplyAsync({ user ->
+          val inheritedGroups = user.getInheritedGroups(user.queryOptions)
+          return@thenApplyAsync inheritedGroups.stream().anyMatch { g: Group ->
+            groups.contains(g.name)
+          }
+        })
+  }
+
+  fun hasAnyGroupSync(player: UUID, groups: List<String>): Boolean {
+    if (groups.isEmpty()) return true
+    val api = LuckPermsProvider.get()
+    val user = api.userManager.getUser(player) ?: return false
+    val inheritedGroups = user.getInheritedGroups(user.queryOptions)
+    return inheritedGroups.any { groups.contains(it.name) }
   }
 
   fun getCurrentRank(player: UUID): CompletableFuture<io.oyasai.oyasaiAdminTools.rank.Rank?> {
