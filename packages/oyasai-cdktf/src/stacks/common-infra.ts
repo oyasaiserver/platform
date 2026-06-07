@@ -82,8 +82,7 @@ export class CommonInfra extends OyasaiTerraformStack {
 
     const secrets = createSecrets(this, this);
 
-    // TODO: Data because Cloudflare doesn't support importing registrar domain
-    // - shun 2026-04
+    // "Data" because Cloudflare doesn't support importing this resource
     this.oyasaiIoRegistrarDomain = new DataCloudflareRegistrarDomain(
       this,
       this.t("oyasai-io-registrar-domain"),

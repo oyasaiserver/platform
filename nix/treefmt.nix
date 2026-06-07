@@ -64,5 +64,6 @@
   settings.global.excludes = [
     "*/gen/*"
     "docs/*"
+    "*/generated.*"
   ];
 }

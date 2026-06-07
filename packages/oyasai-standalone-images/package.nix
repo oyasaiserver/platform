@@ -5,11 +5,26 @@
 }:
 
 let
-  inherit (callPackage ./_sources/generated.nix { }) mariadb mc-backup mysql-backup;
+  inherit (callPackage ./_sources/generated.nix { })
+    # keep-sorted start
+    caddy
+    mariadb
+    mc-backup
+    mysql-backup
+    # keep-sorted end
+    ;
 in
 runCommandLocal "oyasai-standalone-images"
   {
     passthru = {
+      # keep-sorted start block=yes
+      caddy = oyasaiDockerTools.buildImage {
+        name = caddy.pname;
+        fromImage = caddy.src;
+        config = {
+          Entrypoint = [ "caddy" ];
+        };
+      };
       mariadb = oyasaiDockerTools.buildImage {
         name = mariadb.pname;
         fromImage = mariadb.src;
@@ -33,6 +48,7 @@ runCommandLocal "oyasai-standalone-images"
           Entrypoint = [ "/entrypoint" ];
         };
       };
+      # keep-sorted end
     };
   }
   ''

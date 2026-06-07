@@ -1,3 +1,9 @@
+[caddy]
+docker.os = "linux"
+docker.arch = "amd64"
+fetch.docker = "caddy"
+src.manual = "2.11.3"
+
 [mariadb]
 docker.os = "linux"
 docker.arch = "amd64"

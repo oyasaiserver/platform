@@ -50,6 +50,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
       // keep-sorted start
+      caddy: imageIds["caddy"],
       mariadb: imageIds.mariadb,
       minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
       minecraftBackup: imageIds["mc-backup"],
@@ -288,6 +289,24 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           DB_DUMP_RETENTION: "14d",
           DB_DEBUG: true,
         }),
+      });
+
+      new Container(this, this.t("caddy-container"), {
+        image: images.caddy,
+        name: "caddy",
+        restart: "unless-stopped",
+        networksAdvanced: [network],
+        ports: ports({
+          tcp: [443],
+        }),
+        command: [
+          "reverse-proxy",
+          "--from",
+          platformInfra.rootDnsRecord.name,
+          "--to",
+          // TODO: replace with actual
+          "example.com",
+        ],
       });
     }
   }
