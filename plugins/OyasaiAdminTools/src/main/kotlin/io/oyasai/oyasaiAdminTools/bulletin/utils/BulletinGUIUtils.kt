@@ -19,14 +19,14 @@ object BulletinGUIUtils {
     val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm")
 
     fun createNavigationPane(
-        gui: ChestGui, 
-        pane: PaginatedPane, 
-        player: Player, 
-        onReload: () -> Unit, 
+        gui: ChestGui,
+        pane: PaginatedPane,
+        player: Player,
+        onReload: () -> Unit,
         onRefresh: () -> Unit
     ): StaticPane {
         val navigation = StaticPane(9, 1)
-        
+
         navigation.addItem(GuiItem(ItemStack(Material.ARROW).apply {
             itemMeta = itemMeta.apply { displayName("前のページ".mm()) }
         }) {
@@ -58,10 +58,10 @@ object BulletinGUIUtils {
     }
 
     fun openTargetGroupsEditor(
-        player: Player, 
+        player: Player,
         title: String,
-        currentGroups: List<String>, 
-        onUpdate: (List<String>) -> Unit, 
+        currentGroups: List<String>,
+        onUpdate: (List<String>) -> Unit,
         onBack: () -> Unit
     ) {
         val gui = ChestGui(6, "グループ選択: $title")
@@ -88,7 +88,7 @@ object BulletinGUIUtils {
                 "<gray>状態: </gray>${if (isSelected) "<green>選択中" else "<red>未選択"}".mm()
             ))
             item.itemMeta = meta
-            
+
             GuiItem(item) { _ ->
                 val newGroups = if (isSelected) {
                     currentGroups.filter { it != group.name }
@@ -107,7 +107,7 @@ object BulletinGUIUtils {
         actions.addItem(GuiItem(ItemStack(Material.ARROW).apply {
             itemMeta = itemMeta.apply { displayName("前のページ".mm()) }
         }) { if (pane.page > 0) { pane.page--; gui.update() } }, 0, 0)
-        
+
         actions.addItem(GuiItem(ItemStack(Material.ARROW).apply {
             itemMeta = itemMeta.apply { displayName("次のページ".mm()) }
         }) { if (pane.page < pane.pages - 1) { pane.page++; gui.update() } }, 1, 0)
@@ -115,7 +115,7 @@ object BulletinGUIUtils {
         actions.addItem(GuiItem(ItemStack(Material.ARROW).apply {
             itemMeta = itemMeta.apply { displayName("保存して戻る".mm()) }
         }) { onBack() }, 8, 0)
-        
+
         gui.addPane(Slot.fromXY(0, 5), actions)
         gui.show(player)
     }
@@ -143,13 +143,14 @@ object BulletinGUIUtils {
         player: Player,
         material: Material,
         displayName: String,
-        currentValue: String,
+        displayCurrentValue: String, // Descriptive text for the UI (e.g. "3個登録済み")
         bookTitle: String,
         bookDescription: String,
         sessionId: String,
+        dataValue: String = displayCurrentValue, // Actual data for the book (e.g. "msg1\n<bold>msg2</bold>")
         onUpdate: (String) -> Unit
     ): GuiItem {
-        val displayValue = if (currentValue.isBlank()) "<gray>なし</gray>" else currentValue
+        val displayValue = displayCurrentValue.ifBlank { "<gray>なし</gray>" }
         val item = ItemStack(material).apply {
             itemMeta = itemMeta.apply {
                 displayName("<yellow>$displayName</yellow>".mm())
@@ -159,7 +160,7 @@ object BulletinGUIUtils {
 
         return GuiItem(item) {
             io.oyasai.oyasaiAdminTools.utils.BookInputHandler.requestInput(
-                player, sessionId, bookTitle, bookDescription, currentValue, onUpdate
+                player, sessionId, bookTitle, bookDescription, dataValue, onUpdate
             )
         }
     }

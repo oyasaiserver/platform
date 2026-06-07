@@ -6,6 +6,7 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import io.oyasai.oyasaiAdminTools.bulletin.announcement.AnnouncementManager
 import io.oyasai.oyasaiAdminTools.bulletin.announcement.models.Announcement
+import io.oyasai.oyasaiAdminTools.bulletin.announcement.gui.AnnouncementBrowser
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinGUIUtils
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
 import io.oyasai.oyasaiAdminTools.utils.MMUtils.mm
@@ -26,7 +27,8 @@ object AnnouncementEditor {
             player, Material.WRITABLE_BOOK, "メッセージ管理", 
             if (announcement.messages.isEmpty()) "" else "${announcement.messages.size}個登録済み",
             "メッセージ一覧", "1行につき1つのメッセージを入力してください。\n放送時にランダムで選択されます。",
-            "announcement:${announcement.id}:messages"
+            "announcement:${announcement.id}:messages",
+            announcement.messages.joinToString("\n")
         ) { input ->
             val list = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
             BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(messages = list) }

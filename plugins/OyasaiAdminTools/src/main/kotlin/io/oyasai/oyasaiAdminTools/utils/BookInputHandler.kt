@@ -68,7 +68,9 @@ object BookInputHandler : Listener {
         // Join pages starting from the second page (index 1)
         val pages = meta.pages()
         val content = if (pages.size > 1) {
-            pages.drop(1).joinToString("\n") { plainSerializer.serialize(it) }.trim()
+            pages.drop(1).joinToString("\n") { page ->
+                plainSerializer.serialize(page)
+            }.trim()
         } else {
             ""
         }

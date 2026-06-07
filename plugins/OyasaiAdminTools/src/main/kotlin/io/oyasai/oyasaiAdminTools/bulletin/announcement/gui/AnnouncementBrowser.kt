@@ -36,17 +36,17 @@ object AnnouncementBrowser {
             )
             announcement.expiresAt?.let { lore.add("<gray>期限: </gray><aqua>${BulletinGUIUtils.dateFormat.format(Date(it))}</aqua>".mm()) }
             if (announcement.targetGroups.isNotEmpty()) lore.add("<gray>対象: </gray><white>${announcement.targetGroups.joinToString(", ")}</white>".mm())
-            
+
             lore.add(net.kyori.adventure.text.Component.empty())
             lore.add("<yellow>左クリック: 詳細編集</yellow>".mm())
             lore.add("<aqua>右クリック: 有効/無効の切替</aqua>".mm())
-            
+
             meta.lore(lore)
             item.itemMeta = meta
 
             GuiItem(item) { event ->
                 val target = AnnouncementManager.announcements.find { it.id == announcement.id } ?: return@GuiItem
-                
+
                 if (event.isLeftClick) {
                     AnnouncementEditor.open(player, target)
                 } else if (event.isRightClick) {

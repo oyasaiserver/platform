@@ -4,9 +4,11 @@ import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
-import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyExporter
 import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyManager
+import io.oyasai.oyasaiAdminTools.bulletin.survey.SurveyExporter
 import io.oyasai.oyasaiAdminTools.bulletin.survey.models.Survey
+import io.oyasai.oyasaiAdminTools.bulletin.survey.gui.SurveyBrowser
+import io.oyasai.oyasaiAdminTools.bulletin.survey.gui.SurveyQuestionEditor
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinGUIUtils
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
 import io.oyasai.oyasaiAdminTools.utils.MMUtils.mm
@@ -38,7 +40,8 @@ object SurveyEditor {
             player, Material.WRITABLE_BOOK, "告知メッセージ管理", 
             if (survey.broadcastMessages.isEmpty()) "" else "${survey.broadcastMessages.size}個登録済み",
             "告知メッセージ一覧", "1行につき1つのメッセージを入力してください。\n放送時にランダムで選択されます。",
-            "survey:${survey.id}:broadcastMessages"
+            "survey:${survey.id}:broadcastMessages",
+            survey.broadcastMessages.joinToString("\n")
         ) { input ->
             val list = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(broadcastMessages = list) }
@@ -84,7 +87,8 @@ object SurveyEditor {
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.COMMAND_BLOCK, "報酬コマンド", survey.rewardCommands.joinToString(" | "),
             "報酬コマンド", "1行につき1つのコマンドを入力してください。",
-            "survey:${survey.id}:rewardCommands"
+            "survey:${survey.id}:rewardCommands",
+            survey.rewardCommands.joinToString("\n")
         ) { input ->
             val cmds = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(rewardCommands = cmds) }
