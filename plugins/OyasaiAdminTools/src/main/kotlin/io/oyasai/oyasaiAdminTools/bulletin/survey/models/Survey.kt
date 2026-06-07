@@ -6,7 +6,7 @@ data class Survey(
   val id: String = "",
   val title: String = "",
   val broadcastMessages: List<String> = emptyList(),
-  val broadcastInterval: Long = 0,
+  val broadcastInterval: Long = 60,
   val questions: List<Question> = emptyList(),
   val rewardCommands: List<String> = emptyList(),
   val enabled: Boolean = true,
