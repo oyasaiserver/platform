@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template
+// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface ProjectTemplateConfig extends cdktf.TerraformMetaArguments {
   /**
   * The description of the project template
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#description ProjectTemplate#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#description ProjectTemplate#description}
   */
   readonly description?: string;
   /**
   * The environments for the project template
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#environments ProjectTemplate#environments}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#environments ProjectTemplate#environments}
   */
   readonly environments?: ProjectTemplateEnvironments[] | cdktf.IResolvable;
   /**
   * The name of the project template
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#name ProjectTemplate#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#name ProjectTemplate#name}
   */
   readonly name: string;
   /**
   * The roles for the project template
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#roles ProjectTemplate#roles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#roles ProjectTemplate#roles}
   */
   readonly roles?: ProjectTemplateRoles[] | cdktf.IResolvable;
   /**
   * The type of the project template. Refer to the documentation here https://infisical.com/docs/api-reference/endpoints/project-templates/create#body-type for the available options
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#type ProjectTemplate#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#type ProjectTemplate#type}
   */
   readonly type: string;
 }
@@ -42,19 +42,19 @@ export interface ProjectTemplateEnvironments {
   /**
   * The name of the environment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#name ProjectTemplate#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#name ProjectTemplate#name}
   */
   readonly name: string;
   /**
   * The position of the environment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#position ProjectTemplate#position}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#position ProjectTemplate#position}
   */
   readonly position: number;
   /**
   * The slug of the environment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#slug ProjectTemplate#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#slug ProjectTemplate#slug}
   */
   readonly slug: string;
 }
@@ -221,25 +221,25 @@ export interface ProjectTemplateRolesPermissions {
   /**
   * Describe what actions an entity can take.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#action ProjectTemplate#action}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#action ProjectTemplate#action}
   */
   readonly action: string[];
   /**
   * When specified, only matching conditions will be allowed to access given resource. Refer to the documentation in https://infisical.com/docs/internals/permissions#conditions for the complete list of supported properties and operators.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#conditions ProjectTemplate#conditions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#conditions ProjectTemplate#conditions}
   */
   readonly conditions?: string;
   /**
   * Whether rule forbids. Set this to true if permission forbids.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#inverted ProjectTemplate#inverted}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#inverted ProjectTemplate#inverted}
   */
   readonly inverted?: boolean | cdktf.IResolvable;
   /**
   * Describe the entity the permission pertains to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#subject ProjectTemplate#subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#subject ProjectTemplate#subject}
   */
   readonly subject: string;
 }
@@ -438,19 +438,19 @@ export interface ProjectTemplateRoles {
   /**
   * The name of the role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#name ProjectTemplate#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#name ProjectTemplate#name}
   */
   readonly name: string;
   /**
   * The permissions assigned to the role. Refer to the documentation here https://infisical.com/docs/api-reference/endpoints/project-templates/create#body-roles-permissions for its usage.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#permissions ProjectTemplate#permissions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#permissions ProjectTemplate#permissions}
   */
   readonly permissions?: ProjectTemplateRolesPermissions[] | cdktf.IResolvable;
   /**
   * The slug of the role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#slug ProjectTemplate#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#slug ProjectTemplate#slug}
   */
   readonly slug: string;
 }
@@ -618,7 +618,7 @@ export class ProjectTemplateRolesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template infisical_project_template}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template infisical_project_template}
 */
 export class ProjectTemplate extends cdktf.TerraformResource {
 
@@ -634,7 +634,7 @@ export class ProjectTemplate extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ProjectTemplate resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ProjectTemplate to import
-  * @param importFromId The id of the existing ProjectTemplate that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ProjectTemplate that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ProjectTemplate to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -646,7 +646,7 @@ export class ProjectTemplate extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/project_template infisical_project_template} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_template infisical_project_template} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -657,7 +657,7 @@ export class ProjectTemplate extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_project_template',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.16.28'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

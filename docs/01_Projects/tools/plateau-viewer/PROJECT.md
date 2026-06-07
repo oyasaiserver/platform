@@ -4,8 +4,13 @@ category: tool
 status: active
 owner: marzipan99
 source_of_truth: "https://github.com/marzipan99/plateau-viewer"
-related_paths: []
-last_validated: "2026-05-20"
+related_paths:
+  - docs/01_Projects/tools/plateau-viewer/
+  - plugins/CitiesSkyMine/
+project_kind: tool
+runtime_kind: browser-tool
+minecraft_related: true
+last_validated: "2026-06-05"
 agent_task: null
 ---
 
@@ -13,6 +18,17 @@ agent_task: null
 
 国土交通省PLATEAUの3D都市モデル（CityGML/GML形式）をブラウザで表示するツール。
 Leaflet.jsで地図上に建物フットプリントを描画する。
+
+## AI 作業入口
+
+| 項目 | 内容 |
+|---|---|
+| 実装の正本 | 外部リポジトリ `https://github.com/marzipan99/plateau-viewer` |
+| Platform内ミラー | `docs/01_Projects/tools/plateau-viewer/` |
+| 実行入口 | `index-standalone.html`, `index.html`, `server.py` |
+| Minecraft連携 | CityGML/PLATEAUデータを確認し、CitiesSkyMineやCityGML Converterの入力調査に使う。サーバープラグインとしてロードしない |
+| 関連プラグイン | `plugins/CitiesSkyMine/` |
+| 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置き、このファイルには公開可能な判断だけを書く |
 
 ## 使用方法
 
@@ -40,4 +56,4 @@ PLATEAUデータ（無償）: [国土交通省G空間情報センター](https:/
 
 ## 関連
 
-- CitiesSkyMine用のCityGML変換: [citygml-converter.md](citygml-converter.md)
+- CitiesSkyMine用のCityGML変換: [`../citygml-converter/PROJECT.md`](../citygml-converter/PROJECT.md)

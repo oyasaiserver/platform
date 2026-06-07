@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/kms_key_public_key
+// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/data-sources/kms_key_public_key
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataInfisicalKmsKeyPublicKeyConfig extends cdktf.TerraformMetaA
   /**
   * The ID of the KMS key to retrieve the public key for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/kms_key_public_key#key_id DataInfisicalKmsKeyPublicKey#key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/data-sources/kms_key_public_key#key_id DataInfisicalKmsKeyPublicKey#key_id}
   */
   readonly keyId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/kms_key_public_key infisical_kms_key_public_key}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/data-sources/kms_key_public_key infisical_kms_key_public_key}
 */
 export class DataInfisicalKmsKeyPublicKey extends cdktf.TerraformDataSource {
 
@@ -32,7 +32,7 @@ export class DataInfisicalKmsKeyPublicKey extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataInfisicalKmsKeyPublicKey resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataInfisicalKmsKeyPublicKey to import
-  * @param importFromId The id of the existing DataInfisicalKmsKeyPublicKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/kms_key_public_key#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataInfisicalKmsKeyPublicKey that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/data-sources/kms_key_public_key#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataInfisicalKmsKeyPublicKey to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -44,7 +44,7 @@ export class DataInfisicalKmsKeyPublicKey extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/kms_key_public_key infisical_kms_key_public_key} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/data-sources/kms_key_public_key infisical_kms_key_public_key} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -55,7 +55,7 @@ export class DataInfisicalKmsKeyPublicKey extends cdktf.TerraformDataSource {
       terraformResourceType: 'infisical_kms_key_public_key',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.16.28'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

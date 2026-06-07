@@ -1,101 +1,122 @@
 ---
-title: "プロジェクトコンテキスト — AI向け技術スタック・設計思想"
+title: "Platform Context"
 category: meta
 status: active
 owner: marzipan99
 source_of_truth: "docs/00_Context/CONTEXT.md"
 related_paths:
+  - docs/_MANIFEST.md
+  - docs/00_Context/WORKFLOWS.md
+  - docs/01_Projects/
   - plugins/
-  - dev-server/
-last_validated: "2026-05-20"
+  - packages/
+last_validated: "2026-06-05"
 agent_task: null
 ---
 
-# Platform プロジェクトコンテキスト
+# Platform Context
 
-AIエージェントが作業を開始する前に把握すべき技術スタック・設計思想・制約事項。
-Antigravityワークスペースの `00_Context/context.md` に相当するplatform固有版。
+This file is the main context and navigation layer for `docs/`.
 
----
+AI agents must not edit this file unless the user explicitly asks to edit `docs/00_Context/CONTEXT.md`.
 
-## プロジェクト概要
+## Repository
 
-Minecraftサーバー（Purpur 1.21.x）向けKotlinプラグインのモノレポ。
-おやさいサーバーというMinecraft鯖で実際に稼働するプロダクションコード。
+`platform` is the OyasaiServer monorepo.
 
----
+It contains Minecraft server plugins, infrastructure packages, Nix build definitions, local development server assets, and public documentation for contributors and AI agents.
 
-## 技術スタック
+## Core Stack
 
-| 技術 | バージョン | 用途 |
+| Area | Primary paths | Notes |
 |---|---|---|
-| Kotlin | 1.9.x | プラグイン開発言語 |
-| Purpur (Paper fork) | 1.21.10 | Minecraftサーバー |
-| Gradle | 8.x | ビルドシステム |
-| Nix | flake | 再現可能ビルド環境 |
-| treefmt | — | CIフォーマット検証 |
-| detekt | 1.23.6 | Kotlin静的解析（Java 25で既知問題あり） |
+| Minecraft plugins | `plugins/` | Kotlin / Java / Paper / Purpur plugins |
+| Build system | `build.gradle.kts`, `gradle/`, `gradle.lock` | Gradle-based build |
+| Reproducible env | `flake.nix`, `nix/` | Use `/nix/var/nix/profiles/default/bin/nix` if `nix` is not on PATH |
+| Packages / infra | `packages/` | Nix-buildable packages and generated providers |
+| Local runtime | `dev-server/`, `local/` | Local-only runtime state is not the docs SOT |
+| Documentation | `docs/` | Public shared docs and AI entrypoints |
 
-### ビルドの重要な注意点
-- `nix` は `/nix/var/nix/profiles/default/bin/nix`（PATHに入っていない）
-- フォーマットは `nix fmt`（treefmt経由）。**`gradle fmt` は使わない** — CI乖離の原因になる
-- detekt 1.23.6 + Java 25 → `IllegalArgumentException: 25` は既知の非コード問題
+## Docs Structure
 
----
+```text
+docs/
+  _MANIFEST.md          Constitution. Protected. Points here.
+  README.md             Human-readable overview and diagrams.
+  AGENTS.md             Thin AI entrypoint. Points to _MANIFEST.md.
+  CLAUDE.md             Thin Claude entrypoint. Points to _MANIFEST.md.
+  GEMINI.md             Thin Gemini entrypoint. Points to _MANIFEST.md.
+  00_Context/
+    CONTEXT.md          This file. Repo context, docs structure, routing.
+    WORKFLOWS.md        Shared agent workflow procedures.
+  01_Projects/
+    _MANIFEST.md        Project directory rules.
+    INDEX.md            Project index, if maintained.
+    <category>/<project>/PROJECT.md
+  02_Docs/
+    _MANIFEST.md        Cross-cutting docs and ops rules.
+    ops/
+    tools/
+  03_Outputs/
+    _MANIFEST.md        Public generated outputs and validation results.
+  04_Resources/
+    _MANIFEST.md        Small public resources and examples.
+  05_PublicArchives/
+    _MANIFEST.md        Public deprecated or historical docs.
+  99_Inbox/
+    _MANIFEST.md        Public triage area.
+```
 
-## プラグイン設計の方針
+## Read Routing
 
-### 依存注入の原則
-コンストラクタインジェクションを優先。Bukkit APIのグローバルオブジェクトへの直接アクセスは最小限に。
+Read only what is needed for the task.
 
-### スレッドセーフ設計
-- 複数プレイヤー操作を伴うMapは `ConcurrentHashMap`
-- Scheduler経由のタスクはBukkitの非同期スレッドで動作する場合がある
+| Goal | Read next |
+|---|---|
+| Understand docs at a human level | `docs/README.md` |
+| Follow a PR, docs, plugin, or dev-server workflow | `docs/00_Context/WORKFLOWS.md` |
+| Add or update a project page | `docs/01_Projects/_MANIFEST.md` |
+| Edit a plugin | target `docs/01_Projects/minecraft-plugins/<plugin>/PROJECT.md`, then `plugins/<Plugin>/` |
+| Work on a Minecraft-related non-plugin tool | target `docs/01_Projects/tools/<tool>/PROJECT.md` |
+| Update cross-cutting operations or tool docs | `docs/02_Docs/_MANIFEST.md` |
+| Store public validation output | `docs/03_Outputs/_MANIFEST.md` |
+| Store small public examples or samples | `docs/04_Resources/_MANIFEST.md` |
+| Check old public docs | `docs/05_PublicArchives/_MANIFEST.md` |
+| Put public but unsorted notes temporarily | `docs/99_Inbox/_MANIFEST.md` |
 
-### イベント駆動
-Bukkit EventListenerパターン。重い処理は非同期Schedulerに分離する。
+## Read Flow
 
-### ActivePetRegistry（OyasaiPets v2.5.0の教訓）
-「全ワールドのエンティティをスキャンして探す」パターンは禁止。
-専用レジストリ（インメモリ）を用意し、spawn/despawnタイミングで登録・解除する。
+```mermaid
+flowchart TD
+  Entry["AGENTS.md / CLAUDE.md / GEMINI.md"] --> Manifest["docs/_MANIFEST.md"]
+  Manifest --> Context["docs/00_Context/CONTEXT.md"]
+  Context --> Goal{"Task goal"}
+  Goal -->|Workflow| Workflows["00_Context/WORKFLOWS.md"]
+  Goal -->|Project| ProjectManifest["01_Projects/_MANIFEST.md"]
+  Goal -->|Ops or tools docs| DocsManifest["02_Docs/_MANIFEST.md"]
+  Goal -->|Public output| OutputsManifest["03_Outputs/_MANIFEST.md"]
+  Goal -->|Resources| ResourcesManifest["04_Resources/_MANIFEST.md"]
+  Goal -->|History| PublicArchives["05_PublicArchives/_MANIFEST.md"]
+  Goal -->|Triage| Inbox["99_Inbox/_MANIFEST.md"]
+  ProjectManifest --> Project["PROJECT.md"]
+  Project --> Sot["source_of_truth / related_paths"]
+  Sot --> Impl["plugins/ / packages/ / apps/ / external repo"]
+```
 
----
+## Editing Rules
 
-## 設計判断の履歴
+- `docs/_MANIFEST.md` and this file are protected. Edit them only when the user explicitly asks.
+- Keep common procedures in `WORKFLOWS.md`.
+- Keep project-specific context in `PROJECT.md`.
+- Keep directory-specific rules in child `_MANIFEST.md` files.
+- Keep `README.md` human-readable, visual, and comprehensive.
+- Do not duplicate shared rules in adapter files such as `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`.
 
-### GuiMaker: ドラフト/ライブ方式
-GUIをドラフト（編集中）とライブ（公開済み）の2フェーズに分けることで、
-プレイヤーが使用中の画面に編集中の変更が反映されることを防ぐ。
+## Build And Validation Basics
 
-### OyasaiPets v2.5.0: `onPetSpawned`呼び出し順序
-**旧仕様（バグあり）**: `onPetSpawned` → `petId/ownerId設定`
-**現在の正解**: `petId/ownerId設定` → `applyVariant` → `setupPetEntity` → `onPetSpawned`
-この順序を守らないと `ActivePetRegistry` が空になり、全ペット関連機能が壊れる。
+- Format: `/nix/var/nix/profiles/default/bin/nix fmt`
+- Build through Nix when possible: `/nix/var/nix/profiles/default/bin/nix develop --command gradle <task>`
+- Do not use `gradle fmt`; CI uses treefmt through Nix.
+- `detekt 1.23.6 + Java 25` can produce `IllegalArgumentException: 25`; treat it as a known environment issue unless evidence says otherwise.
 
----
-
-## AIエージェント向け編集規約
-
-1. **コメントは書かない**: 関数名・変数名で自明なコメントは削除対象
-2. **抽象化は最小限**: 3つ似たコードがあっても安易に共通化しない
-3. **エラーハンドリング**: システム境界（プレイヤー入力・外部API）のみバリデーション
-4. **ビルド確認**: 変更後は必ず `compileKotlin` を実行して確認
-5. **フォーマット**: `nix fmt` を実行してからコミット
-
----
-
-## 外部知識の扱い
-
-- **Antigravityの理論文書** (`~/Desktop/Antigravity/02_Docs/`) はplatformへ複製しない
-  → `docs/02_Docs/tools/` の各ファイルにリンクのみ掲載
-- **Purpur/Paper API** はjavadocを参照。バージョンによってAPIが異なることに注意
-- **Kotlin標準ライブラリ**: JVM 1.8以上対応の範囲で使用
-
----
-
-## 禁止事項
-
-- `gradle fmt` の使用（CI乖離）
-- `build.gradle.kts` の設定をいじる前に確認なしで変更
-- `detekt` エラーを `@Suppress` で黙らせることによる根本原因放置
-- 本番プラグインJARを `dev-server/plugins/` 以外にデプロイ
+For detailed procedures, read `docs/00_Context/WORKFLOWS.md`.

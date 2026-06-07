@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,61 +10,61 @@ export interface IdentityGcpAuthConfig extends cdktf.TerraformMetaArguments {
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#access_token_max_ttl IdentityGcpAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#access_token_max_ttl IdentityGcpAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default:0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#access_token_num_uses_limit IdentityGcpAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#access_token_num_uses_limit IdentityGcpAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address..
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#access_token_trusted_ips IdentityGcpAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#access_token_trusted_ips IdentityGcpAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityGcpAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#access_token_ttl IdentityGcpAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#access_token_ttl IdentityGcpAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * List of trusted GCP projects that the GCE instance must belong to authenticate with Infisical. Note that this validation property will only work for GCE instances
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#allowed_projects IdentityGcpAuth#allowed_projects}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#allowed_projects IdentityGcpAuth#allowed_projects}
   */
   readonly allowedProjects?: string[];
   /**
   * List of trusted service account emails corresponding to the GCE resource(s) allowed to authenticate with Infisical; this could be something like `test@project.iam.gserviceaccount.com`, `12345-compute@developer.gserviceaccount.com`, etc.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#allowed_service_account_emails IdentityGcpAuth#allowed_service_account_emails}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#allowed_service_account_emails IdentityGcpAuth#allowed_service_account_emails}
   */
   readonly allowedServiceAccountEmails?: string[];
   /**
   * List of trusted zones that the GCE instances must belong to authenticate with Infisical; this should be the fully-qualified zone name in the format `<region>-<zone>`like `us-central1-a`, `us-west1-b`, etc. Note that this validation property will only work for GCE instances.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#allowed_zones IdentityGcpAuth#allowed_zones}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#allowed_zones IdentityGcpAuth#allowed_zones}
   */
   readonly allowedZones?: string[];
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#identity_id IdentityGcpAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#identity_id IdentityGcpAuth#identity_id}
   */
   readonly identityId: string;
   /**
   * The Type of GCP Auth Method to use: Options are gce, iam. Default:gce
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#type IdentityGcpAuth#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#type IdentityGcpAuth#type}
   */
   readonly type?: string;
 }
 export interface IdentityGcpAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#ip_address IdentityGcpAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#ip_address IdentityGcpAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -180,7 +180,7 @@ export class IdentityGcpAuthAccessTokenTrustedIpsList extends cdktf.ComplexList 
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth infisical_identity_gcp_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth infisical_identity_gcp_auth}
 */
 export class IdentityGcpAuth extends cdktf.TerraformResource {
 
@@ -196,7 +196,7 @@ export class IdentityGcpAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityGcpAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityGcpAuth to import
-  * @param importFromId The id of the existing IdentityGcpAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityGcpAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityGcpAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -208,7 +208,7 @@ export class IdentityGcpAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_gcp_auth infisical_identity_gcp_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_gcp_auth infisical_identity_gcp_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -219,7 +219,7 @@ export class IdentityGcpAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_gcp_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.16.28'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

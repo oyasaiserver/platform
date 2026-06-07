@@ -4,8 +4,12 @@ category: tool
 status: active
 owner: marzipan99
 source_of_truth: "https://github.com/marzipan99/minecraft-glass-gradient"
-related_paths: []
-last_validated: "2026-05-20"
+related_paths:
+  - docs/01_Projects/tools/minecraft-glass-gradient/
+project_kind: tool
+runtime_kind: browser-tool
+minecraft_related: true
+last_validated: "2026-06-05"
 agent_task: null
 ---
 
@@ -13,6 +17,17 @@ agent_task: null
 
 画像からMinecraftのステインドグラスブロックを重ねた「グラデーション壁」の
 `.schem` ファイルを生成するブラウザツール。
+
+## AI 作業入口
+
+| 項目 | 内容 |
+|---|---|
+| 実装の正本 | 外部リポジトリ `https://github.com/marzipan99/minecraft-glass-gradient` |
+| Platform内ミラー | `docs/01_Projects/tools/minecraft-glass-gradient/` |
+| 実行入口 | `docs/01_Projects/tools/minecraft-glass-gradient/gui/index.html` |
+| Minecraft連携 | 出力 `.schem` を WorldEdit/FAWE でインポートする。サーバープラグインとしてロードしない |
+| 関連プラグイン | FAWE を利用するサーバー環境、必要に応じて CitiesSkyMine/BuildMaster の導線から参照 |
+| 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置き、このファイルには公開可能な判断だけを書く |
 
 ## 使用方法
 
