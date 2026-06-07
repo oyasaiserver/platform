@@ -34,7 +34,7 @@ object SurveyBrowser {
             val firstMsg = survey.broadcastMessages.firstOrNull() ?: "<gray>なし</gray>"
             val lore = mutableListOf(
                 "<gray>タイトル: ${survey.title}</gray>".mm(),
-                "<gray>告知内容: </gray><white>$firstMsg</white>".mm(),
+                "<gray>放送内容: </gray><white>$firstMsg</white>".mm(),
                 "<gray>状態: </gray>${if (survey.enabled) "<green>有効" else "<red>無効"}".mm()
             )
             lore.add("<gray>回答者数: </gray><yellow>${survey.respondedPlayers.size}名</yellow>".mm())

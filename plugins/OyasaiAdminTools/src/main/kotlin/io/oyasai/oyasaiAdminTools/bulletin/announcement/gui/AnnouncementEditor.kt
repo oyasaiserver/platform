@@ -17,14 +17,18 @@ import org.bukkit.inventory.ItemStack
 
 object AnnouncementEditor {
 
-    fun open(player: Player, announcement: Announcement) {
+    fun open(player: Player, announcement: Announcement?) {
+      if (announcement == null){
+        player.msg("<red>お知らせが見つかりませんでした。</red>")
+        return
+      }
         val gui = ChestGui(3, "編集: ${announcement.id}")
         gui.setOnTopClick { it.isCancelled = true }
         val pane = StaticPane(9, 3)
 
         // Messages
         pane.addItem(BulletinGUIUtils.createSettingItem(
-            player, Material.WRITABLE_BOOK, "メッセージ管理", 
+            player, Material.WRITABLE_BOOK, "メッセージ管理",
             if (announcement.messages.isEmpty()) "" else "${announcement.messages.size}個登録済み",
             announcement.id, "メッセージ一覧", "1行につき1つのメッセージを入力してください。\n放送時にランダムで選択されます。",
             "announcement:${announcement.id}:messages",
@@ -32,7 +36,7 @@ object AnnouncementEditor {
         ) { input ->
             val list = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
             BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(messages = list) }
-            open(player, AnnouncementManager.announcements.find { it.id == announcement.id }!!)
+            open(player, AnnouncementManager.announcements.find { it.id == announcement.id })
         }, 1, 1)
 
         // Interval
@@ -43,18 +47,18 @@ object AnnouncementEditor {
         ) { input ->
             val sec = input.trim().toLongOrNull() ?: run { player.msg("<red>数字を入力してください。</red>"); return@createSettingItem }
             BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(interval = sec) }
-            open(player, AnnouncementManager.announcements.find { it.id == announcement.id }!!)
+            open(player, AnnouncementManager.announcements.find { it.id == announcement.id })
         }, 2, 1)
 
         // Sound
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.JUKEBOX, "効果音設定", announcement.sound ?: "",
-            announcement.id, "効果音設定", "告知時に流す効果音のIDを入力してください。\n内容を空にすると無効になります。",
+            announcement.id, "効果音設定", "放送時に流す効果音のIDを入力してください。\n内容を空にすると無効になります。",
             "announcement:${announcement.id}:sound"
         ) { input ->
             val cleaned = input.trim()
             BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(sound = cleaned.ifBlank { null }) }
-            open(player, AnnouncementManager.announcements.find { it.id == announcement.id }!!)
+            open(player, AnnouncementManager.announcements.find { it.id == announcement.id })
         }, 3, 1)
 
         // Expiration
@@ -70,12 +74,12 @@ object AnnouncementEditor {
             }
             val time = cleaned.ifBlank { null }?.toLongOrNull()
             BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(expiresAt = time) }
-            open(player, AnnouncementManager.announcements.find { it.id == announcement.id }!!)
+            open(player, AnnouncementManager.announcements.find { it.id == announcement.id })
         }, 4, 1)
 
         // Groups
         pane.addItem(GuiItem(ItemStack(Material.WHITE_BANNER).apply {
-            itemMeta = itemMeta.apply { 
+            itemMeta = itemMeta.apply {
                 displayName("<yellow>ターゲットグループ設定</yellow>".mm())
                 lore(listOf(
                     "<gray>現在: ${announcement.targetGroups.joinToString(", ").ifEmpty { "全員" }}</gray>".mm(),
@@ -84,11 +88,11 @@ object AnnouncementEditor {
             }
         }) {
             BulletinGUIUtils.openTargetGroupsEditor(
-                player, 
+                player,
                 announcement.id,
                 announcement.targetGroups,
                 { newGroups -> BulletinManagerUtils.updateAnnouncement(announcement.id) { it.copy(targetGroups = newGroups) } },
-                { open(player, AnnouncementManager.announcements.find { it.id == announcement.id }!!) }
+                { open(player, AnnouncementManager.announcements.find { it.id == announcement.id }) }
             )
         }, 5, 1)
 

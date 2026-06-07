@@ -20,7 +20,11 @@ import org.bukkit.inventory.ItemStack
 
 object SurveyEditor {
 
-    fun open(player: Player, survey: Survey) {
+    fun open(player: Player, survey: Survey?) {
+      if(survey == null){
+        player.msg("<red>アンケートが見つかりませんでした。</red>")
+        return
+      }
         val gui = ChestGui(4, "編集: ${survey.id}")
         gui.setOnTopClick { it.isCancelled = true }
         val pane = StaticPane(9, 4)
@@ -32,31 +36,31 @@ object SurveyEditor {
             "survey:${survey.id}:title"
         ) { input ->
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(title = input.trim()) }
-            open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+            open(player, SurveyManager.surveys.find { it.id == survey.id })
         }, 1, 1)
 
         // Broadcast Messages
         pane.addItem(BulletinGUIUtils.createSettingItem(
-            player, Material.WRITABLE_BOOK, "告知メッセージ管理", 
+            player, Material.WRITABLE_BOOK, "放送メッセージ管理",
             if (survey.broadcastMessages.isEmpty()) "" else "${survey.broadcastMessages.size}個登録済み",
-            survey.title, "告知メッセージ管理", "開始を促すメッセージを入力してください。\n放送時にランダムで選択されます。",
+            survey.title, "放送メッセージ管理", "開始を促すメッセージを入力してください。\n放送時にランダムで選択されます。",
             "survey:${survey.id}:broadcastMessages",
             survey.broadcastMessages.joinToString("\n")
         ) { input ->
             val list = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(broadcastMessages = list) }
-            open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+            open(player, SurveyManager.surveys.find { it.id == survey.id })
         }, 2, 1)
 
         // Interval
         pane.addItem(BulletinGUIUtils.createSettingItem(
-            player, Material.CLOCK, "告知間隔 (秒)", survey.broadcastInterval.toString(),
-            survey.title, "告知間隔 (秒)", "告知を流す間隔を秒単位で入力してください。",
+            player, Material.CLOCK, "放送間隔 (秒)", survey.broadcastInterval.toString(),
+            survey.title, "放送間隔 (秒)", "放送を流す間隔を秒単位で入力してください。",
             "survey:${survey.id}:broadcastInterval"
         ) { input ->
             val sec = input.trim().toLongOrNull() ?: run { player.msg("<red>数字を入力してください。</red>"); return@createSettingItem }
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(broadcastInterval = sec) }
-            open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+            open(player, SurveyManager.surveys.find { it.id == survey.id })
         }, 3, 1)
 
         // Max Responses / Rewards
@@ -69,7 +73,7 @@ object SurveyEditor {
             val resp = parts.getOrNull(0)?.toIntOrNull() ?: run { player.msg("<red>無効な入力です。</red>"); return@createSettingItem }
             val rew = parts.getOrNull(1)?.toIntOrNull() ?: resp
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(maxResponses = resp, maxRewards = rew) }
-            open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+            open(player, SurveyManager.surveys.find { it.id == survey.id })
         }, 4, 1)
 
         // Webhook
@@ -80,7 +84,7 @@ object SurveyEditor {
         ) { input ->
             val cleaned = input.trim()
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(discordWebhookUrl = if (cleaned == "none") null else cleaned) }
-            open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+            open(player, SurveyManager.surveys.find { it.id == survey.id })
         }, 5, 1)
 
         // Reward Commands
@@ -92,18 +96,18 @@ object SurveyEditor {
         ) { input ->
             val cmds = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(rewardCommands = cmds) }
-            open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+            open(player, SurveyManager.surveys.find { it.id == survey.id })
         }, 6, 1)
 
         // Sound
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.JUKEBOX, "効果音設定", survey.sound ?: "",
-            survey.title, "効果音設定", "告知時に流す効果音のIDを入力してください。",
+            survey.title, "効果音設定", "放送時に流す効果音のIDを入力してください。",
             "survey:${survey.id}:sound"
         ) { input ->
             val cleaned = input.trim()
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(sound = cleaned.ifBlank { null }) }
-            open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+            open(player, SurveyManager.surveys.find { it.id == survey.id })
         }, 3, 2)
 
         // Expiration
@@ -119,12 +123,12 @@ object SurveyEditor {
             }
             val time = cleaned.ifBlank { null }?.toLongOrNull()
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(expiresAt = time) }
-            open(player, SurveyManager.surveys.find { it.id == survey.id }!!)
+            open(player, SurveyManager.surveys.find { it.id == survey.id })
         }, 2, 2)
 
         // Groups
         pane.addItem(GuiItem(ItemStack(Material.WHITE_BANNER).apply {
-            itemMeta = itemMeta.apply { 
+            itemMeta = itemMeta.apply {
                 displayName("<yellow>ターゲットグループ設定</yellow>".mm())
                 lore(listOf(
                     "<gray>現在: ${survey.targetGroups.joinToString(", ").ifEmpty { "全員" }}</gray>".mm(),
@@ -133,17 +137,17 @@ object SurveyEditor {
             }
         }) {
             BulletinGUIUtils.openTargetGroupsEditor(
-                player, 
+                player,
                 survey.id,
                 survey.targetGroups,
                 { newGroups -> BulletinManagerUtils.updateSurvey(survey.id) { it.copy(targetGroups = newGroups) } },
-                { open(player, SurveyManager.surveys.find { it.id == survey.id }!!) }
+                { open(player, SurveyManager.surveys.find { it.id == survey.id }) }
             )
         }, 1, 2)
 
         // Discord Export Button
         pane.addItem(GuiItem(ItemStack(Material.DISPENSER).apply {
-            itemMeta = itemMeta.apply { 
+            itemMeta = itemMeta.apply {
                 displayName("<aqua>結果をDiscordに送信</aqua>".mm())
                 lore(listOf("<gray>現在の回答結果をCSV形式で送信します</gray>".mm()))
             }
