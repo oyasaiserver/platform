@@ -9,30 +9,24 @@
 
 ### アンケート (Survey)
 
-| コマンド | 説明 | 権限 |
-| :--- | :--- | :--- |
-| `/anke` | 最新のアンケートを開く | `oyasai.survey` |
-| `/survey resume` | 中断したアンケートを再開する | `oyasai.survey` |
-| `/survey <ID>` | 指定したIDのアンケートを開始する | `oyasai.survey` |
-| `/survey help` | アンケートのヘルプを表示する | `oyasai.survey` |
+| コマンド | 説明 | 権限 | | :--- | :--- | :--- | | `/anke` | 最新のアンケートを開く |
+`oyasai.survey` | | `/survey resume` | 中断したアンケートを再開する | `oyasai.survey` | |
+`/survey <ID>` | 指定したIDのアンケートを開始する | `oyasai.survey` | | `/survey help` |
+アンケートのヘルプを表示する | `oyasai.survey` |
 
 ### お知らせ (Announcement)
 
-| コマンド | 説明 | 権限 |
-| :--- | :--- | :--- |
-| `/announce help` | お知らせのヘルプを表示する | `oyasai.survey` |
+| コマンド | 説明 | 権限 | | :--- | :--- | :--- | | `/announce help` | お知らせのヘルプを表示する |
+`oyasai.survey` |
 
 ### 管理者用 (Admin)
 
-| コマンド | 説明 | 権限 |
-| :--- | :--- | :--- |
-| `/survey gui` | アンケート管理画面を開く | `oyasai.admin` |
-| `/survey add <ID>` | 新しいアンケートを追加する | `oyasai.admin` |
-| `/survey send <ID>` | アンケート結果をDiscordに送信する | `oyasai.admin` |
-| `/survey reload` | アンケート設定をリロードする | `oyasai.admin` |
-| `/announce gui` | お知らせ管理画面を開く | `oyasai.admin` |
-| `/announce add <ID>` | お知らせを追加する | `oyasai.admin` |
-| `/announce reload` | お知らせ設定をリロードする | `oyasai.admin` |
+| コマンド | 説明 | 権限 | | :--- | :--- | :--- | | `/survey gui` | アンケート管理画面を開く |
+`oyasai.admin` | | `/survey add <ID>` | 新しいアンケートを追加する | `oyasai.admin` | |
+`/survey send <ID>` | アンケート結果をDiscordに送信する | `oyasai.admin` | | `/survey reload`
+| アンケート設定をリロードする | `oyasai.admin` | | `/announce gui` | お知らせ管理画面を開く |
+`oyasai.admin` | | `/announce add <ID>` | お知らせを追加する | `oyasai.admin` | |
+`/announce reload` | お知らせ設定をリロードする | `oyasai.admin` |
 
 ---
 
