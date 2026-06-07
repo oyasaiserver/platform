@@ -1,6 +1,6 @@
 #!/usr/bin/env node --enable-source-maps
 import { ok } from "node:assert/strict";
-import { createHash } from "node:crypto";
+import { hash } from "node:crypto";
 import { argv, stderr, stdin } from "node:process";
 import { json } from "node:stream/consumers";
 import { parseArgs } from "node:util";
@@ -26,26 +26,22 @@ async function resolveStableUrl(
       return `https://github.com/${entry.owner}/${entry.repo}/releases/download/${entry.tag}/${entry.name}`;
 
     case "modrinth": {
-      const queryModrinth = async (withVersion: boolean) => {
-        const url = new URL(
-          `https://api.modrinth.com/v2/project/${entry.slug}/version`,
-        );
-        if (withVersion)
-          url.searchParams.set("game_versions", JSON.stringify([mcVersion]));
-        url.searchParams.set("loaders", JSON.stringify([platform]));
-        const results = (await (await fetch(url)).json()) as {
-          files: { url: string }[];
-        }[];
-        return results
-          .flatMap((v) => v.files)
-          .map((f) => f.url)
-          .at(0);
-      };
-      const url =
-        (entry.skipVersionCheck ? undefined : await queryModrinth(true)) ??
-        (await queryModrinth(false));
-      ok(url, `No modrinth URL for ${id} (${platform})`);
-      return url;
+      const url = new URL(
+        `https://api.modrinth.com/v2/project/${entry.slug}/version`,
+      );
+      if (!entry.skipVersionCheck) {
+        url.searchParams.set("game_versions", JSON.stringify([mcVersion]));
+      }
+      url.searchParams.set("loaders", JSON.stringify([platform]));
+      const results = (await (await fetch(url)).json()) as {
+        files: { url: string }[];
+      }[];
+      const resolved = results
+        .flatMap((v) => v.files)
+        .map((f) => f.url)
+        .at(0);
+      ok(resolved, `No modrinth URL for ${id} (${platform})`);
+      return resolved;
     }
 
     case "hangar": {
@@ -100,13 +96,12 @@ const hashAlgo = "sha256" as const;
 
 async function computeHash(url: string): Promise<string> {
   const response = await fetch(url);
-  const buffer = await response.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
+  const bytes = await response.bytes();
   ok(
     zipMagic.every((b, i) => bytes[i] === b),
     `Expected a JAR (ZIP) file but got wrong magic bytes at ${url}`,
   );
-  const digest = createHash(hashAlgo).update(bytes).digest("base64");
+  const digest = hash(hashAlgo, bytes, "base64");
   return `${hashAlgo}-${digest}`;
 }
 

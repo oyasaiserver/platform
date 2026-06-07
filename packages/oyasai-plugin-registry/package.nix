@@ -7,7 +7,7 @@
 }:
 
 let
-  lock = builtins.fromJSON (builtins.readFile ./lock.json);
+  lock = lib.importJSON ./lock.json;
 
   final = package-lock2nix.mkNpmModule {
     src = ./.;
@@ -24,26 +24,32 @@ let
       forPlatform = (
         platform:
         let
-          fromLock = lib.pipe lock [
-            (lib.filterAttrs (_: platforms: lib.hasAttr platform platforms))
-            (lib.mapAttrs (id: platforms: fetchurl (platforms.${platform} // { name = "${id}.jar"; })))
-          ];
-          mkResult =
-            staticDir:
+          fromLock = lib.mapAttrs (
+            id: platforms: fetchurl (platforms.${platform} // { name = "${id}.jar"; })
+          ) (lib.filterAttrs (_: lib.hasAttr platform) lock);
+
+          mkRegistryFromDir =
+            dir:
             let
-              fromStatic = lib.optionalAttrs (builtins.pathExists staticDir) (
-                lib.pipe (builtins.readDir staticDir) [
-                  (lib.filterAttrs (_: t: t == "regular"))
-                  (lib.mapAttrs' (name: _: lib.nameValuePair (lib.removeSuffix ".jar" name) (staticDir + "/${name}")))
-                ]
+              fromStatic = lib.optionalAttrs (builtins.pathExists dir) (
+                lib.mapAttrs' (
+                  name: _:
+                  let
+                    id = lib.removeSuffix ".jar" name;
+                  in
+                  lib.nameValuePair id (dir + "/${name}")
+                ) (builtins.readDir dir)
               );
             in
-            fromLock // fromStatic // lib.optionalAttrs (platform == "paper") oyasai-plugins;
+            fromLock // fromStatic;
+
+          dir = ./static + "/${platform}";
         in
-        if platform == "paper" then
-          (version: mkResult (./static/paper + "/${version}"))
+        if platform == "velocity" then
+          mkRegistryFromDir dir
         else
-          mkResult (./static + "/${platform}")
+          (version: (mkRegistryFromDir (dir + "/${version}")) // oyasai-plugins)
+
       );
     };
   };
