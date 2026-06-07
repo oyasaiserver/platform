@@ -144,7 +144,8 @@ object BulletinGUIUtils {
         material: Material,
         displayName: String,
         displayCurrentValue: String, // Descriptive text for the UI (e.g. "3個登録済み")
-        bookTitle: String,
+        targetName: String,         // The ID or Title of the target (e.g. "survey_id")
+        settingName: String,        // Name of the setting (e.g. "メッセージ本文")
         bookDescription: String,
         sessionId: String,
         dataValue: String = displayCurrentValue, // Actual data for the book (e.g. "msg1\n<bold>msg2</bold>")
@@ -160,8 +161,9 @@ object BulletinGUIUtils {
 
         return GuiItem(item) {
             io.oyasai.oyasaiAdminTools.utils.BookInputHandler.requestInput(
-                player, sessionId, bookTitle, bookDescription, dataValue, onUpdate
+                player, sessionId, "[$targetName] $settingName", bookDescription, dataValue, onUpdate
             )
         }
     }
+
 }

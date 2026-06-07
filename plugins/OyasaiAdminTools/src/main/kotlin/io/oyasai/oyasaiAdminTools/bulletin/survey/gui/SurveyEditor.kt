@@ -28,7 +28,7 @@ object SurveyEditor {
         // Title
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.NAME_TAG, "タイトル変更", survey.title,
-            "タイトル", "アンケートのタイトルを入力してください。",
+            survey.title, "タイトル", "アンケートのタイトルを入力してください。",
             "survey:${survey.id}:title"
         ) { input ->
             BulletinManagerUtils.updateSurvey(survey.id) { it.copy(title = input.trim()) }
@@ -39,7 +39,7 @@ object SurveyEditor {
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.WRITABLE_BOOK, "告知メッセージ管理", 
             if (survey.broadcastMessages.isEmpty()) "" else "${survey.broadcastMessages.size}個登録済み",
-            "告知メッセージ一覧", "1行につき1つのメッセージを入力してください。\n放送時にランダムで選択されます。",
+            survey.title, "告知メッセージ管理", "開始を促すメッセージを入力してください。\n放送時にランダムで選択されます。",
             "survey:${survey.id}:broadcastMessages",
             survey.broadcastMessages.joinToString("\n")
         ) { input ->
@@ -51,7 +51,7 @@ object SurveyEditor {
         // Interval
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.CLOCK, "告知間隔 (秒)", survey.broadcastInterval.toString(),
-            "告知間隔 (秒)", "告知を流す間隔を秒単位で入力してください。",
+            survey.title, "告知間隔 (秒)", "告知を流す間隔を秒単位で入力してください。",
             "survey:${survey.id}:broadcastInterval"
         ) { input ->
             val sec = input.trim().toLongOrNull() ?: run { player.msg("<red>数字を入力してください。</red>"); return@createSettingItem }
@@ -62,7 +62,7 @@ object SurveyEditor {
         // Max Responses / Rewards
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.GOLD_INGOT, "回答/報酬上限", "${survey.maxResponses} ${survey.maxRewards}",
-            "回答上限と報酬上限", "回答できる最大回数と、報酬を貰える最大回数をスペース区切りで入力してください。",
+            survey.title, "回答/報酬上限", "回答できる最大回数と、報酬を貰える最大回数をスペース区切りで入力してください。",
             "survey:${survey.id}:maxResponsesRewards"
         ) { input ->
             val parts = input.trim().split(Regex("\\s+"))
@@ -75,7 +75,7 @@ object SurveyEditor {
         // Webhook
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.BLUE_STAINED_GLASS_PANE, "Discord Webhook", survey.discordWebhookUrl ?: "",
-            "Discord Webhook", "Webhook URLを入力してください。'none' で解除されます。",
+            survey.title, "Discord Webhook", "Webhook URLを入力してください。'none' で解除されます。",
             "survey:${survey.id}:discordWebhookUrl"
         ) { input ->
             val cleaned = input.trim()
@@ -86,7 +86,7 @@ object SurveyEditor {
         // Reward Commands
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.COMMAND_BLOCK, "報酬コマンド", survey.rewardCommands.joinToString(" | "),
-            "報酬コマンド", "1行につき1つのコマンドを入力してください。",
+            survey.title, "報酬コマンド", "1行につき1つのコマンドを入力してください。",
             "survey:${survey.id}:rewardCommands",
             survey.rewardCommands.joinToString("\n")
         ) { input ->
@@ -98,7 +98,7 @@ object SurveyEditor {
         // Sound
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.JUKEBOX, "効果音設定", survey.sound ?: "",
-            "効果音ID", "告知時に流す効果音のIDを入力してください。",
+            survey.title, "効果音設定", "告知時に流す効果音のIDを入力してください。",
             "survey:${survey.id}:sound"
         ) { input ->
             val cleaned = input.trim()
@@ -109,7 +109,7 @@ object SurveyEditor {
         // Expiration
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.COMPASS, "期限設定 (UNIXミリ秒)", survey.expiresAt?.toString() ?: "",
-            "期限 (UNIXミリ秒)", "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。",
+            survey.title, "期限設定", "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。",
             "survey:${survey.id}:expiresAt"
         ) { input ->
             val cleaned = input.trim()

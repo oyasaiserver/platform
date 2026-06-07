@@ -83,7 +83,7 @@ object SurveyQuestionEditor {
         // Text
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.NAME_TAG, "質問文変更", q.text,
-            "質問文", "質問の本文を入力してください。",
+            "${survey.title} (Q${qIdx+1})", "質問文", "質問の本文を入力してください。",
             "survey:${survey.id}:question:${qIdx}:text"
         ) { input ->
             updateQuestion(survey.id, qIdx) { it.copy(text = input) }
@@ -105,7 +105,7 @@ object SurveyQuestionEditor {
         // Options
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.PAPER, "選択肢変更", q.options.joinToString(", "),
-            "選択肢", "1行につき1つの選択肢を入力してください。",
+            "${survey.title} (Q${qIdx+1})", "選択肢", "1行につき1つの選択肢を入力してください。",
             "survey:${survey.id}:question:${qIdx}:options"
         ) { input ->
             val opts = input.split("\n").map { it.trim() }.filter { it.isNotEmpty() }

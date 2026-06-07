@@ -6,9 +6,12 @@ import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import io.oyasai.oyasaiAdminTools.OyasaiAdminTools.Companion.plugin
 import io.oyasai.oyasaiAdminTools.bulletin.announcement.AnnouncementManager
+import io.oyasai.oyasaiAdminTools.bulletin.announcement.models.Announcement
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinGUIUtils
 import io.oyasai.oyasaiAdminTools.bulletin.utils.BulletinManagerUtils
+import io.oyasai.oyasaiAdminTools.utils.BookInputHandler
 import io.oyasai.oyasaiAdminTools.utils.MMUtils.mm
+import io.oyasai.oyasaiAdminTools.utils.MMUtils.msg
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -59,7 +62,35 @@ object AnnouncementBrowser {
 
         pane.populateWithGuiItems(items)
         gui.addPane(Slot.fromXY(0, 0), pane)
-        gui.addPane(Slot.fromXY(0, 5), BulletinGUIUtils.createNavigationPane(gui, pane, player, { AnnouncementManager.reload() }, { open(player) }))
+
+        val navigation = BulletinGUIUtils.createNavigationPane(gui, pane, player, { AnnouncementManager.reload() }, { open(player) })
+
+        navigation.addItem(GuiItem(ItemStack(Material.NETHER_STAR).apply {
+            itemMeta = itemMeta.apply { displayName("<green>新規お知らせ作成</green>".mm()) }
+        }) {
+            BookInputHandler.requestInput(
+                player,
+                "announcement:create:id",
+                "新規お知らせID",
+                "作成するお知らせのIDを入力してください。\n(例: event_info)",
+                ""
+            ) { input ->
+                val id = input.trim()
+                if (id.isEmpty()) return@requestInput
+                if (AnnouncementManager.announcements.any { it.id == id }) {
+                    player.msg("<red>そのIDは既に存在します。</red>")
+                    return@requestInput
+                }
+                val newAnno = Announcement(id = id, messages = listOf("新しいお知らせ"), interval = 300)
+                AnnouncementManager.announcements.add(newAnno)
+                AnnouncementManager.save()
+                AnnouncementManager.refreshTimers()
+                player.msg("<green>お知らせ '$id' を作成しました。</green>")
+                AnnouncementEditor.open(player, newAnno)
+            }
+        }, 1, 0)
+
+        gui.addPane(Slot.fromXY(0, 5), navigation)
         gui.show(player)
     }
 }

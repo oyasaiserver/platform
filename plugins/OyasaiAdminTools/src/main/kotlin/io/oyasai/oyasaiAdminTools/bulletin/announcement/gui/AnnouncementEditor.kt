@@ -26,7 +26,7 @@ object AnnouncementEditor {
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.WRITABLE_BOOK, "メッセージ管理", 
             if (announcement.messages.isEmpty()) "" else "${announcement.messages.size}個登録済み",
-            "メッセージ一覧", "1行につき1つのメッセージを入力してください。\n放送時にランダムで選択されます。",
+            announcement.id, "メッセージ一覧", "1行につき1つのメッセージを入力してください。\n放送時にランダムで選択されます。",
             "announcement:${announcement.id}:messages",
             announcement.messages.joinToString("\n")
         ) { input ->
@@ -38,7 +38,7 @@ object AnnouncementEditor {
         // Interval
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.CLOCK, "間隔変更 (秒)", announcement.interval.toString(),
-            "間隔 (秒)", "放送する間隔を秒単位の数字で入力してください。",
+            announcement.id, "間隔 (秒)", "放送する間隔を秒単位の数字で入力してください。",
             "announcement:${announcement.id}:interval"
         ) { input ->
             val sec = input.trim().toLongOrNull() ?: run { player.msg("<red>数字を入力してください。</red>"); return@createSettingItem }
@@ -49,7 +49,7 @@ object AnnouncementEditor {
         // Sound
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.JUKEBOX, "効果音設定", announcement.sound ?: "",
-            "効果音ID", "告知時に流す効果音のIDを入力してください。\n内容を空にすると無効になります。",
+            announcement.id, "効果音設定", "告知時に流す効果音のIDを入力してください。\n内容を空にすると無効になります。",
             "announcement:${announcement.id}:sound"
         ) { input ->
             val cleaned = input.trim()
@@ -60,7 +60,7 @@ object AnnouncementEditor {
         // Expiration
         pane.addItem(BulletinGUIUtils.createSettingItem(
             player, Material.COMPASS, "期限設定 (UNIXミリ秒)", announcement.expiresAt?.toString() ?: "",
-            "期限 (UNIXミリ秒)", "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。",
+            announcement.id, "期限設定", "自動停止する期限をUNIXタイムスタンプ(ミリ秒)で入力してください。",
             "announcement:${announcement.id}:expiresAt"
         ) { input ->
             val cleaned = input.trim()
