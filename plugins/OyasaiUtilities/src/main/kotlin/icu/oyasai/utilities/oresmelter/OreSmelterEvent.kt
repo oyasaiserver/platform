@@ -1,10 +1,10 @@
 package icu.oyasai.utilities.oresmelter
 
+import de.miraculixx.veinminer.VeinMinerEvent.VeinminerDropEvent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDropItemEvent
-import de.miraculixx.veinminer.VeinMinerEvent.VeinminerDropEvent
 
 object OreSmelterEvent : Listener {
 
