@@ -49,7 +49,9 @@ object JsonUtils {
       result ?: default
     } catch (e: Exception) {
       plugin.logger.severe("Failed to parse JSON file: $path. Error: ${e.message}")
-      plugin.logger.severe("To prevent data loss, the file was NOT overwritten. Please check the syntax.")
+      plugin.logger.severe(
+          "To prevent data loss, the file was NOT overwritten. Please check the syntax."
+      )
       default
     }
   }

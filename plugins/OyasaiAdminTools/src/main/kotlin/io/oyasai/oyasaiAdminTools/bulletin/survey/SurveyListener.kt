@@ -10,33 +10,46 @@ import org.bukkit.event.player.PlayerEditBookEvent
 import org.bukkit.persistence.PersistentDataType
 
 object SurveyListener : Listener {
-    private val plainSerializer = PlainTextComponentSerializer.plainText()
+  private val plainSerializer = PlainTextComponentSerializer.plainText()
 
-    @EventHandler
-    fun onBookSign(event: PlayerEditBookEvent) {
-        if (!event.isSigning) return
+  @EventHandler
+  fun onBookSign(event: PlayerEditBookEvent) {
+    if (!event.isSigning) return
 
-        val player = event.player
-        val progress = SurveyManager.getProgress(player.uniqueId) ?: return
-        val survey = SurveyManager.surveys.find { it.id == progress.surveyId } ?: return
-        val question = survey.questions.getOrNull(progress.currentQuestionIndex) ?: return
+    val player = event.player
+    val progress = SurveyManager.getProgress(player.uniqueId) ?: return
+    val survey = SurveyManager.surveys.find { it.id == progress.surveyId } ?: return
+    val question = survey.questions.getOrNull(progress.currentQuestionIndex) ?: return
 
-        if (question.type == QuestionType.WRITE_IN_BOOK) {
-            val bookMeta = event.newBookMeta
-            if (!bookMeta.persistentDataContainer.has(SurveyManager.surveyBookKey, PersistentDataType.BYTE)) {
-                return
-            }
+    if (question.type == QuestionType.WRITE_IN_BOOK) {
+      val bookMeta = event.newBookMeta
+      if (
+          !bookMeta.persistentDataContainer.has(
+              SurveyManager.surveyBookKey,
+              PersistentDataType.BYTE,
+          )
+      ) {
+        return
+      }
 
-            val content = bookMeta.pages().joinToString("\n") { plainSerializer.serialize(it) }
+      val content = bookMeta.pages().joinToString("\n") { plainSerializer.serialize(it) }
 
-            SurveyManager.handleAnswer(player, progress.currentQuestionIndex, content)
+      SurveyManager.handleAnswer(player, progress.currentQuestionIndex, content)
 
-            Bukkit.getScheduler().runTask(plugin, Runnable {
+      Bukkit.getScheduler()
+          .runTask(
+              plugin,
+              Runnable {
                 val item = player.inventory.itemInMainHand
-                if (item.itemMeta?.persistentDataContainer?.has(SurveyManager.surveyBookKey, PersistentDataType.BYTE) == true) {
-                    player.inventory.setItemInMainHand(null)
+                if (
+                    item.itemMeta
+                        ?.persistentDataContainer
+                        ?.has(SurveyManager.surveyBookKey, PersistentDataType.BYTE) == true
+                ) {
+                  player.inventory.setItemInMainHand(null)
                 }
-            })
-        }
+              },
+          )
     }
+  }
 }

@@ -29,7 +29,9 @@ object PermsUtils {
         .loadUser(player)
         .thenApplyAsync({ user ->
           val inheritedGroups = user.getInheritedGroups(user.queryOptions)
-          return@thenApplyAsync inheritedGroups.stream().anyMatch { g: Group -> groups.contains(g.name) }
+          return@thenApplyAsync inheritedGroups.stream().anyMatch { g: Group ->
+            groups.contains(g.name)
+          }
         })
   }
 
