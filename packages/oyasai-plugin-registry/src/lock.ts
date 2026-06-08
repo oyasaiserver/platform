@@ -1,9 +1,8 @@
 #!/usr/bin/env node --enable-source-maps
 import { ok } from "node:assert/strict";
 import { hash } from "node:crypto";
-import { argv, stderr, stdin } from "node:process";
-import { json } from "node:stream/consumers";
-import { parseArgs } from "node:util";
+import { readFileSync, writeFileSync } from "node:fs";
+import { argv, stderr } from "node:process";
 
 type RegistryEntry =
   | { type: "modrinth"; slug: string; skipVersionCheck?: boolean }
@@ -13,12 +12,18 @@ type RegistryEntry =
   | { type: "url"; url: string };
 
 type LockEntry = { url: string; hash: string };
-type LockFile = Record<string, Record<string, LockEntry>>;
+type LockFile = Record<
+  string,
+  Record<string, LockEntry | Record<string, LockEntry>>
+>;
+
+// Platforms with no MC version concept
+const UNVERSIONED_PLATFORMS = new Set(["velocity"]);
 
 async function resolveStableUrl(
   id: string,
   platform: string,
-  mcVersion: string,
+  mcVersion: string | undefined,
   entry: RegistryEntry,
 ): Promise<string> {
   switch (entry.type) {
@@ -51,7 +56,8 @@ async function resolveStableUrl(
         );
         url.searchParams.set("platform", platform.toUpperCase());
         url.searchParams.set("limit", "1");
-        if (withVersion) url.searchParams.set("platformVersion", mcVersion);
+        if (withVersion && mcVersion)
+          url.searchParams.set("platformVersion", mcVersion);
         const response = (await (await fetch(url)).json()) as {
           result?: {
             downloads: Record<
@@ -64,8 +70,9 @@ async function resolveStableUrl(
         return d?.downloadUrl ?? d?.externalUrl;
       };
       const url =
-        (entry.skipVersionCheck ? undefined : await queryHangar(true)) ??
-        (await queryHangar(false));
+        (!mcVersion || entry.skipVersionCheck
+          ? undefined
+          : await queryHangar(true)) ?? (await queryHangar(false));
       ok(url, `No hangar URL for ${id} (${platform})`);
       return url;
     }
@@ -106,18 +113,16 @@ async function computeHash(url: string): Promise<string> {
 }
 
 if (import.meta.main) {
-  const {
-    values: { "mc-version": mcVersion },
-  } = parseArgs({
-    args: argv.slice(2),
-    options: { "mc-version": { type: "string" } },
-  });
+  const mcVersions = argv.slice(2);
   ok(
-    mcVersion,
-    "Usage: plugin-registry-lock --mc-version <version> < registry.json > lock.json",
+    mcVersions.length > 0,
+    "Usage: plugin-registry-lock <mc-version> [mc-version...]",
   );
 
-  const registry = (await json(stdin)) as Record<
+  const registryPath = new URL("../registry.json", import.meta.url);
+  const lockPath = new URL("../lock.json", import.meta.url);
+
+  const registry = JSON.parse(readFileSync(registryPath, "utf8")) as Record<
     string,
     Record<string, RegistryEntry>
   >;
@@ -126,14 +131,28 @@ if (import.meta.main) {
 
   for (const [id, platforms] of Object.entries(registry)) {
     for (const [platform, entry] of Object.entries(platforms)) {
-      stderr.write(`lock  ${id}@${platform} ... `);
-      const url = await resolveStableUrl(id, platform, mcVersion, entry);
-      const hash = await computeHash(url);
       lock[id] ??= {};
-      lock[id][platform] = { url, hash };
-      stderr.write("done\n");
+      if (UNVERSIONED_PLATFORMS.has(platform)) {
+        stderr.write(`lock  ${id}@${platform} ... `);
+        const url = await resolveStableUrl(id, platform, undefined, entry);
+        const hash = await computeHash(url);
+        lock[id][platform] = { url, hash };
+        stderr.write("done\n");
+      } else {
+        const versionedEntry = (lock[id][platform] ??= {}) as Record<
+          string,
+          LockEntry
+        >;
+        for (const mcVersion of mcVersions) {
+          stderr.write(`lock  ${id}@${platform}@${mcVersion} ... `);
+          const url = await resolveStableUrl(id, platform, mcVersion, entry);
+          const hash = await computeHash(url);
+          versionedEntry[mcVersion] = { url, hash };
+          stderr.write("done\n");
+        }
+      }
     }
   }
 
-  console.log(JSON.stringify(lock, null, 2));
+  writeFileSync(lockPath, JSON.stringify(lock, null, 2) + "\n");
 }
