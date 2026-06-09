@@ -1,24 +1,4 @@
 {
-    "caddy": {
-        "cargoLock": null,
-        "date": null,
-        "extract": null,
-        "name": "caddy",
-        "passthru": null,
-        "pinned": false,
-        "src": {
-            "arch": "amd64",
-            "finalImageName": null,
-            "finalImageTag": null,
-            "imageDigest": "sha256:ec18ee54aab3315c22e25f3b2babda73ff8007d39b13b3bd1bfffa2f0444c7d9",
-            "imageName": "caddy",
-            "imageTag": "2.11.3",
-            "os": "linux",
-            "sha256": "sha256-e7XCeWxwkjZKxLBOjc23j80pngi8jQZJ2kSfs7A9TaY=",
-            "tlsVerify": null
-        },
-        "version": "2.11.3"
-    },
     "mariadb": {
         "cargoLock": null,
         "date": null,
@@ -78,5 +58,25 @@
             "tlsVerify": null
         },
         "version": "1.4.0"
+    },
+    "traefik": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "traefik",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "arch": "amd64",
+            "finalImageName": null,
+            "finalImageTag": null,
+            "imageDigest": "sha256:fcdef599e6259359833dd2e1d49f9e964f66825d69bd3dd468f51102ce013d03",
+            "imageName": "traefik",
+            "imageTag": "3.7.4",
+            "os": "linux",
+            "sha256": "sha256-R/XwyezYqVIK1+wm8DuDcdnCU4Z+qhfz8M9OWs64qFo=",
+            "tlsVerify": null
+        },
+        "version": "3.7.4"
     }
 }

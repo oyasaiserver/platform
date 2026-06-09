@@ -6,18 +6,6 @@
   dockerTools,
 }:
 {
-  caddy = {
-    pname = "caddy";
-    version = "2.11.3";
-    src = dockerTools.pullImage {
-      imageName = "caddy";
-      imageDigest = "sha256:ec18ee54aab3315c22e25f3b2babda73ff8007d39b13b3bd1bfffa2f0444c7d9";
-      sha256 = "sha256-e7XCeWxwkjZKxLBOjc23j80pngi8jQZJ2kSfs7A9TaY=";
-      finalImageTag = "2.11.3";
-      os = "linux";
-      arch = "amd64";
-    };
-  };
   mariadb = {
     pname = "mariadb";
     version = "10.4.28";
@@ -50,6 +38,18 @@
       imageDigest = "sha256:9a9a12dc942c370040ced1d43ab9f7d1162e9fde7f38b0f7749c3516d79a812c";
       sha256 = "sha256-6I4SlD+N7jzTDqH7hfu6C7Sh4ALaL6WpkWqTjrhoCK0=";
       finalImageTag = "1.4.0";
+      os = "linux";
+      arch = "amd64";
+    };
+  };
+  traefik = {
+    pname = "traefik";
+    version = "3.7.4";
+    src = dockerTools.pullImage {
+      imageName = "traefik";
+      imageDigest = "sha256:fcdef599e6259359833dd2e1d49f9e964f66825d69bd3dd468f51102ce013d03";
+      sha256 = "sha256-R/XwyezYqVIK1+wm8DuDcdnCU4Z+qhfz8M9OWs64qFo=";
+      finalImageTag = "3.7.4";
       os = "linux";
       arch = "amd64";
     };

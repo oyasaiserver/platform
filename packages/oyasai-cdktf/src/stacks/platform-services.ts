@@ -50,13 +50,13 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
       // keep-sorted start
-      caddy: imageIds["caddy"],
       mariadb: imageIds.mariadb,
       minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
       minecraftBackup: imageIds["mc-backup"],
       minecraftLobby: imageIds["oyasai-minecraft-lobby"],
       minecraftMain: imageIds["oyasai-minecraft-main"],
       mysqlBackup: imageIds["mysql-backup"],
+      traefik: imageIds["traefik"],
       velocity: imageIds["oyasai-velocity"],
       // keep-sorted end
     } as const;
@@ -68,6 +68,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       minecraftAxiom: join(baseHostPath, "minecraft-axiom"),
       minecraftLobby: join(baseHostPath, "minecraft-lobby"),
       minecraftMain: join(baseHostPath, "minecraft-main"),
+      traefik: join(baseHostPath, "traefik"),
       velocity: join(baseHostPath, "velocity"),
       // keep-sorted end
     } as const;
@@ -133,6 +134,25 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           {
             containerPath: "/data",
             hostPath: hostPaths.minecraftMain,
+          },
+        ],
+        labels: [
+          { label: "traefik.enable", value: "true" },
+          {
+            label: "traefik.http.routers.bluemap.rule",
+            value: `Host(\`bluemap.${platformInfra.rootDnsRecord.name}\`)`,
+          },
+          {
+            label: "traefik.http.routers.bluemap.entrypoints",
+            value: "websecure",
+          },
+          {
+            label: "traefik.http.routers.bluemap.tls.certresolver",
+            value: "myresolver",
+          },
+          {
+            label: "traefik.http.services.bluemap.loadbalancer.server.port",
+            value: "8100",
           },
         ],
         ...(this.isMaster && {
@@ -291,21 +311,58 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
       });
 
-      new Container(this, this.t("caddy-container"), {
-        image: images.caddy,
-        name: "caddy",
+      new Container(this, this.t("traefik-container"), {
+        image: images.traefik,
+        name: "traefik",
         restart: "unless-stopped",
         networksAdvanced: [network],
         ports: ports({
-          tcp: [443],
+          tcp: [80, 443],
         }),
         command: [
-          "reverse-proxy",
-          "--from",
-          platformInfra.rootDnsRecord.name,
-          "--to",
-          // TODO: replace with actual
-          "example.com",
+          "--providers.docker=true",
+          "--providers.docker.exposedbydefault=false",
+          "--entrypoints.web.address=:80",
+          "--entrypoints.websecure.address=:443",
+          "--entrypoints.web.http.redirections.entrypoint.to=websecure",
+          "--entrypoints.web.http.redirections.entrypoint.scheme=https",
+          "--certificatesresolvers.myresolver.acme.tlschallenge=true",
+        ],
+        volumes: [
+          {
+            hostPath: "/var/run/docker.sock",
+            containerPath: "/var/run/docker.sock",
+          },
+          {
+            hostPath: hostPaths.traefik,
+            containerPath: "/etc/traefik/acme",
+          },
+        ],
+      });
+
+      new Container(this, this.t("hello-world-container"), {
+        image: "containous/whoami:latest",
+        name: "hello-world-web",
+        restart: "unless-stopped",
+        networksAdvanced: [network],
+        labels: [
+          { label: "traefik.enable", value: "true" },
+          {
+            label: "traefik.http.routers.helloworld.rule",
+            value: `Host(\`${platformInfra.rootDnsRecord.name}\`)`,
+          },
+          {
+            label: "traefik.http.routers.helloworld.entrypoints",
+            value: "websecure",
+          },
+          {
+            label: "traefik.http.routers.helloworld.tls.certresolver",
+            value: "myresolver",
+          },
+          {
+            label: "traefik.http.services.helloworld.loadbalancer.server.port",
+            value: "80",
+          },
         ],
       });
     }
