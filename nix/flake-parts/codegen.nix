@@ -10,6 +10,7 @@
         {
           "gradle/wrapper".source = "${gradle-wrapper}/gradle/wrapper/";
           "gradlew".source = "${gradle-wrapper}/gradlew";
+          "gradlew.bat".source = "${gradle-wrapper}/gradlew.bat";
           "packages/oyasai-cdktf-providers/gen".source = "${oyasai-cdktf-providers.gen}/providers/";
           "packages/gradle-plugins/gen".source = "${gradle-plugins}/";
         };
