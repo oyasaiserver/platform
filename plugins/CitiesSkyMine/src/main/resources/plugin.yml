@@ -13,7 +13,7 @@ softdepend:
 commands:
   csm:
     description: "CitiesSkyMine 統合コマンド"
-    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|stack|selection|config|debugstick|preset>"
+    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|columns|stack|selection|config|debugstick|preset>"
   rc:
     description: "道路カーブを生成するコマンド"
     usage: "/rc <help|set|build|reset|status|debugline|smoothline|version>"
@@ -40,7 +40,16 @@ commands:
     usage: "/.win [width] [height] [frame] [glass] [backing]"
   ".ss":
     description: "SlabStairs 生成ショートカット"
-    usage: "/.ss [build] [slab] [stair] [full]"
+    usage: "/.ss [material]"
+  ".cols":
+    description: "柱割り生成ショートカット"
+    usage: "/.cols [suggest|build] <columnWidth> <gap> [edge|center] [2d]"
+  ".col":
+    description: "柱割り生成ショートカット"
+    usage: "/.col [suggest|build] <columnWidth> <gap> [edge|center] [2d]"
+  ".columns":
+    description: "柱割り生成ショートカット"
+    usage: "/.columns [suggest|build] <columnWidth> <gap> [edge|center] [2d]"
   ".ns":
     description: "選択範囲をプレイヤー視点基準で複製するショートカット"
     usage: "/.ns <forward|back|left|right|up|down...> <times> [skip-blocks...]"
@@ -56,14 +65,6 @@ commands:
   ".brp":
     description: "ブラシプリセットショートカット"
     usage: "/.brp <save|load|list|delete|名前>"
-  ".csmenu":
-    description: "CsmMenu — CitiesSkyMine 独自メニューエンジン (OyasaiMenu フォーク)"
-    usage: "/.csmenu <menu-id|reload>"
-  ".gm":
-    description: "ChestGUI メーカー (OP限定)"
-    usage: "/.gm <new <id>|edit <id> [canvas|preview|commit|revert|info|title|name|lore|perm|action|clearslot]|list>"
-    permission: citiesskymine.guimaker
-    permission-message: "このコマンドはOPのみ使用できます。"
 
 permissions:
   citiesskymine.*:
@@ -80,12 +81,12 @@ permissions:
       citiesskymine.payload: true
       citiesskymine.window: true
       citiesskymine.slabstairs: true
+      citiesskymine.columns: true
       citiesskymine.stack: true
       citiesskymine.selection: true
       citiesskymine.config: true
       citiesskymine.debugstick: true
       citiesskymine.preset: true
-      citiesskymine.guimaker: true
   citiesskymine.role.admin:
     description: "CSM アドミンロール"
     default: op
@@ -116,6 +117,9 @@ permissions:
   citiesskymine.slabstairs:
     description: "旧形式: SlabStairs 生成コマンドの使用権限"
     default: false
+  citiesskymine.columns:
+    description: "旧形式: 柱割り生成コマンドの使用権限"
+    default: false
   citiesskymine.stack:
     description: "旧形式: 選択範囲複製コマンドの使用権限"
     default: false
@@ -131,6 +135,3 @@ permissions:
   citiesskymine.preset:
     description: "旧形式: ブラシプリセットコマンドの使用権限"
     default: false
-  citiesskymine.guimaker:
-    description: "GuiMaker OP限定コマンドの使用権限"
-    default: op

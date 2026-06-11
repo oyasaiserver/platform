@@ -2,6 +2,7 @@ package icu.oyasai.citiesskymine.command
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.columns.ColumnLayoutCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
@@ -27,6 +28,7 @@ class CitiesSkyMineCommand(
     private val payloadCommand: PayloadCommand,
     private val windowCommand: WindowCommand,
     private val slabStairsCommand: SlabStairsCommand,
+    private val columnLayoutCommand: ColumnLayoutCommand,
     private val stackCommand: StackCommand,
     private val selectionCommand: SelectionCommand,
     private val configCommand: ConfigGuiCommand,
@@ -93,11 +95,14 @@ class CitiesSkyMineCommand(
         if (!requireAccess(sender, CommandKey.WINDOW)) return true
         windowCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
-      "slabstairs",
-      "slab-stairs",
-      "ss" -> {
+      "slabstairs" -> {
         if (!requireAccess(sender, CommandKey.SLAB_STAIRS)) return true
         slabStairsCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
+      }
+      "columns",
+      "col" -> {
+        if (!requireAccess(sender, CommandKey.COLUMNS)) return true
+        columnLayoutCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
       "stack",
       "ns" -> {
@@ -150,9 +155,9 @@ class CitiesSkyMineCommand(
       "load",
       "load64" -> payloadCommand.onTabComplete(sender, command, alias, args)
       "window" -> windowCommand.onTabComplete(sender, command, alias, childArgs)
-      "slabstairs",
-      "slab-stairs",
-      "ss" -> slabStairsCommand.onTabComplete(sender, command, alias, childArgs)
+      "slabstairs" -> slabStairsCommand.onTabComplete(sender, command, alias, childArgs)
+      "columns",
+      "col" -> columnLayoutCommand.onTabComplete(sender, command, alias, childArgs)
       "stack",
       "ns" -> stackCommand.onTabComplete(sender, command, alias, childArgs)
       "selection",
@@ -179,8 +184,13 @@ class CitiesSkyMineCommand(
     )
     MessageUtil.helpEntry(
         sender,
-        "/csm slabstairs [build] [slab] [stair] [full]",
+        "/csm slabstairs [material]",
         "WorldEdit選択範囲に階段を生成。取り消しは //undo",
+    )
+    MessageUtil.helpEntry(
+        sender,
+        "/csm columns <柱の太さ> <柱間> [edge|center] [2d]",
+        "選択範囲に手持ちブロックで柱を生成",
     )
     MessageUtil.helpEntry(
         sender,
@@ -194,7 +204,7 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
     MessageUtil.send(
         sender,
-        "<gray>Shortcuts: /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.ns, /.sel, /.cf, /.ds, /.brp</gray>",
+        "<gray>Shortcuts: /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.cols, /.ns, /.sel, /.cf, /.ds, /.brp</gray>",
     )
   }
 
@@ -223,6 +233,8 @@ class CitiesSkyMineCommand(
             "load64",
             "window",
             "slabstairs",
+            "columns",
+            "col",
             "stack",
             "selection",
             "config",

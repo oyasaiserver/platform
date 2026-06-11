@@ -4,6 +4,7 @@ limits:
   max-columns-csm: 100000
   max-blocks-window: 512
   max-blocks-slab-stairs: 200000
+  max-blocks-columns: 200000
   max-blocks-stack: 2000000
 
 window:
@@ -17,9 +18,7 @@ window:
   select-after-fill: true
 
 slab-stairs:
-  slab: STONE_BRICK_SLAB
-  stair: STONE_BRICK_STAIRS
-  full: STONE_BRICKS
+  material: stone_brick
 
 csm:
   default-rotation: 0
@@ -76,6 +75,10 @@ access:
       - takumi
       - admin
     slabstairs:
+      - builder
+      - takumi
+      - admin
+    columns:
       - builder
       - takumi
       - admin

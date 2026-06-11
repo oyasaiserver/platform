@@ -98,9 +98,9 @@ Use when editing a Minecraft plugin.
 1. Read the plugin `PROJECT.md`.
 2. Read the implementation under `plugins/<Plugin>/`.
 3. Treat `plugins/<Plugin>/src/` as the implementation SOT.
-4. Build or compile the target plugin.
+4. Build the target plugin. This must compile Kotlin and produce the plugin jar.
    ```bash
-   /nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:<Plugin>:compileKotlin
+   /nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:<Plugin>:build
    ```
 5. If local runtime verification is needed, copy the jar into `dev-server/plugins/`.
 6. Reload the plugin or restart the dev server.
