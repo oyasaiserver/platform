@@ -41,7 +41,7 @@ object SLSignLikes {
   private val profileCache = ConcurrentHashMap<UUID, Pair<String, String?>>()
 
   private fun createLoadingItem(): ItemStack {
-    return ItemStack(Material.SKELETON_SKULL).apply {
+    return ItemStack(Material.PLAYER_HEAD).apply {
       itemMeta =
           itemMeta?.apply {
             setDisplayName("§7読み込み中...")
