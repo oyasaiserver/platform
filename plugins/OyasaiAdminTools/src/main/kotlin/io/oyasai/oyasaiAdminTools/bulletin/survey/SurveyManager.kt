@@ -218,7 +218,9 @@ object SurveyManager {
 
   private fun showChatChoice(player: Player, survey: Survey, question: Question, index: Int) {
     player.sendMessage("<gold>[アンケート] ${question.text}</gold>".mm())
-    player.sendMessage("<gray>以下の項目をクリックするか、番号（例: <yellow>/anke 1</yellow>）を入力して回答してください。</gray>".mm())
+    player.sendMessage(
+        "<gray>以下の項目をクリックするか、番号（例: <yellow>/anke 1</yellow>）を入力して回答してください。</gray>".mm()
+    )
     question.options.forEachIndexed { i, option ->
       val choice =
           miniMessage
@@ -268,7 +270,9 @@ object SurveyManager {
     val survey = surveys.find { it.id == progress.surveyId } ?: return
     val question = survey.questions.getOrNull(progress.currentQuestionIndex) ?: return
 
-    if (question.type == QuestionType.CLICK_TO_ANSWER || question.type == QuestionType.CHAT_CHOICE) {
+    if (
+        question.type == QuestionType.CLICK_TO_ANSWER || question.type == QuestionType.CHAT_CHOICE
+    ) {
       val optionIndex = index1Based - 1
       if (optionIndex in question.options.indices) {
         handleAnswer(player, progress.currentQuestionIndex, question.options[optionIndex])
