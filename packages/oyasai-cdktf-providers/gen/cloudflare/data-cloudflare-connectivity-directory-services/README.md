@@ -1,3 +1,3 @@
 # `data_cloudflare_connectivity_directory_services`
 
-Refer to the Terraform Registry for docs: [`data_cloudflare_connectivity_directory_services`](https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/connectivity_directory_services).
+Refer to the Terraform Registry for docs: [`data_cloudflare_connectivity_directory_services`](https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/connectivity_directory_services).
