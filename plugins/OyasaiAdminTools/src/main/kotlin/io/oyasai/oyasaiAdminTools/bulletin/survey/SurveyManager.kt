@@ -156,20 +156,20 @@ object SurveyManager {
 
     when (question.type) {
       QuestionType.CLICK_TO_ANSWER -> {
-        player.sendMessage(
-            "<gray>本を閉じてしまった場合は <yellow>/anke resume</yellow> か <click:run_command:/anke resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"
-                .mm()
-        )
-        showBookChoice(player, survey, question, index)
-      }
-      QuestionType.CHAT_CHOICE -> {
         if (player.name.startsWith(".")) {
-          // Bedrock フォールバック
+          showChatChoice(player, survey, question, index)
+        } else {
           player.sendMessage(
               "<gray>本を閉じてしまった場合は <yellow>/anke resume</yellow> か <click:run_command:/anke resume><yellow><u>[ここをクリック]</u></yellow></click> で開き直せます。</gray>"
                   .mm()
           )
           showBookChoice(player, survey, question, index)
+        }
+      }
+      QuestionType.CHAT_CHOICE -> {
+        if (player.name.startsWith(".")) {
+          // Bedrock フォールバック: 本ではなくチャットでの選択肢表示
+          showChatChoice(player, survey, question, index)
         } else {
           // Java はチャットでクリックして回答できる
           player.sendMessage("<gold>[アンケート] ${question.text}</gold>".mm())
@@ -216,6 +216,18 @@ object SurveyManager {
     }
   }
 
+  private fun showChatChoice(player: Player, survey: Survey, question: Question, index: Int) {
+    player.sendMessage("<gold>[アンケート] ${question.text}</gold>".mm())
+    player.sendMessage("<gray>以下の項目をクリックするか、番号（例: <yellow>/anke 1</yellow>）を入力して回答してください。</gray>".mm())
+    question.options.forEachIndexed { i, option ->
+      val choice =
+          miniMessage
+              .deserialize("<blue><u>${i + 1}. ${option}</u></blue>")
+              .clickEvent(ClickEvent.runCommand("/anke ${i + 1}"))
+      player.sendMessage(choice)
+    }
+  }
+
   private fun showBookChoice(player: Player, survey: Survey, question: Question, index: Int) {
     val bookBuilder =
         Book.builder().title(Component.text(survey.title)).author(Component.text("Oyasai Server"))
@@ -223,11 +235,11 @@ object SurveyManager {
     val page =
         Component.text().append(miniMessage.deserialize(question.text)).append(Component.newline())
 
-    question.options.forEach { option ->
+    question.options.forEachIndexed { i, option ->
       val optionComponent =
           miniMessage
               .deserialize("<blue><u>[${option}]</u></blue>")
-              .clickEvent(ClickEvent.runCommand("/anke answer $index $option"))
+              .clickEvent(ClickEvent.runCommand("/anke ${i + 1}"))
       page.append(Component.newline()).append(optionComponent)
     }
 
@@ -249,6 +261,33 @@ object SurveyManager {
 
     progress.answers.add(cleanAnswer)
     showQuestion(player, survey, progress.currentQuestionIndex + 1)
+  }
+
+  fun handleNumericAnswer(player: Player, index1Based: Int) {
+    val progress = playerProgress[player.uniqueId] ?: return
+    val survey = surveys.find { it.id == progress.surveyId } ?: return
+    val question = survey.questions.getOrNull(progress.currentQuestionIndex) ?: return
+
+    if (question.type == QuestionType.CLICK_TO_ANSWER || question.type == QuestionType.CHAT_CHOICE) {
+      val optionIndex = index1Based - 1
+      if (optionIndex in question.options.indices) {
+        handleAnswer(player, progress.currentQuestionIndex, question.options[optionIndex])
+      } else {
+        player.sendMessage("<red>無効な番号です。</red>".mm())
+      }
+    }
+  }
+
+  fun handleTextAnswer(player: Player, text: String) {
+    val progress = playerProgress[player.uniqueId] ?: return
+    val survey = surveys.find { it.id == progress.surveyId } ?: return
+    val question = survey.questions.getOrNull(progress.currentQuestionIndex) ?: return
+
+    if (question.type == QuestionType.WRITE_IN_BOOK) {
+      handleAnswer(player, progress.currentQuestionIndex, text)
+    } else {
+      player.sendMessage("<red>現在は記述式の質問ではありません。</red>".mm())
+    }
   }
 
   private fun finishSurvey(player: Player, survey: Survey) {
