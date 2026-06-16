@@ -212,7 +212,7 @@ class DebugOnBeCommand(
           §a/togom lim [num/reset]      §7- 最大表示個数の制限 (近い順)
           §a/debugonbe refresh [radius] §7- 周囲ブロックを置換 (デフォルト10)
           §a/debugonbe reload           §7- 設定ファイルを再読み込み
-          
+
           §7次ページ: /togo help 2
           """
               .trimIndent()
@@ -276,7 +276,9 @@ class DebugOnBeCommand(
         return options.filter { it.startsWith(current) }.map { prefix + it }
       }
       if (args.size == 2 && (args[0].lowercase() == "lim" || args[0].lowercase() == "limit")) {
-        return listOf("10", "50", "100", "200", "500", "reset").filter { it.startsWith(args[1].lowercase()) }
+        return listOf("10", "50", "100", "200", "500", "reset").filter {
+          it.startsWith(args[1].lowercase())
+        }
       }
       return emptyList()
     }

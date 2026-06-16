@@ -228,7 +228,8 @@ class BlockDisplayManager(
                       mainHandItem =
                           MaterialResolver.resolveItem(baseMaterial, placement.mainHandItem)
                               ?: ItemStack(baseMaterial),
-                      offHandItem = MaterialResolver.resolveItem(baseMaterial, placement.offHandItem),
+                      offHandItem =
+                          MaterialResolver.resolveItem(baseMaterial, placement.offHandItem),
                   )
 
               // ブロックの底辺中心を原点にしてオフセットを適用
@@ -255,9 +256,7 @@ class BlockDisplayManager(
               if (footBlock.type.isOccluding) {
                 hider.sendFakeLightLevel(player, footBlock, block)
                 val playerUuid = player.uniqueId.toString()
-                fakeLitBlocks
-                    .getOrPut(playerUuid) { mutableSetOf() }
-                    .add(blockPosKey(footBlock))
+                fakeLitBlocks.getOrPut(playerUuid) { mutableSetOf() }.add(blockPosKey(footBlock))
                 hasFakeLight = true
               }
 
