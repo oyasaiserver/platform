@@ -36,7 +36,7 @@ commands:
   debugonbe:
     description: DebugOnBE メインコマンド
     usage: /debugonbe <refresh|reload|help>
-    aliases: [dobe]
+    aliases: [dobe, dob]
   togo:
     description: Togo (DebugOnBE Refresh) コマンド
     usage: /togo [radius] [time]

@@ -41,14 +41,14 @@ class DebugOnBeCommand(
       args: Array<out String>,
   ): Boolean {
     if (sender !is Player) {
-      sender.sendMessage("§c[DebugOnBE] このコマンドはプレイヤーのみ使用できます。")
+      sender.sendMessage("§c[DOB] このコマンドはプレイヤーのみ使用できます。")
       return true
     }
 
     // /togo コマンドの処理
     if (command.name == "togo") {
       if (!sender.hasPermission("debugonbe.refresh")) {
-        sender.sendMessage("§c[DebugOnBE] このコマンドを使用する権限がありません。")
+        sender.sendMessage("§c[DOB] このコマンドを使用する権限がありません。")
         return true
       }
       handleTogo(sender, args)
@@ -58,7 +58,7 @@ class DebugOnBeCommand(
     // /togom コマンドの処理
     if (command.name == "togom") {
       if (!sender.hasPermission("debugonbe.refresh")) {
-        sender.sendMessage("§c[DebugOnBE] このコマンドを使用する権限がありません。")
+        sender.sendMessage("§c[DOB] このコマンドを使用する権限がありません。")
         return true
       }
       handleTogom(sender, args)
@@ -73,7 +73,7 @@ class DebugOnBeCommand(
     val sub = args[0].lowercase()
 
     if (!sender.hasPermission("debugonbe.admin")) {
-      sender.sendMessage("§c[DebugOnBE] このコマンドを使用する権限がありません。")
+      sender.sendMessage("§c[DOB] このコマンドを使用する権限がありません。")
       return true
     }
 
@@ -81,7 +81,7 @@ class DebugOnBeCommand(
       "refresh" -> handleRefresh(sender, args)
       "reload" -> handleReload(sender)
       "help" -> sendHelp(sender)
-      else -> sender.sendMessage("§c[DebugOnBE] 不明なサブコマンドです。/debugonbe help を参照してください。")
+      else -> sender.sendMessage("§c[DOB] 不明なサブコマンドです。/debugonbe help を参照してください。")
     }
     return true
   }
@@ -89,7 +89,7 @@ class DebugOnBeCommand(
   private fun handleRefresh(player: Player, args: Array<out String>) {
     val radius = if (args.size >= 2) args[1].toIntOrNull() ?: 10 else 10
     if (radius < 1 || radius > 50) {
-      player.sendMessage("§c[DebugOnBE] 半径は 1〜50 の範囲で指定してください。")
+      player.sendMessage("§c[DOB] 半径は 1〜50 の範囲で指定してください。")
       return
     }
     displayManager.refreshAround(player, radius, 30)
@@ -98,26 +98,26 @@ class DebugOnBeCommand(
   private fun handleTogo(player: Player, args: Array<out String>) {
     if (displayManager.isRefreshing(player)) {
       displayManager.clearRefresh(player)
-      player.sendMessage("§e[DebugOnBE] 表示を解除しました。")
+      player.sendMessage("§e[DOB] 表示を解除しました。")
       return
     }
 
     val radius = if (args.isNotEmpty()) args[0].toIntOrNull() ?: 10 else 10
     if (radius !in 1..50) {
-      player.sendMessage("§c[DebugOnBE] 半径は 1〜50 の範囲で指定してください。")
+      player.sendMessage("§c[DOB] 半径は 1〜50 の範囲で指定してください。")
       return
     }
 
     val time = if (args.size >= 2) args[1].toDoubleOrNull() ?: 1.0 else 1.0
     if (time !in 0.1..5.0) {
-      player.sendMessage("§c[DebugOnBE] 期限は 0.1〜5分 の範囲で指定してください。")
+      player.sendMessage("§c[DOB] 期限は 0.1〜5分 の範囲で指定してください。")
       return
     }
 
     val durationSeconds = (time * 60).toInt()
     displayManager.refreshAround(player, radius, durationSeconds)
 
-    player.sendMessage("§a[DebugOnBE] 表示を適用しました！")
+    player.sendMessage("§a[DOB] 表示を適用しました！")
     player.sendMessage("§7  - 半径: §e$radius §7(MAX 50)")
     player.sendMessage("§7  - 期限: §e${time}分 §7(MAX 5分)")
     player.sendMessage("§7  - 解除するにはもう一度 /togo を実行してください。")
@@ -150,7 +150,7 @@ class DebugOnBeCommand(
 
     if (args[0].lowercase() == "reset") {
       displayManager.setFilter(player, null)
-      player.sendMessage("§a[DebugOnBE] フィルタをリセットしました（すべての対象を表示）。")
+      player.sendMessage("§a[DOB] フィルタをリセットしました（すべての対象を表示）。")
       return
     }
 
@@ -169,24 +169,24 @@ class DebugOnBeCommand(
     }
 
     if (unknowns.isNotEmpty()) {
-      player.sendMessage("§c[DebugOnBE] 不明なタイプが含まれています: ${unknowns.joinToString(", ")}")
+      player.sendMessage("§c[DOB] 不明なタイプが含まれています: ${unknowns.joinToString(", ")}")
       return
     }
 
     if (selectedShapes.isEmpty()) {
-      player.sendMessage("§c[DebugOnBE] 有効なタイプを指定してください。")
+      player.sendMessage("§c[DOB] 有効なタイプを指定してください。")
       return
     }
 
     displayManager.setFilter(player, selectedShapes)
     player.sendMessage(
-        "§a[DebugOnBE] フィルタを設定しました: §e${selectedShapes.joinToString(", ") { it.name.lowercase() }}"
+        "§a[DOB] フィルタを設定しました: §e${selectedShapes.joinToString(", ") { it.name.lowercase() }}"
     )
   }
 
   private fun handleReload(player: Player) {
     store.reloadAll()
-    player.sendMessage("§a[DebugOnBE] 設定ファイルを再読み込みしました。")
+    player.sendMessage("§a[DOB] 設定ファイルを再読み込みしました。")
   }
 
   private fun sendHelp(player: Player) {

@@ -237,7 +237,7 @@ class BlockDisplayManager(
       }
     }
 
-    player.sendMessage("§a[CBM] §f${count} 個のブロックを置き換えました (半径 ${radius})")
+    player.sendMessage("§a[DOB] §f${count} 個のブロックを置き換えました (半径 ${radius})")
 
     if (spawnedBlocks.isNotEmpty()) {
       val task =
