@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,48 +8,47 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareEmailSecurityImpersonationRegistryConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Account Identifier
+  * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry#account_id DataCloudflareEmailSecurityImpersonationRegistry#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry#account_id DataCloudflareEmailSecurityImpersonationRegistry#account_id}
   */
   readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry#display_name_id DataCloudflareEmailSecurityImpersonationRegistry#display_name_id}
-  */
-  readonly displayNameId?: number;
-  /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry#filter DataCloudflareEmailSecurityImpersonationRegistry#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry#filter DataCloudflareEmailSecurityImpersonationRegistry#filter}
   */
   readonly filter?: DataCloudflareEmailSecurityImpersonationRegistryFilter;
+  /**
+  * Impersonation registry entry identifier
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry#impersonation_registry_id DataCloudflareEmailSecurityImpersonationRegistry#impersonation_registry_id}
+  */
+  readonly impersonationRegistryId?: string;
 }
 export interface DataCloudflareEmailSecurityImpersonationRegistryFilter {
   /**
   * The sorting direction.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry#direction DataCloudflareEmailSecurityImpersonationRegistry#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry#direction DataCloudflareEmailSecurityImpersonationRegistry#direction}
   */
   readonly direction?: string;
   /**
-  * The field to sort by.
+  * Field to sort by.
   * Available values: "name", "email", "created_at".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry#order DataCloudflareEmailSecurityImpersonationRegistry#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry#order DataCloudflareEmailSecurityImpersonationRegistry#order}
   */
   readonly order?: string;
   /**
   * Available values: "A1S_INTERNAL", "SNOOPY-CASB_OFFICE_365", "SNOOPY-OFFICE_365", "SNOOPY-GOOGLE_DIRECTORY".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry#provenance DataCloudflareEmailSecurityImpersonationRegistry#provenance}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry#provenance DataCloudflareEmailSecurityImpersonationRegistry#provenance}
   */
   readonly provenance?: string;
   /**
-  * Allows searching in multiple properties of a record simultaneously.
-  * This parameter is intended for human users, not automation. Its exact
-  * behavior is intentionally left unspecified and is subject to change
-  * in the future.
+  * Search term for filtering records. Behavior may change.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry#search DataCloudflareEmailSecurityImpersonationRegistry#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry#search DataCloudflareEmailSecurityImpersonationRegistry#search}
   */
   readonly search?: string;
 }
@@ -230,7 +229,7 @@ export class DataCloudflareEmailSecurityImpersonationRegistryFilterOutputReferen
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry cloudflare_email_security_impersonation_registry}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry cloudflare_email_security_impersonation_registry}
 */
 export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.TerraformDataSource {
 
@@ -246,7 +245,7 @@ export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.Terr
   * Generates CDKTF code for importing a DataCloudflareEmailSecurityImpersonationRegistry resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareEmailSecurityImpersonationRegistry to import
-  * @param importFromId The id of the existing DataCloudflareEmailSecurityImpersonationRegistry that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareEmailSecurityImpersonationRegistry that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareEmailSecurityImpersonationRegistry to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -258,7 +257,7 @@ export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.Terr
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_impersonation_registry cloudflare_email_security_impersonation_registry} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_impersonation_registry cloudflare_email_security_impersonation_registry} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -269,7 +268,7 @@ export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.Terr
       terraformResourceType: 'cloudflare_email_security_impersonation_registry',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.1'
+        providerVersion: '5.20.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -280,8 +279,8 @@ export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.Terr
       forEach: config.forEach
     });
     this._accountId = config.accountId;
-    this._displayNameId = config.displayNameId;
     this._filter.internalValue = config.filter;
+    this._impersonationRegistryId = config.impersonationRegistryId;
   }
 
   // ==========
@@ -324,22 +323,6 @@ export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.Terr
     return this.getNumberAttribute('directory_node_id');
   }
 
-  // display_name_id - computed: false, optional: true, required: false
-  private _displayNameId?: number; 
-  public get displayNameId() {
-    return this.getNumberAttribute('display_name_id');
-  }
-  public set displayNameId(value: number) {
-    this._displayNameId = value;
-  }
-  public resetDisplayNameId() {
-    this._displayNameId = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get displayNameIdInput() {
-    return this._displayNameId;
-  }
-
   // email - computed: true, optional: false, required: false
   public get email() {
     return this.getStringAttribute('email');
@@ -368,7 +351,23 @@ export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.Terr
 
   // id - computed: true, optional: false, required: false
   public get id() {
-    return this.getNumberAttribute('id');
+    return this.getStringAttribute('id');
+  }
+
+  // impersonation_registry_id - computed: false, optional: true, required: false
+  private _impersonationRegistryId?: string; 
+  public get impersonationRegistryId() {
+    return this.getStringAttribute('impersonation_registry_id');
+  }
+  public set impersonationRegistryId(value: string) {
+    this._impersonationRegistryId = value;
+  }
+  public resetImpersonationRegistryId() {
+    this._impersonationRegistryId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get impersonationRegistryIdInput() {
+    return this._impersonationRegistryId;
   }
 
   // is_email_regex - computed: true, optional: false, required: false
@@ -379,6 +378,11 @@ export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.Terr
   // last_modified - computed: true, optional: false, required: false
   public get lastModified() {
     return this.getStringAttribute('last_modified');
+  }
+
+  // modified_at - computed: true, optional: false, required: false
+  public get modifiedAt() {
+    return this.getStringAttribute('modified_at');
   }
 
   // name - computed: true, optional: false, required: false
@@ -398,8 +402,8 @@ export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.Terr
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
-      display_name_id: cdktf.numberToTerraform(this._displayNameId),
       filter: dataCloudflareEmailSecurityImpersonationRegistryFilterToTerraform(this._filter.internalValue),
+      impersonation_registry_id: cdktf.stringToTerraform(this._impersonationRegistryId),
     };
   }
 
@@ -411,17 +415,17 @@ export class DataCloudflareEmailSecurityImpersonationRegistry extends cdktf.Terr
         type: "simple",
         storageClassType: "string",
       },
-      display_name_id: {
-        value: cdktf.numberToHclTerraform(this._displayNameId),
-        isBlock: false,
-        type: "simple",
-        storageClassType: "number",
-      },
       filter: {
         value: dataCloudflareEmailSecurityImpersonationRegistryFilterToHclTerraform(this._filter.internalValue),
         isBlock: true,
         type: "struct",
         storageClassType: "DataCloudflareEmailSecurityImpersonationRegistryFilter",
+      },
+      impersonation_registry_id: {
+        value: cdktf.stringToHclTerraform(this._impersonationRegistryId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
       },
     };
 
