@@ -41,6 +41,10 @@ commands:
     description: Togo (DebugOnBE Refresh) コマンド
     usage: /togo [radius] [time]
     aliases: [refreshtogo]
+  togom:
+    description: Togo Mode (DebugOnBE Filter) コマンド
+    usage: /togom [types/reset/help]
+
 permissions:
   oyasaiutilities.timerbar:
     description: "TimerBarコマンドの使用権限"

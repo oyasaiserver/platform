@@ -37,6 +37,10 @@ object DebugOnBE {
       it.setExecutor(dobeCommand)
       it.tabCompleter = dobeCommand
     }
+    plugin.getServer().getPluginCommand("togom")?.let {
+      it.setExecutor(dobeCommand)
+      it.tabCompleter = dobeCommand
+    }
 
     plugin.server.pluginManager.registerEvents(BlockListener(displayManager), plugin)
   }

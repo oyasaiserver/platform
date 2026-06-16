@@ -37,9 +37,27 @@ class BlockDisplayManager(
   private val activeRefreshTasks: MutableMap<String, org.bukkit.scheduler.BukkitTask> =
       mutableMapOf()
 
+  /** プレイヤーごとの表示対象フィルタ (空ならすべて表示) */
+  private val playerFilters: MutableMap<String, Set<BlockShape>> = mutableMapOf()
+
   // ────────────────────────────────────────────────────────────────
   // 公開 API
   // ────────────────────────────────────────────────────────────────
+
+  /** プレイヤーのフィルタを設定する */
+  fun setFilter(player: Player, shapes: Set<BlockShape>?) {
+    val uuid = player.uniqueId.toString()
+    if (shapes == null || shapes.isEmpty()) {
+      playerFilters.remove(uuid)
+    } else {
+      playerFilters[uuid] = shapes
+    }
+  }
+
+  /** プレイヤーのフィルタを取得する */
+  fun getFilter(player: Player): Set<BlockShape>? {
+    return playerFilters[player.uniqueId.toString()]
+  }
 
   /** プレイヤーが現在表示リフレッシュ中（ON）であるか判定 */
   fun isRefreshing(player: Player): Boolean {
@@ -112,12 +130,17 @@ class BlockDisplayManager(
     val world = center.world ?: return
     var count = 0
     val spawnedBlocks = mutableListOf<Block>()
+    val filter = playerFilters[player.uniqueId.toString()]
 
     for (x in -radius..radius) {
       for (y in -radius..radius) {
         for (z in -radius..radius) {
           val block = world.getBlockAt(center.blockX + x, center.blockY + y, center.blockZ + z)
           val shape = BlockShape.of(block.blockData) ?: continue
+
+          // フィルタが設定されている場合は、含まれていないシェイプをスキップ
+          if (filter != null && !filter.contains(shape)) continue
+
           val stateKey = BlockStateKey.of(block.blockData, shape)
           val placements = store.get(shape).getState(stateKey)
           if (placements.isEmpty()) continue
