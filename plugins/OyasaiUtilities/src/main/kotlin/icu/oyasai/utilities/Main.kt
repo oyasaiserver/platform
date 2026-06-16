@@ -2,6 +2,7 @@ package icu.oyasai.utilities
 
 import icu.oyasai.utilities.adminbp.AdminBP
 import icu.oyasai.utilities.creative_management.CreativeManagement
+import icu.oyasai.utilities.debugonbe.DebugOnBE
 import icu.oyasai.utilities.getuuid.GetUUIDCmd
 import icu.oyasai.utilities.notnbt.NotNBTEvent
 import icu.oyasai.utilities.ore_reappears.OreReappears
@@ -37,6 +38,7 @@ class Main : JavaPlugin() {
     Pita.onEnable() // Pitaの有効化
     OreSmelter.reloadConfig() // OreSmelterのコンフィグリロード
     CreativeManagement.onEnable()
+    DebugOnBE.onEnable(this)
   }
 
   override fun onDisable() {
@@ -44,5 +46,6 @@ class Main : JavaPlugin() {
     AdminBP.onDisable()
     Pita.onDisable() // Pitaの無効化
     TimerObj.onDisable()
+    DebugOnBE.onDisable()
   }
 }
