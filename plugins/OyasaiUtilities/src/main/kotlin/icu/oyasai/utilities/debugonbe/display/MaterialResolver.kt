@@ -18,22 +18,31 @@ object MaterialResolver {
       name.endsWith("_FENCE") -> {
         val base = name.removeSuffix("_FENCE")
         if (base == "NETHER_BRICK") Material.NETHER_BRICKS
-        else Material.matchMaterial("${base}_PLANKS") ?: blockType
+        else
+            Material.matchMaterial("${base}_PLANKS")
+                ?: Material.matchMaterial("${base}_BLOCK")
+                ?: Material.matchMaterial(base)
+                ?: blockType
       }
       name.endsWith("_WALL") -> {
         val base = name.removeSuffix("_WALL")
-        Material.matchMaterial(base) ?: Material.matchMaterial("${base}S") ?: blockType
+        Material.matchMaterial("${base}_BLOCK")
+            ?: Material.matchMaterial(base)
+            ?: Material.matchMaterial("${base}S")
+            ?: blockType
       }
       name.endsWith("_STAIRS") -> {
         val base = name.removeSuffix("_STAIRS")
-        Material.matchMaterial(base)
+        Material.matchMaterial("${base}_BLOCK")
+            ?: Material.matchMaterial(base)
             ?: Material.matchMaterial("${base}_PLANKS")
             ?: Material.matchMaterial("${base}S")
             ?: blockType
       }
       name.endsWith("_SLAB") -> {
         val base = name.removeSuffix("_SLAB")
-        Material.matchMaterial(base)
+        Material.matchMaterial("${base}_BLOCK")
+            ?: Material.matchMaterial(base)
             ?: Material.matchMaterial("${base}_PLANKS")
             ?: Material.matchMaterial("${base}S")
             ?: blockType
@@ -44,22 +53,26 @@ object MaterialResolver {
 
   /** 防具立てに装備されているアイテムが「素材ブロック」のプレースホルダーであるかを判定する。 */
   private fun isMainMaterialPlaceholder(material: Material): Boolean {
-    if (!material.isBlock) return false
     val name = material.name
-    return name.endsWith("_FENCE") ||
-        name.endsWith("_WALL") ||
-        name.endsWith("_STAIRS") ||
-        name.endsWith("_SLAB") ||
-        name.endsWith("_PLANKS") ||
-        name.contains("STONE") ||
-        name.contains("BRICK") ||
-        name.contains("LOG") ||
-        name.contains("WOOD") ||
-        name.contains("COPPER") ||
-        name.contains("PRISMARINE") ||
-        name.contains("SANDSTONE") ||
-        name == "IRON_BARS" ||
-        name.contains("GLASS")
+    return material.isBlock &&
+        (name.endsWith("_FENCE") ||
+            name.endsWith("_WALL") ||
+            name.endsWith("_STAIRS") ||
+            name.endsWith("_SLAB") ||
+            name.endsWith("_PLANKS") ||
+            name.contains("STONE") ||
+            name.contains("BRICK") ||
+            name.contains("LOG") ||
+            name.contains("WOOD") ||
+            name.contains("COPPER") ||
+            name.contains("PRISMARINE") ||
+            name.contains("SANDSTONE") ||
+            name.contains("QUARTZ") ||
+            name.contains("DEEPSLATE") ||
+            name.contains("TUFF") ||
+            name.contains("MUD") ||
+            name == "IRON_BARS" ||
+            name.contains("GLASS"))
   }
 
   /** 置き換え先のブロックに基づいて、防具立てのアイテムを動的に変換する。 */
