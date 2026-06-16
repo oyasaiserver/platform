@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,54 +8,54 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareEmailSecurityBlockSenderConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Account Identifier
+  * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender#account_id DataCloudflareEmailSecurityBlockSender#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender#account_id DataCloudflareEmailSecurityBlockSender#account_id}
   */
   readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender#filter DataCloudflareEmailSecurityBlockSender#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender#filter DataCloudflareEmailSecurityBlockSender#filter}
   */
   readonly filter?: DataCloudflareEmailSecurityBlockSenderFilter;
   /**
-  * The unique identifier for the allow policy.
+  * Blocked sender pattern identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender#pattern_id DataCloudflareEmailSecurityBlockSender#pattern_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender#pattern_id DataCloudflareEmailSecurityBlockSender#pattern_id}
   */
-  readonly patternId?: number;
+  readonly patternId?: string;
 }
 export interface DataCloudflareEmailSecurityBlockSenderFilter {
   /**
   * The sorting direction.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender#direction DataCloudflareEmailSecurityBlockSender#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender#direction DataCloudflareEmailSecurityBlockSender#direction}
   */
   readonly direction?: string;
   /**
-  * The field to sort by.
+  * Field to sort by.
   * Available values: "pattern", "created_at".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender#order DataCloudflareEmailSecurityBlockSender#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender#order DataCloudflareEmailSecurityBlockSender#order}
   */
   readonly order?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender#pattern DataCloudflareEmailSecurityBlockSender#pattern}
+  * Filter by pattern value.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender#pattern DataCloudflareEmailSecurityBlockSender#pattern}
   */
   readonly pattern?: string;
   /**
+  * Filter by pattern type.
   * Available values: "EMAIL", "DOMAIN", "IP", "UNKNOWN".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender#pattern_type DataCloudflareEmailSecurityBlockSender#pattern_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender#pattern_type DataCloudflareEmailSecurityBlockSender#pattern_type}
   */
   readonly patternType?: string;
   /**
-  * Allows searching in multiple properties of a record simultaneously.
-  * This parameter is intended for human users, not automation. Its exact
-  * behavior is intentionally left unspecified and is subject to change
-  * in the future.
+  * Search term for filtering records. Behavior may change.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender#search DataCloudflareEmailSecurityBlockSender#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender#search DataCloudflareEmailSecurityBlockSender#search}
   */
   readonly search?: string;
 }
@@ -265,7 +265,7 @@ export class DataCloudflareEmailSecurityBlockSenderFilterOutputReference extends
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender cloudflare_email_security_block_sender}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender cloudflare_email_security_block_sender}
 */
 export class DataCloudflareEmailSecurityBlockSender extends cdktf.TerraformDataSource {
 
@@ -281,7 +281,7 @@ export class DataCloudflareEmailSecurityBlockSender extends cdktf.TerraformDataS
   * Generates CDKTF code for importing a DataCloudflareEmailSecurityBlockSender resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareEmailSecurityBlockSender to import
-  * @param importFromId The id of the existing DataCloudflareEmailSecurityBlockSender that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareEmailSecurityBlockSender that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareEmailSecurityBlockSender to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -293,7 +293,7 @@ export class DataCloudflareEmailSecurityBlockSender extends cdktf.TerraformDataS
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/email_security_block_sender cloudflare_email_security_block_sender} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/email_security_block_sender cloudflare_email_security_block_sender} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -304,7 +304,7 @@ export class DataCloudflareEmailSecurityBlockSender extends cdktf.TerraformDataS
       terraformResourceType: 'cloudflare_email_security_block_sender',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.1'
+        providerVersion: '5.20.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -367,7 +367,7 @@ export class DataCloudflareEmailSecurityBlockSender extends cdktf.TerraformDataS
 
   // id - computed: true, optional: false, required: false
   public get id() {
-    return this.getNumberAttribute('id');
+    return this.getStringAttribute('id');
   }
 
   // is_regex - computed: true, optional: false, required: false
@@ -380,17 +380,22 @@ export class DataCloudflareEmailSecurityBlockSender extends cdktf.TerraformDataS
     return this.getStringAttribute('last_modified');
   }
 
+  // modified_at - computed: true, optional: false, required: false
+  public get modifiedAt() {
+    return this.getStringAttribute('modified_at');
+  }
+
   // pattern - computed: true, optional: false, required: false
   public get pattern() {
     return this.getStringAttribute('pattern');
   }
 
   // pattern_id - computed: false, optional: true, required: false
-  private _patternId?: number; 
+  private _patternId?: string; 
   public get patternId() {
-    return this.getNumberAttribute('pattern_id');
+    return this.getStringAttribute('pattern_id');
   }
-  public set patternId(value: number) {
+  public set patternId(value: string) {
     this._patternId = value;
   }
   public resetPatternId() {
@@ -414,7 +419,7 @@ export class DataCloudflareEmailSecurityBlockSender extends cdktf.TerraformDataS
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
       filter: dataCloudflareEmailSecurityBlockSenderFilterToTerraform(this._filter.internalValue),
-      pattern_id: cdktf.numberToTerraform(this._patternId),
+      pattern_id: cdktf.stringToTerraform(this._patternId),
     };
   }
 
@@ -433,10 +438,10 @@ export class DataCloudflareEmailSecurityBlockSender extends cdktf.TerraformDataS
         storageClassType: "DataCloudflareEmailSecurityBlockSenderFilter",
       },
       pattern_id: {
-        value: cdktf.numberToHclTerraform(this._patternId),
+        value: cdktf.stringToHclTerraform(this._patternId),
         isBlock: false,
         type: "simple",
-        storageClassType: "number",
+        storageClassType: "string",
       },
     };
 

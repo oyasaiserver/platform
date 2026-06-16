@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/workflows
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/workflows
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,19 +8,19 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareWorkflowsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/workflows#account_id DataCloudflareWorkflows#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/workflows#account_id DataCloudflareWorkflows#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/workflows#max_items DataCloudflareWorkflows#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/workflows#max_items DataCloudflareWorkflows#max_items}
   */
   readonly maxItems?: number;
   /**
   * Allows filtering workflows` name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/workflows#search DataCloudflareWorkflows#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/workflows#search DataCloudflareWorkflows#search}
   */
   readonly search?: string;
 }
@@ -93,6 +93,11 @@ export class DataCloudflareWorkflowsResultInstancesOutputReference extends cdktf
     return this.getNumberAttribute('queued');
   }
 
+  // rolling_back - computed: true, optional: false, required: false
+  public get rollingBack() {
+    return this.getNumberAttribute('rolling_back');
+  }
+
   // running - computed: true, optional: false, required: false
   public get running() {
     return this.getNumberAttribute('running');
@@ -111,6 +116,86 @@ export class DataCloudflareWorkflowsResultInstancesOutputReference extends cdktf
   // waiting_for_pause - computed: true, optional: false, required: false
   public get waitingForPause() {
     return this.getNumberAttribute('waiting_for_pause');
+  }
+}
+export interface DataCloudflareWorkflowsResultSchedules {
+}
+
+export function dataCloudflareWorkflowsResultSchedulesToTerraform(struct?: DataCloudflareWorkflowsResultSchedules): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareWorkflowsResultSchedulesToHclTerraform(struct?: DataCloudflareWorkflowsResultSchedules): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareWorkflowsResultSchedulesOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataCloudflareWorkflowsResultSchedules | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareWorkflowsResultSchedules | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // cron - computed: true, optional: false, required: false
+  public get cron() {
+    return this.getStringAttribute('cron');
+  }
+
+  // next_instance - computed: true, optional: false, required: false
+  public get nextInstance() {
+    return this.getStringAttribute('next_instance');
+  }
+}
+
+export class DataCloudflareWorkflowsResultSchedulesList extends cdktf.ComplexList {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataCloudflareWorkflowsResultSchedulesOutputReference {
+    return new DataCloudflareWorkflowsResultSchedulesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
 export interface DataCloudflareWorkflowsResult {
@@ -195,6 +280,12 @@ export class DataCloudflareWorkflowsResultOutputReference extends cdktf.ComplexO
     return this.getStringAttribute('name');
   }
 
+  // schedules - computed: true, optional: false, required: false
+  private _schedules = new DataCloudflareWorkflowsResultSchedulesList(this, "schedules", false);
+  public get schedules() {
+    return this._schedules;
+  }
+
   // script_name - computed: true, optional: false, required: false
   public get scriptName() {
     return this.getStringAttribute('script_name');
@@ -226,7 +317,7 @@ export class DataCloudflareWorkflowsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/workflows cloudflare_workflows}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/workflows cloudflare_workflows}
 */
 export class DataCloudflareWorkflows extends cdktf.TerraformDataSource {
 
@@ -242,7 +333,7 @@ export class DataCloudflareWorkflows extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWorkflows resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkflows to import
-  * @param importFromId The id of the existing DataCloudflareWorkflows that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/workflows#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkflows that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/workflows#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkflows to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -254,7 +345,7 @@ export class DataCloudflareWorkflows extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/workflows cloudflare_workflows} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/workflows cloudflare_workflows} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -265,7 +356,7 @@ export class DataCloudflareWorkflows extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_workflows',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.1'
+        providerVersion: '5.20.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

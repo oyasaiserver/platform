@@ -1,3 +1,3 @@
 # `data_cloudflare_authenticated_origin_pulls_hostname_certificate`
 
-Refer to the Terraform Registry for docs: [`data_cloudflare_authenticated_origin_pulls_hostname_certificate`](https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/authenticated_origin_pulls_hostname_certificate).
+Refer to the Terraform Registry for docs: [`data_cloudflare_authenticated_origin_pulls_hostname_certificate`](https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/authenticated_origin_pulls_hostname_certificate).
