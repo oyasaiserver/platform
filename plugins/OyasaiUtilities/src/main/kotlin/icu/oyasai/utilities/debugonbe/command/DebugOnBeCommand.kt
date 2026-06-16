@@ -96,6 +96,12 @@ class DebugOnBeCommand(
   }
 
   private fun handleTogo(player: Player, args: Array<out String>) {
+    if (args.isNotEmpty() && args[0].lowercase() == "help") {
+      val page = if (args.size > 1) args[1].toIntOrNull() ?: 1 else 1
+      sendHelp(player, page)
+      return
+    }
+
     if (displayManager.isRefreshing(player)) {
       displayManager.clearRefresh(player)
       player.sendMessage("§e[DOB] 表示を解除しました。")
@@ -127,34 +133,40 @@ class DebugOnBeCommand(
 
   private fun handleTogom(player: Player, args: Array<out String>) {
     if (args.isEmpty() || args[0].lowercase() == "help") {
-      val filter = displayManager.getFilter(player)
-      fun status(shape: BlockShape) = if (filter == null || filter.contains(shape)) "§a✅" else "§7❌"
-
-      player.sendMessage(
-          """
-          §b━━━ /togom ヘルプ §b━━━
-          §a/togom [types] §7- 表示対象ブロックのフィルタ設定
-          §7例: /togom st,wl (階段と壁のみ)
-          §7例: /togom reset (すべて表示)
-          
-          §e■ 現在の設定状況 (✅=対象):
-          ${status(BlockShape.STAIRS)} §fst/stairs    ${status(BlockShape.IRON_BARS)} §fib/iron_bars
-          ${status(BlockShape.FENCE)} §ffc/fences    ${status(BlockShape.WALL)} §fwl/walls
-          ${status(BlockShape.SLAB)} §fsl/slabs     ${status(BlockShape.DOOR)} §fdr/doors
-          ${status(BlockShape.TRAPDOOR)} §ftd/trapdoors  ${status(BlockShape.GLASS_PANE)} §fgp/glass_panes
-          """
-              .trimIndent()
-      )
+      sendHelp(player, 2)
       return
     }
 
-    if (args[0].lowercase() == "reset") {
+    val sub = args[0].lowercase()
+
+    if (sub == "reset") {
       displayManager.setFilter(player, null)
-      player.sendMessage("§a[DOB] フィルタをリセットしました（すべての対象を表示）。")
+      displayManager.setLimit(player, null)
+      player.sendMessage("§a[DOB] フィルタと制限をリセットしました。")
       return
     }
 
-    val input = args[0].lowercase()
+    if (sub == "lim" || sub == "limit") {
+      if (args.size < 2) {
+        player.sendMessage("§c[DOB] 制限数を指定してください。 (例: /togom lim 100)")
+        return
+      }
+      val num = args[1].toIntOrNull()
+      if (num == null || num <= 0) {
+        if (args[1].lowercase() == "reset" || args[1].lowercase() == "off") {
+          displayManager.setLimit(player, null)
+          player.sendMessage("§a[DOB] 個数制限を解除しました。")
+          return
+        }
+        player.sendMessage("§c[DOB] 正の整数を指定してください。")
+        return
+      }
+      displayManager.setLimit(player, num)
+      player.sendMessage("§a[DOB] 最大表示個数を §e$num §a個に制限しました。")
+      return
+    }
+
+    val input = sub
     val types = input.split(",")
     val selectedShapes = mutableSetOf<BlockShape>()
     val unknowns = mutableListOf<String>()
@@ -189,18 +201,46 @@ class DebugOnBeCommand(
     player.sendMessage("§a[DOB] 設定ファイルを再読み込みしました。")
   }
 
-  private fun sendHelp(player: Player) {
-    player.sendMessage(
-        """
-        §b━━━ DebugOnBE ヘルプ §b━━━
-        §7■ コマンド
-        §a/togo [radius] [time]       §7- 周囲ブロックを一定時間表示置換
-        §a/togom [types/reset/help]   §7- 表示対象フィルタの設定
-        §a/debugonbe refresh [radius] §7- 周囲ブロックを置換 (デフォルト10)
-        §a/debugonbe reload           §7- 設定ファイルを再読み込み
-        """
-            .trimIndent()
-    )
+  private fun sendHelp(player: Player, page: Int = 1) {
+    if (page == 1) {
+      player.sendMessage(
+          """
+          §b━━━ DebugOnBE ヘルプ (1/2) §b━━━
+          §7■ コマンド
+          §a/togo [radius] [time]       §7- 周囲ブロックを一定時間表示置換
+          §a/togom [types/reset]        §7- 表示対象フィルタの設定
+          §a/togom lim [num/reset]      §7- 最大表示個数の制限 (近い順)
+          §a/debugonbe refresh [radius] §7- 周囲ブロックを置換 (デフォルト10)
+          §a/debugonbe reload           §7- 設定ファイルを再読み込み
+          
+          §7次ページ: /togo help 2
+          """
+              .trimIndent()
+      )
+    } else {
+      val filter = displayManager.getFilter(player)
+      fun status(shape: BlockShape) = if (filter == null || filter.contains(shape)) "§a✅" else "§7❌"
+      fun name(shape: BlockShape, label: String): String {
+        val configured = store.get(shape).states.values.any { it.isNotEmpty() }
+        return (if (configured) "§a" else "§c") + label
+      }
+
+      player.sendMessage(
+          """
+          §b━━━ DebugOnBE ヘルプ (2/2) §b━━━
+          §e■ フィルタと制限の設定状況 (✅=表示対象):
+          §7制限: §e${displayManager.getLimit(player)} §7個
+          ${status(BlockShape.STAIRS)} ${name(BlockShape.STAIRS, "st/stairs")}    ${status(BlockShape.IRON_BARS)} ${name(BlockShape.IRON_BARS, "ib/iron_bars")}
+          ${status(BlockShape.FENCE)} ${name(BlockShape.FENCE, "fc/fences")}    ${status(BlockShape.WALL)} ${name(BlockShape.WALL, "wl/walls")}
+          ${status(BlockShape.SLAB)} ${name(BlockShape.SLAB, "sl/slabs")}     ${status(BlockShape.DOOR)} ${name(BlockShape.DOOR, "dr/doors")}
+          ${status(BlockShape.TRAPDOOR)} ${name(BlockShape.TRAPDOOR, "td/trapdoors")}  ${status(BlockShape.GLASS_PANE)} ${name(BlockShape.GLASS_PANE, "gp/glass_panes")}
+          
+          §7※ 緑色は設定ファイル対応済み、赤色は未対応です。
+          §7前ページ: /togo help 1
+          """
+              .trimIndent()
+      )
+    }
   }
 
   override fun onTabComplete(
@@ -213,11 +253,17 @@ class DebugOnBeCommand(
 
     val cmdName = command.name.lowercase()
     if (cmdName == "togo") {
-      return when (args.size) {
-        1 -> listOf("5", "10", "16", "32", "50").filter { it.startsWith(args[0]) }
-        2 -> listOf("0.5", "1", "2", "3", "5").filter { it.startsWith(args[1]) }
-        else -> emptyList()
+      if (args.size == 1) {
+        val options = listOf("5", "10", "16", "32", "50", "help")
+        return options.filter { it.startsWith(args[0].lowercase()) }
       }
+      if (args.size == 2 && args[0].lowercase() == "help") {
+        return listOf("1", "2").filter { it.startsWith(args[1]) }
+      }
+      if (args.size == 2 && args[0].lowercase() != "help") {
+        return listOf("0.5", "1", "2", "3", "5").filter { it.startsWith(args[1]) }
+      }
+      return emptyList()
     }
 
     if (cmdName == "togom") {
@@ -226,8 +272,11 @@ class DebugOnBeCommand(
         val prefix = if (lastComma != -1) args[0].substring(0, lastComma + 1) else ""
         val current = if (lastComma != -1) args[0].substring(lastComma + 1) else args[0]
 
-        val options = shapeMap.keys + listOf("reset", "help")
+        val options = shapeMap.keys + listOf("reset", "lim", "limit")
         return options.filter { it.startsWith(current) }.map { prefix + it }
+      }
+      if (args.size == 2 && (args[0].lowercase() == "lim" || args[0].lowercase() == "limit")) {
+        return listOf("10", "50", "100", "200", "500", "reset").filter { it.startsWith(args[1].lowercase()) }
       }
       return emptyList()
     }

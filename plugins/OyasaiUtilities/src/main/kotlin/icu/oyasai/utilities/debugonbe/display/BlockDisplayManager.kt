@@ -40,9 +40,29 @@ class BlockDisplayManager(
   /** プレイヤーごとの表示対象フィルタ (空ならすべて表示) */
   private val playerFilters: MutableMap<String, Set<BlockShape>> = mutableMapOf()
 
+  /** プレイヤーごとの表示数制限 (null なら制限なし) */
+  private val playerLimits: MutableMap<String, Int> = mutableMapOf()
+
+  private val DEFAULT_LIMIT = 35
+
   // ────────────────────────────────────────────────────────────────
   // 公開 API
   // ────────────────────────────────────────────────────────────────
+
+  /** プレイヤーの制限数を設定する */
+  fun setLimit(player: Player, limit: Int?) {
+    val uuid = player.uniqueId.toString()
+    if (limit == null || limit <= 0) {
+      playerLimits.remove(uuid)
+    } else {
+      playerLimits[uuid] = limit
+    }
+  }
+
+  /** プレイヤーの制限数を取得する */
+  fun getLimit(player: Player): Int {
+    return playerLimits[player.uniqueId.toString()] ?: DEFAULT_LIMIT
+  }
 
   /** プレイヤーのフィルタを設定する */
   fun setFilter(player: Player, shapes: Set<BlockShape>?) {
@@ -131,6 +151,9 @@ class BlockDisplayManager(
     var count = 0
     val spawnedBlocks = mutableListOf<Block>()
     val filter = playerFilters[player.uniqueId.toString()]
+    val limit = getLimit(player)
+
+    val candidateBlocks = mutableListOf<Block>()
 
     for (x in -radius..radius) {
       for (y in -radius..radius) {
@@ -141,99 +164,108 @@ class BlockDisplayManager(
           // フィルタが設定されている場合は、含まれていないシェイプをスキップ
           if (filter != null && !filter.contains(shape)) continue
 
-          val stateKey = BlockStateKey.of(block.blockData, shape)
-          val placements = store.get(shape).getState(stateKey)
-          if (placements.isEmpty()) continue
+          candidateBlocks.add(block)
+        }
+      }
+    }
 
-          val key = blockKey(player, block)
+    // 距離順（近い順）にソート
+    candidateBlocks.sortBy { it.location.distanceSquared(center) }
 
-          // 1. 表示対象ブロックを AIR に偽装する
-          hider.hideBlock(player, block)
+    // 制限を適用
+    val blocksToProcess = candidateBlocks.take(limit)
 
-          if (!spawnedStands.containsKey(key)) {
-            val stands =
-                placements.map { placement ->
-                  // 板ガラス (GLASS_PANE) & 鉄格子 (IRON_BARS) の特別対応: 軸 (中心) の場合はガラスブロック/なめらかな石、それ以外 (腕)
-                  // は板ガラス/鉄格子を使用
-                  val baseMaterial =
-                      if (shape == BlockShape.GLASS_PANE || shape == BlockShape.IRON_BARS) {
-                        val postPlacements =
-                            store
-                                .get(shape)
-                                .getState(
-                                    "east=false,north=false,south=false,waterlogged=false,west=false"
-                                )
-                        val postXZs = postPlacements.map { it.offsetX to it.offsetZ }.toSet()
-                        val isPost =
-                            postXZs.any { (px, pz) ->
-                              Math.abs(placement.offsetX - px) < 0.01 &&
-                                  Math.abs(placement.offsetZ - pz) < 0.01
-                            }
-                        if (isPost) {
-                          if (shape == BlockShape.GLASS_PANE) {
-                            MaterialResolver.getGlassBlockMaterial(block.type)
-                          } else {
-                            org.bukkit.Material.SMOOTH_STONE
-                          }
-                        } else {
-                          block.type
+    for (block in blocksToProcess) {
+      val shape = BlockShape.of(block.blockData)!!
+      val stateKey = BlockStateKey.of(block.blockData, shape)
+      val placements = store.get(shape).getState(stateKey)
+      if (placements.isEmpty()) continue
+
+      val key = blockKey(player, block)
+
+      // 1. 表示対象ブロックを AIR に偽装する
+      hider.hideBlock(player, block)
+
+      if (!spawnedStands.containsKey(key)) {
+        val stands =
+            placements.map { placement ->
+              // 板ガラス (GLASS_PANE) & 鉄格子 (IRON_BARS) の特別対応: 軸 (中心) の場合はガラスブロック/なめらかな石、それ以外 (腕)
+              // は板ガラス/鉄格子を使用
+              val baseMaterial =
+                  if (shape == BlockShape.GLASS_PANE || shape == BlockShape.IRON_BARS) {
+                    val postPlacements =
+                        store
+                            .get(shape)
+                            .getState(
+                                "east=false,north=false,south=false,waterlogged=false,west=false"
+                            )
+                    val postXZs = postPlacements.map { it.offsetX to it.offsetZ }.toSet()
+                    val isPost =
+                        postXZs.any { (px, pz) ->
+                          Math.abs(placement.offsetX - px) < 0.01 &&
+                              Math.abs(placement.offsetZ - pz) < 0.01
                         }
+                    if (isPost) {
+                      if (shape == BlockShape.GLASS_PANE) {
+                        MaterialResolver.getGlassBlockMaterial(block.type)
                       } else {
-                        MaterialResolver.getBaseMaterial(block.type)
+                        org.bukkit.Material.SMOOTH_STONE
                       }
-
-                  val resolvedPlacement =
-                      placement.copy(
-                          headItem = MaterialResolver.resolveItem(baseMaterial, placement.headItem),
-                          chestItem =
-                              MaterialResolver.resolveItem(baseMaterial, placement.chestItem),
-                          legsItem = MaterialResolver.resolveItem(baseMaterial, placement.legsItem),
-                          feetItem = MaterialResolver.resolveItem(baseMaterial, placement.feetItem),
-                          // 右手のアイテムが未設定の場合は、ブロックのベース素材を使用
-                          mainHandItem =
-                              MaterialResolver.resolveItem(baseMaterial, placement.mainHandItem)
-                                  ?: ItemStack(baseMaterial),
-                          offHandItem =
-                              MaterialResolver.resolveItem(baseMaterial, placement.offHandItem),
-                      )
-
-                  // ブロックの底辺中心を原点にしてオフセットを適用
-                  val spawnLoc =
-                      Location(
-                          world,
-                          block.x + 0.5 + resolvedPlacement.offsetX,
-                          block.y.toDouble() + resolvedPlacement.offsetY,
-                          block.z + 0.5 + resolvedPlacement.offsetZ,
-                          resolvedPlacement.yaw,
-                          0f,
-                      )
-
-                  // パケットでフェイク防具立てをスポーン
-                  val standId = hider.spawnFakeArmorStand(player, spawnLoc, resolvedPlacement)
-
-                  // 2. Bedrock Edition（Geyser 越し）で地中に埋まった防具立ての
-                  //    装備品が真っ黒になる問題を修正する。
-                  //    ClientboundLightUpdatePacket でブロック種別を変えずに
-                  //    光データだけを 15 に偽装する。
-                  //    ブロックの見た目は一切変わらないため視覚的な穴は生まれない。
-                  val footBlock = spawnLoc.block
-                  var hasFakeLight = false
-                  if (footBlock.type.isOccluding) {
-                    hider.sendFakeLightLevel(player, footBlock, block)
-                    val playerUuid = player.uniqueId.toString()
-                    fakeLitBlocks
-                        .getOrPut(playerUuid) { mutableSetOf() }
-                        .add(blockPosKey(footBlock))
-                    hasFakeLight = true
+                    } else {
+                      block.type
+                    }
+                  } else {
+                    MaterialResolver.getBaseMaterial(block.type)
                   }
 
-                  FakeStandInfo(standId, if (hasFakeLight) footBlock else null)
-                }
-            spawnedStands[key] = stands.toMutableList()
-            spawnedBlocks.add(block)
-            count++
-          }
-        }
+              val resolvedPlacement =
+                  placement.copy(
+                      headItem = MaterialResolver.resolveItem(baseMaterial, placement.headItem),
+                      chestItem = MaterialResolver.resolveItem(baseMaterial, placement.chestItem),
+                      legsItem = MaterialResolver.resolveItem(baseMaterial, placement.legsItem),
+                      feetItem = MaterialResolver.resolveItem(baseMaterial, placement.feetItem),
+                      // 右手のアイテムが未設定の場合は、ブロックのベース素材を使用
+                      mainHandItem =
+                          MaterialResolver.resolveItem(baseMaterial, placement.mainHandItem)
+                              ?: ItemStack(baseMaterial),
+                      offHandItem = MaterialResolver.resolveItem(baseMaterial, placement.offHandItem),
+                  )
+
+              // ブロックの底辺中心を原点にしてオフセットを適用
+              val spawnLoc =
+                  Location(
+                      world,
+                      block.x + 0.5 + resolvedPlacement.offsetX,
+                      block.y.toDouble() + resolvedPlacement.offsetY,
+                      block.z + 0.5 + resolvedPlacement.offsetZ,
+                      resolvedPlacement.yaw,
+                      0f,
+                  )
+
+              // パケットでフェイク防具立てをスポーン
+              val standId = hider.spawnFakeArmorStand(player, spawnLoc, resolvedPlacement)
+
+              // 2. Bedrock Edition（Geyser 越し）で地中に埋まった防具立ての
+              //    装備品が真っ黒になる問題を修正する。
+              //    ClientboundLightUpdatePacket でブロック種別を変えずに
+              //    光データだけを 15 に偽装する。
+              //    ブロックの見た目は一切変わらないため視覚的な穴は生まれない。
+              val footBlock = spawnLoc.block
+              var hasFakeLight = false
+              if (footBlock.type.isOccluding) {
+                hider.sendFakeLightLevel(player, footBlock, block)
+                val playerUuid = player.uniqueId.toString()
+                fakeLitBlocks
+                    .getOrPut(playerUuid) { mutableSetOf() }
+                    .add(blockPosKey(footBlock))
+                hasFakeLight = true
+              }
+
+              FakeStandInfo(standId, if (hasFakeLight) footBlock else null)
+            }
+        spawnedStands[key] = stands.toMutableList()
+        spawnedBlocks.add(block)
+        count++
       }
     }
 
