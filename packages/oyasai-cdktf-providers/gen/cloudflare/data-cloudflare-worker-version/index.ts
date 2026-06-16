@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/worker_version
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/worker_version
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,26 +10,26 @@ export interface DataCloudflareWorkerVersionConfig extends cdktf.TerraformMetaAr
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/worker_version#account_id DataCloudflareWorkerVersion#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/worker_version#account_id DataCloudflareWorkerVersion#account_id}
   */
-  readonly accountId?: string;
+  readonly accountId: string;
   /**
   * Whether to include the `modules` property of the version in the response, which contains code and sourcemap content and may add several megabytes to the response size.
   * Available values: "modules".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/worker_version#include DataCloudflareWorkerVersion#include}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/worker_version#include DataCloudflareWorkerVersion#include}
   */
   readonly include?: string;
   /**
   * Identifier for the version, which can be a UUID, a UUID prefix (minimum length 8), or the literal "latest" to operate on the most recently created version.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/worker_version#version_id DataCloudflareWorkerVersion#version_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/worker_version#version_id DataCloudflareWorkerVersion#version_id}
   */
   readonly versionId: string;
   /**
   * Identifier for the Worker, which can be ID or name.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/worker_version#worker_id DataCloudflareWorkerVersion#worker_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/worker_version#worker_id DataCloudflareWorkerVersion#worker_id}
   */
   readonly workerId: string;
 }
@@ -473,6 +473,11 @@ export class DataCloudflareWorkerVersionBindingsSimpleOutputReference extends cd
   // limit - computed: true, optional: false, required: false
   public get limit() {
     return this.getNumberAttribute('limit');
+  }
+
+  // mitigation_timeout - computed: true, optional: false, required: false
+  public get mitigationTimeout() {
+    return this.getNumberAttribute('mitigation_timeout');
   }
 
   // period - computed: true, optional: false, required: false
@@ -1662,7 +1667,7 @@ export class DataCloudflareWorkerVersionPlacementOutputReference extends cdktf.C
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/worker_version cloudflare_worker_version}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/worker_version cloudflare_worker_version}
 */
 export class DataCloudflareWorkerVersion extends cdktf.TerraformDataSource {
 
@@ -1678,7 +1683,7 @@ export class DataCloudflareWorkerVersion extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWorkerVersion resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkerVersion to import
-  * @param importFromId The id of the existing DataCloudflareWorkerVersion that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/worker_version#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkerVersion that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/worker_version#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkerVersion to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1690,7 +1695,7 @@ export class DataCloudflareWorkerVersion extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/worker_version cloudflare_worker_version} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/worker_version cloudflare_worker_version} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1701,7 +1706,7 @@ export class DataCloudflareWorkerVersion extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_worker_version',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.1'
+        providerVersion: '5.20.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -1721,16 +1726,13 @@ export class DataCloudflareWorkerVersion extends cdktf.TerraformDataSource {
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: true, required: false
+  // account_id - computed: false, optional: false, required: true
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
-  }
-  public resetAccountId() {
-    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {
