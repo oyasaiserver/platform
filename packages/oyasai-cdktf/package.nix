@@ -3,7 +3,7 @@
   terraform,
   writeShellApplication,
   lib,
-  nodejs,
+  oyasai-cdktf-providers,
 }:
 let
   oyasaiCdktf = package-lock2nix.mkNpmModule { src = ./.; };
@@ -14,9 +14,8 @@ writeShellApplication {
     CDKTF_APP = lib.getExe oyasaiCdktf;
   };
   runtimeInputs = [
-    oyasaiCdktf
+    oyasai-cdktf-providers
     terraform
-    nodejs
   ];
   text = ''
     cdktf "$@"

@@ -35,5 +35,6 @@ jobs:
           password: ${{ github.token }}
       - run: nix run .#oyasai-push-nix-images
       - run: nix run .#nix-copy-to-s3
+        if: always()
         env:
           NIX_CACHE_SUBSTITUTER: ${{ vars.NIX_CACHE_SUBSTITUTER }}

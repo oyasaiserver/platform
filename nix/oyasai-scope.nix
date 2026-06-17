@@ -93,11 +93,9 @@ let
 
   overlay = final: prev: {
     oyasai-cdktf = prev.oyasai-cdktf.override {
-      nodejs = pkgs.nodejs_22;
       package-lock2nix = final.package-lock2nix.override { nodejs = pkgs.nodejs_22; };
     };
     oyasai-cdktf-providers = prev.oyasai-cdktf-providers.override {
-      nodejs = pkgs.nodejs_22;
       package-lock2nix = final.package-lock2nix.override { nodejs = pkgs.nodejs_22; };
     };
   };
