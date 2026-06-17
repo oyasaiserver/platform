@@ -27,8 +27,6 @@ CitiesSkylinesの都市データをMinecraftワールドに変換し、道路・
 | プラグイン定義 | `plugins/CitiesSkyMine/src/main/resources/plugin.yml` |
 | 仕様・規約入口 | `docs/01_Projects/minecraft-plugins/citiesskymine/specs/_MANIFEST.md` |
 | 新規コマンド追加 | `specs/command-conventions.md` を先に読み、命名・ショートカット・引数・タブ補完・権限の規約に合わせる |
-| ユーザーガイド生成 | `plugins/CitiesSkyMine/tools/csm_user_guide_catalog.json` を更新し、`:plugins:CitiesSkyMine:generateCitiesSkyMineUserGuide` を実行 |
-| Discord投稿 | `plugins/CitiesSkyMine/tools/publish_user_guide_discord.py --generate` を Bot サーバーで実行。token と channel は環境変数で渡す |
 | 関連資料 | `docs/02_Docs/tools/oyasai-menu-editors-doc/` |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:CitiesSkyMine:compileKotlin` |
 | ローカル反映 | `plugins/CitiesSkyMine/build/libs/CitiesSkyMine.jar` を `dev-server/plugins/CitiesSkyMine.jar` にコピーし、必要に応じてリロードまたは再起動 |

@@ -54,8 +54,7 @@ Confirm each step before moving to the next.
 5. **`config.yml`** — Add `limits.max-blocks-<domain>` and `access.commands.<domain>` defaults.
 6. **Command class** — Implement `CommandExecutor` and `TabCompleter`. Follow patterns in existing commands (e.g. `BezierCommand`, `CloudCommand`).
 7. **Help and tab completion** — Implement `sendHelp()` and `onTabComplete()` per `command-conventions.md`.
-8. **User guide catalog** — Update `plugins/CitiesSkyMine/tools/csm_user_guide_catalog.json`, then run `:plugins:CitiesSkyMine:generateCitiesSkyMineUserGuide`.
-9. **Build confirmation** — Run `nix develop --command gradle :plugins:CitiesSkyMine:compileKotlin` and verify success.
+8. **Build confirmation** — Run `nix develop --command gradle :plugins:CitiesSkyMine:compileKotlin` and verify success.
 
 ## 2. FAWE / WorldEdit
 
