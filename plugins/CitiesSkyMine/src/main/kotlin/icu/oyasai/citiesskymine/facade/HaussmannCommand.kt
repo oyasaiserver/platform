@@ -2,6 +2,7 @@ package icu.oyasai.citiesskymine.facade
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.io.File
 import org.bukkit.command.Command
@@ -19,14 +20,14 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       args: Array<out String>,
   ): Boolean {
     if (sender !is Player) {
-      sender.sendMessage("§cプレイヤーのみ使用可能です")
+      MessageUtil.error(sender, "プレイヤーのみ使用可能です")
       return true
     }
     if (!plugin.access.require(sender, CommandKey.FACADE)) return true
     when (args.getOrNull(0)?.lowercase()) {
       "build" -> doBuild(sender, args)
       "schem" -> doSchem(sender, args)
-      "undo" -> sender.sendMessage("§e取り消しは FAWE の //undo を使ってください。")
+      "undo" -> MessageUtil.warn(sender, "取り消しは FAWE の //undo を使ってください。")
       else -> showHelp(sender)
     }
     return true
@@ -37,14 +38,14 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
   private fun doBuild(player: Player, args: Array<out String>) {
     val bays = args.getOrNull(1)?.toIntOrNull()?.coerceIn(1, 40) ?: 4
     val palette = FacadePalette.from(args.getOrNull(2) ?: "cream")
-    player.sendMessage("§7プロシージャル生成中... (${bays}ベイ, ${palette.id})")
+    MessageUtil.send(player, "<gray>プロシージャル生成中... (${bays}ベイ, ${palette.id})</gray>")
     val result =
         try {
           CsmEditSession.run(player, plugin.logger) { editSession ->
             FacadeGenerator.generateInto(player, editSession, bays, palette)
           }
         } catch (e: Exception) {
-          player.sendMessage("§c生成に失敗しました: ${e.message}")
+          MessageUtil.error(player, "生成に失敗しました: ${e.message}")
           return
         }
     if (result.changed) {
@@ -68,20 +69,23 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
         }
 
     if (!schemFile.exists()) {
-      player.sendMessage("§cファイルが見つかりません: ${schemFile.absolutePath}")
-      player.sendMessage("§7${plugin.dataFolder.absolutePath}/fasard.schem に配置してください")
+      MessageUtil.error(player, "ファイルが見つかりません: ${schemFile.absolutePath}")
+      MessageUtil.send(
+          player,
+          "<gray>${plugin.dataFolder.absolutePath}/fasard.schem に配置してください</gray>",
+      )
       return
     }
 
     if (sub == "full") {
-      player.sendMessage("§7スキマティック全体を貼り付け中...")
+      MessageUtil.send(player, "<gray>スキマティック全体を貼り付け中...</gray>")
       val result =
           try {
             CsmEditSession.run(player, plugin.logger) { editSession ->
               SchematicFacadeGenerator.pasteFullInto(player, editSession, schemFile)
             }
           } catch (e: Exception) {
-            player.sendMessage("§c貼り付けに失敗しました: ${e.message}")
+            MessageUtil.error(player, "貼り付けに失敗しました: ${e.message}")
             return
           }
       if (result.changed) {
@@ -92,14 +96,14 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
     val bays = sub.toIntOrNull()?.coerceIn(1, 60) ?: 4
     val pattern = args.getOrNull(2)?.lowercase() ?: "regular"
-    player.sendMessage("§7スキマティック生成中... (${bays}ベイ, パターン:${pattern})")
+    MessageUtil.send(player, "<gray>スキマティック生成中... (${bays}ベイ, パターン:${pattern})</gray>")
     val result =
         try {
           CsmEditSession.run(player, plugin.logger) { editSession ->
             SchematicFacadeGenerator.generateInto(player, editSession, schemFile, bays, pattern)
           }
         } catch (e: Exception) {
-          player.sendMessage("§c生成に失敗しました: ${e.message}")
+          MessageUtil.error(player, "生成に失敗しました: ${e.message}")
           return
         }
     if (result.changed) {
@@ -109,27 +113,29 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
   private fun sendUndoResult(player: Player, undoRecorded: Boolean, label: String) {
     if (undoRecorded) {
-      player.sendMessage("§a${label}完了！ §7//undo で取り消せます。")
+      MessageUtil.success(player, "${label}完了！")
+      MessageUtil.info(player, "FAWE の //undo で取り消せます。")
     } else {
-      player.sendMessage("§e${label}は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
+      MessageUtil.warn(player, "${label}は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
     }
   }
 
   // ── help ─────────────────────────────────────────────────────────────
 
   private fun showHelp(sender: CommandSender) {
-    sender.sendMessage(
-        """
-        §6=== Haussmann Facade Generator ===
-        §e/hb build §7[ベイ数=4] [palette=cream|grey|brown|red]
-          §7プロシージャルにファサードを生成
-        §e/hb schem full §7— スキマティック全体を1棟貼り付け
-        §e/hb schem §7<ベイ数> §7[pattern] [ファイルパス]
-          §7pattern: regular(3幅) / wide(4幅) / grand(4幅左)
-        §e//undo §7— 直前の生成をFAWEで取り消す
-        """
-            .trimIndent()
+    MessageUtil.header(sender, "Haussmann Facade Generator")
+    MessageUtil.helpEntry(
+        sender,
+        "/hb build [ベイ数=4] [palette=cream|grey|brown|red]",
+        "プロシージャルにファサードを生成",
     )
+    MessageUtil.helpEntry(sender, "/hb schem full", "スキマティック全体を1棟貼り付け")
+    MessageUtil.helpEntry(
+        sender,
+        "/hb schem &lt;ベイ数&gt; [pattern] [ファイルパス]",
+        "pattern: regular(3幅) / wide(4幅) / grand(4幅左)",
+    )
+    MessageUtil.helpEntry(sender, "//undo", "直前の生成をFAWEで取り消す")
   }
 
   // ── tab complete ──────────────────────────────────────────────────────

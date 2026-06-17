@@ -6,6 +6,9 @@ limits:
   max-blocks-slab-stairs: 200000
   max-blocks-columns: 200000
   max-blocks-stack: 2000000
+  max-blocks-cloud: 200000
+  max-volume-cloud: 4000000
+  max-blocks-bezier: 20000
 
 window:
   default-width: 2
@@ -91,6 +94,14 @@ access:
       - takumi
       - admin
     config:
+      - builder
+      - takumi
+      - admin
+    cloud:
+      - builder
+      - takumi
+      - admin
+    bezier:
       - builder
       - takumi
       - admin

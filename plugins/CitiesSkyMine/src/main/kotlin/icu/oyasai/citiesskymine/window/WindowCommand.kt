@@ -81,8 +81,8 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           emptyList()
         }
 
-    val operationBlocks = windowTargets.size + fillTargets.size
-    val maxBlocks = plugin.config.getInt("limits.max-blocks-window", 512)
+    val operationBlocks = (windowTargets.size + fillTargets.size).toLong()
+    val maxBlocks = plugin.config.getLong("limits.max-blocks-window", 512L)
     if (maxBlocks > 0 && operationBlocks > maxBlocks) {
       MessageUtil.error(sender, "生成ブロック数が上限 ($maxBlocks) を超えています: $operationBlocks")
       return true

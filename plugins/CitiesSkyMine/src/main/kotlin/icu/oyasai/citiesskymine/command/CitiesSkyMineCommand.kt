@@ -2,6 +2,8 @@ package icu.oyasai.citiesskymine.command
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.bezier.BezierCommand
+import icu.oyasai.citiesskymine.cloud.CloudCommand
 import icu.oyasai.citiesskymine.columns.ColumnLayoutCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
@@ -32,6 +34,8 @@ class CitiesSkyMineCommand(
     private val stackCommand: StackCommand,
     private val selectionCommand: SelectionCommand,
     private val configCommand: ConfigGuiCommand,
+    private val cloudCommand: CloudCommand,
+    private val bezierCommand: BezierCommand,
     private val debugStickCommand: DebugStickCommand,
     private val brushPresetCommand: BrushPresetCommand,
 ) : CommandExecutor, TabCompleter {
@@ -42,11 +46,29 @@ class CitiesSkyMineCommand(
       label: String,
       args: Array<String>,
   ): Boolean {
+    if (label.equals(".help", ignoreCase = true)) {
+      if (args.size > 1) {
+        MessageUtil.error(sender, "ヘルプ項目は1つだけ指定してください。")
+        MessageUtil.info(sender, "使い方: /.help <command>")
+        return true
+      }
+      showHelpTopic(sender, args.getOrNull(0))
+      return true
+    }
+
     val sub = args.getOrNull(0)?.lowercase()
     return when (sub) {
-      null,
-      "help" -> {
+      null -> {
         showHelp(sender)
+        true
+      }
+      "help" -> {
+        if (args.size > 2) {
+          MessageUtil.error(sender, "ヘルプ項目は1つだけ指定してください。")
+          MessageUtil.info(sender, "使い方: /csm help <command>")
+          return true
+        }
+        showHelpTopic(sender, args.getOrNull(1))
         true
       }
       "version",
@@ -99,8 +121,7 @@ class CitiesSkyMineCommand(
         if (!requireAccess(sender, CommandKey.SLAB_STAIRS)) return true
         slabStairsCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
-      "columns",
-      "col" -> {
+      "columns" -> {
         if (!requireAccess(sender, CommandKey.COLUMNS)) return true
         columnLayoutCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
@@ -118,6 +139,14 @@ class CitiesSkyMineCommand(
       "cf" -> {
         if (!requireAccess(sender, CommandKey.CONFIG)) return true
         configCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
+      }
+      "cloud" -> {
+        if (!requireAccess(sender, CommandKey.CLOUD)) return true
+        cloudCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
+      }
+      "bezier" -> {
+        if (!requireAccess(sender, CommandKey.BEZIER)) return true
+        bezierCommand.onCommand(sender, command, "$label bezier", args.drop(1).toTypedArray())
       }
       "debugstick" -> {
         if (!requireAccess(sender, CommandKey.DEBUGSTICK)) return true
@@ -142,9 +171,17 @@ class CitiesSkyMineCommand(
       args: Array<String>,
   ): List<String> {
     if (args.isEmpty()) return emptyList()
+    if (alias.equals(".help", ignoreCase = true)) {
+      if (args.size != 1) return emptyList()
+      return ROOT_SUBCOMMANDS.filter { it != "help" && it.startsWith(args[0], ignoreCase = true) }
+    }
     if (args.size == 1) {
       return ROOT_SUBCOMMANDS.filter { it.startsWith(args[0], ignoreCase = true) }
     }
+    if (args[0].equals("help", ignoreCase = true) && args.size == 2) {
+      return ROOT_SUBCOMMANDS.filter { it != "help" && it.startsWith(args[1], ignoreCase = true) }
+    }
+    if (args[0].equals("help", ignoreCase = true)) return emptyList()
 
     val childArgs = args.drop(1).toTypedArray()
     return when (args[0].lowercase()) {
@@ -156,14 +193,15 @@ class CitiesSkyMineCommand(
       "load64" -> payloadCommand.onTabComplete(sender, command, alias, args)
       "window" -> windowCommand.onTabComplete(sender, command, alias, childArgs)
       "slabstairs" -> slabStairsCommand.onTabComplete(sender, command, alias, childArgs)
-      "columns",
-      "col" -> columnLayoutCommand.onTabComplete(sender, command, alias, childArgs)
+      "columns" -> columnLayoutCommand.onTabComplete(sender, command, alias, childArgs)
       "stack",
       "ns" -> stackCommand.onTabComplete(sender, command, alias, childArgs)
       "selection",
       "sel" -> selectionCommand.onTabComplete(sender, command, alias, childArgs)
       "config",
       "cf" -> configCommand.onTabComplete(sender, command, alias, childArgs)
+      "cloud" -> cloudCommand.onTabComplete(sender, command, alias, childArgs)
+      "bezier" -> bezierCommand.onTabComplete(sender, command, alias, childArgs)
       "debugstick" -> debugStickCommand.onTabComplete(sender, command, alias, childArgs)
       "preset" -> brushPresetCommand.onTabComplete(sender, command, "$alias preset", childArgs)
       else -> emptyList()
@@ -199,13 +237,71 @@ class CitiesSkyMineCommand(
     )
     MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
     MessageUtil.helpEntry(sender, "/csm config", "個人設定GUIを開く")
+    MessageUtil.helpEntry(sender, "/csm cloud [size] [height] [density] [seed]", "cobweb の雲を生成")
+    MessageUtil.helpEntry(
+        sender,
+        "/csm bezier <add|fromsel|preview|build|clear>",
+        "ベジェ曲線をプレビュー・生成",
+    )
     MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
     MessageUtil.helpEntry(sender, "/csm preset <save|load|list|delete|名前>", "ブラシプリセットを管理")
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
     MessageUtil.send(
         sender,
-        "<gray>Shortcuts: /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.cols, /.ns, /.sel, /.cf, /.ds, /.brp</gray>",
+        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.sel, /.cf, /.cloud, /.bez, /.ds, /.brp</gray>",
     )
+    MessageUtil.send(sender, "<gray>Command help: /csm help <command> or /.help <command></gray>")
+  }
+
+  private fun showHelpTopic(sender: CommandSender, topic: String?) {
+    when (topic?.lowercase()) {
+      null -> showHelp(sender)
+      "cloud" -> cloudCommand.sendHelp(sender, "/csm cloud")
+      "bezier" -> bezierCommand.sendHelp(sender, "/csm bezier")
+      "window" ->
+          MessageUtil.helpEntry(
+              sender,
+              "/csm window [width] [height] [frame] [glass] [backing]",
+              "正面方向に窓を生成",
+          )
+      "slabstairs" ->
+          MessageUtil.helpEntry(sender, "/csm slabstairs [material]", "WorldEdit選択範囲に階段を生成")
+      "columns",
+      "col" ->
+          MessageUtil.helpEntry(
+              sender,
+              "/csm columns <柱の太さ> <柱間> [edge|center] [2d]",
+              "選択範囲に手持ちブロックで柱を生成",
+          )
+      "config" -> MessageUtil.helpEntry(sender, "/csm config", "個人設定GUIを開く")
+      "selection",
+      "sel" ->
+          MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
+      "stack",
+      "ns" ->
+          MessageUtil.helpEntry(
+              sender,
+              "/csm stack <forward|back|left|right|up|down...> <times>",
+              "選択範囲を視点基準で複製",
+          )
+      "debugstick" ->
+          MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
+      "preset" ->
+          MessageUtil.helpEntry(sender, "/csm preset <save|load|list|delete|名前>", "ブラシプリセットを管理")
+      "road" -> MessageUtil.helpEntry(sender, "/csm road <...>", "道路カーブを生成")
+      "intersection" -> MessageUtil.helpEntry(sender, "/csm intersection <...>", "交差点を生成")
+      "facade" -> MessageUtil.helpEntry(sender, "/csm facade <...>", "ファサードを生成")
+      "payload" ->
+          MessageUtil.helpEntry(
+              sender,
+              "/csm payload load <payload> [0-3] [L|R]",
+              "payloadをFAWEで配置",
+          )
+      else -> {
+        MessageUtil.error(sender, "不明なヘルプ項目です: $topic")
+        MessageUtil.info(sender, "使い方: /csm help <command> または /.help <command>")
+      }
+    }
   }
 
   private fun showInfo(sender: CommandSender) {
@@ -234,10 +330,11 @@ class CitiesSkyMineCommand(
             "window",
             "slabstairs",
             "columns",
-            "col",
             "stack",
             "selection",
             "config",
+            "cloud",
+            "bezier",
             "debugstick",
             "preset",
         )

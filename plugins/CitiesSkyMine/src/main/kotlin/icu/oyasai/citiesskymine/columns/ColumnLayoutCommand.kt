@@ -313,6 +313,7 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
         }
         .sortedWith(
             compareBy<AxisLayout> { it.score }
+                .thenBy { symmetryPenalty(it.gaps) }
                 .thenBy { abs(it.averageGapHundredths - preferredGap * 100) }
                 .thenByDescending { it.starts.size },
         )
@@ -332,7 +333,7 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
     val gapSlots = columns - 1
     val gapTotal = length - columns * columnWidth
     if (gapTotal < 0) return emptyList()
-    return gapPatternVariants(gapTotal, gapSlots).map { gaps ->
+    return gapPatternVariants(gapTotal, gapSlots, preferredGap).map { gaps ->
       AxisLayout(
           starts = startsFromGaps(columnWidth, gaps, edgeLeft = 0),
           gaps = gaps,
@@ -373,7 +374,7 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
         }
     return edgeTargets.flatMap { edgeTotal ->
       val interiorTotal = gapTotal - edgeTotal
-      gapPatternVariants(interiorTotal, columns - 1).map { gaps ->
+      gapPatternVariants(interiorTotal, columns - 1, preferredGap).map { gaps ->
         val edgeLeft = edgeTotal / 2
         val edgeRight = edgeTotal - edgeLeft
         AxisLayout(
@@ -388,11 +389,17 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
     }
   }
 
-  private fun gapPatternVariants(total: Int, slots: Int): List<List<Int>> {
+  private fun gapPatternVariants(total: Int, slots: Int, preferredGap: Int): List<List<Int>> {
     if (slots <= 0) return listOf(emptyList())
     if (total < 0) return emptyList()
     val variants = LinkedHashSet<List<Int>>()
-    variants += balancedDistribution(total, slots)
+
+    fun addVariant(values: List<Int>) {
+      variants += values
+      variants += mirrorReorder(values, preferredGap)
+    }
+
+    addVariant(balancedDistribution(total, slots))
 
     val average = total / slots
     for (delta in 1..min(3, max(average, 1))) {
@@ -404,8 +411,8 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
       if (numerator < 0 || numerator % denominator != 0) continue
       val highCount = numerator / denominator
       if (highCount !in 0..slots) continue
-      variants += symmetricMix(slots, low, high, highCount)
-      variants += alternatingMix(slots, low, high, highCount)
+      addVariant(symmetricMix(slots, low, high, highCount))
+      addVariant(alternatingMix(slots, low, high, highCount))
     }
     return variants.toList()
   }
@@ -448,6 +455,51 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
     return result
   }
 
+  private fun mirrorReorder(values: List<Int>, preferredGap: Int): List<Int> {
+    if (values.size <= 2) return values
+    val groups =
+        values
+            .groupingBy { it }
+            .eachCount()
+            .entries
+            .sortedWith(
+                compareBy<Map.Entry<Int, Int>> { it.value }
+                    .thenByDescending { abs(it.key - preferredGap) }
+                    .thenByDescending { it.key },
+            )
+    if (groups.size <= 1) return values
+
+    val result = MutableList<Int?>(values.size) { null }
+    val occupied = BooleanArray(values.size)
+    for (group in groups.dropLast(1)) {
+      for (position in spreadPositions(values.size, group.value, occupied)) {
+        result[position] = group.key
+        occupied[position] = true
+      }
+    }
+
+    val majorityValue = groups.last().key
+    return result.map { it ?: majorityValue }
+  }
+
+  private fun spreadPositions(size: Int, count: Int, occupied: BooleanArray): List<Int> {
+    val selected = ArrayList<Int>()
+    val center = (size - 1).toDouble() / 2.0
+    for (step in 1..count) {
+      val ideal = (step.toDouble() * (size + 1).toDouble()) / (count + 1).toDouble() - 1.0
+      val chosen =
+          (0 until size)
+              .filter { !occupied[it] && it !in selected }
+              .minWithOrNull(
+                  compareBy<Int> { abs(it.toDouble() - ideal) }
+                      .thenBy { abs(it.toDouble() - center) }
+                      .thenBy { it },
+              ) ?: break
+      selected += chosen
+    }
+    return selected
+  }
+
   private fun centerFirstIndices(size: Int): List<Int> {
     val center = (size - 1).toDouble() / 2.0
     return (0 until size).sortedWith(compareBy<Int> { abs(it - center) }.thenBy { it })
@@ -485,6 +537,11 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
 
   private fun averageHundredths(values: List<Int>): Int =
       if (values.isEmpty()) 0 else (values.sum() * 100) / values.size
+
+  private fun symmetryPenalty(values: List<Int>): Int =
+      (0 until values.size / 2).sumOf { index ->
+        abs(values[index] - values[values.lastIndex - index])
+      }
 
   private fun lengthAlong(bounds: CuboidBounds, axis: HorizontalUnit): Int =
       if (axis.x != 0) {
