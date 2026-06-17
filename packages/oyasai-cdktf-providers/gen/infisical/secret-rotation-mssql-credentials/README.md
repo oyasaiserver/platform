@@ -1,3 +1,3 @@
 # `infisical_secret_rotation_mssql_credentials`
 
-Refer to the Terraform Registry for docs: [`infisical_secret_rotation_mssql_credentials`](https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/secret_rotation_mssql_credentials).
+Refer to the Terraform Registry for docs: [`infisical_secret_rotation_mssql_credentials`](https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/secret_rotation_mssql_credentials).

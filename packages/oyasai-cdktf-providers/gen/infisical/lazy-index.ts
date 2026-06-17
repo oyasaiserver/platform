@@ -99,6 +99,7 @@ Object.defineProperty(exports, 'secretSyncGitlab', { get: function () { return r
 Object.defineProperty(exports, 'secretSyncRender', { get: function () { return require('./secret-sync-render'); } });
 Object.defineProperty(exports, 'secretSyncSupabase', { get: function () { return require('./secret-sync-supabase'); } });
 Object.defineProperty(exports, 'secretTag', { get: function () { return require('./secret-tag'); } });
+Object.defineProperty(exports, 'webhook', { get: function () { return require('./webhook'); } });
 Object.defineProperty(exports, 'dataInfisicalGroups', { get: function () { return require('./data-infisical-groups'); } });
 Object.defineProperty(exports, 'dataInfisicalIdentityDetails', { get: function () { return require('./data-infisical-identity-details'); } });
 Object.defineProperty(exports, 'dataInfisicalKmsKeyPublicKey', { get: function () { return require('./data-infisical-kms-key-public-key'); } });

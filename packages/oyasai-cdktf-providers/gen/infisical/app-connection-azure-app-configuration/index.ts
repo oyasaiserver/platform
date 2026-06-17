@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration
+// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionAzureAppConfigurationConfig extends cdktf.Terrafor
   /**
   * The credentials for the Azure App Configuration App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration#credentials AppConnectionAzureAppConfiguration#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration#credentials AppConnectionAzureAppConfiguration#credentials}
   */
   readonly credentials: AppConnectionAzureAppConfigurationCredentials;
   /**
   * An optional description for the Azure App Configuration App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration#description AppConnectionAzureAppConfiguration#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration#description AppConnectionAzureAppConfiguration#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with Azure App Configuration. Possible values are: client-secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration#method AppConnectionAzureAppConfiguration#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration#method AppConnectionAzureAppConfiguration#method}
   */
   readonly method: string;
   /**
   * The name of the Azure App Configuration App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration#name AppConnectionAzureAppConfiguration#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration#name AppConnectionAzureAppConfiguration#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration#project_id AppConnectionAzureAppConfiguration#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration#project_id AppConnectionAzureAppConfiguration#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,19 +42,19 @@ export interface AppConnectionAzureAppConfigurationCredentials {
   /**
   * The Azure application (client) ID. Required for client-secret method. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/azure-app-configuration
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration#client_id AppConnectionAzureAppConfiguration#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration#client_id AppConnectionAzureAppConfiguration#client_id}
   */
   readonly clientId: string;
   /**
   * The Azure client secret. Required for client-secret method. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/azure-app-configuration
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration#client_secret AppConnectionAzureAppConfiguration#client_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration#client_secret AppConnectionAzureAppConfiguration#client_secret}
   */
   readonly clientSecret: string;
   /**
   * The Azure Active Directory (AAD) tenant ID. Required for client-secret method. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/azure-app-configuration
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration#tenant_id AppConnectionAzureAppConfiguration#tenant_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration#tenant_id AppConnectionAzureAppConfiguration#tenant_id}
   */
   readonly tenantId: string;
 }
@@ -197,7 +197,7 @@ export class AppConnectionAzureAppConfigurationCredentialsOutputReference extend
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration infisical_app_connection_azure_app_configuration}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration infisical_app_connection_azure_app_configuration}
 */
 export class AppConnectionAzureAppConfiguration extends cdktf.TerraformResource {
 
@@ -213,7 +213,7 @@ export class AppConnectionAzureAppConfiguration extends cdktf.TerraformResource 
   * Generates CDKTF code for importing a AppConnectionAzureAppConfiguration resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionAzureAppConfiguration to import
-  * @param importFromId The id of the existing AppConnectionAzureAppConfiguration that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionAzureAppConfiguration that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionAzureAppConfiguration to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -225,7 +225,7 @@ export class AppConnectionAzureAppConfiguration extends cdktf.TerraformResource 
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/app_connection_azure_app_configuration infisical_app_connection_azure_app_configuration} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_azure_app_configuration infisical_app_connection_azure_app_configuration} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -236,7 +236,7 @@ export class AppConnectionAzureAppConfiguration extends cdktf.TerraformResource 
       terraformResourceType: 'infisical_app_connection_azure_app_configuration',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.28'
+        providerVersion: '0.16.30'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

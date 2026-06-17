@@ -221,32 +221,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1781491803,
-        "narHash": "sha256-uwbOxML4fcuvP1izNAHye4cIQ4wUAZKFPTTW0QSMbbY=",
+        "lastModified": 1781664491,
+        "narHash": "sha256-ffEAXwEoyX4UP1xJYUWeFWUcw+bSWNrSfoLlsT16Hrw=",
         "owner": "nix-community",
         "repo": "nixpkgs-terraform-providers-bin",
-        "rev": "19d2a73c6e5f77087a365bef38c5873e02a18c23",
+        "rev": "7f429b35ce80e9bc12598c70b428590147d1636a",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
         "repo": "nixpkgs-terraform-providers-bin",
-        "type": "github"
-      }
-    },
-    "nixpkgs-unstable": {
-      "locked": {
-        "lastModified": 1781074563,
-        "narHash": "sha256-md8WlXOlfnIeHeOScMTTHFyf2d6iaTwPl2apR5EQ3P4=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "9ae611a455b90cf061d8f332b977e387bda8e1ca",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -290,7 +274,6 @@
         "nix-minecraft": "nix-minecraft",
         "nixpkgs": "nixpkgs",
         "nixpkgs-terraform-providers-bin": "nixpkgs-terraform-providers-bin",
-        "nixpkgs-unstable": "nixpkgs-unstable",
         "package-lock2nix": "package-lock2nix",
         "systems": "systems_2",
         "tools": "tools",

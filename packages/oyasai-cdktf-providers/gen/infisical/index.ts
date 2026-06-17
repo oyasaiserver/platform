@@ -99,6 +99,7 @@ export * as secretSyncGitlab from './secret-sync-gitlab';
 export * as secretSyncRender from './secret-sync-render';
 export * as secretSyncSupabase from './secret-sync-supabase';
 export * as secretTag from './secret-tag';
+export * as webhook from './webhook';
 export * as dataInfisicalGroups from './data-infisical-groups';
 export * as dataInfisicalIdentityDetails from './data-infisical-identity-details';
 export * as dataInfisicalKmsKeyPublicKey from './data-infisical-kms-key-public-key';
