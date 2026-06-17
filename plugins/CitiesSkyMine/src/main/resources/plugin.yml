@@ -13,7 +13,7 @@ softdepend:
 commands:
   csm:
     description: "CitiesSkyMine 統合コマンド"
-    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|columns|stack|selection|config|cloud|bezier|debugstick|preset>"
+    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|columns|stack|selection|settings|config|cloud|bezier|debugstick|preset>"
   ".help":
     description: "CitiesSkyMine ヘルプショートカット"
     usage: "/.help <command>"
@@ -53,9 +53,12 @@ commands:
   ".sel":
     description: "WorldEdit 選択範囲の保存・復元ショートカット"
     usage: "/.sel <save|list|delete|p|name>"
-  ".cf":
+  ".settings":
     description: "CitiesSkyMine 個人設定GUI"
-    usage: "/.cf"
+    usage: "/.settings"
+  ".config":
+    description: "CitiesSkyMine config.yml 編集ショートカット"
+    usage: "/.config <access|reload>"
   ".cloud":
     description: "雲生成ショートカット"
     usage: "/.cloud [size] [height] [density] [seed]"
@@ -87,6 +90,7 @@ permissions:
       citiesskymine.columns: true
       citiesskymine.stack: true
       citiesskymine.selection: true
+      citiesskymine.settings: true
       citiesskymine.config: true
       citiesskymine.cloud: true
       citiesskymine.bezier: true
@@ -131,8 +135,11 @@ permissions:
   citiesskymine.selection:
     description: "旧形式: WorldEdit 選択範囲保存コマンドの使用権限"
     default: false
-  citiesskymine.config:
+  citiesskymine.settings:
     description: "旧形式: 個人設定GUIの使用権限"
+    default: false
+  citiesskymine.config:
+    description: "旧形式: CitiesSkyMine config.yml 編集コマンドの使用権限"
     default: false
   citiesskymine.cloud:
     description: "旧形式: 雲生成コマンドの使用権限"

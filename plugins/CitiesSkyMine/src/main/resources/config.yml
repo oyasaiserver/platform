@@ -93,9 +93,11 @@ access:
       - builder
       - takumi
       - admin
-    config:
+    settings:
       - builder
       - takumi
+      - admin
+    config:
       - admin
     cloud:
       - builder

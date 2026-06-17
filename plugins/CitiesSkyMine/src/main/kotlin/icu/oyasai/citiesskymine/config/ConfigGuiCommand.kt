@@ -31,7 +31,7 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       MessageUtil.error(sender, "このコマンドはプレイヤーから実行してください。")
       return true
     }
-    if (!plugin.access.require(sender, CommandKey.CONFIG)) return true
+    if (!plugin.access.require(sender, CommandKey.SETTINGS)) return true
     when (args.getOrNull(0)?.lowercase()) {
       "road" -> openRoad(sender)
       "window",
@@ -60,7 +60,7 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     val holder = event.inventory.holder as? Holder ?: return
     event.isCancelled = true
     val player = event.whoClicked as? Player ?: return
-    if (!plugin.access.canUse(player, CommandKey.CONFIG)) return
+    if (!plugin.access.canUse(player, CommandKey.SETTINGS)) return
     if (event.rawSlot !in 0 until event.inventory.size) return
 
     when (holder.page) {

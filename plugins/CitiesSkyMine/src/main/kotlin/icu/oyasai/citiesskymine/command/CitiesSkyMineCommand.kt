@@ -6,6 +6,7 @@ import icu.oyasai.citiesskymine.bezier.BezierCommand
 import icu.oyasai.citiesskymine.cloud.CloudCommand
 import icu.oyasai.citiesskymine.columns.ColumnLayoutCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
+import icu.oyasai.citiesskymine.config.ServerConfigCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
 import icu.oyasai.citiesskymine.payload.PayloadCommand
@@ -33,7 +34,8 @@ class CitiesSkyMineCommand(
     private val columnLayoutCommand: ColumnLayoutCommand,
     private val stackCommand: StackCommand,
     private val selectionCommand: SelectionCommand,
-    private val configCommand: ConfigGuiCommand,
+    private val settingsCommand: ConfigGuiCommand,
+    private val serverConfigCommand: ServerConfigCommand,
     private val cloudCommand: CloudCommand,
     private val bezierCommand: BezierCommand,
     private val debugStickCommand: DebugStickCommand,
@@ -135,10 +137,12 @@ class CitiesSkyMineCommand(
         if (!requireAccess(sender, CommandKey.SELECTION)) return true
         selectionCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
-      "config",
-      "cf" -> {
-        if (!requireAccess(sender, CommandKey.CONFIG)) return true
-        configCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
+      "settings" -> {
+        if (!requireAccess(sender, CommandKey.SETTINGS)) return true
+        settingsCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
+      }
+      "config" -> {
+        serverConfigCommand.onCommand(sender, command, "$label config", args.drop(1).toTypedArray())
       }
       "cloud" -> {
         if (!requireAccess(sender, CommandKey.CLOUD)) return true
@@ -198,8 +202,8 @@ class CitiesSkyMineCommand(
       "ns" -> stackCommand.onTabComplete(sender, command, alias, childArgs)
       "selection",
       "sel" -> selectionCommand.onTabComplete(sender, command, alias, childArgs)
-      "config",
-      "cf" -> configCommand.onTabComplete(sender, command, alias, childArgs)
+      "settings" -> settingsCommand.onTabComplete(sender, command, alias, childArgs)
+      "config" -> serverConfigCommand.onTabComplete(sender, command, "$alias config", childArgs)
       "cloud" -> cloudCommand.onTabComplete(sender, command, alias, childArgs)
       "bezier" -> bezierCommand.onTabComplete(sender, command, alias, childArgs)
       "debugstick" -> debugStickCommand.onTabComplete(sender, command, alias, childArgs)
@@ -236,7 +240,8 @@ class CitiesSkyMineCommand(
         "選択範囲を視点基準で複製",
     )
     MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
-    MessageUtil.helpEntry(sender, "/csm config", "個人設定GUIを開く")
+    MessageUtil.helpEntry(sender, "/csm settings", "個人設定GUIを開く")
+    MessageUtil.helpEntry(sender, "/csm config access <...>", "config.yml の権限設定を編集")
     MessageUtil.helpEntry(sender, "/csm cloud [size] [height] [density] [seed]", "cobweb の雲を生成")
     MessageUtil.helpEntry(
         sender,
@@ -248,7 +253,7 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
     MessageUtil.send(
         sender,
-        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.sel, /.cf, /.cloud, /.bez, /.ds, /.brp</gray>",
+        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.sel, /.settings, /.config, /.cloud, /.bez, /.ds, /.brp</gray>",
     )
     MessageUtil.send(sender, "<gray>Command help: /csm help <command> or /.help <command></gray>")
   }
@@ -273,7 +278,8 @@ class CitiesSkyMineCommand(
               "/csm columns <柱の太さ> <柱間> [edge|center] [2d]",
               "選択範囲に手持ちブロックで柱を生成",
           )
-      "config" -> MessageUtil.helpEntry(sender, "/csm config", "個人設定GUIを開く")
+      "settings" -> MessageUtil.helpEntry(sender, "/csm settings", "個人設定GUIを開く")
+      "config" -> serverConfigCommand.sendHelp(sender, "/csm config")
       "selection",
       "sel" ->
           MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
@@ -332,6 +338,7 @@ class CitiesSkyMineCommand(
             "columns",
             "stack",
             "selection",
+            "settings",
             "config",
             "cloud",
             "bezier",

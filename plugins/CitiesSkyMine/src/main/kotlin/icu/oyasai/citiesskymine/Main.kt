@@ -8,6 +8,7 @@ import icu.oyasai.citiesskymine.cloud.CloudCommand
 import icu.oyasai.citiesskymine.columns.ColumnLayoutCommand
 import icu.oyasai.citiesskymine.command.CitiesSkyMineCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
+import icu.oyasai.citiesskymine.config.ServerConfigCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickMemoryStore
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
@@ -96,7 +97,8 @@ class Main : JavaPlugin() {
     val columnLayoutHandler = ColumnLayoutCommand(this)
     val stackHandler = StackCommand(this)
     val selectionHandler = SelectionCommand(this)
-    val configHandler = ConfigGuiCommand(this)
+    val settingsHandler = ConfigGuiCommand(this)
+    val serverConfigHandler = ServerConfigCommand(this)
     cloudHandler = CloudCommand(this)
     val bezierHandler = BezierCommand(this)
     val debugStickHandler =
@@ -114,7 +116,8 @@ class Main : JavaPlugin() {
             columnLayoutHandler,
             stackHandler,
             selectionHandler,
-            configHandler,
+            settingsHandler,
+            serverConfigHandler,
             cloudHandler,
             bezierHandler,
             debugStickHandler,
@@ -144,9 +147,12 @@ class Main : JavaPlugin() {
     val dotSelectionCmd = getCommand(".sel")
     dotSelectionCmd?.setExecutor(selectionHandler)
     dotSelectionCmd?.tabCompleter = selectionHandler
-    val dotConfigCmd = getCommand(".cf")
-    dotConfigCmd?.setExecutor(configHandler)
-    dotConfigCmd?.tabCompleter = configHandler
+    val dotSettingsCmd = getCommand(".settings")
+    dotSettingsCmd?.setExecutor(settingsHandler)
+    dotSettingsCmd?.tabCompleter = settingsHandler
+    val dotConfigCmd = getCommand(".config")
+    dotConfigCmd?.setExecutor(serverConfigHandler)
+    dotConfigCmd?.tabCompleter = serverConfigHandler
     val dotCloudCmd = getCommand(".cloud")
     dotCloudCmd?.setExecutor(cloudHandler)
     dotCloudCmd?.tabCompleter = cloudHandler
@@ -155,7 +161,7 @@ class Main : JavaPlugin() {
     dotBezierCmd?.tabCompleter = bezierHandler
     server.pluginManager.registerEvents(selectionHandler, this)
     selectionHandler.startTracking()
-    server.pluginManager.registerEvents(configHandler, this)
+    server.pluginManager.registerEvents(settingsHandler, this)
     val dotDebugStickCmd = getCommand(".ds")
     dotDebugStickCmd?.setExecutor(debugStickHandler)
     dotDebugStickCmd?.tabCompleter = debugStickHandler
