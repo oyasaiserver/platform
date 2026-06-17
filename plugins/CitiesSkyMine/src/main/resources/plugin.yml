@@ -13,7 +13,10 @@ softdepend:
 commands:
   csm:
     description: "CitiesSkyMine 統合コマンド"
-    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|columns|stack|selection|config|debugstick|preset>"
+    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|columns|stack|selection|config|cloud|bezier|debugstick|preset>"
+  ".help":
+    description: "CitiesSkyMine ヘルプショートカット"
+    usage: "/.help <command>"
   rc:
     description: "道路カーブを生成するコマンド"
     usage: "/rc <help|set|build|reset|status|debugline|smoothline|version>"
@@ -41,15 +44,9 @@ commands:
   ".ss":
     description: "SlabStairs 生成ショートカット"
     usage: "/.ss [material]"
-  ".cols":
-    description: "柱割り生成ショートカット"
-    usage: "/.cols [suggest|build] <columnWidth> <gap> [edge|center] [2d]"
   ".col":
     description: "柱割り生成ショートカット"
     usage: "/.col [suggest|build] <columnWidth> <gap> [edge|center] [2d]"
-  ".columns":
-    description: "柱割り生成ショートカット"
-    usage: "/.columns [suggest|build] <columnWidth> <gap> [edge|center] [2d]"
   ".ns":
     description: "選択範囲をプレイヤー視点基準で複製するショートカット"
     usage: "/.ns <forward|back|left|right|up|down...> <times> [skip-blocks...]"
@@ -59,6 +56,12 @@ commands:
   ".cf":
     description: "CitiesSkyMine 個人設定GUI"
     usage: "/.cf"
+  ".cloud":
+    description: "雲生成ショートカット"
+    usage: "/.cloud [size] [height] [density] [seed]"
+  ".bez":
+    description: "ベジェ曲線プレビューショートカット"
+    usage: "/.bez <add|set|fromsel|remove|preview|build|segments|status|clear>"
   ".ds":
     description: "debug-stick 互換ショートカット"
     usage: "/.ds <select|cycle>"
@@ -85,6 +88,8 @@ permissions:
       citiesskymine.stack: true
       citiesskymine.selection: true
       citiesskymine.config: true
+      citiesskymine.cloud: true
+      citiesskymine.bezier: true
       citiesskymine.debugstick: true
       citiesskymine.preset: true
   citiesskymine.role.admin:
@@ -128,6 +133,12 @@ permissions:
     default: false
   citiesskymine.config:
     description: "旧形式: 個人設定GUIの使用権限"
+    default: false
+  citiesskymine.cloud:
+    description: "旧形式: 雲生成コマンドの使用権限"
+    default: false
+  citiesskymine.bezier:
+    description: "旧形式: ベジェ曲線プレビューコマンドの使用権限"
     default: false
   citiesskymine.debugstick:
     description: "旧形式: debug-stick 互換コマンドの使用権限"

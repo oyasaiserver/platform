@@ -22,6 +22,8 @@ class CsmAccessController(private val plugin: Main) {
     STACK("stack", "citiesskymine.stack"),
     SELECTION("selection", "citiesskymine.selection"),
     CONFIG("config", "citiesskymine.config"),
+    CLOUD("cloud", "citiesskymine.cloud"),
+    BEZIER("bezier", "citiesskymine.bezier"),
     DEBUGSTICK("debugstick", "citiesskymine.debugstick"),
     PRESET("preset", "citiesskymine.preset"),
   }
@@ -151,6 +153,8 @@ class CsmAccessController(private val plugin: Main) {
             CommandKey.STACK to listOf("builder", "takumi", "admin"),
             CommandKey.SELECTION to listOf("builder", "takumi", "admin"),
             CommandKey.CONFIG to listOf("builder", "takumi", "admin"),
+            CommandKey.CLOUD to listOf("builder", "takumi", "admin"),
+            CommandKey.BEZIER to listOf("builder", "takumi", "admin"),
             CommandKey.DEBUGSTICK to listOf("takumi", "admin"),
             CommandKey.PRESET to listOf("builder", "takumi", "admin"),
         )

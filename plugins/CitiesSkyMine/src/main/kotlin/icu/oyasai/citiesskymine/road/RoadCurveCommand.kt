@@ -2,6 +2,7 @@ package icu.oyasai.citiesskymine.road
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import org.bukkit.Material
 import org.bukkit.block.data.type.Stairs
@@ -24,7 +25,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       args: Array<out String>,
   ): Boolean {
     if (sender !is Player) {
-      sender.sendMessage("§cプレイヤーのみ使用できます。")
+      MessageUtil.error(sender, "プレイヤーのみ使用できます。")
       return true
     }
     if (!plugin.access.require(sender, CommandKey.ROAD)) return true
@@ -40,7 +41,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       "help" -> sendHelp(player)
       "reset" -> handleReset(player, session)
       "build" -> handleBuild(player, session)
-      "undo" -> player.sendMessage("§e[RC] 取り消しは FAWE の //undo を使ってください。")
+      "undo" -> MessageUtil.warn(player, "[RC] 取り消しは FAWE の //undo を使ってください。")
       "set" -> handleSet(player, session, args)
       "status" -> handleStatus(player, session)
       "debugline" -> handleDebugLine(player, session, args)
@@ -106,7 +107,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
   private fun handleReset(player: Player, session: RoadSession) {
     plugin.stopPreview(player)
     session.waypoints.clear()
-    player.sendMessage("§a[RC] 選択点をリセットしました。")
+    MessageUtil.success(player, "[RC] 選択点をリセットしました。")
   }
 
   private fun handleBuild(player: Player, session: RoadSession) {
@@ -123,11 +124,11 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
           session.cachedPath
         }
     if (path.isEmpty()) {
-      player.sendMessage("§c[RC] パスを計算できませんでした。")
+      MessageUtil.error(player, "[RC] パスを計算できませんでした。")
       return
     }
 
-    player.sendMessage("§a[RC] 道路を生成中…（${path.size} サンプル点）")
+    MessageUtil.success(player, "[RC] 道路を生成中…（${path.size} サンプル点）")
     val world = player.world
     val buildPath = path.toList()
     val buildSettings = session.settings.copy()
@@ -145,9 +146,10 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
                 plugin,
                 Runnable {
                   if (result.undoRecorded) {
-                    player.sendMessage("§a[RC] 道路の設置が完了しました。§7//undo で取り消せます。")
+                    MessageUtil.success(player, "[RC] 道路の設置が完了しました。")
+                    MessageUtil.info(player, "FAWE の //undo でこの道路生成を取り消せます。")
                   } else {
-                    player.sendMessage("§e[RC] 道路の設置は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
+                    MessageUtil.warn(player, "[RC] 道路の設置は完了しましたが、FAWE undo 履歴への登録に失敗しました。")
                   }
                 },
             )
@@ -155,7 +157,7 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
             plugin.server.scheduler.runTask(
                 plugin,
                 Runnable {
-                  player.sendMessage("§c[RC] エラーが発生しました: ${e.message}")
+                  MessageUtil.error(player, "[RC] エラーが発生しました: ${e.message}")
                   plugin.logger.severe("RoadBuilder error: ${e.stackTraceToString()}")
                 },
             )
@@ -167,17 +169,17 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
   private fun handleSmoothLines(player: Player, session: RoadSession) {
     if (!requireWaypoints(player, session, 2)) return
     if (session.settings.lineMaterial.createBlockData() !is Stairs) {
-      player.sendMessage("§c[RC] 白線素材に階段ブロックを設定してください。")
+      MessageUtil.error(player, "[RC] 白線素材に階段ブロックを設定してください。")
       return
     }
     val path =
         session.cachedPath.ifEmpty { RoadGeometry.computePath(session.waypoints, session.settings) }
     if (path.isEmpty()) {
-      player.sendMessage("§c[RC] パスを計算できませんでした。")
+      MessageUtil.error(player, "[RC] パスを計算できませんでした。")
       return
     }
 
-    player.sendMessage("§a[RC] 白線スムージングを実行中…（${path.size} サンプル点）")
+    MessageUtil.success(player, "[RC] 白線スムージングを実行中…（${path.size} サンプル点）")
     val world = player.world
     val smoothPath = path.toList()
     val smoothSettings = session.settings.copy()
@@ -197,27 +199,26 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
             plugin.server.scheduler.runTask(
                 plugin,
                 Runnable {
-                  val undoText =
-                      if (result.undoRecorded) {
-                        " §7//undo で取り消せます。"
-                      } else if (!result.changed) {
-                        " §7変更対象はありませんでした。"
-                      } else {
-                        " §eFAWE undo 履歴への登録に失敗しました。"
-                      }
-                  player.sendMessage("§a[RC] 白線スムージング完了: §f${affectedBlocks} ブロック$undoText")
+                  MessageUtil.success(player, "[RC] 白線スムージング完了: ${affectedBlocks} ブロック")
+                  if (result.undoRecorded) {
+                    MessageUtil.info(player, "FAWE の //undo でこの白線スムージングを取り消せます。")
+                  } else if (!result.changed) {
+                    MessageUtil.info(player, "変更対象はありませんでした。")
+                  } else {
+                    MessageUtil.warn(player, "白線スムージングは完了しましたが、FAWE undo 履歴への登録に失敗しました。")
+                  }
                 },
             )
           } catch (e: IllegalArgumentException) {
             plugin.server.scheduler.runTask(
                 plugin,
-                Runnable { player.sendMessage("§c[RC] ${e.message}") },
+                Runnable { MessageUtil.error(player, "[RC] ${e.message}") },
             )
           } catch (e: Exception) {
             plugin.server.scheduler.runTask(
                 plugin,
                 Runnable {
-                  player.sendMessage("§c[RC] 白線スムージング中にエラー: ${e.message}")
+                  MessageUtil.error(player, "[RC] 白線スムージング中にエラー: ${e.message}")
                   plugin.logger.severe("WhiteLineSmoother error: ${e.stackTraceToString()}")
                 },
             )
@@ -229,8 +230,11 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
   private fun handleSet(player: Player, session: RoadSession, args: Array<out String>) {
     // args: set param1 val1 [param2 val2 ...]
     if (args.size < 3 || (args.size - 1) % 2 != 0) {
-      player.sendMessage("§c使い方: /rc set <パラメータ> <値> [<パラメータ> <値> ...]")
-      player.sendMessage("§7  ${SET_PARAMS.joinToString(" / ")}")
+      MessageUtil.error(
+          player,
+          "使い方: /rc set &lt;パラメータ&gt; &lt;値&gt; [&lt;パラメータ&gt; &lt;値&gt; ...]",
+      )
+      MessageUtil.send(player, "<gray>  ${SET_PARAMS.joinToString(" / ")}</gray>")
       return
     }
     val s = session.settings
@@ -255,65 +259,65 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       when (param.lowercase()) {
         "radius" -> {
           s.radius = value.toDouble()
-          player.sendMessage("§a[RC] 半径: §f${s.radius} ブロック")
+          MessageUtil.success(player, "[RC] 半径: ${s.radius} ブロック")
         }
         "transition" -> {
           s.transitionLength = value.toDouble()
-          player.sendMessage("§a[RC] 緩和曲線長: §f${s.transitionLength} ブロック")
+          MessageUtil.success(player, "[RC] 緩和曲線長: ${s.transitionLength} ブロック")
         }
         "lane" -> {
           s.laneWidth = value.toInt()
-          player.sendMessage("§a[RC] 車道幅: §f${s.laneWidth} ブロック")
+          MessageUtil.success(player, "[RC] 車道幅: ${s.laneWidth} ブロック")
         }
         "centerline" -> {
           s.centerLineWidth = value.toInt()
-          player.sendMessage("§a[RC] 中央白線幅: §f${s.centerLineWidth} ブロック")
+          MessageUtil.success(player, "[RC] 中央白線幅: ${s.centerLineWidth} ブロック")
         }
         "outerline" -> {
           s.outerLineWidth = value.toInt()
-          player.sendMessage("§a[RC] 外縁白線幅: §f${s.outerLineWidth} ブロック")
+          MessageUtil.success(player, "[RC] 外縁白線幅: ${s.outerLineWidth} ブロック")
         }
         "sidewalk" -> {
           s.sidewalkWidth = value.toInt()
-          player.sendMessage("§a[RC] 歩道幅: §f${s.sidewalkWidth} ブロック")
+          MessageUtil.success(player, "[RC] 歩道幅: ${s.sidewalkWidth} ブロック")
         }
         "roadmat" -> {
           val mat =
               Material.matchMaterial(value)
                   ?: run {
-                    player.sendMessage("§c不明な素材: $value")
+                    MessageUtil.error(player, "不明な素材: $value")
                     return false
                   }
           s.roadMaterial = mat
-          player.sendMessage("§a[RC] 車道素材: §f${mat.key}")
+          MessageUtil.success(player, "[RC] 車道素材: ${mat.key}")
         }
         "sidewalkmat" -> {
           val mat =
               Material.matchMaterial(value)
                   ?: run {
-                    player.sendMessage("§c不明な素材: $value")
+                    MessageUtil.error(player, "不明な素材: $value")
                     return false
                   }
           s.sidewalkMaterial = mat
-          player.sendMessage("§a[RC] 歩道素材: §f${mat.key}")
+          MessageUtil.success(player, "[RC] 歩道素材: ${mat.key}")
         }
         "linemat" -> {
           val mat =
               Material.matchMaterial(value)
                   ?: run {
-                    player.sendMessage("§c不明な素材: $value")
+                    MessageUtil.error(player, "不明な素材: $value")
                     return false
                   }
           s.lineMaterial = mat
-          player.sendMessage("§a[RC] 白線素材: §f${mat.key}")
+          MessageUtil.success(player, "[RC] 白線素材: ${mat.key}")
         }
         else -> {
-          player.sendMessage("§c不明なパラメータ: $param")
+          MessageUtil.error(player, "不明なパラメータ: $param")
           return false
         }
       }
     } catch (e: NumberFormatException) {
-      player.sendMessage("§c数値が無効です: $value")
+      MessageUtil.error(player, "数値が無効です: $value")
       return false
     }
     return true
@@ -321,19 +325,25 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
   private fun handleStatus(player: Player, session: RoadSession) {
     val s = session.settings
-    val previewState = if (session.previewTask != null) "§a表示中" else "§7停止中"
-    player.sendMessage("§e=== RoadCurve 設定 ===")
-    player.sendMessage("§7通過点数:     §f${session.waypoints.size}  §7プレビュー: $previewState")
-    player.sendMessage("§7半径:         §f${s.radius} ブロック")
-    player.sendMessage("§7緩和曲線長:   §f${s.transitionLength} ブロック")
-    player.sendMessage("§7車道幅(片側): §f${s.laneWidth} ブロック")
-    player.sendMessage("§7中央白線幅:   §f${s.centerLineWidth} ブロック")
-    player.sendMessage("§7外縁白線幅:   §f${s.outerLineWidth} ブロック")
-    player.sendMessage("§7歩道幅:       §f${s.sidewalkWidth} ブロック")
-    player.sendMessage("§7車道素材:     §f${s.roadMaterial.key}")
-    player.sendMessage("§7歩道素材:     §f${s.sidewalkMaterial.key}")
-    val debugFlag = if (s.debugLineGroups) "§aON" else "§7OFF"
-    player.sendMessage("§7白線素材:     §f${s.lineMaterial.key}  §7デバッグ色分け: $debugFlag")
+    val previewState = if (session.previewTask != null) "<green>表示中</green>" else "<gray>停止中</gray>"
+    MessageUtil.header(player, "RoadCurve 設定")
+    MessageUtil.send(
+        player,
+        "<gray>通過点数:     <white>${session.waypoints.size}</white>  プレビュー: $previewState</gray>",
+    )
+    MessageUtil.send(player, "<gray>半径:         <white>${s.radius}</white> ブロック</gray>")
+    MessageUtil.send(player, "<gray>緩和曲線長:   <white>${s.transitionLength}</white> ブロック</gray>")
+    MessageUtil.send(player, "<gray>車道幅(片側): <white>${s.laneWidth}</white> ブロック</gray>")
+    MessageUtil.send(player, "<gray>中央白線幅:   <white>${s.centerLineWidth}</white> ブロック</gray>")
+    MessageUtil.send(player, "<gray>外縁白線幅:   <white>${s.outerLineWidth}</white> ブロック</gray>")
+    MessageUtil.send(player, "<gray>歩道幅:       <white>${s.sidewalkWidth}</white> ブロック</gray>")
+    MessageUtil.send(player, "<gray>車道素材:     <white>${s.roadMaterial.key}</white></gray>")
+    MessageUtil.send(player, "<gray>歩道素材:     <white>${s.sidewalkMaterial.key}</white></gray>")
+    val debugFlag = if (s.debugLineGroups) "<green>ON</green>" else "<gray>OFF</gray>"
+    MessageUtil.send(
+        player,
+        "<gray>白線素材:     <white>${s.lineMaterial.key}</white>  デバッグ色分け: $debugFlag</gray>",
+    )
   }
 
   private fun handleDebugLine(player: Player, session: RoadSession, args: Array<out String>) {
@@ -349,14 +359,14 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
               args[1].equals("false", true) -> false
           args[1].equals("toggle", true) -> !s.debugLineGroups
           else -> {
-            player.sendMessage("§c[RC] 使用法: /rc debugline [on|off|toggle]")
+            MessageUtil.error(player, "[RC] 使用法: /rc debugline [on|off|toggle]")
             return
           }
         }
     s.debugLineGroups = newValue
     plugin.saveRoadSettings(player, s)
-    val state = if (newValue) "§aON" else "§7OFF"
-    player.sendMessage("§a[RC] 白線デバッグ色分け: $state")
+    val state = if (newValue) "ON" else "OFF"
+    MessageUtil.success(player, "[RC] 白線デバッグ色分け: $state")
     // プレビュー機能は無効化されているため何もしない
   }
 
@@ -366,28 +376,35 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
 
   private fun requireWaypoints(player: Player, session: RoadSession, min: Int): Boolean {
     if (session.waypoints.size >= min) return true
-    player.sendMessage("§c[RC] ${min}点以上の通過点が必要です。（現在: ${session.waypoints.size}点）")
+    MessageUtil.error(player, "[RC] ${min}点以上の通過点が必要です。（現在: ${session.waypoints.size}点）")
     return false
   }
 
   private fun sendHelp(player: Player) {
-    player.sendMessage("§e=== RoadCurve ヘルプ ===")
-    player.sendMessage("§fBone§7 を持ってブロック右クリック → 通過点追加（2点目から自動プレビュー）")
-    player.sendMessage("§f/rc build     §7道路ブロックを設置")
-    player.sendMessage("§f/rc smoothline §7白線を階段でスムージング")
-    player.sendMessage("§f//undo        §7最後の道路生成をFAWEで取り消し")
-    player.sendMessage("§f/rc reset     §7通過点をリセット・プレビュー停止")
-    player.sendMessage("§f/rc status    §7現在の設定を表示")
-    player.sendMessage("§f/rc set <param> <val> [<param> <val> ...]  §7設定変更（複数一括可・プレビュー即時反映）")
-    player.sendMessage("§7  radius / transition / lane / centerline / outerline / sidewalk")
-    player.sendMessage("§7  roadmat / sidewalkmat / linemat")
-    player.sendMessage("§7  例: §f/rc set radius 30 lane 3 sidewalk 2")
-    player.sendMessage("§f/rc version   §7現在のRoadCurveバージョンを表示")
+    MessageUtil.header(player, "RoadCurve ヘルプ")
+    MessageUtil.send(player, "<white>Bone</white><gray> を持ってブロック右クリック → 通過点追加（2点目から自動プレビュー）</gray>")
+    MessageUtil.helpEntry(player, "/rc build", "道路ブロックを設置")
+    MessageUtil.helpEntry(player, "/rc smoothline", "白線を階段でスムージング")
+    MessageUtil.helpEntry(player, "//undo", "最後の道路生成をFAWEで取り消し")
+    MessageUtil.helpEntry(player, "/rc reset", "通過点をリセット・プレビュー停止")
+    MessageUtil.helpEntry(player, "/rc status", "現在の設定を表示")
+    MessageUtil.helpEntry(
+        player,
+        "/rc set &lt;param&gt; &lt;val&gt; [&lt;param&gt; &lt;val&gt; ...]",
+        "設定変更（複数一括可・プレビュー即時反映）",
+    )
+    MessageUtil.send(
+        player,
+        "<gray>  radius / transition / lane / centerline / outerline / sidewalk</gray>",
+    )
+    MessageUtil.send(player, "<gray>  roadmat / sidewalkmat / linemat</gray>")
+    MessageUtil.send(player, "<gray>  例: <white>/rc set radius 30 lane 3 sidewalk 2</white></gray>")
+    MessageUtil.helpEntry(player, "/rc version", "現在のRoadCurveバージョンを表示")
   }
 
   private fun handleVersion(player: Player) {
     val version = plugin.description.version ?: "unknown"
-    player.sendMessage("§a[RC] 現在の RoadCurve バージョン: §f$version")
+    MessageUtil.success(player, "[RC] 現在の RoadCurve バージョン: $version")
   }
 
   companion object {

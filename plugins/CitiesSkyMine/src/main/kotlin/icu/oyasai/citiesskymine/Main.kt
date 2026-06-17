@@ -1,6 +1,10 @@
 package icu.oyasai.citiesskymine
 
 import icu.oyasai.citiesskymine.access.CsmAccessController
+import icu.oyasai.citiesskymine.bezier.BezierCommand
+import icu.oyasai.citiesskymine.bezier.BezierPreview
+import icu.oyasai.citiesskymine.bezier.BezierSession
+import icu.oyasai.citiesskymine.cloud.CloudCommand
 import icu.oyasai.citiesskymine.columns.ColumnLayoutCommand
 import icu.oyasai.citiesskymine.command.CitiesSkyMineCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
@@ -38,6 +42,8 @@ class Main : JavaPlugin() {
 
   private val sessions = HashMap<UUID, RoadSession>()
   private val intersectionSessions = HashMap<UUID, IntersectionSession>()
+  private val bezierSessions = HashMap<UUID, BezierSession>()
+  private lateinit var cloudHandler: CloudCommand
   private var debugStickMemoryStore: DebugStickMemoryStore? = null
 
   companion object {
@@ -91,6 +97,8 @@ class Main : JavaPlugin() {
     val stackHandler = StackCommand(this)
     val selectionHandler = SelectionCommand(this)
     val configHandler = ConfigGuiCommand(this)
+    cloudHandler = CloudCommand(this)
+    val bezierHandler = BezierCommand(this)
     val debugStickHandler =
         DebugStickCommand(this, debugStickMemoryStore ?: DebugStickMemoryStore(this))
     val brushPresetHandler = BrushPresetCommand(this)
@@ -107,12 +115,17 @@ class Main : JavaPlugin() {
             stackHandler,
             selectionHandler,
             configHandler,
+            cloudHandler,
+            bezierHandler,
             debugStickHandler,
             brushPresetHandler,
         )
     val csmCmd = getCommand("csm")
     csmCmd?.setExecutor(csmHandler)
     csmCmd?.tabCompleter = csmHandler
+    val dotHelpCmd = getCommand(".help")
+    dotHelpCmd?.setExecutor(csmHandler)
+    dotHelpCmd?.tabCompleter = csmHandler
     val dotPayloadCmd = getCommand(".pl")
     dotPayloadCmd?.setExecutor(payloadHandler)
     dotPayloadCmd?.tabCompleter = payloadHandler
@@ -122,15 +135,9 @@ class Main : JavaPlugin() {
     val dotSlabStairsCmd = getCommand(".ss")
     dotSlabStairsCmd?.setExecutor(slabStairsHandler)
     dotSlabStairsCmd?.tabCompleter = slabStairsHandler
-    val dotColumnsCmd = getCommand(".cols")
-    dotColumnsCmd?.setExecutor(columnLayoutHandler)
-    dotColumnsCmd?.tabCompleter = columnLayoutHandler
     val dotColumnCmd = getCommand(".col")
     dotColumnCmd?.setExecutor(columnLayoutHandler)
     dotColumnCmd?.tabCompleter = columnLayoutHandler
-    val dotColumnsLongCmd = getCommand(".columns")
-    dotColumnsLongCmd?.setExecutor(columnLayoutHandler)
-    dotColumnsLongCmd?.tabCompleter = columnLayoutHandler
     val dotStackCmd = getCommand(".ns")
     dotStackCmd?.setExecutor(stackHandler)
     dotStackCmd?.tabCompleter = stackHandler
@@ -140,6 +147,12 @@ class Main : JavaPlugin() {
     val dotConfigCmd = getCommand(".cf")
     dotConfigCmd?.setExecutor(configHandler)
     dotConfigCmd?.tabCompleter = configHandler
+    val dotCloudCmd = getCommand(".cloud")
+    dotCloudCmd?.setExecutor(cloudHandler)
+    dotCloudCmd?.tabCompleter = cloudHandler
+    val dotBezierCmd = getCommand(".bez")
+    dotBezierCmd?.setExecutor(bezierHandler)
+    dotBezierCmd?.tabCompleter = bezierHandler
     server.pluginManager.registerEvents(selectionHandler, this)
     selectionHandler.startTracking()
     server.pluginManager.registerEvents(configHandler, this)
@@ -158,10 +171,15 @@ class Main : JavaPlugin() {
     if (::playerDataStore.isInitialized) {
       playerDataStore.saveAll()
     }
+    if (::cloudHandler.isInitialized) {
+      cloudHandler.cancelAll()
+    }
     sessions.values.forEach { it.previewTask?.cancel() }
     intersectionSessions.values.forEach { it.previewTask?.cancel() }
+    bezierSessions.values.forEach { it.previewTask?.cancel() }
     sessions.clear()
     intersectionSessions.clear()
+    bezierSessions.clear()
   }
 
   private fun checkDependencies(): Boolean {
@@ -252,6 +270,41 @@ class Main : JavaPlugin() {
 
   fun stopIntersectionPreview(player: Player) {
     val session = intersectionSessions[player.uniqueId] ?: return
+    session.previewTask?.cancel()
+    session.previewTask = null
+  }
+
+  // ──────────────────────────────────────────────────
+  // Bezier セッション
+  // ──────────────────────────────────────────────────
+
+  fun getBezierSession(player: Player): BezierSession =
+      bezierSessions.getOrPut(player.uniqueId) { BezierSession() }
+
+  fun updateBezierPreview(player: Player) {
+    val session = getBezierSession(player)
+    if (session.previewTask != null) return
+    if (session.controlPoints.size < 2) return
+
+    session.previewTask =
+        server.scheduler.runTaskTimer(
+            this,
+            Runnable {
+              if (!player.isOnline) {
+                stopBezierPreview(player)
+                return@Runnable
+              }
+              val s = getBezierSession(player)
+              if (s.controlPoints.size < 2) return@Runnable
+              BezierPreview.showOnce(player, s.controlPoints, s.segments)
+            },
+            0L,
+            10L,
+        )
+  }
+
+  fun stopBezierPreview(player: Player) {
+    val session = bezierSessions[player.uniqueId] ?: return
     session.previewTask?.cancel()
     session.previewTask = null
   }
