@@ -7,11 +7,15 @@
       "types": "./dist/*/index.d.ts"
     }
   },
+  "bin": {
+    "cdktf": "cdktf"
+  },
   "scripts": {
     "build": "tsc"
   },
   "dependencies": {
     "cdktf": "0.21.0",
+    "cdktf-cli": "0.21.0",
     "constructs": "10.6.0"
   },
   "devDependencies": {
