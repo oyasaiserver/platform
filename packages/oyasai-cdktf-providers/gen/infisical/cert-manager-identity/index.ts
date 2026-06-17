@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_identity
+// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_identity
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface CertManagerIdentityConfig extends cdktf.TerraformMetaArguments 
   /**
   * The ID of the identity
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_identity#identity_id CertManagerIdentity#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_identity#identity_id CertManagerIdentity#identity_id}
   */
   readonly identityId: string;
   /**
   * The role to assign to the identity (admin or member)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_identity#role CertManagerIdentity#role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_identity#role CertManagerIdentity#role}
   */
   readonly role: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_identity infisical_cert_manager_identity}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_identity infisical_cert_manager_identity}
 */
 export class CertManagerIdentity extends cdktf.TerraformResource {
 
@@ -38,7 +38,7 @@ export class CertManagerIdentity extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerIdentity resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerIdentity to import
-  * @param importFromId The id of the existing CertManagerIdentity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_identity#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerIdentity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_identity#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerIdentity to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class CertManagerIdentity extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/cert_manager_identity infisical_cert_manager_identity} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_identity infisical_cert_manager_identity} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class CertManagerIdentity extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_identity',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.28'
+        providerVersion: '0.16.30'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

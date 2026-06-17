@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning
+// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface ProjectIdentityProvisioningConfig extends cdktf.TerraformMetaAr
   /**
   * Whether the identity has delete protection enabled. Defaults to false.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning#has_delete_protection ProjectIdentityProvisioning#has_delete_protection}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning#has_delete_protection ProjectIdentityProvisioning#has_delete_protection}
   */
   readonly hasDeleteProtection?: boolean | cdktf.IResolvable;
   /**
   * The metadata associated with this identity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning#metadata ProjectIdentityProvisioning#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning#metadata ProjectIdentityProvisioning#metadata}
   */
   readonly metadata?: ProjectIdentityProvisioningMetadata[] | cdktf.IResolvable;
   /**
   * The name of the identity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning#name ProjectIdentityProvisioning#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning#name ProjectIdentityProvisioning#name}
   */
   readonly name: string;
   /**
   * The ID of the project that owns this identity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning#project_id ProjectIdentityProvisioning#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning#project_id ProjectIdentityProvisioning#project_id}
   */
   readonly projectId: string;
 }
@@ -36,13 +36,13 @@ export interface ProjectIdentityProvisioningMetadata {
   /**
   * The key of the metadata entry.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning#key ProjectIdentityProvisioning#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning#key ProjectIdentityProvisioning#key}
   */
   readonly key: string;
   /**
   * The value of the metadata entry.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning#value ProjectIdentityProvisioning#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning#value ProjectIdentityProvisioning#value}
   */
   readonly value: string;
 }
@@ -181,7 +181,7 @@ export class ProjectIdentityProvisioningMetadataList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning infisical_project_identity_provisioning}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning infisical_project_identity_provisioning}
 */
 export class ProjectIdentityProvisioning extends cdktf.TerraformResource {
 
@@ -197,7 +197,7 @@ export class ProjectIdentityProvisioning extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ProjectIdentityProvisioning resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ProjectIdentityProvisioning to import
-  * @param importFromId The id of the existing ProjectIdentityProvisioning that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ProjectIdentityProvisioning that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ProjectIdentityProvisioning to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -209,7 +209,7 @@ export class ProjectIdentityProvisioning extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_provisioning infisical_project_identity_provisioning} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_provisioning infisical_project_identity_provisioning} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -220,7 +220,7 @@ export class ProjectIdentityProvisioning extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_project_identity_provisioning',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.28'
+        providerVersion: '0.16.30'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
