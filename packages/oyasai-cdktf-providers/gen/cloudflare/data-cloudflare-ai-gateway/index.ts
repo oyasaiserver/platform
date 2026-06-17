@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/ai_gateway
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/ai_gateway
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,17 +8,17 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareAiGatewayConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/ai_gateway#account_id DataCloudflareAiGateway#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/ai_gateway#account_id DataCloudflareAiGateway#account_id}
   */
   readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/ai_gateway#filter DataCloudflareAiGateway#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/ai_gateway#filter DataCloudflareAiGateway#filter}
   */
   readonly filter?: DataCloudflareAiGatewayFilter;
   /**
   * gateway id
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/ai_gateway#id DataCloudflareAiGateway#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/ai_gateway#id DataCloudflareAiGateway#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -194,7 +194,7 @@ export interface DataCloudflareAiGatewayFilter {
   /**
   * Search by id
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/ai_gateway#search DataCloudflareAiGateway#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/ai_gateway#search DataCloudflareAiGateway#search}
   */
   readonly search?: string;
 }
@@ -286,6 +286,305 @@ export class DataCloudflareAiGatewayFilterOutputReference extends cdktf.ComplexO
     return this._search;
   }
 }
+export interface DataCloudflareAiGatewayGuardrailsPrompt {
+}
+
+export function dataCloudflareAiGatewayGuardrailsPromptToTerraform(struct?: DataCloudflareAiGatewayGuardrailsPrompt): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareAiGatewayGuardrailsPromptToHclTerraform(struct?: DataCloudflareAiGatewayGuardrailsPrompt): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareAiGatewayGuardrailsPromptOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareAiGatewayGuardrailsPrompt | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareAiGatewayGuardrailsPrompt | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // p1 - computed: true, optional: false, required: false
+  public get p1() {
+    return this.getStringAttribute('p1');
+  }
+
+  // s1 - computed: true, optional: false, required: false
+  public get s1() {
+    return this.getStringAttribute('s1');
+  }
+
+  // s10 - computed: true, optional: false, required: false
+  public get s10() {
+    return this.getStringAttribute('s10');
+  }
+
+  // s11 - computed: true, optional: false, required: false
+  public get s11() {
+    return this.getStringAttribute('s11');
+  }
+
+  // s12 - computed: true, optional: false, required: false
+  public get s12() {
+    return this.getStringAttribute('s12');
+  }
+
+  // s13 - computed: true, optional: false, required: false
+  public get s13() {
+    return this.getStringAttribute('s13');
+  }
+
+  // s2 - computed: true, optional: false, required: false
+  public get s2() {
+    return this.getStringAttribute('s2');
+  }
+
+  // s3 - computed: true, optional: false, required: false
+  public get s3() {
+    return this.getStringAttribute('s3');
+  }
+
+  // s4 - computed: true, optional: false, required: false
+  public get s4() {
+    return this.getStringAttribute('s4');
+  }
+
+  // s5 - computed: true, optional: false, required: false
+  public get s5() {
+    return this.getStringAttribute('s5');
+  }
+
+  // s6 - computed: true, optional: false, required: false
+  public get s6() {
+    return this.getStringAttribute('s6');
+  }
+
+  // s7 - computed: true, optional: false, required: false
+  public get s7() {
+    return this.getStringAttribute('s7');
+  }
+
+  // s8 - computed: true, optional: false, required: false
+  public get s8() {
+    return this.getStringAttribute('s8');
+  }
+
+  // s9 - computed: true, optional: false, required: false
+  public get s9() {
+    return this.getStringAttribute('s9');
+  }
+}
+export interface DataCloudflareAiGatewayGuardrailsResponse {
+}
+
+export function dataCloudflareAiGatewayGuardrailsResponseToTerraform(struct?: DataCloudflareAiGatewayGuardrailsResponse): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareAiGatewayGuardrailsResponseToHclTerraform(struct?: DataCloudflareAiGatewayGuardrailsResponse): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareAiGatewayGuardrailsResponseOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareAiGatewayGuardrailsResponse | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareAiGatewayGuardrailsResponse | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // p1 - computed: true, optional: false, required: false
+  public get p1() {
+    return this.getStringAttribute('p1');
+  }
+
+  // s1 - computed: true, optional: false, required: false
+  public get s1() {
+    return this.getStringAttribute('s1');
+  }
+
+  // s10 - computed: true, optional: false, required: false
+  public get s10() {
+    return this.getStringAttribute('s10');
+  }
+
+  // s11 - computed: true, optional: false, required: false
+  public get s11() {
+    return this.getStringAttribute('s11');
+  }
+
+  // s12 - computed: true, optional: false, required: false
+  public get s12() {
+    return this.getStringAttribute('s12');
+  }
+
+  // s13 - computed: true, optional: false, required: false
+  public get s13() {
+    return this.getStringAttribute('s13');
+  }
+
+  // s2 - computed: true, optional: false, required: false
+  public get s2() {
+    return this.getStringAttribute('s2');
+  }
+
+  // s3 - computed: true, optional: false, required: false
+  public get s3() {
+    return this.getStringAttribute('s3');
+  }
+
+  // s4 - computed: true, optional: false, required: false
+  public get s4() {
+    return this.getStringAttribute('s4');
+  }
+
+  // s5 - computed: true, optional: false, required: false
+  public get s5() {
+    return this.getStringAttribute('s5');
+  }
+
+  // s6 - computed: true, optional: false, required: false
+  public get s6() {
+    return this.getStringAttribute('s6');
+  }
+
+  // s7 - computed: true, optional: false, required: false
+  public get s7() {
+    return this.getStringAttribute('s7');
+  }
+
+  // s8 - computed: true, optional: false, required: false
+  public get s8() {
+    return this.getStringAttribute('s8');
+  }
+
+  // s9 - computed: true, optional: false, required: false
+  public get s9() {
+    return this.getStringAttribute('s9');
+  }
+}
+export interface DataCloudflareAiGatewayGuardrails {
+}
+
+export function dataCloudflareAiGatewayGuardrailsToTerraform(struct?: DataCloudflareAiGatewayGuardrails): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareAiGatewayGuardrailsToHclTerraform(struct?: DataCloudflareAiGatewayGuardrails): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareAiGatewayGuardrailsOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareAiGatewayGuardrails | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareAiGatewayGuardrails | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // prompt - computed: true, optional: false, required: false
+  private _prompt = new DataCloudflareAiGatewayGuardrailsPromptOutputReference(this, "prompt");
+  public get prompt() {
+    return this._prompt;
+  }
+
+  // response - computed: true, optional: false, required: false
+  private _response = new DataCloudflareAiGatewayGuardrailsResponseOutputReference(this, "response");
+  public get response() {
+    return this._response;
+  }
+}
 export interface DataCloudflareAiGatewayOtel {
 }
 
@@ -375,6 +674,380 @@ export class DataCloudflareAiGatewayOtelList extends cdktf.ComplexList {
   */
   public get(index: number): DataCloudflareAiGatewayOtelOutputReference {
     return new DataCloudflareAiGatewayOtelOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
+export interface DataCloudflareAiGatewaySpendLimitsRulesAiGatewayProvider {
+}
+
+export function dataCloudflareAiGatewaySpendLimitsRulesAiGatewayProviderToTerraform(struct?: DataCloudflareAiGatewaySpendLimitsRulesAiGatewayProvider): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareAiGatewaySpendLimitsRulesAiGatewayProviderToHclTerraform(struct?: DataCloudflareAiGatewaySpendLimitsRulesAiGatewayProvider): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareAiGatewaySpendLimitsRulesAiGatewayProviderOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareAiGatewaySpendLimitsRulesAiGatewayProvider | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareAiGatewaySpendLimitsRulesAiGatewayProvider | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // mode - computed: true, optional: false, required: false
+  public get mode() {
+    return this.getStringAttribute('mode');
+  }
+
+  // values - computed: true, optional: false, required: false
+  public get values() {
+    return this.getListAttribute('values');
+  }
+}
+export interface DataCloudflareAiGatewaySpendLimitsRulesMetadata {
+}
+
+export function dataCloudflareAiGatewaySpendLimitsRulesMetadataToTerraform(struct?: DataCloudflareAiGatewaySpendLimitsRulesMetadata): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareAiGatewaySpendLimitsRulesMetadataToHclTerraform(struct?: DataCloudflareAiGatewaySpendLimitsRulesMetadata): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareAiGatewaySpendLimitsRulesMetadataOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectKey the key of this item in the map
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectKey: string) {
+    super(terraformResource, terraformAttribute, false, complexObjectKey);
+  }
+
+  public get internalValue(): DataCloudflareAiGatewaySpendLimitsRulesMetadata | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareAiGatewaySpendLimitsRulesMetadata | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // mode - computed: true, optional: false, required: false
+  public get mode() {
+    return this.getStringAttribute('mode');
+  }
+
+  // values - computed: true, optional: false, required: false
+  public get values() {
+    return this.getListAttribute('values');
+  }
+}
+
+export class DataCloudflareAiGatewaySpendLimitsRulesMetadataMap extends cdktf.ComplexMap {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string) {
+    super(terraformResource, terraformAttribute)
+  }
+
+  /**
+  * @param key the key of the item to return
+  */
+  public get(key: string): DataCloudflareAiGatewaySpendLimitsRulesMetadataOutputReference {
+    return new DataCloudflareAiGatewaySpendLimitsRulesMetadataOutputReference(this.terraformResource, this.terraformAttribute, key);
+  }
+}
+export interface DataCloudflareAiGatewaySpendLimitsRulesModel {
+}
+
+export function dataCloudflareAiGatewaySpendLimitsRulesModelToTerraform(struct?: DataCloudflareAiGatewaySpendLimitsRulesModel): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareAiGatewaySpendLimitsRulesModelToHclTerraform(struct?: DataCloudflareAiGatewaySpendLimitsRulesModel): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareAiGatewaySpendLimitsRulesModelOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareAiGatewaySpendLimitsRulesModel | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareAiGatewaySpendLimitsRulesModel | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // mode - computed: true, optional: false, required: false
+  public get mode() {
+    return this.getStringAttribute('mode');
+  }
+
+  // values - computed: true, optional: false, required: false
+  public get values() {
+    return this.getListAttribute('values');
+  }
+}
+export interface DataCloudflareAiGatewaySpendLimitsRules {
+}
+
+export function dataCloudflareAiGatewaySpendLimitsRulesToTerraform(struct?: DataCloudflareAiGatewaySpendLimitsRules): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareAiGatewaySpendLimitsRulesToHclTerraform(struct?: DataCloudflareAiGatewaySpendLimitsRules): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareAiGatewaySpendLimitsRulesOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataCloudflareAiGatewaySpendLimitsRules | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareAiGatewaySpendLimitsRules | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // ai_gateway_provider - computed: true, optional: false, required: false
+  private _aiGatewayProvider = new DataCloudflareAiGatewaySpendLimitsRulesAiGatewayProviderOutputReference(this, "ai_gateway_provider");
+  public get aiGatewayProvider() {
+    return this._aiGatewayProvider;
+  }
+
+  // enabled - computed: true, optional: false, required: false
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
+  }
+
+  // id - computed: true, optional: false, required: false
+  public get id() {
+    return this.getStringAttribute('id');
+  }
+
+  // limit - computed: true, optional: false, required: false
+  public get limit() {
+    return this.getNumberAttribute('limit');
+  }
+
+  // limit_type - computed: true, optional: false, required: false
+  public get limitType() {
+    return this.getStringAttribute('limit_type');
+  }
+
+  // metadata - computed: true, optional: false, required: false
+  private _metadata = new DataCloudflareAiGatewaySpendLimitsRulesMetadataMap(this, "metadata");
+  public get metadata() {
+    return this._metadata;
+  }
+
+  // model - computed: true, optional: false, required: false
+  private _model = new DataCloudflareAiGatewaySpendLimitsRulesModelOutputReference(this, "model");
+  public get model() {
+    return this._model;
+  }
+
+  // technique - computed: true, optional: false, required: false
+  public get technique() {
+    return this.getStringAttribute('technique');
+  }
+
+  // window - computed: true, optional: false, required: false
+  public get window() {
+    return this.getNumberAttribute('window');
+  }
+}
+
+export class DataCloudflareAiGatewaySpendLimitsRulesList extends cdktf.ComplexList {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataCloudflareAiGatewaySpendLimitsRulesOutputReference {
+    return new DataCloudflareAiGatewaySpendLimitsRulesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
+export interface DataCloudflareAiGatewaySpendLimits {
+}
+
+export function dataCloudflareAiGatewaySpendLimitsToTerraform(struct?: DataCloudflareAiGatewaySpendLimits): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareAiGatewaySpendLimitsToHclTerraform(struct?: DataCloudflareAiGatewaySpendLimits): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareAiGatewaySpendLimitsOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareAiGatewaySpendLimits | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareAiGatewaySpendLimits | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // enabled - computed: true, optional: false, required: false
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
+  }
+
+  // rules - computed: true, optional: false, required: false
+  private _rules = new DataCloudflareAiGatewaySpendLimitsRulesList(this, "rules", false);
+  public get rules() {
+    return this._rules;
   }
 }
 export interface DataCloudflareAiGatewayStripeUsageEvents {
@@ -514,7 +1187,7 @@ export class DataCloudflareAiGatewayStripeOutputReference extends cdktf.ComplexO
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/ai_gateway cloudflare_ai_gateway}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/ai_gateway cloudflare_ai_gateway}
 */
 export class DataCloudflareAiGateway extends cdktf.TerraformDataSource {
 
@@ -530,7 +1203,7 @@ export class DataCloudflareAiGateway extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareAiGateway resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareAiGateway to import
-  * @param importFromId The id of the existing DataCloudflareAiGateway that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/ai_gateway#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareAiGateway that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/ai_gateway#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareAiGateway to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -542,7 +1215,7 @@ export class DataCloudflareAiGateway extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/ai_gateway cloudflare_ai_gateway} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/data-sources/ai_gateway cloudflare_ai_gateway} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -553,7 +1226,7 @@ export class DataCloudflareAiGateway extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_ai_gateway',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.1'
+        providerVersion: '5.20.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -633,6 +1306,12 @@ export class DataCloudflareAiGateway extends cdktf.TerraformDataSource {
   // Temporarily expose input value. Use with caution.
   public get filterInput() {
     return this._filter.internalValue;
+  }
+
+  // guardrails - computed: true, optional: false, required: false
+  private _guardrails = new DataCloudflareAiGatewayGuardrailsOutputReference(this, "guardrails");
+  public get guardrails() {
+    return this._guardrails;
   }
 
   // id - computed: true, optional: true, required: false
@@ -715,6 +1394,12 @@ export class DataCloudflareAiGateway extends cdktf.TerraformDataSource {
   // retry_max_attempts - computed: true, optional: false, required: false
   public get retryMaxAttempts() {
     return this.getNumberAttribute('retry_max_attempts');
+  }
+
+  // spend_limits - computed: true, optional: false, required: false
+  private _spendLimits = new DataCloudflareAiGatewaySpendLimitsOutputReference(this, "spend_limits");
+  public get spendLimits() {
+    return this._spendLimits;
   }
 
   // store_id - computed: true, optional: false, required: false

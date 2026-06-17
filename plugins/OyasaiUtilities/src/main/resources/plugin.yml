@@ -33,6 +33,18 @@ commands:
     permission: oyasaiutilities.tpdata
   pita:
     description: "ピタッ！と止まるモードの切り替え"
+  debugonbe:
+    description: DebugOnBE メインコマンド
+    usage: /debugonbe <refresh|reload|help>
+    aliases: [dobe, dob]
+  togo:
+    description: Togo (DebugOnBE Refresh) コマンド
+    usage: /togo [radius] [time]
+    aliases: [refreshtogo]
+  togom:
+    description: Togo Mode (DebugOnBE Filter) コマンド
+    usage: /togom [types/reset/lim]
+
 permissions:
   oyasaiutilities.timerbar:
     description: "TimerBarコマンドの使用権限"
@@ -44,3 +56,9 @@ permissions:
   cm.bypass.spawn_egg:
     description: "CreativeManagementのSpawnEggバイパスする権限"
     default: op
+  debugonbe.admin:
+    description: DebugOnBE の管理権限
+    default: op
+  debugonbe.refresh:
+    description: Togo (DebugOnBE Refresh) コマンドの使用権限
+    default: true

@@ -64,6 +64,11 @@ object SurveySubCommand {
         val answer = args.drop(2).joinToString(" ")
         SurveyManager.handleAnswer(sender, index, answer)
       }
+      "text" -> {
+        if (args.size < 2) return
+        val text = args.drop(1).joinToString(" ")
+        SurveyManager.handleTextAnswer(sender, text)
+      }
       "send" -> {
         if (!sender.hasPermission("oyasai.admin")) return
         if (args.size < 2) {
@@ -78,8 +83,13 @@ object SurveySubCommand {
         sender.msg("<green>アンケート設定をリロードしました。</green>")
       }
       else -> {
-        // If args[0] is surveyId
-        SurveyManager.startSurvey(sender, args[0])
+        val num = args[0].toIntOrNull()
+        if (num != null) {
+          SurveyManager.handleNumericAnswer(sender, num)
+        } else {
+          // If args[0] is surveyId
+          SurveyManager.startSurvey(sender, args[0])
+        }
       }
     }
   }
