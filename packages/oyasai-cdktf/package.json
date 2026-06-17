@@ -4,13 +4,17 @@
   "exports": {
     "./*": "./src/*.ts"
   },
-  "bin": "src/index.ts",
+  "bin": {
+    "cdktf": "cdktf",
+    "oyasai-cdktf": "src/index.ts"
+  },
   "scripts": {
     "build": "tsc"
   },
   "dependencies": {
     "@oyasaiserver/cdktf-providers": "file:../oyasai-cdktf-providers",
     "cdktf": "0.21.0",
+    "cdktf-cli": "0.21.0",
     "constructs": "10.6.0"
   },
   "devDependencies": {
