@@ -110,4 +110,22 @@ When adding a command domain, update the relevant files:
 | `CitiesSkyMineCommand.kt` | routing, root tab completion, help entry |
 | `CsmAccessController.kt` | command key and default roles |
 | `config.yml` | limits and access defaults |
+| `plugins/CitiesSkyMine/tools/csm_user_guide_catalog.json` | user-facing command usage, examples, and Discord guide text |
 | `docs/01_Projects/minecraft-plugins/citiesskymine/PROJECT.md` or specs | public routing when the command adds a durable concept |
+
+After changing `csm_user_guide_catalog.json`, regenerate the user guide:
+
+```bash
+/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:CitiesSkyMine:generateCitiesSkyMineUserGuide
+```
+
+The plugin build checks that `docs/02_Docs/tools/citiesskymine-user-guide.md` matches the catalog. This prevents command changes from landing while the Discord-ready user guide is stale.
+
+The Discord publishing script uses the generated Markdown and external credentials:
+
+```bash
+DISCORD_BOT_TOKEN=... \
+python3 plugins/CitiesSkyMine/tools/publish_user_guide_discord.py --generate
+```
+
+The default publish target is channel `1513469247714496653`. Override with `DISCORD_CHANNEL_ID` or `--channel-id` when needed.

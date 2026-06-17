@@ -1,0 +1,251 @@
+{
+  "commands": [
+    {
+      "canonical": "/csm help <command>",
+      "details": [
+        "help の後ろに同じ引数を何度も入れる必要はありません。1つ目の command だけを指定します。"
+      ],
+      "examples": ["/.help cloud", "/.help bezier", "/.help columns"],
+      "name": "help",
+      "shortcut": "/.help <command>",
+      "summary": "指定したコマンドの使い方を表示します。",
+      "title": "ヘルプ",
+      "usage": ["/csm help <command>", "/.help <command>"]
+    },
+    {
+      "canonical": "/csm cloud [size] [height] [density] [yOffset] [seed]",
+      "details": [
+        "size は X/Z の両方に使われるため、生成範囲は正方形になります。",
+        "density は 0.0 から 1.0 の範囲で、値が大きいほど濃い雲になります。",
+        "yOffset を省略すると 100 ブロック上に生成します。",
+        "seed を省略すると 10000000 以下のランダム値が使われます。"
+      ],
+      "examples": [
+        "/.cloud",
+        "/.cloud 128 16 0.50",
+        "/.cloud 128 16 0.50 128",
+        "/.cloud 128 16 0.50 128 2026"
+      ],
+      "name": "cloud",
+      "shortcut": "/.cloud [size] [height] [density] [yOffset] [seed]",
+      "summary": "現在位置から上方向に cobweb の雲を生成します。",
+      "title": "雲生成",
+      "usage": ["/.cloud [size] [height] [density] [yOffset] [seed]"]
+    },
+    {
+      "canonical": "/csm bezier <action>",
+      "details": [
+        "fromsel は FAWE の convex/polyhedral 選択から頂点を読み込みます。",
+        "build は半径指定の曲線を実ブロックで生成します。",
+        "build flat は道路向けの1枚板を生成します。",
+        "segments を増やすと曲線が滑らかになりますが、生成ブロック数も増えます。"
+      ],
+      "examples": [
+        "/.bez add",
+        "/.bez fromsel",
+        "/.bez preview on",
+        "/.bez build stone 3",
+        "/.bez build flat gray_concrete 7"
+      ],
+      "name": "bezier",
+      "shortcut": "/.bez <action>",
+      "summary": "制御点から曲線をプレビューし、実ブロックの曲線または道路用の1枚板を生成します。",
+      "title": "ベジェ曲線",
+      "usage": [
+        "/.bez add",
+        "/.bez set <1-8>",
+        "/.bez fromsel",
+        "/.bez remove [1-8]",
+        "/.bez preview <on|off>",
+        "/.bez build [material] [radius]",
+        "/.bez build flat [material] [width]",
+        "/.bez segments [8-256]",
+        "/.bez status",
+        "/.bez clear"
+      ]
+    },
+    {
+      "canonical": "/csm columns [suggest|build] <columnWidth> <gap> [edge|center] [2d]",
+      "details": [
+        "ショートカットは /.col だけです。/.cols や /.columns は使いません。",
+        "suggest は生成せず、柱割り候補だけを表示します。",
+        "2d を付けると X/Z 両方向に柱を配置します。"
+      ],
+      "examples": [
+        "/.col 2 7",
+        "/.col suggest 2 7 center",
+        "/.col 2 7 center 2d"
+      ],
+      "name": "columns",
+      "shortcut": "/.col [suggest|build] <columnWidth> <gap> [edge|center] [2d]",
+      "summary": "WorldEdit 選択範囲に手持ちブロックで柱を配置します。",
+      "title": "柱割り",
+      "usage": [
+        "/.col <columnWidth> <gap> [edge|center] [2d]",
+        "/.col suggest <columnWidth> <gap> [edge|center] [2d]",
+        "/.col build <columnWidth> <gap> [edge|center] [2d]"
+      ]
+    },
+    {
+      "canonical": "/csm window [width] [height] [frame] [glass] [backing]",
+      "details": [
+        "フレーム、ガラス、裏地の素材は省略できます。",
+        "生成後、横に並べるための選択範囲が自動設定されます。"
+      ],
+      "examples": ["/.win", "/.win 3 4", "/.win 2 3 OAK_TRAPDOOR GLASS"],
+      "name": "window",
+      "shortcut": "/.win [width] [height] [frame] [glass] [backing]",
+      "summary": "プレイヤーの正面方向に窓を生成します。",
+      "title": "窓生成",
+      "usage": ["/.win [width] [height] [frame] [glass] [backing]"]
+    },
+    {
+      "canonical": "/csm slabstairs [material]",
+      "details": [
+        "素材名はファミリー名で指定します。",
+        "緩い勾配では slab と stairs、急な勾配では full ブロックも組み合わせます。"
+      ],
+      "examples": ["/.ss stone_brick", "/.ss oak", "/.ss quartz"],
+      "name": "slabstairs",
+      "shortcut": "/.ss [material]",
+      "summary": "WorldEdit の2点選択に、勾配に応じた slab/stairs/full ブロックの坂道を生成します。",
+      "title": "SlabStairs",
+      "usage": ["/.ss [material]"]
+    },
+    {
+      "canonical": "/csm stack <direction...> <times> [skip-blocks...]",
+      "details": [
+        "forward/back/left/right/up/down を組み合わせられます。",
+        "-a を付けると空気を上書きしません。"
+      ],
+      "examples": [
+        "/.ns forward 5",
+        "/.ns right 3",
+        "/.ns up 2",
+        "/.ns f 4 -a"
+      ],
+      "name": "stack",
+      "shortcut": "/.ns <direction...> <times> [skip-blocks...]",
+      "summary": "WorldEdit 選択範囲をプレイヤー視点基準で複製します。",
+      "title": "Stack",
+      "usage": [
+        "/.ns <forward|back|left|right|up|down...> <times> [skip-blocks...]"
+      ]
+    },
+    {
+      "canonical": "/csm selection <save|list|delete|p|name>",
+      "details": ["直前の選択範囲は自動的に記録され、/.sel p で復元できます。"],
+      "examples": ["/.sel save tower", "/.sel tower", "/.sel p"],
+      "name": "selection",
+      "shortcut": "/.sel <save|list|delete|p|name>",
+      "summary": "WorldEdit 選択範囲を保存・復元します。",
+      "title": "Selection",
+      "usage": [
+        "/.sel save [name]",
+        "/.sel list",
+        "/.sel delete <name>",
+        "/.sel p",
+        "/.sel <name>"
+      ]
+    },
+    {
+      "canonical": "/csm config",
+      "details": ["コマンドで設定した内容も GUI に反映されます。"],
+      "examples": ["/.cf", "/.cf win"],
+      "name": "config",
+      "shortcut": "/.cf",
+      "summary": "チェスト型 GUI で個人設定を変更します。",
+      "title": "Config GUI",
+      "usage": ["/.cf", "/.cf win"]
+    },
+    {
+      "canonical": "/csm debugstick <select|cycle>",
+      "details": ["バニラのデバッグ棒に近い操作をコマンドで行います。"],
+      "examples": ["/.ds select", "/.ds cycle"],
+      "name": "debugstick",
+      "shortcut": "/.ds <select|cycle>",
+      "summary": "見ているブロックの BlockData プロパティを選択・変更します。",
+      "title": "DebugStick",
+      "usage": ["/.ds select", "/.ds cycle"]
+    },
+    {
+      "canonical": "/csm preset <save|load|list|delete|name>",
+      "details": ["保存できるコマンドは許可リストに一致するものだけです。"],
+      "examples": ["/.brp save road //br sphere gray_concrete 5", "/.brp road"],
+      "name": "preset",
+      "shortcut": "/.brp <save|load|list|delete|name>",
+      "summary": "よく使うブラシ系コマンドを保存・呼び出しします。",
+      "title": "ブラシプリセット",
+      "usage": [
+        "/.brp save <name> <command>",
+        "/.brp load <name>",
+        "/.brp <name>",
+        "/.brp list",
+        "/.brp delete <name>"
+      ]
+    },
+    {
+      "canonical": "/csm payload <load|load64> <payload>",
+      "details": ["巨大な payload はチャット欄の長さ制限に注意してください。"],
+      "examples": ["/.pl load64 <payload>"],
+      "name": "payload",
+      "shortcut": "/.pl <load|load64> <payload> [0-3] [L|R]",
+      "summary": "Base997/Base64 payload を復元して配置します。",
+      "title": "Payload",
+      "usage": [
+        "/csm payload load <payload>",
+        "/csm payload load64 <payload>",
+        "/.pl <load|load64> <payload> [0-3] [L|R]"
+      ]
+    }
+  ],
+  "compatibility_commands": [
+    {
+      "command": "/rc または /.rc",
+      "summary": "既存の道路カーブ生成コマンドです。新規コマンドの命名パターンではなく互換用です。"
+    },
+    {
+      "command": "/ri または /.ri",
+      "summary": "既存の交差点生成コマンドです。"
+    },
+    {
+      "command": "/hb または /.hb",
+      "summary": "既存のファサード生成コマンドです。"
+    }
+  ],
+  "description": "CitiesSkylines の都市データを Minecraft に取り込み、道路・交差点・窓・選択範囲操作などの建築を支援するプラグインです。",
+  "discord_channel_id": "1513469247714496653",
+  "notes": [
+    "すべての新しい機能は /csm <command> または slash-dot ショートカットで使います。",
+    "生成系コマンドの取り消しは FAWE の //undo を使います。",
+    "ヘルプは /csm help <command> または /.help <command> で確認できます。"
+  ],
+  "title": "CitiesSkyMine ユーザーガイド",
+  "tutorials": [
+    {
+      "steps": [
+        "壁に向かって /.win 2 3 を実行します。",
+        "自動設定された選択範囲を /.ns right 4 で右方向へ複製します。",
+        "やり直す場合は //undo を実行します。"
+      ],
+      "title": "窓を横に並べる"
+    },
+    {
+      "steps": [
+        "雲の中心にしたい場所の下へ移動します。",
+        "/.cloud 128 16 0.50 を実行すると、100 ブロック上に雲が生成されます。",
+        "同じ形を再現したい場合は /.cloud 128 16 0.50 100 2026 のように seed を指定します。"
+      ],
+      "title": "雲を生成する"
+    },
+    {
+      "steps": [
+        "FAWE の convex/polyhedral 選択で制御点を作ります。",
+        "/.bez fromsel で制御点を読み込みます。",
+        "/.bez preview on でパーティクルを確認します。",
+        "/.bez build flat gray_concrete 7 で道路用の1枚板を生成します。"
+      ],
+      "title": "ベジェ曲線の道路板を生成する"
+    }
+  ]
+}
