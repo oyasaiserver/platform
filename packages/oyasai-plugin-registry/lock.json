@@ -106,26 +106,26 @@
   "floodgate": {
     "paper": {
       "1.21.10": {
-        "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/132/downloads/spigot",
-        "hash": "sha256-ZR31ephvY1BqEcLyxrJxR+3snFkJT6ffzCGhMdqKEDA="
+        "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/134/downloads/spigot",
+        "hash": "sha256-0fnDmnmjwFjwOEuGx0fFN4naae1mI42kkWMpl59ck/A="
       }
     },
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/132/downloads/velocity",
-      "hash": "sha256-8liZUEOkhpy28e9gURCsHZBmpbHhsxZJWiWwavoMEGA="
+      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/134/downloads/velocity",
+      "hash": "sha256-s6sOyTbOIxJ2bGHYLrt/LHBGG+5iZ4rpHhke2S81Fnw="
     }
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.1/builds/1168/downloads/velocity",
-      "hash": "sha256-da2U2XiZ1JDqcc837WqrEGuVnrZuDmHiHSmuGJzpOTE="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.1/builds/1172/downloads/velocity",
+      "hash": "sha256-+yWiOsh/kSIXAo7gw2rwxGNwzGlxM98sKuJDua8F9Zo="
     }
   },
   "gsit": {
     "paper": {
       "1.21.10": {
-        "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/vSwwTz0g/GSit-3.5.0.jar",
-        "hash": "sha256-GrCudsXQkSq9AMsSqDtQm0OQe/SaelrafAzfHOK80xQ="
+        "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/nZM8fxpG/GSit-3.5.1.jar",
+        "hash": "sha256-sHSUErZcAb3NaDggp2Si92msVX6wtpGFbSZ6Y/KDyhw="
       }
     }
   },
@@ -188,8 +188,8 @@
   "multiversecore": {
     "paper": {
       "1.21.10": {
-        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/y7jO3wci/multiverse-core-5.7.0.jar",
-        "hash": "sha256-HvpqZqeQuSizdtmt34uQy57G3RHjVVjbas1HLwx8ns4="
+        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/kgxH7ZVB/multiverse-core-5.7.1.jar",
+        "hash": "sha256-kKORM/NiQLKHObfBAEkjcXAvitHX92IbAo+NKvSf4cM="
       }
     }
   },
@@ -276,8 +276,8 @@
   "screamingbedwars": {
     "paper": {
       "1.21.10": {
-        "url": "https://cdn.modrinth.com/data/8sg1aj4I/versions/fwiTdMod/BedWars-0.2.43.jar",
-        "hash": "sha256-Je8RxG7+bQmSPfM9B3qxLRqybyC/aDQdyACrLt73/yI="
+        "url": "https://cdn.modrinth.com/data/8sg1aj4I/versions/nUPEYDAm/BedWars-0.2.44.jar",
+        "hash": "sha256-UQ1G0xDf8qQmRhxWdgUbvxn/N7VT7guYdVl6vkukDVw="
       }
     }
   },
@@ -300,13 +300,13 @@
   "skinsrestorer": {
     "paper": {
       "1.21.10": {
-        "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/E9seHdFr/SkinsRestorer.jar",
-        "hash": "sha256-58j1FZgRSQzqNq7AclAc77KXkMim1VCMZOLxW34mRxg="
+        "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/itZJnFwV/SkinsRestorer.jar",
+        "hash": "sha256-Qp71VLnmObThanrEr97l0nOsVKyoL+AhXGTexYsnxiM="
       }
     },
     "velocity": {
-      "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/E9seHdFr/SkinsRestorer.jar",
-      "hash": "sha256-58j1FZgRSQzqNq7AclAc77KXkMim1VCMZOLxW34mRxg="
+      "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/itZJnFwV/SkinsRestorer.jar",
+      "hash": "sha256-Qp71VLnmObThanrEr97l0nOsVKyoL+AhXGTexYsnxiM="
     }
   },
   "skript": {
@@ -328,8 +328,8 @@
   "tab": {
     "paper": {
       "1.21.10": {
-        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/MsHr6ITb/TAB%20v6.0.3%20-%20Vanilla.jar",
-        "hash": "sha256-V63IplVzalCnnb4RpnqKdULfINuN12ZQ7JNMng4qkmw="
+        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/t5Bd9Ajx/TAB%20v6.1.0.jar",
+        "hash": "sha256-FP6WAc4J8u/oo5XvI1nb8QmjVyqhsLFAuZwEsbOR05c="
       }
     }
   },
@@ -368,8 +368,8 @@
   "viaversion": {
     "paper": {
       "1.21.10": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/N50tHB0H/ViaVersion-5.9.2-SNAPSHOT.jar",
-        "hash": "sha256-eh+NzCcPVoDMd7gzk+hHAOBPLqlVhyAtgkCYWqlHu6M="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/z0sCGSmk/ViaVersion-5.10.1-SNAPSHOT.jar",
+        "hash": "sha256-HPuipEqT7WSR6cTnl3YFh85kcj3dsM2NgaZOFk9DDQM="
       }
     }
   },
