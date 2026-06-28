@@ -18,13 +18,15 @@ let
     paperweightUserdevPopulateCache() {
       ${lib.concatMapAttrsStringSep "\n" (
         version:
-        { mappings }:
+        {
+          mappings ? null,
+        }:
         let
           # Reimplementation of paperweight cache key
           cacheKey = (builtins.hashString "sha256" (builtins.hashString "sha256" version));
           vanillaServerJar = vanillaServers."vanilla-${lib.replaceString "." "_" version}";
         in
-        ''
+        lib.optionalString (mappings != null) ''
           dir="$GRADLE_USER_HOME/caches/paperweight-userdev/v2/work/vanillaServerDownloads_${cacheKey}"
           mkdir -p "$dir"
 
