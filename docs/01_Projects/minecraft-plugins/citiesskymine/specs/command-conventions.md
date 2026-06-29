@@ -35,7 +35,7 @@ Recommended examples:
 ```text
 /csm cloud 128 48 0.72 42
 /.cloud 128 48 0.72 42
-/csm cloud 128 48 0.72 100 42
+/csm cloud 128 48 0.72 42 100
 ```
 
 ## Command Shape
@@ -64,11 +64,13 @@ Help is centralized:
 ## Arguments
 
 - Prefer short positional arguments for player-facing generation commands when the order is stable.
-- Use tab completion placeholders such as `[size]`, `[height]`, `[density]`, `[yOffset]`, and `[seed]` to show what should be typed next.
+- Use tab completion placeholders such as `[size]`, `[height]`, `[density]`, `[seed]`, and `[yOffset]` to show what should be typed next.
 - Use named key/value tokens only when positional arguments would be ambiguous or frequently skipped.
 - Keep aliases minimal. A short alias is acceptable for common actions only when it is already established by nearby code.
 - Validate unknown tokens explicitly and report the first invalid token.
 - Report usage with the actual invoked label when possible.
+- Keep the visible command surface consistent across `/csm <domain>`, slash-dot shortcuts, help text, tab completion, `plugin.yml`, and public docs.
+- Preserve the invoked usage label when routing or delegating so `/csm ...` help does not show only the shortcut form.
 
 ## Tab Completion
 
@@ -79,6 +81,7 @@ Tab completion should follow the command grammar:
 3. Do not require users to type option keys when a stable positional grammar is enough.
 4. Never suggest options that are already present unless they are repeatable.
 5. Return an empty list rather than noisy generic suggestions.
+6. Do not suggest commands, flags, or argument orders that the executor will reject.
 
 ## Access
 

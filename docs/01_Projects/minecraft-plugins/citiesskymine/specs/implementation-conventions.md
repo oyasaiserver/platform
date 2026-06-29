@@ -56,6 +56,8 @@ Confirm each step before moving to the next.
 7. **Help and tab completion** — Implement `sendHelp()` and `onTabComplete()` per `command-conventions.md`.
 8. **Build confirmation** — Run `nix develop --command gradle :plugins:CitiesSkyMine:compileKotlin` and verify success.
 
+Documented config keys must be read by implementation code. If a key is no longer read, remove it from the docs and default `config.yml` instead of leaving a dead setting.
+
 ## 2. FAWE / WorldEdit
 
 ### CsmEditSession.run()

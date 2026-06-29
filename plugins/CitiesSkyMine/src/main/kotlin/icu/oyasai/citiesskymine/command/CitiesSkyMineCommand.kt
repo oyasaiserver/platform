@@ -6,12 +6,14 @@ import icu.oyasai.citiesskymine.bezier.BezierCommand
 import icu.oyasai.citiesskymine.cloud.CloudCommand
 import icu.oyasai.citiesskymine.columns.ColumnLayoutCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
+import icu.oyasai.citiesskymine.config.ServerConfigCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
 import icu.oyasai.citiesskymine.payload.PayloadCommand
 import icu.oyasai.citiesskymine.preset.BrushPresetCommand
 import icu.oyasai.citiesskymine.road.IntersectionCommand
 import icu.oyasai.citiesskymine.road.RoadCurveCommand
+import icu.oyasai.citiesskymine.schematic.SchematicCommand
 import icu.oyasai.citiesskymine.selection.SelectionCommand
 import icu.oyasai.citiesskymine.slabstairs.SlabStairsCommand
 import icu.oyasai.citiesskymine.stack.StackCommand
@@ -33,11 +35,13 @@ class CitiesSkyMineCommand(
     private val columnLayoutCommand: ColumnLayoutCommand,
     private val stackCommand: StackCommand,
     private val selectionCommand: SelectionCommand,
-    private val configCommand: ConfigGuiCommand,
+    private val settingsCommand: ConfigGuiCommand,
+    private val serverConfigCommand: ServerConfigCommand,
     private val cloudCommand: CloudCommand,
     private val bezierCommand: BezierCommand,
     private val debugStickCommand: DebugStickCommand,
     private val brushPresetCommand: BrushPresetCommand,
+    private val schematicCommand: SchematicCommand,
 ) : CommandExecutor, TabCompleter {
 
   override fun onCommand(
@@ -135,10 +139,12 @@ class CitiesSkyMineCommand(
         if (!requireAccess(sender, CommandKey.SELECTION)) return true
         selectionCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
-      "config",
-      "cf" -> {
-        if (!requireAccess(sender, CommandKey.CONFIG)) return true
-        configCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
+      "settings" -> {
+        if (!requireAccess(sender, CommandKey.SETTINGS)) return true
+        settingsCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
+      }
+      "config" -> {
+        serverConfigCommand.onCommand(sender, command, "$label config", args.drop(1).toTypedArray())
       }
       "cloud" -> {
         if (!requireAccess(sender, CommandKey.CLOUD)) return true
@@ -155,6 +161,10 @@ class CitiesSkyMineCommand(
       "preset" -> {
         if (!requireAccess(sender, CommandKey.PRESET)) return true
         brushPresetCommand.onCommand(sender, command, "$label preset", args.drop(1).toTypedArray())
+      }
+      "schematic" -> {
+        if (!requireAccess(sender, CommandKey.SCHEMATIC)) return true
+        schematicCommand.onCommand(sender, command, "$label schematic", args.drop(1).toTypedArray())
       }
       else -> {
         MessageUtil.error(sender, "不明なサブコマンド: $sub")
@@ -198,12 +208,13 @@ class CitiesSkyMineCommand(
       "ns" -> stackCommand.onTabComplete(sender, command, alias, childArgs)
       "selection",
       "sel" -> selectionCommand.onTabComplete(sender, command, alias, childArgs)
-      "config",
-      "cf" -> configCommand.onTabComplete(sender, command, alias, childArgs)
+      "settings" -> settingsCommand.onTabComplete(sender, command, alias, childArgs)
+      "config" -> serverConfigCommand.onTabComplete(sender, command, "$alias config", childArgs)
       "cloud" -> cloudCommand.onTabComplete(sender, command, alias, childArgs)
       "bezier" -> bezierCommand.onTabComplete(sender, command, alias, childArgs)
       "debugstick" -> debugStickCommand.onTabComplete(sender, command, alias, childArgs)
       "preset" -> brushPresetCommand.onTabComplete(sender, command, "$alias preset", childArgs)
+      "schematic" -> schematicCommand.onTabComplete(sender, command, "$alias schematic", childArgs)
       else -> emptyList()
     }
   }
@@ -227,7 +238,7 @@ class CitiesSkyMineCommand(
     )
     MessageUtil.helpEntry(
         sender,
-        "/csm columns <柱の太さ> <柱間> [edge|center] [2d]",
+        "/csm columns <柱の太さ> <柱間|柱数> [edge|center] [2d] [-s] [-p]",
         "選択範囲に手持ちブロックで柱を生成",
     )
     MessageUtil.helpEntry(
@@ -236,19 +247,25 @@ class CitiesSkyMineCommand(
         "選択範囲を視点基準で複製",
     )
     MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
-    MessageUtil.helpEntry(sender, "/csm config", "個人設定GUIを開く")
+    MessageUtil.helpEntry(sender, "/csm settings", "個人設定GUIを開く")
+    MessageUtil.helpEntry(sender, "/csm config access <...>", "config.yml の権限設定を編集")
     MessageUtil.helpEntry(sender, "/csm cloud [size] [height] [density] [seed]", "cobweb の雲を生成")
     MessageUtil.helpEntry(
         sender,
-        "/csm bezier <add|fromsel|preview|build|clear>",
+        "/csm bezier <add|plane|preview|build|clear>",
         "ベジェ曲線をプレビュー・生成",
     )
     MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
     MessageUtil.helpEntry(sender, "/csm preset <save|load|list|delete|名前>", "ブラシプリセットを管理")
+    MessageUtil.helpEntry(
+        sender,
+        "/csm schematic <name> [-a]",
+        "スキマティックを読み込んで貼り付け",
+    )
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
     MessageUtil.send(
         sender,
-        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.sel, /.cf, /.cloud, /.bez, /.ds, /.brp</gray>",
+        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.sel, /.settings, /.config, /.cloud, /.bez, /.ds, /.brp, /.sc</gray>",
     )
     MessageUtil.send(sender, "<gray>Command help: /csm help <command> or /.help <command></gray>")
   }
@@ -270,10 +287,11 @@ class CitiesSkyMineCommand(
       "col" ->
           MessageUtil.helpEntry(
               sender,
-              "/csm columns <柱の太さ> <柱間> [edge|center] [2d]",
+              "/csm columns <柱の太さ> <柱間|柱数> [edge|center] [2d] [-s] [-p]",
               "選択範囲に手持ちブロックで柱を生成",
           )
-      "config" -> MessageUtil.helpEntry(sender, "/csm config", "個人設定GUIを開く")
+      "settings" -> MessageUtil.helpEntry(sender, "/csm settings", "個人設定GUIを開く")
+      "config" -> serverConfigCommand.sendHelp(sender, "/csm config")
       "selection",
       "sel" ->
           MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
@@ -288,6 +306,8 @@ class CitiesSkyMineCommand(
           MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
       "preset" ->
           MessageUtil.helpEntry(sender, "/csm preset <save|load|list|delete|名前>", "ブラシプリセットを管理")
+      "schematic",
+      "sc" -> schematicCommand.sendHelp(sender, "/csm schematic")
       "road" -> MessageUtil.helpEntry(sender, "/csm road <...>", "道路カーブを生成")
       "intersection" -> MessageUtil.helpEntry(sender, "/csm intersection <...>", "交差点を生成")
       "facade" -> MessageUtil.helpEntry(sender, "/csm facade <...>", "ファサードを生成")
@@ -332,11 +352,13 @@ class CitiesSkyMineCommand(
             "columns",
             "stack",
             "selection",
+            "settings",
             "config",
             "cloud",
             "bezier",
             "debugstick",
             "preset",
+            "schematic",
         )
   }
 }

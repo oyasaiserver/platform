@@ -21,11 +21,13 @@ class CsmAccessController(private val plugin: Main) {
     COLUMNS("columns", "citiesskymine.columns"),
     STACK("stack", "citiesskymine.stack"),
     SELECTION("selection", "citiesskymine.selection"),
+    SETTINGS("settings", "citiesskymine.settings"),
     CONFIG("config", "citiesskymine.config"),
     CLOUD("cloud", "citiesskymine.cloud"),
     BEZIER("bezier", "citiesskymine.bezier"),
     DEBUGSTICK("debugstick", "citiesskymine.debugstick"),
     PRESET("preset", "citiesskymine.preset"),
+    SCHEMATIC("schematic", "citiesskymine.schematic"),
   }
 
   fun require(sender: CommandSender, command: CommandKey): Boolean {
@@ -152,11 +154,13 @@ class CsmAccessController(private val plugin: Main) {
             CommandKey.COLUMNS to listOf("builder", "takumi", "admin"),
             CommandKey.STACK to listOf("builder", "takumi", "admin"),
             CommandKey.SELECTION to listOf("builder", "takumi", "admin"),
-            CommandKey.CONFIG to listOf("builder", "takumi", "admin"),
+            CommandKey.SETTINGS to listOf("builder", "takumi", "admin"),
+            CommandKey.CONFIG to listOf("admin"),
             CommandKey.CLOUD to listOf("builder", "takumi", "admin"),
             CommandKey.BEZIER to listOf("builder", "takumi", "admin"),
             CommandKey.DEBUGSTICK to listOf("takumi", "admin"),
             CommandKey.PRESET to listOf("builder", "takumi", "admin"),
+            CommandKey.SCHEMATIC to listOf("builder", "takumi", "admin"),
         )
   }
 }

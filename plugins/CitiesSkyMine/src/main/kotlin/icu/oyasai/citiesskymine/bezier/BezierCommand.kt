@@ -3,6 +3,7 @@ package icu.oyasai.citiesskymine.bezier
 import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
+import com.sk89q.worldedit.regions.CuboidRegion
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
 import icu.oyasai.citiesskymine.util.MessageUtil
@@ -38,6 +39,9 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       "fromsel",
       "selection",
       "convex" -> loadFromSelection(sender)
+      "plane",
+      "flatplane",
+      "planar" -> planeMode(sender, args.getOrNull(1))
       "remove" -> removePoint(sender, args)
       "clear",
       "reset" -> clear(sender)
@@ -69,7 +73,7 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           else emptyList()
       "preview" ->
           if (args.size == 2)
-              listOf("on", "off").filter { it.startsWith(args[1], ignoreCase = true) }
+              listOf("on", "off", "plane").filter { it.startsWith(args[1], ignoreCase = true) }
           else emptyList()
       "build" -> tabCompleteBuild(args)
       "segments" ->
@@ -83,9 +87,9 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     MessageUtil.header(sender, "Bezier")
     MessageUtil.helpEntry(sender, "$base add", "現在位置を制御点として追加")
     MessageUtil.helpEntry(sender, "$base set <1-$MAX_POINTS>", "指定番号の制御点を現在位置に更新")
-    MessageUtil.helpEntry(sender, "$base fromsel", "FAWE convex/polyhedral 選択の頂点を制御点として読み込み")
+    MessageUtil.helpEntry(sender, "$base preview <on|off>", "現在の WorldEdit 選択を自動読込してプレビュー")
+    MessageUtil.helpEntry(sender, "$base plane <on|off>", "制御点のYをそろえて平面化")
     MessageUtil.helpEntry(sender, "$base remove [1-$MAX_POINTS]", "指定制御点、または末尾の制御点を削除")
-    MessageUtil.helpEntry(sender, "$base preview <on|off>", "パーティクルプレビューを開始・停止")
     MessageUtil.helpEntry(sender, "$base build [material] [radius]", "曲線を実ブロックで生成。取り消しは //undo")
     MessageUtil.helpEntry(sender, "$base build flat [material] [width]", "道路用の1枚板を生成。取り消しは //undo")
     MessageUtil.helpEntry(sender, "$base segments [8-256]", "曲線の分割数を設定")
@@ -98,19 +102,13 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       MessageUtil.error(player, "制御点は最大 ${MAX_POINTS} 点です。")
       return
     }
-    session.controlPoints += player.location.clone()
+    session.controlPoints += centerLocation(player.location)
     MessageUtil.success(player, "制御点 ${session.controlPoints.size} を追加しました。")
     if (session.previewTask != null) plugin.updateBezierPreview(player)
   }
 
   private fun loadFromSelection(player: Player) {
-    val vertices =
-        try {
-          selectedVertices(player)
-        } catch (e: Exception) {
-          MessageUtil.error(player, "WorldEdit/FAWE の選択頂点を読み込めませんでした: ${e.message}")
-          return
-        }
+    val vertices = selectedVerticesOrNull(player, showErrors = true) ?: return
     if (vertices.size < 2) {
       MessageUtil.error(player, "convex/polyhedral 選択で2点以上の頂点を選択してください。")
       return
@@ -122,7 +120,7 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     val session = plugin.getBezierSession(player)
     session.controlPoints.clear()
-    session.controlPoints += vertices.map { it.toLocation(player) }
+    session.controlPoints += vertices.map { it.toCenteredLocation(player) }
     if (session.previewTask != null) plugin.updateBezierPreview(player)
     MessageUtil.success(player, "WorldEdit/FAWE 選択から ${vertices.size} 点の制御点を読み込みました。")
   }
@@ -137,7 +135,7 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       )
       return
     }
-    val location = player.location.clone()
+    val location = centerLocation(player.location)
     if (index == session.controlPoints.size + 1) {
       session.controlPoints += location
       MessageUtil.success(player, "制御点 $index を追加しました。")
@@ -173,10 +171,32 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     MessageUtil.success(player, "ベジェ曲線の制御点をクリアしました。")
   }
 
+  private fun planeMode(player: Player, mode: String?) {
+    val session = plugin.getBezierSession(player)
+    session.planeMode =
+        when (mode?.lowercase()) {
+          null,
+          "toggle" -> !session.planeMode
+          "on",
+          "true",
+          "1" -> true
+          "off",
+          "false",
+          "0" -> false
+          else -> {
+            MessageUtil.error(player, "plane は on または off を指定してください。")
+            return
+          }
+        }
+    if (session.previewTask != null) plugin.updateBezierPreview(player)
+    MessageUtil.success(player, "ベジェ平面モード: ${if (session.planeMode) "on" else "off"}")
+  }
+
   private fun preview(player: Player, mode: String?) {
     when (mode?.lowercase()) {
       null,
       "on" -> {
+        syncSelectionControlPoints(player, showErrors = false)
         val session = plugin.getBezierSession(player)
         if (session.controlPoints.size < 2) {
           MessageUtil.error(player, "プレビューには2点以上の制御点が必要です。")
@@ -189,11 +209,13 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         plugin.stopBezierPreview(player)
         MessageUtil.success(player, "ベジェ曲線プレビューを停止しました。")
       }
+      "plane" -> planeMode(player, "toggle")
       else -> MessageUtil.error(player, "preview は on または off を指定してください。")
     }
   }
 
   private fun build(player: Player, args: Array<String>) {
+    syncSelectionControlPoints(player, showErrors = false)
     val session = plugin.getBezierSession(player)
     if (session.controlPoints.size < 2) {
       MessageUtil.error(player, "生成には2点以上の制御点が必要です。")
@@ -209,13 +231,13 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         when (buildOptions.mode) {
           BuildMode.TUBE ->
               BezierGeometry.blockPath(
-                  session.controlPoints,
+                  activeControlPoints(session),
                   session.segments,
                   buildOptions.size,
               )
           BuildMode.FLAT ->
               BezierGeometry.flatRoadPath(
-                  session.controlPoints,
+                  activeControlPoints(session),
                   session.segments,
                   buildOptions.size,
               )
@@ -254,13 +276,14 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   }
 
   private fun status(player: Player) {
+    syncSelectionControlPoints(player, showErrors = false)
     val session = plugin.getBezierSession(player)
     val state = if (session.previewTask != null) "表示中" else "停止中"
     MessageUtil.info(
         player,
-        "制御点=${session.controlPoints.size}/$MAX_POINTS segments=${session.segments} preview=$state",
+        "制御点=${session.controlPoints.size}/$MAX_POINTS segments=${session.segments} preview=$state plane=${if (session.planeMode) "on" else "off"}",
     )
-    session.controlPoints.forEachIndexed { index, location ->
+    activeControlPoints(session).forEachIndexed { index, location ->
       MessageUtil.info(player, "${index + 1}: ${format(location)}")
     }
   }
@@ -409,6 +432,15 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
   }
 
+  private fun selectedVerticesOrNull(player: Player, showErrors: Boolean): List<BlockVector3>? {
+    return try {
+      selectedVertices(player)
+    } catch (e: Exception) {
+      if (showErrors) MessageUtil.error(player, "WorldEdit/FAWE の選択頂点を読み込めませんでした: ${e.message}")
+      null
+    }
+  }
+
   private fun selectedVertices(player: Player): List<BlockVector3> {
     val actor = BukkitAdapter.adapt(player)
     val weWorld = BukkitAdapter.adapt(player.world)
@@ -421,14 +453,61 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   }
 
   private fun verticesFrom(source: Any): List<BlockVector3> {
+    if (source is CuboidRegion) return cuboidVertices(source)
     val method =
         source.javaClass.methods.firstOrNull { it.name == "getVertices" && it.parameterCount == 0 }
     val value = method?.invoke(source) as? Iterable<*> ?: return emptyList()
     return value.filterIsInstance<BlockVector3>().distinct()
   }
 
-  private fun BlockVector3.toLocation(player: Player): Location =
-      Location(player.world, x().toDouble(), y().toDouble(), z().toDouble())
+  private fun cuboidVertices(region: CuboidRegion): List<BlockVector3> {
+    val min = region.minimumPoint
+    val max = region.maximumPoint
+    return listOf(
+            BlockVector3.at(min.x(), min.y(), min.z()),
+            BlockVector3.at(max.x(), min.y(), min.z()),
+            BlockVector3.at(max.x(), max.y(), max.z()),
+            BlockVector3.at(min.x(), max.y(), max.z()),
+        )
+        .distinct()
+  }
+
+  private fun syncSelectionControlPoints(player: Player, showErrors: Boolean) {
+    val vertices = selectedVerticesOrNull(player, showErrors) ?: return
+    if (vertices.size < 2) return
+    if (vertices.size > MAX_POINTS) {
+      if (showErrors) MessageUtil.error(player, "制御点は最大 $MAX_POINTS 点です。現在の選択: ${vertices.size} 点")
+      return
+    }
+    val selected = vertices.map { it.toCenteredLocation(player) }
+    val session = plugin.getBezierSession(player)
+    if (sameLocations(session.controlPoints, selected)) return
+    session.controlPoints.clear()
+    session.controlPoints += selected
+  }
+
+  private fun activeControlPoints(session: BezierSession): List<Location> {
+    if (!session.planeMode || session.controlPoints.isEmpty()) return session.controlPoints
+    val y = session.controlPoints.first().y
+    return session.controlPoints.map { Location(it.world, it.x, y, it.z) }
+  }
+
+  private fun sameLocations(a: List<Location>, b: List<Location>): Boolean =
+      a.size == b.size &&
+          a.zip(b).all { (left, right) ->
+            left.world == right.world && left.x == right.x && left.y == right.y && left.z == right.z
+          }
+
+  private fun centerLocation(location: Location): Location =
+      Location(
+          location.world,
+          location.blockX.toDouble() + 0.5,
+          location.blockY.toDouble() + 0.5,
+          location.blockZ.toDouble() + 0.5,
+      )
+
+  private fun BlockVector3.toCenteredLocation(player: Player): Location =
+      Location(player.world, x().toDouble() + 0.5, y().toDouble() + 0.5, z().toDouble() + 0.5)
 
   private data class BuildOptions(val mode: BuildMode, val material: Material, val size: Int)
 
@@ -443,7 +522,7 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         listOf(
             "add",
             "set",
-            "fromsel",
+            "plane",
             "remove",
             "preview",
             "build",

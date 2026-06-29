@@ -60,9 +60,11 @@ window            ✓          ✓         ✓
 slabstairs        ✓          ✓         ✓
 stack             ✓          ✓         ✓
 selection         ✓          ✓         ✓
-config            ✓          ✓         ✓
+settings          ✓          ✓         ✓       個人設定GUI
+config            ✗          ✗         ✓       server config編集
 debugstick        ✗          ✓         ✓
 preset            ✓          ✓         ✓
+schematic         ✓          ✓         ✓
 reload            ✗          ✗         ✓
 ```
 
@@ -120,9 +122,11 @@ citiesskymine.window         窓生成コマンド（旧形式）             fa
 citiesskymine.slabstairs     SlabStairs生成（旧形式）             false
 citiesskymine.stack          選択範囲複製（旧形式）               false
 citiesskymine.selection      選択保存（旧形式）                   false
-citiesskymine.config         個人設定GUI（旧形式）                false
+citiesskymine.settings       個人設定GUI（旧形式）                false
+citiesskymine.config         server config編集（旧形式）           false
 citiesskymine.debugstick     debug-stick互換（旧形式）            false
 citiesskymine.preset         ブラシプリセット（旧形式）            false
+citiesskymine.schematic      スキマティック貼り付け（旧形式）      false
 ```
 
 ---
@@ -141,6 +145,9 @@ limits:
   max-blocks-window: 512           # 窓生成のブロック数上限
   max-blocks-slab-stairs: 200000   # SlabStairs生成のブロック数上限
   max-blocks-stack: 2000000        # Stack複製のブロック数上限
+  max-blocks-schematic: 500000     # schematic貼り付けのブロック数上限
+  max-volume-schematic: 500000     # schematic範囲ボリューム上限
+  max-schematic-file-bytes: 10485760 # schematicファイルサイズ上限
 ```
 
 > 0 に設定すると上限なしになります。パフォーマンスに注意してください。
@@ -166,6 +173,15 @@ slab-stairs:
   material: stone_brick            # デフォルトの素材ファミリー
 ```
 
+### Schematic
+
+```yaml
+schematic:
+  select-after-paste: true         # 貼り付け後にWorldEdit選択を設定
+```
+
+スキマティックファイルは FAWE/WorldEdit の schematic 保存先に配置します。FAWE の per-player schematics が有効な場合は、実行したプレイヤーの UUID フォルダを参照します。`/.sc <name>` は `<name>.schem` または `<name>.schematic` を読み込みます。任意パス指定や上位ディレクトリ参照は許可されません。`/.sc list` は FAWE の `//schem list` をそのまま実行します。
+
 ### ブラシプリセット
 
 ```yaml
@@ -178,7 +194,6 @@ brush-preset:
     - "//brush "
     - "//mask "
     - "//gmask "
-    - "//replace "
 ```
 
 ### DebugStick
@@ -226,6 +241,8 @@ icu.oyasai.citiesskymine/
 │   └── PayloadCommand         Base997/Base64デコード・配置
 ├── preset/
 │   └── BrushPresetCommand     ブラシプリセット管理
+├── schematic/
+│   └── SchematicCommand       .schem/.schematic読み込み・貼り付け
 ├── road/
 │   ├── RoadCurveCommand       /rc コマンド
 │   ├── RoadBuilder            FAWE経由の道路ブロック設置
@@ -555,6 +572,9 @@ Base997またはBase64でエンコードされた建物データをデコード�
 ```
 /.pl load <payload文字列> [回転] [左右] [hollow/solid]     Base997/Base64を自動判定
 /.pl load64 <payload文字列> [回転] [左右] [hollow/solid]   Base64専用
+/.pl p <id> <番号>/<総数> <payload片>                     長いpayloadの分割登録
+/.pl r <id> [回転] [左右] [hollow/solid]                  分割payloadを結合して配置
+/.pl clear [id]                                           分割payloadの一時保存を削除
 ```
 
 **パラメータ:**
@@ -594,9 +614,11 @@ payload配置はコマンドブロックから実行できます。
   csm payload load <payload文字列> 0 R hollow
 ```
 
+- `csm payload <payload文字列>` のように `load` を省くと実行されません
 - コマンドブロックの向き（Directional BlockData）が配置基準方向になります
 - FAWE undo履歴はプレイヤー実行でないため登録されません
 - `access.command-blocks.allowed-commands` で許可するコマンドを制限できます
+- Web ビューワーのコピー結果が250文字を超える場合は、コマンドブロックではなくプレイヤーが複数行をチャット欄に貼り付けて実行します
 
 **config.yml の関連設定:**
 

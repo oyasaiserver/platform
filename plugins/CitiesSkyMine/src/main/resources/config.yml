@@ -9,6 +9,9 @@ limits:
   max-blocks-cloud: 200000
   max-volume-cloud: 4000000
   max-blocks-bezier: 20000
+  max-blocks-schematic: 500000
+  max-volume-schematic: 500000
+  max-schematic-file-bytes: 10485760
 
 window:
   default-width: 2
@@ -28,6 +31,9 @@ csm:
   default-side: R
   select-after-load: true
   hollow-on-load: true
+
+schematic:
+  select-after-paste: true
 
 access:
   enabled: true
@@ -93,9 +99,11 @@ access:
       - builder
       - takumi
       - admin
-    config:
+    settings:
       - builder
       - takumi
+      - admin
+    config:
       - admin
     cloud:
       - builder
@@ -109,6 +117,10 @@ access:
       - takumi
       - admin
     preset:
+      - builder
+      - takumi
+      - admin
+    schematic:
       - builder
       - takumi
       - admin
@@ -129,7 +141,6 @@ brush-preset:
     - "//brush "
     - "//mask "
     - "//gmask "
-    - "//replace "
 
 debug-stick:
   enabled: true

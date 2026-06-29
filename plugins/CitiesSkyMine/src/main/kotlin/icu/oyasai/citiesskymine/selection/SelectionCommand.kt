@@ -5,7 +5,10 @@ import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.CuboidRegion
+import com.sk89q.worldedit.regions.RegionSelector
+import com.sk89q.worldedit.regions.selector.ConvexPolyhedralRegionSelector
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector
+import com.sk89q.worldedit.regions.selector.Polygonal2DRegionSelector
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
 import icu.oyasai.citiesskymine.util.MessageUtil
@@ -169,14 +172,24 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
   private fun currentSelectionOrNull(player: Player): StoredSelection? {
     val actor = BukkitAdapter.adapt(player)
     val weWorld = BukkitAdapter.adapt(player.world)
+    val selector = WorldEdit.getInstance().sessionManager.get(actor).getRegionSelector(weWorld)
     val region =
         try {
-          WorldEdit.getInstance().sessionManager.get(actor).getRegionSelector(weWorld).getRegion()
+          selector.getRegion()
         } catch (_: IncompleteRegionException) {
           return null
         }
-    val cuboid = region as? CuboidRegion ?: return null
-    return StoredSelection(player.world.uid, player.world.name, cuboid.pos1, cuboid.pos2)
+    val points = selectionPoints(selector, region)
+    if (points.size < 2) return null
+    val cuboid = region as? CuboidRegion
+    return StoredSelection(
+        player.world.uid,
+        player.world.name,
+        selector.javaClass.simpleName,
+        cuboid?.pos1 ?: points.first(),
+        cuboid?.pos2 ?: points.last(),
+        points,
+    )
   }
 
   private fun applySelection(player: Player, selection: StoredSelection): Boolean {
@@ -189,11 +202,39 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
             }
     val actor = BukkitAdapter.adapt(player)
     val weWorld = BukkitAdapter.adapt(world)
-    val selector = CuboidRegionSelector(weWorld, selection.pos1, selection.pos2)
+    val selector = createSelector(weWorld, selection)
     val session = WorldEdit.getInstance().sessionManager.get(actor)
+    selector.learnChanges()
     session.setRegionSelector(weWorld, selector)
     session.dispatchCUISelection(actor)
     return true
+  }
+
+  private fun createSelector(
+      world: com.sk89q.worldedit.world.World,
+      selection: StoredSelection,
+  ): RegionSelector {
+    val points = selection.points.ifEmpty { listOf(selection.pos1, selection.pos2) }
+    return when {
+      selection.selectorType.contains("Polygonal2D", ignoreCase = true) -> {
+        Polygonal2DRegionSelector(world).also { applyPoints(it, points) }
+      }
+      selection.selectorType.contains("Convex", ignoreCase = true) ||
+          selection.selectorType.contains("Polyhedral", ignoreCase = true) -> {
+        ConvexPolyhedralRegionSelector(world).also { applyPoints(it, points) }
+      }
+      else -> {
+        CuboidRegionSelector(world).also {
+          it.selectPrimary(selection.pos1, null)
+          it.selectSecondary(selection.pos2, null)
+        }
+      }
+    }
+  }
+
+  private fun applyPoints(selector: RegionSelector, points: List<BlockVector3>) {
+    selector.selectPrimary(points.first(), null)
+    points.drop(1).forEach { selector.selectSecondary(it, null) }
   }
 
   private fun writeSelection(
@@ -202,19 +243,27 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       selection: StoredSelection,
       name: String,
   ) {
+    plugin.playerDataStore.set(player, "$path.points", null)
     plugin.playerDataStore.setMany(
         player,
-        mapOf(
-            "$path.name" to name,
-            "$path.world-id" to selection.worldId.toString(),
-            "$path.world" to selection.worldName,
-            "$path.x1" to selection.pos1.x(),
-            "$path.y1" to selection.pos1.y(),
-            "$path.z1" to selection.pos1.z(),
-            "$path.x2" to selection.pos2.x(),
-            "$path.y2" to selection.pos2.y(),
-            "$path.z2" to selection.pos2.z(),
-        ),
+        buildMap {
+          put("$path.name", name)
+          put("$path.world-id", selection.worldId.toString())
+          put("$path.world", selection.worldName)
+          put("$path.selector", selection.selectorType)
+          put("$path.x1", selection.pos1.x())
+          put("$path.y1", selection.pos1.y())
+          put("$path.z1", selection.pos1.z())
+          put("$path.x2", selection.pos2.x())
+          put("$path.y2", selection.pos2.y())
+          put("$path.z2", selection.pos2.z())
+          put("$path.point-count", selection.points.size)
+          for ((index, point) in selection.points.withIndex()) {
+            put("$path.points.$index.x", point.x())
+            put("$path.points.$index.y", point.y())
+            put("$path.points.$index.z", point.z())
+          }
+        },
     )
   }
 
@@ -230,12 +279,36 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     val x2 = plugin.playerDataStore.getInt(player, "$path.x2") ?: return null
     val y2 = plugin.playerDataStore.getInt(player, "$path.y2") ?: return null
     val z2 = plugin.playerDataStore.getInt(player, "$path.z2") ?: return null
+    val pos1 = BlockVector3.at(x1, y1, z1)
+    val pos2 = BlockVector3.at(x2, y2, z2)
+    val pointCount = plugin.playerDataStore.getInt(player, "$path.point-count") ?: 0
+    val points =
+        (0 until pointCount).mapNotNull { index -> readPoint(player, "$path.points.$index") }
     return StoredSelection(
         worldId,
         worldName,
-        BlockVector3.at(x1, y1, z1),
-        BlockVector3.at(x2, y2, z2),
+        plugin.playerDataStore.getString(player, "$path.selector") ?: "CuboidRegionSelector",
+        pos1,
+        pos2,
+        points.ifEmpty { listOf(pos1, pos2) },
     )
+  }
+
+  private fun readPoint(player: Player, path: String): BlockVector3? {
+    val x = plugin.playerDataStore.getInt(player, "$path.x") ?: return null
+    val y = plugin.playerDataStore.getInt(player, "$path.y") ?: return null
+    val z = plugin.playerDataStore.getInt(player, "$path.z") ?: return null
+    return BlockVector3.at(x, y, z)
+  }
+
+  private fun selectionPoints(selector: RegionSelector, region: Any): List<BlockVector3> {
+    val selectorVertices = runCatching { selector.vertices }.getOrDefault(emptyList())
+    if (selectorVertices.isNotEmpty()) return selectorVertices.distinct()
+    if (region is CuboidRegion) return listOf(region.pos1, region.pos2)
+    val method =
+        region.javaClass.methods.firstOrNull { it.name == "getVertices" && it.parameterCount == 0 }
+    val value = method?.invoke(region) as? Iterable<*> ?: return emptyList()
+    return value.filterIsInstance<BlockVector3>().distinct()
   }
 
   private fun namedKeys(player: Player): Set<String> =
@@ -276,8 +349,10 @@ class SelectionCommand(private val plugin: Main) : CommandExecutor, TabCompleter
   private data class StoredSelection(
       val worldId: UUID,
       val worldName: String,
+      val selectorType: String,
       val pos1: BlockVector3,
       val pos2: BlockVector3,
+      val points: List<BlockVector3>,
   )
 
   companion object {

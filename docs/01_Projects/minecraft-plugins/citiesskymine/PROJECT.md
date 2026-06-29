@@ -26,7 +26,7 @@ CitiesSkylinesの都市データをMinecraftワールドに変換し、道路・
 | 主要コード | `plugins/CitiesSkyMine/src/main/kotlin/` |
 | プラグイン定義 | `plugins/CitiesSkyMine/src/main/resources/plugin.yml` |
 | 仕様・規約入口 | `docs/01_Projects/minecraft-plugins/citiesskymine/specs/_MANIFEST.md` |
-| 新規コマンド追加 | `specs/command-conventions.md` を先に読み、命名・ショートカット・引数・タブ補完・権限の規約に合わせる |
+| コマンド追加・変更 | `specs/command-conventions.md` を先に読み、命名・ショートカット・引数・タブ補完・権限の規約に合わせる |
 | 関連資料 | `docs/02_Docs/tools/oyasai-menu-editors-doc/` |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:CitiesSkyMine:compileKotlin` |
 | ローカル反映 | `plugins/CitiesSkyMine/build/libs/CitiesSkyMine.jar` を `dev-server/plugins/CitiesSkyMine.jar` にコピーし、必要に応じてリロードまたは再起動 |
@@ -35,7 +35,7 @@ CitiesSkylinesの都市データをMinecraftワールドに変換し、道路・
 ## 関連ドキュメント
 
 - **仕様・規約入口**: [`specs/_MANIFEST.md`](specs/_MANIFEST.md)
-- **新規コマンド規約**: [`specs/command-conventions.md`](specs/command-conventions.md)
+- **コマンド追加・変更規約**: [`specs/command-conventions.md`](specs/command-conventions.md)
 - **仕様案: キャンバスのブランチ/マージ管理**: [`specs/canvas-branch-management.md`](specs/canvas-branch-management.md)
 - **仕様案: 柱割り・間隔サジェスト**: [`specs/column-layout-assistant.md`](specs/column-layout-assistant.md)
 - **ユーザーガイド（Discord投稿用）**: [`../../../02_Docs/tools/citiesskymine-user-guide.md`](../../../02_Docs/tools/citiesskymine-user-guide.md)

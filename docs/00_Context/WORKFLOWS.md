@@ -95,16 +95,17 @@ Use when adding a new project under `docs/01_Projects/`.
 
 Use when editing a Minecraft plugin.
 
-1. Read the plugin `PROJECT.md`.
-2. Read the implementation under `plugins/<Plugin>/`.
-3. Treat `plugins/<Plugin>/src/` as the implementation SOT.
-4. Build the target plugin. This must compile Kotlin and produce the plugin jar.
+1. Read `docs/01_Projects/INDEX.md` to find the plugin `PROJECT.md`.
+2. Read the plugin `PROJECT.md`.
+3. Read the implementation under `plugins/<Plugin>/`.
+4. Treat `plugins/<Plugin>/src/` as the implementation SOT.
+5. Build the target plugin. This must compile Kotlin and produce the plugin jar.
    ```bash
    /nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:<Plugin>:build
    ```
-5. If local runtime verification is needed, copy the jar into `dev-server/plugins/`.
-6. Reload the plugin or restart the dev server.
-7. If stale deploy is possible, verify checksums.
+6. If local runtime verification is needed, copy the jar into `dev-server/plugins/`.
+7. Reload the plugin or restart the dev server.
+8. If stale deploy is possible, verify checksums.
 
 ## Dev Server Jar Workflow
 
@@ -127,7 +128,8 @@ Read in this order:
 1. `docs/_MANIFEST.md`
 2. `docs/00_Context/CONTEXT.md`
 3. The relevant workflow or child manifest
-4. The relevant `PROJECT.md`
-5. The implementation SOT
+4. `docs/01_Projects/INDEX.md` to find the relevant plugin `PROJECT.md`
+5. The relevant `PROJECT.md`
+6. The implementation SOT
 
 Read `docs/05_PublicArchives/` only when the task is about old public docs or historical behavior.

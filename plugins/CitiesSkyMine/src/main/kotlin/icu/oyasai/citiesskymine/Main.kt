@@ -8,6 +8,7 @@ import icu.oyasai.citiesskymine.cloud.CloudCommand
 import icu.oyasai.citiesskymine.columns.ColumnLayoutCommand
 import icu.oyasai.citiesskymine.command.CitiesSkyMineCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
+import icu.oyasai.citiesskymine.config.ServerConfigCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickMemoryStore
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
@@ -22,6 +23,7 @@ import icu.oyasai.citiesskymine.road.RoadPreview
 import icu.oyasai.citiesskymine.road.RoadSession
 import icu.oyasai.citiesskymine.road.RoadSettings
 import icu.oyasai.citiesskymine.road.WaypointListener
+import icu.oyasai.citiesskymine.schematic.SchematicCommand
 import icu.oyasai.citiesskymine.selection.SelectionCommand
 import icu.oyasai.citiesskymine.slabstairs.SlabStairsCommand
 import icu.oyasai.citiesskymine.stack.StackCommand
@@ -29,6 +31,7 @@ import icu.oyasai.citiesskymine.storage.PlayerDataStore
 import icu.oyasai.citiesskymine.window.WindowCommand
 import java.util.HashMap
 import java.util.UUID
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -96,12 +99,14 @@ class Main : JavaPlugin() {
     val columnLayoutHandler = ColumnLayoutCommand(this)
     val stackHandler = StackCommand(this)
     val selectionHandler = SelectionCommand(this)
-    val configHandler = ConfigGuiCommand(this)
+    val settingsHandler = ConfigGuiCommand(this)
+    val serverConfigHandler = ServerConfigCommand(this)
     cloudHandler = CloudCommand(this)
     val bezierHandler = BezierCommand(this)
     val debugStickHandler =
         DebugStickCommand(this, debugStickMemoryStore ?: DebugStickMemoryStore(this))
     val brushPresetHandler = BrushPresetCommand(this)
+    val schematicHandler = SchematicCommand(this)
     val csmHandler =
         CitiesSkyMineCommand(
             this,
@@ -114,11 +119,13 @@ class Main : JavaPlugin() {
             columnLayoutHandler,
             stackHandler,
             selectionHandler,
-            configHandler,
+            settingsHandler,
+            serverConfigHandler,
             cloudHandler,
             bezierHandler,
             debugStickHandler,
             brushPresetHandler,
+            schematicHandler,
         )
     val csmCmd = getCommand("csm")
     csmCmd?.setExecutor(csmHandler)
@@ -144,9 +151,12 @@ class Main : JavaPlugin() {
     val dotSelectionCmd = getCommand(".sel")
     dotSelectionCmd?.setExecutor(selectionHandler)
     dotSelectionCmd?.tabCompleter = selectionHandler
-    val dotConfigCmd = getCommand(".cf")
-    dotConfigCmd?.setExecutor(configHandler)
-    dotConfigCmd?.tabCompleter = configHandler
+    val dotSettingsCmd = getCommand(".settings")
+    dotSettingsCmd?.setExecutor(settingsHandler)
+    dotSettingsCmd?.tabCompleter = settingsHandler
+    val dotConfigCmd = getCommand(".config")
+    dotConfigCmd?.setExecutor(serverConfigHandler)
+    dotConfigCmd?.tabCompleter = serverConfigHandler
     val dotCloudCmd = getCommand(".cloud")
     dotCloudCmd?.setExecutor(cloudHandler)
     dotCloudCmd?.tabCompleter = cloudHandler
@@ -155,13 +165,16 @@ class Main : JavaPlugin() {
     dotBezierCmd?.tabCompleter = bezierHandler
     server.pluginManager.registerEvents(selectionHandler, this)
     selectionHandler.startTracking()
-    server.pluginManager.registerEvents(configHandler, this)
+    server.pluginManager.registerEvents(settingsHandler, this)
     val dotDebugStickCmd = getCommand(".ds")
     dotDebugStickCmd?.setExecutor(debugStickHandler)
     dotDebugStickCmd?.tabCompleter = debugStickHandler
     val dotBrushPresetCmd = getCommand(".brp")
     dotBrushPresetCmd?.setExecutor(brushPresetHandler)
     dotBrushPresetCmd?.tabCompleter = brushPresetHandler
+    val dotSchematicCmd = getCommand(".sc")
+    dotSchematicCmd?.setExecutor(schematicHandler)
+    dotSchematicCmd?.tabCompleter = schematicHandler
 
     logger.info("CitiesSkyMine enabled")
   }
@@ -296,7 +309,18 @@ class Main : JavaPlugin() {
               }
               val s = getBezierSession(player)
               if (s.controlPoints.size < 2) return@Runnable
-              BezierPreview.showOnce(player, s.controlPoints, s.segments)
+              val points =
+                  if (s.planeMode) {
+                    val y = s.controlPoints.first().y
+                    s.controlPoints.map { Location(it.world, it.x, y, it.z) }
+                  } else {
+                    s.controlPoints
+                  }
+              BezierPreview.showOnce(
+                  player,
+                  points.map { it.clone().add(0.0, 1.0, 0.0) },
+                  s.segments,
+              )
             },
             0L,
             10L,
