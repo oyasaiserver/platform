@@ -1,3 +1,3 @@
 # `infisical_project_identity_specific_privilege`
 
-Refer to the Terraform Registry for docs: [`infisical_project_identity_specific_privilege`](https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/project_identity_specific_privilege).
+Refer to the Terraform Registry for docs: [`infisical_project_identity_specific_privilege`](https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/project_identity_specific_privilege).

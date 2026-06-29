@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/group
+// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/group
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface GroupConfig extends cdktf.TerraformMetaArguments {
   /**
   * The name of the group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/group#name Group#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/group#name Group#name}
   */
   readonly name: string;
   /**
   * The role of the group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/group#role Group#role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/group#role Group#role}
   */
   readonly role: string;
   /**
   * The slug of the group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/group#slug Group#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/group#slug Group#slug}
   */
   readonly slug: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/group infisical_group}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/group infisical_group}
 */
 export class Group extends cdktf.TerraformResource {
 
@@ -44,7 +44,7 @@ export class Group extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Group resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Group to import
-  * @param importFromId The id of the existing Group that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/group#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Group that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/group#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Group to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -56,7 +56,7 @@ export class Group extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/group infisical_group} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/group infisical_group} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -67,7 +67,7 @@ export class Group extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_group',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.28'
+        providerVersion: '0.16.30'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

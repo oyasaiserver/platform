@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface IdentityAzureAuthConfig extends cdktf.TerraformMetaArguments {
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#access_token_max_ttl IdentityAzureAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#access_token_max_ttl IdentityAzureAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default:0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#access_token_num_uses_limit IdentityAzureAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#access_token_num_uses_limit IdentityAzureAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address..
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#access_token_trusted_ips IdentityAzureAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#access_token_trusted_ips IdentityAzureAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityAzureAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#access_token_ttl IdentityAzureAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#access_token_ttl IdentityAzureAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * List of Azure AD service principal IDs that are allowed to authenticate with Infisical
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#allowed_service_principal_ids IdentityAzureAuth#allowed_service_principal_ids}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#allowed_service_principal_ids IdentityAzureAuth#allowed_service_principal_ids}
   */
   readonly allowedServicePrincipalIds?: string[];
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#identity_id IdentityAzureAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#identity_id IdentityAzureAuth#identity_id}
   */
   readonly identityId: string;
   /**
   * The resource URL for the application registered in Azure AD. The value is expected to match the `aud` claim of the access token JWT later used in the login operation against Infisical. See the [resource](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/how-to-use-vm-token#get-a-token-using-http) parameter for how the audience is set when requesting a JWT access token from the Azure Instance Metadata Service (IMDS) endpoint. In most cases, this value should be `https://management.azure.com/` which is the default
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#resource_url IdentityAzureAuth#resource_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#resource_url IdentityAzureAuth#resource_url}
   */
   readonly resourceUrl?: string;
   /**
   *  The [tenant ID](https://learn.microsoft.com/en-us/entra/fundamentals/how-to-find-tenant) for the Azure AD organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#tenant_id IdentityAzureAuth#tenant_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#tenant_id IdentityAzureAuth#tenant_id}
   */
   readonly tenantId: string;
 }
 export interface IdentityAzureAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#ip_address IdentityAzureAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#ip_address IdentityAzureAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -174,7 +174,7 @@ export class IdentityAzureAuthAccessTokenTrustedIpsList extends cdktf.ComplexLis
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth infisical_identity_azure_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth infisical_identity_azure_auth}
 */
 export class IdentityAzureAuth extends cdktf.TerraformResource {
 
@@ -190,7 +190,7 @@ export class IdentityAzureAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityAzureAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityAzureAuth to import
-  * @param importFromId The id of the existing IdentityAzureAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityAzureAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityAzureAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -202,7 +202,7 @@ export class IdentityAzureAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.28/docs/resources/identity_azure_auth infisical_identity_azure_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity_azure_auth infisical_identity_azure_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -213,7 +213,7 @@ export class IdentityAzureAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_azure_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.28'
+        providerVersion: '0.16.30'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
