@@ -47,7 +47,7 @@ cp plugins/OyasaiMenu/build/libs/OyasaiMenu.jar dev-server/plugins/
 ```
 
 **開発サーバー**: `/Users/aa/platform/dev-server/`
-- Purpur 1.21.11
+- Purpur 1.21.10
 - 主要プラグイン: FAWE, CitiesSkyMine, OyasaiMenu, Vault, PlaceholderAPI, PlugManX
 
 ## 外部ツール（Antigravity）のデプロイ

@@ -1,7 +1,7 @@
 {
   "advancedban": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/8695.jar",
         "hash": "sha256-e0llrauKgRDij8wUYDvnFIJzwuVDAU2RXd9EpjkDHdg="
       }
@@ -9,15 +9,15 @@
   },
   "axiom-paper-plugin": {
     "paper": {
-      "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/mSS9faHn/AxiomPaperPlugin-5.0.4-for-MC1.21.11.jar",
-        "hash": "sha256-f3mjtn8HG+GrQJPWbkmp5otxGYTvxvmbgXHzw9eX5DQ="
+      "1.21.10": {
+        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/KIGJ1Vhv/AxiomPaperPlugin-5.0.4-for-MC1.21.10.jar",
+        "hash": "sha256-zbgssJUQ6j4UGQwQOzNer2sOxAK8pn5QOpm0KLnyBUg="
       }
     }
   },
   "bkcommonlib": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/rTg6ckWb/versions/yZdQcJiN/BKCommonLib-1.21.11-v1-1957.jar",
         "hash": "sha256-N2UyWsc33Xrp88RdHDHnVDoa7EbYMVRbcUW9xZLGtXY="
       }
@@ -25,7 +25,7 @@
   },
   "bluemap": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/Vb2ZE8bR/bluemap-5.16-paper.jar",
         "hash": "sha256-eduusmBTLb1WYk+LzoqyL7yhWK5KKGCwT8zv+55Gdso="
       }
@@ -33,7 +33,7 @@
   },
   "coreprotect": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/6W2ad1iI/CoreProtect-CE-23.2.jar",
         "hash": "sha256-LXi76LC049bJW334AiyzMTLI0YrMUxlcJz7tPisEkls="
       }
@@ -41,7 +41,7 @@
   },
   "crackshotguns": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/48301.jar",
         "hash": "sha256-Hd7DJB+7JNf9JhCc+VzeA52e7fqxyEhqAgz8sIoXoTY="
       }
@@ -49,7 +49,7 @@
   },
   "decentholograms": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/w02MKsTg/versions/nGwsH27P/DecentHolograms-2.10.0.jar",
         "hash": "sha256-Hfe6Po6zqPvjm1pN3Huf2t51PizeMaz20U0uC/vAJ30="
       }
@@ -57,7 +57,7 @@
   },
   "discordsrv": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/UmLGoGij/versions/ATlquwiT/DiscordSRV-Build-1.30.5.jar",
         "hash": "sha256-7y+h8usUbHx3QStxkKfdM/H8kSgmg/5FQHc5VUyK7+8="
       }
@@ -65,7 +65,7 @@
   },
   "essentialsx": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/hXiIvTyT/versions/nY6VN1XH/EssentialsX-2.22.0.jar",
         "hash": "sha256-vaRoUQWXf8ouIJggqfCtJCdb0QM5CgMjbzjlm/2sWOY="
       }
@@ -73,7 +73,7 @@
   },
   "essentialsx-chat": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/2qgyQbO1/versions/2k7YvKOk/EssentialsXChat-2.22.0.jar",
         "hash": "sha256-5bAhH5ivHqunEtkpSZdjmjkgnbH8hCOUoJI4IAc+xlo="
       }
@@ -81,7 +81,7 @@
   },
   "essentialsx-spawn": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/sYpvDxGJ/versions/lc5JHiNJ/EssentialsXSpawn-2.22.0.jar",
         "hash": "sha256-3VN3xMkhubZ4FCCfT2ZG/7uVlykAPnIexeY8R8fAELg="
       }
@@ -89,7 +89,7 @@
   },
   "fastasyncvoxelsniper": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/D7XBSI1y/versions/n77tXMjA/fastasyncvoxelsniper-3.2.4.jar",
         "hash": "sha256-k1qgEacp/UDLh/0+Nxwg3UWBMDVH1PksMcvGCOfl7LM="
       }
@@ -97,7 +97,7 @@
   },
   "fastasyncworldedit": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/tG0Vfeqx/FastAsyncWorldEdit-Paper-2.15.2.jar",
         "hash": "sha256-+yWmVha1HMVNmZ8EVe+de3W6ky23nizy3Nh0t+74X9E="
       }
@@ -105,7 +105,7 @@
   },
   "floodgate": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/134/downloads/spigot",
         "hash": "sha256-0fnDmnmjwFjwOEuGx0fFN4naae1mI42kkWMpl59ck/A="
       }
@@ -117,13 +117,13 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.1/builds/1174/downloads/velocity",
-      "hash": "sha256-uCP/PlRMSHu8Ja6tY2aLdE7a3+mhRiljv2s7u6fjaug="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.1/builds/1172/downloads/velocity",
+      "hash": "sha256-+yWiOsh/kSIXAo7gw2rwxGNwzGlxM98sKuJDua8F9Zo="
     }
   },
   "gsit": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/GOHbQGyX/versions/nZM8fxpG/GSit-3.5.1.jar",
         "hash": "sha256-sHSUErZcAb3NaDggp2Si92msVX6wtpGFbSZ6Y/KDyhw="
       }
@@ -131,7 +131,7 @@
   },
   "imageonmap": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://github.com/okocraft/ImageOnMap/releases/download/5.1.1/ImageOnMap-5.1.1.jar",
         "hash": "sha256-uRacoOUtqrd5I4/yStqdv6h6h5TuOBYMpfC+K8Jf9vk="
       }
@@ -139,7 +139,7 @@
   },
   "inventoryshop": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/47694.jar",
         "hash": "sha256-wkotPB9a/eS5RtCRxN5Eyjbpt8Q+VGCFBtK7qRAVrTs="
       }
@@ -147,7 +147,7 @@
   },
   "joincommands": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://hangarcdn.papermc.io/plugins/SirBlobman/JoinCommands/versions/3.1.0.120/PAPER/JoinCommands-3.1.0.120.jar",
         "hash": "sha256-nvbcJR9gp3CFlY+bxe+iBxeDVi21YoOY7YIjsCRgwu0="
       }
@@ -155,7 +155,7 @@
   },
   "luckperms": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/MBSY8toc/LuckPerms-Bukkit-5.5.53.jar",
         "hash": "sha256-/I1OzL8RwehEr0Un8Bi7/ekMGGapq6G/iAFzqOZEzVk="
       }
@@ -163,7 +163,7 @@
   },
   "lunachat": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/gr738FKw/versions/VnKre5xb/LunaChat.jar",
         "hash": "sha256-nZP7aCQa3ofzfvAoiBS9hyCMk2GDdKvQrJMTqJkTy8Q="
       }
@@ -171,7 +171,7 @@
   },
   "lwc": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/rAVMDz0v/versions/hCNtxsSa/LWC-2.4.2.jar",
         "hash": "sha256-2M4KfahUslvZCCfSuTz4BnKNHCYWj7sh9l5U6/Q3BFc="
       }
@@ -179,7 +179,7 @@
   },
   "minepacks": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/19286.jar",
         "hash": "sha256-ajO5bapTVQhc36vpzTcOod9m6Hd/peLCngC5AE42VrA="
       }
@@ -187,15 +187,15 @@
   },
   "multiversecore": {
     "paper": {
-      "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/DPkqDAS7/multiverse-core-5.7.2-pre.2.jar",
-        "hash": "sha256-M0v3FKQq8if+CTxLDT5EYhryUQ45ctmJqqlkte9UQzA="
+      "1.21.10": {
+        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/kgxH7ZVB/multiverse-core-5.7.1.jar",
+        "hash": "sha256-kKORM/NiQLKHObfBAEkjcXAvitHX92IbAo+NKvSf4cM="
       }
     }
   },
   "multiverseportals": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/8VMk6P0I/versions/b7zoWTL2/multiverse-portals-5.2.3.jar",
         "hash": "sha256-IVnYEH6lF6JYrZ2D+/pLiTeaRwa4AFH9t781YO/QNN0="
       }
@@ -203,7 +203,7 @@
   },
   "mycommand": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/22272.jar",
         "hash": "sha256-PuYVL4huBX3+d4l+jlnrtKjRmj5e93ZQqIKshuqyBIE="
       }
@@ -211,7 +211,7 @@
   },
   "nuvotifier": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://github.com/NuVotifier/NuVotifier/releases/download/v2.7.3/nuvotifier.jar",
         "hash": "sha256-X+VFfpunmJ3JRG9SKmkOTodyNrovxekO1m+tM9PGnzk="
       }
@@ -219,7 +219,7 @@
   },
   "openinv": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://hangarcdn.papermc.io/plugins/jikoo/OpenInv/versions/5.3.2/PAPER/OpenInv.jar",
         "hash": "sha256-wAPZe+2IidTolxgHCEJJ4Cjs7puTwCTN0xUVTe6wGQk="
       }
@@ -227,7 +227,7 @@
   },
   "particlehats": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/1007.jar",
         "hash": "sha256-y6fHiK6+KDsRyknAQw4/2dmi99vrONURQKaItDZ0Jw0="
       }
@@ -235,7 +235,7 @@
   },
   "placeholderapi": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/lKEzGugV/versions/UmbIiI5H/PlaceholderAPI-2.12.2.jar",
         "hash": "sha256-/3avIMes8yf/Kij7Lb1mlOP5RlA+cmNaX3tssuZPwBQ="
       }
@@ -243,7 +243,7 @@
   },
   "plugmanx": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/yro4niHu/versions/hrMAp7Ww/PlugManX-3.0.4.jar",
         "hash": "sha256-LLb7Ddfm9YZ7ypv6PwN1HW2J1rlJ6LbTdAUHtVrmqcA="
       }
@@ -251,7 +251,7 @@
   },
   "protocollib": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://github.com/dmulloy2/ProtocolLib/releases/download/5.4.0/ProtocolLib.jar",
         "hash": "sha256-7i56ubU4by0QMIHE0QjmGxA13yymkrU9biQJ+x9crM8="
       }
@@ -259,7 +259,7 @@
   },
   "pvparena": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/16584.jar",
         "hash": "sha256-KPEIwHAcVasy1djx1j16ly40GWuS8aF+esiNhpDs84c="
       }
@@ -267,7 +267,7 @@
   },
   "sba": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/lJPKRQLl/versions/d12OWoXE/SBA-1.5.20.2-all.jar",
         "hash": "sha256-aoXVmWUQuMjRGyDGCArXQSY398sV79yIdZ4W++8x/Gg="
       }
@@ -275,7 +275,7 @@
   },
   "screamingbedwars": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/8sg1aj4I/versions/nUPEYDAm/BedWars-0.2.44.jar",
         "hash": "sha256-UQ1G0xDf8qQmRhxWdgUbvxn/N7VT7guYdVl6vkukDVw="
       }
@@ -283,7 +283,7 @@
   },
   "signshop": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/10997.jar",
         "hash": "sha256-6QlXZ9+cpuKzFo0EOg9bh2nhZwEcZpZEpvnL+hzUxJ4="
       }
@@ -291,7 +291,7 @@
   },
   "simpleelevator": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/44462.jar",
         "hash": "sha256-tnP1YIToVRxL3ejCkCK8pwYi6M/8TSbnPp2jvhDckjk="
       }
@@ -299,7 +299,7 @@
   },
   "skinsrestorer": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/itZJnFwV/SkinsRestorer.jar",
         "hash": "sha256-Qp71VLnmObThanrEr97l0nOsVKyoL+AhXGTexYsnxiM="
       }
@@ -311,7 +311,7 @@
   },
   "skript": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/HpdbRhER/Skript-2.15.3.jar",
         "hash": "sha256-SdzNLSz+xO8jVPYuPXYDnR0EHcX1rCnoT52riU43MLk="
       }
@@ -319,7 +319,7 @@
   },
   "slotmachine": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/22023.jar",
         "hash": "sha256-qg+XVjITD4WzBQMDrNi4h5jX+p7oH07KamobDvSmk2k="
       }
@@ -327,7 +327,7 @@
   },
   "tab": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/t5Bd9Ajx/TAB%20v6.1.0.jar",
         "hash": "sha256-FP6WAc4J8u/oo5XvI1nb8QmjVyqhsLFAuZwEsbOR05c="
       }
@@ -335,7 +335,7 @@
   },
   "tntruneloaded": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/53359.jar",
         "hash": "sha256-KS80G8n9ljR8ioNcrQpt+XTeOexJ4aNgmtFpgKMiW30="
       }
@@ -343,7 +343,7 @@
   },
   "vault": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/34315.jar",
         "hash": "sha256-prXtl/Q6XPW7rwCnyM0jxa/JvQA/hJh1r4s25s930B0="
       }
@@ -351,15 +351,15 @@
   },
   "veinminer": {
     "paper": {
-      "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/OhduvhIc/versions/L4VqZYyJ/veinminer-paper-2.10.1%2B1.21.11.jar",
-        "hash": "sha256-BQYC4ZretXLKtB0TmB9lioZ4RSzcLVf32S/QaiuOAEs="
+      "1.21.10": {
+        "url": "https://cdn.modrinth.com/data/OhduvhIc/versions/xyKcAltm/veinminer-paper-2.6.0.jar",
+        "hash": "sha256-wmoAptiUYbpLlJ+OGTwG1tA3tWKEAleLbpWX5bkunLY="
       }
     }
   },
   "venturechat": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/771.jar",
         "hash": "sha256-32ycX8HDvPG/IZAYXJWYjMc2HhdN1u7qUQl0smVCRN0="
       }
@@ -367,7 +367,7 @@
   },
   "viaversion": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/z0sCGSmk/ViaVersion-5.10.1-SNAPSHOT.jar",
         "hash": "sha256-HPuipEqT7WSR6cTnl3YFh85kcj3dsM2NgaZOFk9DDQM="
       }
@@ -375,7 +375,7 @@
   },
   "worldborder": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://github.com/PryPurity/WorldBorder/releases/download/v2.1.5/WorldBorder.jar",
         "hash": "sha256-n8w7xj+ii6vHJJTRKbiu3wNK4kdhu2bRCuGatPmW3io="
       }
@@ -383,7 +383,7 @@
   },
   "worldeditsui": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://hangarcdn.papermc.io/plugins/kennytv/WorldEditSUI/versions/1.7.4/PAPER/WorldEditSUI-1.7.4.jar",
         "hash": "sha256-cAbPnllEx14bV8wZ3IjtF/wXmg4oNU/aQkqjKpWqw9g="
       }
@@ -391,15 +391,15 @@
   },
   "worldguard": {
     "paper": {
-      "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/pI4UHLJL/worldguard-bukkit-7.0.17.jar",
-        "hash": "sha256-PxRWJQm/AedoBXG29WkyI5FX/5OPJXwyJt87QIiuVPI="
+      "1.21.10": {
+        "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/WaElxvDz/worldguard-bukkit-7.0.15.jar",
+        "hash": "sha256-ghCSYxKMsiMv0OmH+Pi/oUX2oHHF+pLPPSIZIq+GPHQ="
       }
     }
   },
   "zvoteparty": {
     "paper": {
-      "1.21.11": {
+      "1.21.10": {
         "url": "https://cdn.spiget.org/file/spiget-resources/95603.jar",
         "hash": "sha256-lm4CuTn7f/5uIDE7OA1rwP/XJ3ClbiqYUTitjuMf1ic="
       }

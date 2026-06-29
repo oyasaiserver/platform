@@ -49,18 +49,21 @@
   },
   "essentialsx": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "essentialsx",
       "type": "modrinth"
     }
   },
   "essentialsx-chat": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "essentialsx-chat-module",
       "type": "modrinth"
     }
   },
   "essentialsx-spawn": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "essentialsx-spawn",
       "type": "modrinth"
     }
@@ -197,6 +200,7 @@
   },
   "protocollib": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "dmulloy2/protocollib",
       "type": "hangar"
     }
@@ -209,7 +213,6 @@
   },
   "sba": {
     "paper": {
-      "skipVersionCheck": true,
       "slug": "sba",
       "type": "modrinth"
     }
@@ -238,6 +241,7 @@
       "type": "modrinth"
     },
     "velocity": {
+      "skipVersionCheck": true,
       "slug": "skinsrestorer",
       "type": "modrinth"
     }

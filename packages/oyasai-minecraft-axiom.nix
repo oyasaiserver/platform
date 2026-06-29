@@ -2,7 +2,7 @@
 
 oyasaiPurpur rec {
   name = "oyasai-minecraft-axiom";
-  version = "1.21.11";
+  version = "1.21.10";
 
   properties = {
     # keep-sorted start
