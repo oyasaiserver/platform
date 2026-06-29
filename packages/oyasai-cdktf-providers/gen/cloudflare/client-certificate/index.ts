@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/client_certificate
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/client_certificate
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface ClientCertificateConfig extends cdktf.TerraformMetaArguments {
   /**
   * The Certificate Signing Request (CSR). Must be newline-encoded.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/client_certificate#csr ClientCertificate#csr}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/client_certificate#csr ClientCertificate#csr}
   */
   readonly csr: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/client_certificate#reactivate ClientCertificate#reactivate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/client_certificate#reactivate ClientCertificate#reactivate}
   */
   readonly reactivate?: boolean | cdktf.IResolvable;
   /**
   * The number of days the Client Certificate will be valid after the issued_on date.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/client_certificate#validity_days ClientCertificate#validity_days}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/client_certificate#validity_days ClientCertificate#validity_days}
   */
   readonly validityDays: number;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/client_certificate#zone_id ClientCertificate#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/client_certificate#zone_id ClientCertificate#zone_id}
   */
-  readonly zoneId?: string;
+  readonly zoneId: string;
 }
 export interface ClientCertificateCertificateAuthority {
 }
@@ -91,7 +91,7 @@ export class ClientCertificateCertificateAuthorityOutputReference extends cdktf.
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/client_certificate cloudflare_client_certificate}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/client_certificate cloudflare_client_certificate}
 */
 export class ClientCertificate extends cdktf.TerraformResource {
 
@@ -107,7 +107,7 @@ export class ClientCertificate extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ClientCertificate resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ClientCertificate to import
-  * @param importFromId The id of the existing ClientCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/client_certificate#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ClientCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/client_certificate#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ClientCertificate to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -119,7 +119,7 @@ export class ClientCertificate extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/client_certificate cloudflare_client_certificate} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/client_certificate cloudflare_client_certificate} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -130,7 +130,7 @@ export class ClientCertificate extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_client_certificate',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.20.0'
+        providerVersion: '5.21.1'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -273,16 +273,13 @@ export class ClientCertificate extends cdktf.TerraformResource {
     return this._validityDays;
   }
 
-  // zone_id - computed: false, optional: true, required: false
+  // zone_id - computed: false, optional: false, required: true
   private _zoneId?: string; 
   public get zoneId() {
     return this.getStringAttribute('zone_id');
   }
   public set zoneId(value: string) {
     this._zoneId = value;
-  }
-  public resetZoneId() {
-    this._zoneId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get zoneIdInput() {

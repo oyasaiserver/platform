@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_external_ca_adcs
+// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_external_ca_adcs
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface CertManagerExternalCaAdcsConfig extends cdktf.TerraformMetaArgu
   /**
   * The ID of the Azure ADCS app connection for certificate issuance
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_external_ca_adcs#azure_adcs_connection_id CertManagerExternalCaAdcs#azure_adcs_connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_external_ca_adcs#azure_adcs_connection_id CertManagerExternalCaAdcs#azure_adcs_connection_id}
   */
   readonly azureAdcsConnectionId: string;
   /**
   * The name of the ADCS CA
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_external_ca_adcs#name CertManagerExternalCaAdcs#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_external_ca_adcs#name CertManagerExternalCaAdcs#name}
   */
   readonly name: string;
   /**
   * The status of the CA. Supported values: active, disabled. Defaults to 'active'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_external_ca_adcs#status CertManagerExternalCaAdcs#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_external_ca_adcs#status CertManagerExternalCaAdcs#status}
   */
   readonly status?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_external_ca_adcs infisical_cert_manager_external_ca_adcs}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_external_ca_adcs infisical_cert_manager_external_ca_adcs}
 */
 export class CertManagerExternalCaAdcs extends cdktf.TerraformResource {
 
@@ -44,7 +44,7 @@ export class CertManagerExternalCaAdcs extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerExternalCaAdcs resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerExternalCaAdcs to import
-  * @param importFromId The id of the existing CertManagerExternalCaAdcs that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_external_ca_adcs#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerExternalCaAdcs that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_external_ca_adcs#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerExternalCaAdcs to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -56,7 +56,7 @@ export class CertManagerExternalCaAdcs extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/cert_manager_external_ca_adcs infisical_cert_manager_external_ca_adcs} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_external_ca_adcs infisical_cert_manager_external_ca_adcs} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -67,7 +67,7 @@ export class CertManagerExternalCaAdcs extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_external_ca_adcs',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.30'
+        providerVersion: '0.16.35'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

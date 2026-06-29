@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database
+// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface DynamicSecretSqlDatabaseConfig extends cdktf.TerraformMetaArgum
   /**
   * The configuration of the dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#configuration DynamicSecretSqlDatabase#configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#configuration DynamicSecretSqlDatabase#configuration}
   */
   readonly configuration: DynamicSecretSqlDatabaseConfiguration;
   /**
   * The default TTL that will be applied for all the leases.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#default_ttl DynamicSecretSqlDatabase#default_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#default_ttl DynamicSecretSqlDatabase#default_ttl}
   */
   readonly defaultTtl: string;
   /**
   * The slug of the environment to create the dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#environment_slug DynamicSecretSqlDatabase#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#environment_slug DynamicSecretSqlDatabase#environment_slug}
   */
   readonly environmentSlug: string;
   /**
   * The maximum limit a TTL can be leased or renewed for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#max_ttl DynamicSecretSqlDatabase#max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#max_ttl DynamicSecretSqlDatabase#max_ttl}
   */
   readonly maxTtl?: string;
   /**
   * The metadata associated with this dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#metadata DynamicSecretSqlDatabase#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#metadata DynamicSecretSqlDatabase#metadata}
   */
   readonly metadata?: DynamicSecretSqlDatabaseMetadata[] | cdktf.IResolvable;
   /**
   * The name of the dynamic secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#name DynamicSecretSqlDatabase#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#name DynamicSecretSqlDatabase#name}
   */
   readonly name: string;
   /**
   * The path to create the dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#path DynamicSecretSqlDatabase#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#path DynamicSecretSqlDatabase#path}
   */
   readonly path: string;
   /**
   * The slug of the project to create dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#project_slug DynamicSecretSqlDatabase#project_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#project_slug DynamicSecretSqlDatabase#project_slug}
   */
   readonly projectSlug: string;
   /**
   * The username template of the dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#username_template DynamicSecretSqlDatabase#username_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#username_template DynamicSecretSqlDatabase#username_template}
   */
   readonly usernameTemplate?: string;
 }
@@ -66,25 +66,25 @@ export interface DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequir
   /**
   * The number of digits required in the password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#digits DynamicSecretSqlDatabase#digits}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#digits DynamicSecretSqlDatabase#digits}
   */
   readonly digits: number;
   /**
   * The number of lowercase characters required in the password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#lowercase DynamicSecretSqlDatabase#lowercase}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#lowercase DynamicSecretSqlDatabase#lowercase}
   */
   readonly lowercase: number;
   /**
   * The number of symbols required in the password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#symbols DynamicSecretSqlDatabase#symbols}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#symbols DynamicSecretSqlDatabase#symbols}
   */
   readonly symbols: number;
   /**
   * The number of uppercase characters required in the password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#uppercase DynamicSecretSqlDatabase#uppercase}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#uppercase DynamicSecretSqlDatabase#uppercase}
   */
   readonly uppercase: number;
 }
@@ -255,19 +255,19 @@ export interface DynamicSecretSqlDatabaseConfigurationPasswordRequirements {
   /**
   * The symbols allowed in the password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#allowed_symbols DynamicSecretSqlDatabase#allowed_symbols}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#allowed_symbols DynamicSecretSqlDatabase#allowed_symbols}
   */
   readonly allowedSymbols?: string;
   /**
   * The length of the password to use to create the dynamic secret lease.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#length DynamicSecretSqlDatabase#length}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#length DynamicSecretSqlDatabase#length}
   */
   readonly length: number;
   /**
   * The required characters to use to create the dynamic secret lease.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#required DynamicSecretSqlDatabase#required}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#required DynamicSecretSqlDatabase#required}
   */
   readonly required: DynamicSecretSqlDatabaseConfigurationPasswordRequirementsRequired;
 }
@@ -415,73 +415,73 @@ export interface DynamicSecretSqlDatabaseConfiguration {
   /**
   * The CA certificate to use to connect to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#ca DynamicSecretSqlDatabase#ca}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#ca DynamicSecretSqlDatabase#ca}
   */
   readonly ca?: string;
   /**
   * The database client to use. Currently supported values are postgres, mysql2, oracledb, mssql, sap-ase, and vertica.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#client DynamicSecretSqlDatabase#client}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#client DynamicSecretSqlDatabase#client}
   */
   readonly client: string;
   /**
   * The creation statement to use to create the dynamic secret lease.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#creation_statement DynamicSecretSqlDatabase#creation_statement}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#creation_statement DynamicSecretSqlDatabase#creation_statement}
   */
   readonly creationStatement: string;
   /**
   * The name of the database to use.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#database DynamicSecretSqlDatabase#database}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#database DynamicSecretSqlDatabase#database}
   */
   readonly database: string;
   /**
   * The Gateway ID to use to connect to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#gateway_id DynamicSecretSqlDatabase#gateway_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#gateway_id DynamicSecretSqlDatabase#gateway_id}
   */
   readonly gatewayId?: string;
   /**
   * The host of the database server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#host DynamicSecretSqlDatabase#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#host DynamicSecretSqlDatabase#host}
   */
   readonly host: string;
   /**
   * The password to use to connect to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#password DynamicSecretSqlDatabase#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#password DynamicSecretSqlDatabase#password}
   */
   readonly password: string;
   /**
   * The password requirements to use to create the dynamic secret lease.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#password_requirements DynamicSecretSqlDatabase#password_requirements}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#password_requirements DynamicSecretSqlDatabase#password_requirements}
   */
   readonly passwordRequirements?: DynamicSecretSqlDatabaseConfigurationPasswordRequirements;
   /**
   * The port of the database server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#port DynamicSecretSqlDatabase#port}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#port DynamicSecretSqlDatabase#port}
   */
   readonly port: number;
   /**
   * The renew statement to use to renew the dynamic secret lease.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#renew_statement DynamicSecretSqlDatabase#renew_statement}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#renew_statement DynamicSecretSqlDatabase#renew_statement}
   */
   readonly renewStatement?: string;
   /**
   * The revocation statement to use to revoke the dynamic secret lease.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#revocation_statement DynamicSecretSqlDatabase#revocation_statement}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#revocation_statement DynamicSecretSqlDatabase#revocation_statement}
   */
   readonly revocationStatement: string;
   /**
   * The username to use to connect to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#username DynamicSecretSqlDatabase#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#username DynamicSecretSqlDatabase#username}
   */
   readonly username: string;
 }
@@ -872,13 +872,13 @@ export interface DynamicSecretSqlDatabaseMetadata {
   /**
   * The key of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#key DynamicSecretSqlDatabase#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#key DynamicSecretSqlDatabase#key}
   */
   readonly key: string;
   /**
   * The value of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#value DynamicSecretSqlDatabase#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#value DynamicSecretSqlDatabase#value}
   */
   readonly value: string;
 }
@@ -1017,7 +1017,7 @@ export class DynamicSecretSqlDatabaseMetadataList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database infisical_dynamic_secret_sql_database}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database infisical_dynamic_secret_sql_database}
 */
 export class DynamicSecretSqlDatabase extends cdktf.TerraformResource {
 
@@ -1033,7 +1033,7 @@ export class DynamicSecretSqlDatabase extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DynamicSecretSqlDatabase resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DynamicSecretSqlDatabase to import
-  * @param importFromId The id of the existing DynamicSecretSqlDatabase that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DynamicSecretSqlDatabase that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DynamicSecretSqlDatabase to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1045,7 +1045,7 @@ export class DynamicSecretSqlDatabase extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_sql_database infisical_dynamic_secret_sql_database} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_sql_database infisical_dynamic_secret_sql_database} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1056,7 +1056,7 @@ export class DynamicSecretSqlDatabase extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_dynamic_secret_sql_database',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.30'
+        providerVersion: '0.16.35'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

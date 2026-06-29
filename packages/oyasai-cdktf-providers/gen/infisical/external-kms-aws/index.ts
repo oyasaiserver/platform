@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws
+// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface ExternalKmsAwsConfig extends cdktf.TerraformMetaArguments {
   /**
   * The configuration for the AWS External KMS
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#configuration ExternalKmsAws#configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#configuration ExternalKmsAws#configuration}
   */
   readonly configuration: ExternalKmsAwsConfiguration;
   /**
   * An optional description for the KMS.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#description ExternalKmsAws#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#description ExternalKmsAws#description}
   */
   readonly description?: string;
   /**
   * The name of the KMS to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#name ExternalKmsAws#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#name ExternalKmsAws#name}
   */
   readonly name: string;
 }
@@ -30,25 +30,25 @@ export interface ExternalKmsAwsConfigurationCredential {
   /**
   * The AWS Access Key ID used to authenticate requests to AWS services. Required for access-key type. For more details, refer to the documentation here https://infisical.com/docs/documentation/platform/kms-configuration/aws-kms#param-access-key-id
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#access_key_id ExternalKmsAws#access_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#access_key_id ExternalKmsAws#access_key_id}
   */
   readonly accessKeyId?: string;
   /**
   * The Amazon Resource Name (ARN) of the IAM role to assume for performing operations. Infisical will assume this role using AWS Security Token Service (STS). Required for assume-role type. For more details, refer to the documentation here https://infisical.com/docs/documentation/platform/kms-configuration/aws-kms#param-iam-role-arn-for-role-assumption
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#role_arn ExternalKmsAws#role_arn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#role_arn ExternalKmsAws#role_arn}
   */
   readonly roleArn?: string;
   /**
   * The external ID of the role to assume for performing operations. Required for assume-role type. For more details, refer to the documentation here https://infisical.com/docs/documentation/platform/kms-configuration/aws-kms#param-assume-role-external-id
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#role_external_id ExternalKmsAws#role_external_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#role_external_id ExternalKmsAws#role_external_id}
   */
   readonly roleExternalId?: string;
   /**
   * The AWS Secret Access Key associated with the Access Key ID to authenticate requests to AWS services. Required for access-key type. For more details, refer to the documentation here https://infisical.com/docs/documentation/platform/kms-configuration/aws-kms#param-secret-access-key
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#secret_access_key ExternalKmsAws#secret_access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#secret_access_key ExternalKmsAws#secret_access_key}
   */
   readonly secretAccessKey?: string;
 }
@@ -231,25 +231,25 @@ export interface ExternalKmsAwsConfiguration {
   /**
   * The AWS KMS key ID to use for the external KMS. For more details, refer to the documentation here https://infisical.com/docs/documentation/platform/kms-configuration/aws-kms#param-aws-kms-key-id
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#aws_kms_key_id ExternalKmsAws#aws_kms_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#aws_kms_key_id ExternalKmsAws#aws_kms_key_id}
   */
   readonly awsKmsKeyId: string;
   /**
   * The AWS region where the KMS key is located
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#aws_region ExternalKmsAws#aws_region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#aws_region ExternalKmsAws#aws_region}
   */
   readonly awsRegion: string;
   /**
   * The AWS credentials for the external KMS
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#credential ExternalKmsAws#credential}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#credential ExternalKmsAws#credential}
   */
   readonly credential: ExternalKmsAwsConfigurationCredential;
   /**
   * The Authentication Type to use. Must be access-key or assume-role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#type ExternalKmsAws#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#type ExternalKmsAws#type}
   */
   readonly type: string;
 }
@@ -418,7 +418,7 @@ export class ExternalKmsAwsConfigurationOutputReference extends cdktf.ComplexObj
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws infisical_external_kms_aws}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws infisical_external_kms_aws}
 */
 export class ExternalKmsAws extends cdktf.TerraformResource {
 
@@ -434,7 +434,7 @@ export class ExternalKmsAws extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ExternalKmsAws resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ExternalKmsAws to import
-  * @param importFromId The id of the existing ExternalKmsAws that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ExternalKmsAws that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ExternalKmsAws to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -446,7 +446,7 @@ export class ExternalKmsAws extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/external_kms_aws infisical_external_kms_aws} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/external_kms_aws infisical_external_kms_aws} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -457,7 +457,7 @@ export class ExternalKmsAws extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_external_kms_aws',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.30'
+        providerVersion: '0.16.35'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

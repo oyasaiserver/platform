@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault
+// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface AppConnectionHashicorpVaultConfig extends cdktf.TerraformMetaAr
   /**
   * The credentials for the HashiCorp Vault App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#credentials AppConnectionHashicorpVault#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#credentials AppConnectionHashicorpVault#credentials}
   */
   readonly credentials: AppConnectionHashicorpVaultCredentials;
   /**
   * An optional description for the HashiCorp Vault App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#description AppConnectionHashicorpVault#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#description AppConnectionHashicorpVault#description}
   */
   readonly description?: string;
   /**
   * The Gateway ID to use for the app connection. If not specified, the Internet Gateway will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#gateway_id AppConnectionHashicorpVault#gateway_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#gateway_id AppConnectionHashicorpVault#gateway_id}
   */
   readonly gatewayId?: string;
   /**
   * The method used to authenticate with HashiCorp Vault. Possible values are: access-token, app-role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#method AppConnectionHashicorpVault#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#method AppConnectionHashicorpVault#method}
   */
   readonly method: string;
   /**
   * The name of the HashiCorp Vault App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#name AppConnectionHashicorpVault#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#name AppConnectionHashicorpVault#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#project_id AppConnectionHashicorpVault#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#project_id AppConnectionHashicorpVault#project_id}
   */
   readonly projectId?: string;
 }
@@ -48,31 +48,31 @@ export interface AppConnectionHashicorpVaultCredentials {
   /**
   * The Vault access token. Required for the `access-token` method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#access_token AppConnectionHashicorpVault#access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#access_token AppConnectionHashicorpVault#access_token}
   */
   readonly accessToken?: string;
   /**
   * The URL of the HashiCorp Vault instance, e.g. `https://vault.example.com`. Required for all methods.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#instance_url AppConnectionHashicorpVault#instance_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#instance_url AppConnectionHashicorpVault#instance_url}
   */
   readonly instanceUrl?: string;
   /**
   * Optional Vault namespace. Only applicable to HCP Vault Dedicated and Enterprise deployments.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#namespace AppConnectionHashicorpVault#namespace}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#namespace AppConnectionHashicorpVault#namespace}
   */
   readonly namespace?: string;
   /**
   * The AppRole role ID. Required for the `app-role` method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#role_id AppConnectionHashicorpVault#role_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#role_id AppConnectionHashicorpVault#role_id}
   */
   readonly roleId?: string;
   /**
   * The AppRole secret ID. Required for the `app-role` method.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#secret_id AppConnectionHashicorpVault#secret_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#secret_id AppConnectionHashicorpVault#secret_id}
   */
   readonly secretId?: string;
 }
@@ -282,7 +282,7 @@ export class AppConnectionHashicorpVaultCredentialsOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault infisical_app_connection_hashicorp_vault}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault infisical_app_connection_hashicorp_vault}
 */
 export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
 
@@ -298,7 +298,7 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionHashicorpVault resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionHashicorpVault to import
-  * @param importFromId The id of the existing AppConnectionHashicorpVault that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionHashicorpVault that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionHashicorpVault to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -310,7 +310,7 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_hashicorp_vault infisical_app_connection_hashicorp_vault} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_hashicorp_vault infisical_app_connection_hashicorp_vault} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -321,7 +321,7 @@ export class AppConnectionHashicorpVault extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_hashicorp_vault',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.30'
+        providerVersion: '0.16.35'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

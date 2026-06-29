@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db
+// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface DynamicSecretMongoDbConfig extends cdktf.TerraformMetaArguments
   /**
   * The configuration of the dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#configuration DynamicSecretMongoDb#configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#configuration DynamicSecretMongoDb#configuration}
   */
   readonly configuration: DynamicSecretMongoDbConfiguration;
   /**
   * The default TTL that will be applied for all the leases.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#default_ttl DynamicSecretMongoDb#default_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#default_ttl DynamicSecretMongoDb#default_ttl}
   */
   readonly defaultTtl: string;
   /**
   * The slug of the environment to create the dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#environment_slug DynamicSecretMongoDb#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#environment_slug DynamicSecretMongoDb#environment_slug}
   */
   readonly environmentSlug: string;
   /**
   * The maximum limit a TTL can be leased or renewed for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#max_ttl DynamicSecretMongoDb#max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#max_ttl DynamicSecretMongoDb#max_ttl}
   */
   readonly maxTtl?: string;
   /**
   * The metadata associated with this dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#metadata DynamicSecretMongoDb#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#metadata DynamicSecretMongoDb#metadata}
   */
   readonly metadata?: DynamicSecretMongoDbMetadata[] | cdktf.IResolvable;
   /**
   * The name of the dynamic secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#name DynamicSecretMongoDb#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#name DynamicSecretMongoDb#name}
   */
   readonly name: string;
   /**
   * The path to create the dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#path DynamicSecretMongoDb#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#path DynamicSecretMongoDb#path}
   */
   readonly path: string;
   /**
   * The slug of the project to create dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#project_slug DynamicSecretMongoDb#project_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#project_slug DynamicSecretMongoDb#project_slug}
   */
   readonly projectSlug: string;
   /**
   * The username template of the dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#username_template DynamicSecretMongoDb#username_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#username_template DynamicSecretMongoDb#username_template}
   */
   readonly usernameTemplate?: string;
 }
@@ -66,43 +66,43 @@ export interface DynamicSecretMongoDbConfiguration {
   /**
   * The CA certificate to use to connect to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#ca DynamicSecretMongoDb#ca}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#ca DynamicSecretMongoDb#ca}
   */
   readonly ca?: string;
   /**
   * The name of the database to use.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#database DynamicSecretMongoDb#database}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#database DynamicSecretMongoDb#database}
   */
   readonly database: string;
   /**
   * The host of the database server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#host DynamicSecretMongoDb#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#host DynamicSecretMongoDb#host}
   */
   readonly host: string;
   /**
   * The password to use to connect to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#password DynamicSecretMongoDb#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#password DynamicSecretMongoDb#password}
   */
   readonly password: string;
   /**
   * The port of the database server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#port DynamicSecretMongoDb#port}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#port DynamicSecretMongoDb#port}
   */
   readonly port?: number;
   /**
   * A list of role names to assign to the user. The role names can either be built-in or custom.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#roles DynamicSecretMongoDb#roles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#roles DynamicSecretMongoDb#roles}
   */
   readonly roles: string[];
   /**
   * The username to use to connect to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#username DynamicSecretMongoDb#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#username DynamicSecretMongoDb#username}
   */
   readonly username: string;
 }
@@ -357,13 +357,13 @@ export interface DynamicSecretMongoDbMetadata {
   /**
   * The key of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#key DynamicSecretMongoDb#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#key DynamicSecretMongoDb#key}
   */
   readonly key: string;
   /**
   * The value of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#value DynamicSecretMongoDb#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#value DynamicSecretMongoDb#value}
   */
   readonly value: string;
 }
@@ -502,7 +502,7 @@ export class DynamicSecretMongoDbMetadataList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db infisical_dynamic_secret_mongo_db}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db infisical_dynamic_secret_mongo_db}
 */
 export class DynamicSecretMongoDb extends cdktf.TerraformResource {
 
@@ -518,7 +518,7 @@ export class DynamicSecretMongoDb extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DynamicSecretMongoDb resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DynamicSecretMongoDb to import
-  * @param importFromId The id of the existing DynamicSecretMongoDb that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DynamicSecretMongoDb that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DynamicSecretMongoDb to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -530,7 +530,7 @@ export class DynamicSecretMongoDb extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/dynamic_secret_mongo_db infisical_dynamic_secret_mongo_db} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/dynamic_secret_mongo_db infisical_dynamic_secret_mongo_db} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -541,7 +541,7 @@ export class DynamicSecretMongoDb extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_dynamic_secret_mongo_db',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.30'
+        providerVersion: '0.16.35'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
