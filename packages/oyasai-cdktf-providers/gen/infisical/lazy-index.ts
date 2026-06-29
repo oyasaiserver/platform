@@ -103,7 +103,12 @@ Object.defineProperty(exports, 'webhook', { get: function () { return require('.
 Object.defineProperty(exports, 'dataInfisicalGroups', { get: function () { return require('./data-infisical-groups'); } });
 Object.defineProperty(exports, 'dataInfisicalIdentityDetails', { get: function () { return require('./data-infisical-identity-details'); } });
 Object.defineProperty(exports, 'dataInfisicalKmsKeyPublicKey', { get: function () { return require('./data-infisical-kms-key-public-key'); } });
+Object.defineProperty(exports, 'dataInfisicalProjectEnvironment', { get: function () { return require('./data-infisical-project-environment'); } });
+Object.defineProperty(exports, 'dataInfisicalProjectIdentity', { get: function () { return require('./data-infisical-project-identity'); } });
+Object.defineProperty(exports, 'dataInfisicalProjectRole', { get: function () { return require('./data-infisical-project-role'); } });
+Object.defineProperty(exports, 'dataInfisicalProjectUser', { get: function () { return require('./data-infisical-project-user'); } });
 Object.defineProperty(exports, 'dataInfisicalProjects', { get: function () { return require('./data-infisical-projects'); } });
+Object.defineProperty(exports, 'dataInfisicalProjectsList', { get: function () { return require('./data-infisical-projects-list'); } });
 Object.defineProperty(exports, 'dataInfisicalSecretFolders', { get: function () { return require('./data-infisical-secret-folders'); } });
 Object.defineProperty(exports, 'dataInfisicalSecretMetadata', { get: function () { return require('./data-infisical-secret-metadata'); } });
 Object.defineProperty(exports, 'dataInfisicalSecretTag', { get: function () { return require('./data-infisical-secret-tag'); } });

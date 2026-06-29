@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/data-sources/secret_metadata
+// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/data-sources/secret_metadata
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface DataInfisicalSecretMetadataConfig extends cdktf.TerraformMetaAr
   /**
   * The environment slug where the secret resides.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/data-sources/secret_metadata#environment_slug DataInfisicalSecretMetadata#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/data-sources/secret_metadata#environment_slug DataInfisicalSecretMetadata#environment_slug}
   */
   readonly environmentSlug: string;
   /**
   * The path to the folder where the secret is located.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/data-sources/secret_metadata#folder_path DataInfisicalSecretMetadata#folder_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/data-sources/secret_metadata#folder_path DataInfisicalSecretMetadata#folder_path}
   */
   readonly folderPath: string;
   /**
   * The name of the secret to retrieve properties for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/data-sources/secret_metadata#name DataInfisicalSecretMetadata#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/data-sources/secret_metadata#name DataInfisicalSecretMetadata#name}
   */
   readonly name: string;
   /**
   * The Infisical project ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/data-sources/secret_metadata#project_id DataInfisicalSecretMetadata#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/data-sources/secret_metadata#project_id DataInfisicalSecretMetadata#project_id}
   */
   readonly projectId: string;
   /**
   * The type of the secret (shared or personal). Defaults to shared.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/data-sources/secret_metadata#secret_type DataInfisicalSecretMetadata#secret_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/data-sources/secret_metadata#secret_type DataInfisicalSecretMetadata#secret_type}
   */
   readonly secretType?: string;
 }
@@ -215,7 +215,7 @@ export class DataInfisicalSecretMetadataTagsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/data-sources/secret_metadata infisical_secret_metadata}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/data-sources/secret_metadata infisical_secret_metadata}
 */
 export class DataInfisicalSecretMetadata extends cdktf.TerraformDataSource {
 
@@ -231,7 +231,7 @@ export class DataInfisicalSecretMetadata extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataInfisicalSecretMetadata resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataInfisicalSecretMetadata to import
-  * @param importFromId The id of the existing DataInfisicalSecretMetadata that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/data-sources/secret_metadata#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataInfisicalSecretMetadata that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/data-sources/secret_metadata#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataInfisicalSecretMetadata to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -243,7 +243,7 @@ export class DataInfisicalSecretMetadata extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/data-sources/secret_metadata infisical_secret_metadata} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/data-sources/secret_metadata infisical_secret_metadata} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -254,7 +254,7 @@ export class DataInfisicalSecretMetadata extends cdktf.TerraformDataSource {
       terraformResourceType: 'infisical_secret_metadata',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.30'
+        providerVersion: '0.16.35'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

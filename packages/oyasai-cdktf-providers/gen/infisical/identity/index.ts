@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity
+// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface IdentityConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether the identity has delete protection, defaults to false
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity#has_delete_protection Identity#has_delete_protection}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity#has_delete_protection Identity#has_delete_protection}
   */
   readonly hasDeleteProtection?: boolean | cdktf.IResolvable;
   /**
   * The metadata associated with this identity
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity#metadata Identity#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity#metadata Identity#metadata}
   */
   readonly metadata?: IdentityMetadata[] | cdktf.IResolvable;
   /**
   * The name for the identity
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity#name Identity#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity#name Identity#name}
   */
   readonly name: string;
   /**
   * The ID of the organization for the identity
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity#org_id Identity#org_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity#org_id Identity#org_id}
   */
   readonly orgId: string;
   /**
   * The role for the identity. Available default role options are 'admin', 'member', and 'no-access'. If you've created custom roles, you can use their slugs as well.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity#role Identity#role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity#role Identity#role}
   */
   readonly role: string;
 }
@@ -42,13 +42,13 @@ export interface IdentityMetadata {
   /**
   * The key of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity#key Identity#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity#key Identity#key}
   */
   readonly key: string;
   /**
   * The value of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity#value Identity#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity#value Identity#value}
   */
   readonly value: string;
 }
@@ -187,7 +187,7 @@ export class IdentityMetadataList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity infisical_identity}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity infisical_identity}
 */
 export class Identity extends cdktf.TerraformResource {
 
@@ -203,7 +203,7 @@ export class Identity extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Identity resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Identity to import
-  * @param importFromId The id of the existing Identity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Identity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Identity to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -215,7 +215,7 @@ export class Identity extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/identity infisical_identity} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity infisical_identity} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -226,7 +226,7 @@ export class Identity extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.30'
+        providerVersion: '0.16.35'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

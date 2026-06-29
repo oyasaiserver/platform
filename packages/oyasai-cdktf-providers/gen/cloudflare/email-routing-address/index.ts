@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/email_routing_address
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/email_routing_address
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface EmailRoutingAddressConfig extends cdktf.TerraformMetaArguments 
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/email_routing_address#account_id EmailRoutingAddress#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/email_routing_address#account_id EmailRoutingAddress#account_id}
   */
-  readonly accountId?: string;
+  readonly accountId: string;
   /**
   * The contact email address of the user.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/email_routing_address#email EmailRoutingAddress#email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/email_routing_address#email EmailRoutingAddress#email}
   */
   readonly email: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/email_routing_address cloudflare_email_routing_address}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/email_routing_address cloudflare_email_routing_address}
 */
 export class EmailRoutingAddress extends cdktf.TerraformResource {
 
@@ -38,7 +38,7 @@ export class EmailRoutingAddress extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a EmailRoutingAddress resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the EmailRoutingAddress to import
-  * @param importFromId The id of the existing EmailRoutingAddress that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/email_routing_address#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing EmailRoutingAddress that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/email_routing_address#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the EmailRoutingAddress to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class EmailRoutingAddress extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.20.0/docs/resources/email_routing_address cloudflare_email_routing_address} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/email_routing_address cloudflare_email_routing_address} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class EmailRoutingAddress extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_email_routing_address',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.20.0'
+        providerVersion: '5.21.1'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -79,16 +79,13 @@ export class EmailRoutingAddress extends cdktf.TerraformResource {
   // ATTRIBUTES
   // ==========
 
-  // account_id - computed: false, optional: true, required: false
+  // account_id - computed: false, optional: false, required: true
   private _accountId?: string; 
   public get accountId() {
     return this.getStringAttribute('account_id');
   }
   public set accountId(value: string) {
     this._accountId = value;
-  }
-  public resetAccountId() {
-    this._accountId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {

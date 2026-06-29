@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github
+// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionGithubConfig extends cdktf.TerraformMetaArguments 
   /**
   * The credentials for the GitHub App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github#credentials AppConnectionGithub#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github#credentials AppConnectionGithub#credentials}
   */
   readonly credentials: AppConnectionGithubCredentials;
   /**
   * An optional description for the GitHub App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github#description AppConnectionGithub#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github#description AppConnectionGithub#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with GitHub. Possible values are: pat
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github#method AppConnectionGithub#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github#method AppConnectionGithub#method}
   */
   readonly method: string;
   /**
   * The name of the GitHub App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github#name AppConnectionGithub#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github#name AppConnectionGithub#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github#project_id AppConnectionGithub#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github#project_id AppConnectionGithub#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,19 +42,19 @@ export interface AppConnectionGithubCredentials {
   /**
   * The hostname of your GitHub Enterprise instance. Required when instance_type is 'server'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github#host AppConnectionGithub#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github#host AppConnectionGithub#host}
   */
   readonly host?: string;
   /**
   * The type of GitHub instance. Use 'cloud' for GitHub.com (default) or 'server' for GitHub Enterprise. When 'server', host is required.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github#instance_type AppConnectionGithub#instance_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github#instance_type AppConnectionGithub#instance_type}
   */
   readonly instanceType?: string;
   /**
   * The Personal Access Token used to access GitHub.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github#personal_access_token AppConnectionGithub#personal_access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github#personal_access_token AppConnectionGithub#personal_access_token}
   */
   readonly personalAccessToken: string;
 }
@@ -203,7 +203,7 @@ export class AppConnectionGithubCredentialsOutputReference extends cdktf.Complex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github infisical_app_connection_github}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github infisical_app_connection_github}
 */
 export class AppConnectionGithub extends cdktf.TerraformResource {
 
@@ -219,7 +219,7 @@ export class AppConnectionGithub extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionGithub resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionGithub to import
-  * @param importFromId The id of the existing AppConnectionGithub that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionGithub that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionGithub to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -231,7 +231,7 @@ export class AppConnectionGithub extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/app_connection_github infisical_app_connection_github} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_github infisical_app_connection_github} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -242,7 +242,7 @@ export class AppConnectionGithub extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_github',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.30'
+        providerVersion: '0.16.35'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

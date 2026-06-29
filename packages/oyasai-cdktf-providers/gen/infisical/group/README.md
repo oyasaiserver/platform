@@ -1,3 +1,3 @@
 # `infisical_group`
 
-Refer to the Terraform Registry for docs: [`infisical_group`](https://registry.terraform.io/providers/infisical/infisical/0.16.30/docs/resources/group).
+Refer to the Terraform Registry for docs: [`infisical_group`](https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/group).
