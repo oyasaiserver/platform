@@ -5,7 +5,7 @@
 }:
 oyasaiPurpur rec {
   name = "oyasai-minecraft-lobby";
-  version = "26.1.2";
+  version = "26.2";
 
   properties = {
     # keep-sorted start block=yes

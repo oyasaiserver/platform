@@ -3,7 +3,7 @@
 ⚠️ WIP
 
 ```console
-$ npm run update 26.1.2
+$ npm run lock <version
 ```
 
 etc.
