@@ -1,6 +1,7 @@
 package com.github.srain3.sociallikes
 
 import com.fren_gor.ultimateAdvancementAPI.UltimateAdvancementAPI
+import com.fren_gor.ultimateAdvancementAPI.advancement.display.AdvancementFrameType
 import com.github.srain3.sociallikes.Events.idKey
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
@@ -68,6 +69,8 @@ object Tools {
 
   /** SocialLikeロゴ？ */
   val socialLikesLOGOShort = "&8(&5S&7L&8)".color()
+
+  private var advancementToastDisabled = false
 
   /** ItemStackに表示名と説明を追加する(自動カラー化付き) */
   fun ItemStack.addText(title: String?, lore: MutableList<String>): ItemStack {
@@ -209,4 +212,26 @@ object Tools {
 
   /** AdvancementAPI */
   val advAPI by lazy { UltimateAdvancementAPI.getInstance(plugin) }
+
+  fun displaySocialLikeToast(player: Player, icon: ItemStack, text: String): Boolean {
+    if (advancementToastDisabled) return false
+    return try {
+      advAPI.displayCustomToast(player, icon, text, AdvancementFrameType.TASK)
+      true
+    } catch (throwable: LinkageError) {
+      disableAdvancementToast(throwable)
+    } catch (throwable: RuntimeException) {
+      disableAdvancementToast(throwable)
+    }
+  }
+
+  private fun disableAdvancementToast(throwable: Throwable): Boolean {
+    advancementToastDisabled = true
+    plugin.logger.warning(
+        "[SocialLikes3] Advancement toast notification has been disabled: " +
+            "${throwable.javaClass.name}: ${throwable.message}"
+    )
+    plugin.logger.warning("[SocialLikes3] Likes, rewards, and sign updates will continue.")
+    return false
+  }
 }

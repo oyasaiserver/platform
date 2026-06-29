@@ -1,6 +1,5 @@
 package com.github.srain3.sociallikes
 
-import com.fren_gor.ultimateAdvancementAPI.advancement.display.AdvancementFrameType
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.Tools.isLegacySLSign
 import com.github.srain3.sociallikes.Tools.isSLSign
@@ -251,12 +250,11 @@ object Events : Listener {
               this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
               this.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
           })*/
-          Tools.advAPI.displayCustomToast(
+          Tools.displaySocialLikeToast(
               ownerPlayer,
               ItemStack(Material.OAK_SIGN),
               Tools.socialLikesLOGOShort +
                   "&a${data.title}&7ID:${id}&r\n${e.player.name}&7<&rイイね!".color(),
-              AdvancementFrameType.TASK,
           )
           ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
           if (e.player.uniqueId != data.owner) {

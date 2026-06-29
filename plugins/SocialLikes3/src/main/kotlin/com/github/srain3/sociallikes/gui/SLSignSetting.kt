@@ -20,7 +20,6 @@ import me.realized.tokenmanager.api.TokenManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextColor
-import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -492,7 +491,7 @@ object SLSignSetting {
                   .addText("&aタイトルを変更する", mutableListOf("&7看板のタイトルを変えれます"))
           ) {
             it.whoClicked.closeInventory()
-            titleChangeAnvilGUI(sign, slData, (it.whoClicked as Player))
+            titleChangeAnvilInput(sign, slData, (it.whoClicked as Player))
           },
           7,
           0,
@@ -574,41 +573,30 @@ object SLSignSetting {
     sign.update(true)
   }
 
-  private fun titleChangeAnvilGUI(sign: Sign, slData: SLData, player: Player) {
-    AnvilGUI.Builder().apply {
-      itemLeft(
-          ItemStack(Material.OAK_SIGN)
-              .allFlag()
-              .addText(
-                  slData.title,
-                  mutableListOf("&7出力先(右側)にあるこの看板をクリックで確定します", "&7普通に閉じた場合はキャンセルです"),
-              )
-      )
-      onClick { slot, e ->
-        if (slot != AnvilGUI.Slot.OUTPUT) {
-          return@onClick listOf()
-        }
-
-        if (e.text.isNotBlank()) {
-          sign.getSide(Side.FRONT).setLine(1, "&a${e.text}".color())
-          sign.update()
-          slData.title = e.text
-          Data.save(slData)
-          // GUIへ反映
-          AllBuild.updateSLSignData(slData)
-          UserBuild.updateSLSignData(slData)
-          e.player.sendMessage(Tools.socialLikesLOGO + "&r タイトルを変更しました!".color())
-          e.player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-          // Discordへ反映
-          SLDiscord.changeSLDataToMsg(slData)
-          return@onClick listOf(AnvilGUI.ResponseAction.close())
-        } else {
-          return@onClick listOf(AnvilGUI.ResponseAction.replaceInputText(""))
-        }
-      }
-      title(Tools.socialLikesLOGOShort + "&0title change".color())
-      plugin(Tools.plugin)
-      open(player)
+  private fun titleChangeAnvilInput(sign: Sign, slData: SLData, player: Player) {
+    val item =
+        ItemStack(Material.OAK_SIGN)
+            .allFlag()
+            .addText(
+                slData.title,
+                mutableListOf("&7出力先(右側)にあるこの看板をクリックで確定します", "&7普通に閉じた場合はキャンセルです"),
+            )
+    SocialLikesAnvilInput.open(
+        player,
+        Tools.socialLikesLOGOShort + "&0title change".color(),
+        item,
+    ) { p, text ->
+      sign.getSide(Side.FRONT).setLine(1, "&a${text}".color())
+      sign.update()
+      slData.title = text
+      Data.save(slData)
+      // GUIへ反映
+      AllBuild.updateSLSignData(slData)
+      UserBuild.updateSLSignData(slData)
+      p.sendMessage(Tools.socialLikesLOGO + "&r タイトルを変更しました!".color())
+      p.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
+      // Discordへ反映
+      SLDiscord.changeSLDataToMsg(slData)
     }
   }
 }

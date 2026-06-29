@@ -7,6 +7,7 @@ import com.github.srain3.sociallikes.datas.PlaceHolder
 import com.github.srain3.sociallikes.datas.PublicityHistory
 import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.srain3.sociallikes.gui.FollowBuild
+import com.github.srain3.sociallikes.gui.SocialLikesAnvilInput
 import java.io.File
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -23,6 +24,7 @@ class SocialLikes : JavaPlugin() {
 
     server.pluginManager.registerEvents(Events, this)
     server.pluginManager.registerEvents(FollowBuild, this)
+    server.pluginManager.registerEvents(SocialLikesAnvilInput, this)
 
     server.getPluginCommand("sltp")?.setExecutor(SLtp)
     server.getPluginCommand("slbuild")?.setExecutor(SLBuilds)

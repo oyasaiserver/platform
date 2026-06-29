@@ -24,7 +24,6 @@ import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.chat.hover.content.Text
-import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -476,36 +475,23 @@ object SLSignLikes {
   }
 
   private fun commentEdit(player: Player, slData: SLData) {
-    AnvilGUI.Builder().apply {
-      itemLeft(
-          ItemStack(Material.WRITABLE_BOOK)
-              .allFlag()
-              .addText(
-                  slData.comment,
-                  mutableListOf(
-                      "&7出力先(右側)にあるこの本をクリックで確定します",
-                      "&7普通に閉じた場合はキャンセルです",
-                      "&7カンマ(,)で改行扱いします",
-                  ),
-              )
-      )
-      onClick { slot, e ->
-        if (slot != AnvilGUI.Slot.OUTPUT) {
-          return@onClick listOf()
-        }
-
-        if (e.text.isNotBlank()) {
-          slData.comment = e.text
-          Data.save(slData)
-          e.player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-          return@onClick listOf(AnvilGUI.ResponseAction.close())
-        } else {
-          return@onClick listOf(AnvilGUI.ResponseAction.replaceInputText(""))
-        }
-      }
-      title(Tools.socialLikesLOGOShort + "&0コメント編集".color())
-      plugin(Tools.plugin)
-      open(player)
+    val item =
+        ItemStack(Material.WRITABLE_BOOK)
+            .allFlag()
+            .addText(
+                slData.comment,
+                mutableListOf(
+                    "&7出力先(右側)にあるこの本をクリックで確定します",
+                    "&7普通に閉じた場合はキャンセルです",
+                    "&7カンマ(,)で改行扱いします",
+                ),
+            )
+    SocialLikesAnvilInput.open(player, Tools.socialLikesLOGOShort + "&0コメント編集".color(), item) {
+        p,
+        text ->
+      slData.comment = text
+      Data.save(slData)
+      p.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
     }
   }
 }
