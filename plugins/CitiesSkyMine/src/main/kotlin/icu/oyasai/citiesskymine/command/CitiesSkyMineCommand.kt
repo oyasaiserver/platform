@@ -13,6 +13,7 @@ import icu.oyasai.citiesskymine.payload.PayloadCommand
 import icu.oyasai.citiesskymine.preset.BrushPresetCommand
 import icu.oyasai.citiesskymine.road.IntersectionCommand
 import icu.oyasai.citiesskymine.road.RoadCurveCommand
+import icu.oyasai.citiesskymine.schematic.SchematicCommand
 import icu.oyasai.citiesskymine.selection.SelectionCommand
 import icu.oyasai.citiesskymine.slabstairs.SlabStairsCommand
 import icu.oyasai.citiesskymine.stack.StackCommand
@@ -40,6 +41,7 @@ class CitiesSkyMineCommand(
     private val bezierCommand: BezierCommand,
     private val debugStickCommand: DebugStickCommand,
     private val brushPresetCommand: BrushPresetCommand,
+    private val schematicCommand: SchematicCommand,
 ) : CommandExecutor, TabCompleter {
 
   override fun onCommand(
@@ -160,6 +162,10 @@ class CitiesSkyMineCommand(
         if (!requireAccess(sender, CommandKey.PRESET)) return true
         brushPresetCommand.onCommand(sender, command, "$label preset", args.drop(1).toTypedArray())
       }
+      "schematic" -> {
+        if (!requireAccess(sender, CommandKey.SCHEMATIC)) return true
+        schematicCommand.onCommand(sender, command, "$label schematic", args.drop(1).toTypedArray())
+      }
       else -> {
         MessageUtil.error(sender, "不明なサブコマンド: $sub")
         showHelp(sender)
@@ -208,6 +214,7 @@ class CitiesSkyMineCommand(
       "bezier" -> bezierCommand.onTabComplete(sender, command, alias, childArgs)
       "debugstick" -> debugStickCommand.onTabComplete(sender, command, alias, childArgs)
       "preset" -> brushPresetCommand.onTabComplete(sender, command, "$alias preset", childArgs)
+      "schematic" -> schematicCommand.onTabComplete(sender, command, "$alias schematic", childArgs)
       else -> emptyList()
     }
   }
@@ -231,7 +238,7 @@ class CitiesSkyMineCommand(
     )
     MessageUtil.helpEntry(
         sender,
-        "/csm columns <柱の太さ> <柱間> [edge|center] [2d]",
+        "/csm columns <柱の太さ> <柱間|柱数> [edge|center] [2d] [-s] [-p]",
         "選択範囲に手持ちブロックで柱を生成",
     )
     MessageUtil.helpEntry(
@@ -245,15 +252,20 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm cloud [size] [height] [density] [seed]", "cobweb の雲を生成")
     MessageUtil.helpEntry(
         sender,
-        "/csm bezier <add|fromsel|preview|build|clear>",
+        "/csm bezier <add|plane|preview|build|clear>",
         "ベジェ曲線をプレビュー・生成",
     )
     MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
     MessageUtil.helpEntry(sender, "/csm preset <save|load|list|delete|名前>", "ブラシプリセットを管理")
+    MessageUtil.helpEntry(
+        sender,
+        "/csm schematic <name> [-a]",
+        "スキマティックを読み込んで貼り付け",
+    )
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
     MessageUtil.send(
         sender,
-        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.sel, /.settings, /.config, /.cloud, /.bez, /.ds, /.brp</gray>",
+        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.sel, /.settings, /.config, /.cloud, /.bez, /.ds, /.brp, /.sc</gray>",
     )
     MessageUtil.send(sender, "<gray>Command help: /csm help <command> or /.help <command></gray>")
   }
@@ -275,7 +287,7 @@ class CitiesSkyMineCommand(
       "col" ->
           MessageUtil.helpEntry(
               sender,
-              "/csm columns <柱の太さ> <柱間> [edge|center] [2d]",
+              "/csm columns <柱の太さ> <柱間|柱数> [edge|center] [2d] [-s] [-p]",
               "選択範囲に手持ちブロックで柱を生成",
           )
       "settings" -> MessageUtil.helpEntry(sender, "/csm settings", "個人設定GUIを開く")
@@ -294,6 +306,8 @@ class CitiesSkyMineCommand(
           MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
       "preset" ->
           MessageUtil.helpEntry(sender, "/csm preset <save|load|list|delete|名前>", "ブラシプリセットを管理")
+      "schematic",
+      "sc" -> schematicCommand.sendHelp(sender, "/csm schematic")
       "road" -> MessageUtil.helpEntry(sender, "/csm road <...>", "道路カーブを生成")
       "intersection" -> MessageUtil.helpEntry(sender, "/csm intersection <...>", "交差点を生成")
       "facade" -> MessageUtil.helpEntry(sender, "/csm facade <...>", "ファサードを生成")
@@ -344,6 +358,7 @@ class CitiesSkyMineCommand(
             "bezier",
             "debugstick",
             "preset",
+            "schematic",
         )
   }
 }

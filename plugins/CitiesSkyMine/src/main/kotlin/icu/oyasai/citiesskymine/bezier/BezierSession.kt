@@ -7,4 +7,5 @@ data class BezierSession(
     val controlPoints: MutableList<Location> = mutableListOf(),
     var previewTask: BukkitTask? = null,
     var segments: Int = 64,
+    var planeMode: Boolean = false,
 )

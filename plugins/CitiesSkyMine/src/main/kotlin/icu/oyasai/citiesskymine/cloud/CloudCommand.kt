@@ -53,14 +53,17 @@ class CloudCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
   fun sendHelp(sender: CommandSender, base: String) {
     MessageUtil.header(sender, "Cloud Generator")
-    MessageUtil.helpEntry(sender, "$base [size] [height] [density] [seed]", "cobweb の雲をFAWEで生成")
     MessageUtil.helpEntry(
         sender,
-        "$base [size] [height] [density] [yOffset] [seed]",
-        "yOffset も指定して生成",
+        "$base [size] [height] [density] [seed] [yOffset]",
+        "cobweb の雲をFAWEで生成",
     )
-    MessageUtil.helpEntry(sender, "$base 128 16 0.9 2026", "100ブロック上, seed=2026")
-    MessageUtil.helpEntry(sender, "$base 128 16 0.9 128 2026", "128ブロック上, seed=2026")
+    MessageUtil.helpEntry(
+        sender,
+        "$base 128 16 0.9 2026",
+        "100ブロック上, seed=2026",
+    )
+    MessageUtil.helpEntry(sender, "$base 128 16 0.9 2026 128", "128ブロック上, seed=2026")
     MessageUtil.info(sender, "density は元 Python の coverage 相当です。既定値は 0.72、値が大きいほど濃くなります。")
     MessageUtil.info(sender, "yOffset はプレイヤー位置から雲の底面までの高さです。既定値は 100 です。")
     MessageUtil.info(sender, "seed は 0 から $MAX_SEED までです。省略時はランダムです。")
@@ -160,30 +163,25 @@ class CloudCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   }
 
   private fun parseOptions(sender: CommandSender, rawArgs: List<String>): CloudOptions? {
-    val args = rawArgs.filterNot { it.isPlaceholder() }
-    if (args.size > 5) {
+    if (rawArgs.size > 5) {
       MessageUtil.error(sender, "引数が多すぎます。使い方は /csm help cloud または /.help cloud を見てください。")
       return null
     }
+    val args = rawArgs.map { raw -> raw.takeUnless { it.isPlaceholder() } }
 
     val size =
         if (args.getOrNull(0) == null) 128
-        else parseInt(sender, "size", args[0], 1, 256) ?: return null
+        else parseInt(sender, "size", args[0]!!, 1, 256) ?: return null
     val height =
         if (args.getOrNull(1) == null) 48
-        else parseInt(sender, "height", args[1], 1, 256) ?: return null
+        else parseInt(sender, "height", args[1]!!, 1, 256) ?: return null
     val density =
         if (args.getOrNull(2) == null) 0.72
-        else parseDouble(sender, "density", args[2], 0.30, 0.95) ?: return null
-    val yOffset: Int
-    val seed: Int?
-    if (args.size >= 5) {
-      yOffset = parseInt(sender, "yOffset", args[3], -256, 512) ?: return null
-      seed = parseInt(sender, "seed", args[4], 0, MAX_SEED) ?: return null
-    } else {
-      yOffset = 100
-      seed = args.getOrNull(3)?.let { parseInt(sender, "seed", it, 0, MAX_SEED) ?: return null }
-    }
+        else parseDouble(sender, "density", args[2]!!, 0.30, 0.95) ?: return null
+    val seed = args.getOrNull(3)?.let { parseInt(sender, "seed", it, 0, MAX_SEED) ?: return null }
+    val yOffset =
+        if (args.getOrNull(4) == null) 100
+        else parseInt(sender, "yOffset", args[4]!!, -256, 512) ?: return null
     val resolvedSeed = seed ?: Random.nextInt(0, MAX_SEED + 1)
 
     return CloudOptions(
@@ -244,14 +242,13 @@ class CloudCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       )
 
   private fun positionalSuggestion(rawArgs: List<String>, current: String): List<String> {
-    val args = rawArgs.filterNot { it.isPlaceholder() }
     val suggestions =
-        when (args.size) {
+        when (rawArgs.size) {
           0 -> listOf("[size]", "64", "96", "128", "160")
           1 -> listOf("[height]", "16", "24", "32", "48")
           2 -> listOf("[density]", "0.50", "0.72", "0.85")
           3 -> listOf("[seed]", "42", "123", "2026")
-          4 -> listOf("[seed]", "42", "123", "2026")
+          4 -> listOf("[yOffset]", "80", "100", "128")
           else -> emptyList()
         }
     return suggestions.filter { it.startsWith(current, ignoreCase = true) }

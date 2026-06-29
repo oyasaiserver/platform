@@ -280,12 +280,15 @@ class SlabStairsCommand(private val plugin: Main) : CommandExecutor, TabComplete
       }
 
   private fun horizontalSegmentShape(index: Int, length: Int, dy: Int): RampShape {
+    if (dy == 0) return RampShape.HALF_BOTTOM
     if (length == 1) return RampShape.STAIRS
     val upward = dy > 0
-    return when (index) {
-      0 -> if (upward) RampShape.HALF_BOTTOM else RampShape.HALF_TOP
-      length - 1 -> if (upward) RampShape.HALF_TOP else RampShape.HALF_BOTTOM
-      else -> RampShape.STAIRS
+    val midpoint = length / 2
+    val isMiddleStair = length % 2 == 1 && index == midpoint
+    return when {
+      isMiddleStair -> RampShape.STAIRS
+      index < midpoint -> if (upward) RampShape.HALF_BOTTOM else RampShape.HALF_TOP
+      else -> if (upward) RampShape.HALF_TOP else RampShape.HALF_BOTTOM
     }
   }
 

@@ -27,6 +27,7 @@ class CsmAccessController(private val plugin: Main) {
     BEZIER("bezier", "citiesskymine.bezier"),
     DEBUGSTICK("debugstick", "citiesskymine.debugstick"),
     PRESET("preset", "citiesskymine.preset"),
+    SCHEMATIC("schematic", "citiesskymine.schematic"),
   }
 
   fun require(sender: CommandSender, command: CommandKey): Boolean {
@@ -159,6 +160,7 @@ class CsmAccessController(private val plugin: Main) {
             CommandKey.BEZIER to listOf("builder", "takumi", "admin"),
             CommandKey.DEBUGSTICK to listOf("takumi", "admin"),
             CommandKey.PRESET to listOf("builder", "takumi", "admin"),
+            CommandKey.SCHEMATIC to listOf("builder", "takumi", "admin"),
         )
   }
 }

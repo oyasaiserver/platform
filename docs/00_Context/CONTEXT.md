@@ -76,7 +76,7 @@ Read only what is needed for the task.
 | Understand docs at a human level | `docs/README.md` |
 | Follow a PR, docs, plugin, or dev-server workflow | `docs/00_Context/WORKFLOWS.md` |
 | Add or update a project page | `docs/01_Projects/_MANIFEST.md` |
-| Edit a plugin | target `docs/01_Projects/minecraft-plugins/<plugin>/PROJECT.md`, then `plugins/<Plugin>/` |
+| Edit a plugin | use `docs/01_Projects/INDEX.md` to find the plugin `PROJECT.md`, then `plugins/<Plugin>/` |
 | Work on a Minecraft-related non-plugin tool | target `docs/01_Projects/tools/<tool>/PROJECT.md` |
 | Update cross-cutting operations or tool docs | `docs/02_Docs/_MANIFEST.md` |
 | Store public validation output | `docs/03_Outputs/_MANIFEST.md` |
@@ -98,7 +98,8 @@ flowchart TD
   Goal -->|Resources| ResourcesManifest["04_Resources/_MANIFEST.md"]
   Goal -->|History| PublicArchives["05_PublicArchives/_MANIFEST.md"]
   Goal -->|Triage| Inbox["99_Inbox/_MANIFEST.md"]
-  ProjectManifest --> Project["PROJECT.md"]
+  ProjectManifest --> ProjectIndex["01_Projects/INDEX.md"]
+  ProjectIndex --> Project["PROJECT.md"]
   Project --> Sot["source_of_truth / related_paths"]
   Sot --> Impl["plugins/ / packages/ / apps/ / external repo"]
 ```

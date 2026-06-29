@@ -110,33 +110,28 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
   ): List<String> {
     if (args.isEmpty()) return emptyList()
     val current = args.last()
-    val suggestions =
-        when (args.size) {
-          1 -> listOf("1", "2", "3", "suggest", "build", "help")
-          2 ->
-              if (
-                  args[0].equals("suggest", true) ||
-                      args[0].equals("build", true) ||
-                      args[0].equals("apply", true)
-              ) {
-                listOf("1", "2", "3")
-              } else {
-                listOf("3", "5", "7", "9")
-              }
-          3 ->
-              if (
-                  args[0].equals("suggest", true) ||
-                      args[0].equals("build", true) ||
-                      args[0].equals("apply", true)
-              ) {
-                listOf("3", "5", "7", "9")
-              } else {
-                listOf("edge", "center", "2d")
-              }
-          4 -> listOf("edge", "center", "2d")
-          else -> listOf("2d")
-        }
+    val suggestions = columnArgumentSuggestions(args)
     return suggestions.filter { it.startsWith(current, ignoreCase = true) }
+  }
+
+  private fun columnArgumentSuggestions(args: Array<String>): List<String> {
+    val position = args.count { !isColumnOptionToken(it) }
+    val countMode = args.any { isCountModeToken(it) }
+    return when {
+      position <= 1 -> listOf("1", "2", "3")
+      position == 2 && countMode -> listOf("3", "4", "5", "6", "5x3")
+      position == 2 -> listOf("3", "5", "7", "9")
+      else -> columnOptionSuggestions(args.dropLast(1))
+    }
+  }
+
+  private fun columnOptionSuggestions(completedArgs: List<String>): List<String> {
+    val suggestions = ArrayList<String>()
+    if (completedArgs.none { isSuggestToken(it) }) suggestions += "-s"
+    if (completedArgs.none { isCountModeToken(it) }) suggestions += "-p"
+    if (completedArgs.none { isLayoutModeToken(it) }) suggestions += listOf("edge", "center")
+    if (completedArgs.none { isGridToken(it) }) suggestions += "2d"
+    return suggestions
   }
 
   private fun parseArgs(
@@ -144,45 +139,21 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
       label: String,
       args: Array<String>,
   ): ParsedColumnArgs? {
-    var index = 0
-    val action =
-        when (args.getOrNull(index)?.lowercase()) {
-          "suggest",
-          "s" -> {
-            index++
-            Action.SUGGEST
-          }
-          "build",
-          "apply",
-          "b" -> {
-            index++
-            Action.BUILD
-          }
-          else -> Action.BUILD
-        }
-
-    val widthRaw = args.getOrNull(index++)
-    val gapRaw = args.getOrNull(index++)
-    val columnWidth = widthRaw?.toIntOrNull()
-    val preferredGap = gapRaw?.toIntOrNull()
-    if (columnWidth == null || preferredGap == null) {
-      MessageUtil.error(sender, "使い方: /$label [suggest|build] <柱の太さ> <柱間> [edge|center] [2d]")
-      return null
-    }
-    if (columnWidth <= 0) {
-      MessageUtil.error(sender, "柱の太さは1以上で指定してください。")
-      return null
-    }
-    if (preferredGap < 0) {
-      MessageUtil.error(sender, "柱間は0以上で指定してください。")
-      return null
-    }
-
+    var action = Action.BUILD
+    var inputMode = InputMode.GAP
     var mode = LayoutMode.EDGE
     var grid = false
-    val trailing = args.drop(index)
-    for ((trailingIndex, raw) in trailing.withIndex()) {
+    val positionals = ArrayList<String>()
+
+    for (raw in args) {
       when (raw.lowercase()) {
+        "suggest",
+        "s",
+        "-s",
+        "--suggest" -> action = Action.SUGGEST
+        "build",
+        "apply",
+        "b" -> action = Action.BUILD
         "edge",
         "e",
         "端" -> mode = LayoutMode.EDGE
@@ -194,20 +165,114 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
         "余白" -> mode = LayoutMode.CENTERED
         "2d",
         "grid",
-        "--grid" -> {
-          if (trailingIndex != trailing.lastIndex) {
-            MessageUtil.error(sender, "2Dグリッド指定は最後の引数にしてください。")
-            return null
-          }
-          grid = true
+        "--grid" -> grid = true
+        else ->
+            if (isCountModeToken(raw)) {
+              inputMode = InputMode.COUNT
+            } else {
+              positionals += raw
+            }
+      }
+    }
+
+    val widthRaw = positionals.getOrNull(0)
+    val columnWidth = widthRaw?.toIntOrNull()
+    if (columnWidth == null) {
+      showColumnUsageError(sender, label)
+      return null
+    }
+    if (columnWidth <= 0) {
+      MessageUtil.error(sender, "柱の太さは1以上で指定してください。")
+      return null
+    }
+
+    val preferredGap: Int?
+    val requestedCounts: AxisCounts?
+    when (inputMode) {
+      InputMode.GAP -> {
+        val gapRaw = positionals.getOrNull(1)
+        preferredGap = gapRaw?.toIntOrNull()
+        requestedCounts = null
+        if (preferredGap == null) {
+          showColumnUsageError(sender, label)
+          return null
         }
-        else -> {
-          MessageUtil.error(sender, "不明な引数です: $raw")
+        if (preferredGap < 0) {
+          MessageUtil.error(sender, "柱間は0以上で指定してください。")
+          return null
+        }
+      }
+      InputMode.COUNT -> {
+        val countRaw = positionals.getOrNull(1)
+        preferredGap = null
+        requestedCounts = countRaw?.let { parseAxisCounts(it) }
+        if (requestedCounts == null) {
+          MessageUtil.error(
+              sender,
+              "使い方: /$label <柱の太さ> <柱数|左右x奥行> -p [edge|center] [2d] [-s]",
+          )
           return null
         }
       }
     }
-    return ParsedColumnArgs(action, columnWidth, preferredGap, mode, grid)
+    if (positionals.size > 2) {
+      MessageUtil.error(sender, "不明な引数です: ${positionals.drop(2).joinToString(" ")}")
+      return null
+    }
+    return ParsedColumnArgs(action, columnWidth, preferredGap, requestedCounts, mode, grid)
+  }
+
+  private fun showColumnUsageError(sender: CommandSender, label: String) {
+    MessageUtil.error(sender, "使い方: /$label <柱の太さ> <柱間> [edge|center] [2d] [-s]")
+    MessageUtil.info(sender, "柱数指定: /$label <柱の太さ> <柱数|左右x奥行> -p [edge|center] [2d] [-s]")
+  }
+
+  private fun isCountModeToken(raw: String): Boolean =
+      raw.equals("count", true) ||
+          raw.equals("counts", true) ||
+          raw.equals("columns", true) ||
+          raw.equals("n", true) ||
+          raw.equals("本数", true) ||
+          raw.equals("-p", true) ||
+          raw.equals("--count", true)
+
+  private fun isColumnOptionToken(raw: String): Boolean =
+      isCountModeToken(raw) ||
+          isSuggestToken(raw) ||
+          raw.equals("build", true) ||
+          raw.equals("apply", true) ||
+          raw.equals("b", true) ||
+          isLayoutModeToken(raw) ||
+          isGridToken(raw)
+
+  private fun isSuggestToken(raw: String): Boolean =
+      raw.equals("-s", true) ||
+          raw.equals("--suggest", true) ||
+          raw.equals("suggest", true) ||
+          raw.equals("s", true)
+
+  private fun isLayoutModeToken(raw: String): Boolean =
+      raw.equals("edge", true) ||
+          raw.equals("e", true) ||
+          raw.equals("端", true) ||
+          raw.equals("center", true) ||
+          raw.equals("centered", true) ||
+          raw.equals("c", true) ||
+          raw.equals("--centered", true) ||
+          raw.equals("中央", true) ||
+          raw.equals("余白", true)
+
+  private fun isGridToken(raw: String): Boolean =
+      raw.equals("2d", true) || raw.equals("grid", true) || raw.equals("--grid", true)
+
+  private fun parseAxisCounts(raw: String): AxisCounts? {
+    val normalized = raw.lowercase().replace("×", "x").replace("*", "x").replace(",", "x")
+    val parts = normalized.split("x")
+    if (parts.size !in 1..2) return null
+    val lateral = parts[0].toIntOrNull() ?: return null
+    val depth = parts.getOrNull(1)?.toIntOrNull()
+    if (lateral <= 0 || depth != null && depth <= 0) return null
+    return AxisCounts(lateral, depth)
   }
 
   private fun selectedCuboid(player: Player): CuboidRegion? {
@@ -245,15 +310,37 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
     }
 
     val lateralSuggestions =
-        suggestLayouts(lateralLength, parsed.columnWidth, parsed.preferredGap, parsed.mode)
+        if (parsed.requestedCounts != null) {
+          layoutsForCount(
+              lateralLength,
+              parsed.columnWidth,
+              parsed.requestedCounts.lateral,
+              parsed.mode,
+          )
+        } else {
+          suggestLayouts(lateralLength, parsed.columnWidth, parsed.preferredGap ?: 0, parsed.mode)
+        }
     require(lateralSuggestions.isNotEmpty()) { "左右方向に配置できる柱割り候補がありません。" }
     val lateralLayout = lateralSuggestions.first()
 
     val depthSuggestions =
         if (parsed.grid) {
-          suggestLayouts(depthLength, parsed.columnWidth, parsed.preferredGap, parsed.mode).also {
-            require(it.isNotEmpty()) { "奥行き方向に配置できる柱割り候補がありません。" }
-          }
+          if (parsed.requestedCounts != null) {
+                layoutsForCount(
+                    depthLength,
+                    parsed.columnWidth,
+                    parsed.requestedCounts.depth ?: parsed.requestedCounts.lateral,
+                    parsed.mode,
+                )
+              } else {
+                suggestLayouts(
+                    depthLength,
+                    parsed.columnWidth,
+                    parsed.preferredGap ?: 0,
+                    parsed.mode,
+                )
+              }
+              .also { require(it.isNotEmpty()) { "奥行き方向に配置できる柱割り候補がありません。" } }
         } else {
           emptyList()
         }
@@ -318,6 +405,67 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
                 .thenByDescending { it.starts.size },
         )
         .take(5)
+  }
+
+  private fun layoutsForCount(
+      length: Int,
+      columnWidth: Int,
+      columns: Int,
+      mode: LayoutMode,
+  ): List<AxisLayout> {
+    if (columns <= 0 || length < columns * columnWidth) return emptyList()
+    val gapTotal = length - columns * columnWidth
+    return when (mode) {
+      LayoutMode.EDGE -> {
+        val gaps =
+            if (columns <= 1) {
+              emptyList()
+            } else {
+              balancedDistribution(gapTotal, columns - 1)
+            }
+        listOf(
+            AxisLayout(
+                starts = startsFromGaps(columnWidth, gaps, edgeLeft = 0),
+                gaps = gaps,
+                edgeLeft = 0,
+                edgeRight = if (columns == 1) gapTotal else 0,
+                score = symmetryPenalty(gaps),
+                averageGapHundredths = averageHundredths(gaps),
+            )
+        )
+      }
+      LayoutMode.CENTERED -> {
+        if (columns == 1) {
+          val edgeLeft = gapTotal / 2
+          val edgeRight = gapTotal - edgeLeft
+          return listOf(
+              AxisLayout(
+                  starts = listOf(edgeLeft),
+                  gaps = emptyList(),
+                  edgeLeft = edgeLeft,
+                  edgeRight = edgeRight,
+                  score = abs(edgeLeft - edgeRight),
+                  averageGapHundredths = (edgeLeft + edgeRight) * 100,
+              )
+          )
+        }
+
+        val edgeTotal = gapTotal / columns
+        val gaps = balancedDistribution(gapTotal - edgeTotal, columns - 1)
+        val edgeLeft = edgeTotal / 2
+        val edgeRight = edgeTotal - edgeLeft
+        listOf(
+            AxisLayout(
+                starts = startsFromGaps(columnWidth, gaps, edgeLeft),
+                gaps = gaps,
+                edgeLeft = edgeLeft,
+                edgeRight = edgeRight,
+                score = symmetryPenalty(gaps) + abs(edgeLeft - edgeRight),
+                averageGapHundredths = averageHundredths(gaps + edgeTotal),
+            )
+        )
+      }
+    }
   }
 
   private fun edgeCandidates(
@@ -617,9 +765,14 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
 
   private fun showHelp(sender: CommandSender, label: String) {
     MessageUtil.header(sender, "CSM Columns")
-    MessageUtil.helpEntry(sender, "/$label <柱の太さ> <柱間> [edge|center] [2d]", "手持ちブロックで柱を生成")
-    MessageUtil.helpEntry(sender, "/$label suggest <柱の太さ> <柱間> [edge|center] [2d]", "生成せず柱割り候補だけ表示")
+    MessageUtil.helpEntry(sender, "/$label <柱の太さ> <柱間> [edge|center] [2d] [-s]", "手持ちブロックで柱を生成")
+    MessageUtil.helpEntry(
+        sender,
+        "/$label <柱の太さ> <柱数|左右x奥行> -p [edge|center] [2d] [-s]",
+        "柱数から均等配置を生成",
+    )
     MessageUtil.helpEntry(sender, "/$label 2 7 center 2d", "両端余白モードで2Dグリッド配置")
+    MessageUtil.helpEntry(sender, "/$label 2 5x3 -p center 2d", "左右5本、奥行3本で2Dグリッド配置")
     MessageUtil.helpEntry(sender, "//undo", "直前の柱生成を FAWE で取り消し")
     MessageUtil.send(
         sender,
@@ -669,10 +822,18 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
   private data class ParsedColumnArgs(
       val action: Action,
       val columnWidth: Int,
-      val preferredGap: Int,
+      val preferredGap: Int?,
+      val requestedCounts: AxisCounts?,
       val mode: LayoutMode,
       val grid: Boolean,
   )
+
+  private enum class InputMode {
+    GAP,
+    COUNT,
+  }
+
+  private data class AxisCounts(val lateral: Int, val depth: Int?)
 
   private data class CuboidBounds(
       val minX: Int,

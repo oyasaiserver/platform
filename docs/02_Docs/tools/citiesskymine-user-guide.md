@@ -30,6 +30,7 @@ CitiesSkyMine は、Minecraft 内で都市建築を補助する Paper/Purpur プ
 /csm bezier         /.bez           ベジェ曲線をプレビュー・生成
 /csm debugstick     /.ds            BlockData を変更
 /csm preset         /.brp           ブラシプリセットを保存・実行
+/csm schematic      /.sc            スキマティックを貼り付け
 /csm payload        /.pl            payload を復元して配置
 /csm reload                         config.yml を再読み込み
 ```
@@ -82,19 +83,22 @@ WorldEdit で 2 点を選択してから実行する。選択範囲の勾配に�
 
 ```text
 /.col <columnWidth> <gap> [edge|center] [2d]
-/.col suggest <columnWidth> <gap> [edge|center] [2d]
-/.col build <columnWidth> <gap> [edge|center] [2d]
+/.col <columnWidth> <gap> [edge|center] [2d] -s
+/.col <columnWidth> <count|leftxdepth> -p [edge|center] [2d]
+/.col <columnWidth> <count|leftxdepth> -p [edge|center] [2d] -s
 ```
 
 例:
 
 ```text
 /.col 2 7
-/.col suggest 2 7 center
+/.col 2 7 center -s
 /.col 2 7 center 2d
+/.col 2 5 -p center
+/.col 2 5x3 -p center 2d
 ```
 
-WorldEdit 選択範囲に、手持ちブロックで柱を生成する。`suggest` は生成せず、柱割り候補だけを表示する。ショートカットは `/.col` のみで、`/.cols` や `/.columns` は使わない。
+WorldEdit 選択範囲に、手持ちブロックで柱を生成する。通常形式は柱の太さと柱間から候補を計算する。`-p` は柱の太さと本数から均等配置する。`2d` では `5x3` のように左右方向と奥行き方向の本数を分けられる。`-s` は生成せず、柱割り候補だけを表示する。ショートカットは `/.col` のみで、`/.cols` や `/.columns` は使わない。
 
 ## Stack
 
@@ -123,7 +127,7 @@ WorldEdit 選択範囲を、プレイヤーの向きを基準に複製する。`
 /.sel <name>
 ```
 
-WorldEdit の選択範囲を保存・復元する。直前の選択範囲は自動記録され、`/.sel p` で復元できる。
+WorldEdit の選択範囲を保存・復元する。直前の選択範囲は自動記録され、`/.sel p` で復元できる。cuboid に加えて convex/polyhedral や polygonal 系の頂点選択も保存対象になる。
 
 ## 個人設定 GUI
 
@@ -216,7 +220,7 @@ GUI では、道路、窓、交差点、payload 配置などのプレイヤー�
 ## 雲生成
 
 ```text
-/.cloud [size] [height] [density] [yOffset] [seed]
+/.cloud [size] [height] [density] [seed] [yOffset]
 ```
 
 例:
@@ -224,20 +228,20 @@ GUI では、道路、窓、交差点、payload 配置などのプレイヤー�
 ```text
 /.cloud
 /.cloud 128 16 0.50
-/.cloud 128 16 0.50 128 2026
+/.cloud 128 16 0.50 2026 128
 ```
 
-現在位置から上方向に、cobweb の雲を生成する。`size` は X/Z 両方に使われるため、生成範囲は正方形である。`yOffset` を省略すると 100 ブロック上に生成される。`seed` を省略するとランダム値が使われる。
+現在位置から上方向に、cobweb の雲を生成する。`size` は X/Z 両方に使われるため、生成範囲は正方形である。`seed` を省略するとランダム値が使われる。`yOffset` を省略すると 100 ブロック上に生成される。
 
-4 番目の引数だけを指定した場合は seed として扱われる。yOffset を指定したい場合は、5 番目の seed まで指定する。
+4 番目の引数は seed、5 番目の引数は yOffset である。
 
 ## ベジェ曲線
 
 ```text
 /.bez add
-/.bez set <1-8>
-/.bez fromsel
-/.bez remove [1-8]
+/.bez set <1-32>
+/.bez plane <on|off>
+/.bez remove [1-32]
 /.bez preview <on|off>
 /.bez build [material] [radius]
 /.bez build flat [material] [width]
@@ -250,13 +254,13 @@ GUI では、道路、窓、交差点、payload 配置などのプレイヤー�
 
 ```text
 /.bez add
-/.bez fromsel
+/.bez plane on
 /.bez preview on
 /.bez build stone 3
 /.bez build flat gray_concrete 7
 ```
 
-制御点からベジェ曲線を作る。`fromsel` は FAWE の convex/polyhedral 選択から頂点を読み込む。`build` は半径指定の曲線、`build flat` は道路向けの 1 枚板を生成する。
+制御点からベジェ曲線を作る。制御点は最大 32 点まで扱える。`preview`、`build`、`status` 実行時には現在の WorldEdit 選択頂点を自動で制御点に読み込む。選択頂点はブロック中心座標として扱い、プレビュー表示だけは実生成位置より 1 ブロック上に表示する。`plane on` は制御点の Y をそろえて平面上の線として扱う。`build` は半径指定の曲線、`build flat` は道路向けの 1 枚板を生成する。
 
 ## DebugStick
 
@@ -270,7 +274,7 @@ GUI では、道路、窓、交差点、payload 配置などのプレイヤー�
 ## ブラシプリセット
 
 ```text
-/.brp save <name> <command>
+/.brp save <name> "<brush>" [-m "<mask>"] [-g "<global mask>"]
 /.brp load <name>
 /.brp <name>
 /.brp list
@@ -280,21 +284,56 @@ GUI では、道路、窓、交差点、payload 配置などのプレイヤー�
 例:
 
 ```text
-/.brp save road //br sphere gray_concrete 5
+/.brp save road "//br sphere gray_concrete 5"
+/.brp save road "//br sphere -h andesite 3" -m ">0 smoothquartz" -g "<global mask>"
 /.brp road
 ```
 
-よく使うブラシ系コマンドを保存して呼び出す。
+よく使う WorldEdit brush と、その mask/gmask を保存して呼び出す。`-m` は mask、`-g` は global mask である。保存対象は brush / mask / gmask に限定され、任意のマクロコマンドとしては扱わない。
+
+## Schematic
+
+```text
+/csm schematic <name> [-a]
+/.sc <name> [-a]
+/.sc list
+/.sc reload
+```
+
+FAWE/WorldEdit の schematic 保存先に置かれた `.schem` / `.schematic` ファイルを、名前だけで読み込んで貼り付ける。FAWE の per-player schematics が有効な場合は、実行したプレイヤーの UUID フォルダを参照する。`/.sc oak_tree` は `oak_tree.schem` または `oak_tree.schematic` を探す。
+
+貼り付け先は、プレイヤーの足元の 1 ブロック前である。回転引数はなく、プレイヤーの向きに合わせて自動回転する。空気を貼らずに既存ブロックを残したい場合は、FAWE の `//paste -a` と同じ意味で `-a` を指定する。
+
+`/.sc list` は FAWE の `//schem list` をそのまま実行する。
+
+例:
+
+```text
+/.sc oak_tree
+/.sc bench -a
+```
+
+貼り付け後は、FAWE の `//undo` で取り消せる。
 
 ## Payload
 
 ```text
 /csm payload load <payload>
 /csm payload load64 <payload>
+/.pl load <payload>
 /.pl load64 <payload>
 ```
 
-Base997 / Base64 payload を復元して配置する。巨大な payload はチャット欄の長さ制限に注意する。
+Base997 / Base64 payload を復元して配置する。Web ビューワーのコピー結果が250文字を超える場合は、次のような複数行コマンドとして出力される。全行をプレイヤー自身がチャット欄へ貼り付けて実行する。
+
+```text
+/.pl p <id> 1/3 <payload片>
+/.pl p <id> 2/3 <payload片>
+/.pl p <id> 3/3 <payload片>
+/.pl r <id> [0-3] [L|R] [hollow|solid]
+```
+
+`/.pl p` は分割 payload を一時保存し、最後の `/.pl r` が結合して配置する。一時保存を消す場合は `/.pl clear <id>` を使う。
 
 ## よくある質問
 

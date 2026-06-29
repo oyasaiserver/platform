@@ -87,9 +87,9 @@ class ServerConfigCommand(private val plugin: Main) : CommandExecutor, TabComple
     when (args.getOrNull(0)?.lowercase()) {
       null,
       "status" -> showAccessStatus(sender)
-      "set" -> setAccessBoolean(sender, args)
+      "set" -> setAccessBoolean(sender, base, args)
       "command" -> setCommandRoles(sender, args)
-      "role" -> setRole(sender, args)
+      "role" -> setRole(sender, base, args)
       "command-blocks" ->
           setCommandList(
               sender,
@@ -130,13 +130,13 @@ class ServerConfigCommand(private val plugin: Main) : CommandExecutor, TabComple
     }
   }
 
-  private fun setAccessBoolean(sender: CommandSender, args: List<String>) {
+  private fun setAccessBoolean(sender: CommandSender, base: String, args: List<String>) {
     val key = args.getOrNull(1)?.lowercase()
     val value = args.getOrNull(2)?.lowercase()
     if (key == null || key !in BOOLEAN_KEYS || value !in listOf("true", "false")) {
       MessageUtil.error(
           sender,
-          "使い方: /csm config access set <${BOOLEAN_KEYS.joinToString("|")}> <true|false>",
+          "使い方: $base access set <${BOOLEAN_KEYS.joinToString("|")}> <true|false>",
       )
       return
     }
@@ -163,13 +163,13 @@ class ServerConfigCommand(private val plugin: Main) : CommandExecutor, TabComple
     )
   }
 
-  private fun setRole(sender: CommandSender, args: List<String>) {
+  private fun setRole(sender: CommandSender, base: String, args: List<String>) {
     val role = args.getOrNull(1)?.lowercase()
     val field = args.getOrNull(2)?.lowercase()
     if (!isSafeId(role) || field !in listOf("permission", "inherits")) {
       MessageUtil.error(
           sender,
-          "使い方: /csm config access role <role> <permission|inherits> <value...>",
+          "使い方: $base access role <role> <permission|inherits> <value...>",
       )
       return
     }
