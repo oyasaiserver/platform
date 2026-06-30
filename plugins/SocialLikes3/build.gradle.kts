@@ -7,7 +7,6 @@ dependencies {
   compileOnly(libs.fawe.bukkit)
   implementation(libs.kotlin.stdlib)
   implementation(libs.inventoryframework)
-  implementation(libs.anvilgui)
   implementation(libs.javacord)
   implementation(libs.ultimateadvancementapi)
 }

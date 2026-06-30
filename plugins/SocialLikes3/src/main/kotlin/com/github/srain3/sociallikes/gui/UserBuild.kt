@@ -13,7 +13,6 @@ import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.*
 import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Player
@@ -330,40 +329,27 @@ object UserBuild {
     return headItemList
   }
 
-  /** オフラインプレイヤーを検索するためのAnvilGUIを開く */
+  /** オフラインプレイヤー検索用の金床入力を開く */
   @Suppress("DEPRECATION")
   private fun offlinePlayerSearch(player: Player) {
-    AnvilGUI.Builder().apply {
-      itemLeft(
-          ItemStack(Material.PLAYER_HEAD)
-              .allFlag()
-              .addText(
-                  "ここにプレイヤー名",
-                  mutableListOf("&7出力先(右側)にあるこのヘッドをクリックで確定します", "&7普通に閉じた場合はキャンセルです"),
-              )
-      )
-      onClick { slot, e ->
-        if (slot != AnvilGUI.Slot.OUTPUT) {
-          return@onClick listOf()
-        }
-
-        if (e.text.isNotBlank()) {
-          val sPlayer = Bukkit.getOfflinePlayer(e.text)
-          object : BukkitRunnable() {
-                override fun run() {
-                  createGUI(sPlayer, player).show(player)
-                }
-              }
-              .runTaskLater(Tools.plugin, 1)
-          e.player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-          return@onClick listOf(AnvilGUI.ResponseAction.close())
-        } else {
-          return@onClick listOf(AnvilGUI.ResponseAction.replaceInputText(""))
-        }
-      }
-      title(Tools.socialLikesLOGOShort + "&0プレイヤー名検索".color())
-      plugin(Tools.plugin)
-      open(player)
+    val item =
+        ItemStack(Material.PLAYER_HEAD)
+            .allFlag()
+            .addText(
+                "ここにプレイヤー名",
+                mutableListOf("&7出力先(右側)にあるこのヘッドをクリックで確定します", "&7普通に閉じた場合はキャンセルです"),
+            )
+    SocialLikesAnvilInput.open(player, Tools.socialLikesLOGOShort + "&0プレイヤー名検索".color(), item) {
+        p,
+        text ->
+      val sPlayer = Bukkit.getOfflinePlayer(text)
+      object : BukkitRunnable() {
+            override fun run() {
+              createGUI(sPlayer, p).show(p)
+            }
+          }
+          .runTaskLater(Tools.plugin, 1)
+      p.playSound(p, Sound.UI_BUTTON_CLICK, 1F, 1F)
     }
   }
 }
