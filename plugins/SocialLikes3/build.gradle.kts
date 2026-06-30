@@ -1,5 +1,7 @@
+plugins { alias(libs.plugins.paperweight.userdev) }
+
 dependencies {
-  compileOnly(libs.purpur.api)
+  paperweightDevelopmentBundle(libs.paper.dev.bundle)
   compileOnly(libs.placeholderapi)
   compileOnly(libs.discordsrv)
   compileOnly(libs.luckperms.api)
