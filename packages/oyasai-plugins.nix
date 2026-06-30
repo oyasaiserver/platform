@@ -17,13 +17,10 @@ let
       toSource {
         root = ../.;
         fileset = unions [
-          # keep-sorted start
           ../build.gradle.kts
           ../gradle
-          ../gradle.properties
           ../plugins
           ../settings.gradle.kts
-          # keep-sorted end
         ];
       };
 
@@ -35,6 +32,10 @@ let
       "build"
       "--no-daemon"
     ];
+
+    # TODO: this feels like a weird place to set these options, but without the
+    # build fails with OOM.
+    _JAVA_OPTIONS = "-Xmx8g -Xms1g -XX:MaxMetaspaceSize=512m";
 
     installPhase = ''
       runHook preInstall
