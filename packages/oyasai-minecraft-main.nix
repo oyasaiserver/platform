@@ -57,6 +57,7 @@ oyasaiPurpur rec {
     fastasyncvoxelsniper
     fastasyncworldedit
     floodgate
+    gakubuchilocker
     gsit
     imageonmap
     inventoryshop

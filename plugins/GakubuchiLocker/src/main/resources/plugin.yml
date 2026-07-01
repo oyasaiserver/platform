@@ -1,0 +1,22 @@
+name: Gakubuchi-Locker
+version: ${version}
+main: com.gakubuchilocker.GakubuchiLockerPlugin
+api-version: "1.21"
+description: 額縁をロックして保護するプラグイン
+authors:
+  - GakubuchiLocker
+
+commands:
+  gakubuchilock:
+    description: 額縁のLockモードを切り替える
+    usage: /gakubuchilock <on|off>
+    permission: gakubuchilocker.use
+  gakubuchiunlock:
+    description: 額縁のUnlockモードを切り替える
+    usage: /gakubuchiunlock <on|off>
+    permission: gakubuchilocker.use
+
+permissions:
+  gakubuchilocker.use:
+    description: gakubuchilocker コマンドの使用を許可
+    default: true
