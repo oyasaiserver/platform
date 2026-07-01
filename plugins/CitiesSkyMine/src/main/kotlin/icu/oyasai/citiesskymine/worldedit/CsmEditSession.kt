@@ -31,8 +31,8 @@ object CsmEditSession {
         .use { editSession ->
           changed = edit(editSession)
           if (changed) {
-            Operations.complete(editSession.commit())
             undoRecorded = player?.let { FaweUndo.remember(it, editSession, logger) } ?: false
+            Operations.complete(editSession.commit())
           }
         }
     return Result(changed, undoRecorded)
