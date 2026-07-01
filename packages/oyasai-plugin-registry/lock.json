@@ -50,8 +50,8 @@
   "decentholograms": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/w02MKsTg/versions/nGwsH27P/DecentHolograms-2.10.0.jar",
-        "hash": "sha256-Hfe6Po6zqPvjm1pN3Huf2t51PizeMaz20U0uC/vAJ30="
+        "url": "https://cdn.modrinth.com/data/w02MKsTg/versions/Fva1FgWm/DecentHolograms-2.10.1.jar",
+        "hash": "sha256-4ke3Niwnfa0FlstItdFXCxAC+6AUpa/YRY2XiWOiU7Q="
       }
     }
   },
@@ -106,19 +106,19 @@
   "floodgate": {
     "paper": {
       "1.21.11": {
-        "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/134/downloads/spigot",
-        "hash": "sha256-0fnDmnmjwFjwOEuGx0fFN4naae1mI42kkWMpl59ck/A="
+        "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/138/downloads/spigot",
+        "hash": "sha256-RL25COL7T/G5dNUxPQSKYlohVVqYRM+4Ylapjo4ca9E="
       }
     },
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/134/downloads/velocity",
-      "hash": "sha256-s6sOyTbOIxJ2bGHYLrt/LHBGG+5iZ4rpHhke2S81Fnw="
+      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/138/downloads/velocity",
+      "hash": "sha256-UkdExcPeZ99LhK3IC6u/XZ8AQSwaWT90qK5ubd6SwG8="
     }
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.1/builds/1174/downloads/velocity",
-      "hash": "sha256-uCP/PlRMSHu8Ja6tY2aLdE7a3+mhRiljv2s7u6fjaug="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.1/builds/1177/downloads/velocity",
+      "hash": "sha256-rBxpvPYkcQTLxE+JmUp7nSBQ0LiJOuXrD1I3MUTdjZI="
     }
   },
   "gsit": {
@@ -181,7 +181,7 @@
     "paper": {
       "1.21.11": {
         "url": "https://cdn.spiget.org/file/spiget-resources/19286.jar",
-        "hash": "sha256-ajO5bapTVQhc36vpzTcOod9m6Hd/peLCngC5AE42VrA="
+        "hash": "sha256-GF3ZEdfdbg+TtW01kk6LYcZFLim3nCpzwx5I+Dx3egQ="
       }
     }
   },
@@ -220,8 +220,8 @@
   "openinv": {
     "paper": {
       "1.21.11": {
-        "url": "https://hangarcdn.papermc.io/plugins/jikoo/OpenInv/versions/5.3.2/PAPER/OpenInv.jar",
-        "hash": "sha256-wAPZe+2IidTolxgHCEJJ4Cjs7puTwCTN0xUVTe6wGQk="
+        "url": "https://hangarcdn.papermc.io/plugins/jikoo/OpenInv/versions/5.3.3/PAPER/OpenInv.jar",
+        "hash": "sha256-wFOSP+Zv7CKKFQnurG9e9oHmA/kXQbRrslmE7Dk2hwY="
       }
     }
   },
@@ -300,13 +300,13 @@
   "skinsrestorer": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/itZJnFwV/SkinsRestorer.jar",
-        "hash": "sha256-Qp71VLnmObThanrEr97l0nOsVKyoL+AhXGTexYsnxiM="
+        "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/jPoqTGpe/SkinsRestorer.jar",
+        "hash": "sha256-Vv7X2fpYYjVoUTB82yBwettdQ/DdZFGgIl670D6NBKA="
       }
     },
     "velocity": {
-      "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/itZJnFwV/SkinsRestorer.jar",
-      "hash": "sha256-Qp71VLnmObThanrEr97l0nOsVKyoL+AhXGTexYsnxiM="
+      "url": "https://cdn.modrinth.com/data/TsLS8Py5/versions/jPoqTGpe/SkinsRestorer.jar",
+      "hash": "sha256-Vv7X2fpYYjVoUTB82yBwettdQ/DdZFGgIl670D6NBKA="
     }
   },
   "skript": {
@@ -368,8 +368,8 @@
   "viaversion": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/z0sCGSmk/ViaVersion-5.10.1-SNAPSHOT.jar",
-        "hash": "sha256-HPuipEqT7WSR6cTnl3YFh85kcj3dsM2NgaZOFk9DDQM="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/WdWKG3E0/ViaVersion-5.10.1-SNAPSHOT.jar",
+        "hash": "sha256-09nOmLR2S1n3Bx1A/sGH+RpJUcmqD5s0Vmkh3HFQSqs="
       }
     }
   },
