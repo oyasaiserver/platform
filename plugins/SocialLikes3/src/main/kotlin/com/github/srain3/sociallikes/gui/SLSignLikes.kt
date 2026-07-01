@@ -1,6 +1,5 @@
 package com.github.srain3.sociallikes.gui
 
-import com.destroystokyo.paper.profile.ProfileProperty
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.addText
 import com.github.srain3.sociallikes.Tools.allFlag
@@ -13,11 +12,7 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
-import com.google.gson.JsonParser
-import java.net.HttpURLConnection
-import java.net.URL
 import java.time.format.DateTimeFormatter
-import java.util.Base64
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import net.md_5.bungee.api.chat.ClickEvent
@@ -32,12 +27,11 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.scheduler.BukkitTask
 
 object SLSignLikes {
 
-  private val profileCache = ConcurrentHashMap<UUID, Pair<String, String?>>()
+  private val profileCache = ConcurrentHashMap<UUID, SLPlayerHeads.ProfileData>()
 
   private fun createLoadingItem(): ItemStack {
     return ItemStack(Material.PLAYER_HEAD).apply {
@@ -50,81 +44,8 @@ object SLSignLikes {
     }
   }
 
-  private fun createBedrockItem(): ItemStack {
-    return ItemStack(Material.PLAYER_HEAD).apply {
-      itemMeta =
-          itemMeta?.apply {
-            setDisplayName("§7Bedrock Player")
-            lore = mutableListOf("§7統合版プレイヤー")
-            addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
-          }
-    }
-  }
-
-  private fun createUnknownItem(): ItemStack {
-    return ItemStack(Material.PLAYER_HEAD).apply {
-      itemMeta =
-          itemMeta?.apply {
-            setDisplayName("§cUnknown Player")
-            addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
-          }
-    }
-  }
-
   // 保留中のGUI更新タスク (スレッド安全のためConcurrentHashMapを使用)
   private val pendingUpdates = ConcurrentHashMap<ChestGui, BukkitTask>()
-
-  private fun isFloodgatePseudoUUID(uuid: UUID): Boolean {
-    return uuid.toString().startsWith("00000000-0000-0000-0009-")
-  }
-
-  private fun fetchFromPlayerDB(uuid: UUID): Pair<String, String?>? {
-    return try {
-      val cleanUuid = uuid.toString().replace("-", "")
-      val url = URL("https://playerdb.co/api/player/minecraft/$cleanUuid")
-      val conn = url.openConnection() as HttpURLConnection
-      conn.requestMethod = "GET"
-      conn.connectTimeout = 3000
-      conn.readTimeout = 3000
-      conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Minecraft Server / SocialLikes Plugin)")
-      conn.setRequestProperty("Accept", "application/json")
-      conn.instanceFollowRedirects = true
-
-      if (conn.responseCode != 200) return null
-
-      val response = conn.inputStream.bufferedReader().use { it.readText() }
-      val json = JsonParser.parseString(response).asJsonObject
-
-      if (json.get("code")?.asString != "player.found") return null
-
-      val playerObj = json.getAsJsonObject("data").getAsJsonObject("player")
-      val username = playerObj.get("username")?.asString ?: return null
-      val skinTexture = playerObj.get("skin_texture")?.asString
-
-      Pair(username, skinTexture)
-    } catch (e: Exception) {
-      null
-    }
-  }
-
-  private fun createPlayerHead(uuid: UUID, name: String, textureUrl: String?): ItemStack {
-    val item = ItemStack(Material.PLAYER_HEAD)
-    val meta = item.itemMeta as SkullMeta
-
-    val profile = Bukkit.createProfile(uuid, name)
-
-    if (textureUrl != null) {
-      val textureJson = """{"textures":{"SKIN":{"url":"$textureUrl"}}}"""
-      val base64 = Base64.getEncoder().encodeToString(textureJson.toByteArray(Charsets.UTF_8))
-      profile.properties.add(ProfileProperty("textures", base64))
-    }
-
-    meta.ownerProfile = profile
-    meta.setDisplayName("§f${name} の頭")
-    meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
-    item.itemMeta = meta
-    return item
-  }
 
   private fun scheduleUpdate(pagePane: PaginatedPane, headStacks: List<ItemStack>, gui: ChestGui) {
     pendingUpdates[gui]?.cancel()
@@ -168,44 +89,23 @@ object SLSignLikes {
                       .runTask(
                           Tools.plugin,
                           Runnable {
-                            headStacks[index] = createPlayerHead(uuid, cached.first, cached.second)
+                            headStacks[index] = SLPlayerHeads.createHead(uuid, cached)
                             scheduleUpdate(pagePane, headStacks, gui)
                           },
                       )
                   return@forEachIndexed
                 }
 
-                // 2. Floodgate擬似UUIDはAPI検索を完全スキップ
-                if (isFloodgatePseudoUUID(uuid)) {
+                val resolvedName = SLPlayerHeads.resolveName(uuid)
+
+                val skinsRestorerResult = SLPlayerHeads.fetchFromSkinsRestorer(uuid, resolvedName)
+                if (skinsRestorerResult != null) {
+                  profileCache[uuid] = skinsRestorerResult
                   Bukkit.getScheduler()
                       .runTask(
                           Tools.plugin,
                           Runnable {
-                            headStacks[index] = createBedrockItem()
-                            scheduleUpdate(pagePane, headStacks, gui)
-                          },
-                      )
-                  return@forEachIndexed
-                }
-
-                // 3. サーバーキャッシュ（usercache.json）から名前を取得
-                val resolvedName: String? =
-                    try {
-                      Bukkit.getOfflinePlayer(uuid).name
-                    } catch (e: Exception) {
-                      null
-                    }
-
-                // 4. PlayerDB APIで名前とテクスチャを一括取得
-                val playerDBResult = fetchFromPlayerDB(uuid)
-                if (playerDBResult != null) {
-                  profileCache[uuid] = playerDBResult
-                  Bukkit.getScheduler()
-                      .runTask(
-                          Tools.plugin,
-                          Runnable {
-                            headStacks[index] =
-                                createPlayerHead(uuid, playerDBResult.first, playerDBResult.second)
+                            headStacks[index] = SLPlayerHeads.createHead(uuid, skinsRestorerResult)
                             scheduleUpdate(pagePane, headStacks, gui)
                           },
                       )
@@ -213,26 +113,50 @@ object SLSignLikes {
                   return@forEachIndexed
                 }
 
-                // 5. PlayerDB失敗時 → サーバーキャッシュの名前があればそれで仮表示
-                if (resolvedName != null) {
-                  profileCache[uuid] = Pair(resolvedName, null)
+                val playerDBResult =
+                    if (SLPlayerHeads.isFloodgatePseudoUUID(uuid)) {
+                      null
+                    } else {
+                      SLPlayerHeads.fetchFromPlayerDB(uuid)
+                    }
+                if (playerDBResult != null) {
+                  profileCache[uuid] = playerDBResult
                   Bukkit.getScheduler()
                       .runTask(
                           Tools.plugin,
                           Runnable {
-                            headStacks[index] = createPlayerHead(uuid, resolvedName, null)
+                            headStacks[index] = SLPlayerHeads.createHead(uuid, playerDBResult)
+                            scheduleUpdate(pagePane, headStacks, gui)
+                          },
+                      )
+                  Thread.sleep(50)
+                  return@forEachIndexed
+                }
+
+                if (resolvedName != null) {
+                  val fallback = SLPlayerHeads.ProfileData(resolvedName, null)
+                  profileCache[uuid] = fallback
+                  Bukkit.getScheduler()
+                      .runTask(
+                          Tools.plugin,
+                          Runnable {
+                            headStacks[index] = SLPlayerHeads.createHead(uuid, fallback)
                             scheduleUpdate(pagePane, headStacks, gui)
                           },
                       )
                   return@forEachIndexed
                 }
 
-                // 6. 名前解決できなければ Unknown
                 Bukkit.getScheduler()
                     .runTask(
                         Tools.plugin,
                         Runnable {
-                          headStacks[index] = createUnknownItem()
+                          headStacks[index] =
+                              if (SLPlayerHeads.isFloodgatePseudoUUID(uuid)) {
+                                SLPlayerHeads.createBedrockFallbackItem()
+                              } else {
+                                SLPlayerHeads.createUnknownItem()
+                              }
                           scheduleUpdate(pagePane, headStacks, gui)
                         },
                     )
@@ -264,6 +188,7 @@ object SLSignLikes {
     gui.addPane(Slot.fromXY(0, 0), pagePane)
 
     loadHeadsAsync(slData.likes, headStacks, pagePane, gui)
+    val ownerName = SLPlayerHeads.resolveName(slData.owner) ?: "Unknown"
 
     val navigation = StaticPane(9, 1)
     navigation.addItem(
@@ -337,7 +262,7 @@ object SLSignLikes {
                 .addText(
                     "&f>>&a${slData.title} &rID:${slData.id}",
                     mutableListOf(
-                        "&3制作者:&f ${Bukkit.getOfflinePlayer(slData.owner).name}",
+                        "&3制作者:&f $ownerName",
                         "&3イイね:&f ${slData.likes.count()}",
                         "&3作成日:&f " +
                             slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
@@ -373,8 +298,7 @@ object SLSignLikes {
     }
 
     // --- 所有者ヘッド: createPlayerHead で統一 ---
-    val ownerName = Bukkit.getOfflinePlayer(slData.owner).name ?: "Unknown"
-    val ownerHeadItem = createPlayerHead(slData.owner, ownerName, null)
+    val ownerHeadItem = SLPlayerHeads.createHead(slData.owner, ownerName)
 
     navigation.addItem(
         GuiItem(
