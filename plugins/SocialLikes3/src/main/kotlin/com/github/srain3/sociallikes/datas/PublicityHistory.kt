@@ -26,6 +26,8 @@ object PublicityHistory {
                 data[dataID] = PublicityData(dataID, time, user, id)
                 lastID = max(lastID, dataID)
               }
+
+              SLDatabase.syncPublicityHistory(data.values.toList())
             },
             "SL3-loadPublicityHistoryData",
         )
@@ -37,11 +39,14 @@ object PublicityHistory {
     val dataID = lastID + 1
     lastID++
 
-    data[dataID] = PublicityData(dataID, time, user, slid)
+    val pData = PublicityData(dataID, time, user, slid)
+    data[dataID] = pData
     yaml.set("${dataID}.TimeStamp", time.toString())
     yaml.set("${dataID}.User", user.toString())
     yaml.set("${dataID}.SLID", slid)
     yaml.save()
+
+    SLDatabase.savePublicityHistory(pData)
   }
 
   fun delSLID(slid: Int) {
@@ -52,6 +57,8 @@ object PublicityHistory {
       }
     }
     yaml.save()
+
+    SLDatabase.deletePublicityHistoryBySLID(slid)
   }
 
   fun getData(): Map<Int, PublicityData> {

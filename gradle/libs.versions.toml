@@ -2,6 +2,8 @@
 anvilgui = {module = "net.wesjd:anvilgui", version.ref = "anvilgui"}
 discord-webhooks = {module = "club.minnced:discord-webhooks", version.ref = "discord-webhooks"}
 discordsrv = {module = "com.discordsrv:discordsrv", version.ref = "discordsrv"}
+exposed-core = {module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed"}
+exposed-jdbc = {module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed"}
 gson = {module = "com.google.code.gson:gson", version.ref = "gson"}
 inventoryframework = {module = "com.github.stefvanschie.inventoryframework:IF", version.ref = "inventoryframework"}
 javacord = {module = "org.javacord:javacord", version.ref = "javacord"}
@@ -14,6 +16,7 @@ purpur-api = {module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-a
 shadow-plugin = {module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow"}
 spotless-plugin = {module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless"}
 paper-dev-bundle = {module = "io.papermc.paper:dev-bundle", version.ref = "purpur-api"}
+sqlite-jdbc = {module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc"}
 tokenmanager = {module = "com.github.Realizedd:TokenManager", version.ref = "tokenmanager"}
 ultimateadvancementapi = {module = "com.frengor:ultimateadvancementapi-shadeable", version.ref = "ultimateadvancementapi"}
 vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
@@ -27,6 +30,7 @@ paperweight-userdev = {id = "io.papermc.paperweight.userdev", version.ref = "pap
 anvilgui = "1.10.11-SNAPSHOT"
 discord-webhooks = "0.8.4"
 discordsrv = "1.30.5"
+exposed = "0.61.0"
 gson = "2.14.0"
 inventoryframework = "0.12.0"
 javacord = "3.8.0"
@@ -36,6 +40,7 @@ nuvotifier = "2.7.2"
 placeholderapi = "2.11.6"
 purpur-api = "1.21.11-R0.1-SNAPSHOT"
 shadow = "9.4.1"
+sqlite-jdbc = "3.50.3.0"
 spotless = "8.5.1" # Ktfmt version must match that of Nixpkgs
 paperweight = "2.0.0-beta.21"
 tokenmanager = "3.2.4"
