@@ -125,7 +125,7 @@ jobs:
           java-version: "25"
           cache: gradle
       - run: |
-          ./gradlew build --parallel
+          ./gradlew build --parallel -Pkotlin.daemon.jvmargs=-Xmx4g
           ./gradlew fmt
           ./gradlew lock
 
