@@ -33,7 +33,7 @@ object UserBuild {
 
   /** GUIを返す */
   fun createGUI(user: OfflinePlayer, player: Player): ChestGui {
-    val name = user.name
+    val name = SLPlayerHeads.resolveName(user.uniqueId) ?: user.name ?: "Unknown"
     val gui = ChestGui(6, Tools.socialLikesLOGOShort + "&r ${name}の建築 p1".color())
     gui.setOnTopClick {
       it.isCancelled = true
@@ -112,9 +112,7 @@ object UserBuild {
           ) { event: InventoryClickEvent ->
             event.whoClicked.closeInventory()
             FollowBuild.newFollowerSave(user.uniqueId, event.whoClicked.uniqueId, true)
-            event.whoClicked.sendMessage(
-                Tools.socialLikesLOGO + "&r ${user.name}さんへのフォローを外しました".color()
-            )
+            event.whoClicked.sendMessage(Tools.socialLikesLOGO + "&r ${name}さんへのフォローを外しました".color())
           },
           6,
           0,
@@ -129,9 +127,7 @@ object UserBuild {
           ) { event: InventoryClickEvent ->
             event.whoClicked.closeInventory()
             FollowBuild.newFollowerSave(user.uniqueId, event.whoClicked.uniqueId, false)
-            event.whoClicked.sendMessage(
-                Tools.socialLikesLOGO + "&r ${user.name}さんをフォローしました！".color()
-            )
+            event.whoClicked.sendMessage(Tools.socialLikesLOGO + "&r ${name}さんをフォローしました！".color())
             event.whoClicked.sendMessage(
                 Tools.socialLikesLOGO + "&r \"/slmenu\"のフォロー建築一覧から建築を確認できます".color()
             )
@@ -187,11 +183,7 @@ object UserBuild {
         "&f>>&a${slData.title} &rID:${slData.id}",
         mutableListOf(
             "&3制作者:&f ${
-                try {
-                    Bukkit.getOfflinePlayer(slData.owner).name
-                } catch (_: Exception) {
-                    "不明"
-                }
+                SLPlayerHeads.resolveName(slData.owner) ?: "不明"
             }",
             "&3イイね:&f ${slData.likes.count()}",
             "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
@@ -319,9 +311,8 @@ object UserBuild {
   private fun onlinePlayerHeadItem(): MutableList<ItemStack> {
     val headItemList = mutableListOf<ItemStack>()
     Bukkit.getOnlinePlayers().forEach { player ->
-      val item = ItemStack(Material.PLAYER_HEAD)
+      val item = SLPlayerHeads.createOnlineHead(player)
       val meta = item.itemMeta as SkullMeta
-      meta.setOwningPlayer(player)
       meta.persistentDataContainer.set(key, PersistentDataType.STRING, player.uniqueId.toString())
       item.itemMeta = meta
       headItemList.add(item)

@@ -5,6 +5,7 @@ import com.github.srain3.sociallikes.command.*
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.PlaceHolder
 import com.github.srain3.sociallikes.datas.PublicityHistory
+import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.srain3.sociallikes.gui.FollowBuild
 import com.github.srain3.sociallikes.gui.SocialLikesAnvilInput
@@ -21,6 +22,7 @@ class SocialLikes : JavaPlugin() {
 
   override fun onEnable() {
     advMain.enableSQLite(File(this.dataFolder, "Advancement.db"))
+    SLDatabase.init(this)
 
     server.pluginManager.registerEvents(Events, this)
     server.pluginManager.registerEvents(FollowBuild, this)
@@ -62,5 +64,6 @@ class SocialLikes : JavaPlugin() {
     }
     SLtp.userLastSLTPTimeSave()
     Events.offlineLikePointSave()
+    SLDatabase.close()
   }
 }

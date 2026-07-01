@@ -3,6 +3,8 @@ sqlite-jdbc = {module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc"}
 anvilgui = {module = "net.wesjd:anvilgui", version.ref = "anvilgui"}
 discord-webhooks = {module = "club.minnced:discord-webhooks", version.ref = "discord-webhooks"}
 discordsrv = {module = "com.discordsrv:discordsrv", version.ref = "discordsrv"}
+exposed-core = {module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed"}
+exposed-jdbc = {module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed"}
 gson = {module = "com.google.code.gson:gson", version.ref = "gson"}
 inventoryframework = {module = "com.github.stefvanschie.inventoryframework:IF", version.ref = "inventoryframework"}
 javacord = {module = "org.javacord:javacord", version.ref = "javacord"}
@@ -29,6 +31,7 @@ sqlite-jdbc = "3.50.3.0"
 anvilgui = "1.10.11-SNAPSHOT"
 discord-webhooks = "0.8.4"
 discordsrv = "1.30.5"
+exposed = "0.61.0"
 gson = "2.14.0"
 inventoryframework = "0.12.0"
 javacord = "3.8.0"

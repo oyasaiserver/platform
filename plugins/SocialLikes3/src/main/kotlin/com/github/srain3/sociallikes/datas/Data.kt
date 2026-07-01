@@ -63,6 +63,8 @@ object Data {
     }
     yml.save()
 
+    SLDatabase.saveBuild(data)
+
     // Cacheへ保存する(既にデータが有る場合は追加しない)
     val list = dataMap[dirName] ?: mutableListOf()
     if (list.none { it == data }) {
@@ -156,6 +158,8 @@ object Data {
 
     val yml = CustomYaml("data/" + dirName + "/${slData.id}.yml")
     yml.delete()
+
+    SLDatabase.deleteBuild(slData.id)
 
     SLRankUp.minusBuildTask(slData.owner)
   }
@@ -306,6 +310,12 @@ object Data {
                 SLRankUp.createDataTask()
               } catch (e: Exception) {
                 Tools.plugin.logger.severe("SLRankUp.createDataTaskにエラー: ${e.toString()}")
+              }
+
+              try {
+                SLDatabase.syncBuilds(getSLDataAll())
+              } catch (e: Exception) {
+                Tools.plugin.logger.warning("[SL3] SQLite shadow syncBuilds failed: ${e.message}")
               }
 
               loading = true
