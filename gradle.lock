@@ -373,28 +373,6 @@
       "hash": "sha256-r7XLRdQcH542dZCd5P7yQr3BzqRHagY0riD016VEM/8="
     }
   },
-  "com.frengor:ultimateadvancementapi-distribution:2.7.2": {
-    "ultimateadvancementapi-distribution-2.7.2.pom": {
-      "url": "https://nexus.frengor.com/repository/public/com/frengor/ultimateadvancementapi-distribution/2.7.2/ultimateadvancementapi-distribution-2.7.2.pom",
-      "hash": "sha256-gX0FPo/QYwa335jJ58Oy2JZbHTuDBn4d2zg3yzbz0ZQ="
-    }
-  },
-  "com.frengor:ultimateadvancementapi-parent:2.7.2": {
-    "ultimateadvancementapi-parent-2.7.2.pom": {
-      "url": "https://nexus.frengor.com/repository/public/com/frengor/ultimateadvancementapi-parent/2.7.2/ultimateadvancementapi-parent-2.7.2.pom",
-      "hash": "sha256-JABepaGPv5agcP+snSi9fz945lSKDKiz6Zh7flPDRvo="
-    }
-  },
-  "com.frengor:ultimateadvancementapi-shadeable:2.7.2": {
-    "ultimateadvancementapi-shadeable-2.7.2.jar": {
-      "url": "https://nexus.frengor.com/repository/public/com/frengor/ultimateadvancementapi-shadeable/2.7.2/ultimateadvancementapi-shadeable-2.7.2.jar",
-      "hash": "sha256-lOeL55rvkDS1ZH3RzoWhgTwa2m1NJXiWMNTSsv6Jzgg="
-    },
-    "ultimateadvancementapi-shadeable-2.7.2.pom": {
-      "url": "https://nexus.frengor.com/repository/public/com/frengor/ultimateadvancementapi-shadeable/2.7.2/ultimateadvancementapi-shadeable-2.7.2.pom",
-      "hash": "sha256-iNp5sMbMT6kUx6+yXVws26y3McAHeeBVBQgOdv13TaU="
-    }
-  },
   "com.github.MilkBowl:VaultAPI:1.7.1": {
     "VaultAPI-1.7.1.jar": {
       "url": "https://repo.purpurmc.org/snapshots/com/github/MilkBowl/VaultAPI/1.7.1/VaultAPI-1.7.1.jar",
