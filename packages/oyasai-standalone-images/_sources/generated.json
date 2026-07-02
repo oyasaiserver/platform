@@ -1,62 +1,82 @@
 {
-  "mariadb": {
-    "cargoLock": null,
-    "date": null,
-    "extract": null,
-    "name": "mariadb",
-    "passthru": null,
-    "pinned": false,
-    "src": {
-      "arch": "amd64",
-      "finalImageName": null,
-      "finalImageTag": null,
-      "imageDigest": "sha256:d8369cb7020907b44ab0a7a73f855e41cbd5b6da16e01fbd8b8fe21200c7a854",
-      "imageName": "mariadb",
-      "imageTag": "10.4.28",
-      "os": "linux",
-      "sha256": "sha256-pIEYzawoBIJI295R0ToQyueVVDGLfYItnn8mySwhvLs=",
-      "tlsVerify": null
+    "mariadb": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "mariadb",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "arch": "amd64",
+            "finalImageName": null,
+            "finalImageTag": null,
+            "imageDigest": "sha256:d8369cb7020907b44ab0a7a73f855e41cbd5b6da16e01fbd8b8fe21200c7a854",
+            "imageName": "mariadb",
+            "imageTag": "10.4.28",
+            "os": "linux",
+            "sha256": "sha256-pIEYzawoBIJI295R0ToQyueVVDGLfYItnn8mySwhvLs=",
+            "tlsVerify": null
+        },
+        "version": "10.4.28"
     },
-    "version": "10.4.28"
-  },
-  "mc-backup": {
-    "cargoLock": null,
-    "date": null,
-    "extract": null,
-    "name": "mc-backup",
-    "passthru": null,
-    "pinned": false,
-    "src": {
-      "arch": "amd64",
-      "finalImageName": null,
-      "finalImageTag": null,
-      "imageDigest": "sha256:3ee78d8c49d70efc4dfc06d362051b5a028d4f28f2f0fe095e3cbccd29ab511d",
-      "imageName": "itzg/mc-backup",
-      "imageTag": "2026.5.0",
-      "os": "linux",
-      "sha256": "sha256-VbYN9VF/9LJPXhH5HSISQ+3YzqJlliUtiE39oWFPcBw=",
-      "tlsVerify": null
+    "mc-backup": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "mc-backup",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "arch": "amd64",
+            "finalImageName": null,
+            "finalImageTag": null,
+            "imageDigest": "sha256:f4f2b46f4cd67c74ba65ea3c2a4effb19804e834e84a64c071a4f3a47ebd6b44",
+            "imageName": "itzg/mc-backup",
+            "imageTag": "2026.6.0",
+            "os": "linux",
+            "sha256": "sha256-AqUbsoGMSb9SebWLrzWcjWMhYrC6COVcUIikjjUGG2Q=",
+            "tlsVerify": null
+        },
+        "version": "2026.6.0"
     },
-    "version": "2026.5.0"
-  },
-  "mysql-backup": {
-    "cargoLock": null,
-    "date": null,
-    "extract": null,
-    "name": "mysql-backup",
-    "passthru": null,
-    "pinned": false,
-    "src": {
-      "arch": "amd64",
-      "finalImageName": null,
-      "finalImageTag": null,
-      "imageDigest": "sha256:9a9a12dc942c370040ced1d43ab9f7d1162e9fde7f38b0f7749c3516d79a812c",
-      "imageName": "databack/mysql-backup",
-      "imageTag": "1.4.0",
-      "os": "linux",
-      "sha256": "sha256-6I4SlD+N7jzTDqH7hfu6C7Sh4ALaL6WpkWqTjrhoCK0=",
-      "tlsVerify": null
+    "mysql-backup": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "mysql-backup",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "arch": "amd64",
+            "finalImageName": null,
+            "finalImageTag": null,
+            "imageDigest": "sha256:9a9a12dc942c370040ced1d43ab9f7d1162e9fde7f38b0f7749c3516d79a812c",
+            "imageName": "databack/mysql-backup",
+            "imageTag": "1.4.0",
+            "os": "linux",
+            "sha256": "sha256-6I4SlD+N7jzTDqH7hfu6C7Sh4ALaL6WpkWqTjrhoCK0=",
+            "tlsVerify": null
+        },
+        "version": "1.4.0"
     },
-    "version": "1.4.0"
-  }
+    "traefik": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "traefik",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "arch": "amd64",
+            "finalImageName": null,
+            "finalImageTag": null,
+            "imageDigest": "sha256:fcdef599e6259359833dd2e1d49f9e964f66825d69bd3dd468f51102ce013d03",
+            "imageName": "traefik",
+            "imageTag": "3.7.4",
+            "os": "linux",
+            "sha256": "sha256-R/XwyezYqVIK1+wm8DuDcdnCU4Z+qhfz8M9OWs64qFo=",
+            "tlsVerify": null
+        },
+        "version": "3.7.4"
+    }
 }

@@ -20,12 +20,12 @@
   };
   mc-backup = {
     pname = "mc-backup";
-    version = "2026.5.0";
+    version = "2026.6.0";
     src = dockerTools.pullImage {
       imageName = "itzg/mc-backup";
-      imageDigest = "sha256:3ee78d8c49d70efc4dfc06d362051b5a028d4f28f2f0fe095e3cbccd29ab511d";
-      sha256 = "sha256-VbYN9VF/9LJPXhH5HSISQ+3YzqJlliUtiE39oWFPcBw=";
-      finalImageTag = "2026.5.0";
+      imageDigest = "sha256:f4f2b46f4cd67c74ba65ea3c2a4effb19804e834e84a64c071a4f3a47ebd6b44";
+      sha256 = "sha256-AqUbsoGMSb9SebWLrzWcjWMhYrC6COVcUIikjjUGG2Q=";
+      finalImageTag = "2026.6.0";
       os = "linux";
       arch = "amd64";
     };
@@ -38,6 +38,18 @@
       imageDigest = "sha256:9a9a12dc942c370040ced1d43ab9f7d1162e9fde7f38b0f7749c3516d79a812c";
       sha256 = "sha256-6I4SlD+N7jzTDqH7hfu6C7Sh4ALaL6WpkWqTjrhoCK0=";
       finalImageTag = "1.4.0";
+      os = "linux";
+      arch = "amd64";
+    };
+  };
+  traefik = {
+    pname = "traefik";
+    version = "3.7.4";
+    src = dockerTools.pullImage {
+      imageName = "traefik";
+      imageDigest = "sha256:fcdef599e6259359833dd2e1d49f9e964f66825d69bd3dd468f51102ce013d03";
+      sha256 = "sha256-R/XwyezYqVIK1+wm8DuDcdnCU4Z+qhfz8M9OWs64qFo=";
+      finalImageTag = "3.7.4";
       os = "linux";
       arch = "amd64";
     };

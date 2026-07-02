@@ -5,11 +5,19 @@
 }:
 
 let
-  inherit (callPackage ./_sources/generated.nix { }) mariadb mc-backup mysql-backup;
+  inherit (callPackage ./_sources/generated.nix { })
+    # keep-sorted start
+    mariadb
+    mc-backup
+    mysql-backup
+    traefik
+    # keep-sorted end
+    ;
 in
 runCommandLocal "oyasai-standalone-images"
   {
     passthru = {
+      # keep-sorted start block=yes
       mariadb = oyasaiDockerTools.buildImage {
         name = mariadb.pname;
         fromImage = mariadb.src;
@@ -33,6 +41,15 @@ runCommandLocal "oyasai-standalone-images"
           Entrypoint = [ "/entrypoint" ];
         };
       };
+      traefik = oyasaiDockerTools.buildImage {
+        name = traefik.pname;
+        fromImage = traefik.src;
+        config = {
+          Entrypoint = [ "/entrypoint.sh" ];
+          Cmd = [ "traefik" ];
+        };
+      };
+      # keep-sorted end
     };
   }
   ''
