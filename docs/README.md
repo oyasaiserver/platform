@@ -1,71 +1,119 @@
-# Docs
+# docs について
 
-Public shared documentation for contributors and AI agents.
+この `docs/` フォルダーは、OyasaiServer の `platform` リポジトリで使う公開ドキュメント置き場です。
 
-Do not put personal information, secrets, private notes, raw personal logs, or large temporary outputs here.
+人間の共同作業者と AI エージェントが、同じ前提、同じ手順、同じ判断基準を読めるようにするための場所です。単なるメモ置き場ではなく、プロジェクトの状態、運用手順、AI が次回から同じ失敗をしないための知識を整理して残します。
 
-## One-Screen Map
+個人情報、秘密情報、非公開のサーバー詳細、生ログ、個人的な作業メモはここに置きません。公開してよい内容だけを `docs/` に残します。
+
+## まず読む場所
+
+人間が全体像を知りたい場合は、この README から読み始めてください。
+
+AI エージェントは次の順番で読みます。
+
+1. [`_MANIFEST.md`](_MANIFEST.md)
+2. [`00_Context/CONTEXT.md`](00_Context/CONTEXT.md)
+3. 必要に応じて [`00_Context/WORKFLOWS.md`](00_Context/WORKFLOWS.md) や各ディレクトリの `_MANIFEST.md`
+
+`_MANIFEST.md` は憲法のようなファイルです。公開境界、最初に読む場所、孤立した Markdown を作らないことなど、最小限の絶対ルールだけを書きます。
+
+`00_Context/CONTEXT.md` は地図です。`docs/` 全体の構造と、目的別にどこを読むべきかを案内します。
+
+`00_Context/WORKFLOWS.md` は手順書です。PR、docs 更新、プラグイン編集、AI の自己修正など、繰り返し使う作業手順をまとめています。
+
+## 全体の地図
 
 ```mermaid
 flowchart TD
-  Root["docs/_MANIFEST.md<br/>constitution<br/>protected"] --> Context["00_Context/CONTEXT.md<br/>repo context<br/>docs structure<br/>routing"]
-  Context --> Workflows["00_Context/WORKFLOWS.md<br/>shared procedures"]
-  Context --> P01["01_Projects/_MANIFEST.md"]
-  Context --> P02["02_Docs/_MANIFEST.md"]
-  Context --> P03["03_Outputs/_MANIFEST.md"]
-  Context --> P04["04_Resources/_MANIFEST.md"]
-  Context --> P05["05_PublicArchives/_MANIFEST.md"]
-  Context --> P99["99_Inbox/_MANIFEST.md"]
-  P01 --> ProjectIndex["01_Projects/INDEX.md"]
-  P01 --> Project["01_Projects/<category>/<project>/PROJECT.md"]
-  Project --> Sot["source_of_truth / related_paths"]
-  Sot --> Impl["plugins/ / packages/ / apps/ / external repo"]
+  Readme["README.md<br/>人間向けの全体説明"]
+  Root["_MANIFEST.md<br/>docs の憲法<br/>AI が最初に読む"]
+  Context["00_Context/CONTEXT.md<br/>構造と読み分け"]
+  Workflows["00_Context/WORKFLOWS.md<br/>共通手順"]
+  Projects["01_Projects/<br/>プロジェクト別の入口"]
+  SharedDocs["02_Docs/<br/>横断的な運用知識"]
+  Outputs["03_Outputs/<br/>公開できる検証結果"]
+  Resources["04_Resources/<br/>小さな公開資料"]
+  Archives["05_PublicArchives/<br/>公開できる過去資料"]
+  Inbox["99_Inbox/<br/>公開可能な未分類知識"]
+  Local["docs/local/<br/>Git管理外のローカルメモ"]
+  Impl["plugins/ / packages/ / nix/<br/>実装の真実"]
+
+  Readme --> Root
+  Root --> Context
+  Context --> Workflows
+  Context --> Projects
+  Context --> SharedDocs
+  Context --> Outputs
+  Context --> Resources
+  Context --> Archives
+  Context --> Inbox
+  Context --> Local
+  Projects --> Impl
 ```
 
-## Root Markdown
+## ディレクトリの役割
 
-| File | Purpose |
+| 場所 | 役割 |
 |---|---|
-| [`_MANIFEST.md`](_MANIFEST.md) | Constitution. AI agents must read this first. Protected from AI-only edits |
-| [`README.md`](README.md) | Human-readable overview and diagrams |
-| [`AGENTS.md`](AGENTS.md) | Thin AI entrypoint |
-| [`CLAUDE.md`](CLAUDE.md) | Thin Claude entrypoint |
-| [`GEMINI.md`](GEMINI.md) | Thin Gemini entrypoint |
+| [`00_Context/`](00_Context/) | `docs/` 全体の前提、構造、作業手順 |
+| [`01_Projects/`](01_Projects/) | 各プロジェクトの状態、入口、関連実装への案内 |
+| [`02_Docs/`](02_Docs/) | 複数プロジェクトにまたがる運用手順、ツール資料、AI運用ルール |
+| [`03_Outputs/`](03_Outputs/) | 公開してよい検証結果や生成物 |
+| [`04_Resources/`](04_Resources/) | 小さな公開サンプル、参考資料 |
+| [`05_PublicArchives/`](05_PublicArchives/) | 古くなったが公開してよい履歴資料 |
+| [`99_Inbox/`](99_Inbox/) | 公開可能だが分類しきれない知識 |
+| `docs/local/` | Git管理外のローカル専用メモ。必要な場合は AI が作成してよい |
 
-## Context Markdown
+## 公開用とローカル用
 
-| File | Purpose |
+`docs/` は基本的に公開リポジトリの一部です。残す内容は、将来の共同作業者や AI エージェントが読んでも問題ないものに限ります。
+
+| 場所 | Git追跡 | 用途 |
+|---|---:|---|
+| `docs/01_Projects/` | あり | プロジェクト別の公開コンテキスト |
+| `docs/02_Docs/` | あり | 横断的な公開手順、運用知識 |
+| `docs/99_Inbox/` | あり | 公開可能な未分類知識 |
+| `docs/local/` | なし | 非公開、ローカル依存、生ログ、判断保留のメモ |
+| ルート `local/` | なし | ローカルサーバーや実行時データ |
+| ルート `archive/` | なし | 個人的・一時的な退避 |
+
+`docs/local/` は、公開 docs に入れる前の下書きや、生ログ、ローカルサーバー調査、公開してよいか判断できないメモの置き場です。存在しない場合、AI エージェントは必要に応じて作成してよいです。
+
+ただし、`docs/local/` の中身は Git に載らないため、公開ドキュメントとして残したい知識は、要約して `docs/99_Inbox/`、`docs/02_Docs/`、または該当する `PROJECT.md` に昇格します。
+
+## AI エージェントを育てる仕組み
+
+この `docs/` には、AI エージェントが次回からよりよく動くための知識も置きます。
+
+中心になるのは [`02_Docs/ops/agentic-learning-loop/`](02_Docs/ops/agentic-learning-loop/) です。
+
+| ファイル | 役割 |
 |---|---|
-| [`00_Context/CONTEXT.md`](00_Context/CONTEXT.md) | Repository context, docs structure, and routing. Protected from AI-only edits |
-| [`00_Context/WORKFLOWS.md`](00_Context/WORKFLOWS.md) | Shared workflow procedures for any AI agent |
+| [`README.md`](02_Docs/ops/agentic-learning-loop/README.md) | AI の自己修正ループの考え方 |
+| [`corrections.md`](02_Docs/ops/agentic-learning-loop/corrections.md) | ユーザーからの訂正を、次回の行動ルールとして残す場所 |
+| [`memory-routing.md`](02_Docs/ops/agentic-learning-loop/memory-routing.md) | 知識を `docs/`、`99_Inbox/`、`docs/local/` のどこに置くかの判断基準 |
 
-## Directory Roles
+個人的な知識管理システムのように何でも保存するのではなく、`platform` では公開可能で、リポジトリ作業に役立つ知識だけを tracked docs に残します。
 
-| Directory | Manifest | Purpose |
-|---|---|---|
-| `01_Projects/` | [`01_Projects/_MANIFEST.md`](01_Projects/_MANIFEST.md) | Project pages and AI work entrypoints |
-| `02_Docs/` | [`02_Docs/_MANIFEST.md`](02_Docs/_MANIFEST.md) | Cross-cutting docs, ops, and tool references |
-| `03_Outputs/` | [`03_Outputs/_MANIFEST.md`](03_Outputs/_MANIFEST.md) | Public validation outputs and generated artifacts |
-| `04_Resources/` | [`04_Resources/_MANIFEST.md`](04_Resources/_MANIFEST.md) | Small public samples and reference resources |
-| `05_PublicArchives/` | [`05_PublicArchives/_MANIFEST.md`](05_PublicArchives/_MANIFEST.md) | Public deprecated or historical docs |
-| `99_Inbox/` | [`99_Inbox/_MANIFEST.md`](99_Inbox/_MANIFEST.md) | Public triage area |
+## どこに書くか迷ったら
 
-## Purpose Routing
-
-| Goal | Read |
+| 内容 | 置き場所 |
 |---|---|
-| Understand this docs design | `_MANIFEST.md`, then `00_Context/CONTEXT.md` |
-| Make a PR | `00_Context/WORKFLOWS.md` |
-| Update docs | target directory `_MANIFEST.md` |
-| Add a project | `01_Projects/_MANIFEST.md`, then `01_Projects/INDEX.md` |
-| Edit a plugin | target `01_Projects/minecraft-plugins/<plugin>/PROJECT.md`, then `plugins/<Plugin>/` |
-| Work on a tool | target `01_Projects/tools/<tool>/PROJECT.md` |
-| Check historical public docs | `05_PublicArchives/_MANIFEST.md` |
+| 特定プロジェクトの状態 | 該当する `01_Projects/.../PROJECT.md` |
+| 何度も使う作業手順 | `00_Context/WORKFLOWS.md` または `02_Docs/ops/` |
+| AI が次回から守るべき訂正 | `02_Docs/ops/agentic-learning-loop/corrections.md` |
+| 公開できるが分類不能な知識 | `99_Inbox/` |
+| 公開してよいか不明なメモ | `docs/local/` |
+| 生ログやローカルサーバー調査 | `docs/local/` またはルート `local/` |
+| 実装の正しい状態 | `plugins/`、`packages/`、`nix/` などの実装ディレクトリ |
 
-## Public vs Private Archive
+迷った場合は、まず [`02_Docs/ops/agentic-learning-loop/memory-routing.md`](02_Docs/ops/agentic-learning-loop/memory-routing.md) を読んでください。
 
-| Location | Git status | Use |
-|---|---|---|
-| `docs/05_PublicArchives/` | tracked | Public deprecated docs and migration records |
-| root `archive/` | ignored | Personal, temporary, local-only archive |
-| root `local/` | ignored | Local runtime data and private scratch state |
+## 重要なルール
+
+- `docs/` には公開してよい内容だけを書く。
+- 実装の真実は、原則として `plugins/`、`packages/`、`nix/` などの実装側にある。
+- 新しい Markdown を作ったら、どこかの `_MANIFEST.md`、`README.md`、`PROJECT.md`、`INDEX.md` から辿れるようにする。
+- ただの生ログや長い作業履歴は公開 docs に入れない。
+- AI の判断ミスを残す場合は、長い反省文ではなく、次回使える短い行動ルールにする。
