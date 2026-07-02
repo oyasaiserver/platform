@@ -64,7 +64,8 @@ docs/
   05_PublicArchives/
     _MANIFEST.md        Public deprecated or historical docs.
   99_Inbox/
-    _MANIFEST.md        Public triage area.
+    _MANIFEST.md        Public unsorted knowledge area.
+  local/                Git-ignored local-only notes, if needed.
 ```
 
 ## Read Routing
@@ -82,7 +83,9 @@ Read only what is needed for the task.
 | Store public validation output | `docs/03_Outputs/_MANIFEST.md` |
 | Store small public examples or samples | `docs/04_Resources/_MANIFEST.md` |
 | Check old public docs | `docs/05_PublicArchives/_MANIFEST.md` |
-| Put public but unsorted notes temporarily | `docs/99_Inbox/_MANIFEST.md` |
+| Store public but unsorted knowledge | `docs/99_Inbox/_MANIFEST.md` |
+| Route agent memory, corrections, or local-only notes | `docs/02_Docs/ops/agentic-learning-loop/memory-routing.md` |
+| Keep private, local, raw, or unresolved notes | `docs/local/` if needed; it is Git-ignored and may be created by agents |
 
 ## Read Flow
 
@@ -97,7 +100,9 @@ flowchart TD
   Goal -->|Public output| OutputsManifest["03_Outputs/_MANIFEST.md"]
   Goal -->|Resources| ResourcesManifest["04_Resources/_MANIFEST.md"]
   Goal -->|History| PublicArchives["05_PublicArchives/_MANIFEST.md"]
-  Goal -->|Triage| Inbox["99_Inbox/_MANIFEST.md"]
+  Goal -->|Public unsorted knowledge| Inbox["99_Inbox/_MANIFEST.md"]
+  Goal -->|Agent memory routing| MemoryRouting["02_Docs/ops/agentic-learning-loop/memory-routing.md"]
+  Goal -->|Local-only notes| LocalDocs["docs/local/ (Git ignored, create if needed)"]
   ProjectManifest --> ProjectIndex["01_Projects/INDEX.md"]
   ProjectIndex --> Project["PROJECT.md"]
   Project --> Sot["source_of_truth / related_paths"]
@@ -112,6 +117,7 @@ flowchart TD
 - Keep directory-specific rules in child `_MANIFEST.md` files.
 - Keep `README.md` human-readable, visual, and comprehensive.
 - Do not duplicate shared rules in adapter files such as `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`.
+- Use `docs/local/` for local-only docs memory when needed. It may be created by agents and is intentionally not tracked by Git.
 
 ## Build And Validation Basics
 

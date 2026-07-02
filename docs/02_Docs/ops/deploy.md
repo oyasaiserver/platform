@@ -2,7 +2,7 @@
 title: "デプロイ・ビルド手順"
 category: ops
 status: active
-owner: marzipan99
+owner: platform-maintainers
 source_of_truth: "docs/02_Docs/ops/deploy.md"
 related_paths:
   - dev-server/
@@ -46,7 +46,7 @@ cp plugins/OyasaiMenu/build/libs/OyasaiMenu.jar dev-server/plugins/
 /plugman reload OyasaiMenu
 ```
 
-**開発サーバー**: `/Users/aa/platform/dev-server/`
+**開発サーバー**: `dev-server/`（リポジトリルートからの相対パス）
 - Purpur 1.21.11
 - 主要プラグイン: FAWE, CitiesSkyMine, OyasaiMenu, Vault, PlaceholderAPI, PlugManX
 

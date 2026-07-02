@@ -2,7 +2,7 @@
 title: "Platform Workflows"
 category: meta
 status: active
-owner: marzipan99
+owner: platform-maintainers
 source_of_truth: "docs/00_Context/WORKFLOWS.md"
 related_paths:
   - docs/_MANIFEST.md
@@ -57,7 +57,9 @@ Use when the task asks for a branch, commit, push, or pull request.
     gh pr create
     ```
 
-If `CONTRIBUTING.md` exists, follow it over this workflow.
+Follow the repository-root `README.md` for current contribution, development,
+formatting, and build basics. If a future `CONTRIBUTING.md` exists, follow it
+over this workflow.
 
 ## Docs Update Workflow
 
@@ -67,9 +69,26 @@ Use when adding, moving, or editing Markdown under `docs/`.
 2. Read `docs/00_Context/CONTEXT.md`.
 3. Read the child `_MANIFEST.md` for the target directory.
 4. Place the file according to the target directory rules.
-5. Ensure the Markdown is reachable from `_MANIFEST.md`, `README.md`, `PROJECT.md`, or an `INDEX.md`.
-6. Do not place personal information, secrets, private notes, raw logs, or large temporary outputs in `docs/`.
-7. Run `nix fmt` and `git diff --check`.
+5. Classify unresolved knowledge before writing it:
+   - public-safe but unsorted: `docs/99_Inbox/`;
+   - private, local-only, raw, or not yet public-safe: Git-ignored `docs/local/`.
+6. Ensure tracked Markdown is reachable from `_MANIFEST.md`, `README.md`, `PROJECT.md`, or an `INDEX.md`.
+7. Do not place personal information, secrets, private notes, raw logs, or large temporary outputs in tracked `docs/`.
+8. Run `nix fmt` and `git diff --check`.
+
+## Agentic Self-Correction Workflow
+
+Use when the user explicitly corrects an AI agent and the correction should change future behavior.
+
+1. Keep personal knowledge vaults, private note systems, and local workspaces separate from tracked `platform/docs`.
+2. Read `docs/02_Docs/ops/agentic-learning-loop/README.md`.
+3. Read `docs/02_Docs/ops/agentic-learning-loop/memory-routing.md`.
+4. If the correction is reusable, concrete, and public-safe, add or update a short rule in `docs/02_Docs/ops/agentic-learning-loop/corrections.md`.
+5. Store only repository-scoped information needed to operate or contribute to this monorepo.
+6. Do not store private context, raw chat logs, secrets, personal notes, or local-only server details in tracked docs.
+7. If the correction is private or too detailed for public docs, keep the raw note in Git-ignored `docs/local/` and store only a public-safe rule in `docs/`.
+8. Do not defer durable agent knowledge with "write it later"; record it during the same task or explain why it was not recorded.
+9. Report which learning-loop files were read or written.
 
 ## New Project Workflow
 
