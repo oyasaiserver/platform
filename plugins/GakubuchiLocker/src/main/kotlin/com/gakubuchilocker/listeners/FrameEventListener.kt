@@ -71,8 +71,8 @@ class FrameEventListener(private val plugin: GakubuchiLockerPlugin) : Listener {
             }
 
             null -> {
-                // 通常時: ロック済みで、かつオーナー以外なら保護
-                if (plugin.db.isLocked(frame.uniqueId) && plugin.db.getOwner(frame.uniqueId) != player.uniqueId) {
+                // 通常時: ロック済みで、かつオーナー以外なら保護 (OP は例外)
+                if (plugin.db.isLocked(frame.uniqueId) && plugin.db.getOwner(frame.uniqueId) != player.uniqueId && !player.isOp) {
                     event.isCancelled = true
                     player.sendMessage("§c[Gakubuchi] §fこの額縁はロックされており破壊できません。")
                 }
@@ -112,8 +112,8 @@ class FrameEventListener(private val plugin: GakubuchiLockerPlugin) : Listener {
         if (!plugin.db.isLocked(frame.uniqueId)) return
 
         val remover = event.remover
-        if (remover is Player && plugin.db.getOwner(frame.uniqueId) == remover.uniqueId) {
-            // オーナー本人が破壊 → DBからロック情報を削除して通過
+        if (remover is Player && (plugin.db.getOwner(frame.uniqueId) == remover.uniqueId || remover.isOp)) {
+            // オーナー本人、または OP が破壊 → DBからロック情報を削除して通過
             plugin.db.unlockFrame(frame.uniqueId)
             return
         }
