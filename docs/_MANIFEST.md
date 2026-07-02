@@ -26,6 +26,7 @@ After reading this file, read:
 
 Implementation truth lives outside `docs/` unless a project explicitly says otherwise.
 
+- Repository overview and contribution/development basics: repository-root `README.md`
 - Plugin implementation: `plugins/*/`
 - Packages and infrastructure: `packages/*/`, `nix/`, `flake.nix`, `build.gradle.kts`
 - Project context and navigation: `docs/01_Projects/<category>/<project>/PROJECT.md`

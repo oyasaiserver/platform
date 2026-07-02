@@ -57,7 +57,9 @@ Use when the task asks for a branch, commit, push, or pull request.
     gh pr create
     ```
 
-If `CONTRIBUTING.md` exists, follow it over this workflow.
+Follow the repository-root `README.md` for current contribution, development,
+formatting, and build basics. If a future `CONTRIBUTING.md` exists, follow it
+over this workflow.
 
 ## Docs Update Workflow
 
