@@ -1,24 +1,12 @@
 package com.github.srain3.sociallikes.discord
 
 import com.github.srain3.sociallikes.CustomYaml
-import com.github.srain3.sociallikes.Events
 import com.github.srain3.sociallikes.Tools
-import com.github.srain3.sociallikes.Tools.color
-import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
-import com.github.srain3.sociallikes.gui.AllBuild
-import com.github.srain3.sociallikes.gui.UserBuild
-import github.scarsz.discordsrv.DiscordSRV
 import java.awt.Color
 import java.time.format.DateTimeFormatter
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.Sound
-import org.bukkit.block.Sign
-import org.bukkit.block.sign.Side
-import org.bukkit.inventory.ItemStack
-import org.bukkit.scheduler.BukkitRunnable
 import org.javacord.api.DiscordApi
 import org.javacord.api.DiscordApiBuilder
 import org.javacord.api.entity.message.embed.EmbedBuilder
@@ -52,97 +40,7 @@ object SLDiscord {
     DiscordApiBuilder()
         .setToken(token)
         .login()
-        .thenAccept {
-          discordApi = it
-          it.addReactionAddListener { event ->
-            if (event.channel.id != textChID) return@addReactionAddListener
-            if (!event.emoji.equalsEmoji("👍")) {
-              return@addReactionAddListener
-            }
-            val uuid =
-                DiscordSRV.getPlugin().accountLinkManager.linkedAccounts[event.userIdAsString]
-                    ?: return@addReactionAddListener
-            val player = Bukkit.getOfflinePlayer(uuid)
-
-            // いいねを行う処理
-            if (!Data.loading) return@addReactionAddListener
-            val messageID = event.messageId
-            val embed = event.channel.getMessageById(messageID)
-            val id = embed.get().embeds.first().description.get().replace("ID:", "").toInt()
-            val data = Data.getSLData(id) ?: return@addReactionAddListener
-
-            // 良いねを行っているか判断
-            if (!data.likes.none { likeUUID -> likeUUID == uuid }) return@addReactionAddListener
-            // いいねを行う
-            // データに記録・保存する
-            data.likes.add(uuid)
-            Data.save(data)
-            Data.changeUserLikesInt(data.owner, 1)
-            AllBuild.updateSLSignData(data)
-            UserBuild.updateSLSignData(data)
-
-            object : BukkitRunnable() {
-                  override fun run() {
-                    // 制作者がオンラインの場合通知
-                    val ownerPlayer = Bukkit.getPlayer(data.owner)
-                    if (ownerPlayer?.isOnline == true) {
-                      /*ownerPlayer.spigot().sendMessage(TextComponent(Tools.socialLikesLOGO + "&r「&a${data.title}&7(ID:${id})&r」が ${e.player.name}さんからイイねされました！".color()).apply {
-                          this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
-                          this.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
-                      })*/
-                      Tools.displaySocialLikeToast(
-                          ownerPlayer,
-                          ItemStack(Material.OAK_SIGN),
-                          Tools.socialLikesLOGOShort +
-                              "&a${data.title}&7ID:${id}&r\n${player.name}&7<&rイイね!".color(),
-                      )
-                      ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
-                      if (uuid != data.owner) {
-                        Bukkit.dispatchCommand(
-                            Bukkit.getConsoleSender(),
-                            "tokenmanager:tm add ${ownerPlayer.name} 2",
-                        )
-                      }
-                    } else {
-                      Events.offlineLikesPoint[data.owner] =
-                          (Events.offlineLikesPoint[data.owner] ?: 0) + 2
-                    }
-                    val block = data.loc.block.state
-                    if (block !is Sign) return
-                    // 看板ブロックへlike数を反映させる
-                    if (
-                        Events.checkMarkRegex.containsMatchIn(block.getSide(Side.FRONT).getLine(3))
-                    ) {
-                      block
-                          .getSide(Side.FRONT)
-                          .setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
-                      if (player.isOp) {
-                        if (!data.check) {
-                          data.check = true
-                          Data.save(data)
-                        }
-                      }
-                    } else {
-                      if (player.isOp) {
-                        block
-                            .getSide(Side.FRONT)
-                            .setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
-                        if (!data.check) {
-                          data.check = true
-                          Data.save(data)
-                        }
-                      } else {
-                        block
-                            .getSide(Side.FRONT)
-                            .setLine(3, "&7Likes&8: &6${data.likes.count()}".color())
-                      }
-                    }
-                    block.update()
-                  }
-                }
-                .runTask(Tools.plugin)
-          }
-        }
+        .thenAccept { discordApi = it }
         .exceptionally { _: Throwable? ->
           // Log a warning when the login to Discord failed (wrong token?)
           Tools.plugin.logger.warning("Failed to connect to Discord! Disabling plugin!")

@@ -10,7 +10,6 @@ dependencies {
   implementation(libs.kotlin.stdlib)
   implementation(libs.inventoryframework)
   implementation(libs.javacord)
-  implementation(libs.ultimateadvancementapi)
   implementation(libs.exposed.core)
   implementation(libs.exposed.jdbc)
   implementation(libs.sqlite.jdbc)

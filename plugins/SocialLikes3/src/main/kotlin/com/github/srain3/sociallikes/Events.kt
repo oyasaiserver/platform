@@ -254,14 +254,11 @@ object Events : Listener {
               ownerPlayer,
               ItemStack(Material.OAK_SIGN),
               Tools.socialLikesLOGOShort +
-                  "&a${data.title}&7ID:${id}&r\n${e.player.name}&7<&rイイね!".color(),
+                  "&a${data.title} &7ID:${id}&r\n${e.player.name}&7 > &rイイね!".color(),
           )
           ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
           if (e.player.uniqueId != data.owner) {
-            Bukkit.dispatchCommand(
-                Bukkit.getConsoleSender(),
-                "tokenmanager:tm add ${ownerPlayer.name} 2",
-            )
+            Tools.addTokens(ownerPlayer, 2)
           }
         } else {
           offlineLikesPoint[data.owner] = (offlineLikesPoint[data.owner] ?: 0) + 2
@@ -375,10 +372,7 @@ object Events : Listener {
   @EventHandler
   fun joinEvent(e: PlayerJoinEvent) {
     val pointInt = offlineLikesPoint[e.player.uniqueId] ?: return
-    Bukkit.dispatchCommand(
-        Bukkit.getConsoleSender(),
-        "tokenmanager:tm add ${e.player.name} $pointInt",
-    )
+    Tools.addTokens(e.player, pointInt.toLong())
     offlineLikesPoint.remove(e.player.uniqueId)
   }
 
