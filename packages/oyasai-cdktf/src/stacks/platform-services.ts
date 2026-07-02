@@ -50,12 +50,17 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
       // keep-sorted start
+      alloy: imageIds["oyasai-alloy"],
+      grafana: imageIds["oyasai-grafana"],
+      loki: imageIds["oyasai-loki"],
       mariadb: imageIds.mariadb,
+      mcMonitorExporter: imageIds["oyasai-mc-monitor-exporter"],
       minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
       minecraftBackup: imageIds["mc-backup"],
       minecraftLobby: imageIds["oyasai-minecraft-lobby"],
       minecraftMain: imageIds["oyasai-minecraft-main"],
       mysqlBackup: imageIds["mysql-backup"],
+      prometheus: imageIds["oyasai-prometheus"],
       velocity: imageIds["oyasai-velocity"],
       // keep-sorted end
     } as const;
@@ -63,10 +68,12 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const baseHostPath = join("/opt/platform", this.environment);
     const hostPaths = {
       // keep-sorted start
+      loki: join(baseHostPath, "loki"),
       mariadb: join(baseHostPath, "mariadb"),
       minecraftAxiom: join(baseHostPath, "minecraft-axiom"),
       minecraftLobby: join(baseHostPath, "minecraft-lobby"),
       minecraftMain: join(baseHostPath, "minecraft-main"),
+      prometheus: join(baseHostPath, "prometheus"),
       velocity: join(baseHostPath, "velocity"),
       // keep-sorted end
     } as const;
@@ -290,5 +297,65 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         }),
       });
     }
+
+    new Container(this, this.t("mc-monitor-exporter-container"), {
+      image: images.mcMonitorExporter,
+      name: "mc-monitor-exporter",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      env: envs({
+        EXPORT_SERVERS: [
+          `${minecraftMainContainer.name}:25565`,
+          `${minecraftLobbyContainer.name}:25565`,
+        ].join(","),
+      }),
+    });
+
+    new Container(this, this.t("loki-container"), {
+      image: images.loki,
+      name: "loki",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      volumes: [
+        {
+          containerPath: "/data",
+          hostPath: hostPaths.loki,
+        },
+      ],
+    });
+
+    new Container(this, this.t("alloy-container"), {
+      image: images.alloy,
+      name: "alloy",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      volumes: [
+        {
+          containerPath: "/var/run/docker.sock",
+          hostPath: "/var/run/docker.sock",
+        },
+      ],
+    });
+
+    new Container(this, this.t("prometheus-container"), {
+      image: images.prometheus,
+      name: "prometheus",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      volumes: [
+        {
+          containerPath: "/data",
+          hostPath: hostPaths.prometheus,
+        },
+      ],
+    });
+
+    new Container(this, this.t("grafana-container"), {
+      image: images.grafana,
+      name: "grafana",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      ports: ports({ tcp: [3000] }),
+    });
   }
 }
