@@ -18,6 +18,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Biome
 import org.bukkit.block.BlockFace
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -248,17 +249,7 @@ object Data {
                   likesStr.forEach { uuidStr -> likes.add(UUID.fromString(uuidStr)) }
 
                   // likesWithTimestampのロード
-                  val rawLikesWithTimestamp = yml.get("likesWithTimestamp")
-                  val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf()
-                  if (rawLikesWithTimestamp is Map<*, *>) {
-                    rawLikesWithTimestamp.forEach { (k, v) ->
-                      try {
-                        val uuid = UUID.fromString(k as String)
-                        val ts = (v as? Number)?.toLong() ?: v.toString().toLongOrNull()
-                        if (ts != null) likesWithTimestamp[uuid] = ts
-                      } catch (_: Exception) {}
-                    }
-                  }
+                  val likesWithTimestamp = loadLikesWithTimestamp(yml)
 
                   // Cacheへ入れる
                   val slData =
@@ -324,6 +315,43 @@ object Data {
             "SL3-loadFileToDataCache",
         )
         .start()
+  }
+
+  private fun loadLikesWithTimestamp(yml: CustomYamlFile): MutableMap<UUID, Long> {
+    val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf()
+    val section = yml.getConfigurationSection("likesWithTimestamp")
+
+    if (section != null) {
+      section.getKeys(false).forEach { uuidStr ->
+        putLikeTimestamp(likesWithTimestamp, uuidStr, section.get(uuidStr))
+      }
+      return likesWithTimestamp
+    }
+
+    val rawLikesWithTimestamp = yml.get("likesWithTimestamp")
+    if (rawLikesWithTimestamp is Map<*, *>) {
+      rawLikesWithTimestamp.forEach { (uuid, timestamp) ->
+        putLikeTimestamp(likesWithTimestamp, uuid as? String, timestamp)
+      }
+    } else if (rawLikesWithTimestamp is ConfigurationSection) {
+      rawLikesWithTimestamp.getKeys(false).forEach { uuidStr ->
+        putLikeTimestamp(likesWithTimestamp, uuidStr, rawLikesWithTimestamp.get(uuidStr))
+      }
+    }
+
+    return likesWithTimestamp
+  }
+
+  private fun putLikeTimestamp(
+      likesWithTimestamp: MutableMap<UUID, Long>,
+      uuidStr: String?,
+      timestamp: Any?,
+  ) {
+    try {
+      val uuid = UUID.fromString(uuidStr ?: return)
+      val ts = (timestamp as? Number)?.toLong() ?: timestamp?.toString()?.toLongOrNull() ?: return
+      likesWithTimestamp[uuid] = ts
+    } catch (_: Exception) {}
   }
 
   /** WorldNameとchunk別のslDataMap */

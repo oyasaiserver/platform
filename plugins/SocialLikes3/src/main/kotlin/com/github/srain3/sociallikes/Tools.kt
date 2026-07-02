@@ -1,18 +1,20 @@
 package com.github.srain3.sociallikes
 
-import com.fren_gor.ultimateAdvancementAPI.UltimateAdvancementAPI
-import com.fren_gor.ultimateAdvancementAPI.advancement.display.AdvancementFrameType
 import com.github.srain3.sociallikes.Events.idKey
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.discord.SLDiscord
 import java.io.File
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.collections.set
 import me.realized.tokenmanager.api.TokenManager
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.luckperms.api.LuckPermsProvider
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.block.BlockState
 import org.bukkit.block.Sign
 import org.bukkit.block.sign.Side
@@ -34,12 +36,22 @@ object Tools {
 
   /** TokenManagerを返す、無ければnull */
   fun getTokenManager(): TokenManager? {
-    val tmPlugin = Bukkit.getServer().pluginManager.getPlugin("TokenManager")
-    return if (tmPlugin != null) {
-      tmPlugin as TokenManager
-    } else {
-      null
+    Bukkit.getServer().servicesManager.getRegistration(TokenManager::class.java)?.provider?.let {
+      return it
     }
+
+    return Bukkit.getServer().pluginManager.getPlugin("TokenManager") as? TokenManager
+  }
+
+  fun addTokens(player: Player, amount: Long): Boolean {
+    val tokenManager = getTokenManager()
+    if (tokenManager == null) {
+      plugin.logger.warning(
+          "TokenManager is not available. Failed to add $amount tokens to ${player.name}."
+      )
+      return false
+    }
+    return tokenManager.addTokens(player, amount)
   }
 
   fun canUseCreative(player: Player): Boolean {
@@ -70,6 +82,11 @@ object Tools {
   /** SocialLikeロゴ？ */
   val socialLikesLOGOShort = "&8(&5S&7L&8)".color()
 
+  private const val TOAST_CRITERION = "trigger"
+  private val legacyAmpersandColorRegex = Regex("(?i)&[0-9A-FK-OR]")
+  private val legacySectionSerializer = LegacyComponentSerializer.legacySection()
+  private val gsonComponentSerializer = GsonComponentSerializer.gson()
+  private val advancementToastSequence = AtomicLong()
   private var advancementToastDisabled = false
 
   /** ItemStackに表示名と説明を追加する(自動カラー化付き) */
@@ -210,28 +227,118 @@ object Tools {
     block.update()
   }
 
-  /** AdvancementAPI */
-  val advAPI by lazy { UltimateAdvancementAPI.getInstance(plugin) }
-
   fun displaySocialLikeToast(player: Player, icon: ItemStack, text: String): Boolean {
-    if (advancementToastDisabled) return false
+    val fallbackText = text.withoutLegacyColorCodes()
+    if (advancementToastDisabled) {
+      sendSocialLikeActionBar(player, fallbackText)
+      return false
+    }
     return try {
-      advAPI.displayCustomToast(player, icon, text, AdvancementFrameType.TASK)
+      loadAndAwardSocialLikeToast(player, icon, text)
       true
     } catch (throwable: LinkageError) {
-      disableAdvancementToast(throwable)
+      handleAdvancementToastFailure(player, fallbackText, throwable)
     } catch (throwable: RuntimeException) {
-      disableAdvancementToast(throwable)
+      handleAdvancementToastFailure(player, fallbackText, throwable)
     }
   }
 
-  private fun disableAdvancementToast(throwable: Throwable): Boolean {
+  private fun loadAndAwardSocialLikeToast(player: Player, icon: ItemStack, text: String) {
+    val key =
+        NamespacedKey(
+            plugin,
+            "social_like_toast_" +
+                player.uniqueId.toString().replace("-", "") +
+                "_" +
+                System.currentTimeMillis() +
+                "_" +
+                advancementToastSequence.incrementAndGet(),
+        )
+    val advancement =
+        Bukkit.getUnsafe().loadAdvancement(key, createSocialLikeToastJson(icon, text))
+            ?: throw IllegalStateException("Bukkit returned null advancement for $key")
+
+    player.getAdvancementProgress(advancement).awardCriteria(TOAST_CRITERION)
+    Bukkit.getScheduler()
+        .runTaskLater(
+            plugin,
+            Runnable {
+              try {
+                Bukkit.getPlayer(player.uniqueId)
+                    ?.getAdvancementProgress(advancement)
+                    ?.takeIf { TOAST_CRITERION in it.awardedCriteria }
+                    ?.revokeCriteria(TOAST_CRITERION)
+              } finally {
+                Bukkit.getUnsafe().removeAdvancement(key)
+              }
+            },
+            20L,
+        )
+  }
+
+  private fun createSocialLikeToastJson(icon: ItemStack, text: String): String {
+    val title = text.ifBlank { "SocialLikes" }
+    val iconType = icon.type.takeIf { it.isItem } ?: Material.OAK_SIGN
+
+    return """
+      {
+        "criteria": {
+          "$TOAST_CRITERION": {
+            "trigger": "minecraft:impossible"
+          }
+        },
+        "display": {
+          "announce_to_chat": false,
+          "background": "minecraft:gui/advancements/backgrounds/adventure",
+          "description": ${legacyJsonText("\n§7A notification.")},
+          "frame": "task",
+          "hidden": true,
+          "icon": {
+            "count": 1,
+            "id": "${iconType.key.asString()}"
+          },
+          "show_toast": true,
+          "title": ${legacyJsonText(title)}
+        },
+        "requirements": [
+          [
+            "$TOAST_CRITERION"
+          ]
+        ],
+        "sends_telemetry_event": false
+      }
+      """
+        .trimIndent()
+  }
+
+  private fun legacyJsonText(text: String): String {
+    return gsonComponentSerializer.serialize(legacySectionSerializer.deserialize(text))
+  }
+
+  private fun String.withoutLegacyColorCodes(): String {
+    return (ChatColor.stripColor(this) ?: this).replace(legacyAmpersandColorRegex, "")
+  }
+
+  private fun handleAdvancementToastFailure(
+      player: Player,
+      text: String,
+      throwable: Throwable,
+  ): Boolean {
+    disableAdvancementToast(throwable)
+    sendSocialLikeActionBar(player, text)
+    return false
+  }
+
+  private fun sendSocialLikeActionBar(player: Player, text: String) {
+    player.sendActionBar(text.lines().filter { it.isNotBlank() }.joinToString(" "))
+  }
+
+  private fun disableAdvancementToast(throwable: Throwable) {
     advancementToastDisabled = true
     plugin.logger.warning(
         "[SocialLikes3] Advancement toast notification has been disabled: " +
             "${throwable.javaClass.name}: ${throwable.message}"
     )
     plugin.logger.warning("[SocialLikes3] Likes, rewards, and sign updates will continue.")
-    return false
   }
 }

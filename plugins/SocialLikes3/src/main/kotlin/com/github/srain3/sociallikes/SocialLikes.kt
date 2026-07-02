@@ -1,6 +1,5 @@
 package com.github.srain3.sociallikes
 
-import com.fren_gor.ultimateAdvancementAPI.AdvancementMain
 import com.github.srain3.sociallikes.command.*
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.PlaceHolder
@@ -9,19 +8,21 @@ import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.srain3.sociallikes.gui.FollowBuild
 import com.github.srain3.sociallikes.gui.SocialLikesAnvilInput
-import java.io.File
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.StandardCopyOption
+import java.nio.file.attribute.BasicFileAttributes
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 class SocialLikes : JavaPlugin() {
-  private val advMain by lazy { AdvancementMain(this) }
-
-  override fun onLoad() {
-    advMain.load()
-  }
-
   override fun onEnable() {
-    advMain.enableSQLite(File(this.dataFolder, "Advancement.db"))
+    backupPluginDataOnStartup()
+
     SLDatabase.init(this)
 
     server.pluginManager.registerEvents(Events, this)
@@ -56,7 +57,6 @@ class SocialLikes : JavaPlugin() {
   }
 
   override fun onDisable() {
-    advMain.disable()
     SLDiscord.disable()
 
     if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -65,5 +65,46 @@ class SocialLikes : JavaPlugin() {
     SLtp.userLastSLTPTimeSave()
     Events.offlineLikePointSave()
     SLDatabase.close()
+  }
+
+  private fun backupPluginDataOnStartup() {
+    if (!dataFolder.exists()) {
+      return
+    }
+
+    val pluginsDir =
+        dataFolder.parentFile?.toPath()
+            ?: throw IllegalStateException("[SocialLikes3] Could not resolve plugins directory")
+    val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"))
+    val backupDir = pluginsDir.resolve("SocialLikes3-backups").resolve("startup-$timestamp")
+
+    try {
+      copyDirectory(dataFolder.toPath(), backupDir)
+      logger.info("[SocialLikes3] Startup backup created: $backupDir")
+    } catch (e: Exception) {
+      logger.severe("[SocialLikes3] Startup backup failed: ${e.message}")
+      throw IllegalStateException("SocialLikes3 startup backup failed", e)
+    }
+  }
+
+  private fun copyDirectory(source: Path, target: Path) {
+    Files.walkFileTree(
+        source,
+        object : SimpleFileVisitor<Path>() {
+          override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes) =
+              FileVisitResult.CONTINUE.also {
+                Files.createDirectories(target.resolve(source.relativize(dir)))
+              }
+
+          override fun visitFile(file: Path, attrs: BasicFileAttributes) =
+              FileVisitResult.CONTINUE.also {
+                Files.copy(
+                    file,
+                    target.resolve(source.relativize(file)),
+                    StandardCopyOption.COPY_ATTRIBUTES,
+                )
+              }
+        },
+    )
   }
 }
