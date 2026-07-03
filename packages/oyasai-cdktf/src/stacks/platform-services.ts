@@ -50,6 +50,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const imageIds = JSON.parse(process.env.OYASAI_IMAGE_ID as string);
     const images = {
       // keep-sorted start
+      caddy: imageIds["caddy"],
       mariadb: imageIds.mariadb,
       minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
       minecraftBackup: imageIds["mc-backup"],
@@ -63,6 +64,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const baseHostPath = join("/opt/platform", this.environment);
     const hostPaths = {
       // keep-sorted start
+      caddy: join(baseHostPath, "caddy"),
       mariadb: join(baseHostPath, "mariadb"),
       minecraftAxiom: join(baseHostPath, "minecraft-axiom"),
       minecraftLobby: join(baseHostPath, "minecraft-lobby"),
@@ -211,6 +213,45 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         {
           containerPath: "/data",
           hostPath: hostPaths.velocity,
+        },
+      ],
+    });
+
+    const helloWorldContainer = new Container(
+      this,
+      this.t("hello-world-container"),
+      {
+        image: "containous/whoami:latest",
+        name: "hello-world",
+        restart: "unless-stopped",
+        networksAdvanced: [network],
+      },
+    );
+
+    new Container(this, this.t("caddy-container"), {
+      image: images.caddy,
+      name: "caddy",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      ports: ports({
+        tcp: [
+          80, // http
+          443, // https
+        ],
+      }),
+      command: [
+        "reverse-proxy",
+        "--from",
+        // TODO: violation of layer - root dns should be defined per-env. This
+        // assumes that caddy only exists in master.
+        platformInfra.rootDnsRecord.name,
+        "--to",
+        `${helloWorldContainer.name}:80`,
+      ],
+      volumes: [
+        {
+          containerPath: "/data",
+          hostPath: hostPaths.caddy,
         },
       ],
     });

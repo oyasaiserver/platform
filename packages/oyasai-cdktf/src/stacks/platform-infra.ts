@@ -15,6 +15,7 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
   public readonly ipv4 = "121.81.157.109";
 
   public readonly r2Bucket: R2Bucket;
+  public readonly rootDnsRecord: DnsRecord;
 
   public constructor(
     scope: Construct,
@@ -41,19 +42,21 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
       location: this.isMaster ? "apac" : "enam",
     });
 
-    if (this.isMaster) {
-      // We _can_ make dns record for every environment, though it's currently
-      // unnecessary. - shun 2026-04
-      new DnsRecord(this, this.t("root-dns-record"), {
-        ttl: 1, // automatic
-        zoneId: oyasaiIoZone.id,
-        name: oyasaiIoRegistrarDomain.domainName,
-        type: "A",
-        proxied: false,
-        content: this.ipv4,
-      });
+    // TODO: centralize to vanity domains
+    this.rootDnsRecord = new DnsRecord(this, this.t("root-dns-record"), {
+      ttl: 1, // automatic
+      zoneId: oyasaiIoZone.id,
+      name: this.isMaster
+        ? oyasaiIoRegistrarDomain.domainName
+        : `${this.environment}.${oyasaiIoRegistrarDomain.domainName}`,
+      type: "A",
+      proxied: false,
+      content: this.ipv4,
+    });
 
+    if (this.isMaster) {
       // Proxy to our seesaawiki. Implicitly reserves `wiki.oyasai.io`.
+      // TODO: centralize to vanity domains
       new DnsRecord(this, "seesaawiki-cname-dns-record", {
         ttl: 1, // automatic
         zoneId: oyasaiIoZone.id,
