@@ -1,0 +1,13 @@
+{
+  "name": "oyasai-web",
+  "type": "module",
+  "bin": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "25.6.0",
+    "typescript": "6.0.2"
+  }
+}
