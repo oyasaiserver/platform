@@ -57,6 +57,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       minecraftLobby: imageIds["oyasai-minecraft-lobby"],
       minecraftMain: imageIds["oyasai-minecraft-main"],
       mysqlBackup: imageIds["mysql-backup"],
+      oyasaiWeb: imageIds["oyasai-web"],
       velocity: imageIds["oyasai-velocity"],
       // keep-sorted end
     } as const;
@@ -217,14 +218,17 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       ],
     });
 
-    const helloWorldContainer = new Container(
+    const oyasaiWebContainer = new Container(
       this,
-      this.t("hello-world-container"),
+      this.t("oyasai-web-container"),
       {
-        image: "containous/whoami:latest",
-        name: "hello-world",
+        image: images.oyasaiWeb,
+        name: "oyasai-web",
         restart: "unless-stopped",
         networksAdvanced: [network],
+        env: envs({
+          OYASAI_LISTEN_PORT: 80,
+        }),
       },
     );
 
@@ -242,11 +246,9 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       command: [
         "reverse-proxy",
         "--from",
-        // TODO: violation of layer - root dns should be defined per-env. This
-        // assumes that caddy only exists in master.
         platformInfra.rootDnsRecord.name,
         "--to",
-        `${helloWorldContainer.name}:80`,
+        oyasaiWebContainer.name,
       ],
       volumes: [
         {
