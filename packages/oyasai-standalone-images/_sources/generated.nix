@@ -6,6 +6,18 @@
   dockerTools,
 }:
 {
+  caddy = {
+    pname = "caddy";
+    version = "2.11.3";
+    src = dockerTools.pullImage {
+      imageName = "caddy";
+      imageDigest = "sha256:ec18ee54aab3315c22e25f3b2babda73ff8007d39b13b3bd1bfffa2f0444c7d9";
+      sha256 = "sha256-e7XCeWxwkjZKxLBOjc23j80pngi8jQZJ2kSfs7A9TaY=";
+      finalImageTag = "2.11.3";
+      os = "linux";
+      arch = "amd64";
+    };
+  };
   mariadb = {
     pname = "mariadb";
     version = "10.4.28";
@@ -20,12 +32,12 @@
   };
   mc-backup = {
     pname = "mc-backup";
-    version = "2026.5.0";
+    version = "2026.6.2";
     src = dockerTools.pullImage {
       imageName = "itzg/mc-backup";
-      imageDigest = "sha256:3ee78d8c49d70efc4dfc06d362051b5a028d4f28f2f0fe095e3cbccd29ab511d";
-      sha256 = "sha256-VbYN9VF/9LJPXhH5HSISQ+3YzqJlliUtiE39oWFPcBw=";
-      finalImageTag = "2026.5.0";
+      imageDigest = "sha256:324971bd9b77867c5ee8ca510d071e63b96402995c0fb027b270e72f893140db";
+      sha256 = "sha256-nd3L8u1LVXVjq6iPQqKrrtgPoCg8zI4DzvgP03uBjMk=";
+      finalImageTag = "2026.6.2";
       os = "linux";
       arch = "amd64";
     };
