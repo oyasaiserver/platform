@@ -34,92 +34,18 @@ class FrameEventListener(private val plugin: GakubuchiLockerPlugin) : Listener {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
   fun onEntityDamage(event: EntityDamageByEntityEvent) {
     val frame = event.entity as? ItemFrame ?: return
-    val player = event.damager as? Player ?: return
 
-<<<<<<< HEAD
-        val mode = plugin.pendingMode[player.uniqueId]
-
-        when (mode) {
-            GakubuchiLockerPlugin.PendingMode.LOCK -> {
-                event.isCancelled = true
-
-                if (plugin.db.isLocked(frame.uniqueId)) {
-                    player.sendMessage("§c[Gakubuchi] §fこの額縁はすでにロックされています。")
-                    return
-                }
-
-                plugin.db.lockFrame(frame, player.uniqueId)
-                player.sendMessage("§a[Gakubuchi] §f額縁をロックしました！ §7(/gakubuchilock off で終了)")
-            }
-
-            GakubuchiLockerPlugin.PendingMode.UNLOCK -> {
-                event.isCancelled = true
-
-                if (!plugin.db.isLocked(frame.uniqueId)) {
-                    player.sendMessage("§c[Gakubuchi] §fこの額縁はロックされていません。")
-                    return
-                }
-
-                val owner = plugin.db.getOwner(frame.uniqueId)
-                if (owner != player.uniqueId) {
-                    player.sendMessage("§c[Gakubuchi] §fこの額縁は別のプレイヤーがロックしています。解除できません。")
-                    return
-                }
-
-                plugin.db.unlockFrame(frame.uniqueId)
-                player.sendMessage("§a[Gakubuchi] §f額縁のロックを解除しました！ §7(/gakubuchiunlock off で終了)")
-            }
-
-            null -> {
-                // 通常時: ロック済みで、かつオーナー以外なら保護
-                if (plugin.db.isLocked(frame.uniqueId) && plugin.db.getOwner(frame.uniqueId) != player.uniqueId) {
-                    event.isCancelled = true
-                    player.sendMessage("§c[Gakubuchi] §fこの額縁はロックされており破壊できません。")
-                }
-            }
-        }
+    // 雪玉・矢などの投擲物によるダメージは、撃った相手がオーナーやOPであっても
+    // ロック済み額縁を破壊・中身排出させないよう常にキャンセルする
+    val player = event.damager as? Player
+    if (player == null) {
+      if (plugin.db.isLocked(frame.uniqueId)) {
+        event.isCancelled = true
+      }
+      return
     }
 
-    // =====================================================
-    // 右クリック: アイテムの出し入れ・回転防止
-    // =====================================================
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    fun onPlayerInteractEntity(event: PlayerInteractEntityEvent) {
-        val frame = event.rightClicked as? ItemFrame ?: return
-
-        if (plugin.db.isLocked(frame.uniqueId) && plugin.db.getOwner(frame.uniqueId) != event.player.uniqueId) {
-            event.isCancelled = true
-            event.player.sendMessage("§c[Gakubuchi] §fこの額縁はロックされています。")
-        }
-    }
-
-    // Paper では PlayerInteractAtEntityEvent も発火するため両方キャンセル
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    fun onPlayerInteractAtEntity(event: PlayerInteractAtEntityEvent) {
-        val frame = event.rightClicked as? ItemFrame ?: return
-
-        if (plugin.db.isLocked(frame.uniqueId) && plugin.db.getOwner(frame.uniqueId) != event.player.uniqueId) {
-            event.isCancelled = true
-        }
-    }
-
-    // =====================================================
-    // プレイヤーによる破壊 (HangingBreakByEntity)
-    // =====================================================
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    fun onHangingBreakByEntity(event: HangingBreakByEntityEvent) {
-        val frame = event.entity as? ItemFrame ?: return
-        if (!plugin.db.isLocked(frame.uniqueId)) return
-
-        val remover = event.remover
-        if (remover is Player && plugin.db.getOwner(frame.uniqueId) == remover.uniqueId) {
-            // オーナー本人が破壊 → DBからロック情報を削除して通過
-            plugin.db.unlockFrame(frame.uniqueId)
-            return
-        }
-=======
     val mode = plugin.pendingMode[player.uniqueId]
->>>>>>> fcee1a5c (format)
 
     when (mode) {
       GakubuchiLockerPlugin.PendingMode.LOCK -> {

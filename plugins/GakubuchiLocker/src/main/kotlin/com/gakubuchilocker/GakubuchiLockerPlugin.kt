@@ -1,6 +1,7 @@
 package com.gakubuchilocker
 
 import com.gakubuchilocker.commands.GakubuchiCommand
+import com.gakubuchilocker.commands.GakubuchiFinderCommand
 import com.gakubuchilocker.database.DatabaseManager
 import com.gakubuchilocker.listeners.FrameEventListener
 import java.util.UUID
@@ -27,6 +28,12 @@ class GakubuchiLockerPlugin : JavaPlugin() {
         cmd.setExecutor(handler)
         cmd.tabCompleter = handler
       }
+    }
+
+    val finderHandler = GakubuchiFinderCommand(this)
+    getCommand("gakubuchifinder")?.let { cmd ->
+      cmd.setExecutor(finderHandler)
+      cmd.tabCompleter = finderHandler
     }
 
     server.pluginManager.registerEvents(FrameEventListener(this), this)
