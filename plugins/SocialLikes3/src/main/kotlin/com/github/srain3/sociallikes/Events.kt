@@ -173,6 +173,9 @@ object Events : Listener {
   /** このPluginの看板内部データKey */
   val idKey = NamespacedKey(plugin, "SocialLikes_ID")
 
+  /** 再取得したSL看板アイテムの復元用データKey */
+  val slSignItemIdKey = NamespacedKey(plugin, "sociallikes_id")
+
   /** 運営チェックマーク */
   val checkMarkRegex = Regex("""✓""")
 
@@ -438,60 +441,67 @@ object Events : Listener {
     // if (!Geyser.api().isBedrockPlayer(e.player.uniqueId)) return
     if (!signRegex.containsMatchIn(e.itemInHand.type.name.uppercase())) return
     val meta = e.itemInHand.itemMeta ?: return
-    if (!sl3Regex.containsMatchIn(meta.asString)) return
-
-    val slIDStr = sl3Regex.find(meta.asString)?.value ?: return
-    val id = slIDStr.replace("\"sociallikes3:sociallikes_id\":", "").toIntOrNull() ?: return
+    val sourceSign = (meta as? BlockStateMeta)?.blockState as? Sign
+    val sourceSignId =
+        sourceSign?.persistentDataContainer?.get(slSignItemIdKey, PersistentDataType.INTEGER)
+            ?: sourceSign?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
+    val id =
+        sourceSignId
+            ?: meta.persistentDataContainer.get(slSignItemIdKey, PersistentDataType.INTEGER)
+            ?: legacySLSignItemId(meta.asString)
+            ?: return
     val slData = Data.getSLData(id) ?: return
+    val sourceSignForRestore = sourceSign.takeIf { sourceSignId != null }
 
-    val sign = e.blockPlaced.state
-    if (sign !is Sign) return
+    if (e.blockPlaced.state !is Sign) return
     object : BukkitRunnable() {
           override fun run() {
-            beSignTask(sign, slData)
+            val sign = e.blockPlaced.state as? Sign ?: return
+            beSignTask(sign, slData, sourceSignForRestore)
           }
         }
         .runTaskLater(plugin, 1)
     // e.isCancelled = true
   }
 
-  private fun beSignTask(sign: Sign, slData: SLData) {
-    /*val signData = sign.blockData
-    val rotation = if (signData is Rotatable) {
-        signData.rotation.name
+  private fun legacySLSignItemId(metaAsString: String): Int? {
+    val slIDStr = sl3Regex.find(metaAsString)?.value ?: return null
+    return slIDStr.replace("\"sociallikes3:sociallikes_id\":", "").toIntOrNull()
+  }
+
+  private fun beSignTask(sign: Sign, slData: SLData, sourceSign: Sign?) {
+    if (sourceSign != null) {
+      copySignSide(sourceSign, sign, Side.FRONT)
+      copySignSide(sourceSign, sign, Side.BACK)
+      sign.isWaxed = sourceSign.isWaxed
     } else {
-        null
+      sign.getSide(Side.FRONT).apply {
+        setLine(0, Tools.socialLikesLOGO)
+        setLine(1, "&a".color() + slData.title)
+        setLine(2, "&f${Bukkit.getOfflinePlayer(slData.owner).name}".color())
+        setLine(
+            3,
+            "&7Likes&8: &6${slData.likes.count()}${if (slData.check){" &e✓"}else{""}}".color(),
+        )
+      }
+      sign.isWaxed = true
     }
-    val face = if (signData is Directional) {
-        signData.facing
-    } else {
-        null
-    }*/
 
-    // sign.type = newMaterial
-    // sign.update(true,false)
-
-    /*val data = sign.blockData
-    if (data is Rotatable) {
-        data.rotation = BlockFace.valueOf(rotation!!)
-    }
-    if (data is Directional) {
-        data.facing = face!!
-    }
-    sign.blockData = data*/
-    // sign.update(true,false)
-
-    sign.getSide(Side.FRONT).apply {
-      setLine(0, Tools.socialLikesLOGO)
-      setLine(1, "&a".color() + slData.title)
-      setLine(2, "&f${Bukkit.getOfflinePlayer(slData.owner).name}".color())
-      setLine(3, "&7Likes&8: &6${slData.likes.count()}${if (slData.check){" &e✓"}else{""}}".color())
-    }
-    // sign.update(true,false)
-
-    sign.isWaxed = true
-    sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, slData.id)
+    val id =
+        sourceSign?.persistentDataContainer?.get(slSignItemIdKey, PersistentDataType.INTEGER)
+            ?: sourceSign?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
+            ?: slData.id
+    sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
+    sign.persistentDataContainer.set(slSignItemIdKey, PersistentDataType.INTEGER, id)
     sign.update(true)
+  }
+
+  private fun copySignSide(sourceSign: Sign, targetSign: Sign, side: Side) {
+    val sourceSide = sourceSign.getSide(side)
+    val targetSide = targetSign.getSide(side)
+    (0 until 4).forEach { index -> targetSide.line(index, sourceSide.line(index)) }
+    targetSide.isGlowingText = sourceSide.isGlowingText
+    targetSide.color = sourceSide.color
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

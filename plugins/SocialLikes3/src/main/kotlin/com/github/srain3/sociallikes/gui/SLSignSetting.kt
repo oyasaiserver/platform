@@ -35,13 +35,53 @@ import org.bukkit.persistence.PersistentDataType
 
 object SLSignSetting {
 
-  // 釣り看板かどうか
+  // 吊り看板かどうか
   private val hangingRegex = Regex("""HANGING""")
   // 壁付きかどうか
   private val wallRegex = Regex("""WALL""")
 
   val sltpSignKey = NamespacedKey(plugin, "SocialLikes_TPsign")
   val sltpSignUUIDKey = NamespacedKey(plugin, "SocialLikes_TPsign_owner")
+
+  private data class SignMaterialOption(
+      val itemMaterial: Material,
+      val woodName: String,
+      val displayName: String,
+      val loreName: String,
+      val x: Int,
+      val y: Int,
+  )
+
+  private val signMaterialOptions =
+      listOf(
+          SignMaterialOption(Material.OAK_SIGN, "OAK", "オーク", "オーク", 0, 0),
+          SignMaterialOption(Material.SPRUCE_SIGN, "SPRUCE", "トウヒ", "トウヒ", 1, 0),
+          SignMaterialOption(Material.BIRCH_SIGN, "BIRCH", "シラカバ", "シラカバ", 2, 0),
+          SignMaterialOption(Material.JUNGLE_SIGN, "JUNGLE", "ジャングル", "ジャングル", 3, 0),
+          SignMaterialOption(Material.ACACIA_SIGN, "ACACIA", "アカシア", "アカシア", 4, 0),
+          SignMaterialOption(Material.DARK_OAK_SIGN, "DARK_OAK", "ダークオーク", "ダークオーク", 5, 0),
+          SignMaterialOption(Material.MANGROVE_SIGN, "MANGROVE", "マングローブ", "マングローブ", 0, 1),
+          SignMaterialOption(Material.CHERRY_SIGN, "CHERRY", "サクラ", "サクラ", 1, 1),
+          SignMaterialOption(Material.BAMBOO_SIGN, "BAMBOO", "竹", "竹", 2, 1),
+          SignMaterialOption(Material.PALE_OAK_SIGN, "PALE_OAK", "ペールオーク", "ペールオーク", 3, 1),
+          SignMaterialOption(Material.CRIMSON_SIGN, "CRIMSON", "真紅", "真紅", 4, 1),
+          SignMaterialOption(Material.WARPED_SIGN, "WARPED", "歪んだ", "歪んだ木材", 5, 1),
+      )
+
+  private fun shapeSuffix(material: Material): String {
+    val name = material.name
+    val isHanging = hangingRegex.containsMatchIn(name)
+    val isWall = wallRegex.containsMatchIn(name)
+    return when {
+      isHanging && isWall -> "_WALL_HANGING_SIGN"
+      isHanging -> "_HANGING_SIGN"
+      isWall -> "_WALL_SIGN"
+      else -> "_SIGN"
+    }
+  }
+
+  private fun materialForCurrentShape(currentMaterial: Material, woodName: String): Material =
+      Material.valueOf("$woodName${shapeSuffix(currentMaterial)}")
 
   private fun asItemSignMaterial(material: Material): Material {
     val name = material.name
@@ -158,330 +198,23 @@ object SLSignSetting {
           0,
           2,
       )
-      addItem(
-          GuiItem(
-              ItemStack(Material.OAK_SIGN)
-                  .allFlag()
-                  .addText("&aオークの看板へ変更する", mutableListOf("&7材質をオークへ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.OAK_WALL_HANGING_SIGN
-                  } else {
-                    Material.OAK_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.OAK_WALL_SIGN
-                  } else {
-                    Material.OAK_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          0,
-          0,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.SPRUCE_SIGN)
-                  .allFlag()
-                  .addText("&aトウヒの看板へ変更する", mutableListOf("&7材質をトウヒへ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.SPRUCE_WALL_HANGING_SIGN
-                  } else {
-                    Material.SPRUCE_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.SPRUCE_WALL_SIGN
-                  } else {
-                    Material.SPRUCE_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          1,
-          0,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.BIRCH_SIGN)
-                  .allFlag()
-                  .addText("&aシラカバの看板へ変更する", mutableListOf("&7材質をシラカバへ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.BIRCH_WALL_HANGING_SIGN
-                  } else {
-                    Material.BIRCH_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.BIRCH_WALL_SIGN
-                  } else {
-                    Material.BIRCH_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          2,
-          0,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.JUNGLE_SIGN)
-                  .allFlag()
-                  .addText("&aジャングルの看板へ変更する", mutableListOf("&7材質をジャングルへ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.JUNGLE_WALL_HANGING_SIGN
-                  } else {
-                    Material.JUNGLE_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.JUNGLE_WALL_SIGN
-                  } else {
-                    Material.JUNGLE_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          3,
-          0,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.ACACIA_SIGN)
-                  .allFlag()
-                  .addText("&aアカシアの看板へ変更する", mutableListOf("&7材質をアカシアへ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.ACACIA_WALL_HANGING_SIGN
-                  } else {
-                    Material.ACACIA_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.ACACIA_WALL_SIGN
-                  } else {
-                    Material.ACACIA_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          4,
-          0,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.DARK_OAK_SIGN)
-                  .allFlag()
-                  .addText("&aダークオークの看板へ変更する", mutableListOf("&7材質をダークオークへ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.DARK_OAK_WALL_HANGING_SIGN
-                  } else {
-                    Material.DARK_OAK_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.DARK_OAK_WALL_SIGN
-                  } else {
-                    Material.DARK_OAK_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          5,
-          0,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.MANGROVE_SIGN)
-                  .allFlag()
-                  .addText("&aマングローブの看板へ変更する", mutableListOf("&7材質をマングローブへ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.MANGROVE_WALL_HANGING_SIGN
-                  } else {
-                    Material.MANGROVE_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.MANGROVE_WALL_SIGN
-                  } else {
-                    Material.MANGROVE_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          0,
-          1,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.CHERRY_SIGN)
-                  .allFlag()
-                  .addText("&aサクラの看板へ変更する", mutableListOf("&7材質をサクラへ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.CHERRY_WALL_HANGING_SIGN
-                  } else {
-                    Material.CHERRY_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.CHERRY_WALL_SIGN
-                  } else {
-                    Material.CHERRY_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          1,
-          1,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.BAMBOO_SIGN)
-                  .allFlag()
-                  .addText("&a竹の看板へ変更する", mutableListOf("&7材質を竹へ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.BAMBOO_WALL_HANGING_SIGN
-                  } else {
-                    Material.BAMBOO_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.BAMBOO_WALL_SIGN
-                  } else {
-                    Material.BAMBOO_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          2,
-          1,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.PALE_OAK_SIGN)
-                  .allFlag()
-                  .addText("&aペールオークの看板へ変更する", mutableListOf("&7材質をペールオークへ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.PALE_OAK_WALL_HANGING_SIGN
-                  } else {
-                    Material.PALE_OAK_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.PALE_OAK_WALL_SIGN
-                  } else {
-                    Material.PALE_OAK_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          3,
-          1,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.CRIMSON_SIGN)
-                  .allFlag()
-                  .addText("&a真紅の看板へ変更する", mutableListOf("&7材質を真紅へ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.CRIMSON_WALL_HANGING_SIGN
-                  } else {
-                    Material.CRIMSON_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.CRIMSON_WALL_SIGN
-                  } else {
-                    Material.CRIMSON_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          4,
-          1,
-      )
-      addItem(
-          GuiItem(
-              ItemStack(Material.WARPED_SIGN)
-                  .allFlag()
-                  .addText("&a歪んだ看板へ変更する", mutableListOf("&7材質を歪んだ木材へ変えます"))
-          ) {
-            val oldMaterialName = sign.type.name
-            val newMaterial =
-                if (hangingRegex.containsMatchIn(oldMaterialName)) {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.WARPED_WALL_HANGING_SIGN
-                  } else {
-                    Material.WARPED_HANGING_SIGN
-                  }
-                } else {
-                  if (wallRegex.containsMatchIn(oldMaterialName)) {
-                    Material.WARPED_WALL_SIGN
-                  } else {
-                    Material.WARPED_SIGN
-                  }
-                }
-            changeSignType(sign, newMaterial, slData.id)
-            it.whoClicked.closeInventory()
-          },
-          5,
-          1,
-      )
+      signMaterialOptions.forEach { option ->
+        addItem(
+            GuiItem(
+                ItemStack(option.itemMaterial)
+                    .allFlag()
+                    .addText(
+                        "&a${option.displayName}の看板へ変更する",
+                        mutableListOf("&7材質を${option.loreName}へ変えます"),
+                    )
+            ) {
+              changeSignType(sign, materialForCurrentShape(sign.type, option.woodName), slData.id)
+              it.whoClicked.closeInventory()
+            },
+            option.x,
+            option.y,
+        )
+      }
     }
     pane.apply {
       addItem(
