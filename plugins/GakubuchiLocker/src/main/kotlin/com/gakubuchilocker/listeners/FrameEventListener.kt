@@ -34,7 +34,16 @@ class FrameEventListener(private val plugin: GakubuchiLockerPlugin) : Listener {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
   fun onEntityDamage(event: EntityDamageByEntityEvent) {
     val frame = event.entity as? ItemFrame ?: return
-    val player = event.damager as? Player ?: return
+
+    // 雪玉・矢などの投擲物によるダメージは、撃った相手がオーナーやOPであっても
+    // ロック済み額縁を破壊・中身排出させないよう常にキャンセルする
+    val player = event.damager as? Player
+    if (player == null) {
+      if (plugin.db.isLocked(frame.uniqueId)) {
+        event.isCancelled = true
+      }
+      return
+    }
 
     val mode = plugin.pendingMode[player.uniqueId]
 
