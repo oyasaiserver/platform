@@ -2,7 +2,7 @@
 
 oyasaiPurpur rec {
   name = "oyasai-minecraft-main";
-  version = "1.21.11";
+  version = "26.1.2";
 
   icon = ../assets/icon-64x64.png;
 
