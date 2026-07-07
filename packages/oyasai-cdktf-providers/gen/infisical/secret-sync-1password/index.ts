@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password
+// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSync1PasswordConfig extends cdktf.TerraformMetaArguments 
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#auto_sync_enabled SecretSync1Password#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#auto_sync_enabled SecretSync1Password#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the 1password Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#connection_id SecretSync1Password#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#connection_id SecretSync1Password#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the 1Password sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#description SecretSync1Password#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#description SecretSync1Password#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#destination_config SecretSync1Password#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#destination_config SecretSync1Password#destination_config}
   */
   readonly destinationConfig: SecretSync1PasswordDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#environment SecretSync1Password#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#environment SecretSync1Password#environment}
   */
   readonly environment: string;
   /**
   * The name of the 1Password sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#name SecretSync1Password#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#name SecretSync1Password#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#project_id SecretSync1Password#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#project_id SecretSync1Password#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#secret_path SecretSync1Password#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#secret_path SecretSync1Password#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#sync_options SecretSync1Password#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#sync_options SecretSync1Password#sync_options}
   */
   readonly syncOptions: SecretSync1PasswordSyncOptions;
 }
@@ -66,13 +66,13 @@ export interface SecretSync1PasswordDestinationConfig {
   /**
   * The label of the 1Password item field which will hold your secret value. For example, if you were to sync Infisical secret 'foo: bar', the 1Password item equivalent would have an item title of 'foo', and a field on that item 'value: bar'. The field label 'value' is what gets changed by this option
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#value_label SecretSync1Password#value_label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#value_label SecretSync1Password#value_label}
   */
   readonly valueLabel?: string;
   /**
   * The ID of the 1Password vault to sync secrets to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#vault_id SecretSync1Password#vault_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#vault_id SecretSync1Password#vault_id}
   */
   readonly vaultId: string;
 }
@@ -194,19 +194,19 @@ export interface SecretSync1PasswordSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from 1Password. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#disable_secret_deletion SecretSync1Password#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#disable_secret_deletion SecretSync1Password#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination, import-prioritize-source, import-prioritize-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#initial_sync_behavior SecretSync1Password#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#initial_sync_behavior SecretSync1Password#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the 1Password destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#key_schema SecretSync1Password#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#key_schema SecretSync1Password#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -355,7 +355,7 @@ export class SecretSync1PasswordSyncOptionsOutputReference extends cdktf.Complex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password infisical_secret_sync_1password}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password infisical_secret_sync_1password}
 */
 export class SecretSync1Password extends cdktf.TerraformResource {
 
@@ -371,7 +371,7 @@ export class SecretSync1Password extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSync1Password resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSync1Password to import
-  * @param importFromId The id of the existing SecretSync1Password that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSync1Password that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSync1Password to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -383,7 +383,7 @@ export class SecretSync1Password extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_1password infisical_secret_sync_1password} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_1password infisical_secret_sync_1password} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -394,7 +394,7 @@ export class SecretSync1Password extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_1password',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.35'
+        providerVersion: '0.18.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

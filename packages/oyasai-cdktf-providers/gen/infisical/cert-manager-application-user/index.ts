@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_application_user
+// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_application_user
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface CertManagerApplicationUserConfig extends cdktf.TerraformMetaArg
   /**
   * The ID of the Certificate Manager application
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_application_user#application_id CertManagerApplicationUser#application_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_application_user#application_id CertManagerApplicationUser#application_id}
   */
   readonly applicationId: string;
   /**
   * The email of the user to add
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_application_user#email CertManagerApplicationUser#email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_application_user#email CertManagerApplicationUser#email}
   */
   readonly email: string;
   /**
   * The role to assign to the user (admin, operator, or auditor)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_application_user#role CertManagerApplicationUser#role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_application_user#role CertManagerApplicationUser#role}
   */
   readonly role: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_application_user infisical_cert_manager_application_user}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_application_user infisical_cert_manager_application_user}
 */
 export class CertManagerApplicationUser extends cdktf.TerraformResource {
 
@@ -44,7 +44,7 @@ export class CertManagerApplicationUser extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerApplicationUser resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerApplicationUser to import
-  * @param importFromId The id of the existing CertManagerApplicationUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_application_user#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerApplicationUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_application_user#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerApplicationUser to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -56,7 +56,7 @@ export class CertManagerApplicationUser extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_application_user infisical_cert_manager_application_user} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_application_user infisical_cert_manager_application_user} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -67,7 +67,7 @@ export class CertManagerApplicationUser extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_application_user',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.35'
+        providerVersion: '0.18.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,85 +10,85 @@ export interface IdentityJwtAuthConfig extends cdktf.TerraformMetaArguments {
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#access_token_max_ttl IdentityJwtAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#access_token_max_ttl IdentityJwtAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default: 0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#access_token_num_uses_limit IdentityJwtAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#access_token_num_uses_limit IdentityJwtAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#access_token_trusted_ips IdentityJwtAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#access_token_trusted_ips IdentityJwtAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityJwtAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#access_token_ttl IdentityJwtAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#access_token_ttl IdentityJwtAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * The list of intended recipients.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#bound_audiences IdentityJwtAuth#bound_audiences}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#bound_audiences IdentityJwtAuth#bound_audiences}
   */
   readonly boundAudiences?: string[];
   /**
   * The attributes that should be present in the JWT for it to be valid.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#bound_claims IdentityJwtAuth#bound_claims}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#bound_claims IdentityJwtAuth#bound_claims}
   */
   readonly boundClaims?: { [key: string]: string };
   /**
   * The unique identifier of the identity provider issuing the JWTs.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#bound_issuer IdentityJwtAuth#bound_issuer}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#bound_issuer IdentityJwtAuth#bound_issuer}
   */
   readonly boundIssuer?: string;
   /**
   * The expected principal that is the subject of the JWT.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#bound_subject IdentityJwtAuth#bound_subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#bound_subject IdentityJwtAuth#bound_subject}
   */
   readonly boundSubject?: string;
   /**
   * The configuration type of the JWT auth. Must be 'jwks' or 'static'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#configuration_type IdentityJwtAuth#configuration_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#configuration_type IdentityJwtAuth#configuration_type}
   */
   readonly configurationType: string;
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#identity_id IdentityJwtAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#identity_id IdentityJwtAuth#identity_id}
   */
   readonly identityId: string;
   /**
   * The PEM-encoded CA certificate for validating the TLS connection to the JWKS URL.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#jwks_ca_cert IdentityJwtAuth#jwks_ca_cert}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#jwks_ca_cert IdentityJwtAuth#jwks_ca_cert}
   */
   readonly jwksCaCert?: string;
   /**
   * The URL used to retrieve the JSON Web Key Set (JWKS) for verifying JWTs. Required when configuration_type is 'jwks'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#jwks_url IdentityJwtAuth#jwks_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#jwks_url IdentityJwtAuth#jwks_url}
   */
   readonly jwksUrl?: string;
   /**
   * A list of PEM-encoded public keys used to verify JWTs. Required when configuration_type is 'static'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#public_keys IdentityJwtAuth#public_keys}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#public_keys IdentityJwtAuth#public_keys}
   */
   readonly publicKeys?: string[];
 }
 export interface IdentityJwtAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#ip_address IdentityJwtAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#ip_address IdentityJwtAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -204,7 +204,7 @@ export class IdentityJwtAuthAccessTokenTrustedIpsList extends cdktf.ComplexList 
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth infisical_identity_jwt_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth infisical_identity_jwt_auth}
 */
 export class IdentityJwtAuth extends cdktf.TerraformResource {
 
@@ -220,7 +220,7 @@ export class IdentityJwtAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityJwtAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityJwtAuth to import
-  * @param importFromId The id of the existing IdentityJwtAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityJwtAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityJwtAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -232,7 +232,7 @@ export class IdentityJwtAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/identity_jwt_auth infisical_identity_jwt_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/identity_jwt_auth infisical_identity_jwt_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -243,7 +243,7 @@ export class IdentityJwtAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_jwt_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.35'
+        providerVersion: '0.18.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

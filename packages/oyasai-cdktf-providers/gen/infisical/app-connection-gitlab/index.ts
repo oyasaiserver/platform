@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab
+// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionGitlabConfig extends cdktf.TerraformMetaArguments 
   /**
   * The credentials for the GitLab App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab#credentials AppConnectionGitlab#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab#credentials AppConnectionGitlab#credentials}
   */
   readonly credentials: AppConnectionGitlabCredentials;
   /**
   * An optional description for the GitLab App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab#description AppConnectionGitlab#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab#description AppConnectionGitlab#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with GitLab. Possible values are: access-token
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab#method AppConnectionGitlab#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab#method AppConnectionGitlab#method}
   */
   readonly method: string;
   /**
   * The name of the GitLab App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab#name AppConnectionGitlab#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab#name AppConnectionGitlab#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab#project_id AppConnectionGitlab#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab#project_id AppConnectionGitlab#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,19 +42,19 @@ export interface AppConnectionGitlabCredentials {
   /**
   * The Access Token used to access GitLab.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab#access_token AppConnectionGitlab#access_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab#access_token AppConnectionGitlab#access_token}
   */
   readonly accessToken: string;
   /**
   * The type of token used to connect with GitLab. Supported options: 'project', 'personal', and 'group'
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab#access_token_type AppConnectionGitlab#access_token_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab#access_token_type AppConnectionGitlab#access_token_type}
   */
   readonly accessTokenType: string;
   /**
   * The GitLab instance URL to connect with. (default: https://gitlab.com)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab#instance_url AppConnectionGitlab#instance_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab#instance_url AppConnectionGitlab#instance_url}
   */
   readonly instanceUrl?: string;
 }
@@ -200,7 +200,7 @@ export class AppConnectionGitlabCredentialsOutputReference extends cdktf.Complex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab infisical_app_connection_gitlab}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab infisical_app_connection_gitlab}
 */
 export class AppConnectionGitlab extends cdktf.TerraformResource {
 
@@ -216,7 +216,7 @@ export class AppConnectionGitlab extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionGitlab resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionGitlab to import
-  * @param importFromId The id of the existing AppConnectionGitlab that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionGitlab that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionGitlab to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -228,7 +228,7 @@ export class AppConnectionGitlab extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/app_connection_gitlab infisical_app_connection_gitlab} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_gitlab infisical_app_connection_gitlab} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -239,7 +239,7 @@ export class AppConnectionGitlab extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_gitlab',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.35'
+        providerVersion: '0.18.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile
+// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface CertManagerCertificateProfileConfig extends cdktf.TerraformMeta
   /**
   * The ID of the certificate authority to use (required unless issuer_type is 'self-signed')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#ca_id CertManagerCertificateProfile#ca_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#ca_id CertManagerCertificateProfile#ca_id}
   */
   readonly caId?: string;
   /**
   * The ID of the certificate policy to use
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#certificate_policy_id CertManagerCertificateProfile#certificate_policy_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#certificate_policy_id CertManagerCertificateProfile#certificate_policy_id}
   */
   readonly certificatePolicyId: string;
   /**
   * The description of the certificate profile
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#description CertManagerCertificateProfile#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#description CertManagerCertificateProfile#description}
   */
   readonly description?: string;
   /**
   * The issuer type for the profile. Supported values: ca, self-signed. Defaults to 'ca'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#issuer_type CertManagerCertificateProfile#issuer_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#issuer_type CertManagerCertificateProfile#issuer_type}
   */
   readonly issuerType?: string;
   /**
   * The unique name of the certificate profile
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#name CertManagerCertificateProfile#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#name CertManagerCertificateProfile#name}
   */
   readonly name: string;
   /**
   * defaults block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#defaults CertManagerCertificateProfile#defaults}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#defaults CertManagerCertificateProfile#defaults}
   */
   readonly defaults?: CertManagerCertificateProfileDefaults;
 }
@@ -48,67 +48,67 @@ export interface CertManagerCertificateProfileDefaults {
   /**
   * Default common name
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#common_name CertManagerCertificateProfile#common_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#common_name CertManagerCertificateProfile#common_name}
   */
   readonly commonName?: string;
   /**
   * Default country (C)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#country CertManagerCertificateProfile#country}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#country CertManagerCertificateProfile#country}
   */
   readonly country?: string;
   /**
   * Default extended key usages. Supported values: client_auth, server_auth, code_signing, email_protection, ocsp_signing, time_stamping
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#extended_key_usages CertManagerCertificateProfile#extended_key_usages}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#extended_key_usages CertManagerCertificateProfile#extended_key_usages}
   */
   readonly extendedKeyUsages?: string[];
   /**
   * Default key algorithm. Supported values: RSA_2048, RSA_3072, RSA_4096, EC_prime256v1, EC_secp384r1, EC_secp521r1
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#key_algorithm CertManagerCertificateProfile#key_algorithm}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#key_algorithm CertManagerCertificateProfile#key_algorithm}
   */
   readonly keyAlgorithm?: string;
   /**
   * Default key usages. Supported values: digital_signature, key_encipherment, non_repudiation, data_encipherment, key_agreement, key_cert_sign, crl_sign, encipher_only, decipher_only
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#key_usages CertManagerCertificateProfile#key_usages}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#key_usages CertManagerCertificateProfile#key_usages}
   */
   readonly keyUsages?: string[];
   /**
   * Default locality (L)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#locality CertManagerCertificateProfile#locality}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#locality CertManagerCertificateProfile#locality}
   */
   readonly locality?: string;
   /**
   * Default organization (O)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#organization CertManagerCertificateProfile#organization}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#organization CertManagerCertificateProfile#organization}
   */
   readonly organization?: string;
   /**
   * Default organizational unit (OU)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#organizational_unit CertManagerCertificateProfile#organizational_unit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#organizational_unit CertManagerCertificateProfile#organizational_unit}
   */
   readonly organizationalUnit?: string;
   /**
   * Default signature algorithm. Supported values: RSA-SHA256, RSA-SHA384, RSA-SHA512, ECDSA-SHA256, ECDSA-SHA384, ECDSA-SHA512
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#signature_algorithm CertManagerCertificateProfile#signature_algorithm}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#signature_algorithm CertManagerCertificateProfile#signature_algorithm}
   */
   readonly signatureAlgorithm?: string;
   /**
   * Default state/province (ST)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#state CertManagerCertificateProfile#state}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#state CertManagerCertificateProfile#state}
   */
   readonly state?: string;
   /**
   * Default certificate validity in days
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#ttl_days CertManagerCertificateProfile#ttl_days}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#ttl_days CertManagerCertificateProfile#ttl_days}
   */
   readonly ttlDays?: number;
 }
@@ -492,7 +492,7 @@ export class CertManagerCertificateProfileDefaultsOutputReference extends cdktf.
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile infisical_cert_manager_certificate_profile}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile infisical_cert_manager_certificate_profile}
 */
 export class CertManagerCertificateProfile extends cdktf.TerraformResource {
 
@@ -508,7 +508,7 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerCertificateProfile resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerCertificateProfile to import
-  * @param importFromId The id of the existing CertManagerCertificateProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerCertificateProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerCertificateProfile to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -520,7 +520,7 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_certificate_profile infisical_cert_manager_certificate_profile} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_certificate_profile infisical_cert_manager_certificate_profile} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -531,7 +531,7 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_certificate_profile',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.35'
+        providerVersion: '0.18.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -66,9 +66,9 @@ Object.defineProperty(exports, 'project', { get: function () { return require('.
 Object.defineProperty(exports, 'projectEnvironment', { get: function () { return require('./project-environment'); } });
 Object.defineProperty(exports, 'projectGroup', { get: function () { return require('./project-group'); } });
 Object.defineProperty(exports, 'projectIdentity', { get: function () { return require('./project-identity'); } });
-Object.defineProperty(exports, 'projectIdentityProvisioning', { get: function () { return require('./project-identity-provisioning'); } });
 Object.defineProperty(exports, 'projectIdentitySpecificPrivilege', { get: function () { return require('./project-identity-specific-privilege'); } });
 Object.defineProperty(exports, 'projectRole', { get: function () { return require('./project-role'); } });
+Object.defineProperty(exports, 'projectScopedIdentity', { get: function () { return require('./project-scoped-identity'); } });
 Object.defineProperty(exports, 'projectTemplate', { get: function () { return require('./project-template'); } });
 Object.defineProperty(exports, 'projectUser', { get: function () { return require('./project-user'); } });
 Object.defineProperty(exports, 'secret', { get: function () { return require('./secret'); } });
@@ -101,6 +101,7 @@ Object.defineProperty(exports, 'secretSyncSupabase', { get: function () { return
 Object.defineProperty(exports, 'secretTag', { get: function () { return require('./secret-tag'); } });
 Object.defineProperty(exports, 'webhook', { get: function () { return require('./webhook'); } });
 Object.defineProperty(exports, 'dataInfisicalGroups', { get: function () { return require('./data-infisical-groups'); } });
+Object.defineProperty(exports, 'dataInfisicalIdentity', { get: function () { return require('./data-infisical-identity'); } });
 Object.defineProperty(exports, 'dataInfisicalIdentityDetails', { get: function () { return require('./data-infisical-identity-details'); } });
 Object.defineProperty(exports, 'dataInfisicalKmsKeyPublicKey', { get: function () { return require('./data-infisical-kms-key-public-key'); } });
 Object.defineProperty(exports, 'dataInfisicalProjectEnvironment', { get: function () { return require('./data-infisical-project-environment'); } });

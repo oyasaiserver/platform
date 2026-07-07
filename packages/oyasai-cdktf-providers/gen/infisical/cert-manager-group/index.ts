@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_group
+// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_group
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface CertManagerGroupConfig extends cdktf.TerraformMetaArguments {
   /**
   * The ID of the group
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_group#group_id CertManagerGroup#group_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_group#group_id CertManagerGroup#group_id}
   */
   readonly groupId: string;
   /**
   * The role to assign to the group (admin or member)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_group#role CertManagerGroup#role}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_group#role CertManagerGroup#role}
   */
   readonly role: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_group infisical_cert_manager_group}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_group infisical_cert_manager_group}
 */
 export class CertManagerGroup extends cdktf.TerraformResource {
 
@@ -38,7 +38,7 @@ export class CertManagerGroup extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerGroup resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerGroup to import
-  * @param importFromId The id of the existing CertManagerGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_group#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_group#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerGroup to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class CertManagerGroup extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/cert_manager_group infisical_cert_manager_group} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/cert_manager_group infisical_cert_manager_group} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class CertManagerGroup extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_group',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.35'
+        providerVersion: '0.18.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

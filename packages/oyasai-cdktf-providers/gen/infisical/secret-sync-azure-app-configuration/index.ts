@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration
+// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncAzureAppConfigurationConfig extends cdktf.TerraformMe
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#auto_sync_enabled SecretSyncAzureAppConfiguration#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#auto_sync_enabled SecretSyncAzureAppConfiguration#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the azure Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#connection_id SecretSyncAzureAppConfiguration#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#connection_id SecretSyncAzureAppConfiguration#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the Azure App Configuration sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#description SecretSyncAzureAppConfiguration#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#description SecretSyncAzureAppConfiguration#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#destination_config SecretSyncAzureAppConfiguration#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#destination_config SecretSyncAzureAppConfiguration#destination_config}
   */
   readonly destinationConfig: SecretSyncAzureAppConfigurationDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#environment SecretSyncAzureAppConfiguration#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#environment SecretSyncAzureAppConfiguration#environment}
   */
   readonly environment: string;
   /**
   * The name of the Azure App Configuration sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#name SecretSyncAzureAppConfiguration#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#name SecretSyncAzureAppConfiguration#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#project_id SecretSyncAzureAppConfiguration#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#project_id SecretSyncAzureAppConfiguration#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#secret_path SecretSyncAzureAppConfiguration#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#secret_path SecretSyncAzureAppConfiguration#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#sync_options SecretSyncAzureAppConfiguration#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#sync_options SecretSyncAzureAppConfiguration#sync_options}
   */
   readonly syncOptions: SecretSyncAzureAppConfigurationSyncOptions;
 }
@@ -66,13 +66,13 @@ export interface SecretSyncAzureAppConfigurationDestinationConfig {
   /**
   * The URL of your Azure App Configuration
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#configuration_url SecretSyncAzureAppConfiguration#configuration_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#configuration_url SecretSyncAzureAppConfiguration#configuration_url}
   */
   readonly configurationUrl: string;
   /**
   * The label to attach to secrets created in Azure App Configuration
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#label SecretSyncAzureAppConfiguration#label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#label SecretSyncAzureAppConfiguration#label}
   */
   readonly label?: string;
 }
@@ -194,19 +194,19 @@ export interface SecretSyncAzureAppConfigurationSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from Azure App Configuration. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#disable_secret_deletion SecretSyncAzureAppConfiguration#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#disable_secret_deletion SecretSyncAzureAppConfiguration#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination, import-prioritize-source, import-prioritize-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#initial_sync_behavior SecretSyncAzureAppConfiguration#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#initial_sync_behavior SecretSyncAzureAppConfiguration#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the Azure App Configuration destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#key_schema SecretSyncAzureAppConfiguration#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#key_schema SecretSyncAzureAppConfiguration#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -355,7 +355,7 @@ export class SecretSyncAzureAppConfigurationSyncOptionsOutputReference extends c
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration infisical_secret_sync_azure_app_configuration}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration infisical_secret_sync_azure_app_configuration}
 */
 export class SecretSyncAzureAppConfiguration extends cdktf.TerraformResource {
 
@@ -371,7 +371,7 @@ export class SecretSyncAzureAppConfiguration extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncAzureAppConfiguration resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncAzureAppConfiguration to import
-  * @param importFromId The id of the existing SecretSyncAzureAppConfiguration that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncAzureAppConfiguration that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncAzureAppConfiguration to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -383,7 +383,7 @@ export class SecretSyncAzureAppConfiguration extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.35/docs/resources/secret_sync_azure_app_configuration infisical_secret_sync_azure_app_configuration} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_azure_app_configuration infisical_secret_sync_azure_app_configuration} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -394,7 +394,7 @@ export class SecretSyncAzureAppConfiguration extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_azure_app_configuration',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.35'
+        providerVersion: '0.18.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
