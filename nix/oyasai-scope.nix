@@ -15,10 +15,13 @@ let
 
       oyasaiTerraformProviders =
         with (inputs.nixpkgs-terraform-providers-bin.legacyPackages.${system}.providers); [
+          # keep-sorted start
           cloudflare.cloudflare
-          kreuzwerker.docker
-          integrations.github
+          hashicorp.random
           infisical.infisical
+          integrations.github
+          kreuzwerker.docker
+          # keep-sorted end
         ];
 
       pl2nixOverlay = final: prev: {
