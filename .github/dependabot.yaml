@@ -4,6 +4,8 @@ updates:
   - package-ecosystem: "npm"
     directories:
       - "packages/*"
+    exclude-paths:
+      - "docs/**"
     cooldown:
       default-days: 14
     schedule:
@@ -32,8 +34,6 @@ updates:
       all:
         patterns:
           - "*"
-    ignore:
-      - dependency-name: "nixpkgs-*"
     commit-message:
       prefix: "build"
   - package-ecosystem: "gradle"
