@@ -18,8 +18,8 @@
   "bkcommonlib": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/rTg6ckWb/versions/yZdQcJiN/BKCommonLib-1.21.11-v1-1957.jar",
-        "hash": "sha256-N2UyWsc33Xrp88RdHDHnVDoa7EbYMVRbcUW9xZLGtXY="
+        "url": "https://cdn.modrinth.com/data/rTg6ckWb/versions/BtLkakNV/BKCommonLib-2.0.1-2025.jar",
+        "hash": "sha256-FxtOL7cuDj32xbWIWs8cEnxsrDbezQ17r7xVNbVyt7U="
       }
     }
   },
@@ -117,8 +117,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.1/builds/1177/downloads/velocity",
-      "hash": "sha256-rBxpvPYkcQTLxE+JmUp7nSBQ0LiJOuXrD1I3MUTdjZI="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.1/builds/1180/downloads/velocity",
+      "hash": "sha256-/+Mi6ryhIXQA0oNRcidr28NdTziTZPy6vvD1M/IKA30="
     }
   },
   "gsit": {
@@ -188,8 +188,8 @@
   "multiversecore": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/DPkqDAS7/multiverse-core-5.7.2-pre.2.jar",
-        "hash": "sha256-M0v3FKQq8if+CTxLDT5EYhryUQ45ctmJqqlkte9UQzA="
+        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/zaVq0eAi/multiverse-core-5.7.2.jar",
+        "hash": "sha256-V0hiqjBir1OVf+hF3hEKOG+IZEU2aDbIxjcS4R1pdAA="
       }
     }
   },
@@ -236,8 +236,8 @@
   "placeholderapi": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/lKEzGugV/versions/UmbIiI5H/PlaceholderAPI-2.12.2.jar",
-        "hash": "sha256-/3avIMes8yf/Kij7Lb1mlOP5RlA+cmNaX3tssuZPwBQ="
+        "url": "https://cdn.modrinth.com/data/lKEzGugV/versions/pIvQcXW8/PlaceholderAPI-2.12.3.jar",
+        "hash": "sha256-/eAyWfWvaTjzwz7rTYFAAKGtq/HSMEzhSXC+gfYJpDc="
       }
     }
   },
@@ -312,8 +312,8 @@
   "skript": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/HpdbRhER/Skript-2.15.3.jar",
-        "hash": "sha256-SdzNLSz+xO8jVPYuPXYDnR0EHcX1rCnoT52riU43MLk="
+        "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/2QwoQvep/Skript-2.15.4.jar",
+        "hash": "sha256-xZhU2GlWLoIqGCpepmIZAwcYohPVO2cYLl2b3ssVhl0="
       }
     }
   },
@@ -368,8 +368,8 @@
   "viaversion": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/WdWKG3E0/ViaVersion-5.10.1-SNAPSHOT.jar",
-        "hash": "sha256-09nOmLR2S1n3Bx1A/sGH+RpJUcmqD5s0Vmkh3HFQSqs="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/nSqRQTXh/ViaVersion-5.10.1-SNAPSHOT.jar",
+        "hash": "sha256-uSZmO1R1/GMP3ypj1AoiPv9eFUxJSmvBso4Z7c7gNVA="
       }
     }
   },
