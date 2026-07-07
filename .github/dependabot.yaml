@@ -47,7 +47,7 @@ updates:
         patterns:
           - "*"
     ignore:
+      - dependency-name: "*paperweight*"
       - dependency-name: "*purpur-api*"
       - dependency-name: "gradle-wrapper"
-      - dependency-name: "spotless-plugin"
-      - dependency-name: "paperweight-userdev"
+      - dependency-name: "*spotless*"
