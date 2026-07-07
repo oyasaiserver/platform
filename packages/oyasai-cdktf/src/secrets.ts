@@ -7,20 +7,27 @@ export interface Secrets<T> {
   get(key: T): string;
 }
 
-export const secretKeys = [
-  // keep-sorted start
+// Keep this list minimal.
+const secretKeys = [
+  // Secrets required by CI. Set as ActionSecrets via GitHub provider.
   "CLOUDFLARE_ACCESS_KEY_ID",
   "CLOUDFLARE_SECRET_ACCESS_KEY",
-  "DISCORDSRV_TOKEN",
-  "MARIADB_PASSWORD",
   "NIX_CACHE_SIGNING_KEY",
-  "RCON_PASSWORD",
+
+  // Secrets required by plugins
+  "DISCORDSRV_TOKEN",
+
+  // This is static, do not change.
   "RESTIC_PASSWORD",
+
+  // Docker daemon certs
   "TLS_CA_PEM",
   "TLS_CERT_PEM",
   "TLS_KEY_PEM",
-  "VELOCITY_FORWARDING_SECRET",
-  // keep-sorted end
+
+  // Ideally we'd want this generated via Random provider but is hardcoded to
+  // plugins' config files :( - ueda 2026-07
+  "MARIADB_PASSWORD",
 ] as const;
 
 export type SecretKey = (typeof secretKeys)[number];
