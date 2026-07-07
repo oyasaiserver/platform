@@ -18,7 +18,6 @@ shadow-plugin = {module = "com.gradleup.shadow:shadow-gradle-plugin", version.re
 spotless-plugin = {module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless"}
 paper-dev-bundle = {module = "io.papermc.paper:dev-bundle", version.ref = "purpur-api"}
 tokenmanager = {module = "com.github.Realizedd:TokenManager", version.ref = "tokenmanager"}
-ultimateadvancementapi = {module = "com.frengor:ultimateadvancementapi-shadeable", version.ref = "ultimateadvancementapi"}
 vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
 worldborder = {module = "com.github.PryPurity:WorldBorder", version.ref = "worldborder"}
 fawe-bukkit = {module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe"}
@@ -44,7 +43,6 @@ shadow = "9.4.1"
 spotless = "8.5.1" # Ktfmt version must match that of Nixpkgs
 paperweight = "2.0.0-beta.21"
 tokenmanager = "3.2.4"
-ultimateadvancementapi = "2.7.2"
 vault = "1.7.1"
 worldborder = "2.1.4"
 fawe = "2.15.0"
