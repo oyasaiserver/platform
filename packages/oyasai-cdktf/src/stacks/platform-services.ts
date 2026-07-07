@@ -259,7 +259,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     });
 
     if (this.isMaster) {
-      const cloudflareBaseUrl = `https://${secrets.get("CLOUDFLARE_ACCOUNT_ID")}.r2.cloudflarestorage.com`;
+      const cloudflareBaseUrl = `https://${commonInfra.cloudflareAccountId}.r2.cloudflarestorage.com`;
 
       const backedupMinecraftContainers = {
         ["minecraft-main"]: minecraftMainContainer,

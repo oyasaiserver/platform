@@ -21,7 +21,7 @@ type Props = {
 
 export class CommonInternal extends OyasaiTerraformStack {
   // TODO: Where should we put this? - shun 2026 04
-  public readonly nixCachePublicKey =
+  readonly nixCachePublicKey =
     "oyasaiserver:f0coAsRP8jLzDTOmVCY8hqQibMHtZcxjk60oVCQkjtU=";
 
   constructor(scope: Construct, id: string, { commonInfra }: Props) {
@@ -37,7 +37,7 @@ export class CommonInternal extends OyasaiTerraformStack {
     const secrets = createSecrets(this, commonInfra);
 
     const nixCacheBucket = new R2Bucket(this, "nix-cache-r2-bucket", {
-      accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
+      accountId: commonInfra.cloudflareAccountId,
       name: "nix-cache",
       // Most popular location for GitHub Action runners
       location: "enam",
@@ -46,7 +46,7 @@ export class CommonInternal extends OyasaiTerraformStack {
     const nixCacheExpirationDays = 180;
 
     new R2BucketLifecycle(this, this.t("nix-cache-r2-bucket-lifecycle"), {
-      accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
+      accountId: commonInfra.cloudflareAccountId,
       bucketName: nixCacheBucket.name,
       rules: [
         {
@@ -74,7 +74,7 @@ export class CommonInternal extends OyasaiTerraformStack {
     //
     // https://developers.cloudflare.com/support/troubleshooting/http-status-codes/4xx-client-error/error-413/#cloudflare-specific-information
     new R2CustomDomain(this, "nix-cache-r2-custom-domain", {
-      accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
+      accountId: commonInfra.cloudflareAccountId,
       bucketName: nixCacheBucket.name,
       domain: `nix-cache.${oyasaiIoRegistrarDomain.domainName}`,
       enabled: true,
@@ -186,7 +186,7 @@ export class CommonInternal extends OyasaiTerraformStack {
       this.t("nix-cache-substituter-actions-org-variable"),
       {
         variableName: "NIX_CACHE_SUBSTITUTER",
-        value: `s3://${nixCacheBucket.name}?endpoint=${secrets.get("CLOUDFLARE_ACCOUNT_ID")}.r2.cloudflarestorage.com&compression=zstd`,
+        value: `s3://${nixCacheBucket.name}?endpoint=${commonInfra.cloudflareAccountId}.r2.cloudflarestorage.com&compression=zstd`,
         visibility: "all",
       },
     );
