@@ -1,5 +1,5 @@
-import { DataCloudflareRegistrarDomain } from "@oyasaiserver/cdktf-providers/cloudflare/data-cloudflare-registrar-domain";
 import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
+import { RegistrarDomain } from "@oyasaiserver/cdktf-providers/cloudflare/registrar-domain";
 import { Zone } from "@oyasaiserver/cdktf-providers/cloudflare/zone";
 import { Identity } from "@oyasaiserver/cdktf-providers/infisical/identity";
 import { IdentityOidcAuth } from "@oyasaiserver/cdktf-providers/infisical/identity-oidc-auth";
@@ -13,8 +13,9 @@ import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
 export class CommonInfra extends OyasaiTerraformStack {
   private readonly infisicalOrgId = "a8e8e008-81e0-4a4f-81a9-8441c6820e7e";
+  public readonly cloudflareAccountId = "7befe273c79e6f7993c1cd4534d6afff";
 
-  public readonly oyasaiIoRegistrarDomain: DataCloudflareRegistrarDomain;
+  public readonly oyasaiIoRegistrarDomain: RegistrarDomain;
   public readonly oyasaiIoZone: Zone;
 
   public readonly platformInfisicalProject: Project;
@@ -82,14 +83,13 @@ export class CommonInfra extends OyasaiTerraformStack {
 
     const secrets = createSecrets(this, this);
 
-    // TODO: Data because Cloudflare doesn't support importing registrar domain
-    // - shun 2026-04
-    this.oyasaiIoRegistrarDomain = new DataCloudflareRegistrarDomain(
+    this.oyasaiIoRegistrarDomain = new RegistrarDomain(
       this,
       this.t("oyasai-io-registrar-domain"),
       {
         accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
         domainName: "oyasai.io",
+        privacy: true
       },
     );
 
