@@ -2,6 +2,9 @@ import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/pro
 import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
 import { R2BucketLifecycle } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket-lifecycle";
 import { R2CustomDomain } from "@oyasaiserver/cdktf-providers/cloudflare/r2-custom-domain";
+import { Container } from "@oyasaiserver/cdktf-providers/docker/container";
+import { Network } from "@oyasaiserver/cdktf-providers/docker/network";
+import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
 import { ActionsOrganizationVariable } from "@oyasaiserver/cdktf-providers/github/actions-organization-variable";
 import { BranchDefault } from "@oyasaiserver/cdktf-providers/github/branch-default";
 import { GithubProvider } from "@oyasaiserver/cdktf-providers/github/provider";
@@ -9,8 +12,12 @@ import { Repository } from "@oyasaiserver/cdktf-providers/github/repository";
 import { RepositoryRuleset } from "@oyasaiserver/cdktf-providers/github/repository-ruleset";
 import { WorkflowRepositoryPermissions } from "@oyasaiserver/cdktf-providers/github/workflow-repository-permissions";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
+import { Password } from "@oyasaiserver/cdktf-providers/random/password";
+import { RandomProvider } from "@oyasaiserver/cdktf-providers/random/provider";
+import { Fn } from "cdktf";
 import type { Construct } from "constructs";
-import { DAY_IN_SECONDS } from "../helpers.ts";
+import { getDockerImages, getHostPaths } from "../docker-images.ts";
+import { DAY_IN_SECONDS, envs, ports } from "../helpers.ts";
 import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
@@ -29,12 +36,32 @@ export class CommonInternal extends OyasaiTerraformStack {
 
     this.createCloudBackend();
 
+    const secrets = createSecrets(this, commonInfra);
+
+    new RandomProvider(this, "random");
+
     new CloudflareProvider(this, this.t("cloudflare-provider"));
 
     new InfisicalProvider(this, this.t("infisical-provider"));
 
+    new DockerProvider(this, id, {
+      host: `tcp://${commonInfra.ipv4}:2376`,
+      caMaterial: secrets.get("TLS_CA_PEM"),
+      certMaterial: secrets.get("TLS_CERT_PEM"),
+      keyMaterial: secrets.get("TLS_KEY_PEM"),
+    });
+
+    new GithubProvider(this, "github-provider", {
+      // Required for app auth
+      owner: "oyasaiserver",
+      // Must pass empty object for app auth
+      // @ts-expect-error https://github.com/hashicorp/terraform-plugin-sdk/issues/142
+      appAuth: {},
+    });
+
     const { oyasaiIoRegistrarDomain, oyasaiIoZone } = commonInfra;
-    const secrets = createSecrets(this, commonInfra);
+    const images = getDockerImages();
+    const hostPaths = getHostPaths("common");
 
     const nixCacheBucket = new R2Bucket(this, "nix-cache-r2-bucket", {
       accountId: commonInfra.cloudflareAccountId,
@@ -81,12 +108,102 @@ export class CommonInternal extends OyasaiTerraformStack {
       zoneId: oyasaiIoZone.id,
     });
 
-    new GithubProvider(this, "github-provider", {
-      // Required for app auth
-      owner: "oyasaiserver",
-      // Must pass empty object for app auth
-      // @ts-expect-error https://github.com/hashicorp/terraform-plugin-sdk/issues/142
-      appAuth: {},
+    const network = new Network(this, this.t("network-internal"), {
+      name: "network-internal",
+    });
+
+    const postgresPassword = new Password(this, this.t("postgres-password"), {
+      length: 32,
+      special: false, // keep it simple for a DB URL
+    });
+
+    const niks3ApiToken = new Password(this, this.t("niks3-api-token"), {
+      length: 48, // min 36 chars required
+      special: false,
+    });
+
+    const postgres = new Container(this, this.t("postgres-container"), {
+      image: images.postgres,
+      name: "postgres",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      env: envs({
+        POSTGRES_USER: "niks3",
+        POSTGRES_PASSWORD: postgresPassword.result,
+        POSTGRES_DB: "niks3",
+      }),
+      volumes: [
+        {
+          containerPath: "/var/lib/postgresql",
+          hostPath: hostPaths.postgres,
+        },
+      ],
+    });
+
+    const niks3Bucket = new R2Bucket(this, "niks3-r2-bucket", {
+      accountId: commonInfra.cloudflareAccountId,
+      name: "niks3",
+      // Most popular location for GitHub Action runners
+      location: "enam",
+    });
+
+    const niks3Container = new Container(this, this.t("niks3-container"), {
+      image: images.niks3,
+      name: "niks3",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      dependsOn: [postgres],
+      ports: ports({
+        tcp: [5751],
+      }),
+      tmpfs: {
+        "/secrets": "rw,noexec,nosuid,size=65536k",
+      },
+      entrypoint: [
+        "/bin/sh",
+        "-c",
+        'echo "$NIKS3_SIGNING_KEY_VAL" > "$NIKS3_SIGN_KEY_PATHS" && exec /bin/niks3-server',
+      ],
+      env: envs({
+        NIKS3_DB: Fn.sensitive(
+          `postgres://niks3:${postgresPassword.result}@postgres:5432/niks3?sslmode=disable`,
+        ),
+        NIKS3_S3_ENDPOINT: `${commonInfra.cloudflareAccountId}.r2.cloudflarestorage.com`,
+        NIKS3_S3_BUCKET: niks3Bucket.name,
+        NIKS3_S3_ACCESS_KEY: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
+        NIKS3_S3_SECRET_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
+        NIKS3_S3_REGION: "auto",
+        NIKS3_API_TOKEN: niks3ApiToken.result,
+        NIKS3_SIGNING_KEY_VAL: secrets.get("NIX_CACHE_SIGNING_KEY"),
+        NIKS3_SIGN_KEY_PATHS: "/secrets/signing-key",
+      }),
+    });
+
+    // NOMERGE caddy
+    new Container(this, this.t("caddy-internal-container"), {
+      image: images.caddy,
+      name: "caddy",
+      restart: "unless-stopped",
+      networksAdvanced: [network],
+      ports: ports({
+        tcp: [
+          80, // http
+          443, // https
+        ],
+      }),
+      command: [
+        "reverse-proxy",
+        "--from",
+        `cache.${commonInfra.oyasaiIoRegistrarDomain.domainName}`,
+        "--to",
+        `${niks3Container.name}:5751`,
+      ],
+      volumes: [
+        {
+          containerPath: "/data",
+          hostPath: hostPaths.caddy,
+        },
+      ],
     });
 
     const platformRepository = new Repository(

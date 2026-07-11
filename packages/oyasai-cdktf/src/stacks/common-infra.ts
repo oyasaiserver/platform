@@ -21,6 +21,8 @@ export class CommonInfra extends OyasaiTerraformStack {
   readonly platformInfisicalProject: Project;
   readonly platformInfisicalProjectEnvironment: ProjectEnvironment;
 
+  readonly ipv4 = "121.81.157.109";
+
   constructor(scope: Construct, id: string) {
     super(scope, id);
 

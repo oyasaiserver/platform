@@ -32,12 +32,12 @@
   };
   mc-backup = {
     pname = "mc-backup";
-    version = "2026.6.2";
+    version = "2026.7.1";
     src = dockerTools.pullImage {
       imageName = "itzg/mc-backup";
-      imageDigest = "sha256:324971bd9b77867c5ee8ca510d071e63b96402995c0fb027b270e72f893140db";
-      sha256 = "sha256-nd3L8u1LVXVjq6iPQqKrrtgPoCg8zI4DzvgP03uBjMk=";
-      finalImageTag = "2026.6.2";
+      imageDigest = "sha256:a577ef7f05d03a42dace4077ee8c8bbee7e153ff9c3c5a7e939eacc4411ede33";
+      sha256 = "sha256-PCR/uOyTBy8ak2Y5z2q6HHJh8ZJfDIMTh838xApixg0=";
+      finalImageTag = "2026.7.1";
       os = "linux";
       arch = "amd64";
     };
@@ -50,6 +50,30 @@
       imageDigest = "sha256:9a9a12dc942c370040ced1d43ab9f7d1162e9fde7f38b0f7749c3516d79a812c";
       sha256 = "sha256-6I4SlD+N7jzTDqH7hfu6C7Sh4ALaL6WpkWqTjrhoCK0=";
       finalImageTag = "1.4.0";
+      os = "linux";
+      arch = "amd64";
+    };
+  };
+  niks3 = {
+    pname = "niks3";
+    version = "v1.7.0";
+    src = dockerTools.pullImage {
+      imageName = "ghcr.io/mic92/niks3";
+      imageDigest = "sha256:d705d1b78d95db4da8643368f29aef431f422aefeaa87045661f6a02d8b409f5";
+      sha256 = "sha256-8wnNVN2vwSBv5sVDCi7nDwPrZY+itywa8ORBkQL9NLQ=";
+      finalImageTag = "v1.7.0";
+      os = "linux";
+      arch = "amd64";
+    };
+  };
+  postgres = {
+    pname = "postgres";
+    version = "18.4";
+    src = dockerTools.pullImage {
+      imageName = "postgres";
+      imageDigest = "sha256:b076a8bcd593cf79cc6a72d66ee600740de46242ce09efbc04b459bbb7daaed5";
+      sha256 = "sha256-sUVEK3+XAQ1peANE0MyMnqJT1yNYwWBWsWQtYCMCpWs=";
+      finalImageTag = "18.4";
       os = "linux";
       arch = "amd64";
     };

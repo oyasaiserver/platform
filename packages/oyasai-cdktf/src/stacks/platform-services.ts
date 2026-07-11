@@ -6,8 +6,8 @@ import { Password } from "@oyasaiserver/cdktf-providers/random/password";
 import { RandomProvider } from "@oyasaiserver/cdktf-providers/random/provider";
 import { LocalBackend } from "cdktf";
 import { Construct } from "constructs";
-import { join } from "node:path";
-import { envs, mustEnv, ports } from "../helpers.ts";
+import { getDockerImages, getHostPaths } from "../docker-images.ts";
+import { envs, ports } from "../helpers.ts";
 import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
@@ -37,7 +37,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       this.createCloudBackend();
 
       new DockerProvider(this, id, {
-        host: `tcp://${platformInfra.ipv4}:2376`,
+        host: `tcp://${commonInfra.ipv4}:2376`,
         caMaterial: secrets.get("TLS_CA_PEM"),
         certMaterial: secrets.get("TLS_CERT_PEM"),
         keyMaterial: secrets.get("TLS_KEY_PEM"),
@@ -67,32 +67,8 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       ),
     } as const;
 
-    const imageIds = JSON.parse(mustEnv("OYASAI_IMAGE_ID"));
-    const images = {
-      // keep-sorted start
-      caddy: imageIds["caddy"],
-      mariadb: imageIds.mariadb,
-      minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
-      minecraftBackup: imageIds["mc-backup"],
-      minecraftLobby: imageIds["oyasai-minecraft-lobby"],
-      minecraftMain: imageIds["oyasai-minecraft-main"],
-      mysqlBackup: imageIds["mysql-backup"],
-      oyasaiWeb: imageIds["oyasai-web"],
-      velocity: imageIds["oyasai-velocity"],
-      // keep-sorted end
-    } as const;
-
-    const baseHostPath = join("/opt/platform", this.environment);
-    const hostPaths = {
-      // keep-sorted start
-      caddy: join(baseHostPath, "caddy"),
-      mariadb: join(baseHostPath, "mariadb"),
-      minecraftAxiom: join(baseHostPath, "minecraft-axiom"),
-      minecraftLobby: join(baseHostPath, "minecraft-lobby"),
-      minecraftMain: join(baseHostPath, "minecraft-main"),
-      velocity: join(baseHostPath, "velocity"),
-      // keep-sorted end
-    } as const;
+    const images = getDockerImages();
+    const hostPaths = getHostPaths(this.environment);
 
     const network = new Network(this, this.t("network"), {
       name: "network",

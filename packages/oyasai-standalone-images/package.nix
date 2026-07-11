@@ -11,6 +11,8 @@ let
     mariadb
     mc-backup
     mysql-backup
+    niks3
+    postgres
     # keep-sorted end
     ;
 in
@@ -46,6 +48,21 @@ runCommandLocal "oyasai-standalone-images"
         fromImage = mysql-backup.src;
         config = {
           Entrypoint = [ "/entrypoint" ];
+        };
+      };
+      niks3 = oyasaiDockerTools.buildImage {
+        name = niks3.pname;
+        fromImage = niks3.src;
+        config = {
+          Entrypoint = [ "/bin/niks3-server" ];
+        };
+      };
+      postgres = oyasaiDockerTools.buildImage {
+        name = postgres.pname;
+        fromImage = postgres.src;
+        config = {
+          Entrypoint = [ "docker-entrypoint.sh" ];
+          Cmd = [ "postgres" ];
         };
       };
       # keep-sorted end

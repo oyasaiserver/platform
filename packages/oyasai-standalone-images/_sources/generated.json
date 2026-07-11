@@ -50,14 +50,14 @@
             "arch": "amd64",
             "finalImageName": null,
             "finalImageTag": null,
-            "imageDigest": "sha256:324971bd9b77867c5ee8ca510d071e63b96402995c0fb027b270e72f893140db",
+            "imageDigest": "sha256:a577ef7f05d03a42dace4077ee8c8bbee7e153ff9c3c5a7e939eacc4411ede33",
             "imageName": "itzg/mc-backup",
-            "imageTag": "2026.6.2",
+            "imageTag": "2026.7.1",
             "os": "linux",
-            "sha256": "sha256-nd3L8u1LVXVjq6iPQqKrrtgPoCg8zI4DzvgP03uBjMk=",
+            "sha256": "sha256-PCR/uOyTBy8ak2Y5z2q6HHJh8ZJfDIMTh838xApixg0=",
             "tlsVerify": null
         },
-        "version": "2026.6.2"
+        "version": "2026.7.1"
     },
     "mysql-backup": {
         "cargoLock": null,
@@ -78,5 +78,45 @@
             "tlsVerify": null
         },
         "version": "1.4.0"
+    },
+    "niks3": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "niks3",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "arch": "amd64",
+            "finalImageName": null,
+            "finalImageTag": null,
+            "imageDigest": "sha256:d705d1b78d95db4da8643368f29aef431f422aefeaa87045661f6a02d8b409f5",
+            "imageName": "ghcr.io/mic92/niks3",
+            "imageTag": "v1.7.0",
+            "os": "linux",
+            "sha256": "sha256-8wnNVN2vwSBv5sVDCi7nDwPrZY+itywa8ORBkQL9NLQ=",
+            "tlsVerify": null
+        },
+        "version": "v1.7.0"
+    },
+    "postgres": {
+        "cargoLock": null,
+        "date": null,
+        "extract": null,
+        "name": "postgres",
+        "passthru": null,
+        "pinned": false,
+        "src": {
+            "arch": "amd64",
+            "finalImageName": null,
+            "finalImageTag": null,
+            "imageDigest": "sha256:b076a8bcd593cf79cc6a72d66ee600740de46242ce09efbc04b459bbb7daaed5",
+            "imageName": "postgres",
+            "imageTag": "18.4",
+            "os": "linux",
+            "sha256": "sha256-sUVEK3+XAQ1peANE0MyMnqJT1yNYwWBWsWQtYCMCpWs=",
+            "tlsVerify": null
+        },
+        "version": "18.4"
     }
 }
