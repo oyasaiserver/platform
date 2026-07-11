@@ -106,7 +106,7 @@ object SLRankUp {
     data
         .toList()
         .sortedWith(
-            Comparator.comparingInt<Pair<UUID, RankUpData>?> { it.second.buildCount }
+            Comparator.comparingInt<Pair<UUID, RankUpData>> { it.second.buildCount }
                 .thenComparingLong {
                   it.second.lastOnlineTime()?.toEpochSecond(ZoneOffset.UTC) ?: 0L
                 }
