@@ -317,13 +317,12 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
               // keep-sorted end
             ].join(","),
             PRUNE_RESTIC_RETENTION:
-              "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
+              "--group-by paths --keep-daily 7 --keep-weekly 4 --keep-monthly 3",
             RCON_HOST: minecraftContainer.name,
             RCON_PASSWORD: randoms.rconPassword.result,
             RESTIC_ADDITIONAL_TAGS: "", // Set to an empty string to disable additional tags.
             RESTIC_PASSWORD: secrets.get("RESTIC_PASSWORD"),
             RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/${backupName}-backup`,
-            RESTIC_VERBOSE: true,
             // keep-sorted end
           }),
           volumes: minecraftContainer.volumesInput,
