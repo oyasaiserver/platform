@@ -7,10 +7,11 @@ source_of_truth: "docs/00_Context/CONTEXT.md"
 related_paths:
   - docs/_MANIFEST.md
   - docs/00_Context/WORKFLOWS.md
+  - docs/02_Docs/ops/agentic-learning-loop/README.md
   - docs/01_Projects/
   - plugins/
   - packages/
-last_validated: "2026-06-05"
+last_validated: "2026-07-03"
 agent_task: null
 ---
 
@@ -56,6 +57,7 @@ docs/
   02_Docs/
     _MANIFEST.md        Cross-cutting docs and ops rules.
     ops/
+      agentic-learning-loop/
     tools/
   03_Outputs/
     _MANIFEST.md        Public generated outputs and validation results.
@@ -72,6 +74,12 @@ docs/
 
 Read only what is needed for the task.
 
+After this file, AI agents must read
+`docs/02_Docs/ops/agentic-learning-loop/README.md` before planning or acting.
+That loop defines how reusable corrections, mistakes, working rules, and
+next-time actions are captured for future agents in public-safe platform
+context.
+
 | Goal | Read next |
 |---|---|
 | Understand docs at a human level | `docs/README.md` |
@@ -84,7 +92,7 @@ Read only what is needed for the task.
 | Store small public examples or samples | `docs/04_Resources/_MANIFEST.md` |
 | Check old public docs | `docs/05_PublicArchives/_MANIFEST.md` |
 | Store public but unsorted knowledge | `docs/99_Inbox/_MANIFEST.md` |
-| Route agent memory, corrections, or local-only notes | `docs/02_Docs/ops/agentic-learning-loop/memory-routing.md` |
+| Route agent memory, corrections, or local-only notes | `docs/02_Docs/ops/agentic-learning-loop/README.md`, then `docs/02_Docs/ops/agentic-learning-loop/memory-routing.md` |
 | Keep private, local, raw, or unresolved notes | `docs/local/` if needed; it is Git-ignored and may be created by agents |
 
 ## Read Flow
@@ -93,7 +101,8 @@ Read only what is needed for the task.
 flowchart TD
   Entry["AGENTS.md / CLAUDE.md / GEMINI.md"] --> Manifest["docs/_MANIFEST.md"]
   Manifest --> Context["docs/00_Context/CONTEXT.md"]
-  Context --> Goal{"Task goal"}
+  Context --> LearningLoop["02_Docs/ops/agentic-learning-loop/README.md"]
+  LearningLoop --> Goal{"Task goal"}
   Goal -->|Workflow| Workflows["00_Context/WORKFLOWS.md"]
   Goal -->|Project| ProjectManifest["01_Projects/_MANIFEST.md"]
   Goal -->|Ops or tools docs| DocsManifest["02_Docs/_MANIFEST.md"]

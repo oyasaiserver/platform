@@ -2,6 +2,7 @@ package icu.oyasai.citiesskymine.facade
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.io.File
@@ -152,8 +153,24 @@ class HaussmannCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       1 -> listOf("build", "schem", "help").filter { it.startsWith(a0) }
       2 ->
           when (a0) {
-            "build" -> listOf("2", "3", "4", "5", "6", "8", "10")
-            "schem" -> listOf("full", "2", "3", "4", "5", "6", "8", "10", "12")
+            "build" ->
+                ArgSuggest.filterSuggestions(
+                    ArgSuggest.positional(
+                        "bays",
+                        "2-12",
+                        listOf("2", "3", "4", "5", "6", "8", "10"),
+                    ),
+                    args.last(),
+                )
+            "schem" ->
+                ArgSuggest.filterSuggestions(
+                    ArgSuggest.positional(
+                        "bays",
+                        "2-12",
+                        listOf("full", "2", "3", "4", "5", "6", "8", "10", "12"),
+                    ),
+                    args.last(),
+                )
             else -> emptyList()
           }
       3 ->

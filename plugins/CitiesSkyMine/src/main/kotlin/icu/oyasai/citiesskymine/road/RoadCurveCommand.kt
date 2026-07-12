@@ -2,6 +2,7 @@ package icu.oyasai.citiesskymine.road
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import org.bukkit.Material
@@ -90,12 +91,40 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
               }
               .take(20)
               .map { it.name.lowercase() }
-      "radius" -> listOf("10.0", "20.0", "30.0", "50.0").filter { it.startsWith(prefix) }
-      "transition" -> listOf("5.0", "10.0", "15.0", "20.0").filter { it.startsWith(prefix) }
-      "lane" -> listOf("2", "3", "4", "5", "6").filter { it.startsWith(prefix) }
-      "centerline",
-      "outerline" -> listOf("1", "2").filter { it.startsWith(prefix) }
-      "sidewalk" -> listOf("1", "2", "3", "4").filter { it.startsWith(prefix) }
+      "radius" ->
+          ArgSuggest.filterSuggestions(
+              ArgSuggest.positional("radius", "1.0-100.0", listOf("10.0", "20.0", "30.0", "50.0")),
+              prefix,
+          )
+      "transition" ->
+          ArgSuggest.filterSuggestions(
+              ArgSuggest.positional(
+                  "transition",
+                  "1.0-50.0",
+                  listOf("5.0", "10.0", "15.0", "20.0"),
+              ),
+              prefix,
+          )
+      "lane" ->
+          ArgSuggest.filterSuggestions(
+              ArgSuggest.positional("lane", "2-6", listOf("2", "3", "4", "5", "6")),
+              prefix,
+          )
+      "centerline" ->
+          ArgSuggest.filterSuggestions(
+              ArgSuggest.positional("centerline", "0-4", listOf("1", "2")),
+              prefix,
+          )
+      "outerline" ->
+          ArgSuggest.filterSuggestions(
+              ArgSuggest.positional("outerline", "0-4", listOf("1", "2")),
+              prefix,
+          )
+      "sidewalk" ->
+          ArgSuggest.filterSuggestions(
+              ArgSuggest.positional("sidewalk", "0-10", listOf("1", "2", "3", "4")),
+              prefix,
+          )
       else -> emptyList()
     }
   }
@@ -255,6 +284,10 @@ class RoadCurveCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       param: String,
       value: String,
   ): Boolean {
+    if (ArgSuggest.isPlaceholder(value)) {
+      MessageUtil.error(player, "無効な引数です。数値を入力してください: $value")
+      return false
+    }
     try {
       when (param.lowercase()) {
         "radius" -> {

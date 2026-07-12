@@ -4,6 +4,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.math.BlockVector3
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.util.UUID
@@ -48,7 +49,16 @@ class CloudCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       args: Array<String>,
   ): List<String> {
     if (args.size > 5) return emptyList()
-    return positionalSuggestion(args.dropLast(1), args.lastOrNull().orEmpty())
+    val suggestions =
+        when (args.size - 1) {
+          0 -> ArgSuggest.positional("size", "1-256", listOf("64", "96", "128", "160"))
+          1 -> ArgSuggest.positional("height", "1-256", listOf("16", "24", "32", "48"))
+          2 -> ArgSuggest.positional("density", "0.30-0.95", listOf("0.50", "0.72", "0.85"))
+          3 -> ArgSuggest.positional("seed", "0-10000000", listOf("42", "123", "2026"))
+          4 -> ArgSuggest.positional("yOffset", "-256~512", listOf("80", "100", "128"))
+          else -> emptyList()
+        }
+    return ArgSuggest.filterSuggestions(suggestions, args.lastOrNull().orEmpty())
   }
 
   fun sendHelp(sender: CommandSender, base: String) {
@@ -167,7 +177,7 @@ class CloudCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       MessageUtil.error(sender, "引数が多すぎます。使い方は /csm help cloud または /.help cloud を見てください。")
       return null
     }
-    val args = rawArgs.map { raw -> raw.takeUnless { it.isPlaceholder() } }
+    val args = rawArgs.map { raw -> raw.takeUnless { ArgSuggest.isPlaceholder(it) } }
 
     val size =
         if (args.getOrNull(0) == null) 128
@@ -240,21 +250,6 @@ class CloudCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           "limits.max-blocks-cloud",
           plugin.config.getLong("limits.max-blocks-csm", 2_000_000L),
       )
-
-  private fun positionalSuggestion(rawArgs: List<String>, current: String): List<String> {
-    val suggestions =
-        when (rawArgs.size) {
-          0 -> listOf("[size]", "64", "96", "128", "160")
-          1 -> listOf("[height]", "16", "24", "32", "48")
-          2 -> listOf("[density]", "0.50", "0.72", "0.85")
-          3 -> listOf("[seed]", "42", "123", "2026")
-          4 -> listOf("[yOffset]", "80", "100", "128")
-          else -> emptyList()
-        }
-    return suggestions.filter { it.startsWith(current, ignoreCase = true) }
-  }
-
-  private fun String.isPlaceholder(): Boolean = startsWith("[") && endsWith("]")
 
   private companion object {
     const val MAX_SEED = 10_000_000

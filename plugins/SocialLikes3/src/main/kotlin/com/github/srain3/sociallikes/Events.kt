@@ -34,6 +34,7 @@ import org.bukkit.block.HangingSign
 import org.bukkit.block.Sign
 import org.bukkit.block.data.type.WallSign
 import org.bukkit.block.sign.Side
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -261,7 +262,9 @@ object Events : Listener {
           )
           ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
           if (e.player.uniqueId != data.owner) {
-            Tools.addTokens(ownerPlayer, 2)
+            if (Tools.addTokens(ownerPlayer, 2)) {
+              sendLikeRewardMessage(ownerPlayer, 2)
+            }
           }
         } else {
           offlineLikesPoint[data.owner] = (offlineLikesPoint[data.owner] ?: 0) + 2
@@ -353,6 +356,16 @@ object Events : Listener {
   /** オフラインの時イイねされたPointを貯めておく */
   val offlineLikesPoint = mutableMapOf<UUID, Int>()
 
+  private fun sendLikeRewardMessage(player: Player, amount: Long, offline: Boolean = false) {
+    val message =
+        if (offline) {
+          "&aオフライン中のいいね報酬として投票ポイントを${amount}pt獲得しました！"
+        } else {
+          "&aいいね報酬として投票ポイントを2pt獲得しました！"
+        }
+    player.sendMessage(Tools.socialLikesLOGO + " " + message.color())
+  }
+
   /** オフライン時のいいねPointをプラグイン無効化時ファイルへ保存 */
   fun offlineLikePointSave() {
     val oldYml = CustomYaml("offlineLikePoint.yml")
@@ -375,8 +388,17 @@ object Events : Listener {
   @EventHandler
   fun joinEvent(e: PlayerJoinEvent) {
     val pointInt = offlineLikesPoint[e.player.uniqueId] ?: return
-    Tools.addTokens(e.player, pointInt.toLong())
-    offlineLikesPoint.remove(e.player.uniqueId)
+    val player = e.player
+    object : BukkitRunnable() {
+          override fun run() {
+            if (!player.isOnline) return
+            if (Tools.addTokens(player, pointInt.toLong())) {
+              sendLikeRewardMessage(player, pointInt.toLong(), offline = true)
+              offlineLikesPoint.remove(player.uniqueId)
+            }
+          }
+        }
+        .runTaskLater(plugin, 20L)
   }
 
   /** SocialLikesの看板が壊れないようにする */

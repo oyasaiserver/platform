@@ -7,6 +7,7 @@ import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.CuboidRegion
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import kotlin.math.abs
@@ -111,16 +112,17 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
     if (args.isEmpty()) return emptyList()
     val current = args.last()
     val suggestions = columnArgumentSuggestions(args)
-    return suggestions.filter { it.startsWith(current, ignoreCase = true) }
+    return ArgSuggest.filterSuggestions(suggestions, current)
   }
 
   private fun columnArgumentSuggestions(args: Array<String>): List<String> {
     val position = args.count { !isColumnOptionToken(it) }
     val countMode = args.any { isCountModeToken(it) }
     return when {
-      position <= 1 -> listOf("1", "2", "3")
-      position == 2 && countMode -> listOf("3", "4", "5", "6", "5x3")
-      position == 2 -> listOf("3", "5", "7", "9")
+      position <= 1 -> ArgSuggest.positional("thickness", "1-10", listOf("1", "2", "3"))
+      position == 2 && countMode ->
+          ArgSuggest.positional("count", "2-20", listOf("3", "4", "5", "6", "5x3"))
+      position == 2 -> ArgSuggest.positional("spacing", "1-50", listOf("3", "5", "7", "9"))
       else -> columnOptionSuggestions(args.dropLast(1))
     }
   }
@@ -176,6 +178,10 @@ class ColumnLayoutCommand(private val plugin: Main) : CommandExecutor, TabComple
     }
 
     val widthRaw = positionals.getOrNull(0)
+    if (widthRaw != null && ArgSuggest.isPlaceholder(widthRaw)) {
+      MessageUtil.error(sender, "無効な引数です。数値を入力してください: $widthRaw")
+      return null
+    }
     val columnWidth = widthRaw?.toIntOrNull()
     if (columnWidth == null) {
       showColumnUsageError(sender, label)

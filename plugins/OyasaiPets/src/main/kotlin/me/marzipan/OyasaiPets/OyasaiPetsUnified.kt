@@ -9491,7 +9491,7 @@ class EconomySystem(private val logger: Logger) {
     }
 
     return try {
-      TMAPI.removeTokens(player.uniqueId, amount)
+      if (!TMAPI.removeTokens(player.uniqueId, amount)) return false
       true
     } catch (e: Exception) {
       logger.warning("Failed to remove tokens from ${player.name}: ${e.message}")
