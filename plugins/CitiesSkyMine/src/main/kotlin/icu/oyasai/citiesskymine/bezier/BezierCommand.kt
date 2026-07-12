@@ -6,6 +6,7 @@ import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.CuboidRegion
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import org.bukkit.Location
@@ -69,7 +70,10 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       "set",
       "remove" ->
           if (args.size == 2)
-              (1..MAX_POINTS).map { it.toString() }.filter { it.startsWith(args[1]) }
+              ArgSuggest.filterSuggestions(
+                  ArgSuggest.positional("point", "1-N", listOf("1", "2", "3")),
+                  args[1],
+              )
           else emptyList()
       "preview" ->
           if (args.size == 2)
@@ -77,7 +81,11 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
           else emptyList()
       "build" -> tabCompleteBuild(args)
       "segments" ->
-          if (args.size == 2) listOf("32", "64", "96", "128").filter { it.startsWith(args[1]) }
+          if (args.size == 2)
+              ArgSuggest.filterSuggestions(
+                  ArgSuggest.positional("segments", "8-256", listOf("32", "64", "96", "128")),
+                  args[1],
+              )
           else emptyList()
       else -> emptyList()
     }
@@ -290,6 +298,10 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
   private fun setSegments(player: Player, args: Array<String>) {
     val raw = args.getOrNull(1)
+    if (raw != null && ArgSuggest.isPlaceholder(raw)) {
+      MessageUtil.error(player, "無効な引数です。数値を入力してください: $raw")
+      return
+    }
     val value = raw?.toIntOrNull()
     if (value == null || value !in 8..256) {
       MessageUtil.error(player, "segments は 8 から 256 の整数で指定してください。")
@@ -396,6 +408,10 @@ class BezierCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   }
 
   private fun parseIndex(player: Player, raw: String?): Int? {
+    if (raw != null && ArgSuggest.isPlaceholder(raw)) {
+      MessageUtil.error(player, "無効な引数です。数値を入力してください: $raw")
+      return null
+    }
     val index = raw?.toIntOrNull()
     if (index == null || index !in 1..MAX_POINTS) {
       MessageUtil.error(player, "制御点番号は 1 から $MAX_POINTS で指定してください。")

@@ -6,6 +6,7 @@ import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.util.LinkedHashMap
@@ -189,12 +190,15 @@ class WindowCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     return when (args.size) {
       1 ->
-          (listOf("2", "3", "4", "5", "6") + materialSuggestions).filter {
-            it.startsWith(args[0], ignoreCase = true)
-          }
+          (ArgSuggest.positional("width", "1-10", listOf("2", "3", "4", "5", "6")) +
+                  materialSuggestions)
+              .let { ArgSuggest.filterSuggestions(it, args[0]) }
       2 ->
           if (args[0].toIntOrNull() != null) {
-            listOf("3", "4", "5", "6", "8").filter { it.startsWith(args[1]) }
+            ArgSuggest.filterSuggestions(
+                ArgSuggest.positional("height", "1-20", listOf("3", "4", "5", "6", "8")),
+                args[1],
+            )
           } else {
             materialSuggestions.filter { it.startsWith(args[1], ignoreCase = true) }
           }

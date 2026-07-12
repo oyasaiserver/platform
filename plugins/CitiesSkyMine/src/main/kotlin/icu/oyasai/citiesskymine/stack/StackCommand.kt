@@ -6,6 +6,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.regions.CuboidRegion
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import kotlin.math.roundToInt
@@ -89,20 +90,30 @@ class StackCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   ): List<String> {
     if (args.isEmpty()) return emptyList()
     val current = args.last()
-    val hasTimes = args.any { it.toIntOrNull() != null }
+    val previousArgs = args.dropLast(1)
+    val hasTimes = previousArgs.any { it.toIntOrNull() != null }
+    val hasDirection = previousArgs.any { normalizeDirection(it) != null }
     val suggestions =
         if (hasTimes) {
           listOf("-a", "air", "water", "lava", "stone", "dirt", "grass_block")
+        } else if (
+            hasDirection && current.toIntOrNull() != null || (hasDirection && current.isEmpty())
+        ) {
+          ArgSuggest.positional("times", "1-100", listOf("2", "3", "5", "10"))
         } else {
           DIRECTION_SUGGESTIONS + listOf("help")
         }
-    return suggestions.filter { it.startsWith(current, ignoreCase = true) }
+    return ArgSuggest.filterSuggestions(suggestions, current)
   }
 
   private fun parseArgs(sender: CommandSender, args: Array<String>): ParsedStackArgs? {
     val directions = ArrayList<String>()
     var timesIndex = -1
     for (i in args.indices) {
+      if (ArgSuggest.isPlaceholder(args[i])) {
+        MessageUtil.error(sender, "無効な引数です。数値を入力してください: ${args[i]}")
+        return null
+      }
       if (args[i].toIntOrNull() != null) {
         timesIndex = i
         break

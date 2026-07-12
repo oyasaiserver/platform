@@ -11,6 +11,7 @@ import com.sk89q.worldedit.world.block.BlockState
 import com.sk89q.worldedit.world.block.BlockTypes
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.io.ByteArrayInputStream
@@ -252,7 +253,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
 
     val suggestions = ArrayList<String>()
-    if (!hasRotation) suggestions.addAll(listOf("0", "1", "2", "3"))
+    if (!hasRotation)
+        suggestions.addAll(ArgSuggest.positional("rotation", "0-3", listOf("0", "1", "2", "3")))
     if (!hasSide) suggestions.addAll(listOf("L", "R"))
     if (!hasRotation && !hasSide) {
       suggestions.addAll(
@@ -277,7 +279,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       )
     }
     if (!hasHollow) suggestions.addAll(listOf("hollow", "solid"))
-    return suggestions.filter { it.startsWith(args.last(), ignoreCase = true) }
+    return ArgSuggest.filterSuggestions(suggestions, args.last())
   }
 
   private fun showHelp(sender: CommandSender) {
@@ -734,6 +736,9 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun parsePlacementToken(raw: String?): PlacementToken? {
     if (raw == null) {
       return PlacementToken(null, null, null)
+    }
+    if (ArgSuggest.isPlaceholder(raw)) {
+      return null
     }
 
     val token = raw.trim().uppercase()
