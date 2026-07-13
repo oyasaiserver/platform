@@ -286,11 +286,11 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         ["minecraft-axiom"]: minecraftAxiomContainer,
       } as const;
 
-      for (const [backupName, minecraftContainer] of Object.entries(
+      for (const [backupId, minecraftContainer] of Object.entries(
         backedupMinecraftContainers,
       )) {
-        new Container(this, this.t(`${backupName}-backup-container`), {
-          name: `${backupName}-backup`,
+        new Container(this, this.t(`${backupId}-backup-container`), {
+          name: `${backupId}-backup`,
           dependsOn: [minecraftContainer],
           image: images.minecraftBackup,
           networksAdvanced: [network],
@@ -301,7 +301,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
             AWS_SECRET_ACCESS_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
             BACKUP_INTERVAL: "6h",
             BACKUP_METHOD: "restic",
-            BACKUP_NAME: backupName,
+            BACKUP_NAME: minecraftContainer.name,
             EXCLUDES: [
               // keep-sorted start
               "*.hprof", // Spark profiles - they are huge.
@@ -317,12 +317,12 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
               // keep-sorted end
             ].join(","),
             PRUNE_RESTIC_RETENTION:
-              "--group-by paths --keep-daily 7 --keep-weekly 4 --keep-monthly 3",
+              "--keep-daily 7 --keep-weekly 4 --keep-monthly 3",
             RCON_HOST: minecraftContainer.name,
             RCON_PASSWORD: randoms.rconPassword.result,
             RESTIC_ADDITIONAL_TAGS: "", // Set to an empty string to disable additional tags.
             RESTIC_PASSWORD: secrets.get("RESTIC_PASSWORD"),
-            RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/${backupName}-backup`,
+            RESTIC_REPOSITORY: `s3:${cloudflareBaseUrl}/${r2Bucket.name}/${backupId}-backup`,
             // keep-sorted end
           }),
           volumes: minecraftContainer.volumesInput,
