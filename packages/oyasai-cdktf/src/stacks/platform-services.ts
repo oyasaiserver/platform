@@ -219,7 +219,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
 
     new Container(this, this.t("velocity-container"), {
       image: images.velocity,
-      name: "velocity",
+      name: "oyasai-velocity",
       restart: "unless-stopped",
       networksAdvanced: [network],
       ports: ports({
