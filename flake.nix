@@ -25,7 +25,7 @@
       flake = false;
     };
     nix-minecraft = {
-      url = "github:infinidoge/nix-minecraft";
+      url = "github:infinidoge/nix-minecraft/pull/230/merge";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
     };
