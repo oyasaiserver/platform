@@ -34,8 +34,8 @@
   "coreprotect": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/6W2ad1iI/CoreProtect-CE-23.2.jar",
-        "hash": "sha256-LXi76LC049bJW334AiyzMTLI0YrMUxlcJz7tPisEkls="
+        "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/Kma0kBsY/CoreProtect-CE-24.0.jar",
+        "hash": "sha256-Zs02IIm7hDDloBjud+m0M78NyeZVkNXxoEOnjWBBVpY="
       }
     }
   },
@@ -98,8 +98,8 @@
   "fastasyncworldedit": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/tG0Vfeqx/FastAsyncWorldEdit-Paper-2.15.2.jar",
-        "hash": "sha256-+yWmVha1HMVNmZ8EVe+de3W6ky23nizy3Nh0t+74X9E="
+        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/Ad3NnAQP/FastAsyncWorldEdit-Paper-2.15.3.jar",
+        "hash": "sha256-1ylB+//6jz578p9blKwpvLIN0EKyqy5dv7BqwSr6RWo="
       }
     }
   },
@@ -117,8 +117,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.10.1/builds/1180/downloads/velocity",
-      "hash": "sha256-/+Mi6ryhIXQA0oNRcidr28NdTziTZPy6vvD1M/IKA30="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.0/builds/1199/downloads/velocity",
+      "hash": "sha256-xX13iG77VgdkcmtIaLdUy7Jn3QxGcn1MqsIixBWljn4="
     }
   },
   "gsit": {
@@ -188,8 +188,8 @@
   "multiversecore": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/zaVq0eAi/multiverse-core-5.7.2.jar",
-        "hash": "sha256-V0hiqjBir1OVf+hF3hEKOG+IZEU2aDbIxjcS4R1pdAA="
+        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/PBjs38nY/multiverse-core-5.7.3-pre.1.jar",
+        "hash": "sha256-DBI3NB06gExlp2EHLaevkfgq9WdF/6YWtcYoCdHrDBo="
       }
     }
   },
@@ -244,8 +244,8 @@
   "plugmanx": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/yro4niHu/versions/hrMAp7Ww/PlugManX-3.0.4.jar",
-        "hash": "sha256-LLb7Ddfm9YZ7ypv6PwN1HW2J1rlJ6LbTdAUHtVrmqcA="
+        "url": "https://cdn.modrinth.com/data/yro4niHu/versions/xKZ0Z0JG/PlugManX-3.1.0-Beta.2.jar",
+        "hash": "sha256-Fal4+q881IFmdDqmfTETLFZoRLjFg823y7Umkyq+Qpw="
       }
     }
   },
@@ -312,8 +312,8 @@
   "skript": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/2QwoQvep/Skript-2.15.4.jar",
-        "hash": "sha256-xZhU2GlWLoIqGCpepmIZAwcYohPVO2cYLl2b3ssVhl0="
+        "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/1FoOjYHA/Skript-2.16.0.jar",
+        "hash": "sha256-vNvREqdAMXHUec2qXw/pgPbzYqJASJzgcFKeiZ4XqpM="
       }
     }
   },
@@ -368,8 +368,8 @@
   "viaversion": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/nSqRQTXh/ViaVersion-5.10.1-SNAPSHOT.jar",
-        "hash": "sha256-uSZmO1R1/GMP3ypj1AoiPv9eFUxJSmvBso4Z7c7gNVA="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/CjleI5xo/ViaVersion-5.11.1-SNAPSHOT.jar",
+        "hash": "sha256-mSqwbbffbTfB0uP3pF0egFTWzLO7Vscz3TeClp67kAE="
       }
     }
   },
@@ -384,8 +384,8 @@
   "worldeditsui": {
     "paper": {
       "1.21.11": {
-        "url": "https://hangarcdn.papermc.io/plugins/kennytv/WorldEditSUI/versions/1.7.4/PAPER/WorldEditSUI-1.7.4.jar",
-        "hash": "sha256-cAbPnllEx14bV8wZ3IjtF/wXmg4oNU/aQkqjKpWqw9g="
+        "url": "https://hangarcdn.papermc.io/plugins/kennytv/WorldEditSUI/versions/1.8.0/PAPER/WorldEditSUI-1.8.0.jar",
+        "hash": "sha256-wS283aZjbaufbIDzRYs8GpUIcX5DCmOB+CVz86/D8JQ="
       }
     }
   },
