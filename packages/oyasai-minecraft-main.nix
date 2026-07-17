@@ -59,6 +59,7 @@ oyasaiPurpur rec {
     floodgate
     gakubuchilocker
     gsit
+    headhuntplugin
     imageonmap
     inventoryshop
     joincommands
