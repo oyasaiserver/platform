@@ -1,7 +1,7 @@
 name: HeadHunt
-version: '${version}'
+version: "${version}"
 main: com.ququla89.headhunt.HeadHuntPlugin
-api-version: '1.21'
+api-version: "1.21"
 author: QuQuLa89
 description: Head-block treasure hunting minigame (solo / team)
 
