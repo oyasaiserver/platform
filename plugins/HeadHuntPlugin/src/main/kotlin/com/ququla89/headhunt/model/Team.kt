@@ -5,5 +5,5 @@ import java.util.UUID
 class Team(
     val name: String,
 ) {
-    val members: MutableSet<UUID> = linkedSetOf()
+  val members: MutableSet<UUID> = linkedSetOf()
 }
