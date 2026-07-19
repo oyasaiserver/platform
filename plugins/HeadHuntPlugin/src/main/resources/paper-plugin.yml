@@ -3,12 +3,12 @@ version: "${version}"
 main: com.ququla89.headhunt.HeadHuntPlugin
 api-version: "1.21"
 author: QuQuLa89
-description: Head-block treasure hunting minigame (solo / team)
+description: 頭ブロックを使ったソロ・チーム対応の宝探しミニゲームです。
 
 permissions:
   headhunt.admin:
-    description: Allows administrative HeadHunt commands (setmode, start, reset, stop, deleteall, team management, list)
+    description: HeadHuntの管理コマンドを使用できます。
     default: op
   headhunt.use:
-    description: Allows basic HeadHunt commands (team list, team info)
+    description: HeadHuntの基本コマンドを使用できます。
     default: true
