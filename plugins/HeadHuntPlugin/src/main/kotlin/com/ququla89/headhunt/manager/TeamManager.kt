@@ -20,10 +20,13 @@ class TeamManager {
 
   fun delete(name: String): Boolean = teams.remove(name) != null
 
-  fun addMember(name: String, playerId: UUID): Boolean {
+  fun addMember(
+      name: String,
+      playerId: UUID,
+  ): Boolean {
     val team = teams[name] ?: return false
-    team.members.add(playerId)
-    return true
+    if (teamOf(playerId) != null) return false
+    return team.members.add(playerId)
   }
 
   fun removeMember(playerId: UUID): Boolean {

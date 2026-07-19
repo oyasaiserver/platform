@@ -10,7 +10,6 @@ import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
 
 class HeadHuntPlugin : JavaPlugin() {
-
   private lateinit var treasureManager: TreasureManager
   private lateinit var teamManager: TeamManager
   private lateinit var gameManager: GameManager
@@ -19,7 +18,7 @@ class HeadHuntPlugin : JavaPlugin() {
     val treasureIdKey = NamespacedKey(this, "treasure_id")
     val dataFile = File(dataFolder, "treasures.yml")
 
-    treasureManager = TreasureManager(dataFile, treasureIdKey, logger)
+    treasureManager = TreasureManager(dataFile, treasureIdKey, logger, server::getWorld)
     treasureManager.load()
 
     teamManager = TeamManager()
@@ -28,15 +27,17 @@ class HeadHuntPlugin : JavaPlugin() {
     server.pluginManager.registerEvents(TreasureListener(treasureManager, gameManager), this)
 
     val executor = HeadHuntCommand(treasureManager, teamManager, gameManager)
-    registerCommand("headhunt", "HeadHunt main command", listOf("hhunt"), executor)
+    registerCommand("headhunt", "HeadHuntのメインコマンドです。", listOf("hhunt"), executor)
 
-    logger.info("HeadHunt has been enabled. Loaded " + treasureManager.size + " treasure(s).")
+    logger.info("HeadHuntを有効化しました。${treasureManager.size}件の宝HEADを読み込みました。")
   }
 
   override fun onDisable() {
     if (::treasureManager.isInitialized) {
-      treasureManager.save()
+      if (!treasureManager.save()) {
+        logger.severe("HeadHuntの終了時に宝HEAD情報を保存できませんでした。")
+      }
     }
-    logger.info("HeadHunt has been disabled.")
+    logger.info("HeadHuntを無効化しました。")
   }
 }
