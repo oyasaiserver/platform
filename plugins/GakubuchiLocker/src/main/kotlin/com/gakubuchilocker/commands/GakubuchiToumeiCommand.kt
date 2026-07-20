@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
-class GakubuchiCommand(
+class GakubuchiToumeiCommand(
     private val plugin: GakubuchiLockerPlugin,
 ) : CommandExecutor, TabCompleter {
   override fun onCommand(
@@ -32,38 +32,19 @@ class GakubuchiCommand(
       return true
     }
 
-    val turnOn = sub == "on"
-    when (command.name.lowercase()) {
-      "gakubuchilock" ->
-          handleMode(sender, turnOn, GakubuchiLockerPlugin.PendingMode.LOCK, "Lock", "ロック")
-      "gakubuchiunlock" ->
-          handleMode(sender, turnOn, GakubuchiLockerPlugin.PendingMode.UNLOCK, "Unlock", "ロック解除")
+    if (sub == "on") {
+      plugin.toumeiPlayers.add(sender.uniqueId)
+      sender.sendMessage("§a[Gakubuchi] §f額縁自動透明化モードを§aON§fにしました。額縁を設置すると自動で透明になります。")
+      sender.sendMessage("§7/$label off §7で終了します。")
+    } else {
+      if (plugin.toumeiPlayers.remove(sender.uniqueId)) {
+        sender.sendMessage("§e[Gakubuchi] §f額縁自動透明化モードを§cOFF§fにしました。")
+      } else {
+        sender.sendMessage("§c[Gakubuchi] §f額縁自動透明化モードはONになっていません。")
+      }
     }
 
     return true
-  }
-
-  private fun handleMode(
-      player: Player,
-      turnOn: Boolean,
-      mode: GakubuchiLockerPlugin.PendingMode,
-      label: String,
-      action: String,
-  ) {
-    if (turnOn) {
-      plugin.pendingMode[player.uniqueId] = mode
-      val offCmd =
-          if (mode == GakubuchiLockerPlugin.PendingMode.LOCK) "gakubuchilock" else "gakubuchiunlock"
-      player.sendMessage("§a[Gakubuchi] §f${label}モードを§aON§fにしました。額縁を右クリックで${action}できます。")
-      player.sendMessage("§7/$offCmd off §7で終了します。")
-    } else {
-      if (plugin.pendingMode[player.uniqueId] == mode) {
-        plugin.pendingMode.remove(player.uniqueId)
-        player.sendMessage("§e[Gakubuchi] §f${label}モードを§cOFF§fにしました。")
-      } else {
-        player.sendMessage("§c[Gakubuchi] §f${label}モードはONになっていません。")
-      }
-    }
   }
 
   override fun onTabComplete(
