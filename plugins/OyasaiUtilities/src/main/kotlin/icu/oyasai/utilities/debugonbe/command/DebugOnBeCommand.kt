@@ -6,6 +6,7 @@ import icu.oyasai.utilities.debugonbe.gui.TogoGui
 import icu.oyasai.utilities.debugonbe.model.BlockShape
 import icu.oyasai.utilities.debugonbe.model.TogoSettings
 import icu.oyasai.utilities.debugonbe.model.TogoSettingsLimits
+import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -88,6 +89,9 @@ class DebugOnBeCommand(
     when (sub) {
       "refresh" -> handleRefresh(sender, args)
       "reload" -> handleReload(sender)
+      "replace",
+      "target",
+      "replacement" -> handleReplace(sender, args)
       "help" -> sendHelp(sender)
       else -> sender.sendMessage("§c[DOB] 不明なサブコマンドです。/debugonbe help を参照してください。")
     }
@@ -296,6 +300,31 @@ class DebugOnBeCommand(
     player.sendMessage("§a[DOB] 設定ファイルを再読み込みしました。")
   }
 
+  private fun handleReplace(player: Player, args: Array<out String>) {
+    val raw = args.getOrNull(1)
+    if (raw == null) {
+      player.sendMessage("§c[DOB] 置き換え先ブロックを指定してください。 (例: /debugonbe replace stone)")
+      return
+    }
+
+    if (raw.lowercase() in setOf("air", "reset", "off")) {
+      displayManager.setReplacementMaterial(player, Material.AIR)
+      displayManager.syncForPlayer(player)
+      player.sendMessage("§a[DOB] 置き換え先をAIRに戻しました。")
+      return
+    }
+
+    val material = Material.matchMaterial(raw.removePrefix("minecraft:").uppercase())
+    if (material == null || !material.isBlock) {
+      player.sendMessage("§c[DOB] ブロック名が不正です。")
+      return
+    }
+
+    displayManager.setReplacementMaterial(player, material)
+    displayManager.syncForPlayer(player)
+    player.sendMessage("§a[DOB] 置き換え先を §e${material.name.lowercase()} §aに設定しました。")
+  }
+
   private fun sendHelp(player: Player, page: Int = 1) {
     if (page == 1) {
       player.sendMessage(
@@ -306,6 +335,7 @@ class DebugOnBeCommand(
           §a/togom                     §7- Togo設定GUIを開く
           §a/togom <types/reset/lim/...> §7- Togo設定をコマンドで変更
           §a/debugonbe refresh [radius] §7- 周囲ブロックを置換 (デフォルト10)
+          §a/debugonbe replace <block> §7- 置き換え先を設定 (AIRで解除)
           §a/debugonbe reload           §7- 設定ファイルを再読み込み
 
           §7次ページ: /togo help 2
@@ -406,10 +436,19 @@ class DebugOnBeCommand(
     }
 
     return when (args.size) {
-      1 -> listOf("refresh", "reload", "help").filter { it.startsWith(args[0].lowercase()) }
+      1 ->
+          listOf("refresh", "reload", "replace", "target", "replacement", "help").filter {
+            it.startsWith(args[0].lowercase())
+          }
       2 ->
           when (args[0].lowercase()) {
             "refresh" -> listOf("5", "10", "16", "32").filter { it.startsWith(args[1]) }
+            "replace",
+            "target",
+            "replacement" ->
+                (listOf("air", "reset", "off") +
+                        Material.values().filter { it.isBlock }.map { it.name.lowercase() })
+                    .filter { it.startsWith(args[1].lowercase()) }
             else -> emptyList()
           }
       else -> emptyList()

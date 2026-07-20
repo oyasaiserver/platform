@@ -21,10 +21,12 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.LightBlock
 import net.minecraft.world.level.block.state.BlockState
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.craftbukkit.CraftWorld
 import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.bukkit.craftbukkit.inventory.CraftItemStack
+import org.bukkit.craftbukkit.util.CraftMagicNumbers
 import org.bukkit.entity.Player
 
 /**
@@ -45,8 +47,14 @@ class PacketBlockHider(private val plugin: org.bukkit.plugin.Plugin) {
   // ブロック表示パケット
   // ────────────────────────────────────────────────────────────────
 
-  fun hideBlock(player: Player, block: Block) {
-    sendBlockPacket(player, block.location, Blocks.AIR.defaultBlockState())
+  fun hideBlock(player: Player, block: Block, replacementMaterial: Material = Material.AIR) {
+    val replacementState =
+        if (replacementMaterial.isAir) {
+          Blocks.AIR.defaultBlockState()
+        } else {
+          CraftMagicNumbers.getBlock(replacementMaterial).defaultBlockState()
+        }
+    sendBlockPacket(player, block.location, replacementState)
   }
 
   fun restoreBlock(player: Player, block: Block) {
