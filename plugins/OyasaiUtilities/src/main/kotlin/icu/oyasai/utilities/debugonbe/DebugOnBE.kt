@@ -2,6 +2,7 @@ package icu.oyasai.utilities.debugonbe
 
 import icu.oyasai.utilities.debugonbe.command.DebugOnBeCommand
 import icu.oyasai.utilities.debugonbe.data.PlacementDataStore
+import icu.oyasai.utilities.debugonbe.data.TogoSettingsStore
 import icu.oyasai.utilities.debugonbe.display.ArmorStandSpawner
 import icu.oyasai.utilities.debugonbe.display.BlockDisplayManager
 import icu.oyasai.utilities.debugonbe.display.PacketBlockHider
@@ -13,6 +14,7 @@ import org.bukkit.plugin.Plugin
 object DebugOnBE {
 
   lateinit var store: PlacementDataStore
+  lateinit var settingsStore: TogoSettingsStore
   lateinit var displayManager: BlockDisplayManager
   lateinit var togoGui: TogoGui
 
@@ -21,6 +23,7 @@ object DebugOnBE {
 
     store = PlacementDataStore(plugin)
     store.loadAll()
+    settingsStore = TogoSettingsStore(plugin)
 
     val hider = PacketBlockHider(plugin)
     displayManager =
@@ -29,6 +32,7 @@ object DebugOnBE {
             store = store,
             spawner = ArmorStandSpawner,
             hider = hider,
+            settingsStore = settingsStore,
         )
 
     togoGui = TogoGui(plugin, displayManager, store)
@@ -60,6 +64,9 @@ object DebugOnBE {
     }
     if (::displayManager.isInitialized) {
       displayManager.removeAll()
+    }
+    if (::settingsStore.isInitialized) {
+      settingsStore.save()
     }
   }
 }
