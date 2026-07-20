@@ -117,8 +117,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.0/builds/1199/downloads/velocity",
-      "hash": "sha256-xX13iG77VgdkcmtIaLdUy7Jn3QxGcn1MqsIixBWljn4="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.0/builds/1200/downloads/velocity",
+      "hash": "sha256-wFYIW4UE/hh94widIogKAv3hjEUDVdywkXZHHZJMlkw="
     }
   },
   "gsit": {
@@ -188,8 +188,8 @@
   "multiversecore": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/PBjs38nY/multiverse-core-5.7.3-pre.1.jar",
-        "hash": "sha256-DBI3NB06gExlp2EHLaevkfgq9WdF/6YWtcYoCdHrDBo="
+        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/tycqBMJZ/multiverse-core-5.7.3-pre.4.jar",
+        "hash": "sha256-yMfDsPR3H5mtGFnawDU1bPfR8/ItKDpQF4lNr2h2zh8="
       }
     }
   },
