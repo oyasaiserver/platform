@@ -7,6 +7,7 @@ import icu.oyasai.utilities.debugonbe.model.BlockStateKey
 import icu.oyasai.utilities.debugonbe.model.TogoSettings
 import icu.oyasai.utilities.debugonbe.model.TogoSettingsLimits
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -49,6 +50,9 @@ class BlockDisplayManager(
 
   /** プレイヤーごとの変換設定。設定はセッション中のみ保持する。 */
   private val playerSettings: MutableMap<String, TogoSettings> = mutableMapOf()
+
+  /** プレイヤーごとのフェイクブロック置き換え先。未設定時はAIR。 */
+  private val replacementMaterials: MutableMap<String, Material> = mutableMapOf()
 
   // ────────────────────────────────────────────────────────────────
   // 公開 API
@@ -116,6 +120,23 @@ class BlockDisplayManager(
   /** プレイヤーの変換時間を秒単位で取得する。 */
   fun getDurationSeconds(player: Player): Int {
     return getSettings(player).durationSeconds
+  }
+
+  /** プレイヤーのフェイクブロック置き換え先を設定する。AIRでデフォルトへ戻す。 */
+  fun setReplacementMaterial(player: Player, material: Material): Boolean {
+    if (!material.isBlock) return false
+    val playerUuid = player.uniqueId.toString()
+    if (material.isAir) {
+      replacementMaterials.remove(playerUuid)
+    } else {
+      replacementMaterials[playerUuid] = material
+    }
+    return true
+  }
+
+  /** プレイヤーのフェイクブロック置き換え先を取得する。 */
+  fun getReplacementMaterial(player: Player): Material {
+    return replacementMaterials[player.uniqueId.toString()] ?: Material.AIR
   }
 
   /** プレイヤーが現在表示リフレッシュ中（ON）であるか判定 */
@@ -248,7 +269,7 @@ class BlockDisplayManager(
       val key = blockKey(player, block)
 
       // 1. 表示対象ブロックを AIR に偽装する
-      hider.hideBlock(player, block)
+      hider.hideBlock(player, block, getReplacementMaterial(player))
 
       if (!spawnedStands.containsKey(key)) {
         val stands =
@@ -364,7 +385,7 @@ class BlockDisplayManager(
             } else null
           } else null
         }
-        .forEach { block -> hider.hideBlock(player, block) }
+        .forEach { block -> hider.hideBlock(player, block, getReplacementMaterial(player)) }
   }
 
   /** すべての管理済み防具立てを除去する (プラグイン無効時など) */
@@ -391,6 +412,7 @@ class BlockDisplayManager(
     val playerUuid = player.uniqueId.toString()
     clearRefresh(player)
     playerSettings.remove(playerUuid)
+    replacementMaterials.remove(playerUuid)
 
     // 光データ偽装のキー情報をクリア
     fakeLitBlocks.remove(playerUuid)
