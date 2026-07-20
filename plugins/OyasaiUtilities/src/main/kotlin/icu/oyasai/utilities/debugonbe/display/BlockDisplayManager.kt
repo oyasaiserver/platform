@@ -1,6 +1,8 @@
 package icu.oyasai.utilities.debugonbe.display
 
 import icu.oyasai.utilities.debugonbe.data.PlacementDataStore
+import icu.oyasai.utilities.debugonbe.data.TogoSettingsStore
+import icu.oyasai.utilities.debugonbe.data.TogoUserSettings
 import icu.oyasai.utilities.debugonbe.model.ArmorStandPlacement
 import icu.oyasai.utilities.debugonbe.model.BlockShape
 import icu.oyasai.utilities.debugonbe.model.BlockStateKey
@@ -33,6 +35,7 @@ class BlockDisplayManager(
     private val store: PlacementDataStore,
     private val spawner: ArmorStandSpawner,
     private val hider: PacketBlockHider,
+    private val settingsStore: TogoSettingsStore,
 ) {
 
   /** プレイヤーごと、ワールドごと、ブロック座標ごとにスポーン済みフェイク防具立てを管理する。 Key: "playerUUID:worldName:x,y,z" */
@@ -48,10 +51,10 @@ class BlockDisplayManager(
   private val activeRefreshTasks: MutableMap<String, org.bukkit.scheduler.BukkitTask> =
       mutableMapOf()
 
-  /** プレイヤーごとの変換設定。設定はセッション中のみ保持する。 */
+  /** プレイヤーごとの変換設定キャッシュ。永続データは TogoSettingsStore が管理する。 */
   private val playerSettings: MutableMap<String, TogoSettings> = mutableMapOf()
 
-  /** プレイヤーごとのフェイクブロック置き換え先。未設定時はAIR。 */
+  /** プレイヤーごとのフェイクブロック置き換え先キャッシュ。未設定時はAIR。 */
   private val replacementMaterials: MutableMap<String, Material> = mutableMapOf()
 
   // ────────────────────────────────────────────────────────────────
@@ -60,12 +63,16 @@ class BlockDisplayManager(
 
   /** プレイヤーの現在の変換設定を取得する。 */
   fun getSettings(player: Player): TogoSettings {
-    return playerSettings[player.uniqueId.toString()] ?: TogoSettings()
+    val playerUuid = player.uniqueId.toString()
+    return playerSettings.getOrPut(playerUuid) {
+      settingsStore.getUser(player.uniqueId).togoSettings
+    }
   }
 
   /** プレイヤーの変換設定を置き換える。 */
   fun setSettings(player: Player, settings: TogoSettings) {
     playerSettings[player.uniqueId.toString()] = settings
+    saveSettings(player, settings, getReplacementMaterial(player))
   }
 
   /** プレイヤーの制限数を設定する。null はデフォルト値へ戻す。 */
@@ -131,12 +138,16 @@ class BlockDisplayManager(
     } else {
       replacementMaterials[playerUuid] = material
     }
+    saveSettings(player, getSettings(player), material)
     return true
   }
 
   /** プレイヤーのフェイクブロック置き換え先を取得する。 */
   fun getReplacementMaterial(player: Player): Material {
-    return replacementMaterials[player.uniqueId.toString()] ?: Material.AIR
+    val playerUuid = player.uniqueId.toString()
+    return replacementMaterials.getOrPut(playerUuid) {
+      settingsStore.getUser(player.uniqueId).replacementMaterial
+    }
   }
 
   /** プレイヤーが現在表示リフレッシュ中（ON）であるか判定 */
@@ -430,4 +441,14 @@ class BlockDisplayManager(
 
   private fun blockPosKey(block: Block): String =
       "${block.world.name}:${block.x},${block.y},${block.z}"
+
+  private fun saveSettings(player: Player, settings: TogoSettings, replacementMaterial: Material) {
+    settingsStore.setUser(
+        player.uniqueId,
+        TogoUserSettings(
+            togoSettings = settings,
+            replacementMaterial = replacementMaterial,
+        ),
+    )
+  }
 }
