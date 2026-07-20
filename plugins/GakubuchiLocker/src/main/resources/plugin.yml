@@ -22,6 +22,11 @@ commands:
     usage: /gakubuchifinder [radius]
     permission: gakubuchilocker.use
     aliases: [gfinder]
+  gakubuchitoumei:
+    description: 額縁設置時の自動透明化モードを切り替える
+    usage: /gakubuchitoumei <on|off>
+    permission: gakubuchilocker.use
+    aliases: [gtoumei]
 
 permissions:
   gakubuchilocker.use:

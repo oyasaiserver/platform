@@ -12,9 +12,9 @@ import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
 // 透明化(シアーズで見た目を消した)額縁を赤いパーティクルで可視化して発見しやすくするコマンド
-class GakubuchiFinderCommand(private val plugin: GakubuchiLockerPlugin) :
-    CommandExecutor, TabCompleter {
-
+class GakubuchiFinderCommand(
+    private val plugin: GakubuchiLockerPlugin,
+) : CommandExecutor, TabCompleter {
   companion object {
     private const val DEFAULT_RADIUS = 32.0
     private const val MAX_RADIUS = 100.0

@@ -6,8 +6,9 @@ import java.sql.DriverManager
 import java.util.UUID
 import org.bukkit.entity.ItemFrame
 
-class DatabaseManager(dataFolder: File) {
-
+class DatabaseManager(
+    dataFolder: File,
+) {
   private val connection: Connection
 
   // 起動時にSQLiteから全ロックデータをメモリに展開する
@@ -37,7 +38,7 @@ class DatabaseManager(dataFolder: File) {
               locked_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
           )
           """
-              .trimIndent()
+              .trimIndent(),
       )
     }
   }
@@ -54,11 +55,14 @@ class DatabaseManager(dataFolder: File) {
     }
   }
 
-  fun lockFrame(frame: ItemFrame, ownerUuid: UUID) {
+  fun lockFrame(
+      frame: ItemFrame,
+      ownerUuid: UUID,
+  ) {
     val loc = frame.location
     connection
         .prepareStatement(
-            "INSERT OR REPLACE INTO locked_frames (entity_uuid, world, x, y, z, owner_uuid) VALUES (?, ?, ?, ?, ?, ?)"
+            "INSERT OR REPLACE INTO locked_frames (entity_uuid, world, x, y, z, owner_uuid) VALUES (?, ?, ?, ?, ?, ?)",
         )
         .use { stmt ->
           stmt.setString(1, frame.uniqueId.toString())
@@ -73,10 +77,14 @@ class DatabaseManager(dataFolder: File) {
   }
 
   fun unlockFrame(entityUuid: UUID) {
-    connection.prepareStatement("DELETE FROM locked_frames WHERE entity_uuid = ?").use { stmt ->
-      stmt.setString(1, entityUuid.toString())
-      stmt.executeUpdate()
-    }
+    connection
+        .prepareStatement(
+            "DELETE FROM locked_frames WHERE entity_uuid = ?",
+        )
+        .use { stmt ->
+          stmt.setString(1, entityUuid.toString())
+          stmt.executeUpdate()
+        }
     cache.remove(entityUuid)
   }
 
