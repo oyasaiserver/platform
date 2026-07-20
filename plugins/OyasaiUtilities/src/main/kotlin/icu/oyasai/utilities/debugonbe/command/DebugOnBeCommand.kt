@@ -3,6 +3,7 @@ package icu.oyasai.utilities.debugonbe.command
 import icu.oyasai.utilities.debugonbe.data.PlacementDataStore
 import icu.oyasai.utilities.debugonbe.display.BlockDisplayManager
 import icu.oyasai.utilities.debugonbe.model.BlockShape
+import icu.oyasai.utilities.debugonbe.model.TogoSettingsLimits
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -87,9 +88,11 @@ class DebugOnBeCommand(
   }
 
   private fun handleRefresh(player: Player, args: Array<out String>) {
-    val radius = if (args.size >= 2) args[1].toIntOrNull() ?: 10 else 10
-    if (radius < 1 || radius > 50) {
-      player.sendMessage("§c[DOB] 半径は 1〜50 の範囲で指定してください。")
+    val radius = if (args.size >= 2) args[1].toIntOrNull() else TogoSettingsLimits.DEFAULT_RADIUS
+    if (radius == null || radius !in TogoSettingsLimits.MIN_RADIUS..TogoSettingsLimits.MAX_RADIUS) {
+      player.sendMessage(
+          "§c[DOB] 半径は ${TogoSettingsLimits.MIN_RADIUS}〜${TogoSettingsLimits.MAX_RADIUS} の範囲で指定してください。"
+      )
       return
     }
     displayManager.refreshAround(player, radius, 30)
@@ -108,26 +111,36 @@ class DebugOnBeCommand(
       return
     }
 
-    val radius = if (args.isNotEmpty()) args[0].toIntOrNull() ?: 10 else 10
-    if (radius !in 1..50) {
-      player.sendMessage("§c[DOB] 半径は 1〜50 の範囲で指定してください。")
+    val radius = if (args.isNotEmpty()) args[0].toIntOrNull() else displayManager.getRadius(player)
+    if (radius == null || radius !in TogoSettingsLimits.MIN_RADIUS..TogoSettingsLimits.MAX_RADIUS) {
+      player.sendMessage(
+          "§c[DOB] 半径は ${TogoSettingsLimits.MIN_RADIUS}〜${TogoSettingsLimits.MAX_RADIUS} の範囲で指定してください。"
+      )
       return
     }
 
-    val time = if (args.size >= 2) args[1].toDoubleOrNull() ?: 1.0 else 1.0
-    if (time !in 0.1..5.0) {
-      player.sendMessage("§c[DOB] 期限は 0.1〜5分 の範囲で指定してください。")
+    val durationSeconds =
+        if (args.size >= 2) {
+          parseDurationSeconds(args[1])
+        } else {
+          displayManager.getDurationSeconds(player)
+        }
+    if (durationSeconds == null) {
+      player.sendMessage(
+          "§c[DOB] 期限は ${TogoSettingsLimits.MIN_DURATION_SECONDS}〜${TogoSettingsLimits.MAX_DURATION_SECONDS}秒の範囲で指定してください。"
+      )
       return
     }
 
-    val durationSeconds = (time * 60).toInt()
     displayManager.refreshAround(player, radius, durationSeconds)
 
     player.sendMessage("§a[DOB] 表示を適用しました！")
-    player.sendMessage("§7  - 半径: §e$radius §7(MAX 50)")
-    player.sendMessage("§7  - 期限: §e${time}分 §7(MAX 5分)")
+    player.sendMessage("§7  - 半径: §e$radius §7(MAX ${TogoSettingsLimits.MAX_RADIUS})")
+    player.sendMessage(
+        "§7  - 期限: §e${durationSeconds}秒 §7(MAX ${TogoSettingsLimits.MAX_DURATION_SECONDS}秒)"
+    )
     player.sendMessage("§7  - 解除するにはもう一度 /togo を実行してください。")
-    player.sendMessage("§7  - 使い方: /togo [半径] [時間(分)]")
+    player.sendMessage("§7  - 使い方: /togo [半径] [時間(秒)]")
     player.sendMessage("§7  - フィルタ設定: /togom [types/reset/help]")
   }
 
@@ -152,13 +165,18 @@ class DebugOnBeCommand(
         return
       }
       val num = args[1].toIntOrNull()
-      if (num == null || num <= 0) {
+      if (
+          num == null ||
+              num !in TogoSettingsLimits.MIN_MAX_BLOCKS..TogoSettingsLimits.MAX_MAX_BLOCKS
+      ) {
         if (args[1].lowercase() == "reset" || args[1].lowercase() == "off") {
           displayManager.setLimit(player, null)
           player.sendMessage("§a[DOB] 個数制限を解除しました。")
           return
         }
-        player.sendMessage("§c[DOB] 正の整数を指定してください。")
+        player.sendMessage(
+            "§c[DOB] 個数制限は ${TogoSettingsLimits.MIN_MAX_BLOCKS}〜${TogoSettingsLimits.MAX_MAX_BLOCKS} の範囲で指定してください。"
+        )
         return
       }
       displayManager.setLimit(player, num)
@@ -194,6 +212,14 @@ class DebugOnBeCommand(
     player.sendMessage(
         "§a[DOB] フィルタを設定しました: §e${selectedShapes.joinToString(", ") { it.name.lowercase() }}"
     )
+  }
+
+  /** /togo の秒単位引数を検証する。 */
+  private fun parseDurationSeconds(raw: String): Int? {
+    val seconds = raw.toIntOrNull() ?: return null
+    return seconds.takeIf {
+      it in TogoSettingsLimits.MIN_DURATION_SECONDS..TogoSettingsLimits.MAX_DURATION_SECONDS
+    }
   }
 
   private fun handleReload(player: Player) {
@@ -254,14 +280,17 @@ class DebugOnBeCommand(
     val cmdName = command.name.lowercase()
     if (cmdName == "togo") {
       if (args.size == 1) {
-        val options = listOf("5", "10", "16", "32", "50", "help")
+        val options = listOf("5", "10", "16", "32", "help")
         return options.filter { it.startsWith(args[0].lowercase()) }
       }
       if (args.size == 2 && args[0].lowercase() == "help") {
         return listOf("1", "2").filter { it.startsWith(args[1]) }
       }
       if (args.size == 2 && args[0].lowercase() != "help") {
-        return listOf("0.5", "1", "2", "3", "5").filter { it.startsWith(args[1]) }
+        return listOf("10", "30", "60", "120", "300").filter {
+          val seconds = parseDurationSeconds(it) ?: return@filter false
+          seconds <= TogoSettingsLimits.MAX_DURATION_SECONDS && it.startsWith(args[1])
+        }
       }
       return emptyList()
     }
@@ -287,7 +316,7 @@ class DebugOnBeCommand(
       1 -> listOf("refresh", "reload", "help").filter { it.startsWith(args[0].lowercase()) }
       2 ->
           when (args[0].lowercase()) {
-            "refresh" -> listOf("5", "10", "16", "32", "64").filter { it.startsWith(args[1]) }
+            "refresh" -> listOf("5", "10", "16", "32").filter { it.startsWith(args[1]) }
             else -> emptyList()
           }
       else -> emptyList()

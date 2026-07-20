@@ -1,8 +1,11 @@
 package icu.oyasai.utilities.debugonbe.display
 
 import icu.oyasai.utilities.debugonbe.data.PlacementDataStore
+import icu.oyasai.utilities.debugonbe.model.ArmorStandPlacement
 import icu.oyasai.utilities.debugonbe.model.BlockShape
 import icu.oyasai.utilities.debugonbe.model.BlockStateKey
+import icu.oyasai.utilities.debugonbe.model.TogoSettings
+import icu.oyasai.utilities.debugonbe.model.TogoSettingsLimits
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -16,6 +19,13 @@ import org.bukkit.plugin.Plugin
  * - /cbm refresh で実行プレイヤー周辺のブロックを一時的(30秒)にフェイク置換する
  */
 private data class FakeStandInfo(val id: Int, val footBlock: Block?)
+
+private data class CandidateBlock(
+    val block: Block,
+    val shape: BlockShape,
+    val placements: List<ArmorStandPlacement>,
+    val distanceSquared: Double,
+)
 
 class BlockDisplayManager(
     val plugin: Plugin,
@@ -37,46 +47,75 @@ class BlockDisplayManager(
   private val activeRefreshTasks: MutableMap<String, org.bukkit.scheduler.BukkitTask> =
       mutableMapOf()
 
-  /** プレイヤーごとの表示対象フィルタ (空ならすべて表示) */
-  private val playerFilters: MutableMap<String, Set<BlockShape>> = mutableMapOf()
-
-  /** プレイヤーごとの表示数制限 (null なら制限なし) */
-  private val playerLimits: MutableMap<String, Int> = mutableMapOf()
-
-  private val DEFAULT_LIMIT = 35
+  /** プレイヤーごとの変換設定。設定はセッション中のみ保持する。 */
+  private val playerSettings: MutableMap<String, TogoSettings> = mutableMapOf()
 
   // ────────────────────────────────────────────────────────────────
   // 公開 API
   // ────────────────────────────────────────────────────────────────
 
-  /** プレイヤーの制限数を設定する */
-  fun setLimit(player: Player, limit: Int?) {
-    val uuid = player.uniqueId.toString()
-    if (limit == null || limit <= 0) {
-      playerLimits.remove(uuid)
-    } else {
-      playerLimits[uuid] = limit
-    }
+  /** プレイヤーの現在の変換設定を取得する。 */
+  fun getSettings(player: Player): TogoSettings {
+    return playerSettings[player.uniqueId.toString()] ?: TogoSettings()
   }
 
-  /** プレイヤーの制限数を取得する */
+  /** プレイヤーの変換設定を置き換える。 */
+  fun setSettings(player: Player, settings: TogoSettings) {
+    playerSettings[player.uniqueId.toString()] = settings
+  }
+
+  /** プレイヤーの制限数を設定する。null はデフォルト値へ戻す。 */
+  fun setLimit(player: Player, limit: Int?): Boolean {
+    val newLimit = limit ?: TogoSettingsLimits.DEFAULT_MAX_BLOCKS
+    if (newLimit !in TogoSettingsLimits.MIN_MAX_BLOCKS..TogoSettingsLimits.MAX_MAX_BLOCKS) {
+      return false
+    }
+    setSettings(player, getSettings(player).copy(maxBlocks = newLimit))
+    return true
+  }
+
+  /** プレイヤーの制限数を取得する。 */
   fun getLimit(player: Player): Int {
-    return playerLimits[player.uniqueId.toString()] ?: DEFAULT_LIMIT
+    return getSettings(player).maxBlocks
   }
 
-  /** プレイヤーのフィルタを設定する */
+  /** プレイヤーのフィルタを設定する。null は対応済みの全形状を表す。 */
   fun setFilter(player: Player, shapes: Set<BlockShape>?) {
-    val uuid = player.uniqueId.toString()
-    if (shapes == null || shapes.isEmpty()) {
-      playerFilters.remove(uuid)
-    } else {
-      playerFilters[uuid] = shapes
-    }
+    setSettings(player, getSettings(player).copy(enabledShapes = shapes?.toSet()))
   }
 
-  /** プレイヤーのフィルタを取得する */
+  /** プレイヤーのフィルタを取得する。 */
   fun getFilter(player: Player): Set<BlockShape>? {
-    return playerFilters[player.uniqueId.toString()]
+    return getSettings(player).enabledShapes
+  }
+
+  /** プレイヤーの走査半径を設定する。 */
+  fun setRadius(player: Player, radius: Int): Boolean {
+    if (radius !in TogoSettingsLimits.MIN_RADIUS..TogoSettingsLimits.MAX_RADIUS) return false
+    setSettings(player, getSettings(player).copy(radius = radius))
+    return true
+  }
+
+  /** プレイヤーの走査半径を取得する。 */
+  fun getRadius(player: Player): Int {
+    return getSettings(player).radius
+  }
+
+  /** プレイヤーの変換時間を秒単位で設定する。 */
+  fun setDurationSeconds(player: Player, durationSeconds: Int): Boolean {
+    if (
+        durationSeconds !in
+            TogoSettingsLimits.MIN_DURATION_SECONDS..TogoSettingsLimits.MAX_DURATION_SECONDS
+    ) {
+      return false
+    }
+    setSettings(player, getSettings(player).copy(durationSeconds = durationSeconds))
+    return true
+  }
+
+  /** プレイヤーの変換時間を秒単位で取得する。 */
+  fun getDurationSeconds(player: Player): Int {
+    return getSettings(player).durationSeconds
   }
 
   /** プレイヤーが現在表示リフレッシュ中（ON）であるか判定 */
@@ -142,6 +181,22 @@ class BlockDisplayManager(
    * @param durationSeconds 表示を維持する秒数
    */
   fun refreshAround(player: Player, radius: Int, durationSeconds: Int) {
+    val settings =
+        getSettings(player)
+            .copy(
+                radius = radius,
+                durationSeconds = durationSeconds,
+            )
+    refreshAround(player, settings)
+  }
+
+  /** プレイヤーに保存された設定で周囲の対象ブロックを一度だけ変換する。 */
+  fun refreshAround(player: Player) {
+    refreshAround(player, getSettings(player))
+  }
+
+  /** 指定された設定で周囲の対象ブロックを一度だけ変換する。 */
+  fun refreshAround(player: Player, settings: TogoSettings) {
     val playerUuid = player.uniqueId.toString()
     // 既存の表示があれば解除する
     clearRefresh(player)
@@ -150,36 +205,45 @@ class BlockDisplayManager(
     val world = center.world ?: return
     var count = 0
     val spawnedBlocks = mutableListOf<Block>()
-    val filter = playerFilters[player.uniqueId.toString()]
-    val limit = getLimit(player)
+    val filter = settings.enabledShapes
 
-    val candidateBlocks = mutableListOf<Block>()
+    val candidateBlocks = mutableListOf<CandidateBlock>()
 
-    for (x in -radius..radius) {
-      for (y in -radius..radius) {
-        for (z in -radius..radius) {
+    for (x in -settings.radius..settings.radius) {
+      for (y in -settings.radius..settings.radius) {
+        for (z in -settings.radius..settings.radius) {
           val block = world.getBlockAt(center.blockX + x, center.blockY + y, center.blockZ + z)
           val shape = BlockShape.of(block.blockData) ?: continue
 
           // フィルタが設定されている場合は、含まれていないシェイプをスキップ
           if (filter != null && !filter.contains(shape)) continue
 
-          candidateBlocks.add(block)
+          val stateKey = BlockStateKey.of(block.blockData, shape)
+          val placements = store.get(shape).getState(stateKey)
+          if (placements.isEmpty()) continue
+
+          candidateBlocks.add(
+              CandidateBlock(
+                  block = block,
+                  shape = shape,
+                  placements = placements,
+                  distanceSquared = block.location.distanceSquared(center),
+              )
+          )
         }
       }
     }
 
     // 距離順（近い順）にソート
-    candidateBlocks.sortBy { it.location.distanceSquared(center) }
+    candidateBlocks.sortBy { it.distanceSquared }
 
     // 制限を適用
-    val blocksToProcess = candidateBlocks.take(limit)
+    val blocksToProcess = candidateBlocks.take(settings.maxBlocks)
 
-    for (block in blocksToProcess) {
-      val shape = BlockShape.of(block.blockData)!!
-      val stateKey = BlockStateKey.of(block.blockData, shape)
-      val placements = store.get(shape).getState(stateKey)
-      if (placements.isEmpty()) continue
+    for (candidate in blocksToProcess) {
+      val block = candidate.block
+      val shape = candidate.shape
+      val placements = candidate.placements
 
       val key = blockKey(player, block)
 
@@ -268,14 +332,14 @@ class BlockDisplayManager(
       }
     }
 
-    player.sendMessage("§a[DOB] §f${count} 個のブロックを置き換えました (半径 ${radius})")
+    player.sendMessage("§a[DOB] §f${count} 個のブロックを置き換えました (半径 ${settings.radius})")
 
     if (spawnedBlocks.isNotEmpty()) {
       val task =
           plugin.server.scheduler.runTaskLater(
               plugin,
               Runnable { clearRefresh(player) },
-              durationSeconds * 20L,
+              settings.durationSeconds * 20L,
           )
       activeRefreshTasks[playerUuid] = task
     }
@@ -326,6 +390,7 @@ class BlockDisplayManager(
   fun clearPlayer(player: Player) {
     val playerUuid = player.uniqueId.toString()
     clearRefresh(player)
+    playerSettings.remove(playerUuid)
 
     // 光データ偽装のキー情報をクリア
     fakeLitBlocks.remove(playerUuid)
