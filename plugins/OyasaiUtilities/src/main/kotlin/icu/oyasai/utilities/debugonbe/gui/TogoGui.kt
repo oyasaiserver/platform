@@ -39,19 +39,19 @@ class TogoGui(
         title = "ブロック数制限",
         min = TogoSettingsLimits.MIN_MAX_BLOCKS,
         max = TogoSettingsLimits.MAX_MAX_BLOCKS,
-        steps = intArrayOf(1, 10, 25, 50, 100, 200),
+        steps = intArrayOf(1, 10, 100),
     ),
     RADIUS(
         title = "変換半径",
         min = TogoSettingsLimits.MIN_RADIUS,
         max = TogoSettingsLimits.MAX_RADIUS,
-        steps = intArrayOf(1, 2, 5, 10, 16, 32),
+        steps = intArrayOf(1, 10, 100),
     ),
     DURATION(
         title = "変換時間(秒)",
         min = TogoSettingsLimits.MIN_DURATION_SECONDS,
         max = TogoSettingsLimits.MAX_DURATION_SECONDS,
-        steps = intArrayOf(1, 5, 10, 30, 60, 120, 300),
+        steps = intArrayOf(1, 10, 100),
     ),
   }
 
@@ -193,25 +193,13 @@ class TogoGui(
     val value = currentValue(displayManager.getSettings(player), setting)
 
     inventory.setItem(
-        9,
+        26,
         ItemStack(Material.ARROW).addText("§a戻る", mutableListOf("§7設定画面に戻る")),
-    )
-    inventory.setItem(
-        13,
-        ItemStack(Material.PAPER)
-            .addText(
-                "§e$value",
-                mutableListOf(
-                    "§f${setting.title}",
-                    "§7範囲: ${setting.min}〜${setting.max}",
-                    "§7上限・下限を超えないように調整されます",
-                ),
-            ),
     )
 
     setting.steps.forEachIndexed { index, step ->
       inventory.setItem(
-          index + 1,
+          index,
           ItemStack(Material.GREEN_WOOL)
               .addText(
                   "§a+$step",
@@ -219,11 +207,26 @@ class TogoGui(
               ),
       )
       inventory.setItem(
-          index + 19,
+          index + 18,
           ItemStack(Material.RED_WOOL)
               .addText(
                   "§c-$step",
                   mutableListOf("§7${setting.title}を減らす"),
+              ),
+      )
+    }
+
+    value.toString().forEachIndexed { index, digit ->
+      inventory.setItem(
+          index + 9,
+          TogoNumberBanner.getBannerChar(digit)
+              ?.addText(
+                  "§e$value",
+                  mutableListOf(
+                      "§f${setting.title}",
+                      "§7範囲: ${setting.min}〜${setting.max}",
+                      "§7桁ごとのボタンで変更",
+                  ),
               ),
       )
     }
@@ -254,15 +257,15 @@ class TogoGui(
 
   private fun handleNumericClick(player: Player, holder: TogoGuiHolder, slot: Int) {
     val setting = holder.numericSetting ?: return
-    if (slot == 9) {
+    if (slot == 26) {
       player.openInventory(createSettingsInventory(player))
       return
     }
 
     val (step, sign) =
         when {
-          slot in 1..7 -> setting.steps.getOrNull(slot - 1) to 1
-          slot in 19..25 -> setting.steps.getOrNull(slot - 19) to -1
+          slot in 0..2 -> setting.steps.getOrNull(slot) to 1
+          slot in 18..20 -> setting.steps.getOrNull(slot - 18) to -1
           else -> null to 0
         }
     if (step == null || sign == 0) return
@@ -306,7 +309,7 @@ class TogoGui(
 
   private fun createShapeItem(shape: BlockShape, enabled: Boolean): ItemStack {
     val item =
-        ItemStack(if (enabled) Material.LIME_WOOL else Material.RED_WOOL)
+        ItemStack(shape.iconMaterial())
             .addText(
                 "${if (enabled) "§a" else "§c"}${shape.displayName()}",
                 mutableListOf(
@@ -343,5 +346,17 @@ class TogoGui(
         BlockShape.DOOR -> "ドア"
         BlockShape.TRAPDOOR -> "トラップドア"
         BlockShape.GLASS_PANE -> "板ガラス"
+      }
+
+  private fun BlockShape.iconMaterial(): Material =
+      when (this) {
+        BlockShape.STAIRS -> Material.OAK_STAIRS
+        BlockShape.IRON_BARS -> Material.IRON_BARS
+        BlockShape.FENCE -> Material.OAK_FENCE
+        BlockShape.WALL -> Material.STONE_BRICK_WALL
+        BlockShape.SLAB -> Material.OAK_SLAB
+        BlockShape.DOOR -> Material.OAK_DOOR
+        BlockShape.TRAPDOOR -> Material.OAK_TRAPDOOR
+        BlockShape.GLASS_PANE -> Material.GLASS_PANE
       }
 }
