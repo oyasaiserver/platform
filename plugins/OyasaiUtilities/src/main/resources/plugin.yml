@@ -40,7 +40,7 @@ commands:
   togo:
     description: Togo (DebugOnBE Refresh) コマンド
     usage: /togo [radius] [time]
-    aliases: [refreshtogo]
+    aliases: [refreshtogo, "-"]
   togom:
     description: Togo Mode (DebugOnBE 設定GUI) コマンド
     usage: /togom [types/reset/lim/radius/duration]

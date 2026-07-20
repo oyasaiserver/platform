@@ -3,6 +3,7 @@ package icu.oyasai.utilities.debugonbe.gui
 import icu.oyasai.utilities.OyasaiUtilities.addText
 import icu.oyasai.utilities.debugonbe.data.PlacementDataStore
 import icu.oyasai.utilities.debugonbe.display.BlockDisplayManager
+import icu.oyasai.utilities.debugonbe.item.TogoAutoItem
 import icu.oyasai.utilities.debugonbe.model.BlockShape
 import icu.oyasai.utilities.debugonbe.model.TogoSettings
 import icu.oyasai.utilities.debugonbe.model.TogoSettingsLimits
@@ -151,10 +152,13 @@ class TogoGui(
 
     inventory.setItem(
         18,
-        ItemStack(Material.PAPER)
+        TogoAutoItem.create(plugin)
             .addText(
-                "§e有効ブロック: §f${enabledShapes.intersect(shapes.toSet()).size}/${shapes.size}",
-                mutableListOf("§7ブロック種類をクリックして切り替え"),
+                "§dTogo自動起動アイテム",
+                mutableListOf(
+                    "§7クリックして取得",
+                    "§7手に持つと現在位置で自動起動",
+                ),
             ),
     )
     inventory.setItem(
@@ -251,10 +255,20 @@ class TogoGui(
     }
 
     when (slot) {
+      18 -> giveAutoItem(player)
       19 -> openNumeric(player, NumericSetting.MAX_BLOCKS)
       20 -> openNumeric(player, NumericSetting.RADIUS)
       21 -> openNumeric(player, NumericSetting.DURATION)
       22 -> player.closeInventory()
+    }
+  }
+
+  private fun giveAutoItem(player: Player) {
+    val leftovers = player.inventory.addItem(TogoAutoItem.create(plugin))
+    if (leftovers.isEmpty()) {
+      player.sendMessage("§a[DOB] Togo自動起動アイテムを取得しました。")
+    } else {
+      player.sendMessage("§c[DOB] インベントリに空きがありません。")
     }
   }
 
