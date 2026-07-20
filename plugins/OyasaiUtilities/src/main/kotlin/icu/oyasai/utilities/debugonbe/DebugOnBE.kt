@@ -7,6 +7,7 @@ import icu.oyasai.utilities.debugonbe.display.BlockDisplayManager
 import icu.oyasai.utilities.debugonbe.display.PacketBlockHider
 import icu.oyasai.utilities.debugonbe.gui.TogoGui
 import icu.oyasai.utilities.debugonbe.listener.BlockListener
+import icu.oyasai.utilities.debugonbe.listener.TogoAutoItemListener
 import org.bukkit.plugin.Plugin
 
 object DebugOnBE {
@@ -32,6 +33,9 @@ object DebugOnBE {
 
     togoGui = TogoGui(plugin, displayManager, store)
     plugin.server.pluginManager.registerEvents(togoGui, plugin)
+    val autoItemListener = TogoAutoItemListener(plugin, displayManager)
+    plugin.server.pluginManager.registerEvents(autoItemListener, plugin)
+    autoItemListener.syncOnlinePlayers()
 
     val dobeCommand = DebugOnBeCommand(displayManager, store, togoGui)
     plugin.getServer().getPluginCommand("debugonbe")?.let {
