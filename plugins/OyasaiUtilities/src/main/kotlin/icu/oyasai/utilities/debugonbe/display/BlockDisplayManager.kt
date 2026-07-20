@@ -295,7 +295,8 @@ class BlockDisplayManager(
     }
 
     plugin.logger.info(
-        "[DOB] Togo started: player=${player.name}, radius=${settings.radius}, blocks=$count"
+        "[DOB] Togo started: player=${player.name}, radius=${settings.radius}, " +
+            "duration=${settings.durationSeconds}s, blocks=$count"
     )
 
     val message = "§a[DOB] §f${count} 個のブロックを置き換えました (半径 ${settings.radius})"
