@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -31,6 +32,15 @@ class BlockListener(private val displayManager: BlockDisplayManager) : Listener 
   fun onPlayerQuit(event: PlayerQuitEvent) {
     pendingDebugStickSyncs.removeAll { it.startsWith("${event.player.uniqueId}:") }
     displayManager.clearPlayer(event.player)
+  }
+
+  /** 表示中のブロックは破壊操作を許可しつつ、真のブロック破壊と表示更新を防ぐ。 */
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+  fun onDisplayedBlockBreak(event: BlockBreakEvent) {
+    if (displayManager.isDisplayed(event.player, event.block)) {
+      event.isCancelled = true
+      displayManager.resendReplacementBlock(event.player, event.block)
+    }
   }
 
   /** デバッグ棒の操作後に、サーバー側で更新された状態と表示を再同期する。 */

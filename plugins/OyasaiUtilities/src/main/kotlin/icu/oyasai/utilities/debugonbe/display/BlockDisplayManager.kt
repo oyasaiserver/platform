@@ -166,6 +166,21 @@ class BlockDisplayManager(
     return spawnedStands.containsKey(blockKey(player, block))
   }
 
+  /** 破壊操作後も表示中の置き換え先ブロックを再送する。 */
+  fun resendReplacementBlock(player: Player, block: Block) {
+    if (!isDisplayed(player, block)) return
+
+    plugin.server.scheduler.runTaskLater(
+        plugin,
+        Runnable {
+          if (isDisplayed(player, block)) {
+            hider.hideBlock(player, block, getReplacementMaterial())
+          }
+        },
+        1L,
+    )
+  }
+
   /** プレイヤーのアクティブなリフレッシュ表示をすべて消去し、タスクをキャンセルする */
   fun clearRefresh(player: Player) {
     val playerUuid = player.uniqueId.toString()
