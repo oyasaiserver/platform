@@ -115,7 +115,7 @@ class TogoGui(
   private fun createSettingsInventory(player: Player): Inventory {
     val shapes = supportedShapes()
     val holder = TogoGuiHolder(player.uniqueId, numericSetting = null, shapes = shapes)
-    val inventory = createInventory(holder, 36, "§8Togo設定")
+    val inventory = createInventory(holder, 27, "§8Togo設定")
     renderSettings(inventory, player, shapes)
     return inventory
   }
@@ -144,7 +144,9 @@ class TogoGui(
     val settings = displayManager.getSettings(player)
     val enabledShapes = settings.enabledShapes ?: shapes.toSet()
     shapes.forEachIndexed { index, shape ->
-      inventory.setItem(index, createShapeItem(shape, shape in enabledShapes))
+      val row = index / 5
+      val column = index % 5
+      inventory.setItem(row * 9 + column, createShapeItem(shape, shape in enabledShapes))
     }
 
     inventory.setItem(
@@ -156,7 +158,7 @@ class TogoGui(
             ),
     )
     inventory.setItem(
-        20,
+        19,
         createSettingItem(
             Material.CHEST,
             "ブロック数制限",
@@ -165,7 +167,7 @@ class TogoGui(
         ),
     )
     inventory.setItem(
-        22,
+        20,
         createSettingItem(
             Material.COMPASS,
             "変換半径",
@@ -174,7 +176,7 @@ class TogoGui(
         ),
     )
     inventory.setItem(
-        24,
+        21,
         createSettingItem(
             Material.CLOCK,
             "変換時間",
@@ -183,7 +185,7 @@ class TogoGui(
         ),
     )
     inventory.setItem(
-        35,
+        22,
         ItemStack(Material.BARRIER).addText("§c閉じる", mutableListOf()),
     )
   }
@@ -234,7 +236,7 @@ class TogoGui(
   }
 
   private fun handleSettingsClick(player: Player, holder: TogoGuiHolder, slot: Int) {
-    val shape = holder.shapes.getOrNull(slot)
+    val shape = shapeAtSlot(holder, slot)
     if (shape != null) {
       val currentSettings = displayManager.getSettings(player)
       val supported = holder.shapes.toSet()
@@ -249,11 +251,18 @@ class TogoGui(
     }
 
     when (slot) {
-      20 -> openNumeric(player, NumericSetting.MAX_BLOCKS)
-      22 -> openNumeric(player, NumericSetting.RADIUS)
-      24 -> openNumeric(player, NumericSetting.DURATION)
-      35 -> player.closeInventory()
+      19 -> openNumeric(player, NumericSetting.MAX_BLOCKS)
+      20 -> openNumeric(player, NumericSetting.RADIUS)
+      21 -> openNumeric(player, NumericSetting.DURATION)
+      22 -> player.closeInventory()
     }
+  }
+
+  private fun shapeAtSlot(holder: TogoGuiHolder, slot: Int): BlockShape? {
+    val row = slot / 9
+    val column = slot % 9
+    if (row !in 0..1 || column !in 0..4) return null
+    return holder.shapes.getOrNull(row * 5 + column)
   }
 
   private fun handleNumericClick(player: Player, holder: TogoGuiHolder, slot: Int) {
