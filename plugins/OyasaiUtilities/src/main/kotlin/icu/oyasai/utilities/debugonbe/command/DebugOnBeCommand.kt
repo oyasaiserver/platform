@@ -3,6 +3,7 @@ package icu.oyasai.utilities.debugonbe.command
 import icu.oyasai.utilities.debugonbe.data.PlacementDataStore
 import icu.oyasai.utilities.debugonbe.display.BlockDisplayManager
 import icu.oyasai.utilities.debugonbe.gui.TogoGui
+import icu.oyasai.utilities.debugonbe.listener.TogoAutoItemListener
 import icu.oyasai.utilities.debugonbe.model.BlockShape
 import icu.oyasai.utilities.debugonbe.model.TogoSettings
 import icu.oyasai.utilities.debugonbe.model.TogoSettingsLimits
@@ -17,6 +18,7 @@ class DebugOnBeCommand(
     private val displayManager: BlockDisplayManager,
     private val store: PlacementDataStore,
     private val togoGui: TogoGui,
+    private val autoItemListener: TogoAutoItemListener,
 ) : CommandExecutor, TabCompleter {
 
   private val shapeMap =
@@ -89,9 +91,6 @@ class DebugOnBeCommand(
     when (sub) {
       "refresh" -> handleRefresh(sender, args)
       "reload" -> handleReload(sender)
-      "replace",
-      "target",
-      "replacement" -> handleReplace(sender, args)
       "help" -> sendHelp(sender)
       else -> sender.sendMessage("§c[DOB] 不明なサブコマンドです。/debugonbe help を参照してください。")
     }
@@ -99,20 +98,41 @@ class DebugOnBeCommand(
   }
 
   private fun handleRefresh(player: Player, args: Array<out String>) {
-    val radius = if (args.size >= 2) args[1].toIntOrNull() else TogoSettingsLimits.DEFAULT_RADIUS
+    val radius = if (args.size >= 2) args[1].toIntOrNull() else TogoSettings().radius
     if (radius == null || radius !in TogoSettingsLimits.MIN_RADIUS..TogoSettingsLimits.MAX_RADIUS) {
       player.sendMessage(
           "§c[DOB] 半径は ${TogoSettingsLimits.MIN_RADIUS}〜${TogoSettingsLimits.MAX_RADIUS} の範囲で指定してください。"
       )
       return
     }
-    displayManager.refreshAround(player, radius, 30)
+    displayManager.refreshAround(
+        player,
+        radius,
+        30.coerceIn(
+            TogoSettingsLimits.MIN_DURATION_SECONDS,
+            TogoSettingsLimits.MAX_DURATION_SECONDS,
+        ),
+    )
   }
 
   private fun handleTogo(player: Player, args: Array<out String>) {
     if (args.isNotEmpty() && args[0].lowercase() == "help") {
       val page = if (args.size > 1) args[1].toIntOrNull() ?: 1 else 1
       sendHelp(player, page)
+      return
+    }
+
+    if (args.size == 1 && args[0].lowercase() == "auto") {
+      val enabled = !displayManager.isDebugStickAutoEnabled(player)
+      displayManager.setDebugStickAutoEnabled(player, enabled)
+      autoItemListener.updateNow(player)
+      player.sendMessage(
+          if (enabled) {
+            "§a[DOB] デバッグ棒による自動Togoを有効にしました。"
+          } else {
+            "§e[DOB] デバッグ棒による自動Togoを無効にしました。"
+          }
+      )
       return
     }
 
@@ -178,6 +198,13 @@ class DebugOnBeCommand(
           handleShapeFilter(player, args[1])
         }
       }
+      "replace" -> {
+        if (!player.hasPermission("debugonbe.admin")) {
+          player.sendMessage("§c[DOB] この全体設定を変更する権限がありません。")
+        } else {
+          handleReplace(player, args)
+        }
+      }
       else -> handleShapeFilter(player, sub)
     }
   }
@@ -216,7 +243,7 @@ class DebugOnBeCommand(
     if (raw.lowercase() == "reset" || raw.lowercase() == "off") {
       displayManager.setSettings(
           player,
-          displayManager.getSettings(player).copy(radius = TogoSettingsLimits.DEFAULT_RADIUS),
+          displayManager.getSettings(player).copy(radius = TogoSettings().radius),
       )
       player.sendMessage("§a[DOB] 変換半径をデフォルトに戻しました。")
       return
@@ -241,9 +268,7 @@ class DebugOnBeCommand(
     if (raw.lowercase() == "reset" || raw.lowercase() == "off") {
       displayManager.setSettings(
           player,
-          displayManager
-              .getSettings(player)
-              .copy(durationSeconds = TogoSettingsLimits.DEFAULT_DURATION_SECONDS),
+          displayManager.getSettings(player).copy(durationSeconds = TogoSettings().durationSeconds),
       )
       player.sendMessage("§a[DOB] 変換時間をデフォルトに戻しました。")
       return
@@ -303,13 +328,12 @@ class DebugOnBeCommand(
   private fun handleReplace(player: Player, args: Array<out String>) {
     val raw = args.getOrNull(1)
     if (raw == null) {
-      player.sendMessage("§c[DOB] 置き換え先ブロックを指定してください。 (例: /debugonbe replace stone)")
+      player.sendMessage("§c[DOB] 置き換え先ブロックを指定してください。 (例: /togom replace stone)")
       return
     }
 
     if (raw.lowercase() in setOf("air", "reset", "off")) {
-      displayManager.setReplacementMaterial(player, Material.AIR)
-      displayManager.syncForPlayer(player)
+      displayManager.setReplacementMaterial(Material.AIR)
       player.sendMessage("§a[DOB] 置き換え先をAIRに戻しました。")
       return
     }
@@ -320,8 +344,7 @@ class DebugOnBeCommand(
       return
     }
 
-    displayManager.setReplacementMaterial(player, material)
-    displayManager.syncForPlayer(player)
+    displayManager.setReplacementMaterial(material)
     player.sendMessage("§a[DOB] 置き換え先を §e${material.name.lowercase()} §aに設定しました。")
   }
 
@@ -332,10 +355,11 @@ class DebugOnBeCommand(
           §b━━━ DebugOnBE ヘルプ (1/2) §b━━━
           §7■ コマンド
           §a/togo [radius] [time]       §7- 周囲ブロックを一定時間表示置換
+          §a/togo auto                  §7- デバッグ棒を持った時の自動Togoを切替
           §a/togom                     §7- Togo設定GUIを開く
           §a/togom <types/reset/lim/...> §7- Togo設定をコマンドで変更
+          §a/togom replace <block>      §7- 全体の置き換え先を設定 (AIRで解除)
           §a/debugonbe refresh [radius] §7- 周囲ブロックを置換 (デフォルト10)
-          §a/debugonbe replace <block> §7- 置き換え先を設定 (AIRで解除)
           §a/debugonbe reload           §7- 設定ファイルを再読み込み
 
           §7次ページ: /togo help 2
@@ -382,7 +406,11 @@ class DebugOnBeCommand(
     val cmdName = command.name.lowercase()
     if (cmdName == "togo") {
       if (args.size == 1) {
-        val options = listOf("5", "10", "16", "32", "help")
+        val options =
+            (listOf(5, 10, 16, TogoSettingsLimits.MAX_RADIUS)
+                    .filter { it in TogoSettingsLimits.MIN_RADIUS..TogoSettingsLimits.MAX_RADIUS }
+                    .map { it.toString() } + listOf("auto", "help"))
+                .distinct()
         return options.filter { it.startsWith(args[0].lowercase()) }
       }
       if (args.size == 2 && args[0].lowercase() == "help") {
@@ -411,6 +439,7 @@ class DebugOnBeCommand(
                     "rad",
                     "duration",
                     "time",
+                    "replace",
                 )
         return options.filter { it.startsWith(args[0].lowercase()) }
       }
@@ -420,15 +449,40 @@ class DebugOnBeCommand(
           "filter" -> shapeMap.keys.filter { it.startsWith(args[1].lowercase()) }
           "lim",
           "limit" ->
-              listOf("1", "35", "256", "reset", "off").filter { it.startsWith(args[1].lowercase()) }
+              listOf(
+                      "1",
+                      TogoSettingsLimits.DEFAULT_MAX_BLOCKS.toString(),
+                      TogoSettingsLimits.MAX_MAX_BLOCKS.toString(),
+                      "reset",
+                      "off",
+                  )
+                  .filter { it.startsWith(args[1].lowercase()) }
           "radius",
           "rad" ->
-              listOf("1", "10", "32", "reset", "off").filter { it.startsWith(args[1].lowercase()) }
+              listOf(
+                      "1",
+                      "10",
+                      TogoSettingsLimits.MAX_RADIUS.toString(),
+                      "reset",
+                      "off",
+                  )
+                  .filter { it.startsWith(args[1].lowercase()) }
           "duration",
           "time",
           "seconds",
           "sec" ->
-              listOf("1", "60", "300", "reset", "off").filter { it.startsWith(args[1].lowercase()) }
+              listOf(
+                      "1",
+                      "60",
+                      TogoSettingsLimits.MAX_DURATION_SECONDS.toString(),
+                      "reset",
+                      "off",
+                  )
+                  .filter { it.startsWith(args[1].lowercase()) }
+          "replace" ->
+              (listOf("air", "reset", "off") +
+                      Material.values().filter { it.isBlock }.map { it.name.lowercase() })
+                  .filter { it.startsWith(args[1].lowercase()) }
           else -> emptyList()
         }
       }
@@ -436,19 +490,13 @@ class DebugOnBeCommand(
     }
 
     return when (args.size) {
-      1 ->
-          listOf("refresh", "reload", "replace", "target", "replacement", "help").filter {
-            it.startsWith(args[0].lowercase())
-          }
+      1 -> listOf("refresh", "reload", "help").filter { it.startsWith(args[0].lowercase()) }
       2 ->
           when (args[0].lowercase()) {
-            "refresh" -> listOf("5", "10", "16", "32").filter { it.startsWith(args[1]) }
-            "replace",
-            "target",
-            "replacement" ->
-                (listOf("air", "reset", "off") +
-                        Material.values().filter { it.isBlock }.map { it.name.lowercase() })
-                    .filter { it.startsWith(args[1].lowercase()) }
+            "refresh" ->
+                listOf("5", "10", "16", TogoSettingsLimits.MAX_RADIUS.toString()).filter {
+                  it.startsWith(args[1])
+                }
             else -> emptyList()
           }
       else -> emptyList()

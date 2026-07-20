@@ -3,6 +3,7 @@ package icu.oyasai.utilities.debugonbe.listener
 import icu.oyasai.utilities.debugonbe.display.BlockDisplayManager
 import icu.oyasai.utilities.debugonbe.item.TogoAutoItem
 import java.util.UUID
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -23,6 +24,11 @@ class TogoAutoItemListener(
 
   fun syncOnlinePlayers() {
     plugin.server.onlinePlayers.forEach(::scheduleUpdate)
+  }
+
+  /** コマンドなどから、現在の手持ち状態を即時反映する。 */
+  fun updateNow(player: Player) {
+    update(player)
   }
 
   @EventHandler
@@ -71,12 +77,19 @@ class TogoAutoItemListener(
     val uuid = player.uniqueId
     val held =
         TogoAutoItem.isItem(plugin, player.inventory.itemInMainHand) ||
-            TogoAutoItem.isItem(plugin, player.inventory.itemInOffHand)
+            TogoAutoItem.isItem(plugin, player.inventory.itemInOffHand) ||
+            (displayManager.isDebugStickAutoEnabled(player) &&
+                (player.inventory.itemInMainHand.type == Material.DEBUG_STICK ||
+                    player.inventory.itemInOffHand.type == Material.DEBUG_STICK))
 
     if (held) {
       if (autoActivePlayers.add(uuid)) {
         // 起動時の位置だけを中心にし、その後の移動では再実行しない。
-        displayManager.refreshAround(player)
+        displayManager.refreshAround(
+            player,
+            displayManager.getSettings(player),
+            showMessageInActionBar = true,
+        )
       }
     } else if (autoActivePlayers.remove(uuid)) {
       displayManager.clearRefresh(player)
