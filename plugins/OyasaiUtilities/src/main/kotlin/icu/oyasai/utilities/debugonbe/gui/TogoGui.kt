@@ -219,7 +219,7 @@ class TogoGui(
     val digits = value.toString()
     digits.forEachIndexed { index, digit ->
       inventory.setItem(
-          9 + (4 - digits.length) + index,
+          9 + (3 - digits.length) + index,
           TogoNumberBanner.getBannerChar(digit)
               ?.addText(
                   "§e$value",
