@@ -7,7 +7,6 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -35,19 +34,12 @@ class BlockListener(private val displayManager: BlockDisplayManager) : Listener 
     displayManager.clearPlayer(event.player)
   }
 
-  /** 表示中のブロックに対する破壊開始をキャンセルし、クライアントの破壊演出を止める。 */
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-  fun onDisplayedBlockDamage(event: BlockDamageEvent) {
-    if (displayManager.isDisplayed(event.player, event.block)) {
-      event.isCancelled = true
-    }
-  }
-
-  /** 表示中のブロックに対する破壊完了をキャンセルし、真のブロック更新を防ぐ。 */
+  /** 表示中のブロックは破壊操作を許可しつつ、真のブロック破壊と表示更新を防ぐ。 */
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
   fun onDisplayedBlockBreak(event: BlockBreakEvent) {
     if (displayManager.isDisplayed(event.player, event.block)) {
       event.isCancelled = true
+      displayManager.resendReplacementBlock(event.player, event.block)
     }
   }
 
