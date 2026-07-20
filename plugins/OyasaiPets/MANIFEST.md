@@ -7,11 +7,12 @@
 **コードを変更する前に必ず以下を実行すること:**
 
 ```bash
-# バックアップ先: /Users/aa/platform/archive/
-# ファイル名形式: OyasaiPetsUnified-YYYY-MM-DD-HHmm.kt.bak
+# バックアップ先: archive/OyasaiPets-YYYY-MM-DD-HHmm/
 
-cp plugins/OyasaiPets/src/main/kotlin/me/marzipan/OyasaiPets/OyasaiPetsUnified.kt \
-   archive/OyasaiPetsUnified-$(date +%Y-%m-%d-%H%M).kt.bak
+backup_dir=archive/OyasaiPets-$(date +%Y-%m-%d-%H%M)
+mkdir -p "$backup_dir"
+cp -R plugins/OyasaiPets/src/main/kotlin/me/marzipan/OyasaiPets \
+   "$backup_dir"/
 ```
 
 バックアップなしでの変更は禁止。
@@ -23,8 +24,8 @@ cp plugins/OyasaiPets/src/main/kotlin/me/marzipan/OyasaiPets/OyasaiPetsUnified.k
 - **プラグイン名**: OyasaiPets（旧称 BigWolf）
 - **サーバー**: PaperMC 1.21 / Purpur 1.21.8
 - **言語**: Kotlin
-- **メインファイル**:
-  `src/main/kotlin/me/marzipan/OyasaiPets/OyasaiPetsUnified.kt`（単一ファイル構成、~8400行）
+- **メインクラス**: `src/main/kotlin/me/marzipan/OyasaiPets/BigWolf.kt` の
+  `BigWolfPlugin`
 
 ---
 
@@ -48,7 +49,7 @@ cp plugins/OyasaiPets/src/main/kotlin/me/marzipan/OyasaiPets/OyasaiPetsUnified.k
 
 ## アーキテクチャ概要
 
-### 主要クラス（ファイル内コメント `// ===== File: *.kt =====` で区切られている）
+### 主要クラス
 
 | クラス | 役割 | |---|---| | `BigWolfPlugin` |
 エントリーポイント、onEnable/onDisable、コマンドルーティング | | `BigWolfConfig` | 設定値の読み書き（object） |
