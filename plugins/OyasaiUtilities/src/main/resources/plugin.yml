@@ -43,7 +43,7 @@ commands:
     aliases: [refreshtogo, "-"]
   togom:
     description: Togo Mode (DebugOnBE 設定GUI) コマンド
-    usage: /togom [types/reset/lim/radius/duration]
+    usage: /togom [types/reset/lim/radius/duration/replace]
 
 permissions:
   oyasaiutilities.timerbar:

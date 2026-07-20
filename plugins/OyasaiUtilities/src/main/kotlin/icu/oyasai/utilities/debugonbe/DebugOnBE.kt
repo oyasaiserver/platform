@@ -41,7 +41,7 @@ object DebugOnBE {
     plugin.server.pluginManager.registerEvents(autoItemListener, plugin)
     autoItemListener.syncOnlinePlayers()
 
-    val dobeCommand = DebugOnBeCommand(displayManager, store, togoGui)
+    val dobeCommand = DebugOnBeCommand(displayManager, store, togoGui, autoItemListener)
     plugin.getServer().getPluginCommand("debugonbe")?.let {
       it.setExecutor(dobeCommand)
       it.tabCompleter = dobeCommand
