@@ -5,6 +5,7 @@ import icu.oyasai.utilities.debugonbe.data.PlacementDataStore
 import icu.oyasai.utilities.debugonbe.display.ArmorStandSpawner
 import icu.oyasai.utilities.debugonbe.display.BlockDisplayManager
 import icu.oyasai.utilities.debugonbe.display.PacketBlockHider
+import icu.oyasai.utilities.debugonbe.gui.TogoGui
 import icu.oyasai.utilities.debugonbe.listener.BlockListener
 import org.bukkit.plugin.Plugin
 
@@ -12,6 +13,7 @@ object DebugOnBE {
 
   lateinit var store: PlacementDataStore
   lateinit var displayManager: BlockDisplayManager
+  lateinit var togoGui: TogoGui
 
   fun onEnable(plugin: Plugin) {
     plugin.dataFolder.mkdirs()
@@ -28,7 +30,10 @@ object DebugOnBE {
             hider = hider,
         )
 
-    val dobeCommand = DebugOnBeCommand(displayManager, store)
+    togoGui = TogoGui(plugin, displayManager, store)
+    plugin.server.pluginManager.registerEvents(togoGui, plugin)
+
+    val dobeCommand = DebugOnBeCommand(displayManager, store, togoGui)
     plugin.getServer().getPluginCommand("debugonbe")?.let {
       it.setExecutor(dobeCommand)
       it.tabCompleter = dobeCommand
@@ -46,6 +51,9 @@ object DebugOnBE {
   }
 
   fun onDisable() {
+    if (::togoGui.isInitialized) {
+      togoGui.closeAll()
+    }
     if (::displayManager.isInitialized) {
       displayManager.removeAll()
     }

@@ -42,8 +42,8 @@ commands:
     usage: /togo [radius] [time]
     aliases: [refreshtogo]
   togom:
-    description: Togo Mode (DebugOnBE Filter) コマンド
-    usage: /togom [types/reset/lim]
+    description: Togo Mode (DebugOnBE 設定GUI) コマンド
+    usage: /togom [types/reset/lim/radius/duration]
 
 permissions:
   oyasaiutilities.timerbar:

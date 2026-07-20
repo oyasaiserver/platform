@@ -2,7 +2,9 @@ package icu.oyasai.utilities.debugonbe.command
 
 import icu.oyasai.utilities.debugonbe.data.PlacementDataStore
 import icu.oyasai.utilities.debugonbe.display.BlockDisplayManager
+import icu.oyasai.utilities.debugonbe.gui.TogoGui
 import icu.oyasai.utilities.debugonbe.model.BlockShape
+import icu.oyasai.utilities.debugonbe.model.TogoSettings
 import icu.oyasai.utilities.debugonbe.model.TogoSettingsLimits
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -13,6 +15,7 @@ import org.bukkit.entity.Player
 class DebugOnBeCommand(
     private val displayManager: BlockDisplayManager,
     private val store: PlacementDataStore,
+    private val togoGui: TogoGui,
 ) : CommandExecutor, TabCompleter {
 
   private val shapeMap =
@@ -62,7 +65,11 @@ class DebugOnBeCommand(
         sender.sendMessage("§c[DOB] このコマンドを使用する権限がありません。")
         return true
       }
-      handleTogom(sender, args)
+      if (args.isEmpty()) {
+        togoGui.open(sender)
+      } else {
+        handleTogom(sender, args)
+      }
       return true
     }
 
@@ -141,60 +148,123 @@ class DebugOnBeCommand(
     )
     player.sendMessage("§7  - 解除するにはもう一度 /togo を実行してください。")
     player.sendMessage("§7  - 使い方: /togo [半径] [時間(秒)]")
-    player.sendMessage("§7  - フィルタ設定: /togom [types/reset/help]")
+    player.sendMessage("§7  - 設定変更: /togom")
   }
 
   private fun handleTogom(player: Player, args: Array<out String>) {
-    if (args.isEmpty() || args[0].lowercase() == "help") {
-      sendHelp(player, 2)
-      return
-    }
-
-    val sub = args[0].lowercase()
-
-    if (sub == "reset") {
-      displayManager.setFilter(player, null)
-      displayManager.setLimit(player, null)
-      player.sendMessage("§a[DOB] フィルタと制限をリセットしました。")
-      return
-    }
-
-    if (sub == "lim" || sub == "limit") {
-      if (args.size < 2) {
-        player.sendMessage("§c[DOB] 制限数を指定してください。 (例: /togom lim 100)")
-        return
+    when (val sub = args[0].lowercase()) {
+      "help" -> sendHelp(player, 2)
+      "reset" -> {
+        displayManager.setSettings(player, TogoSettings())
+        player.sendMessage("§a[DOB] Togo設定を初期化しました。")
       }
-      val num = args[1].toIntOrNull()
-      if (
-          num == null ||
-              num !in TogoSettingsLimits.MIN_MAX_BLOCKS..TogoSettingsLimits.MAX_MAX_BLOCKS
-      ) {
-        if (args[1].lowercase() == "reset" || args[1].lowercase() == "off") {
-          displayManager.setLimit(player, null)
-          player.sendMessage("§a[DOB] 個数制限を解除しました。")
-          return
+      "lim",
+      "limit" -> handleLimit(player, args)
+      "radius",
+      "rad" -> handleRadius(player, args)
+      "duration",
+      "time",
+      "seconds",
+      "sec" -> handleDuration(player, args)
+      "types",
+      "filter" -> {
+        if (args.size < 2) {
+          player.sendMessage("§c[DOB] ブロック種類を指定してください。 (例: /togom types stairs,slabs)")
+        } else {
+          handleShapeFilter(player, args[1])
         }
-        player.sendMessage(
-            "§c[DOB] 個数制限は ${TogoSettingsLimits.MIN_MAX_BLOCKS}〜${TogoSettingsLimits.MAX_MAX_BLOCKS} の範囲で指定してください。"
-        )
-        return
       }
-      displayManager.setLimit(player, num)
-      player.sendMessage("§a[DOB] 最大表示個数を §e$num §a個に制限しました。")
+      else -> handleShapeFilter(player, sub)
+    }
+  }
+
+  private fun handleLimit(player: Player, args: Array<out String>) {
+    val raw = args.getOrNull(1)
+    if (raw == null) {
+      player.sendMessage("§c[DOB] 個数制限を指定してください。 (例: /togom lim 100)")
       return
     }
+    if (raw.lowercase() == "reset" || raw.lowercase() == "off") {
+      displayManager.setLimit(player, null)
+      player.sendMessage("§a[DOB] 個数制限をデフォルトに戻しました。")
+      return
+    }
+    val limit = raw.toIntOrNull()
+    if (
+        limit == null ||
+            limit !in TogoSettingsLimits.MIN_MAX_BLOCKS..TogoSettingsLimits.MAX_MAX_BLOCKS
+    ) {
+      player.sendMessage(
+          "§c[DOB] 個数制限は ${TogoSettingsLimits.MIN_MAX_BLOCKS}〜${TogoSettingsLimits.MAX_MAX_BLOCKS} の範囲で指定してください。"
+      )
+      return
+    }
+    displayManager.setLimit(player, limit)
+    player.sendMessage("§a[DOB] 最大表示個数を §e$limit §a個に設定しました。")
+  }
 
-    val input = sub
-    val types = input.split(",")
+  private fun handleRadius(player: Player, args: Array<out String>) {
+    val raw = args.getOrNull(1)
+    if (raw == null) {
+      player.sendMessage("§c[DOB] 半径を指定してください。 (例: /togom radius 10)")
+      return
+    }
+    if (raw.lowercase() == "reset" || raw.lowercase() == "off") {
+      displayManager.setSettings(
+          player,
+          displayManager.getSettings(player).copy(radius = TogoSettingsLimits.DEFAULT_RADIUS),
+      )
+      player.sendMessage("§a[DOB] 変換半径をデフォルトに戻しました。")
+      return
+    }
+    val radius = raw.toIntOrNull()
+    if (radius == null || radius !in TogoSettingsLimits.MIN_RADIUS..TogoSettingsLimits.MAX_RADIUS) {
+      player.sendMessage(
+          "§c[DOB] 半径は ${TogoSettingsLimits.MIN_RADIUS}〜${TogoSettingsLimits.MAX_RADIUS} の範囲で指定してください。"
+      )
+      return
+    }
+    displayManager.setRadius(player, radius)
+    player.sendMessage("§a[DOB] 変換半径を §e$radius §aに設定しました。")
+  }
+
+  private fun handleDuration(player: Player, args: Array<out String>) {
+    val raw = args.getOrNull(1)
+    if (raw == null) {
+      player.sendMessage("§c[DOB] 変換時間(秒)を指定してください。 (例: /togom duration 60)")
+      return
+    }
+    if (raw.lowercase() == "reset" || raw.lowercase() == "off") {
+      displayManager.setSettings(
+          player,
+          displayManager
+              .getSettings(player)
+              .copy(durationSeconds = TogoSettingsLimits.DEFAULT_DURATION_SECONDS),
+      )
+      player.sendMessage("§a[DOB] 変換時間をデフォルトに戻しました。")
+      return
+    }
+    val durationSeconds = parseDurationSeconds(raw)
+    if (durationSeconds == null) {
+      player.sendMessage(
+          "§c[DOB] 変換時間は ${TogoSettingsLimits.MIN_DURATION_SECONDS}〜${TogoSettingsLimits.MAX_DURATION_SECONDS}秒の範囲で指定してください。"
+      )
+      return
+    }
+    displayManager.setDurationSeconds(player, durationSeconds)
+    player.sendMessage("§a[DOB] 変換時間を §e${durationSeconds}秒 §aに設定しました。")
+  }
+
+  private fun handleShapeFilter(player: Player, input: String) {
     val selectedShapes = mutableSetOf<BlockShape>()
     val unknowns = mutableListOf<String>()
 
-    for (type in types) {
-      val shape = shapeMap[type]
-      if (shape != null) {
-        selectedShapes.add(shape)
+    input.split(",").forEach { type ->
+      val shape = shapeMap[type.lowercase()]
+      if (shape == null) {
+        unknowns += type
       } else {
-        unknowns.add(type)
+        selectedShapes += shape
       }
     }
 
@@ -202,7 +272,6 @@ class DebugOnBeCommand(
       player.sendMessage("§c[DOB] 不明なタイプが含まれています: ${unknowns.joinToString(", ")}")
       return
     }
-
     if (selectedShapes.isEmpty()) {
       player.sendMessage("§c[DOB] 有効なタイプを指定してください。")
       return
@@ -234,8 +303,8 @@ class DebugOnBeCommand(
           §b━━━ DebugOnBE ヘルプ (1/2) §b━━━
           §7■ コマンド
           §a/togo [radius] [time]       §7- 周囲ブロックを一定時間表示置換
-          §a/togom [types/reset]        §7- 表示対象フィルタの設定
-          §a/togom lim [num/reset]      §7- 最大表示個数の制限 (近い順)
+          §a/togom                     §7- Togo設定GUIを開く
+          §a/togom <types/reset/lim/...> §7- Togo設定をコマンドで変更
           §a/debugonbe refresh [radius] §7- 周囲ブロックを置換 (デフォルト10)
           §a/debugonbe reload           §7- 設定ファイルを再読み込み
 
@@ -254,14 +323,17 @@ class DebugOnBeCommand(
       player.sendMessage(
           """
           §b━━━ DebugOnBE ヘルプ (2/2) §b━━━
-          §e■ フィルタと制限の設定状況 (✅=表示対象):
-          §7制限: §e${displayManager.getLimit(player)} §7個
+          §e■ Togo設定状況 (✅=表示対象):
+          §7ブロック数制限: §e${displayManager.getLimit(player)} §7個
+          §7変換半径: §e${displayManager.getRadius(player)} §7ブロック
+          §7変換時間: §e${displayManager.getDurationSeconds(player)} §7秒
           ${status(BlockShape.STAIRS)} ${name(BlockShape.STAIRS, "st/stairs")}    ${status(BlockShape.IRON_BARS)} ${name(BlockShape.IRON_BARS, "ib/iron_bars")}
           ${status(BlockShape.FENCE)} ${name(BlockShape.FENCE, "fc/fences")}    ${status(BlockShape.WALL)} ${name(BlockShape.WALL, "wl/walls")}
           ${status(BlockShape.SLAB)} ${name(BlockShape.SLAB, "sl/slabs")}     ${status(BlockShape.DOOR)} ${name(BlockShape.DOOR, "dr/doors")}
           ${status(BlockShape.TRAPDOOR)} ${name(BlockShape.TRAPDOOR, "td/trapdoors")}  ${status(BlockShape.GLASS_PANE)} ${name(BlockShape.GLASS_PANE, "gp/glass_panes")}
           
           §7※ 緑色は設定ファイル対応済み、赤色は未対応です。
+          §7設定変更: /togom
           §7前ページ: /togo help 1
           """
               .trimIndent()
@@ -297,16 +369,37 @@ class DebugOnBeCommand(
 
     if (cmdName == "togom") {
       if (args.size == 1) {
-        val lastComma = args[0].lastIndexOf(',')
-        val prefix = if (lastComma != -1) args[0].substring(0, lastComma + 1) else ""
-        val current = if (lastComma != -1) args[0].substring(lastComma + 1) else args[0]
-
-        val options = shapeMap.keys + listOf("reset", "lim", "limit")
-        return options.filter { it.startsWith(current) }.map { prefix + it }
+        val options =
+            shapeMap.keys +
+                listOf(
+                    "types",
+                    "filter",
+                    "reset",
+                    "lim",
+                    "limit",
+                    "radius",
+                    "rad",
+                    "duration",
+                    "time",
+                )
+        return options.filter { it.startsWith(args[0].lowercase()) }
       }
-      if (args.size == 2 && (args[0].lowercase() == "lim" || args[0].lowercase() == "limit")) {
-        return listOf("10", "50", "100", "200", "500", "reset").filter {
-          it.startsWith(args[1].lowercase())
+      if (args.size == 2) {
+        return when (args[0].lowercase()) {
+          "types",
+          "filter" -> shapeMap.keys.filter { it.startsWith(args[1].lowercase()) }
+          "lim",
+          "limit" ->
+              listOf("1", "35", "256", "reset", "off").filter { it.startsWith(args[1].lowercase()) }
+          "radius",
+          "rad" ->
+              listOf("1", "10", "32", "reset", "off").filter { it.startsWith(args[1].lowercase()) }
+          "duration",
+          "time",
+          "seconds",
+          "sec" ->
+              listOf("1", "60", "300", "reset", "off").filter { it.startsWith(args[1].lowercase()) }
+          else -> emptyList()
         }
       }
       return emptyList()
