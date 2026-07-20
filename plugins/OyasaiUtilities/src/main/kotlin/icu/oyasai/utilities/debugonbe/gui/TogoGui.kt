@@ -39,19 +39,19 @@ class TogoGui(
         title = "ブロック数制限",
         min = TogoSettingsLimits.MIN_MAX_BLOCKS,
         max = TogoSettingsLimits.MAX_MAX_BLOCKS,
-        steps = intArrayOf(1, 10, 100),
+        steps = intArrayOf(100, 10, 1),
     ),
     RADIUS(
         title = "変換半径",
         min = TogoSettingsLimits.MIN_RADIUS,
         max = TogoSettingsLimits.MAX_RADIUS,
-        steps = intArrayOf(1, 10, 100),
+        steps = intArrayOf(100, 10, 1),
     ),
     DURATION(
         title = "変換時間(秒)",
         min = TogoSettingsLimits.MIN_DURATION_SECONDS,
         max = TogoSettingsLimits.MAX_DURATION_SECONDS,
-        steps = intArrayOf(1, 10, 100),
+        steps = intArrayOf(100, 10, 1),
     ),
   }
 
@@ -193,7 +193,7 @@ class TogoGui(
     val value = currentValue(displayManager.getSettings(player), setting)
 
     inventory.setItem(
-        26,
+        21,
         ItemStack(Material.ARROW).addText("§a戻る", mutableListOf("§7設定画面に戻る")),
     )
 
@@ -216,9 +216,10 @@ class TogoGui(
       )
     }
 
-    value.toString().forEachIndexed { index, digit ->
+    val digits = value.toString()
+    digits.forEachIndexed { index, digit ->
       inventory.setItem(
-          index + 9,
+          9 + (4 - digits.length) + index,
           TogoNumberBanner.getBannerChar(digit)
               ?.addText(
                   "§e$value",
@@ -257,7 +258,7 @@ class TogoGui(
 
   private fun handleNumericClick(player: Player, holder: TogoGuiHolder, slot: Int) {
     val setting = holder.numericSetting ?: return
-    if (slot == 26) {
+    if (slot == 21) {
       player.openInventory(createSettingsInventory(player))
       return
     }
