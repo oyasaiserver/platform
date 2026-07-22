@@ -16,11 +16,11 @@ Project index for `docs/01_Projects/`.
 | Project | Summary |
 |---|---|
 | [anamorph-voxel](tools/anamorph-voxel/PROJECT.md) | Anamorphic voxel art generator |
-| [antigravity-toolkit](tools/antigravity-toolkit/PROJECT.md) | Local toolkit and launcher |
 | [citygml-converter](tools/citygml-converter/PROJECT.md) | CityGML converter |
 | [craftscripts](tools/craftscripts/PROJECT.md) | FAWE CraftScript and GUI builder tools |
 | [minecraft-analyzer](tools/minecraft-analyzer/PROJECT.md) | Minecraft world analyzer |
 | [minecraft-glass-gradient](tools/minecraft-glass-gradient/PROJECT.md) | Minecraft stained glass gradient generator |
+| [nexus-toolkit](tools/nexus-toolkit/PROJECT.md) | Local toolkit and launcher |
 | [plateau-viewer](tools/plateau-viewer/PROJECT.md) | PLATEAU CityGML viewer |
 | [sociallikes-analytics](tools/sociallikes-analytics/PROJECT.md) | SocialLikes analytics |
 | [uuid-resolver](tools/uuid-resolver/PROJECT.md) | Minecraft UUID resolver |

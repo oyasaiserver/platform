@@ -1,15 +1,15 @@
 ---
-title: "antigravity-toolkit"
+title: "nexus-toolkit"
 category: tool
 status: active
 owner: marzipan99
 source_of_truth: "~/Desktop/Nexus/01_Projects/nexus-toolkit/"
 related_paths: []
-last_validated: "2026-05-20"
+last_validated: "2026-07-22"
 agent_task: null
 ---
 
-# antigravity-toolkit
+# nexus-toolkit
 
 ## 概要
 
