@@ -3,7 +3,7 @@ title: "ai-debate"
 category: tool
 status: active
 owner: marzipan99
-source_of_truth: "~/Desktop/Antigravity/01_Projects/ai-debate/"
+source_of_truth: "~/Desktop/Nexus/01_Projects/ai-debate/"
 related_paths:
   - docs/01_Projects/automation/ai-debate/
 project_kind: automation

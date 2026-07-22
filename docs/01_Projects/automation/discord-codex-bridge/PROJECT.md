@@ -3,7 +3,7 @@ title: "discord-codex-bridge"
 category: tool
 status: active
 owner: marzipan99
-source_of_truth: "~/Desktop/Antigravity/01_Projects/discord-codex-bridge/"
+source_of_truth: "~/Desktop/Nexus/01_Projects/discord-codex-bridge/"
 related_paths: []
 last_validated: "2026-05-20"
 agent_task: null

@@ -122,21 +122,22 @@ Use when editing a Minecraft plugin.
    ```bash
    /nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:<Plugin>:build
    ```
-6. If local runtime verification is needed, copy the jar into `dev-server/plugins/`.
-7. Reload the plugin or restart the dev server.
+6. If local runtime verification is needed, copy the jar into `local/paperclip-tmp/plugins/`.
+7. Reload the plugin or restart the local test server.
 8. If stale deploy is possible, verify checksums.
 
-## Dev Server Jar Workflow
+## Local Server Jar Workflow
 
-Use when a rebuilt plugin must be tested in the local dev server.
+Use when a rebuilt plugin must be tested in the local test server (`local/paperclip-tmp/`).
 
 ```bash
 /nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:<Plugin>:build
-cp plugins/<Plugin>/build/libs/<Plugin>.jar dev-server/plugins/<Plugin>.jar
-shasum -a 256 plugins/<Plugin>/build/libs/<Plugin>.jar dev-server/plugins/<Plugin>.jar
+cp plugins/<Plugin>/build/libs/<Plugin>.jar local/paperclip-tmp/plugins/<Plugin>.jar
+shasum -a 256 plugins/<Plugin>/build/libs/<Plugin>.jar local/paperclip-tmp/plugins/<Plugin>.jar
 ```
 
 After copying, reload the plugin with PlugManX or restart the server.
+See `docs/02_Docs/ops/local-server.md` for start, stop, and troubleshooting steps.
 
 ## Reading Budget Rule
 

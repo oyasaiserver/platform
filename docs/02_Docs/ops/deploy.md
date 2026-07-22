@@ -50,7 +50,7 @@ cp plugins/OyasaiMenu/build/libs/OyasaiMenu.jar dev-server/plugins/
 - Purpur 1.21.11
 - 主要プラグイン: FAWE, CitiesSkyMine, OyasaiMenu, Vault, PlaceholderAPI, PlugManX
 
-## 外部ツール（Antigravity）のデプロイ
+## 外部ツール（Nexus）のデプロイ
 
 各ツールはHTMLファイル1枚で動作するため、以下の方法でデプロイ可能:
 
