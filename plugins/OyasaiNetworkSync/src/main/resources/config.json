@@ -1,33 +1,21 @@
 {
-  "server-detection": {
-    // 同期対象ホスト名の接頭辞
-    "host-prefix": "oyasai-minecraft-",
-    // VentureChat未導入サーバーの判定に使用するホスト名の末尾
-    "direct-chat-host-suffixes": [
-      "-lobby"
-      // , "-hub"
-    ]
+  "debug": false,
+  "direct-chat": {
+    "cancel-backend-chat": true,
+    "enabled": true,
+    "format": "<white>{player}<gray>: <white>{message}"
   },
-  "venturechat": {
-    // VentureChatサーバー間プラグインメッセージチャンネル
-    "channel": "venturechat:data",
-    // 受信したVentureChatメッセージを同期するチャンネル
-    "synced-channels": ["Global"]
+  "server-detection": {
+    "direct-chat-host-suffixes": ["-lobby"],
+    "host-prefix": "oyasai-minecraft-"
   },
   "tab": {
     "enabled": true,
-    // {player}の置換対象はプレイヤー名
     "remote-display-name": "<gray>{player}",
     "remote-list-order": 1000
   },
-  // VentureChat未導入サーバー向け直接チャット配信
-  "direct-chat": {
-    "enabled": true,
-    // バックエンド側バニラチャットの二重表示防止
-    "cancel-backend-chat": true,
-    // 直接チャット配信時のチャット形式
-    // {player}と{message}の挿入値はプレーンテキスト
-    "format": "<white>{player}<gray>: <white>{message}"
-  },
-  "debug": false
+  "venturechat": {
+    "channel": "venturechat:data",
+    "synced-channels": ["Global"]
+  }
 }

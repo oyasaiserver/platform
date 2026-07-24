@@ -1,9 +1,7 @@
 {
+  "authors": ["takucan"],
   "id": "oyasai-network-sync",
-  "name": "OyasaiNetworkSync",
-  "version": "${version}",
   "main": "icu.oyasai.networksync.OyasaiNetworkSync",
-  "authors": [
-    "takucan"
-  ]
+  "name": "OyasaiNetworkSync",
+  "version": "${version}"
 }
