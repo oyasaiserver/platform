@@ -2,6 +2,7 @@ package icu.oyasai.networksync
 
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier
+import com.velocitypowered.api.proxy.server.RegisteredServer
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
@@ -44,7 +45,7 @@ class VentureChatBridge(
               }
             }
             .toByteArray()
-    serverDiscovery.ventureChatServers().forEach { sendToServer(it.serverInfo.name, payload) }
+    serverDiscovery.ventureChatServers().forEach { sendToServer(it, payload) }
   }
 
   private fun handleChatPayload(sourceServer: String, input: DataInputStream) {
@@ -83,18 +84,15 @@ class VentureChatBridge(
         )
     serverDiscovery.ventureChatServers().forEach { target ->
       val targetName = target.serverInfo.name
-      if (!targetName.equals(sourceServer, ignoreCase = true)) sendToServer(targetName, outgoing)
+      if (!targetName.equals(sourceServer, ignoreCase = true)) sendToServer(target, outgoing)
     }
     serverDiscovery.directChatServers().forEach { target ->
       sendJsonToPlayersOnServer(target.serverInfo.name, json)
     }
   }
 
-  private fun sendToServer(serverName: String, payload: ByteArray) {
-    if (!serverDiscovery.isVentureChatServer(serverName)) return
-    proxy.getServer(serverName).ifPresent { server ->
-      if (server.playersConnected.isNotEmpty()) server.sendPluginMessage(channel, payload)
-    }
+  private fun sendToServer(server: RegisteredServer, payload: ByteArray) {
+    if (server.playersConnected.isNotEmpty()) server.sendPluginMessage(channel, payload)
   }
 
   private fun sendJsonToPlayersOnServer(serverName: String, json: String) {

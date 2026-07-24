@@ -66,7 +66,7 @@ constructor(
   @Subscribe
   fun onDisconnect(event: DisconnectEvent) {
     if (!::config.isInitialized) return
-    if (::tabSynchronizer.isInitialized) tabSynchronizer.remove(event.player.uniqueId)
+    tabSynchronizer.remove(event.player.uniqueId)
     proxy.scheduler
         .buildTask(
             this,
@@ -92,8 +92,7 @@ constructor(
     if (!::config.isInitialized || !config.directChatEnabled) return
     val player = event.player
     val server = player.currentServer.map { it.serverInfo.name }.orElse(null) ?: return
-    if (!serverDiscovery.isManagedServer(server) || !serverDiscovery.isDirectChatServer(server))
-        return
+    if (!serverDiscovery.isDirectChatServer(server)) return
 
     val message = formatDirectChatMessage(player, event.message)
     if (config.cancelDirectChatBackend) {
@@ -103,11 +102,11 @@ constructor(
   }
 
   private fun syncAll() {
-    if (::tabSynchronizer.isInitialized) tabSynchronizer.syncAll()
+    tabSynchronizer.syncAll()
   }
 
   private fun sendPlayerNames() {
-    if (::ventureChatBridge.isInitialized) ventureChatBridge.sendPlayerNames()
+    ventureChatBridge.sendPlayerNames()
   }
 
   private fun formatDirectChatMessage(player: Player, message: String): Component {
