@@ -19,6 +19,7 @@ spotless-plugin = {module = "com.diffplug.spotless:spotless-plugin-gradle", vers
 paper-dev-bundle = {module = "io.papermc.paper:dev-bundle", version.ref = "purpur-api"}
 tokenmanager = {module = "com.github.Realizedd:TokenManager", version.ref = "tokenmanager"}
 vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
+velocity-api = {module = "com.velocitypowered:velocity-api", version.ref = "velocity"}
 worldborder = {module = "com.github.PryPurity:WorldBorder", version.ref = "worldborder"}
 fawe-bukkit = {module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe"}
 
@@ -44,5 +45,6 @@ spotless = "8.5.1" # Ktfmt version must match that of Nixpkgs
 paperweight = "2.0.0-beta.21"
 tokenmanager = "3.2.4"
 vault = "1.7.1"
+velocity = "4.1.0-SNAPSHOT"
 worldborder = "2.1.4"
 fawe = "2.15.2"
