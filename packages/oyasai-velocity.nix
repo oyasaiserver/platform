@@ -1,6 +1,7 @@
 {
   oyasaiVelocity,
   oyasai-plugin-registry,
+  oyasai-plugins,
   oyasai-minecraft-main,
   oyasai-minecraft-lobby,
   oyasai-minecraft-axiom,
@@ -13,7 +14,9 @@ oyasaiVelocity {
     # keep-sorted start
     floodgate
     geyser
+    oyasai-plugins.oyasainetworksync
     skinsrestorer
+    venturechat
     # keep-sorted end
   ];
 
