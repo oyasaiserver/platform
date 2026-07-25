@@ -117,8 +117,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.0/builds/1201/downloads/velocity",
-      "hash": "sha256-+lWWUpiZj1YEZD17snL6og6uOyfjAT9FxvObHzSOJfo="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.0/builds/1204/downloads/velocity",
+      "hash": "sha256-UBoEyDmMoPMi7/kGmNaXEsIFHohEiYJPRCOcRzteE7Y="
     }
   },
   "gsit": {
@@ -188,8 +188,8 @@
   "multiversecore": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/RkZK9lKn/multiverse-core-5.7.3-pre.5.jar",
-        "hash": "sha256-fpgQxpekLpu0AiUVklqNaTta9CfoVpBYNVtCx2Oa9q0="
+        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/wvHdu4gu/multiverse-core-5.7.3.jar",
+        "hash": "sha256-yRp8LCWtfYeCV7CMmAOB6LX/uo32P69AIkK/tWoFiIQ="
       }
     }
   },
@@ -363,13 +363,17 @@
         "url": "https://cdn.spiget.org/file/spiget-resources/771.jar",
         "hash": "sha256-32ycX8HDvPG/IZAYXJWYjMc2HhdN1u7qUQl0smVCRN0="
       }
+    },
+    "velocity": {
+      "url": "https://cdn.spiget.org/file/spiget-resources/771.jar",
+      "hash": "sha256-32ycX8HDvPG/IZAYXJWYjMc2HhdN1u7qUQl0smVCRN0="
     }
   },
   "viaversion": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/CjleI5xo/ViaVersion-5.11.1-SNAPSHOT.jar",
-        "hash": "sha256-mSqwbbffbTfB0uP3pF0egFTWzLO7Vscz3TeClp67kAE="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/ZhlgRvXY/ViaVersion-5.11.1-SNAPSHOT.jar",
+        "hash": "sha256-6MG89MVkcCHpMfy4LGGo1Qlq3uaNvMt4GhfMhYoBvT0="
       }
     }
   },

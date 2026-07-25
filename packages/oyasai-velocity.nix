@@ -14,6 +14,7 @@ oyasaiVelocity {
     floodgate
     geyser
     skinsrestorer
+    venturechat
     # keep-sorted end
   ];
 

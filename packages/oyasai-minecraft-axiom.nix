@@ -34,7 +34,10 @@ oyasaiPurpur rec {
     lunachat
     multiversecore
     multiverseportals
+    placeholderapi
     plugmanx
+    protocollib
+    vault
     venturechat
     viaversion
     worldeditsui
