@@ -9,6 +9,7 @@ softdepend:
 commands:
   ban:
     aliases: ["oyasaiban", "aban", "tempban"]
+    permission: oyasai.admin
   syokaku:
     description: サブコマンド（promote, demote, getrank, iscandidate, seerequirements, seeplayerinfo）
     usage: |
