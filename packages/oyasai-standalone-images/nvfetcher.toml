@@ -21,3 +21,15 @@ docker.os = "linux"
 docker.arch = "amd64"
 fetch.docker = "databack/mysql-backup"
 src.manual = "1.4.0"
+
+[niks3]
+docker.os = "linux"
+docker.arch = "amd64"
+fetch.docker = "ghcr.io/mic92/niks3"
+src.manual = "v1.7.0"
+
+[postgres]
+docker.os = "linux"
+docker.arch = "amd64"
+fetch.docker = "postgres"
+src.manual = "18.4"

@@ -3,7 +3,6 @@ import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/pro
 import { R2Bucket } from "@oyasaiserver/cdktf-providers/cloudflare/r2-bucket";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
 import type { Construct } from "constructs";
-import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
 
@@ -12,8 +11,6 @@ type Props = {
 };
 
 export class PlatformInfra extends OyasaiPlatformTerraformStack {
-  public readonly ipv4 = "121.81.157.109";
-
   public readonly r2Bucket: R2Bucket;
   public readonly rootDnsRecord: DnsRecord;
 
@@ -32,7 +29,6 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
     new InfisicalProvider(this, this.t("infisical-provider"));
 
     const { oyasaiIoZone, oyasaiIoRegistrarDomain } = commonInfra;
-    const secrets = createSecrets(this, commonInfra);
 
     this.r2Bucket = new R2Bucket(this, this.t("r2-bucket"), {
       accountId: commonInfra.cloudflareAccountId,
@@ -51,7 +47,7 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
         : `${this.environment}.${oyasaiIoRegistrarDomain.domainName}`,
       type: "A",
       proxied: false,
-      content: this.ipv4,
+      content: commonInfra.ipv4,
     });
 
     if (this.isMaster) {
