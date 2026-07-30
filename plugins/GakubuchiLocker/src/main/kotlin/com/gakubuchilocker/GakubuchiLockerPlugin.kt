@@ -6,10 +6,12 @@ import com.gakubuchilocker.commands.GakubuchiToumeiCommand
 import com.gakubuchilocker.database.DatabaseManager
 import com.gakubuchilocker.listeners.FrameEventListener
 import java.util.UUID
+import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
 
 class GakubuchiLockerPlugin : JavaPlugin() {
   lateinit var db: DatabaseManager
+  val ownerKey by lazy { NamespacedKey(this, "owner") }
 
   // プレイヤーのモード管理 (UUID → "lock" | "unlock")
   val pendingMode = mutableMapOf<UUID, PendingMode>()
@@ -23,7 +25,7 @@ class GakubuchiLockerPlugin : JavaPlugin() {
   }
 
   override fun onEnable() {
-    db = DatabaseManager(dataFolder)
+    db = DatabaseManager(this)
 
     val handler = GakubuchiCommand(this)
     listOf("gakubuchilock", "gakubuchiunlock").forEach { name ->
