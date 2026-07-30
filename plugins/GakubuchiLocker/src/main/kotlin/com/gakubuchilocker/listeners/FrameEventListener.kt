@@ -1,22 +1,54 @@
 package com.gakubuchilocker.listeners
 
 import com.gakubuchilocker.GakubuchiLockerPlugin
+import java.util.UUID
+import org.bukkit.Bukkit
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.hanging.HangingBreakEvent
 import org.bukkit.event.hanging.HangingPlaceEvent
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.persistence.PersistentDataType
 
 class FrameEventListener(
     private val plugin: GakubuchiLockerPlugin,
 ) : Listener {
+  private fun checkAndLockFromPdc(frame: ItemFrame) {
+    if (frame.isDead) return
+    if (plugin.db.isLocked(frame.uniqueId)) return
+    val pdc = frame.persistentDataContainer
+    val ownerUuidStr = pdc.get(plugin.ownerKey, PersistentDataType.STRING) ?: return
+    val ownerUuid = runCatching { UUID.fromString(ownerUuidStr) }.getOrNull() ?: return
+    plugin.db.lockFrame(frame, ownerUuid)
+  }
+
+  // =====================================================
+  // EntitySpawnEvent: FAWE/WE等でスポーンした額縁のPDCからロック情報を同期
+  // =====================================================
+  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+  fun onEntitySpawn(event: EntitySpawnEvent) {
+    if (event.entity.isDead) return
+    val frame = event.entity as? ItemFrame ?: return
+    if (frame.isDead) return
+
+    checkAndLockFromPdc(frame)
+
+    Bukkit.getScheduler()
+        .runTaskLater(
+            plugin,
+            Runnable { checkAndLockFromPdc(frame) },
+            1L,
+        )
+  }
+
   // =====================================================
   // 額縁設置時: 自動ロック & 自動透明化
   // =====================================================
@@ -40,6 +72,7 @@ class FrameEventListener(
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
   fun onEntityDamage(event: EntityDamageByEntityEvent) {
     val frame = event.entity as? ItemFrame ?: return
+    checkAndLockFromPdc(frame)
 
     // 雪玉・矢などの投擲物によるダメージは、撃った相手がオーナーやOPであっても
     // ロック済み額縁を破壊・中身排出させないよう常にキャンセルする
@@ -68,6 +101,7 @@ class FrameEventListener(
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
   fun onPlayerInteractEntity(event: PlayerInteractEntityEvent) {
     val frame = event.rightClicked as? ItemFrame ?: return
+    checkAndLockFromPdc(frame)
     val player = event.player
     val mode = plugin.pendingMode[player.uniqueId]
 
@@ -98,7 +132,7 @@ class FrameEventListener(
           return
         }
 
-        plugin.db.unlockFrame(frame.uniqueId)
+        plugin.db.unlockFrame(frame)
         player.sendMessage("§a[Gakubuchi] §f額縁のロックを解除しました！ §7(/gakubuchiunlock off で終了)")
       }
 
@@ -118,6 +152,7 @@ class FrameEventListener(
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
   fun onPlayerInteractAtEntity(event: PlayerInteractAtEntityEvent) {
     val frame = event.rightClicked as? ItemFrame ?: return
+    checkAndLockFromPdc(frame)
     val player = event.player
     val mode = plugin.pendingMode[player.uniqueId]
 
@@ -139,6 +174,7 @@ class FrameEventListener(
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   fun onHangingBreakByEntity(event: HangingBreakByEntityEvent) {
     val frame = event.entity as? ItemFrame ?: return
+    checkAndLockFromPdc(frame)
     if (!plugin.db.isLocked(frame.uniqueId)) return
 
     val remover = event.remover
@@ -147,7 +183,7 @@ class FrameEventListener(
             (plugin.db.getOwner(frame.uniqueId) == remover.uniqueId || remover.isOp)
     ) {
       // オーナー本人、または OP が破壊 → DBからロック情報を削除して通過
-      plugin.db.unlockFrame(frame.uniqueId)
+      plugin.db.unlockFrame(frame)
       return
     }
 
@@ -167,6 +203,7 @@ class FrameEventListener(
     if (event is HangingBreakByEntityEvent) return
 
     val frame = event.entity as? ItemFrame ?: return
+    checkAndLockFromPdc(frame)
 
     if (plugin.db.isLocked(frame.uniqueId)) {
       event.isCancelled = true
