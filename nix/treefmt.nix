@@ -57,7 +57,10 @@
         # to avoid inconsistency.
         line_ending = "lf";
       };
-      excludes = [ "plugins/* " ];
+      excludes = [
+        "plugins/* "
+        "**/sound-catalog.yml"
+      ];
     };
     # keep-sorted end
   };
