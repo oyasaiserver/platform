@@ -47,7 +47,9 @@ class SearchMenuScreen(
     )
     inventory.setItem(
         authorSearchSlot,
-        GuiItemBuilder(Material.LECTERN).name(Component.text("作者検索", NamedTextColor.YELLOW)).build(),
+        GuiItemBuilder(Material.LECTERN)
+            .name(Component.text("作者検索", NamedTextColor.YELLOW))
+            .build(),
     )
     inventory.setItem(
         onlineAuthorsSlot,
