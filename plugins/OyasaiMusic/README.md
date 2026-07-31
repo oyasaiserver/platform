@@ -26,7 +26,7 @@ plugins/OyasaiMusic/
 ├─ config.yml             # プラグイン設定
 ├─ database.db            # 楽曲・ユーザー・プレイリスト等の SQLite データベース
 ├─ ranking_cache.json     # 日間・週間・総合ランキングのキャッシュ
-├─ sound-catalog.yml      # 看板用バニラ SoundEvent カタログ
+├─ sound-catalog.json     # 看板用バニラ SoundEvent カタログ
 ├─ soundeffect/           # プラグイン通知用の録音済み効果音
 │  ├─ publish_newsong.bin # 新曲公開時
 │  └─ get_reward.bin      # 報酬受取時
@@ -125,7 +125,7 @@ FAWE 録音では、先に対象範囲を `//copy`
 3 行目の `1` は四分音符 1 個分、`1/8` は八分音符 1 個分です。遅延の基準 BPM はグリッド型なら指定 BPM、回路型は基準 120
 BPM、動的録音は記録セッションの基準 BPM です。
 
-4 行目の ID は `sound-catalog.yml` によって決まります。たとえば `entity.axolotl.attack` のパターン 1 は
+4 行目の ID は `sound-catalog.json` によって決まります。たとえば `entity.axolotl.attack` のパターン 1 は
 `4.5.1:1`、`ui.loom.select_pattern` のパターン 4 は `8.3.1:4` のように指定します。音量は看板 1
 行目（未指定時は元ノート）、ピッチは看板下のノートブロックを使います。
 
@@ -133,7 +133,7 @@ BPM、動的録音は記録セッションの基準 BPM です。
 
 ## SoundEvent カタログ
 
-`sound-catalog.yml` は JAR
+`sound-catalog.json` は JAR
 内の初期カタログを初回起動時にデータフォルダへ展開したものです。カタログの読み込みに失敗した場合、`/demosound` の TAB 補完や 4
 行目指定は利用できません。
 
@@ -205,5 +205,5 @@ economy:
 - `/oyasaimusic reload`
   は設定・カタログ等を読み直しますが、進行中の録音や再生を再構築するためのコマンドではありません。設定変更は人の少ない時間帯に行うことを推奨します。
 - データベースファイルだけを移動して `audio` を移動しないと、楽曲情報は残っていても再生できません。
-- `sound-catalog.yml` が削除・破損した場合は、バックアップから戻すか、プラグイン JAR 内の同名ファイルをデータフォルダへ復元してから
+- `sound-catalog.json` が削除・破損した場合は、バックアップから戻すか、プラグイン JAR 内の同名ファイルをデータフォルダへ復元してから
   `/oyasaimusic reload` を実行してください。

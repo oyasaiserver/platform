@@ -1,15 +1,18 @@
 package com.github.sahyuya.oyasaiMusic.audio
 
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import java.io.File
 import java.util.Random
 import java.util.concurrent.ConcurrentHashMap
 import org.bukkit.plugin.java.JavaPlugin
 
 /**
- * データフォルダ内の sound-catalog.yml（JSON互換YAML）をサウンド定義として扱う。 Paperの廃止予定になった Sound.values()/Sound#getKey()
- * には依存しない。
+ * データフォルダ内の sound-catalog.json をサウンド定義として扱う。 Paperの廃止予定になった Sound.values()/Sound#getKey() には依存しない。
  */
 object VanillaSoundCatalog {
+
+  private const val CATALOG_FILE_NAME = "sound-catalog.json"
 
   private data class EventParts(val eventKey: String, val group: String, val tail: List<String>)
 
@@ -53,22 +56,22 @@ object VanillaSoundCatalog {
   @Volatile private var byEvent: Map<String, SoundDefinition> = emptyMap()
   @Volatile private var byId: Map<String, SoundDefinition> = emptyMap()
 
-  /** 初回起動時にJAR内の定義をデータフォルダへ展開し、そのファイルを読み込む。 */
+  /** 初回起動時にJAR内のJSON定義をデータフォルダへ展開し、そのファイルを読み込む。 */
   fun initialize(plugin: JavaPlugin): Int {
-    val file = File(plugin.dataFolder, "sound-catalog.yml")
-    if (!file.exists()) plugin.saveResource("sound-catalog.yml", false)
+    val file = File(plugin.dataFolder, CATALOG_FILE_NAME)
+    if (!file.exists()) plugin.saveResource(CATALOG_FILE_NAME, false)
     return reload(file)
   }
 
   /** `/oyasaimusic reload` からも呼び出す、編集済みカタログの再読込。 */
-  fun reload(plugin: JavaPlugin): Int = reload(File(plugin.dataFolder, "sound-catalog.yml"))
+  fun reload(plugin: JavaPlugin): Int = reload(File(plugin.dataFolder, CATALOG_FILE_NAME))
 
   @Synchronized
   private fun reload(file: File): Int {
-    require(file.isFile) { "sound-catalog.yml が見つかりません: ${file.absolutePath}" }
+    require(file.isFile) { "$CATALOG_FILE_NAME が見つかりません: ${file.absolutePath}" }
     val loaded = parseDefinitions(file.readText(Charsets.UTF_8))
     require(loaded.isNotEmpty()) {
-      "sound-catalog.yml からSoundEventを読み取れませんでした: ${file.absolutePath}"
+      "$CATALOG_FILE_NAME からSoundEventを読み取れませんでした: ${file.absolutePath}"
     }
     definitions = loaded
     byEvent = loaded.associateBy { it.eventKey }
@@ -87,26 +90,17 @@ object VanillaSoundCatalog {
     return byId[parts[0]]?.selectionForPattern(parts[1].toIntOrNull() ?: return null)
   }
 
-  /** JSON互換YAMLの sounds 配列を直接読む。Bukkitのドット区切りパス解釈を回避する。 */
+  /** JSONの sounds 配列を解析する。イベント名に含まれるドットはJSONキーとしてそのまま扱う。 */
   private fun parseDefinitions(text: String): List<SoundDefinition> {
-    val eventPattern = Regex("\\\"([a-z0-9_.]+)\\\"\\s*:\\s*\\{\\s*\\\"sounds\\\"\\s*:\\s*\\[")
     val patternsByEvent = linkedMapOf<String, List<Pattern>>()
-    eventPattern.findAll(text).forEach { match ->
-      val arrayStart = match.range.last
-      val arrayEnd = closingIndex(text, arrayStart, '[', ']') ?: return@forEach
-      val entries = splitTopLevel(text.substring(arrayStart + 1, arrayEnd))
-      if (entries.isNotEmpty()) {
-        patternsByEvent[match.groupValues[1]] =
-            entries.mapIndexed { index, entry ->
-              val weight =
-                  Regex("\\\"weight\\\"\\s*:\\s*(\\d+)")
-                      .find(entry)
-                      ?.groupValues
-                      ?.get(1)
-                      ?.toIntOrNull()
-                      ?.coerceAtLeast(1) ?: 1
-              Pattern(index + 1, weight)
-            }
+    val root = JsonParser.parseString(text).asJsonObject
+    root.entrySet().forEach { (rawEventKey, value) ->
+      val definition = value.takeIf { it.isJsonObject }?.asJsonObject ?: return@forEach
+      val sounds = definition.getAsJsonArray("sounds") ?: return@forEach
+      val patterns =
+          sounds.mapIndexed { index, sound -> Pattern(index + 1, sound.weight().coerceAtLeast(1)) }
+      if (patterns.isNotEmpty()) {
+        patternsByEvent[rawEventKey.removePrefix("minecraft:").lowercase()] = patterns
       }
     }
 
@@ -140,51 +134,11 @@ object VanillaSoundCatalog {
         .map { (eventKey, patterns) -> SoundDefinition(eventKey, idByEvent[eventKey], patterns) }
   }
 
-  private fun closingIndex(text: String, start: Int, open: Char, close: Char): Int? {
-    var depth = 0
-    var quoted = false
-    var escaped = false
-    for (index in start until text.length) {
-      val char = text[index]
-      if (quoted) {
-        if (escaped) escaped = false
-        else if (char == '\\') escaped = true else if (char == '"') quoted = false
-        continue
-      }
-      when (char) {
-        '"' -> quoted = true
-        open -> depth++
-        close -> if (--depth == 0) return index
-      }
-    }
-    return null
+  private fun com.google.gson.JsonElement.weight(): Int {
+    val sound = takeIf { it.isJsonObject }?.asJsonObject ?: return 1
+    return sound.intOrNull("weight") ?: 1
   }
 
-  private fun splitTopLevel(text: String): List<String> {
-    val entries = mutableListOf<String>()
-    var start = 0
-    var depth = 0
-    var quoted = false
-    var escaped = false
-    text.forEachIndexed { index, char ->
-      if (quoted) {
-        if (escaped) escaped = false
-        else if (char == '\\') escaped = true else if (char == '"') quoted = false
-      } else
-          when (char) {
-            '"' -> quoted = true
-            '{',
-            '[' -> depth++
-            '}',
-            ']' -> depth--
-            ',' ->
-                if (depth == 0) {
-                  text.substring(start, index).trim().takeIf { it.isNotEmpty() }?.let(entries::add)
-                  start = index + 1
-                }
-          }
-    }
-    text.substring(start).trim().takeIf { it.isNotEmpty() }?.let(entries::add)
-    return entries
-  }
+  private fun JsonObject.intOrNull(member: String): Int? =
+      get(member)?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }?.asInt
 }
