@@ -1,0 +1,48 @@
+# OyasaiMusic 設定ファイル
+
+storage:
+  # SQLiteデータベースファイル（pluginsフォルダからの相対パス）
+  database-file: "database.db"
+  # 音源バイナリ(.bin)の保存先ディレクトリ
+  audio-directory: "audio"
+
+recording:
+  # デフォルトのレコード価格
+  default-price: 1000
+  # デフォルトのレコード素材（バニラマテリアル名）
+  default-record-material: "MUSIC_DISC_13"
+  # 動的録音(/record start)で1音として拾う最大半径（ブロック）
+  dynamic-record-radius: 32.0
+  # 動的録音の音量最大値が適用される距離（この距離以内は減衰なし）
+  dynamic-record-full-volume-radius: 2.0
+
+playback:
+  # デフォルトの再生方式: default(推奨, プレイヤーに音源追従・Panなし) / positional(立体音響再生, Pan対応)
+  # 実際にどちらで再生するかは、対応楽曲(songs.supports_positional=true)であれば
+  # リスナーごとの選択(playback_preferences)が優先される。この値は選択が無い場合の既定値。
+  default-mode: default
+  # 視聴カウント判定: 直近1時間の再生回数上限
+  view-limit-per-hour: 3
+  # 視聴カウント判定: 直近24時間の再生回数上限
+  view-limit-per-day: 10
+  # 視聴回数がこの値に達するたびに作者へpending_pointsを+1
+  views-per-point: 10
+  # 楽曲の総演奏時間に対して、この割合以上を聴き終えたら1視聴としてカウント
+  view-completion-ratio: 0.8
+
+economy:
+  # いいね送信者(リスナー)に付与する金額
+  like-reward-money: 1000
+  # いいね受信者(作者)に付与するポイント
+  like-reward-points: 2
+  # レコード売上の作者還元率
+  record-sale-author-share: 0.8
+  # TokenManager 等へポイントを付与するコンソールコマンド。%player% と %points%（または%amount%）を使える。
+  # /tokenmanager add <player> <値> に合わせた既定値。%player% と %points%（または%amount%）を使える。
+  points-command: "tokenmanager add %player% %points%"
+
+bedrock:
+  # 統合版(Geyser/Floodgate)プレイヤーの検知に使う名前接頭辞
+  name-prefix: "."
+  # 同一ミリ秒・同一楽器の同時発音数がこれ以上の場合、最高音・最低音のみ再生する
+  chord-limit: 3

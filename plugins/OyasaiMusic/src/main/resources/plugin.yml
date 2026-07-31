@@ -1,0 +1,52 @@
+name: OyasaiMusic
+version: "${version}"
+main: com.github.sahyuya.oyasaiMusic.OyasaiMusic
+api-version: "1.21.11"
+load: POSTWORLD
+depend: [FastAsyncWorldEdit]
+softdepend: [Vault, TokenManager, PlaceholderAPI, Essentials, Floodgate]
+
+commands:
+  record:
+    description: 楽曲録音コマンド
+    aliases: [rec]
+    usage: |
+      /record we grid <BPM>   - FAWEクリップボードからグリッド型録音
+      /record we default      - FAWEクリップボードから回路型(レッドストーン)録音
+      /record start <1-4>     - 動的録音を開始（引数は量子化グリッドの遅延単位）
+      /record stop            - 動的録音を終了して下書き保存
+    permission: oyasaimusic.record
+  musicmenu:
+    description: 音楽メニューを開く、または楽曲を操作する
+    aliases: [mm]
+    usage: /musicmenu [play|open] <ID>
+    permission: oyasaimusic.use
+  getmusicplayer:
+    description: 物理アイテム「音楽プレイヤー」を取得する（GUIフェーズで追加）
+    aliases: [getmp]
+    usage: |
+      /getmusicplayer          - 自分自身に音楽プレイヤーを配布
+      /getmusicplayer <player> - 指定プレイヤーに配布（OP/コンソール専用）
+    permission: oyasaimusic.use
+  oyasaimusic:
+    description: OyasaiMusic管理コマンド
+    usage: /oyasaimusic <reload|update>
+    permission: oyasaimusic.admin
+  demosound:
+    description: バニラSoundEventの指定パターンを自分だけに試聴する
+    usage: /demosound <SoundEvent> <パターン> [ピッチ(0-24)]
+    permission: oyasaimusic.demosound
+
+permissions:
+  oyasaimusic.admin:
+    description: OP専用機能（審査・履歴管理GUI等）へのアクセス
+    default: op
+  oyasaimusic.record:
+    description: 楽曲録音コマンドの使用
+    default: false
+  oyasaimusic.use:
+    description: プレイヤーGUI/物理アイテムの使用
+    default: false
+  oyasaimusic.demosound:
+    description: 看板用バニラ音源を試聴する
+    default: false

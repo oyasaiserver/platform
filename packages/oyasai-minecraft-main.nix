@@ -74,6 +74,7 @@ oyasaiPurpur rec {
     openinv
     oyasaiadmintools
     oyasaimenu
+    oyasaimusic
     oyasaipets
     oyasaiutilities
     oyasaivehicles
