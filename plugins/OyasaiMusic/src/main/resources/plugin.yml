@@ -1,7 +1,7 @@
 name: OyasaiMusic
-version: '${version}'
+version: "${version}"
 main: com.github.sahyuya.oyasaiMusic.OyasaiMusic
-api-version: '1.21.11'
+api-version: "1.21.11"
 load: POSTWORLD
 depend: [FastAsyncWorldEdit]
 softdepend: [Vault, TokenManager, PlaceholderAPI, Essentials, Floodgate]

@@ -23,41 +23,39 @@ import org.bukkit.craftbukkit.util.CraftChatMessage
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-/**
- * 右上Toastをクライアントへ一時Advancementパケットとして直接送る。
- * BukkitのloadAdvancement方式と異なり、サーバーの進捗データには保存しない。
- */
+/** 右上Toastをクライアントへ一時Advancementパケットとして直接送る。 BukkitのloadAdvancement方式と異なり、サーバーの進捗データには保存しない。 */
 class ToastNotificationService(private val plugin: OyasaiMusic) {
 
-    private companion object {
-        const val NAMESPACE = "oyasaimusic"
-        const val ROOT_CRITERION = "root"
-        const val TOAST_CRITERION = "trigger"
-    }
+  private companion object {
+    const val NAMESPACE = "oyasaimusic"
+    const val ROOT_CRITERION = "root"
+    const val TOAST_CRITERION = "trigger"
+  }
 
-    private val sequence = AtomicLong()
-    private val noBackground: Optional<ClientAsset.ResourceTexture> = Optional.empty()
-    private val noParent: Optional<Identifier> = Optional.empty()
-    private val criteria: Map<String, Criterion<*>> = emptyMap()
+  private val sequence = AtomicLong()
+  private val noBackground: Optional<ClientAsset.ResourceTexture> = Optional.empty()
+  private val noParent: Optional<Identifier> = Optional.empty()
+  private val criteria: Map<String, Criterion<*>> = emptyMap()
 
-    fun showLikeReceived(author: Player, songTitle: String, likerName: String) {
-        if (!author.isOnline) return
-        display(
-            player = author,
-            icon = ItemStack(Material.HEART_OF_THE_SEA),
-            title = "§d$likerName §fさんが §b「$songTitle」 §fにいいねしました",
-        )
-        plugin.soundEffectService.play(PluginSoundEffect.LIKE_RECEIVED, listOf(author))
-    }
+  fun showLikeReceived(author: Player, songTitle: String, likerName: String) {
+    if (!author.isOnline) return
+    display(
+        player = author,
+        icon = ItemStack(Material.HEART_OF_THE_SEA),
+        title = "§d$likerName §fさんが §b「$songTitle」 §fにいいねしました",
+    )
+    plugin.soundEffectService.play(PluginSoundEffect.LIKE_RECEIVED, listOf(author))
+  }
 
-    private fun display(player: Player, icon: ItemStack, title: String) {
-        val serial = player.uniqueId.toString().replace("-", "") + "_${sequence.incrementAndGet()}"
-        val rootId = Identifier.fromNamespaceAndPath(NAMESPACE, "toast_root_$serial")
-        val toastId = Identifier.fromNamespaceAndPath(NAMESPACE, "toast_$serial")
-        val rootRequirements = AdvancementRequirements.allOf(listOf(ROOT_CRITERION))
-        val toastRequirements = AdvancementRequirements.allOf(listOf(TOAST_CRITERION))
+  private fun display(player: Player, icon: ItemStack, title: String) {
+    val serial = player.uniqueId.toString().replace("-", "") + "_${sequence.incrementAndGet()}"
+    val rootId = Identifier.fromNamespaceAndPath(NAMESPACE, "toast_root_$serial")
+    val toastId = Identifier.fromNamespaceAndPath(NAMESPACE, "toast_$serial")
+    val rootRequirements = AdvancementRequirements.allOf(listOf(ROOT_CRITERION))
+    val toastRequirements = AdvancementRequirements.allOf(listOf(TOAST_CRITERION))
 
-        val root = AdvancementHolder(
+    val root =
+        AdvancementHolder(
             rootId,
             advancement(
                 noParent,
@@ -74,7 +72,8 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
                 rootRequirements,
             ),
         )
-        val toastDisplay = DisplayInfo(
+    val toastDisplay =
+        DisplayInfo(
             nmsIcon(icon),
             legacyComponent(title.ifBlank { "OyasaiMusic" }),
             legacyComponent("\n§7いいねを受け取りました"),
@@ -84,10 +83,15 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
             false,
             true,
         )
-        toastDisplay.setLocation(1F, 0F)
-        val toast = AdvancementHolder(toastId, advancement(Optional.of(rootId), toastDisplay, toastRequirements))
+    toastDisplay.setLocation(1F, 0F)
+    val toast =
+        AdvancementHolder(
+            toastId,
+            advancement(Optional.of(rootId), toastDisplay, toastRequirements),
+        )
 
-        val addPacket = ClientboundUpdateAdvancementsPacket(
+    val addPacket =
+        ClientboundUpdateAdvancementsPacket(
             false,
             listOf(root, toast),
             emptySet(),
@@ -97,35 +101,48 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
             ),
             true,
         )
-        val removePacket = ClientboundUpdateAdvancementsPacket(
+    val removePacket =
+        ClientboundUpdateAdvancementsPacket(
             false,
             emptyList(),
             setOf(rootId, toastId),
             emptyMap(),
             true,
         )
-        val connection = (player as CraftPlayer).handle.connection
-        connection.send(addPacket)
-        connection.send(removePacket)
-    }
+    val connection = (player as CraftPlayer).handle.connection
+    connection.send(addPacket)
+    connection.send(removePacket)
+  }
 
-    private fun advancement(
-        parent: Optional<Identifier>,
-        display: DisplayInfo,
-        requirements: AdvancementRequirements,
-    ): Advancement = Advancement(parent, Optional.of(display), AdvancementRewards.EMPTY, criteria, requirements, false)
+  private fun advancement(
+      parent: Optional<Identifier>,
+      display: DisplayInfo,
+      requirements: AdvancementRequirements,
+  ): Advancement =
+      Advancement(
+          parent,
+          Optional.of(display),
+          AdvancementRewards.EMPTY,
+          criteria,
+          requirements,
+          false,
+      )
 
-    private fun completedProgress(requirements: AdvancementRequirements, criterion: String): AdvancementProgress =
-        AdvancementProgress().also {
-            it.update(requirements)
-            it.grantProgress(criterion)
-        }
+  private fun completedProgress(
+      requirements: AdvancementRequirements,
+      criterion: String,
+  ): AdvancementProgress =
+      AdvancementProgress().also {
+        it.update(requirements)
+        it.grantProgress(criterion)
+      }
 
-    private fun nmsIcon(icon: ItemStack): net.minecraft.world.item.ItemStack {
-        val source = if (icon.type.isItem) icon else ItemStack(Material.OAK_SIGN)
-        val nmsStack = CraftItemStack.asNMSCopy(source)
-        return if (nmsStack.isEmpty) CraftItemStack.asNMSCopy(ItemStack(Material.OAK_SIGN)) else nmsStack
-    }
+  private fun nmsIcon(icon: ItemStack): net.minecraft.world.item.ItemStack {
+    val source = if (icon.type.isItem) icon else ItemStack(Material.OAK_SIGN)
+    val nmsStack = CraftItemStack.asNMSCopy(source)
+    return if (nmsStack.isEmpty) CraftItemStack.asNMSCopy(ItemStack(Material.OAK_SIGN))
+    else nmsStack
+  }
 
-    private fun legacyComponent(text: String): Component = CraftChatMessage.fromStringOrEmpty(text)
+  private fun legacyComponent(text: String): Component = CraftChatMessage.fromStringOrEmpty(text)
 }

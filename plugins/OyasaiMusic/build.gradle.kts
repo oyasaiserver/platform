@@ -1,6 +1,4 @@
-plugins {
-  alias(libs.plugins.paperweight.userdev)
-}
+plugins { alias(libs.plugins.paperweight.userdev) }
 
 dependencies {
   paperweightDevelopmentBundle(libs.paper.dev.bundle)
@@ -16,17 +14,13 @@ dependencies {
 
 tasks {
   shadowJar {
-    minimize {
-      exclude(dependency(libs.sqlite.jdbc.get()))
-    }
+    minimize { exclude(dependency(libs.sqlite.jdbc.get())) }
     relocate("org.sqlite", "com.oyasai.music.libs.sqlite")
     relocate("kotlin", "com.oyasai.music.libs.kotlin")
   }
 
   processResources {
     val properties = mapOf("version" to project.version.toString())
-    filesNotMatching("**/*.bin") {
-      expand(properties)
-    }
+    filesNotMatching("**/*.bin") { expand(properties) }
   }
 }
