@@ -9,7 +9,6 @@ dependencies {
   compileOnly(libs.placeholderapi)
   compileOnly(libs.vault.api)
   compileOnly(libs.fawe.bukkit)
-  compileOnly(libs.purpur.api)
 }
 
 tasks {
@@ -21,6 +20,6 @@ tasks {
 
   processResources {
     val properties = mapOf("version" to project.version.toString())
-    filesNotMatching("**/*.bin") { expand(properties) }
+    filesNotMatching(listOf("**/*.bin", "**/sound-catalog.yml")) { expand(properties) }
   }
 }
