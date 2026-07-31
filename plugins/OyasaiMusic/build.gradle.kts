@@ -1,3 +1,7 @@
+plugins {
+  alias(libs.plugins.paperweight.userdev)
+}
+
 dependencies {
   paperweightDevelopmentBundle(libs.paper.dev.bundle)
 
