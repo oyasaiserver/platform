@@ -20,6 +20,6 @@ tasks {
 
   processResources {
     val properties = mapOf("version" to project.version.toString())
-    filesNotMatching(listOf("**/*.bin")) { expand(properties) }
+    filesNotMatching(listOf("**/*.bin", "**/sound-catalog.json")) { expand(properties) }
   }
 }
