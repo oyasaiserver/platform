@@ -5,8 +5,17 @@ website: "https://github.com/OyasaiServer"
 main: icu.oyasai.utilities.Main
 api-version: "1.21"
 version: "0.1.0"
-softdepend: [Veinminer]
+softdepend: [Veinminer, Vault, TokenManager]
 commands:
+  redbull:
+    description: "20ポイントで一日 fly 権限を有効にする"
+    permission: redbull.use
+  buyredbull:
+    description: "Red Bull を購入する"
+    permission: redbull.give
+  buyredbullset:
+    description: "Red Bull 12本セットを購入する"
+    permission: redbull.give
   orerepopreload:
     description: "OreReappearsのconfigリロードコマンド"
   orerepopswitch:
@@ -46,6 +55,12 @@ commands:
     usage: /togom [types/reset/lim/radius/duration/replace]
 
 permissions:
+  redbull.use:
+    description: "Red Bull の一日 fly 権限を有効にする"
+    default: true
+  redbull.give:
+    description: "Red Bull を購入・付与する"
+    default: op
   oyasaiutilities.timerbar:
     description: "TimerBarコマンドの使用権限"
   oyasaiutilities.tpdata:
