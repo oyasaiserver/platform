@@ -9,6 +9,8 @@ import icu.oyasai.utilities.ore_reappears.OreReappears
 import icu.oyasai.utilities.oresmelter.OreSmelter
 import icu.oyasai.utilities.oresmelter.OreSmelterEvent
 import icu.oyasai.utilities.pita.Pita
+import icu.oyasai.utilities.redbull.RedBullCommand
+import icu.oyasai.utilities.redbull.RedBullFeature
 import icu.oyasai.utilities.timerbar.TimerBarEvent
 import icu.oyasai.utilities.timerbar.TimerCmd
 import icu.oyasai.utilities.timerbar.TimerObj
@@ -25,19 +27,24 @@ class Main : JavaPlugin() {
     server.pluginManager.registerEvents(TimerBarEvent, this) // TimerBar用のイベント登録
     server.pluginManager.registerEvents(TeleportListener, this) // TPathのイベント登録
     server.pluginManager.registerEvents(Pita, this) // Pitaのイベント
-
+    server.pluginManager.registerEvents(RedBullFeature, this) // RedBullのイベント
     server.getPluginCommand("oresmelter")?.setExecutor(OreSmelter) // OreSmelterのコマンド
     server.getPluginCommand("uuid")?.setExecutor(GetUUIDCmd) // GetUUIDのコマンド
     server.getPluginCommand("timerbar")?.setExecutor(TimerCmd) // TimerBarのコマンド
     server.getPluginCommand("back")?.setExecutor(BackForwardCmd) // back コマンド
     server.getPluginCommand("forward")?.setExecutor(BackForwardCmd) // forward コマンド
     server.getPluginCommand("pita")?.setExecutor(Pita) // Pitaのコマンド
+    listOf("redbull", "buyredbull", "buyredbullset").forEach { commandName ->
+      server.getPluginCommand(commandName)?.setExecutor(RedBullCommand)
+      server.getPluginCommand(commandName)?.tabCompleter = RedBullCommand
+    }
 
     OreReappears.onEnable() // OreReappearsの有効化
     AdminBP.onEnable()
     Pita.onEnable() // Pitaの有効化
     OreSmelter.reloadConfig() // OreSmelterのコンフィグリロード
     CreativeManagement.onEnable()
+    RedBullFeature.onEnable()
     DebugOnBE.onEnable(this)
   }
 
@@ -47,6 +54,7 @@ class Main : JavaPlugin() {
     Pita.onDisable() // Pitaの無効化
     TimerObj.onDisable()
     CreativeManagement.onDisable()
+    RedBullFeature.onDisable()
     DebugOnBE.onDisable()
   }
 }
