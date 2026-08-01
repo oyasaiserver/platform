@@ -36,6 +36,10 @@ object SLPlayerHeads {
   }
 
   fun createHead(uuid: UUID, name: String, textureValue: String? = null): ItemStack {
+    if (textureValue == null && isFloodgatePseudoUUID(uuid)) {
+      return createBedrockFallbackItem(name)
+    }
+
     val item = ItemStack(Material.PLAYER_HEAD)
     val meta = item.itemMeta as SkullMeta
     val onlinePlayer = Bukkit.getPlayer(uuid)

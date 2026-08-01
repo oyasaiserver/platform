@@ -21,7 +21,6 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.SkullMeta
 
 object SLRankUp {
   private val format = DateTimeFormatter.ofPattern("yyyy/MM/dd")
@@ -118,10 +117,7 @@ object SLRankUp {
           if (!rankFilter.contains(rank)) return@forEach
           if (!beforeTime.isBefore(rud.lastOnlineTime())) return@forEach
 
-          val item = ItemStack(Material.PLAYER_HEAD)
-          val meta = item.itemMeta as SkullMeta
-          meta.setOwningPlayer(player)
-          item.itemMeta = meta
+          val item = SLPlayerHeads.createHead(player.uniqueId, player.name ?: "Unknown")
 
           item.allFlag()
           item.addText(
