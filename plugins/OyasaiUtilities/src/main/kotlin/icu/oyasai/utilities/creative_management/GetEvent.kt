@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.*
+import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.ItemMergeEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent
@@ -20,17 +21,12 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.BlockInventoryHolder
 import org.bukkit.inventory.meta.SpawnEggMeta
-import org.bukkit.metadata.MetadataValue
 import org.bukkit.persistence.PersistentDataType
-import org.bukkit.plugin.Plugin
 import org.bukkit.util.Vector
 
 object GetEvent : Listener {
-  /** クリエ関連用Meta(TAG) */
-  private const val META_TAG = "CreativeBlock"
-
   /** クリエ関連用Namespace */
-  private val NAMESPACE = NamespacedKey(plugin, META_TAG)
+  private val NAMESPACE = NamespacedKey(plugin, "CreativeBlock")
 
   /** 失敗時の音 */
   private fun Player.missSound() {
@@ -48,8 +44,8 @@ object GetEvent : Listener {
     if (e.items.isEmpty()) {
       if (e.player.gameMode != GameMode.CREATIVE) return
     }
-    if (!e.block.state.hasMetadata(META_TAG)) return
-    e.block.state.removeMetadata(META_TAG, plugin)
+    if (!CreativeBlockStore.isMarked(e.block)) return
+    CreativeBlockStore.remove(e.block)
     e.isCancelled = true
   }
 
@@ -58,55 +54,42 @@ object GetEvent : Listener {
   fun blockBuildEvent(e: BlockPlaceEvent) {
     if (e.isCancelled) return
     if (e.blockPlaced.type.isAir) return
-    if (e.player.gameMode != GameMode.CREATIVE) return
-    e.blockPlaced.state.setMetadata(
-        META_TAG,
-        object : MetadataValue {
-          override fun value(): Any? {
-            return true
-          }
+    if (e.player.gameMode == GameMode.CREATIVE) {
+      CreativeBlockStore.mark(e.blockPlaced)
+    } else {
+      // 以前に壊れた落下ブロック等の古い印が、この座標に再利用されないようにする。
+      CreativeBlockStore.remove(e.blockPlaced)
+    }
+  }
 
-          override fun asInt(): Int {
-            return 1
-          }
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun pistonExtendEvent(e: BlockPistonExtendEvent) {
+    CreativeBlockStore.move(e.blocks, e.direction.modX, e.direction.modY, e.direction.modZ)
+  }
 
-          override fun asFloat(): Float {
-            return 1F
-          }
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun pistonRetractEvent(e: BlockPistonRetractEvent) {
+    CreativeBlockStore.move(e.blocks, e.direction.modX, e.direction.modY, e.direction.modZ)
+  }
 
-          override fun asDouble(): Double {
-            return 1.0
-          }
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun blockExplodeEvent(e: BlockExplodeEvent) {
+    e.blockList().forEach(CreativeBlockStore::remove)
+  }
 
-          override fun asLong(): Long {
-            return 1L
-          }
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun entityExplodeEvent(e: EntityExplodeEvent) {
+    e.blockList().forEach(CreativeBlockStore::remove)
+  }
 
-          override fun asShort(): Short {
-            return 1
-          }
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun blockBurnEvent(e: BlockBurnEvent) {
+    CreativeBlockStore.remove(e.block)
+  }
 
-          override fun asByte(): Byte {
-            return 1
-          }
-
-          override fun asBoolean(): Boolean {
-            return true
-          }
-
-          override fun asString(): String {
-            return "true"
-          }
-
-          override fun getOwningPlugin(): Plugin? {
-            return plugin
-          }
-
-          override fun invalidate() {
-            return
-          }
-        },
-    )
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  fun blockFadeEvent(e: BlockFadeEvent) {
+    CreativeBlockStore.remove(e.block)
   }
 
   /** ブロックをクリックしたときの制御(色々なブロック) */
@@ -131,7 +114,7 @@ object GetEvent : Listener {
             block.type == Material.CAMPFIRE ||
             block.type == Material.SOUL_CAMPFIRE
     ) {
-      if (block.hasMetadata(META_TAG)) {
+      if (CreativeBlockStore.isMarked(block)) {
         // クリエブロック
         if (e.player.gameMode != GameMode.CREATIVE) {
           // クリエじゃないので弄れない
@@ -165,7 +148,7 @@ object GetEvent : Listener {
 
     if (isBlockHolder || isDoubleChest) {
       // ブロックにあるインベントリの場合
-      if (loc.block.state.hasMetadata(META_TAG)) {
+      if (CreativeBlockStore.isMarked(loc.block)) {
         // クリエブロックのインベントリ
         if (isSurvival) {
           // クリエじゃないので弄れない
@@ -194,7 +177,7 @@ object GetEvent : Listener {
   @EventHandler(priority = EventPriority.HIGH)
   fun dispenseEvent(e: BlockDispenseEvent) {
     if (e.isCancelled) return
-    if (!e.block.state.hasMetadata(META_TAG)) return
+    if (!CreativeBlockStore.isMarked(e.block)) return
     val item = e.item.clone()
     if (item.itemMeta is SpawnEggMeta) {
       e.isCancelled = true
@@ -207,7 +190,7 @@ object GetEvent : Listener {
   @EventHandler(priority = EventPriority.HIGH)
   fun dispenseArmorEvent(e: BlockDispenseArmorEvent) {
     if (e.isCancelled) return
-    if (!e.block.state.hasMetadata(META_TAG)) return
+    if (!CreativeBlockStore.isMarked(e.block)) return
     val item = e.item.clone()
     item.editMeta { it.persistentDataContainer.set(NAMESPACE, PersistentDataType.BOOLEAN, true) }
     e.item = item
@@ -216,7 +199,7 @@ object GetEvent : Listener {
   @EventHandler(priority = EventPriority.HIGH)
   fun cookEvent(e: BlockCookEvent) {
     if (e.isCancelled) return
-    if (!e.block.state.hasMetadata(META_TAG)) return
+    if (!CreativeBlockStore.isMarked(e.block)) return
     val item = e.result.clone()
     item.editMeta { it.persistentDataContainer.set(NAMESPACE, PersistentDataType.BOOLEAN, true) }
     e.result = item

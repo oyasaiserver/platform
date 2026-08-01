@@ -7,5 +7,10 @@ object CreativeManagement {
     val server = OyasaiUtilities.plugin.server
     server.pluginManager.registerEvents(GetEvent, OyasaiUtilities.plugin)
     server.pluginManager.registerEvents(InventoryEvent, OyasaiUtilities.plugin)
+    server.pluginManager.registerEvents(CreativeBlockStore, OyasaiUtilities.plugin)
+  }
+
+  fun onDisable() {
+    CreativeBlockStore.clearCache()
   }
 }
