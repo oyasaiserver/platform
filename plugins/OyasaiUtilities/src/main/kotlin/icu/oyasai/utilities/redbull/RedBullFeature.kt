@@ -14,6 +14,7 @@ import me.realized.tokenmanager.api.TokenManager
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -43,14 +44,26 @@ object RedBullFeature : Listener {
   private const val FLY_PERMISSION = "essentials.fly"
   private val ticketExpiryKey = NamespacedKey(plugin, "redbull-fly-expiry")
   private val redBullKey = NamespacedKey(plugin, "redbull-item")
+  // 同一プロフィールにして、単品・12本セットを含む全 Red Bull をスタック可能にする。
+  private val redBullProfileId = UUID.fromString("cbdca8f6-4fa0-4d74-8950-45cf4adf4313")
   private val activeTickets = mutableMapOf<UUID, PermissionAttachment>()
-  private val expiryFormatter = DateTimeFormatter.ofPattern("MM/dd HH:mm").withZone(ZoneId.of("Asia/Tokyo"))
+  private val expiryFormatter =
+      DateTimeFormatter.ofPattern("MM/dd HH:mm").withZone(ZoneId.of("Asia/Tokyo"))
   private var expiryTask: BukkitTask? = null
 
   fun onEnable() {
-    Bukkit.getOnlinePlayers().forEach(::restoreTicket)
+    Bukkit.getOnlinePlayers().forEach { player ->
+      restoreTicket(player)
+      refreshItems(player)
+    }
     expiryTask =
-      Bukkit.getScheduler().runTaskTimer(plugin, Runnable { Bukkit.getOnlinePlayers().forEach(::expireIfNeeded) }, 20L, 20L * 30)
+        Bukkit.getScheduler()
+            .runTaskTimer(
+                plugin,
+                Runnable { Bukkit.getOnlinePlayers().forEach(::expireIfNeeded) },
+                20L,
+                20L * 30,
+            )
   }
 
   fun onDisable() {
@@ -61,10 +74,12 @@ object RedBullFeature : Listener {
 
   fun buy(senderName: String, target: Player, amount: Int): Boolean {
     val price = if (amount == 1) SINGLE_PRICE else SET_PRICE
-    val economy = economy() ?: run {
-      Bukkit.getConsoleSender().sendMessage("§c[RedBull] Vault の経済プロバイダーが見つかりません。")
-      return false
-    }
+    val economy =
+        economy()
+            ?: run {
+              Bukkit.getConsoleSender().sendMessage("§c[RedBull] Vault の経済プロバイダーが見つかりません。")
+              return false
+            }
     if (economy.getBalance(target) < price) {
       target.sendMessage("§cRed Bull の購入には ${price.toInt()}円必要です。")
       return false
@@ -76,9 +91,13 @@ object RedBullFeature : Listener {
     }
 
     val leftovers =
-      target.inventory.addItem(
-        createItem(amount, activeExpiry(target), hasActiveTicket(target) || hasPermanentFly(target))
-      )
+        target.inventory.addItem(
+            createItem(
+                amount,
+                activeExpiry(target),
+                hasActiveTicket(target) || hasPermanentFly(target),
+            )
+        )
     leftovers.values.forEach { target.world.dropItemNaturally(target.location, it) }
     target.sendMessage("§6§lRed Bull §r§bを入手しました！")
     Bukkit.getConsoleSender().sendMessage("§a$senderName が ${target.name} に Red Bull を渡しました。")
@@ -100,8 +119,24 @@ object RedBullFeature : Listener {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   fun onInteract(event: PlayerInteractEvent) {
     if (event.action != Action.RIGHT_CLICK_BLOCK || !isRedBull(event.item)) return
-    // 消費処理を優先させ、プレイヤーヘッドがブロックとして置かれるのを防ぐ。
-    event.setUseInteractedBlock(org.bukkit.event.Event.Result.DENY)
+    if (event.player.isSneaking) {
+      // しゃがみ右クリックはプレイヤーヘッドとして通常どおり設置できる。
+      return
+    }
+    // ブロックアイテムとしての右クリックを完全に止めてから、消費だけを明示的に開始する。
+    // useItemInHand を ALLOW にすると配置と消費の判定が競合するため使用しない。
+    event.isCancelled = true
+    val hand = event.hand ?: return
+    val player = event.player
+    Bukkit.getScheduler()
+        .runTask(
+            plugin,
+            Runnable {
+              if (isRedBull(player.inventory.getItem(hand))) {
+                player.startUsingItem(hand)
+              }
+            },
+        )
   }
 
   @EventHandler
@@ -154,10 +189,12 @@ object RedBullFeature : Listener {
       enableFlight(player)
       return ActivationResult.ACTIVATED
     }
-    val tokenManager = tokenManager() ?: run {
-      player.sendMessage("§cTokenManager が見つからないため、Red Bull を使用できません。")
-      return ActivationResult.TOKEN_MANAGER_UNAVAILABLE
-    }
+    val tokenManager =
+        tokenManager()
+            ?: run {
+              player.sendMessage("§cTokenManager が見つからないため、Red Bull を使用できません。")
+              return ActivationResult.TOKEN_MANAGER_UNAVAILABLE
+            }
     val balance = tokenManager.getTokens(player).orElse(0L)
     if (balance < TOKEN_COST) {
       player.sendMessage("§cポイントが不足しています。必要: ${TOKEN_COST}P / 所持: ${balance}P")
@@ -169,7 +206,11 @@ object RedBullFeature : Listener {
     }
 
     val expiry = Instant.now().plus(Duration.ofDays(1))
-    player.persistentDataContainer.set(ticketExpiryKey, PersistentDataType.LONG, expiry.toEpochMilli())
+    player.persistentDataContainer.set(
+        ticketExpiryKey,
+        PersistentDataType.LONG,
+        expiry.toEpochMilli(),
+    )
     attachTicket(player)
     enableFlight(player)
     return ActivationResult.ACTIVATED
@@ -212,15 +253,14 @@ object RedBullFeature : Listener {
   }
 
   private fun activeExpiry(player: Player): Instant? {
-    val epochMillis = player.persistentDataContainer.get(ticketExpiryKey, PersistentDataType.LONG) ?: return null
+    val epochMillis =
+        player.persistentDataContainer.get(ticketExpiryKey, PersistentDataType.LONG) ?: return null
     return Instant.ofEpochMilli(epochMillis)
   }
 
   private fun hasPermanentFly(player: Player): Boolean {
     return player.hasPermission("group.jokyu") ||
-      player.hasPermission("group.builder") ||
-      player.hasPermission("group.takumi") ||
-      (!activeTickets.containsKey(player.uniqueId) && player.hasPermission(FLY_PERMISSION))
+        (!activeTickets.containsKey(player.uniqueId) && player.hasPermission(FLY_PERMISSION))
   }
 
   private fun enableFlight(player: Player) {
@@ -232,44 +272,55 @@ object RedBullFeature : Listener {
   private fun createItem(amount: Int, expiry: Instant?, fastConsume: Boolean): ItemStack {
     val item = ItemStack(Material.PLAYER_HEAD, amount)
     // このプロジェクトの Paper API では SkullMeta が旧 Paper PlayerProfile 型を要求する。
-    val profile = Bukkit.createProfile(UUID.randomUUID())
+    val profile = Bukkit.createProfile(redBullProfileId)
     val textures = profile.textures
-    textures.skin = URL("https://textures.minecraft.net/texture/766844d5e84f649451a87dacca7a73beaa04eea847d438de26c2d44d1e949de")
+    textures.skin =
+        URL(
+            "https://textures.minecraft.net/texture/766844d5e84f649451a87dacca7a73beaa04eea847d438de26c2d44d1e949de"
+        )
     profile.setTextures(textures)
     item.editMeta(SkullMeta::class.java) { meta ->
       meta.playerProfile = profile
-      meta.displayName(Component.text("Red Bull", NamedTextColor.GOLD).decorate(net.kyori.adventure.text.format.TextDecoration.BOLD))
+      meta.displayName(
+          line("Red Bull", NamedTextColor.GOLD)
+              .decoration(TextDecoration.BOLD, true)
+              .decoration(TextDecoration.UNDERLINED, true)
+      )
       meta.lore(
-        listOf(
-          Component.text("🪽翼を授ける🪽", NamedTextColor.AQUA),
-          Component.text("一日フライ券を購入していない場合、", NamedTextColor.YELLOW),
-          Component.text("20Pを消費して24時間 fly が使えます", NamedTextColor.YELLOW),
-          Component.text("※有効時間は上書きされません", NamedTextColor.RED),
-          Component.text("(上級者以上はポイントを消費しません)", NamedTextColor.GRAY),
-          Component.empty(),
-          expiryLine(expiry),
-        )
+          listOf(
+              line("🪽翼を授ける🪽", NamedTextColor.AQUA),
+              line("一日フライ券を購入していない場合、", NamedTextColor.WHITE),
+              line("20Pを消費して24時間 fly が使えます", NamedTextColor.WHITE),
+              line("※有効時間は上書きされません", NamedTextColor.RED),
+              line("(上級者以上はポイントを消費しません)", NamedTextColor.GRAY),
+              line("shift右クリックで置けます", NamedTextColor.GRAY),
+              Component.empty().decoration(TextDecoration.ITALIC, false),
+              expiryLine(expiry),
+          )
       )
       meta.persistentDataContainer.set(redBullKey, PersistentDataType.BYTE, 1)
     }
     item.setData(
-      DataComponentTypes.CONSUMABLE,
-      Consumable.consumable()
-        .consumeSeconds(if (fastConsume) 0.8f else 2.0f)
-        .animation(ItemUseAnimation.DRINK)
-        .sound(Key.key("entity.generic.drink"))
-        .hasConsumeParticles(true),
+        DataComponentTypes.CONSUMABLE,
+        Consumable.consumable()
+            .consumeSeconds(if (fastConsume) 0.8f else 2.0f)
+            .animation(ItemUseAnimation.DRINK)
+            .sound(Key.key("entity.generic.drink"))
+            .hasConsumeParticles(true),
     )
     return item
   }
 
   private fun expiryLine(expiry: Instant?): Component {
     return if (expiry == null) {
-      Component.text("fly有効期限: 使用後24時間", NamedTextColor.GRAY)
+      line("fly消費期限: 使用後24時間", NamedTextColor.GRAY)
     } else {
-      Component.text("fly有効期限: ${expiryFormatter.format(expiry)}", NamedTextColor.LIGHT_PURPLE)
+      line("fly消費期限: ${expiryFormatter.format(expiry)}", NamedTextColor.LIGHT_PURPLE)
     }
   }
+
+  private fun line(text: String, color: NamedTextColor): Component =
+      Component.text(text, color).decoration(TextDecoration.ITALIC, false)
 
   private fun refreshItems(player: Player) {
     val expiry = activeExpiry(player)?.takeIf { it.isAfter(Instant.now()) }
@@ -285,9 +336,11 @@ object RedBullFeature : Listener {
     return item?.itemMeta?.persistentDataContainer?.has(redBullKey, PersistentDataType.BYTE) == true
   }
 
-  private fun tokenManager(): TokenManager? = Bukkit.getPluginManager().getPlugin("TokenManager") as? TokenManager
+  private fun tokenManager(): TokenManager? =
+      Bukkit.getPluginManager().getPlugin("TokenManager") as? TokenManager
 
-  private fun economy(): Economy? = Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
+  private fun economy(): Economy? =
+      Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
 
   private enum class ActivationResult {
     ACTIVATED,
