@@ -13,9 +13,8 @@ import org.bukkit.persistence.PersistentDataType
 /**
  * クリエイティブ設置ブロックの印をチャンク PDC に保存する。
  *
- * Bukkit Metadata と異なり、チャンクのワールドデータと一緒に保存されるため、再起動や
- * チャンクのアンロード後も残る。チャンクごとに整数配列を一つだけ保存し、メモリ上では
- * Set に展開するので、個々のブロックを走査せずに判定できる。
+ * Bukkit Metadata と異なり、チャンクのワールドデータと一緒に保存されるため、再起動や チャンクのアンロード後も残る。チャンクごとに整数配列を一つだけ保存し、メモリ上では Set
+ * に展開するので、個々のブロックを走査せずに判定できる。
  */
 object CreativeBlockStore : Listener {
   private val markerKey = NamespacedKey(plugin, "creative-block-positions")
@@ -53,10 +52,8 @@ object CreativeBlockStore : Listener {
 
   private fun markers(chunk: Chunk): MutableSet<Int> {
     return cache.getOrPut(ChunkId(chunk)) {
-      chunk.persistentDataContainer
-        .get(markerKey, PersistentDataType.INTEGER_ARRAY)
-        ?.toMutableSet()
-        ?: mutableSetOf()
+      chunk.persistentDataContainer.get(markerKey, PersistentDataType.INTEGER_ARRAY)?.toMutableSet()
+          ?: mutableSetOf()
     }
   }
 
@@ -65,9 +62,9 @@ object CreativeBlockStore : Listener {
       chunk.persistentDataContainer.remove(markerKey)
     } else {
       chunk.persistentDataContainer.set(
-        markerKey,
-        PersistentDataType.INTEGER_ARRAY,
-        markers.sorted().toIntArray(),
+          markerKey,
+          PersistentDataType.INTEGER_ARRAY,
+          markers.sorted().toIntArray(),
       )
     }
   }

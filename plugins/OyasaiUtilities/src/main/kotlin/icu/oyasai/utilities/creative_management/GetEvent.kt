@@ -109,10 +109,10 @@ object GetEvent : Listener {
     }
     val block = e.clickedBlock ?: return
     if (
-      block.type == Material.CHISELED_BOOKSHELF ||
-      block.type == Material.DECORATED_POT ||
-      block.type == Material.CAMPFIRE ||
-      block.type == Material.SOUL_CAMPFIRE
+        block.type == Material.CHISELED_BOOKSHELF ||
+            block.type == Material.DECORATED_POT ||
+            block.type == Material.CAMPFIRE ||
+            block.type == Material.SOUL_CAMPFIRE
     ) {
       if (CreativeBlockStore.isMarked(block)) {
         // クリエブロック
@@ -253,8 +253,8 @@ object GetEvent : Listener {
       return
     }
     if (
-      e.item.itemStack.persistentDataContainer.has(NAMESPACE) ||
-      e.item.persistentDataContainer.has(NAMESPACE)
+        e.item.itemStack.persistentDataContainer.has(NAMESPACE) ||
+            e.item.persistentDataContainer.has(NAMESPACE)
     ) {
       if (e.player.gameMode != GameMode.CREATIVE) {
         // クリエじゃないので拾えない
@@ -287,18 +287,18 @@ object GetEvent : Listener {
     if (i1.persistentDataContainer.has(NAMESPACE) && i2.persistentDataContainer.has(NAMESPACE)) {
       return
     } else if (
-      (!i1.persistentDataContainer.has(NAMESPACE) && !i2.persistentDataContainer.has(NAMESPACE))
+        (!i1.persistentDataContainer.has(NAMESPACE) && !i2.persistentDataContainer.has(NAMESPACE))
     ) {
       return
     }
     if (
-      i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
-      i2.itemStack.persistentDataContainer.has(NAMESPACE)
+        i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
+            i2.itemStack.persistentDataContainer.has(NAMESPACE)
     ) {
       return
     } else if (
-      (!i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
-        !i2.itemStack.persistentDataContainer.has(NAMESPACE))
+        (!i1.itemStack.persistentDataContainer.has(NAMESPACE) &&
+            !i2.itemStack.persistentDataContainer.has(NAMESPACE))
     ) {
       return
     }
@@ -319,15 +319,15 @@ object GetEvent : Listener {
     if (e.isCancelled) return
     if (e.action != PlayerItemFrameChangeEvent.ItemFrameChangeAction.PLACE) {
       if (
-        e.action == PlayerItemFrameChangeEvent.ItemFrameChangeAction.REMOVE &&
-        e.player.gameMode == GameMode.CREATIVE
+          e.action == PlayerItemFrameChangeEvent.ItemFrameChangeAction.REMOVE &&
+              e.player.gameMode == GameMode.CREATIVE
       ) {
         if (!e.itemStack.persistentDataContainer.has(NAMESPACE)) {
           // サバイバルアイテムを外した場合
           val item = e.itemStack.clone()
           val loc = e.itemFrame.location.clone().add(0.0, 0.125, 0.0)
           val vec =
-            Vector(0.0, 0.2, 0.15).rotateAroundY(Math.toRadians(Random.nextDouble(0.0, 360.0)))
+              Vector(0.0, 0.2, 0.15).rotateAroundY(Math.toRadians(Random.nextDouble(0.0, 360.0)))
           loc.world.dropItemNaturally(loc, item).velocity = vec
         }
       }
