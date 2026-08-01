@@ -46,6 +46,7 @@ class Main : JavaPlugin() {
     AdminBP.onDisable()
     Pita.onDisable() // Pitaの無効化
     TimerObj.onDisable()
+    CreativeManagement.onDisable()
     DebugOnBE.onDisable()
   }
 }
