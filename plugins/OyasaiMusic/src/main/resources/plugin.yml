@@ -1,7 +1,7 @@
 name: OyasaiMusic
-version: "${version}"
+version: '${version}'
 main: com.github.sahyuya.oyasaiMusic.OyasaiMusic
-api-version: "1.21.11"
+api-version: '1.21.11'
 load: POSTWORLD
 depend: [FastAsyncWorldEdit]
 softdepend: [Vault, TokenManager, PlaceholderAPI, Essentials, Floodgate]
@@ -13,8 +13,10 @@ commands:
     usage: |
       /record we grid <BPM>   - FAWEクリップボードからグリッド型録音
       /record we default      - FAWEクリップボードから回路型(レッドストーン)録音
-      /record start <1-4>     - 動的録音を開始（引数は量子化グリッドの遅延単位）
-      /record stop            - 動的録音を終了して下書き保存
+      /record we start <RStick> - コピー元回路の実演奏を録音（0.5/1/2/3/4）
+      /record we inspect      - FAWEクリップボードの回路情報を確認
+      /record live             - 生演奏を実時間で録音
+      /record stop            - 録音を終了して下書き保存
     permission: oyasaimusic.record
   musicmenu:
     description: 音楽メニューを開く、または楽曲を操作する
@@ -49,4 +51,19 @@ permissions:
     default: false
   oyasaimusic.demosound:
     description: 看板用バニラ音源を試聴する
+    default: false
+  oyasaimusic.newsong.notify:
+    description: 新曲公開のチャット通知と効果音を受け取る
+    default: false
+  oyasaimusic.record.range.16:
+    description: 環境BGMレコードを半径16ブロックで再生する
+    default: false
+  oyasaimusic.record.range.64:
+    description: 環境BGMレコードを半径64ブロックで再生する
+    default: false
+  oyasaimusic.record.range.256:
+    description: 環境BGMレコードを半径256ブロックで再生する
+    default: false
+  oyasaimusic.record.range.world:
+    description: 環境BGMレコードをワールド全体へ再生する
     default: false

@@ -1,24 +1,20 @@
 package com.github.sahyuya.oyasaiMusic.audio
 
 import com.github.sahyuya.oyasaiMusic.model.NoteEvent
+import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
-import org.bukkit.Location
 
 /**
- * 動的録音（データ・システム設計書 3章 `/record start <1〜4>`）の実行中セッション。
+ * 生演奏録音（`/record live`）の実行中セッション。
  *
- * `NotePlayEvent` をフックして録音するため、コマンド実行(start)〜終了(stop)の間、 プレイヤーごとに1つ保持される状態オブジェクト。
+ * `NotePlayEvent` をフックして録音するため、コマンド実行(start)〜終了(stop)の間、
+ * プレイヤーごとに1つ保持される状態オブジェクト。
  *
- * @param quantizeStepMs 量子化グリッドの間隔（引数1〜4 × 100ms。redstone repeaterの遅延単位と対応）
- * @param origin 録音開始時点のプレイヤー位置・向き（Pan計算・BPM算出の基準点）
  */
 class DynamicRecordingSession(
-    val origin: Location,
-    val startTimeMillis: Long,
-    val quantizeStepMs: Long,
+    val playerUuid: UUID,
+    val startTimeNanos: Long,
+    val replacement: RecordingReplacementTarget? = null,
 ) {
-  val notes: MutableList<NoteEvent> = CopyOnWriteArrayList()
-
-  /** 引数の量子化単位から、便宜上の基準BPMを逆算する（60000 / stepMs）。楽曲のbpmカラムに使用。 */
-  fun impliedBpm(): Int = (60000.0 / quantizeStepMs).toInt().coerceAtLeast(1)
+    val notes: MutableList<NoteEvent> = CopyOnWriteArrayList()
 }
