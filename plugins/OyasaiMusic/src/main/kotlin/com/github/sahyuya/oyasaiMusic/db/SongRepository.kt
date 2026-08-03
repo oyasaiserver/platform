@@ -3,8 +3,8 @@ package com.github.sahyuya.oyasaiMusic.db
 import com.github.sahyuya.oyasaiMusic.model.Song
 import com.github.sahyuya.oyasaiMusic.model.SongStatus
 import com.github.sahyuya.oyasaiMusic.util.UuidUtil
+import java.sql.Connection
 import java.sql.ResultSet
-import java.sql.Statement
 import java.util.UUID
 
 /** songs テーブルへのアクセスを担当するリポジトリ。 呼び出しは必ず非同期スレッドから行うこと（[DatabaseManager.transaction] が同期化する）。 */
@@ -12,6 +12,8 @@ class SongRepository(private val db: DatabaseManager) {
 
   /**
    * 新規楽曲を下書き(status=DRAFT, published=false)として登録する。 録音システム（グリッド型/回路型/動的録音）は録音完了後に必ずこれを呼び出す。
+   *
+   * 削除済みのIDがある場合は最も小さい欠番を再利用し、なければ末尾の次のIDを使う。
    *
    * @return 採番された楽曲ID
    */
@@ -25,31 +27,51 @@ class SongRepository(private val db: DatabaseManager) {
       supportsPositional: Boolean = false,
   ): Long =
       db.transaction { conn ->
+        val songId = nextAvailableId(conn)
         conn
             .prepareStatement(
                 """
-                INSERT INTO songs (author_uuid, title, created_at, bpm, record_material, price, status, likes, views, file_name, supports_positional, published)
-                VALUES (?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, 0)
+                INSERT INTO songs (id, author_uuid, title, created_at, bpm, record_material, price, status, likes, views, file_name, supports_positional, published)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, ?, 0)
                 """
                     .trimIndent(),
-                Statement.RETURN_GENERATED_KEYS,
             )
             .use { ps ->
-              ps.setBytes(1, UuidUtil.toBytes(authorUuid))
-              ps.setString(2, title)
-              ps.setLong(3, System.currentTimeMillis() / 1000)
-              ps.setInt(4, bpm)
-              ps.setString(5, recordMaterial)
-              ps.setInt(6, price)
-              ps.setInt(7, SongStatus.DRAFT.code)
-              ps.setString(8, fileName)
-              ps.setInt(9, if (supportsPositional) 1 else 0)
+              ps.setLong(1, songId)
+              ps.setBytes(2, UuidUtil.toBytes(authorUuid))
+              ps.setString(3, title)
+              ps.setLong(4, System.currentTimeMillis() / 1000)
+              ps.setInt(5, bpm)
+              ps.setString(6, recordMaterial)
+              ps.setInt(7, price)
+              ps.setInt(8, SongStatus.DRAFT.code)
+              ps.setString(9, fileName)
+              ps.setInt(10, if (supportsPositional) 1 else 0)
               ps.executeUpdate()
-              ps.generatedKeys.use { keys ->
-                if (keys.next()) keys.getLong(1) else error("楽曲IDの採番に失敗しました")
-              }
+              songId
             }
       }
+
+  /**
+   * 楽曲IDは利用者へ表示されるため、削除で生じた欠番を小さい順に再利用する。 この検索とINSERTは同一の[DatabaseManager.transaction]内で直列化されるため、
+   * 複数の録音完了が同時に発生しても同じIDが割り当てられない。
+   */
+  private fun nextAvailableId(conn: Connection): Long {
+    var candidate = 1L
+    conn.prepareStatement("SELECT id FROM songs WHERE id >= 1 ORDER BY id ASC").use { ps ->
+      ps.executeQuery().use { ids ->
+        while (ids.next()) {
+          val occupied = ids.getLong(1)
+          if (occupied == candidate) {
+            candidate++
+          } else if (occupied > candidate) {
+            return candidate
+          }
+        }
+      }
+    }
+    return candidate
+  }
 
   fun findById(id: Long): Song? =
       db.transaction { conn ->
@@ -120,7 +142,7 @@ class SongRepository(private val db: DatabaseManager) {
       db.transaction { conn ->
         // 審査依頼済み、または既に判定履歴を持つ楽曲だけを対象にする。
         val sql =
-            "SELECT * FROM songs WHERE review_requested_at IS NOT NULL OR status != ? ORDER BY ${sort.orderBy} LIMIT ? OFFSET ?"
+            "SELECT * FROM songs WHERE published = 1 AND (review_requested_at IS NOT NULL OR status != ?) ORDER BY ${sort.orderBy} LIMIT ? OFFSET ?"
         conn.prepareStatement(sql).use { ps ->
           ps.setInt(1, SongStatus.DRAFT.code)
           ps.setInt(2, limit)
@@ -130,17 +152,33 @@ class SongRepository(private val db: DatabaseManager) {
       }
 
   /** オリジナル審査の依頼を永続化し、提出時点で仮OKへ移す。 仮OKは「作者が申請済み」の暫定状態であり、OP審査画面では許可／未審査／却下へ変更できる。 */
-  fun requestReview(id: Long) =
+  /** 公開済みの未申請楽曲だけを審査へ提出する。提出できた場合だけtrueを返す。 */
+  fun requestReview(id: Long): Boolean =
       db.transaction { conn ->
         conn
             .prepareStatement(
-                "UPDATE songs SET status = ?, review_requested_at = COALESCE(review_requested_at, ?) WHERE id = ?"
+                "UPDATE songs SET status = ?, review_requested_at = ? WHERE id = ? AND published = 1 AND review_requested_at IS NULL"
             )
             .use { ps ->
               ps.setInt(1, SongStatus.TEMP_OK.code)
               ps.setLong(2, System.currentTimeMillis() / 1000)
               ps.setLong(3, id)
-              ps.executeUpdate()
+              ps.executeUpdate() == 1
+            }
+      }
+
+  /** OPが判定する前の申請を取り消し、下書き状態へ戻す。 */
+  fun cancelReviewRequest(id: Long): Boolean =
+      db.transaction { conn ->
+        conn
+            .prepareStatement(
+                "UPDATE songs SET status = ?, review_requested_at = NULL WHERE id = ? AND status = ? AND review_requested_at IS NOT NULL"
+            )
+            .use { ps ->
+              ps.setInt(1, SongStatus.DRAFT.code)
+              ps.setLong(2, id)
+              ps.setInt(3, SongStatus.TEMP_OK.code)
+              ps.executeUpdate() == 1
             }
       }
 

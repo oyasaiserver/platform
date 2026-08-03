@@ -78,7 +78,7 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
         st.executeUpdate(
             """
             CREATE TABLE IF NOT EXISTS songs (
-                id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                id              INTEGER PRIMARY KEY,
                 author_uuid     BLOB(16) NOT NULL,
                 title           TEXT NOT NULL,
                 created_at      INTEGER NOT NULL,

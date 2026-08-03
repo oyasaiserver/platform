@@ -39,12 +39,8 @@ object ActionModeCategory {
 object BedrockActionModeService {
   private val modes = ConcurrentHashMap<Pair<UUID, String>, ActionMode>()
 
-  /** 楽曲設定は Shift 操作を割り当てないため、統合版のモード切替も左右クリックの2択にする。 他の画面は従来どおり4種を循環する。 */
-  fun availableModes(category: String): List<ActionMode> =
-      when (category) {
-        ActionModeCategory.SONG_SETTINGS -> listOf(ActionMode.PRIMARY, ActionMode.TERTIARY)
-        else -> ActionMode.entries
-      }
+  /** 楽曲設定を含む全画面で、4種のクリック操作を選択できる。 */
+  fun availableModes(category: String): List<ActionMode> = ActionMode.entries
 
   fun get(playerUuid: UUID, category: String): ActionMode {
     val selected = modes[playerUuid to category]

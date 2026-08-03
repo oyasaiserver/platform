@@ -65,6 +65,10 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
         return
       }
       val range = PhysicalRecordItem.range(plugin, item)
+      if (!player.hasPermission(range.permission)) {
+        player.sendMessage("§c再生範囲${range.label}ブロックを使う権限がありません。")
+        return
+      }
       val trigger = PhysicalRecordItem.trigger(plugin, item)
       val loop = PhysicalRecordItem.loop(plugin, item)
       plugin.ambientPlaybackRegistry.register(clickedBlock.location, song, range, trigger, loop)

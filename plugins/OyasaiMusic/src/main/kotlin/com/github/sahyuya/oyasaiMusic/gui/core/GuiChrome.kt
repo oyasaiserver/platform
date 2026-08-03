@@ -109,6 +109,10 @@ class PlayerControllerStateService {
 
   fun stateFor(playerUuid: UUID): PlayerControllerState =
       states.getOrPut(playerUuid) { PlayerControllerState() }
+
+  /** 1秒ごとの再生演出など、全プレイヤーの再生状態を読む用途のスナップショット。 */
+  fun activeStates(): List<Pair<UUID, PlayerControllerState>> =
+      states.entries.map { it.key to it.value }
 }
 
 /**
@@ -245,7 +249,7 @@ object GuiChrome {
 
   private fun profileStat(label: String, value: Long): Component =
       Component.text("$label: ", NamedTextColor.GRAY)
-          .append(Component.text(value.toString(), NamedTextColor.AQUA))
+          .append(Component.text(value.toString(), NamedTextColor.YELLOW))
 
   /** 40枠をコンテンツで使い切る画面用。1ページ目の「前のページ」欄を戻る操作に置換する。 */
   fun backControllerButton(): ItemStack =

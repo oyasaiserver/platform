@@ -46,6 +46,7 @@ class SongListMenu(
   private var sortIndex = availableSorts.indexOf(initialSort).coerceAtLeast(0)
   private var page = 0
   private var pageSongs: List<Song> = emptyList()
+  private var hasNextPage = false
 
   init {
     reload()
@@ -60,12 +61,13 @@ class SongListMenu(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              val songs = loader(currentSort(), PAGE_SIZE, page * PAGE_SIZE)
+              val songs = loader(currentSort(), PAGE_SIZE + 1, page * PAGE_SIZE)
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
-                        pageSongs = songs
+                        hasNextPage = songs.size > PAGE_SIZE
+                        pageSongs = songs.take(PAGE_SIZE)
                         render()
                       },
                   )
@@ -99,12 +101,17 @@ class SongListMenu(
   ): org.bukkit.inventory.ItemStack {
     val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
     val nowPlaying = state.isPlaying && state.nowPlayingSong?.id == song.id
+    val authorName = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
 
     // UI/UX設計書8章「未公開（下書き）状態: …「レコードの破片」として…」に対応。
     // 公開済みでない楽曲(自分の作成中の楽曲)は、実際のレコード種類ではなく
     // レコードの欠片(DISC_FRAGMENT_5)で視覚的に区別する（サヒュヤ氏の指示で追加）。
     if (!song.published) {
-      val lore = mutableListOf<Component>(Component.text("非公開（自分だけに表示）", NamedTextColor.DARK_GRAY))
+      val lore: MutableList<Component> =
+          mutableListOf(
+              SongLoreComponents.author(authorName),
+              Component.text("非公開（自分だけに表示）", NamedTextColor.DARK_GRAY),
+          )
       lore +=
           ActionLoreBuilder.build(
               viewer,
@@ -124,9 +131,10 @@ class SongListMenu(
           .build()
     }
 
-    val lore =
-        mutableListOf<Component>(
-            Component.text("いいね: ${song.likes}  再生数: ${song.views}", NamedTextColor.GRAY)
+    val lore: MutableList<Component> =
+        mutableListOf(
+            SongLoreComponents.author(authorName),
+            SongLoreComponents.statistics(song.likes, song.views),
         )
     lore +=
         ActionLoreBuilder.build(
@@ -178,7 +186,7 @@ class SongListMenu(
             reload()
           } else if (ownTab == null) menuManager.openPrevious(viewer)
       ControllerSlots.PAGE_NEXT ->
-          if (pageSongs.size == PAGE_SIZE) {
+          if (hasNextPage) {
             page++
             reload()
           }

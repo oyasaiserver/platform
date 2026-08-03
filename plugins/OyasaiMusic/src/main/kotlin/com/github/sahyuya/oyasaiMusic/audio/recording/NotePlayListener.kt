@@ -1,5 +1,6 @@
 package com.github.sahyuya.oyasaiMusic.audio
 
+import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -11,26 +12,31 @@ import org.bukkit.event.block.NotePlayEvent
  */
 class NotePlayListener(
     private val sessionManager: RecordingSessionManager,
-    private val maxRadius: Double,
-    private val fullVolumeRadius: Double,
-    private val minVolumeFloor: Int,
 ) : Listener {
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onNotePlay(event: NotePlayEvent) {
     if (!sessionManager.hasAnySession()) return
-    val now = System.currentTimeMillis()
+    val now = System.nanoTime()
 
-    for (session in sessionManager.activeSessions()) {
+    for (session in sessionManager.activeDynamicSessions()) {
+      val recorder = Bukkit.getPlayer(session.playerUuid) ?: continue
       DynamicRecorder.process(
           session = session,
           block = event.block,
           instrument = event.instrument,
           pitch = event.note.id,
-          eventTimeMillis = now,
-          maxRadius = maxRadius,
-          fullVolumeRadius = fullVolumeRadius,
-          minVolumeFloor = minVolumeFloor,
+          recorderLocation = recorder.location,
+          eventTimeNanos = now,
+      )
+    }
+    for (session in sessionManager.activeLiveCircuitSessions()) {
+      DynamicRecorder.processLiveCircuit(
+          session = session,
+          block = event.block,
+          instrument = event.instrument,
+          pitch = event.note.id,
+          eventTimeNanos = now,
       )
     }
   }

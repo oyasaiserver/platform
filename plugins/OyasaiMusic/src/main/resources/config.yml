@@ -11,10 +11,6 @@ recording:
   default-price: 1000
   # デフォルトのレコード素材（バニラマテリアル名）
   default-record-material: "MUSIC_DISC_13"
-  # 動的録音(/record start)で1音として拾う最大半径（ブロック）
-  dynamic-record-radius: 32.0
-  # 動的録音の音量最大値が適用される距離（この距離以内は減衰なし）
-  dynamic-record-full-volume-radius: 2.0
 
 playback:
   # デフォルトの再生方式: default(推奨, プレイヤーに音源追従・Panなし) / positional(立体音響再生, Pan対応)

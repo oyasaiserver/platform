@@ -55,6 +55,7 @@ class PlayerHeadListMenu(
     currentPageUuids().forEachIndexed { index, uuid ->
       val name = Bukkit.getOfflinePlayer(uuid).name ?: uuid.toString().take(8)
       HeadTextureUtil.resolveAsync(plugin, uuid, name) { item ->
+        if (currentPageUuids().getOrNull(index) != uuid) return@resolveAsync
         item.editMeta { meta -> meta.displayName(Component.text(name, NamedTextColor.WHITE)) }
         inventory.setItem(SLOTS[index], item)
       }

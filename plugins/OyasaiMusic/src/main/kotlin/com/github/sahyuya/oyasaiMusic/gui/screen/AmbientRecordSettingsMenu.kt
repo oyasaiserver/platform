@@ -1,6 +1,7 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.item.AmbientRange
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordItem
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
@@ -65,8 +66,17 @@ class AmbientRecordSettingsMenu(
     inventory.setItem(
         RANGE_SLOT,
         GuiItemBuilder(Material.BEACON)
-            .name(Component.text("再生範囲: ${range.label}", NamedTextColor.AQUA))
-            .lore(Component.text("クリックで切替", NamedTextColor.DARK_GRAY))
+            .name(
+                Component.text(
+                    "再生範囲: ${range.label}",
+                    if (viewer.hasPermission(range.permission)) NamedTextColor.AQUA
+                    else NamedTextColor.RED,
+                )
+            )
+            .lore(
+                Component.text("必要権限: ${range.permission}", NamedTextColor.DARK_GRAY),
+                Component.text("クリックで切替", NamedTextColor.DARK_GRAY),
+            )
             .build(),
     )
     inventory.setItem(
@@ -101,14 +111,7 @@ class AmbientRecordSettingsMenu(
     val item = currentItem()
     if (item == null || !PhysicalRecordItem.isRecordItem(plugin, item)) return
     when (event.rawSlot) {
-      RANGE_SLOT ->
-          update(
-              PhysicalRecordItem.withRange(
-                  plugin,
-                  item,
-                  PhysicalRecordItem.range(plugin, item).next(),
-              )
-          )
+      RANGE_SLOT -> cycleRange(item)
       TRIGGER_SLOT ->
           update(
               PhysicalRecordItem.withTrigger(
@@ -131,5 +134,17 @@ class AmbientRecordSettingsMenu(
   private fun update(newItem: org.bukkit.inventory.ItemStack) {
     viewer.inventory.setItem(handSlot, newItem)
     render()
+  }
+
+  /** 権限のある範囲だけを循環する。既存アイテムの権限外設定もここで復帰できる。 */
+  private fun cycleRange(item: org.bukkit.inventory.ItemStack) {
+    val allowed = AmbientRange.entries.filter { viewer.hasPermission(it.permission) }
+    if (allowed.isEmpty()) {
+      viewer.sendMessage("§c環境BGMの再生範囲を使う権限がありません。")
+      return
+    }
+    val current = PhysicalRecordItem.range(plugin, item)
+    val next = allowed[(allowed.indexOf(current).let { if (it < 0) -1 else it } + 1) % allowed.size]
+    update(PhysicalRecordItem.withRange(plugin, item, next))
   }
 }

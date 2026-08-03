@@ -3,6 +3,7 @@ package com.github.sahyuya.oyasaiMusic.command
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.audio.CircuitRecorder
 import com.github.sahyuya.oyasaiMusic.audio.GridRecorder
+import com.github.sahyuya.oyasaiMusic.audio.RecordingReplacementTarget
 import com.github.sahyuya.oyasaiMusic.audio.RecordingSessionManager
 import com.github.sahyuya.oyasaiMusic.audio.SongAudioFile
 import com.github.sahyuya.oyasaiMusic.db.SongRepository
@@ -24,8 +25,8 @@ import org.bukkit.entity.Player
 /**
  * `/record` コマンド群（データ・システム設計書 3章）を処理するハンドラ。
  *
- * /record we grid <BPM> グリッド型録音 /record we default 回路型(レッドストーン)録音 /record start <1-4> 動的録音の開始
- * /record stop 動的録音の終了・保存
+ * /record we grid <BPM> グリッド型録音 /record we default 回路型(レッドストーン)録音 /record we start <最小RStick>
+ * コピー元回路の実演奏録音を開始 /record live 生演奏録音の開始 /record stop 録音を終了・保存
  *
  * 録音完了後は下書きを保存して[SongSettingsScreen]を開き、題名や公開設定を続けて編集できる。
  */
@@ -60,7 +61,7 @@ class RecordCommand(
 
     when (args[0].lowercase()) {
       "we" -> handleWorldEdit(sender, args)
-      "start" -> handleStart(sender, args)
+      "live" -> handleLivePerformance(sender)
       "stop" -> handleStop(sender)
       else -> sendUsage(sender)
     }
@@ -77,6 +78,8 @@ class RecordCommand(
     when (args[1].lowercase()) {
       "grid" -> handleGrid(player, args)
       "default" -> handleCircuit(player)
+      "start" -> handleCircuitStart(player, args)
+      "inspect" -> inspectCircuitClipboard(player)
       else -> sendUsage(player)
     }
   }
@@ -124,6 +127,67 @@ class RecordCommand(
     finalizeRecording(player, notes, bpm = 120)
   }
 
+  /**
+   * コピー元の回路を実際に作動させ、その範囲で発生したNotePlayEventだけを録音する。
+   * 新規ワールド・貼り付け・ブロック操作を一切行わないため、他プラグインのワールド管理対象にならない。
+   */
+  private fun handleCircuitStart(player: Player, args: Array<out String>) {
+    val minimumRedstoneTick = args.getOrNull(2)?.let(SUPPORTED_MINIMUM_REDSTONE_TICKS::get)
+    if (minimumRedstoneTick == null) {
+      player.sendMessage("§c使い方: /record we start <0.5|1|2|3|4>")
+      return
+    }
+    val quantizationMs = (minimumRedstoneTick * 100.0).toInt()
+    if (sessionManager.updateLiveCircuitQuantization(player.uniqueId, quantizationMs)) {
+      player.sendMessage("§a待機中の現地回路録音を${args[2]}RStick（${quantizationMs}ms）へ変更しました。回路を起動してください。")
+      return
+    }
+    if (sessionManager.isRecording(player.uniqueId)) {
+      player.sendMessage("§c既に録音中です。回路を起動した後はRStickを変更できません。")
+      return
+    }
+    val clipboard = getClipboardOrNotify(player) ?: return
+    val region = clipboard.region
+    val copiedWorld = runCatching { BukkitAdapter.adapt(region.world) }.getOrNull()
+    if (copiedWorld != null && copiedWorld.uid != player.world.uid) {
+      player.sendMessage("§cコピー元のワールド（${copiedWorld.name}）へ移動してから実行してください。")
+      return
+    }
+    sessionManager.startLiveCircuit(
+        playerUuid = player.uniqueId,
+        worldUuid = player.world.uid,
+        minimum = region.minimumPoint,
+        maximum = region.maximumPoint,
+        quantizationMs = quantizationMs,
+    )
+    player.sendMessage(
+        "§a現地回路録音を開始しました。§eコピー元のボタン／レバーを一度作動させてください。" +
+            "§7範囲内の実発火を${args[2]}RStick（${quantizationMs}ms）単位で記録します。終了は /record stop"
+    )
+  }
+
+  /** FAWEクリップボードに回路部品が正しく残っているかを、保存せずに表示する。 */
+  private fun inspectCircuitClipboard(player: Player) {
+    val clipboard = getClipboardOrNotify(player) ?: return
+    val result =
+        runCatching { CircuitRecorder.inspect(clipboard) }
+            .getOrElse { error ->
+              plugin.logger.warning("FAWEクリップボードの検査に失敗しました: ${error.message}")
+              player.sendMessage("§cクリップボードの検査中にエラーが発生しました。")
+              return
+            }
+    player.sendMessage(
+        listOf(
+                "§e--- FAWEクリップボード検査 ---",
+                "§f大きさ: §b${result.dimensions.x()}×${result.dimensions.y()}×${result.dimensions.z()} §7/ 原点: §b${result.origin}",
+                "§f実座標範囲: §b${result.minimum} §7〜 §b${result.maximum}",
+                "§f音ブロック: §a${result.noteBlocks} §7/ ダスト: §c${result.wires} §7(接続情報なし: §e${result.wiresWithoutConnectionInfo}§7)",
+                "§fリピーター: §d${result.repeaters} §7/ 電源: §6${result.powerSources}",
+            )
+            .joinToString("\n")
+    )
+  }
+
   private fun getClipboardOrNotify(player: Player): Clipboard? {
     return try {
       val actor = BukkitAdapter.adapt(player)
@@ -135,39 +199,41 @@ class RecordCommand(
     }
   }
 
-  // ---------------- /record start / stop ----------------
+  // ---------------- /record we start / /record live / stop ----------------
 
-  private fun handleStart(player: Player, args: Array<out String>) {
+  private fun handleLivePerformance(player: Player) {
     if (sessionManager.isRecording(player.uniqueId)) {
       player.sendMessage("§c既に録音中です。先に /record stop で終了してください。")
       return
     }
-    if (args.size < 2) {
-      player.sendMessage("§c使い方: /record start <1-4>")
-      return
-    }
-    val unit = args[1].toIntOrNull()
-    if (unit == null || unit !in 1..4) {
-      player.sendMessage("§c量子化単位は1〜4の整数で指定してください。")
-      return
-    }
-    sessionManager.start(player.uniqueId, player.location, unit)
-    player.sendMessage("§a動的録音を開始しました。ノートブロックを鳴らすと自動的に記録されます。終了する場合は /record stop を実行してください。")
+    sessionManager.startDynamic(player.uniqueId)
+    player.sendMessage("§a生演奏録音を開始しました。現在地から48ブロック以内の発音を実時間で記録します。終了は /record stop")
   }
 
   private fun handleStop(player: Player) {
-    val session = sessionManager.stop(player.uniqueId)
-    if (session == null) {
-      player.sendMessage("§c録音中ではありません。")
+    val dynamicSession = sessionManager.stopDynamic(player.uniqueId)
+    if (dynamicSession != null) {
+      completeRecording(
+          player,
+          trimLeadingSilence(dynamicSession.notes.toList()),
+          dynamicSession.replacement,
+      )
       return
     }
-    val bpm = session.impliedBpm()
-    val notes: List<NoteEvent> = trimLeadingSilence(session.notes.toList())
-    finalizeRecording(player, notes, bpm)
+    val liveCircuitSession = sessionManager.stopLiveCircuit(player.uniqueId)
+    if (liveCircuitSession != null) {
+      completeRecording(
+          player,
+          trimLeadingSilence(liveCircuitSession.notes.toList()),
+          liveCircuitSession.replacement,
+      )
+      return
+    }
+    player.sendMessage("§c録音中ではありません。")
   }
 
   /**
-   * 動的録音は `/record start` を実行してから最初の音を鳴らすまでに間が空くことが多いため、 最初に記録された音符のタイミングを0msとして全体をシフトし、先頭の無音を取り除く。
+   * 生演奏・現地回路録音は開始してから最初の音を鳴らすまでに間が空くことが多いため、 最初に記録された音符のタイミングを0msとして全体をシフトし、先頭の無音を取り除く。
    * 終了(stop)時点で記録済みの最後の音符がそのまま末尾になる（追加の無音は付与しない）。
    */
   private fun trimLeadingSilence(notes: List<NoteEvent>): List<NoteEvent> {
@@ -175,6 +241,57 @@ class RecordCommand(
     val minTime = notes.minOf { it.timeMs }
     if (minTime == 0) return notes
     return notes.map { it.copy(timeMs = it.timeMs - minTime) }
+  }
+
+  private fun completeRecording(
+      player: Player,
+      notes: List<NoteEvent>,
+      replacement: RecordingReplacementTarget?,
+  ) {
+    if (replacement == null) finalizeRecording(player, notes, bpm = 120)
+    else replaceExistingRecording(player, notes, replacement)
+  }
+
+  /** 設定画面から開始した生演奏／現地回路録音の保存先を、既存楽曲へ限定する。 */
+  private fun replaceExistingRecording(
+      player: Player,
+      notes: List<NoteEvent>,
+      target: RecordingReplacementTarget,
+  ) {
+    if (notes.isEmpty()) {
+      player.sendMessage("§c録音対象のノートブロックが見つかりませんでした。")
+      return
+    }
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            plugin,
+            Runnable {
+              try {
+                val song =
+                    songRepository.findById(target.songId)
+                        ?: run {
+                          Bukkit.getScheduler()
+                              .runTask(plugin, Runnable { player.sendMessage("§c置換先の楽曲が見つかりません。") })
+                          return@Runnable
+                        }
+                SongAudioFile.write(File(audioDirectory, target.fileName), notes)
+                val supportsPositional = notes.any { it.pan != 0 }
+                songRepository.updateAudioProperties(target.songId, supportsPositional)
+                Bukkit.getScheduler()
+                    .runTask(
+                        plugin,
+                        Runnable {
+                          plugin.applySongUpdate(song.copy(supportsPositional = supportsPositional))
+                          player.sendMessage("§a楽曲「${song.title}」の音源を${notes.size}音で更新しました。")
+                        },
+                    )
+              } catch (error: Exception) {
+                plugin.logger.warning("楽曲ID ${target.songId} の録音音源更新に失敗しました: ${error.message}")
+                Bukkit.getScheduler()
+                    .runTask(plugin, Runnable { player.sendMessage("§c音源ファイルの上書きに失敗しました。") })
+              }
+            },
+        )
   }
 
   // ---------------- 共通: 保存処理 ----------------
@@ -248,8 +365,10 @@ class RecordCommand(
                 "§e--- OyasaiMusic /record ---",
                 "§7/record we grid <BPM>   §fグリッド型録音",
                 "§7/record we default      §f回路型(レッドストーン)録音",
-                "§7/record start <1-4>     §f動的録音の開始",
-                "§7/record stop            §f動的録音の終了・保存",
+                "§7/record we start <RStick> §fコピー元回路を録音（0.5/1/2/3/4）",
+                "§7/record we inspect      §fFAWEクリップボードの回路検査",
+                "§7/record live            §f生演奏を実時間で録音",
+                "§7/record stop            §f録音を終了して下書き保存",
             )
             .joinToString("\n")
     )
@@ -262,13 +381,30 @@ class RecordCommand(
       args: Array<out String>,
   ): List<String> =
       when (args.size) {
-        1 -> listOf("we", "start", "stop").filter { it.startsWith(args[0].lowercase()) }
+        1 -> listOf("we", "live", "stop").filter { it.startsWith(args[0].lowercase()) }
         2 ->
             when (args[0].lowercase()) {
-              "we" -> listOf("grid", "default").filter { it.startsWith(args[1].lowercase()) }
-              "start" -> listOf("1", "2", "3", "4")
+              "we" ->
+                  listOf("grid", "default", "start", "inspect").filter {
+                    it.startsWith(args[1].lowercase())
+                  }
               else -> emptyList()
             }
+        3 ->
+            if (args[0].equals("we", true) && args[1].equals("start", true)) {
+              SUPPORTED_MINIMUM_REDSTONE_TICKS.keys.filter { it.startsWith(args[2]) }
+            } else emptyList()
         else -> emptyList()
       }
+
+  private companion object {
+    val SUPPORTED_MINIMUM_REDSTONE_TICKS =
+        linkedMapOf(
+            "0.5" to 0.5,
+            "1" to 1.0,
+            "2" to 2.0,
+            "3" to 3.0,
+            "4" to 4.0,
+        )
+  }
 }

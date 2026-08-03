@@ -91,7 +91,7 @@ class SongDetailScreen(
     )
 
     inventory.setItem(previewSlot, previewItem(state))
-    inventory.setItem(authorHeadSlot, authorHeadItem())
+    renderAuthorHead()
     inventory.setItem(followSlot, followItem())
     inventory.setItem(positionalModeSlot, positionalModeItem())
     inventory.setItem(likeSlot, likeItem())
@@ -125,7 +125,7 @@ class SongDetailScreen(
     return GuiItemBuilder(Material.matchMaterial(song.recordMaterial) ?: Material.MUSIC_DISC_13)
         .name(songTitle(song))
         .lore(
-            Component.text("いいね: ${song.likes}  再生数: ${song.views}", NamedTextColor.GRAY),
+            SongLoreComponents.statistics(song.likes, song.views),
             Component.text("BPM: ${song.bpm}", NamedTextColor.GRAY),
             Component.text("クリックで再生", NamedTextColor.DARK_GRAY),
             *(if (nowPlaying) arrayOf(Component.text("♪ 再生中", NamedTextColor.GREEN))
@@ -145,14 +145,28 @@ class SongDetailScreen(
           )
           .build()
 
-  private fun authorHeadItem(): org.bukkit.inventory.ItemStack {
+  private fun renderAuthorHead() {
+    val authorUuid = song.authorUuid
+    val authorName = Bukkit.getOfflinePlayer(authorUuid).name ?: "不明"
+    inventory.setItem(authorHeadSlot, authorHeadItem())
+    HeadTextureUtil.resolveAsync(plugin, authorUuid, authorName) { item ->
+      if (song.authorUuid == authorUuid && viewer.isOnline) {
+        inventory.setItem(authorHeadSlot, authorHeadItem(item))
+      }
+    }
+  }
+
+  private fun authorHeadItem(
+      item: org.bukkit.inventory.ItemStack =
+          HeadTextureUtil.placeholderHead(
+              song.authorUuid,
+              Bukkit.getOfflinePlayer(song.authorUuid).name,
+          )
+  ): org.bukkit.inventory.ItemStack {
     val name = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
     val stats = AuthorStatsCache.get(plugin, song.authorUuid) { render() }
-    val item = HeadTextureUtil.placeholderHead(song.authorUuid, name)
     item.editMeta { meta ->
-      meta.displayName(
-          Component.text("作者: $name", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false)
-      )
+      meta.displayName(SongLoreComponents.author(name).decoration(TextDecoration.ITALIC, false))
       meta.lore(
           buildList {
                 add(Component.text("クリックで作品一覧へ", NamedTextColor.GRAY))

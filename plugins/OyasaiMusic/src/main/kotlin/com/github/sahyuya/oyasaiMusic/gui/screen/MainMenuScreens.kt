@@ -81,7 +81,7 @@ object MainMenuScreens {
    * 公開楽曲を表示する一覧へ、閲覧者本人の下書きだけを先頭に追加する。 下書きは録音直後の設定画面へ移動しやすくするためで、アイコンの描画は
    * [SongListMenu]が非公開状態を検出して切り替える。
    *
-   * 下書きは1ページ目にのみ挿入する。公開楽曲の取得は従来のページングを維持するため、 下書きがページサイズを超える運用を想定する場合は専用クエリへの置換が必要になる。
+   * 下書きと公開曲を単一の仮想リストとしてページングするため、下書きがページを埋めても 次ページの公開曲を飛ばさない。
    */
   fun mergeOwnDrafts(
       plugin: OyasaiMusic,
@@ -91,8 +91,6 @@ object MainMenuScreens {
       titleFilter: String?,
       publishedLoader: (offset: Int, limit: Int) -> List<Song>,
   ): List<Song> {
-    if (offset != 0) return publishedLoader(offset, limit)
-
     val myDrafts =
         plugin.songRepository
             .findByAuthor(viewer.uniqueId, includeDrafts = true)
@@ -104,8 +102,10 @@ object MainMenuScreens {
             }
             .sortedByDescending { it.createdAt }
 
-    val remaining = (limit - myDrafts.size).coerceAtLeast(0)
-    val published = if (remaining > 0) publishedLoader(0, remaining) else emptyList()
-    return (myDrafts + published).take(limit)
+    val draftsForPage = myDrafts.drop(offset).take(limit)
+    val remaining = (limit - draftsForPage.size).coerceAtLeast(0)
+    val publishedOffset = (offset - myDrafts.size).coerceAtLeast(0)
+    val published = if (remaining > 0) publishedLoader(publishedOffset, remaining) else emptyList()
+    return draftsForPage + published
   }
 }

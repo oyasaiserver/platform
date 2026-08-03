@@ -12,13 +12,11 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
 
 /** UI/UX設計書9章「環境BGM用レコード」の再生範囲(ブロック数、nullは「全体」)。 */
-enum class AmbientRange(val blocks: Int?, val label: String) {
-  SHORT(16, "16"),
-  MEDIUM(64, "64"),
-  LONG(256, "256"),
-  WORLD(null, "全体");
-
-  fun next(): AmbientRange = entries[(ordinal + 1) % entries.size]
+enum class AmbientRange(val blocks: Int?, val label: String, val permission: String) {
+  SHORT(16, "16", "oyasaimusic.record.range.16"),
+  MEDIUM(64, "64", "oyasaimusic.record.range.64"),
+  LONG(256, "256", "oyasaimusic.record.range.256"),
+  WORLD(null, "ワールド全体", "oyasaimusic.record.range.world"),
 }
 
 /** UI/UX設計書9章「環境BGM用レコード」のトリガー種別。 */
@@ -41,7 +39,7 @@ object PhysicalRecordItem {
 
   private fun loopKey(plugin: Plugin) = NamespacedKey(plugin, "record_loop")
 
-  /** 「レコードを購入」時に生成する、環境BGM設定込みのアイテムを作る。 既定値: 再生範囲=64、トリガー=ジュークボックス、ループ=OFF。 */
+  /** 「レコードを購入」時に生成する、環境BGM設定込みのアイテムを作る。 既定値: 再生範囲=16、トリガー=ジュークボックス、ループ=OFF。 */
   fun create(
       plugin: Plugin,
       material: Material,
@@ -67,7 +65,7 @@ object PhysicalRecordItem {
       meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
       val pdc = meta.persistentDataContainer
       pdc.set(songIdKey(plugin), PersistentDataType.LONG, songId)
-      pdc.set(rangeKey(plugin), PersistentDataType.STRING, AmbientRange.MEDIUM.name)
+      pdc.set(rangeKey(plugin), PersistentDataType.STRING, AmbientRange.SHORT.name)
       pdc.set(triggerKey(plugin), PersistentDataType.STRING, AmbientTrigger.JUKEBOX.name)
       pdc.set(loopKey(plugin), PersistentDataType.BYTE, 0)
     }

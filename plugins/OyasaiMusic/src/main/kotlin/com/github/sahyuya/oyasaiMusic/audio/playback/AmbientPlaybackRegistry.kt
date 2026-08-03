@@ -45,6 +45,12 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) {
 
   fun entryAt(location: Location): AmbientEntry? = entries[key(location)]
 
+  /** 現在鳴っている環境レコードのジュークボックス位置。聴取者への演出には使用しない。 */
+  fun activePlaybackLocations(): List<Location> =
+      entries.values.mapNotNull { entry ->
+        entry.session?.takeIf { !it.isCancelled && !it.isPaused }?.let { entry.location.clone() }
+      }
+
   fun register(
       location: Location,
       song: Song,

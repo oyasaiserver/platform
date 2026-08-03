@@ -5,6 +5,7 @@ import com.github.sahyuya.oyasaiMusic.audio.NotePlayListener
 import com.github.sahyuya.oyasaiMusic.audio.PlaybackEngine
 import com.github.sahyuya.oyasaiMusic.audio.PlaybackMode
 import com.github.sahyuya.oyasaiMusic.audio.PlaybackModeService
+import com.github.sahyuya.oyasaiMusic.audio.PlaybackParticleService
 import com.github.sahyuya.oyasaiMusic.audio.RecordingSessionManager
 import com.github.sahyuya.oyasaiMusic.audio.SoundEffectService
 import com.github.sahyuya.oyasaiMusic.audio.VanillaSoundCatalog
@@ -155,9 +156,6 @@ class OyasaiMusic : JavaPlugin() {
     server.pluginManager.registerEvents(
         NotePlayListener(
             sessionManager = recordingSessionManager,
-            maxRadius = config.getDouble("recording.dynamic-record-radius", 32.0),
-            fullVolumeRadius = config.getDouble("recording.dynamic-record-full-volume-radius", 2.0),
-            minVolumeFloor = 20,
         ),
         this,
     )
@@ -213,6 +211,8 @@ class OyasaiMusic : JavaPlugin() {
     server.pluginManager.registerEvents(PhysicalRecordListener(this), this)
     // RSトリガーの短いパルスも取りこぼさないよう、0.1秒ごとに状態を確認する。
     Bukkit.getScheduler().runTaskTimer(this, Runnable { ambientPlaybackRegistry.tick() }, 2L, 2L)
+    val playbackParticleService = PlaybackParticleService(this)
+    Bukkit.getScheduler().runTaskTimer(this, Runnable { playbackParticleService.tick() }, 20L, 20L)
     logger.info("OyasaiMusic を有効化しました。")
   }
 
