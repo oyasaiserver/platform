@@ -13,7 +13,7 @@ softdepend:
 commands:
   csm:
     description: "CitiesSkyMine 統合コマンド"
-    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|columns|stack|selection|settings|config|cloud|bezier|debugstick|preset|schematic>"
+    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|columns|stack|crowd|selection|settings|config|cloud|bezier|debugstick|preset|schematic>"
   ".help":
     description: "CitiesSkyMine ヘルプショートカット"
     usage: "/.help <command>"
@@ -50,6 +50,9 @@ commands:
   ".ns":
     description: "選択範囲をプレイヤー視点基準で複製するショートカット"
     usage: "/.ns <forward|back|left|right|up|down...> <times> [skip-blocks...]"
+  ".crowd":
+    description: "群衆シルエット生成ショートカット"
+    usage: "/.crowd <count|leftxdepth> [gap] [wall] [head]"
   ".sel":
     description: "WorldEdit 選択範囲の保存・復元ショートカット"
     usage: "/.sel <save|list|delete|p|name>"
@@ -92,6 +95,7 @@ permissions:
       citiesskymine.slabstairs: true
       citiesskymine.columns: true
       citiesskymine.stack: true
+      citiesskymine.crowd: true
       citiesskymine.selection: true
       citiesskymine.settings: true
       citiesskymine.config: true
@@ -135,6 +139,9 @@ permissions:
     default: false
   citiesskymine.stack:
     description: "旧形式: 選択範囲複製コマンドの使用権限"
+    default: false
+  citiesskymine.crowd:
+    description: "旧形式: 群衆シルエット生成コマンドの使用権限"
     default: false
   citiesskymine.selection:
     description: "旧形式: WorldEdit 選択範囲保存コマンドの使用権限"

@@ -9,6 +9,7 @@ import icu.oyasai.citiesskymine.columns.ColumnLayoutCommand
 import icu.oyasai.citiesskymine.command.CitiesSkyMineCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
 import icu.oyasai.citiesskymine.config.ServerConfigCommand
+import icu.oyasai.citiesskymine.crowd.CrowdCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickMemoryStore
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
@@ -98,6 +99,7 @@ class Main : JavaPlugin() {
     val slabStairsHandler = SlabStairsCommand(this)
     val columnLayoutHandler = ColumnLayoutCommand(this)
     val stackHandler = StackCommand(this)
+    val crowdHandler = CrowdCommand(this)
     val selectionHandler = SelectionCommand(this)
     val settingsHandler = ConfigGuiCommand(this)
     val serverConfigHandler = ServerConfigCommand(this)
@@ -118,6 +120,7 @@ class Main : JavaPlugin() {
             slabStairsHandler,
             columnLayoutHandler,
             stackHandler,
+            crowdHandler,
             selectionHandler,
             settingsHandler,
             serverConfigHandler,
@@ -148,6 +151,9 @@ class Main : JavaPlugin() {
     val dotStackCmd = getCommand(".ns")
     dotStackCmd?.setExecutor(stackHandler)
     dotStackCmd?.tabCompleter = stackHandler
+    val dotCrowdCmd = getCommand(".crowd")
+    dotCrowdCmd?.setExecutor(crowdHandler)
+    dotCrowdCmd?.tabCompleter = crowdHandler
     val dotSelectionCmd = getCommand(".sel")
     dotSelectionCmd?.setExecutor(selectionHandler)
     dotSelectionCmd?.tabCompleter = selectionHandler

@@ -6,6 +6,7 @@ limits:
   max-blocks-slab-stairs: 200000
   max-blocks-columns: 200000
   max-blocks-stack: 2000000
+  max-blocks-crowd: 200000
   max-blocks-cloud: 200000
   max-volume-cloud: 4000000
   max-blocks-bezier: 20000
@@ -25,6 +26,11 @@ window:
 
 slab-stairs:
   material: stone_brick
+
+crowd:
+  default-gap: 2
+  wall: COBBLESTONE_WALL
+  head: PLAYER_HEAD
 
 csm:
   default-rotation: 0
@@ -92,6 +98,10 @@ access:
       - takumi
       - admin
     stack:
+      - builder
+      - takumi
+      - admin
+    crowd:
       - builder
       - takumi
       - admin
