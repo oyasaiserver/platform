@@ -22,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin
 class SocialLikes : JavaPlugin() {
   override fun onEnable() {
     backupPluginDataOnStartup()
+    saveDefaultConfig()
 
     SLDatabase.init(this)
 
