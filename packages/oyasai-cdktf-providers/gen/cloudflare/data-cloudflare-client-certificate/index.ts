@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface DataCloudflareClientCertificateConfig extends cdktf.TerraformMe
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate#client_certificate_id DataCloudflareClientCertificate#client_certificate_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate#client_certificate_id DataCloudflareClientCertificate#client_certificate_id}
   */
   readonly clientCertificateId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate#filter DataCloudflareClientCertificate#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate#filter DataCloudflareClientCertificate#filter}
   */
   readonly filter?: DataCloudflareClientCertificateFilter;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate#zone_id DataCloudflareClientCertificate#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate#zone_id DataCloudflareClientCertificate#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -87,20 +87,20 @@ export interface DataCloudflareClientCertificateFilter {
   /**
   * Limit to the number of records returned.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate#limit DataCloudflareClientCertificate#limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate#limit DataCloudflareClientCertificate#limit}
   */
   readonly limit?: number;
   /**
   * Offset the results.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate#offset DataCloudflareClientCertificate#offset}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate#offset DataCloudflareClientCertificate#offset}
   */
   readonly offset?: number;
   /**
   * Client Certitifcate Status to filter results by.
   * Available values: "all", "active", "pending_reactivation", "pending_revocation", "revoked".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate#status DataCloudflareClientCertificate#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate#status DataCloudflareClientCertificate#status}
   */
   readonly status?: string;
 }
@@ -252,7 +252,7 @@ export class DataCloudflareClientCertificateFilterOutputReference extends cdktf.
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate cloudflare_client_certificate}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate cloudflare_client_certificate}
 */
 export class DataCloudflareClientCertificate extends cdktf.TerraformDataSource {
 
@@ -268,7 +268,7 @@ export class DataCloudflareClientCertificate extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareClientCertificate resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareClientCertificate to import
-  * @param importFromId The id of the existing DataCloudflareClientCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareClientCertificate that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareClientCertificate to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -280,7 +280,7 @@ export class DataCloudflareClientCertificate extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificate cloudflare_client_certificate} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificate cloudflare_client_certificate} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -291,7 +291,7 @@ export class DataCloudflareClientCertificate extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_client_certificate',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

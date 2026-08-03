@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,13 +8,13 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZoneConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#filter DataCloudflareZone#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#filter DataCloudflareZone#filter}
   */
   readonly filter?: DataCloudflareZoneFilter;
   /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#zone_id DataCloudflareZone#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#zone_id DataCloudflareZone#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -81,7 +81,7 @@ export interface DataCloudflareZoneFilterAccount {
   /**
   * Filter by an account ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#id DataCloudflareZone#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#id DataCloudflareZone#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -98,7 +98,7 @@ export interface DataCloudflareZoneFilterAccount {
   *   * `ends_with_case_sensitive`
   *   * `contains_case_sensitive`
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#name DataCloudflareZone#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#name DataCloudflareZone#name}
   */
   readonly name?: string;
 }
@@ -221,21 +221,21 @@ export class DataCloudflareZoneFilterAccountOutputReference extends cdktf.Comple
 }
 export interface DataCloudflareZoneFilter {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#account DataCloudflareZone#account}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#account DataCloudflareZone#account}
   */
   readonly account?: DataCloudflareZoneFilterAccount;
   /**
   * Direction to order zones.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#direction DataCloudflareZone#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#direction DataCloudflareZone#direction}
   */
   readonly direction?: string;
   /**
   * Whether to match all search requirements or at least one (any).
   * Available values: "any", "all".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#match DataCloudflareZone#match}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#match DataCloudflareZone#match}
   */
   readonly match?: string;
   /**
@@ -249,27 +249,27 @@ export interface DataCloudflareZoneFilter {
   *   * `ends_with_case_sensitive`
   *   * `contains_case_sensitive`
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#name DataCloudflareZone#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#name DataCloudflareZone#name}
   */
   readonly name?: string;
   /**
   * Field to order zones by.
   * Available values: "name", "status", "account.id", "account.name", "plan.id".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#order DataCloudflareZone#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#order DataCloudflareZone#order}
   */
   readonly order?: string;
   /**
   * Specify a zone status to filter by.
   * Available values: "initializing", "pending", "active", "moved".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#status DataCloudflareZone#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#status DataCloudflareZone#status}
   */
   readonly status?: string;
   /**
   * Zone types to filter by. Multiple types can be specified as a comma-separated list (e.g., ?type=full,partial,secondary). When this parameter is not provided, zones with type "internal" are excluded from the results.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#type DataCloudflareZone#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#type DataCloudflareZone#type}
   */
   readonly type?: string[];
 }
@@ -897,7 +897,7 @@ export class DataCloudflareZoneTenantUnitOutputReference extends cdktf.ComplexOb
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone cloudflare_zone}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone cloudflare_zone}
 */
 export class DataCloudflareZone extends cdktf.TerraformDataSource {
 
@@ -913,7 +913,7 @@ export class DataCloudflareZone extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareZone resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZone to import
-  * @param importFromId The id of the existing DataCloudflareZone that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZone that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZone to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -925,7 +925,7 @@ export class DataCloudflareZone extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone cloudflare_zone} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone cloudflare_zone} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -936,7 +936,7 @@ export class DataCloudflareZone extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_zone',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/connectivity_directory_service
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/connectivity_directory_service
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,15 +8,15 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareConnectivityDirectoryServiceConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/connectivity_directory_service#account_id DataCloudflareConnectivityDirectoryService#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/connectivity_directory_service#account_id DataCloudflareConnectivityDirectoryService#account_id}
   */
   readonly accountId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/connectivity_directory_service#filter DataCloudflareConnectivityDirectoryService#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/connectivity_directory_service#filter DataCloudflareConnectivityDirectoryService#filter}
   */
   readonly filter?: DataCloudflareConnectivityDirectoryServiceFilter;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/connectivity_directory_service#service_id DataCloudflareConnectivityDirectoryService#service_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/connectivity_directory_service#service_id DataCloudflareConnectivityDirectoryService#service_id}
   */
   readonly serviceId?: string;
 }
@@ -24,7 +24,7 @@ export interface DataCloudflareConnectivityDirectoryServiceFilter {
   /**
   * Available values: "tcp", "http".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/connectivity_directory_service#type DataCloudflareConnectivityDirectoryService#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/connectivity_directory_service#type DataCloudflareConnectivityDirectoryService#type}
   */
   readonly type?: string;
 }
@@ -361,7 +361,7 @@ export class DataCloudflareConnectivityDirectoryServiceTlsSettingsOutputReferenc
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/connectivity_directory_service cloudflare_connectivity_directory_service}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/connectivity_directory_service cloudflare_connectivity_directory_service}
 */
 export class DataCloudflareConnectivityDirectoryService extends cdktf.TerraformDataSource {
 
@@ -377,7 +377,7 @@ export class DataCloudflareConnectivityDirectoryService extends cdktf.TerraformD
   * Generates CDKTF code for importing a DataCloudflareConnectivityDirectoryService resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareConnectivityDirectoryService to import
-  * @param importFromId The id of the existing DataCloudflareConnectivityDirectoryService that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/connectivity_directory_service#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareConnectivityDirectoryService that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/connectivity_directory_service#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareConnectivityDirectoryService to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -389,7 +389,7 @@ export class DataCloudflareConnectivityDirectoryService extends cdktf.TerraformD
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/connectivity_directory_service cloudflare_connectivity_directory_service} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/connectivity_directory_service cloudflare_connectivity_directory_service} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -400,7 +400,7 @@ export class DataCloudflareConnectivityDirectoryService extends cdktf.TerraformD
       terraformResourceType: 'cloudflare_connectivity_directory_service',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

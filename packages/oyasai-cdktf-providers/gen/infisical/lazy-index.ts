@@ -9,6 +9,7 @@ Object.defineProperty(exports, 'appConnectionAzureKeyVault', { get: function () 
 Object.defineProperty(exports, 'appConnectionBitbucket', { get: function () { return require('./app-connection-bitbucket'); } });
 Object.defineProperty(exports, 'appConnectionCloudflare', { get: function () { return require('./app-connection-cloudflare'); } });
 Object.defineProperty(exports, 'appConnectionDatabricks', { get: function () { return require('./app-connection-databricks'); } });
+Object.defineProperty(exports, 'appConnectionDatadog', { get: function () { return require('./app-connection-datadog'); } });
 Object.defineProperty(exports, 'appConnectionFlyio', { get: function () { return require('./app-connection-flyio'); } });
 Object.defineProperty(exports, 'appConnectionGcp', { get: function () { return require('./app-connection-gcp'); } });
 Object.defineProperty(exports, 'appConnectionGithub', { get: function () { return require('./app-connection-github'); } });
@@ -99,6 +100,7 @@ Object.defineProperty(exports, 'secretSyncGitlab', { get: function () { return r
 Object.defineProperty(exports, 'secretSyncRender', { get: function () { return require('./secret-sync-render'); } });
 Object.defineProperty(exports, 'secretSyncSupabase', { get: function () { return require('./secret-sync-supabase'); } });
 Object.defineProperty(exports, 'secretTag', { get: function () { return require('./secret-tag'); } });
+Object.defineProperty(exports, 'subOrganization', { get: function () { return require('./sub-organization'); } });
 Object.defineProperty(exports, 'webhook', { get: function () { return require('./webhook'); } });
 Object.defineProperty(exports, 'dataInfisicalGroups', { get: function () { return require('./data-infisical-groups'); } });
 Object.defineProperty(exports, 'dataInfisicalIdentity', { get: function () { return require('./data-infisical-identity'); } });

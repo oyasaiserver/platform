@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_recipients
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_recipients
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface DataCloudflareShareRecipientsConfig extends cdktf.TerraformMeta
   /**
   * Account identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_recipients#account_id DataCloudflareShareRecipients#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_recipients#account_id DataCloudflareShareRecipients#account_id}
   */
   readonly accountId: string;
   /**
   * Include resources in the response.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_recipients#include_resources DataCloudflareShareRecipients#include_resources}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_recipients#include_resources DataCloudflareShareRecipients#include_resources}
   */
   readonly includeResources?: boolean | cdktf.IResolvable;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_recipients#max_items DataCloudflareShareRecipients#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_recipients#max_items DataCloudflareShareRecipients#max_items}
   */
   readonly maxItems?: number;
   /**
   * Share identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_recipients#share_id DataCloudflareShareRecipients#share_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_recipients#share_id DataCloudflareShareRecipients#share_id}
   */
   readonly shareId: string;
 }
@@ -225,7 +225,7 @@ export class DataCloudflareShareRecipientsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_recipients cloudflare_share_recipients}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_recipients cloudflare_share_recipients}
 */
 export class DataCloudflareShareRecipients extends cdktf.TerraformDataSource {
 
@@ -241,7 +241,7 @@ export class DataCloudflareShareRecipients extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareShareRecipients resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareShareRecipients to import
-  * @param importFromId The id of the existing DataCloudflareShareRecipients that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_recipients#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareShareRecipients that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_recipients#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareShareRecipients to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -253,7 +253,7 @@ export class DataCloudflareShareRecipients extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_recipients cloudflare_share_recipients} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_recipients cloudflare_share_recipients} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -264,7 +264,7 @@ export class DataCloudflareShareRecipients extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_share_recipients',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

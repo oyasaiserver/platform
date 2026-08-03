@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone_subscription
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone_subscription
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,7 +10,7 @@ export interface DataCloudflareZoneSubscriptionConfig extends cdktf.TerraformMet
   /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone_subscription#zone_id DataCloudflareZoneSubscription#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone_subscription#zone_id DataCloudflareZoneSubscription#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -100,7 +100,7 @@ export class DataCloudflareZoneSubscriptionRatePlanOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone_subscription cloudflare_zone_subscription}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone_subscription cloudflare_zone_subscription}
 */
 export class DataCloudflareZoneSubscription extends cdktf.TerraformDataSource {
 
@@ -116,7 +116,7 @@ export class DataCloudflareZoneSubscription extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareZoneSubscription resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZoneSubscription to import
-  * @param importFromId The id of the existing DataCloudflareZoneSubscription that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone_subscription#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZoneSubscription that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone_subscription#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZoneSubscription to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -128,7 +128,7 @@ export class DataCloudflareZoneSubscription extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/zone_subscription cloudflare_zone_subscription} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zone_subscription cloudflare_zone_subscription} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -139,7 +139,7 @@ export class DataCloudflareZoneSubscription extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_zone_subscription',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface SecretsStoreSecretConfig extends cdktf.TerraformMetaArguments {
   /**
   * Account Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret#account_id SecretsStoreSecret#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret#account_id SecretsStoreSecret#account_id}
   */
   readonly accountId: string;
   /**
   * Freeform text describing the secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret#comment SecretsStoreSecret#comment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret#comment SecretsStoreSecret#comment}
   */
   readonly comment?: string;
   /**
   * The name of the secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret#name SecretsStoreSecret#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret#name SecretsStoreSecret#name}
   */
   readonly name: string;
   /**
   * The list of services that can use this secret. Valid values are `workers`, `ai_gateway`, `dex`, and `access`. Must be listed in alphabetical order.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret#scopes SecretsStoreSecret#scopes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret#scopes SecretsStoreSecret#scopes}
   */
   readonly scopes: string[];
   /**
   * Store Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret#store_id SecretsStoreSecret#store_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret#store_id SecretsStoreSecret#store_id}
   */
   readonly storeId: string;
   /**
   * The value of the secret. Maximum 64 KiB (65,536 bytes). Note that this is 'write only' - no API response will provide this value, it is only used to create/modify secrets.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret#value SecretsStoreSecret#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret#value SecretsStoreSecret#value}
   */
   readonly value: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret cloudflare_secrets_store_secret}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret cloudflare_secrets_store_secret}
 */
 export class SecretsStoreSecret extends cdktf.TerraformResource {
 
@@ -62,7 +62,7 @@ export class SecretsStoreSecret extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretsStoreSecret resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretsStoreSecret to import
-  * @param importFromId The id of the existing SecretsStoreSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretsStoreSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretsStoreSecret to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -74,7 +74,7 @@ export class SecretsStoreSecret extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/secrets_store_secret cloudflare_secrets_store_secret} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store_secret cloudflare_secrets_store_secret} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -85,7 +85,7 @@ export class SecretsStoreSecret extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_secrets_store_secret',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

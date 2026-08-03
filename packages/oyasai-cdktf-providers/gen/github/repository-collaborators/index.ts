@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators
+// https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface RepositoryCollaboratorsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#id RepositoryCollaborators#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#id RepositoryCollaborators#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,25 +17,25 @@ export interface RepositoryCollaboratorsConfig extends cdktf.TerraformMetaArgume
   /**
   * Name of the repository.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#repository RepositoryCollaborators#repository}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#repository RepositoryCollaborators#repository}
   */
   readonly repository: string;
   /**
   * ignore_team block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#ignore_team RepositoryCollaborators#ignore_team}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#ignore_team RepositoryCollaborators#ignore_team}
   */
   readonly ignoreTeam?: RepositoryCollaboratorsIgnoreTeam[] | cdktf.IResolvable;
   /**
   * team block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#team RepositoryCollaborators#team}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#team RepositoryCollaborators#team}
   */
   readonly team?: RepositoryCollaboratorsTeam[] | cdktf.IResolvable;
   /**
   * user block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#user RepositoryCollaborators#user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#user RepositoryCollaborators#user}
   */
   readonly user?: RepositoryCollaboratorsUser[] | cdktf.IResolvable;
 }
@@ -43,7 +43,7 @@ export interface RepositoryCollaboratorsIgnoreTeam {
   /**
   * ID or slug of the team to ignore.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#team_id RepositoryCollaborators#team_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#team_id RepositoryCollaborators#team_id}
   */
   readonly teamId: string;
 }
@@ -156,13 +156,15 @@ export class RepositoryCollaboratorsIgnoreTeamList extends cdktf.ComplexList {
 }
 export interface RepositoryCollaboratorsTeam {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#permission RepositoryCollaborators#permission}
+  * Permission to grant to the team. Must be one of `pull`, `triage`, `push`, `maintain`, `admin` or the name of an existing [custom repository role](https://docs.github.com/en/enterprise-cloud@latest/organizations/managing-peoples-access-to-your-organization-with-roles/managing-custom-repository-roles-for-an-organization) within the organization. Defaults to `push`.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#permission RepositoryCollaborators#permission}
   */
   readonly permission?: string;
   /**
-  * Team ID or slug to add to the repository as a collaborator.
+  * ID or slug of the team to add to the repository as a collaborator.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#team_id RepositoryCollaborators#team_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#team_id RepositoryCollaborators#team_id}
   */
   readonly teamId: string;
 }
@@ -304,13 +306,15 @@ export class RepositoryCollaboratorsTeamList extends cdktf.ComplexList {
 }
 export interface RepositoryCollaboratorsUser {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#permission RepositoryCollaborators#permission}
+  * Permission to grant to the user. Must be one of `pull`, `triage`, `push`, `maintain`, `admin` or the name of an existing [custom repository role](https://docs.github.com/en/enterprise-cloud@latest/organizations/managing-peoples-access-to-your-organization-with-roles/managing-custom-repository-roles-for-an-organization) within the organization. Must be `push` for personal repositories. Defaults to `push`.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#permission RepositoryCollaborators#permission}
   */
   readonly permission?: string;
   /**
-  * (Required) The user to add to the repository as a collaborator.
+  * Login for the user to add to the repository as a collaborator.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#username RepositoryCollaborators#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#username RepositoryCollaborators#username}
   */
   readonly username: string;
 }
@@ -452,7 +456,7 @@ export class RepositoryCollaboratorsUserList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators github_repository_collaborators}
+* Represents a {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators github_repository_collaborators}
 */
 export class RepositoryCollaborators extends cdktf.TerraformResource {
 
@@ -468,7 +472,7 @@ export class RepositoryCollaborators extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a RepositoryCollaborators resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the RepositoryCollaborators to import
-  * @param importFromId The id of the existing RepositoryCollaborators that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing RepositoryCollaborators that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the RepositoryCollaborators to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -480,7 +484,7 @@ export class RepositoryCollaborators extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/repository_collaborators github_repository_collaborators} Resource
+  * Create a new {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/repository_collaborators github_repository_collaborators} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -491,7 +495,7 @@ export class RepositoryCollaborators extends cdktf.TerraformResource {
       terraformResourceType: 'github_repository_collaborators',
       terraformGeneratorMetadata: {
         providerName: 'github',
-        providerVersion: '6.12.1'
+        providerVersion: '6.13.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -532,6 +536,11 @@ export class RepositoryCollaborators extends cdktf.TerraformResource {
   private _invitationIds = new cdktf.StringMap(this, "invitation_ids");
   public get invitationIds() {
     return this._invitationIds;
+  }
+
+  // owner_configured - computed: true, optional: false, required: false
+  public get ownerConfigured() {
+    return this.getBooleanAttribute('owner_configured');
   }
 
   // repository - computed: false, optional: false, required: true

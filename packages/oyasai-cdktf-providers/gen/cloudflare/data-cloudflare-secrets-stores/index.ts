@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/secrets_stores
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_stores
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,27 +10,27 @@ export interface DataCloudflareSecretsStoresConfig extends cdktf.TerraformMetaAr
   /**
   * Account Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/secrets_stores#account_id DataCloudflareSecretsStores#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_stores#account_id DataCloudflareSecretsStores#account_id}
   */
   readonly accountId: string;
   /**
   * Direction to sort objects
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/secrets_stores#direction DataCloudflareSecretsStores#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_stores#direction DataCloudflareSecretsStores#direction}
   */
   readonly direction?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/secrets_stores#max_items DataCloudflareSecretsStores#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_stores#max_items DataCloudflareSecretsStores#max_items}
   */
   readonly maxItems?: number;
   /**
   * Order secrets by values in the given field
   * Available values: "name", "comment", "created", "modified", "status".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/secrets_stores#order DataCloudflareSecretsStores#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_stores#order DataCloudflareSecretsStores#order}
   */
   readonly order?: string;
 }
@@ -131,7 +131,7 @@ export class DataCloudflareSecretsStoresResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/secrets_stores cloudflare_secrets_stores}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_stores cloudflare_secrets_stores}
 */
 export class DataCloudflareSecretsStores extends cdktf.TerraformDataSource {
 
@@ -147,7 +147,7 @@ export class DataCloudflareSecretsStores extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareSecretsStores resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareSecretsStores to import
-  * @param importFromId The id of the existing DataCloudflareSecretsStores that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/secrets_stores#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareSecretsStores that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_stores#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareSecretsStores to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -159,7 +159,7 @@ export class DataCloudflareSecretsStores extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/secrets_stores cloudflare_secrets_stores} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_stores cloudflare_secrets_stores} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -170,7 +170,7 @@ export class DataCloudflareSecretsStores extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_secrets_stores',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

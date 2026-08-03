@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_cloud_region
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_cloud_region
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,32 +10,32 @@ export interface OriginCloudRegionConfig extends cdktf.TerraformMetaArguments {
   /**
   * Origin IP address (IPv4 or IPv6). For the single PUT endpoint (`PUT /origin/cloud_regions/{origin_ip}`), this field must match the path parameter or the request will be rejected with a 400 error. For the batch PUT endpoint, this field identifies which mapping to upsert.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_cloud_region#origin_ip OriginCloudRegion#origin_ip}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_cloud_region#origin_ip OriginCloudRegion#origin_ip}
   */
   readonly originIp: string;
   /**
   * Cloud vendor region identifier. Must be a valid region for the specified vendor as returned by the supported_regions endpoint.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_cloud_region#region OriginCloudRegion#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_cloud_region#region OriginCloudRegion#region}
   */
   readonly region: string;
   /**
   * Cloud vendor hosting the origin. Must be one of the supported vendors.
   * Available values: "aws", "azure", "gcp", "oci".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_cloud_region#vendor OriginCloudRegion#vendor}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_cloud_region#vendor OriginCloudRegion#vendor}
   */
   readonly vendor: string;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_cloud_region#zone_id OriginCloudRegion#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_cloud_region#zone_id OriginCloudRegion#zone_id}
   */
   readonly zoneId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_cloud_region cloudflare_origin_cloud_region}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_cloud_region cloudflare_origin_cloud_region}
 */
 export class OriginCloudRegion extends cdktf.TerraformResource {
 
@@ -51,7 +51,7 @@ export class OriginCloudRegion extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OriginCloudRegion resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OriginCloudRegion to import
-  * @param importFromId The id of the existing OriginCloudRegion that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_cloud_region#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OriginCloudRegion that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_cloud_region#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OriginCloudRegion to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -63,7 +63,7 @@ export class OriginCloudRegion extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_cloud_region cloudflare_origin_cloud_region} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_cloud_region cloudflare_origin_cloud_region} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -74,7 +74,7 @@ export class OriginCloudRegion extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_origin_cloud_region',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

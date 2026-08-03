@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncGcpSecretManagerConfig extends cdktf.TerraformMetaArg
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#auto_sync_enabled SecretSyncGcpSecretManager#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#auto_sync_enabled SecretSyncGcpSecretManager#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the GCP Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#connection_id SecretSyncGcpSecretManager#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#connection_id SecretSyncGcpSecretManager#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the GCP Secret Manager sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#description SecretSyncGcpSecretManager#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#description SecretSyncGcpSecretManager#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#destination_config SecretSyncGcpSecretManager#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#destination_config SecretSyncGcpSecretManager#destination_config}
   */
   readonly destinationConfig: SecretSyncGcpSecretManagerDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#environment SecretSyncGcpSecretManager#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#environment SecretSyncGcpSecretManager#environment}
   */
   readonly environment: string;
   /**
   * The name of the GCP Secret Manager sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#name SecretSyncGcpSecretManager#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#name SecretSyncGcpSecretManager#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#project_id SecretSyncGcpSecretManager#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#project_id SecretSyncGcpSecretManager#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#secret_path SecretSyncGcpSecretManager#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#secret_path SecretSyncGcpSecretManager#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#sync_options SecretSyncGcpSecretManager#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#sync_options SecretSyncGcpSecretManager#sync_options}
   */
   readonly syncOptions: SecretSyncGcpSecretManagerSyncOptions;
 }
@@ -66,21 +66,27 @@ export interface SecretSyncGcpSecretManagerDestinationConfig {
   /**
   * The GCP region to sync secrets to (e.g. us-east1). Required when scope is 'region' and must not be set when scope is 'global'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#location_id SecretSyncGcpSecretManager#location_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#location_id SecretSyncGcpSecretManager#location_id}
   */
   readonly locationId?: string;
   /**
   * The ID of the GCP project to sync with
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#project_id SecretSyncGcpSecretManager#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#project_id SecretSyncGcpSecretManager#project_id}
   */
   readonly projectId: string;
   /**
   * The scope of the sync with GCP Secret Manager. Supported options: global, region
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#scope SecretSyncGcpSecretManager#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#scope SecretSyncGcpSecretManager#scope}
   */
   readonly scope?: string;
+  /**
+  * The GCP regions to replicate secrets to (e.g. us-east1). Only applicable when scope is 'global'. When not defined, it will use the automatic replication policy
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#user_replica_location_ids SecretSyncGcpSecretManager#user_replica_location_ids}
+  */
+  readonly userReplicaLocationIds?: string[];
 }
 
 export function secretSyncGcpSecretManagerDestinationConfigToTerraform(struct?: SecretSyncGcpSecretManagerDestinationConfig | cdktf.IResolvable): any {
@@ -92,6 +98,7 @@ export function secretSyncGcpSecretManagerDestinationConfigToTerraform(struct?: 
     location_id: cdktf.stringToTerraform(struct!.locationId),
     project_id: cdktf.stringToTerraform(struct!.projectId),
     scope: cdktf.stringToTerraform(struct!.scope),
+    user_replica_location_ids: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.userReplicaLocationIds),
   }
 }
 
@@ -119,6 +126,12 @@ export function secretSyncGcpSecretManagerDestinationConfigToHclTerraform(struct
       isBlock: false,
       type: "simple",
       storageClassType: "string",
+    },
+    user_replica_location_ids: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.userReplicaLocationIds),
+      isBlock: false,
+      type: "list",
+      storageClassType: "stringList",
     },
   };
 
@@ -156,6 +169,10 @@ export class SecretSyncGcpSecretManagerDestinationConfigOutputReference extends 
       hasAnyValues = true;
       internalValueResult.scope = this._scope;
     }
+    if (this._userReplicaLocationIds !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.userReplicaLocationIds = this._userReplicaLocationIds;
+    }
     return hasAnyValues ? internalValueResult : undefined;
   }
 
@@ -166,6 +183,7 @@ export class SecretSyncGcpSecretManagerDestinationConfigOutputReference extends 
       this._locationId = undefined;
       this._projectId = undefined;
       this._scope = undefined;
+      this._userReplicaLocationIds = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
       this.isEmptyObject = false;
@@ -177,6 +195,7 @@ export class SecretSyncGcpSecretManagerDestinationConfigOutputReference extends 
       this._locationId = value.locationId;
       this._projectId = value.projectId;
       this._scope = value.scope;
+      this._userReplicaLocationIds = value.userReplicaLocationIds;
     }
   }
 
@@ -224,24 +243,40 @@ export class SecretSyncGcpSecretManagerDestinationConfigOutputReference extends 
   public get scopeInput() {
     return this._scope;
   }
+
+  // user_replica_location_ids - computed: false, optional: true, required: false
+  private _userReplicaLocationIds?: string[]; 
+  public get userReplicaLocationIds() {
+    return this.getListAttribute('user_replica_location_ids');
+  }
+  public set userReplicaLocationIds(value: string[]) {
+    this._userReplicaLocationIds = value;
+  }
+  public resetUserReplicaLocationIds() {
+    this._userReplicaLocationIds = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get userReplicaLocationIdsInput() {
+    return this._userReplicaLocationIds;
+  }
 }
 export interface SecretSyncGcpSecretManagerSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from GCP Secret Manager. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#disable_secret_deletion SecretSyncGcpSecretManager#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#disable_secret_deletion SecretSyncGcpSecretManager#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination, import-prioritize-source, import-prioritize-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#initial_sync_behavior SecretSyncGcpSecretManager#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#initial_sync_behavior SecretSyncGcpSecretManager#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the GCP Secret Manager destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#key_schema SecretSyncGcpSecretManager#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#key_schema SecretSyncGcpSecretManager#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -390,7 +425,7 @@ export class SecretSyncGcpSecretManagerSyncOptionsOutputReference extends cdktf.
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager infisical_secret_sync_gcp_secret_manager}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager infisical_secret_sync_gcp_secret_manager}
 */
 export class SecretSyncGcpSecretManager extends cdktf.TerraformResource {
 
@@ -406,7 +441,7 @@ export class SecretSyncGcpSecretManager extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncGcpSecretManager resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncGcpSecretManager to import
-  * @param importFromId The id of the existing SecretSyncGcpSecretManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncGcpSecretManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncGcpSecretManager to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -418,7 +453,7 @@ export class SecretSyncGcpSecretManager extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gcp_secret_manager infisical_secret_sync_gcp_secret_manager} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gcp_secret_manager infisical_secret_sync_gcp_secret_manager} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -429,7 +464,7 @@ export class SecretSyncGcpSecretManager extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_gcp_secret_manager',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.18.0'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

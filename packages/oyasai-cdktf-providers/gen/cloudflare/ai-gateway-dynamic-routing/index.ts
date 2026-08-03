@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,19 +8,19 @@ import * as cdktf from 'cdktf';
 
 export interface AiGatewayDynamicRoutingConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#account_id AiGatewayDynamicRouting#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#account_id AiGatewayDynamicRouting#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#elements AiGatewayDynamicRouting#elements}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#elements AiGatewayDynamicRouting#elements}
   */
   readonly elements: AiGatewayDynamicRoutingElements[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#gateway_id AiGatewayDynamicRouting#gateway_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#gateway_id AiGatewayDynamicRouting#gateway_id}
   */
   readonly gatewayId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#name AiGatewayDynamicRouting#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#name AiGatewayDynamicRouting#name}
   */
   readonly name: string;
 }
@@ -90,7 +90,7 @@ export class AiGatewayDynamicRoutingDeploymentOutputReference extends cdktf.Comp
 }
 export interface AiGatewayDynamicRoutingElementsOutputsFallback {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
   */
   readonly elementId: string;
 }
@@ -181,7 +181,7 @@ export class AiGatewayDynamicRoutingElementsOutputsFallbackOutputReference exten
 }
 export interface AiGatewayDynamicRoutingElementsOutputsFalse {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
   */
   readonly elementId: string;
 }
@@ -272,7 +272,7 @@ export class AiGatewayDynamicRoutingElementsOutputsFalseOutputReference extends 
 }
 export interface AiGatewayDynamicRoutingElementsOutputsNext {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
   */
   readonly elementId: string;
 }
@@ -363,7 +363,7 @@ export class AiGatewayDynamicRoutingElementsOutputsNextOutputReference extends c
 }
 export interface AiGatewayDynamicRoutingElementsOutputsSuccess {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
   */
   readonly elementId: string;
 }
@@ -454,7 +454,7 @@ export class AiGatewayDynamicRoutingElementsOutputsSuccessOutputReference extend
 }
 export interface AiGatewayDynamicRoutingElementsOutputsTrue {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
   */
   readonly elementId: string;
 }
@@ -545,27 +545,27 @@ export class AiGatewayDynamicRoutingElementsOutputsTrueOutputReference extends c
 }
 export interface AiGatewayDynamicRoutingElementsOutputs {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#element_id AiGatewayDynamicRouting#element_id}
   */
   readonly elementId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#fallback AiGatewayDynamicRouting#fallback}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#fallback AiGatewayDynamicRouting#fallback}
   */
   readonly fallback?: AiGatewayDynamicRoutingElementsOutputsFallback;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#false AiGatewayDynamicRouting#false}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#false AiGatewayDynamicRouting#false}
   */
   readonly false?: AiGatewayDynamicRoutingElementsOutputsFalse;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#next AiGatewayDynamicRouting#next}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#next AiGatewayDynamicRouting#next}
   */
   readonly next?: AiGatewayDynamicRoutingElementsOutputsNext;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#success AiGatewayDynamicRouting#success}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#success AiGatewayDynamicRouting#success}
   */
   readonly success?: AiGatewayDynamicRoutingElementsOutputsSuccess;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#true AiGatewayDynamicRouting#true}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#true AiGatewayDynamicRouting#true}
   */
   readonly true?: AiGatewayDynamicRoutingElementsOutputsTrue;
 }
@@ -804,41 +804,41 @@ export class AiGatewayDynamicRoutingElementsOutputsOutputReference extends cdktf
 }
 export interface AiGatewayDynamicRoutingElementsProperties {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#ai_gateway_dynamic_routing_provider AiGatewayDynamicRouting#ai_gateway_dynamic_routing_provider}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#ai_gateway_dynamic_routing_provider AiGatewayDynamicRouting#ai_gateway_dynamic_routing_provider}
   */
   readonly aiGatewayDynamicRoutingProvider?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#conditions AiGatewayDynamicRouting#conditions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#conditions AiGatewayDynamicRouting#conditions}
   */
   readonly conditions?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#key AiGatewayDynamicRouting#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#key AiGatewayDynamicRouting#key}
   */
   readonly key?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#limit AiGatewayDynamicRouting#limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#limit AiGatewayDynamicRouting#limit}
   */
   readonly limit?: number;
   /**
   * Available values: "count", "cost".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#limit_type AiGatewayDynamicRouting#limit_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#limit_type AiGatewayDynamicRouting#limit_type}
   */
   readonly limitType?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#model AiGatewayDynamicRouting#model}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#model AiGatewayDynamicRouting#model}
   */
   readonly model?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#retries AiGatewayDynamicRouting#retries}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#retries AiGatewayDynamicRouting#retries}
   */
   readonly retries?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#timeout AiGatewayDynamicRouting#timeout}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#timeout AiGatewayDynamicRouting#timeout}
   */
   readonly timeout?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#window AiGatewayDynamicRouting#window}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#window AiGatewayDynamicRouting#window}
   */
   readonly window?: number;
 }
@@ -1164,24 +1164,24 @@ export class AiGatewayDynamicRoutingElementsPropertiesOutputReference extends cd
 }
 export interface AiGatewayDynamicRoutingElements {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#id AiGatewayDynamicRouting#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#id AiGatewayDynamicRouting#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
   */
   readonly id: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#outputs AiGatewayDynamicRouting#outputs}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#outputs AiGatewayDynamicRouting#outputs}
   */
   readonly outputs: AiGatewayDynamicRoutingElementsOutputs;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#properties AiGatewayDynamicRouting#properties}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#properties AiGatewayDynamicRouting#properties}
   */
   readonly properties?: AiGatewayDynamicRoutingElementsProperties;
   /**
   * Available values: "start", "conditional", "percentage", "rate", "model", "end".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#type AiGatewayDynamicRouting#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#type AiGatewayDynamicRouting#type}
   */
   readonly type: string;
 }
@@ -2224,7 +2224,7 @@ export class AiGatewayDynamicRoutingVersionOutputReference extends cdktf.Complex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing cloudflare_ai_gateway_dynamic_routing}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing cloudflare_ai_gateway_dynamic_routing}
 */
 export class AiGatewayDynamicRouting extends cdktf.TerraformResource {
 
@@ -2240,7 +2240,7 @@ export class AiGatewayDynamicRouting extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AiGatewayDynamicRouting resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AiGatewayDynamicRouting to import
-  * @param importFromId The id of the existing AiGatewayDynamicRouting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AiGatewayDynamicRouting that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AiGatewayDynamicRouting to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -2252,7 +2252,7 @@ export class AiGatewayDynamicRouting extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/ai_gateway_dynamic_routing cloudflare_ai_gateway_dynamic_routing} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/ai_gateway_dynamic_routing cloudflare_ai_gateway_dynamic_routing} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -2263,7 +2263,7 @@ export class AiGatewayDynamicRouting extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_ai_gateway_dynamic_routing',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

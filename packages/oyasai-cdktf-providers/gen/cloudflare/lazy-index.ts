@@ -98,6 +98,7 @@ Object.defineProperty(exports, 'magicWanGreTunnel', { get: function () { return 
 Object.defineProperty(exports, 'magicWanIpsecTunnel', { get: function () { return require('./magic-wan-ipsec-tunnel'); } });
 Object.defineProperty(exports, 'magicWanStaticRoute', { get: function () { return require('./magic-wan-static-route'); } });
 Object.defineProperty(exports, 'managedTransforms', { get: function () { return require('./managed-transforms'); } });
+Object.defineProperty(exports, 'moqRelay', { get: function () { return require('./moq-relay'); } });
 Object.defineProperty(exports, 'mtlsCertificate', { get: function () { return require('./mtls-certificate'); } });
 Object.defineProperty(exports, 'notificationPolicy', { get: function () { return require('./notification-policy'); } });
 Object.defineProperty(exports, 'notificationPolicyWebhooks', { get: function () { return require('./notification-policy-webhooks'); } });
@@ -428,6 +429,8 @@ Object.defineProperty(exports, 'dataCloudflareMagicWanGreTunnel', { get: functio
 Object.defineProperty(exports, 'dataCloudflareMagicWanIpsecTunnel', { get: function () { return require('./data-cloudflare-magic-wan-ipsec-tunnel'); } });
 Object.defineProperty(exports, 'dataCloudflareMagicWanStaticRoute', { get: function () { return require('./data-cloudflare-magic-wan-static-route'); } });
 Object.defineProperty(exports, 'dataCloudflareManagedTransforms', { get: function () { return require('./data-cloudflare-managed-transforms'); } });
+Object.defineProperty(exports, 'dataCloudflareMoqRelay', { get: function () { return require('./data-cloudflare-moq-relay'); } });
+Object.defineProperty(exports, 'dataCloudflareMoqRelays', { get: function () { return require('./data-cloudflare-moq-relays'); } });
 Object.defineProperty(exports, 'dataCloudflareMtlsCertificate', { get: function () { return require('./data-cloudflare-mtls-certificate'); } });
 Object.defineProperty(exports, 'dataCloudflareMtlsCertificateAssociations', { get: function () { return require('./data-cloudflare-mtls-certificate-associations'); } });
 Object.defineProperty(exports, 'dataCloudflareMtlsCertificates', { get: function () { return require('./data-cloudflare-mtls-certificates'); } });

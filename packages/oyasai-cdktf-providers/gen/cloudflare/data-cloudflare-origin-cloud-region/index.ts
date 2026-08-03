@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/origin_cloud_region
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/origin_cloud_region
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,19 +8,19 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareOriginCloudRegionConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/origin_cloud_region#origin_ip DataCloudflareOriginCloudRegion#origin_ip}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/origin_cloud_region#origin_ip DataCloudflareOriginCloudRegion#origin_ip}
   */
   readonly originIp: string;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/origin_cloud_region#zone_id DataCloudflareOriginCloudRegion#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/origin_cloud_region#zone_id DataCloudflareOriginCloudRegion#zone_id}
   */
   readonly zoneId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/origin_cloud_region cloudflare_origin_cloud_region}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/origin_cloud_region cloudflare_origin_cloud_region}
 */
 export class DataCloudflareOriginCloudRegion extends cdktf.TerraformDataSource {
 
@@ -36,7 +36,7 @@ export class DataCloudflareOriginCloudRegion extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareOriginCloudRegion resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareOriginCloudRegion to import
-  * @param importFromId The id of the existing DataCloudflareOriginCloudRegion that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/origin_cloud_region#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareOriginCloudRegion that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/origin_cloud_region#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareOriginCloudRegion to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -48,7 +48,7 @@ export class DataCloudflareOriginCloudRegion extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/origin_cloud_region cloudflare_origin_cloud_region} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/origin_cloud_region cloudflare_origin_cloud_region} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -59,7 +59,7 @@ export class DataCloudflareOriginCloudRegion extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_origin_cloud_region',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,61 +10,61 @@ export interface ProjectConfig extends cdktf.TerraformMetaArguments {
   /**
   * The audit log retention in days
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#audit_log_retention_days Project#audit_log_retention_days}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#audit_log_retention_days Project#audit_log_retention_days}
   */
   readonly auditLogRetentionDays?: number;
   /**
   * The description of the project
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#description Project#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#description Project#description}
   */
   readonly description?: string;
   /**
   * Whether the project has delete protection, defaults to false
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#has_delete_protection Project#has_delete_protection}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#has_delete_protection Project#has_delete_protection}
   */
   readonly hasDeleteProtection?: boolean | cdktf.IResolvable;
   /**
   * The ID of the KMS secret manager key to use for the project
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#kms_secret_manager_key_id Project#kms_secret_manager_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#kms_secret_manager_key_id Project#kms_secret_manager_key_id}
   */
   readonly kmsSecretManagerKeyId?: string;
   /**
   * The name of the project
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#name Project#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#name Project#name}
   */
   readonly name: string;
   /**
   * Whether to create default environments for the project (dev, staging, prod), defaults to true
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#should_create_default_envs Project#should_create_default_envs}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#should_create_default_envs Project#should_create_default_envs}
   */
   readonly shouldCreateDefaultEnvs?: boolean | cdktf.IResolvable;
   /**
   * The slug of the project
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#slug Project#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#slug Project#slug}
   */
   readonly slug: string;
   /**
   * The name of the template to use for the project
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#template_name Project#template_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#template_name Project#template_name}
   */
   readonly templateName?: string;
   /**
   * The type of the project. Supported values: secret-manager, cert-manager, kms. Defaults to 'secret-manager'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#type Project#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#type Project#type}
   */
   readonly type?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project infisical_project}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project infisical_project}
 */
 export class Project extends cdktf.TerraformResource {
 
@@ -80,7 +80,7 @@ export class Project extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Project resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Project to import
-  * @param importFromId The id of the existing Project that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Project that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Project to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -92,7 +92,7 @@ export class Project extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project infisical_project} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project infisical_project} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -103,7 +103,7 @@ export class Project extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_project',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.18.0'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

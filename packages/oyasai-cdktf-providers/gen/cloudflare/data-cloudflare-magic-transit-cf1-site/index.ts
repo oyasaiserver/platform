@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/magic_transit_cf1_site
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/magic_transit_cf1_site
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareMagicTransitCf1SiteConfig extends cdktf.Terraform
   /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/magic_transit_cf1_site#account_id DataCloudflareMagicTransitCf1Site#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/magic_transit_cf1_site#account_id DataCloudflareMagicTransitCf1Site#account_id}
   */
   readonly accountId: string;
   /**
   * Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/magic_transit_cf1_site#cf1_site_id DataCloudflareMagicTransitCf1Site#cf1_site_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/magic_transit_cf1_site#cf1_site_id DataCloudflareMagicTransitCf1Site#cf1_site_id}
   */
   readonly cf1SiteId: string;
 }
@@ -86,7 +86,7 @@ export class DataCloudflareMagicTransitCf1SiteLocationOutputReference extends cd
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/magic_transit_cf1_site cloudflare_magic_transit_cf1_site}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/magic_transit_cf1_site cloudflare_magic_transit_cf1_site}
 */
 export class DataCloudflareMagicTransitCf1Site extends cdktf.TerraformDataSource {
 
@@ -102,7 +102,7 @@ export class DataCloudflareMagicTransitCf1Site extends cdktf.TerraformDataSource
   * Generates CDKTF code for importing a DataCloudflareMagicTransitCf1Site resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareMagicTransitCf1Site to import
-  * @param importFromId The id of the existing DataCloudflareMagicTransitCf1Site that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/magic_transit_cf1_site#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareMagicTransitCf1Site that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/magic_transit_cf1_site#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareMagicTransitCf1Site to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -114,7 +114,7 @@ export class DataCloudflareMagicTransitCf1Site extends cdktf.TerraformDataSource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/magic_transit_cf1_site cloudflare_magic_transit_cf1_site} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/magic_transit_cf1_site cloudflare_magic_transit_cf1_site} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -125,7 +125,7 @@ export class DataCloudflareMagicTransitCf1Site extends cdktf.TerraformDataSource
       terraformResourceType: 'cloudflare_magic_transit_cf1_site',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

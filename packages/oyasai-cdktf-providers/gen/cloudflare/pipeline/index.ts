@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface PipelineConfig extends cdktf.TerraformMetaArguments {
   /**
   * Specifies the public ID of the account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline#account_id Pipeline#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline#account_id Pipeline#account_id}
   */
   readonly accountId: string;
   /**
   * Specifies the name of the Pipeline.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline#name Pipeline#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline#name Pipeline#name}
   */
   readonly name: string;
   /**
   * Specifies SQL for the Pipeline processing flow.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline#sql Pipeline#sql}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline#sql Pipeline#sql}
   */
   readonly sql: string;
 }
@@ -123,7 +123,7 @@ export class PipelineTablesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline cloudflare_pipeline}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline cloudflare_pipeline}
 */
 export class Pipeline extends cdktf.TerraformResource {
 
@@ -139,7 +139,7 @@ export class Pipeline extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Pipeline resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Pipeline to import
-  * @param importFromId The id of the existing Pipeline that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Pipeline that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Pipeline to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -151,7 +151,7 @@ export class Pipeline extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline cloudflare_pipeline} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline cloudflare_pipeline} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -162,7 +162,7 @@ export class Pipeline extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_pipeline',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/cloudforce_one_request_asset
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/cloudforce_one_request_asset
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,37 +10,37 @@ export interface CloudforceOneRequestAssetConfig extends cdktf.TerraformMetaArgu
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/cloudforce_one_request_asset#account_id CloudforceOneRequestAsset#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/cloudforce_one_request_asset#account_id CloudforceOneRequestAsset#account_id}
   */
   readonly accountId: string;
   /**
   * Page number of results.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/cloudforce_one_request_asset#page CloudforceOneRequestAsset#page}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/cloudforce_one_request_asset#page CloudforceOneRequestAsset#page}
   */
   readonly page: number;
   /**
   * Number of results per page.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/cloudforce_one_request_asset#per_page CloudforceOneRequestAsset#per_page}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/cloudforce_one_request_asset#per_page CloudforceOneRequestAsset#per_page}
   */
   readonly perPage: number;
   /**
   * UUID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/cloudforce_one_request_asset#request_id CloudforceOneRequestAsset#request_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/cloudforce_one_request_asset#request_id CloudforceOneRequestAsset#request_id}
   */
   readonly requestId: string;
   /**
   * Asset file to upload.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/cloudforce_one_request_asset#source CloudforceOneRequestAsset#source}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/cloudforce_one_request_asset#source CloudforceOneRequestAsset#source}
   */
   readonly source?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/cloudforce_one_request_asset cloudflare_cloudforce_one_request_asset}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/cloudforce_one_request_asset cloudflare_cloudforce_one_request_asset}
 */
 export class CloudforceOneRequestAsset extends cdktf.TerraformResource {
 
@@ -56,7 +56,7 @@ export class CloudforceOneRequestAsset extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CloudforceOneRequestAsset resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CloudforceOneRequestAsset to import
-  * @param importFromId The id of the existing CloudforceOneRequestAsset that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/cloudforce_one_request_asset#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CloudforceOneRequestAsset that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/cloudforce_one_request_asset#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CloudforceOneRequestAsset to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -68,7 +68,7 @@ export class CloudforceOneRequestAsset extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/cloudforce_one_request_asset cloudflare_cloudforce_one_request_asset} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/cloudforce_one_request_asset cloudflare_cloudforce_one_request_asset} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -79,7 +79,7 @@ export class CloudforceOneRequestAsset extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_cloudforce_one_request_asset',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

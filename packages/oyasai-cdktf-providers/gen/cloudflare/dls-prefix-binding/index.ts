@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/dls_prefix_binding
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/dls_prefix_binding
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface DlsPrefixBindingConfig extends cdktf.TerraformMetaArguments {
   /**
   * Identifier of a Cloudflare account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/dls_prefix_binding#account_id DlsPrefixBinding#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/dls_prefix_binding#account_id DlsPrefixBinding#account_id}
   */
   readonly accountId: string;
   /**
   * IP prefix in CIDR notation to bind.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/dls_prefix_binding#cidr DlsPrefixBinding#cidr}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/dls_prefix_binding#cidr DlsPrefixBinding#cidr}
   */
   readonly cidr: string;
   /**
   * The ID of the parent IP prefix that contains the CIDR.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/dls_prefix_binding#prefix_id DlsPrefixBinding#prefix_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/dls_prefix_binding#prefix_id DlsPrefixBinding#prefix_id}
   */
   readonly prefixId: string;
   /**
   * Region key from managed regions (e.g., "us", "eu").
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/dls_prefix_binding#region_key DlsPrefixBinding#region_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/dls_prefix_binding#region_key DlsPrefixBinding#region_key}
   */
   readonly regionKey: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/dls_prefix_binding cloudflare_dls_prefix_binding}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/dls_prefix_binding cloudflare_dls_prefix_binding}
 */
 export class DlsPrefixBinding extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class DlsPrefixBinding extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DlsPrefixBinding resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DlsPrefixBinding to import
-  * @param importFromId The id of the existing DlsPrefixBinding that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/dls_prefix_binding#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DlsPrefixBinding that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/dls_prefix_binding#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DlsPrefixBinding to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class DlsPrefixBinding extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/dls_prefix_binding cloudflare_dls_prefix_binding} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/dls_prefix_binding cloudflare_dls_prefix_binding} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class DlsPrefixBinding extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_dls_prefix_binding',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -98,6 +98,7 @@ export * as magicWanGreTunnel from './magic-wan-gre-tunnel';
 export * as magicWanIpsecTunnel from './magic-wan-ipsec-tunnel';
 export * as magicWanStaticRoute from './magic-wan-static-route';
 export * as managedTransforms from './managed-transforms';
+export * as moqRelay from './moq-relay';
 export * as mtlsCertificate from './mtls-certificate';
 export * as notificationPolicy from './notification-policy';
 export * as notificationPolicyWebhooks from './notification-policy-webhooks';
@@ -428,6 +429,8 @@ export * as dataCloudflareMagicWanGreTunnel from './data-cloudflare-magic-wan-gr
 export * as dataCloudflareMagicWanIpsecTunnel from './data-cloudflare-magic-wan-ipsec-tunnel';
 export * as dataCloudflareMagicWanStaticRoute from './data-cloudflare-magic-wan-static-route';
 export * as dataCloudflareManagedTransforms from './data-cloudflare-managed-transforms';
+export * as dataCloudflareMoqRelay from './data-cloudflare-moq-relay';
+export * as dataCloudflareMoqRelays from './data-cloudflare-moq-relays';
 export * as dataCloudflareMtlsCertificate from './data-cloudflare-mtls-certificate';
 export * as dataCloudflareMtlsCertificateAssociations from './data-cloudflare-mtls-certificate-associations';
 export * as dataCloudflareMtlsCertificates from './data-cloudflare-mtls-certificates';

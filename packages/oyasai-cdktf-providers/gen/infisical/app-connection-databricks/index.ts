@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionDatabricksConfig extends cdktf.TerraformMetaArgume
   /**
   * The credentials for the Databricks App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks#credentials AppConnectionDatabricks#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks#credentials AppConnectionDatabricks#credentials}
   */
   readonly credentials: AppConnectionDatabricksCredentials;
   /**
   * An optional description for the Databricks App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks#description AppConnectionDatabricks#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks#description AppConnectionDatabricks#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with Databricks. Possible values are: service-principal
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks#method AppConnectionDatabricks#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks#method AppConnectionDatabricks#method}
   */
   readonly method: string;
   /**
   * The name of the Databricks App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks#name AppConnectionDatabricks#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks#name AppConnectionDatabricks#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks#project_id AppConnectionDatabricks#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks#project_id AppConnectionDatabricks#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,19 +42,19 @@ export interface AppConnectionDatabricksCredentials {
   /**
   * The client ID of the Databricks service principal.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks#client_id AppConnectionDatabricks#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks#client_id AppConnectionDatabricks#client_id}
   */
   readonly clientId: string;
   /**
   * The client secret of the Databricks service principal.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks#client_secret AppConnectionDatabricks#client_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks#client_secret AppConnectionDatabricks#client_secret}
   */
   readonly clientSecret: string;
   /**
   * The workspace URL of the Databricks instance.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks#workspace_url AppConnectionDatabricks#workspace_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks#workspace_url AppConnectionDatabricks#workspace_url}
   */
   readonly workspaceUrl: string;
 }
@@ -197,7 +197,7 @@ export class AppConnectionDatabricksCredentialsOutputReference extends cdktf.Com
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks infisical_app_connection_databricks}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks infisical_app_connection_databricks}
 */
 export class AppConnectionDatabricks extends cdktf.TerraformResource {
 
@@ -213,7 +213,7 @@ export class AppConnectionDatabricks extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionDatabricks resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionDatabricks to import
-  * @param importFromId The id of the existing AppConnectionDatabricks that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionDatabricks that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionDatabricks to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -225,7 +225,7 @@ export class AppConnectionDatabricks extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/app_connection_databricks infisical_app_connection_databricks} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_databricks infisical_app_connection_databricks} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -236,7 +236,7 @@ export class AppConnectionDatabricks extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_databricks',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.18.0'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

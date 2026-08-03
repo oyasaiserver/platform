@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface SnippetRulesConfig extends cdktf.TerraformMetaArguments {
   /**
   * Lists snippet rules.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules#rules SnippetRules#rules}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules#rules SnippetRules#rules}
   */
   readonly rules: SnippetRulesRules[] | cdktf.IResolvable;
   /**
   * Use this field to specify the unique ID of the zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules#zone_id SnippetRules#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules#zone_id SnippetRules#zone_id}
   */
   readonly zoneId: string;
 }
@@ -24,25 +24,25 @@ export interface SnippetRulesRules {
   /**
   * Provide an informative description of the rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules#description SnippetRules#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules#description SnippetRules#description}
   */
   readonly description?: string;
   /**
   * Indicate whether to execute the rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules#enabled SnippetRules#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules#enabled SnippetRules#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * Define the expression that determines which traffic matches the rule.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules#expression SnippetRules#expression}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules#expression SnippetRules#expression}
   */
   readonly expression: string;
   /**
   * Identify the snippet.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules#snippet_name SnippetRules#snippet_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules#snippet_name SnippetRules#snippet_name}
   */
   readonly snippetName: string;
 }
@@ -249,7 +249,7 @@ export class SnippetRulesRulesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules cloudflare_snippet_rules}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules cloudflare_snippet_rules}
 */
 export class SnippetRules extends cdktf.TerraformResource {
 
@@ -265,7 +265,7 @@ export class SnippetRules extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SnippetRules resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SnippetRules to import
-  * @param importFromId The id of the existing SnippetRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SnippetRules that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SnippetRules to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -277,7 +277,7 @@ export class SnippetRules extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippet_rules cloudflare_snippet_rules} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippet_rules cloudflare_snippet_rules} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -288,7 +288,7 @@ export class SnippetRules extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_snippet_rules',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

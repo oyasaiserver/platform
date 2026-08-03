@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface ProjectGroupConfig extends cdktf.TerraformMetaArguments {
   /**
   * The id of the group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group#group_id ProjectGroup#group_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group#group_id ProjectGroup#group_id}
   */
   readonly groupId?: string;
   /**
   * The name of the group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group#group_name ProjectGroup#group_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group#group_name ProjectGroup#group_name}
   */
   readonly groupName?: string;
   /**
   * The id of the project.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group#project_id ProjectGroup#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group#project_id ProjectGroup#project_id}
   */
   readonly projectId: string;
   /**
   * The roles assigned to the project group
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group#roles ProjectGroup#roles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group#roles ProjectGroup#roles}
   */
   readonly roles: ProjectGroupRoles[] | cdktf.IResolvable;
 }
@@ -36,25 +36,25 @@ export interface ProjectGroupRoles {
   /**
   * Flag to indicate the assigned role is temporary or not. When is_temporary is true fields temporary_mode, temporary_range and temporary_access_start_time is required.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group#is_temporary ProjectGroup#is_temporary}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group#is_temporary ProjectGroup#is_temporary}
   */
   readonly isTemporary?: boolean | cdktf.IResolvable;
   /**
   * The slug of the role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group#role_slug ProjectGroup#role_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group#role_slug ProjectGroup#role_slug}
   */
   readonly roleSlug: string;
   /**
   * ISO time for which temporary access should begin. This is in the format YYYY-MM-DDTHH:MM:SSZ e.g. 2024-09-19T12:43:13Z
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group#temporary_access_start_time ProjectGroup#temporary_access_start_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group#temporary_access_start_time ProjectGroup#temporary_access_start_time}
   */
   readonly temporaryAccessStartTime?: string;
   /**
   * TTL for the temporary time. Eg: 1m, 1h, 1d. Default: 1h
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group#temporary_range ProjectGroup#temporary_range}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group#temporary_range ProjectGroup#temporary_range}
   */
   readonly temporaryRange?: string;
 }
@@ -254,7 +254,7 @@ export class ProjectGroupRolesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group infisical_project_group}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group infisical_project_group}
 */
 export class ProjectGroup extends cdktf.TerraformResource {
 
@@ -270,7 +270,7 @@ export class ProjectGroup extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ProjectGroup resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ProjectGroup to import
-  * @param importFromId The id of the existing ProjectGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ProjectGroup that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ProjectGroup to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -282,7 +282,7 @@ export class ProjectGroup extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_group infisical_project_group} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_group infisical_project_group} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -293,7 +293,7 @@ export class ProjectGroup extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_project_group',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.18.0'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

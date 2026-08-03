@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,49 @@ export interface StreamLiveInputConfig extends cdktf.TerraformMetaArguments {
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#account_id StreamLiveInput#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#account_id StreamLiveInput#account_id}
   */
   readonly accountId: string;
   /**
   * Sets the creator ID asssociated with this live input.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#default_creator StreamLiveInput#default_creator}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#default_creator StreamLiveInput#default_creator}
   */
   readonly defaultCreator?: string;
   /**
   * Indicates the number of days after which the live inputs recordings will be deleted. When a stream completes and the recording is ready, the value is used to calculate a scheduled deletion date for that recording. Omit the field to indicate no change, or include with a `null` value to remove an existing scheduled deletion.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#delete_recording_after_days StreamLiveInput#delete_recording_after_days}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#delete_recording_after_days StreamLiveInput#delete_recording_after_days}
   */
   readonly deleteRecordingAfterDays?: number;
   /**
   * Indicates whether the live input is enabled and can accept streams.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#enabled StreamLiveInput#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#enabled StreamLiveInput#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * A unique identifier for a live input.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#live_input_identifier StreamLiveInput#live_input_identifier}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#live_input_identifier StreamLiveInput#live_input_identifier}
   */
   readonly liveInputIdentifier?: string;
   /**
   * A user modifiable key-value store used to reference other systems of record for managing live inputs.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#meta StreamLiveInput#meta}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#meta StreamLiveInput#meta}
   */
   readonly meta?: string;
   /**
+  * When enabled, the live stream is delivered using Low-Latency HLS (LL-HLS), reducing glass-to-glass latency for viewers at the cost of reduced player compatibility.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#prefer_low_latency StreamLiveInput#prefer_low_latency}
+  */
+  readonly preferLowLatency?: boolean | cdktf.IResolvable;
+  /**
   * Records the input to a Cloudflare Stream video. Behavior depends on the mode. In most cases, the video will initially be viewable as a live video and transition to on-demand after a condition is satisfied.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#recording StreamLiveInput#recording}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#recording StreamLiveInput#recording}
   */
   readonly recording?: StreamLiveInputRecording;
 }
@@ -54,32 +60,32 @@ export interface StreamLiveInputRecording {
   /**
   * Lists the origins allowed to display videos created with this input. Enter allowed origin domains in an array and use `*` for wildcard subdomains. An empty array allows videos to be viewed on any origin.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#allowed_origins StreamLiveInput#allowed_origins}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#allowed_origins StreamLiveInput#allowed_origins}
   */
   readonly allowedOrigins?: string[];
   /**
   * Disables reporting the number of live viewers when this property is set to `true`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#hide_live_viewer_count StreamLiveInput#hide_live_viewer_count}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#hide_live_viewer_count StreamLiveInput#hide_live_viewer_count}
   */
   readonly hideLiveViewerCount?: boolean | cdktf.IResolvable;
   /**
   * Specifies the recording behavior for the live input. Set this value to `off` to prevent a recording. Set the value to `automatic` to begin a recording and transition to on-demand after Stream Live stops receiving input.
   * Available values: "off", "automatic".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#mode StreamLiveInput#mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#mode StreamLiveInput#mode}
   */
   readonly mode?: string;
   /**
   * Indicates if a video using the live input has the `requireSignedURLs` property set. Also enforces access controls on any video recording of the livestream with the live input.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#require_signed_urls StreamLiveInput#require_signed_urls}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#require_signed_urls StreamLiveInput#require_signed_urls}
   */
   readonly requireSignedUrls?: boolean | cdktf.IResolvable;
   /**
   * Determines the amount of time a live input configured in `automatic` mode should wait before a recording transitions from live to on-demand. `0` is recommended for most use cases and indicates the platform default should be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#timeout_seconds StreamLiveInput#timeout_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#timeout_seconds StreamLiveInput#timeout_seconds}
   */
   readonly timeoutSeconds?: number;
 }
@@ -643,7 +649,7 @@ export class StreamLiveInputWebRtcPlaybackOutputReference extends cdktf.ComplexO
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input cloudflare_stream_live_input}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input cloudflare_stream_live_input}
 */
 export class StreamLiveInput extends cdktf.TerraformResource {
 
@@ -659,7 +665,7 @@ export class StreamLiveInput extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a StreamLiveInput resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the StreamLiveInput to import
-  * @param importFromId The id of the existing StreamLiveInput that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing StreamLiveInput that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the StreamLiveInput to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -671,7 +677,7 @@ export class StreamLiveInput extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/stream_live_input cloudflare_stream_live_input} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/stream_live_input cloudflare_stream_live_input} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -682,7 +688,7 @@ export class StreamLiveInput extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_stream_live_input',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -698,6 +704,7 @@ export class StreamLiveInput extends cdktf.TerraformResource {
     this._enabled = config.enabled;
     this._liveInputIdentifier = config.liveInputIdentifier;
     this._meta = config.meta;
+    this._preferLowLatency = config.preferLowLatency;
     this._recording.internalValue = config.recording;
   }
 
@@ -771,6 +778,11 @@ export class StreamLiveInput extends cdktf.TerraformResource {
     return this._enabled;
   }
 
+  // keys_rotated_at - computed: true, optional: false, required: false
+  public get keysRotatedAt() {
+    return this.getStringAttribute('keys_rotated_at');
+  }
+
   // live_input_identifier - computed: false, optional: true, required: false
   private _liveInputIdentifier?: string; 
   public get liveInputIdentifier() {
@@ -806,6 +818,22 @@ export class StreamLiveInput extends cdktf.TerraformResource {
   // modified - computed: true, optional: false, required: false
   public get modified() {
     return this.getStringAttribute('modified');
+  }
+
+  // prefer_low_latency - computed: true, optional: true, required: false
+  private _preferLowLatency?: boolean | cdktf.IResolvable; 
+  public get preferLowLatency() {
+    return this.getBooleanAttribute('prefer_low_latency');
+  }
+  public set preferLowLatency(value: boolean | cdktf.IResolvable) {
+    this._preferLowLatency = value;
+  }
+  public resetPreferLowLatency() {
+    this._preferLowLatency = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get preferLowLatencyInput() {
+    return this._preferLowLatency;
   }
 
   // recording - computed: true, optional: true, required: false
@@ -882,6 +910,7 @@ export class StreamLiveInput extends cdktf.TerraformResource {
       enabled: cdktf.booleanToTerraform(this._enabled),
       live_input_identifier: cdktf.stringToTerraform(this._liveInputIdentifier),
       meta: cdktf.stringToTerraform(this._meta),
+      prefer_low_latency: cdktf.booleanToTerraform(this._preferLowLatency),
       recording: streamLiveInputRecordingToTerraform(this._recording.internalValue),
     };
   }
@@ -923,6 +952,12 @@ export class StreamLiveInput extends cdktf.TerraformResource {
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      prefer_low_latency: {
+        value: cdktf.booleanToHclTerraform(this._preferLowLatency),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       recording: {
         value: streamLiveInputRecordingToHclTerraform(this._recording.internalValue),

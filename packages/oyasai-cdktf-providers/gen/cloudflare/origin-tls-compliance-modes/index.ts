@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_tls_compliance_modes
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_tls_compliance_modes
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface OriginTlsComplianceModesConfig extends cdktf.TerraformMetaArgum
   /**
   * List of TLS compliance modes that constrain the key-exchange algorithms Cloudflare may use when establishing the TLS connection to the zone's origin. Currently supported values are `fips` (FIPS-approved curves) and `pqh` (post-quantum hybrid). Future modes (e.g. `cnsa2`) may be added; clients should treat unknown values as opaque strings. Multiple modes are combined as the intersection of their permitted algorithm lists; selections whose intersection is empty are rejected. An empty list clears the constraint.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_tls_compliance_modes#value OriginTlsComplianceModes#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_tls_compliance_modes#value OriginTlsComplianceModes#value}
   */
   readonly value: string[];
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_tls_compliance_modes#zone_id OriginTlsComplianceModes#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_tls_compliance_modes#zone_id OriginTlsComplianceModes#zone_id}
   */
   readonly zoneId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_tls_compliance_modes cloudflare_origin_tls_compliance_modes}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_tls_compliance_modes cloudflare_origin_tls_compliance_modes}
 */
 export class OriginTlsComplianceModes extends cdktf.TerraformResource {
 
@@ -38,7 +38,7 @@ export class OriginTlsComplianceModes extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OriginTlsComplianceModes resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OriginTlsComplianceModes to import
-  * @param importFromId The id of the existing OriginTlsComplianceModes that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_tls_compliance_modes#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OriginTlsComplianceModes that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_tls_compliance_modes#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OriginTlsComplianceModes to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class OriginTlsComplianceModes extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/origin_tls_compliance_modes cloudflare_origin_tls_compliance_modes} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/origin_tls_compliance_modes cloudflare_origin_tls_compliance_modes} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class OriginTlsComplianceModes extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_origin_tls_compliance_modes',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,23 +10,23 @@ export interface DataCloudflareShareResourceConfig extends cdktf.TerraformMetaAr
   /**
   * Account identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource#account_id DataCloudflareShareResource#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource#account_id DataCloudflareShareResource#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource#filter DataCloudflareShareResource#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource#filter DataCloudflareShareResource#filter}
   */
   readonly filter?: DataCloudflareShareResourceFilter;
   /**
   * Share identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource#share_id DataCloudflareShareResource#share_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource#share_id DataCloudflareShareResource#share_id}
   */
   readonly shareId: string;
   /**
   * Share Resource identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource#share_resource_id DataCloudflareShareResource#share_resource_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource#share_resource_id DataCloudflareShareResource#share_resource_id}
   */
   readonly shareResourceId?: string;
 }
@@ -35,14 +35,14 @@ export interface DataCloudflareShareResourceFilter {
   * Filter share resources by resource_type.
   * Available values: "custom-ruleset", "gateway-policy", "gateway-destination-ip", "gateway-block-page-settings", "gateway-extended-email-matching", "idp-federation-grant".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource#resource_type DataCloudflareShareResource#resource_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource#resource_type DataCloudflareShareResource#resource_type}
   */
   readonly resourceType?: string;
   /**
   * Filter share resources by status.
   * Available values: "active", "deleting", "deleted".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource#status DataCloudflareShareResource#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource#status DataCloudflareShareResource#status}
   */
   readonly status?: string;
 }
@@ -165,7 +165,7 @@ export class DataCloudflareShareResourceFilterOutputReference extends cdktf.Comp
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource cloudflare_share_resource}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource cloudflare_share_resource}
 */
 export class DataCloudflareShareResource extends cdktf.TerraformDataSource {
 
@@ -181,7 +181,7 @@ export class DataCloudflareShareResource extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareShareResource resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareShareResource to import
-  * @param importFromId The id of the existing DataCloudflareShareResource that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareShareResource that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareShareResource to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -193,7 +193,7 @@ export class DataCloudflareShareResource extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resource cloudflare_share_resource} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resource cloudflare_share_resource} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -204,7 +204,7 @@ export class DataCloudflareShareResource extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_share_resource',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

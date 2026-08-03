@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificates
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificates
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,32 +10,32 @@ export interface DataCloudflareClientCertificatesConfig extends cdktf.TerraformM
   /**
   * Limit to the number of records returned.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificates#limit DataCloudflareClientCertificates#limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificates#limit DataCloudflareClientCertificates#limit}
   */
   readonly limit?: number;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificates#max_items DataCloudflareClientCertificates#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificates#max_items DataCloudflareClientCertificates#max_items}
   */
   readonly maxItems?: number;
   /**
   * Offset the results.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificates#offset DataCloudflareClientCertificates#offset}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificates#offset DataCloudflareClientCertificates#offset}
   */
   readonly offset?: number;
   /**
   * Client Certitifcate Status to filter results by.
   * Available values: "all", "active", "pending_reactivation", "pending_revocation", "revoked".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificates#status DataCloudflareClientCertificates#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificates#status DataCloudflareClientCertificates#status}
   */
   readonly status?: string;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificates#zone_id DataCloudflareClientCertificates#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificates#zone_id DataCloudflareClientCertificates#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -261,7 +261,7 @@ export class DataCloudflareClientCertificatesResultList extends cdktf.ComplexLis
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificates cloudflare_client_certificates}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificates cloudflare_client_certificates}
 */
 export class DataCloudflareClientCertificates extends cdktf.TerraformDataSource {
 
@@ -277,7 +277,7 @@ export class DataCloudflareClientCertificates extends cdktf.TerraformDataSource 
   * Generates CDKTF code for importing a DataCloudflareClientCertificates resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareClientCertificates to import
-  * @param importFromId The id of the existing DataCloudflareClientCertificates that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificates#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareClientCertificates that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificates#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareClientCertificates to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -289,7 +289,7 @@ export class DataCloudflareClientCertificates extends cdktf.TerraformDataSource 
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/client_certificates cloudflare_client_certificates} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/client_certificates cloudflare_client_certificates} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -300,7 +300,7 @@ export class DataCloudflareClientCertificates extends cdktf.TerraformDataSource 
       terraformResourceType: 'cloudflare_client_certificates',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

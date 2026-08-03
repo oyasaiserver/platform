@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface GoogleTagGatewayConfig extends cdktf.TerraformMetaArguments {
   /**
   * Enables or disables Google Tag Gateway for this zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway#enabled GoogleTagGateway#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway#enabled GoogleTagGateway#enabled}
   */
   readonly enabled: boolean | cdktf.IResolvable;
   /**
   * Specifies the endpoint path for proxying Google Tag Manager requests. Use an absolute path starting with '/', with no nested paths and alphanumeric characters only (e.g. /metrics).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway#endpoint GoogleTagGateway#endpoint}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway#endpoint GoogleTagGateway#endpoint}
   */
   readonly endpoint: string;
   /**
   * Hides the original client IP address from Google when enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway#hide_original_ip GoogleTagGateway#hide_original_ip}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway#hide_original_ip GoogleTagGateway#hide_original_ip}
   */
   readonly hideOriginalIp: boolean | cdktf.IResolvable;
   /**
   * Specify the Google Tag Manager container or measurement ID (e.g. GTM-XXXXXXX or G-XXXXXXXXXX).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway#measurement_id GoogleTagGateway#measurement_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway#measurement_id GoogleTagGateway#measurement_id}
   */
   readonly measurementId: string;
   /**
   * Set up the associated Google Tag on the zone automatically when enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway#set_up_tag GoogleTagGateway#set_up_tag}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway#set_up_tag GoogleTagGateway#set_up_tag}
   */
   readonly setUpTag?: boolean | cdktf.IResolvable;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway#zone_id GoogleTagGateway#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway#zone_id GoogleTagGateway#zone_id}
   */
   readonly zoneId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway cloudflare_google_tag_gateway}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway cloudflare_google_tag_gateway}
 */
 export class GoogleTagGateway extends cdktf.TerraformResource {
 
@@ -62,7 +62,7 @@ export class GoogleTagGateway extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a GoogleTagGateway resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the GoogleTagGateway to import
-  * @param importFromId The id of the existing GoogleTagGateway that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing GoogleTagGateway that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the GoogleTagGateway to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -74,7 +74,7 @@ export class GoogleTagGateway extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/google_tag_gateway cloudflare_google_tag_gateway} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/google_tag_gateway cloudflare_google_tag_gateway} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -85,7 +85,7 @@ export class GoogleTagGateway extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_google_tag_gateway',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/pipeline
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/pipeline
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflarePipelineConfig extends cdktf.TerraformMetaArgumen
   /**
   * Specifies the public ID of the account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/pipeline#account_id DataCloudflarePipeline#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/pipeline#account_id DataCloudflarePipeline#account_id}
   */
   readonly accountId?: string;
   /**
   * Specifies the public ID of the pipeline.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/pipeline#pipeline_id DataCloudflarePipeline#pipeline_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/pipeline#pipeline_id DataCloudflarePipeline#pipeline_id}
   */
   readonly pipelineId: string;
 }
@@ -117,7 +117,7 @@ export class DataCloudflarePipelineTablesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/pipeline cloudflare_pipeline}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/pipeline cloudflare_pipeline}
 */
 export class DataCloudflarePipeline extends cdktf.TerraformDataSource {
 
@@ -133,7 +133,7 @@ export class DataCloudflarePipeline extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflarePipeline resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflarePipeline to import
-  * @param importFromId The id of the existing DataCloudflarePipeline that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/pipeline#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflarePipeline that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/pipeline#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflarePipeline to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -145,7 +145,7 @@ export class DataCloudflarePipeline extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/pipeline cloudflare_pipeline} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/pipeline cloudflare_pipeline} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -156,7 +156,7 @@ export class DataCloudflarePipeline extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_pipeline',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
