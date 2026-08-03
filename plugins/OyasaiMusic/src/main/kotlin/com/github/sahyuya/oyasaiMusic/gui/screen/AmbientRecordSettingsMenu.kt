@@ -24,98 +24,127 @@ class AmbientRecordSettingsMenu(
     private val handSlot: Int,
 ) : OyasaiMusicMenu {
 
-    companion object {
-        private const val RANGE_SLOT = 0
-        private const val TRIGGER_SLOT = 1
-        private const val LOOP_SLOT = 2
-        private const val INFO_SLOT = 3
-        private const val CLOSE_SLOT = 4
+  companion object {
+    private const val RANGE_SLOT = 0
+    private const val TRIGGER_SLOT = 1
+    private const val LOOP_SLOT = 2
+    private const val INFO_SLOT = 3
+    private const val CLOSE_SLOT = 4
+  }
+
+  override val inventory: Inventory =
+      Bukkit.createInventory(
+          OyasaiMusicMenuHolder(this),
+          InventoryType.HOPPER,
+          Component.text("環境BGM設定"),
+      )
+
+  init {
+    render()
+  }
+
+  override fun refresh() = render()
+
+  private fun currentItem(): org.bukkit.inventory.ItemStack? = viewer.inventory.getItem(handSlot)
+
+  private fun render() {
+    val item = currentItem()
+    if (item == null || !PhysicalRecordItem.isRecordItem(plugin, item)) {
+      (0..4).forEach { inventory.setItem(it, null) }
+      inventory.setItem(
+          INFO_SLOT,
+          GuiItemBuilder(Material.BARRIER)
+              .name(Component.text("アイテムが見つかりません", NamedTextColor.RED))
+              .build(),
+      )
+      return
     }
+    val range = PhysicalRecordItem.range(plugin, item)
+    val trigger = PhysicalRecordItem.trigger(plugin, item)
+    val loop = PhysicalRecordItem.loop(plugin, item)
 
-    override val inventory: Inventory = Bukkit.createInventory(OyasaiMusicMenuHolder(this), InventoryType.HOPPER, Component.text("環境BGM設定"))
-
-    init { render() }
-
-    override fun refresh() = render()
-
-    private fun currentItem(): org.bukkit.inventory.ItemStack? = viewer.inventory.getItem(handSlot)
-
-    private fun render() {
-        val item = currentItem()
-        if (item == null || !PhysicalRecordItem.isRecordItem(plugin, item)) {
-            (0..4).forEach { inventory.setItem(it, null) }
-            inventory.setItem(INFO_SLOT, GuiItemBuilder(Material.BARRIER).name(Component.text("アイテムが見つかりません", NamedTextColor.RED)).build())
-            return
-        }
-        val range = PhysicalRecordItem.range(plugin, item)
-        val trigger = PhysicalRecordItem.trigger(plugin, item)
-        val loop = PhysicalRecordItem.loop(plugin, item)
-
-        inventory.setItem(
-            RANGE_SLOT,
-            GuiItemBuilder(Material.BEACON)
-                .name(Component.text("再生範囲: ${range.label}", if (viewer.hasPermission(range.permission)) NamedTextColor.AQUA else NamedTextColor.RED))
-                .lore(
-                    Component.text("必要権限: ${range.permission}", NamedTextColor.DARK_GRAY),
-                    Component.text("クリックで切替", NamedTextColor.DARK_GRAY),
+    inventory.setItem(
+        RANGE_SLOT,
+        GuiItemBuilder(Material.BEACON)
+            .name(
+                Component.text(
+                    "再生範囲: ${range.label}",
+                    if (viewer.hasPermission(range.permission)) NamedTextColor.AQUA
+                    else NamedTextColor.RED,
                 )
-                .build(),
-        )
-        inventory.setItem(
-            TRIGGER_SLOT,
-            GuiItemBuilder(Material.REDSTONE_TORCH)
-                .name(Component.text("トリガー: ${trigger.label}", NamedTextColor.GOLD))
-                .lore(Component.text("クリックで切替", NamedTextColor.DARK_GRAY))
-                .build(),
-        )
-        inventory.setItem(
-            LOOP_SLOT,
-            GuiItemBuilder(Material.LEAD)
-                .name(Component.text("ループ: ${if (loop) "ON" else "OFF"}", NamedTextColor.LIGHT_PURPLE))
-                .lore(Component.text("クリックで切替", NamedTextColor.DARK_GRAY))
-                .glint(loop)
-                .build(),
-        )
-        inventory.setItem(
-            INFO_SLOT,
-            GuiItemBuilder(item.type)
-                .name(item.itemMeta?.displayName() ?: Component.text("楽曲", NamedTextColor.WHITE))
-                .lore(Component.text("設定はジュークボックスへ設置時に反映されます", NamedTextColor.DARK_GRAY))
-                .build(),
-        )
-        inventory.setItem(CLOSE_SLOT, GuiItemBuilder(Material.BARRIER).name(Component.text("閉じる", NamedTextColor.RED)).build())
-    }
+            )
+            .lore(
+                Component.text("必要権限: ${range.permission}", NamedTextColor.DARK_GRAY),
+                Component.text("クリックで切替", NamedTextColor.DARK_GRAY),
+            )
+            .build(),
+    )
+    inventory.setItem(
+        TRIGGER_SLOT,
+        GuiItemBuilder(Material.REDSTONE_TORCH)
+            .name(Component.text("トリガー: ${trigger.label}", NamedTextColor.GOLD))
+            .lore(Component.text("クリックで切替", NamedTextColor.DARK_GRAY))
+            .build(),
+    )
+    inventory.setItem(
+        LOOP_SLOT,
+        GuiItemBuilder(Material.LEAD)
+            .name(Component.text("ループ: ${if (loop) "ON" else "OFF"}", NamedTextColor.LIGHT_PURPLE))
+            .lore(Component.text("クリックで切替", NamedTextColor.DARK_GRAY))
+            .glint(loop)
+            .build(),
+    )
+    inventory.setItem(
+        INFO_SLOT,
+        GuiItemBuilder(item.type)
+            .name(item.itemMeta?.displayName() ?: Component.text("楽曲", NamedTextColor.WHITE))
+            .lore(Component.text("設定はジュークボックスへ設置時に反映されます", NamedTextColor.DARK_GRAY))
+            .build(),
+    )
+    inventory.setItem(
+        CLOSE_SLOT,
+        GuiItemBuilder(Material.BARRIER).name(Component.text("閉じる", NamedTextColor.RED)).build(),
+    )
+  }
 
-    override fun onClick(event: InventoryClickEvent) {
-        val item = currentItem()
-        if (item == null || !PhysicalRecordItem.isRecordItem(plugin, item)) return
-        when (event.rawSlot) {
-            RANGE_SLOT -> cycleRange(item)
-            TRIGGER_SLOT -> update(PhysicalRecordItem.withTrigger(plugin, item, PhysicalRecordItem.trigger(plugin, item).next()))
-            LOOP_SLOT -> update(PhysicalRecordItem.withLoop(plugin, item, !PhysicalRecordItem.loop(plugin, item)))
-            CLOSE_SLOT -> viewer.closeInventory()
-        }
+  override fun onClick(event: InventoryClickEvent) {
+    val item = currentItem()
+    if (item == null || !PhysicalRecordItem.isRecordItem(plugin, item)) return
+    when (event.rawSlot) {
+      RANGE_SLOT -> cycleRange(item)
+      TRIGGER_SLOT ->
+          update(
+              PhysicalRecordItem.withTrigger(
+                  plugin,
+                  item,
+                  PhysicalRecordItem.trigger(plugin, item).next(),
+              )
+          )
+      LOOP_SLOT ->
+          update(PhysicalRecordItem.withLoop(plugin, item, !PhysicalRecordItem.loop(plugin, item)))
+      CLOSE_SLOT -> viewer.closeInventory()
     }
+  }
 
-    override fun onClose(event: InventoryCloseEvent) {
-        // ホッパーGUIはMenuManagerの通常ナビゲーション対象外（履歴に積まない一時的な小画面）のため、
-        // 特別な後処理は無し。設定は都度PDCへ即時反映済み。
-    }
+  override fun onClose(event: InventoryCloseEvent) {
+    // ホッパーGUIはMenuManagerの通常ナビゲーション対象外（履歴に積まない一時的な小画面）のため、
+    // 特別な後処理は無し。設定は都度PDCへ即時反映済み。
+  }
 
-    private fun update(newItem: org.bukkit.inventory.ItemStack) {
-        viewer.inventory.setItem(handSlot, newItem)
-        render()
-    }
+  private fun update(newItem: org.bukkit.inventory.ItemStack) {
+    viewer.inventory.setItem(handSlot, newItem)
+    render()
+  }
 
-    /** 権限のある範囲だけを循環する。既存アイテムの権限外設定もここで復帰できる。 */
-    private fun cycleRange(item: org.bukkit.inventory.ItemStack) {
-        val allowed = AmbientRange.entries.filter { viewer.hasPermission(it.permission) }
-        if (allowed.isEmpty()) {
-            viewer.sendMessage("§c環境BGMの再生範囲を使う権限がありません。")
-            return
-        }
-        val current = PhysicalRecordItem.range(plugin, item)
-        val next = allowed[(allowed.indexOf(current).let { if (it < 0) -1 else it } + 1) % allowed.size]
-        update(PhysicalRecordItem.withRange(plugin, item, next))
+  /** 権限のある範囲だけを循環する。既存アイテムの権限外設定もここで復帰できる。 */
+  private fun cycleRange(item: org.bukkit.inventory.ItemStack) {
+    val allowed = AmbientRange.entries.filter { viewer.hasPermission(it.permission) }
+    if (allowed.isEmpty()) {
+      viewer.sendMessage("§c環境BGMの再生範囲を使う権限がありません。")
+      return
     }
+    val current = PhysicalRecordItem.range(plugin, item)
+    val next = allowed[(allowed.indexOf(current).let { if (it < 0) -1 else it } + 1) % allowed.size]
+    update(PhysicalRecordItem.withRange(plugin, item, next))
+  }
 }
