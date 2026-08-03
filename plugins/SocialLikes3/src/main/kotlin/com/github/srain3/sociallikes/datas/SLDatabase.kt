@@ -2,9 +2,14 @@ package com.github.srain3.sociallikes.datas
 
 import com.github.srain3.sociallikes.Tools
 import java.io.File
+import java.time.LocalDateTime
+import java.util.UUID
+import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.Table
@@ -15,6 +20,7 @@ import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.deleteAll
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.upsert
@@ -163,6 +169,42 @@ object SLDatabase {
     }
   }
 
+  fun loadBuildsBlocking(): List<SLData> {
+    return submitBlocking("loadBuilds") {
+          val likesByBuildId =
+              BuildLikes.selectAll()
+                  .map { row ->
+                    row[BuildLikes.buildId] to
+                        LikeSnapshot(
+                            playerUuid = row[BuildLikes.playerUuid],
+                            likedAt = row[BuildLikes.likedAt],
+                        )
+                  }
+                  .groupBy({ it.first }, { it.second })
+
+          Builds.selectAll().orderBy(Builds.id).map { row ->
+            BuildSnapshot(
+                    id = row[Builds.id],
+                    worldName = row[Builds.worldName],
+                    locX = row[Builds.locX],
+                    locY = row[Builds.locY],
+                    locZ = row[Builds.locZ],
+                    chunkX = row[Builds.chunkX],
+                    chunkZ = row[Builds.chunkZ],
+                    createdAt = row[Builds.createdAt],
+                    ownerUuid = row[Builds.ownerUuid],
+                    title = row[Builds.title],
+                    checked = row[Builds.checked],
+                    comment = row[Builds.comment],
+                    discordTextId = row[Builds.discordTextId],
+                    likes = likesByBuildId[row[Builds.id]].orEmpty(),
+                )
+                .toSLData()
+          }
+        }
+        .orEmpty()
+  }
+
   fun savePublicityHistory(data: PublicityData) {
     val snapshot = data.toPublicityHistorySnapshot()
     submit("savePublicityHistory") { upsertPublicityHistory(snapshot) }
@@ -214,6 +256,45 @@ object SLDatabase {
       } catch (e: Exception) {
         loggerWarning(taskName, e)
       }
+    }
+  }
+
+  private fun <T> submitBlocking(taskName: String, block: () -> T): T? {
+    val service =
+        executor
+            ?: run {
+              Tools.plugin.logger.warning(
+                  "[SL3] SQLite shadow $taskName skipped: database is not initialized"
+              )
+              return null
+            }
+
+    val future =
+        service.submit(
+            Callable<T?> {
+              try {
+                val db =
+                    database
+                        ?: run {
+                          Tools.plugin.logger.warning(
+                              "[SL3] SQLite shadow $taskName skipped: database is not connected"
+                          )
+                          return@Callable null
+                        }
+
+                transaction(db) { block() }
+              } catch (e: Exception) {
+                loggerWarning(taskName, e)
+                null
+              }
+            }
+        )
+
+    return try {
+      future.get()
+    } catch (e: Exception) {
+      loggerWarning(taskName, e)
+      null
     }
   }
 
@@ -274,6 +355,35 @@ object SLDatabase {
             likes.map { uuid ->
               LikeSnapshot(playerUuid = uuid.toString(), likedAt = likesWithTimestamp[uuid])
             },
+    )
+  }
+
+  private fun BuildSnapshot.toSLData(): SLData {
+    val world =
+        Bukkit.getServer().getWorld(worldName)
+            ?: run {
+              Tools.plugin.logger.warning("ID:$id world $worldName does not exist!")
+              null
+            }
+    val likeUuids = likes.map { UUID.fromString(it.playerUuid) }.toMutableList()
+    val likesWithTimestamp =
+        likes
+            .mapNotNull { like -> like.likedAt?.let { UUID.fromString(like.playerUuid) to it } }
+            .toMap()
+            .toMutableMap()
+
+    return SLData(
+        id,
+        Location(world, locX, locY, locZ),
+        LocalDateTime.parse(createdAt),
+        UUID.fromString(ownerUuid),
+        title,
+        likeUuids,
+        likesWithTimestamp,
+        checked,
+        comment,
+        worldName,
+        discordTextId,
     )
   }
 
