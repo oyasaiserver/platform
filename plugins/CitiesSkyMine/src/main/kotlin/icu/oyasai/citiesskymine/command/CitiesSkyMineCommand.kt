@@ -7,6 +7,7 @@ import icu.oyasai.citiesskymine.cloud.CloudCommand
 import icu.oyasai.citiesskymine.columns.ColumnLayoutCommand
 import icu.oyasai.citiesskymine.config.ConfigGuiCommand
 import icu.oyasai.citiesskymine.config.ServerConfigCommand
+import icu.oyasai.citiesskymine.crowd.CrowdCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
 import icu.oyasai.citiesskymine.payload.PayloadCommand
@@ -34,6 +35,7 @@ class CitiesSkyMineCommand(
     private val slabStairsCommand: SlabStairsCommand,
     private val columnLayoutCommand: ColumnLayoutCommand,
     private val stackCommand: StackCommand,
+    private val crowdCommand: CrowdCommand,
     private val selectionCommand: SelectionCommand,
     private val settingsCommand: ConfigGuiCommand,
     private val serverConfigCommand: ServerConfigCommand,
@@ -134,6 +136,10 @@ class CitiesSkyMineCommand(
         if (!requireAccess(sender, CommandKey.STACK)) return true
         stackCommand.onCommand(sender, command, label, args.drop(1).toTypedArray())
       }
+      "crowd" -> {
+        if (!requireAccess(sender, CommandKey.CROWD)) return true
+        crowdCommand.onCommand(sender, command, "$label crowd", args.drop(1).toTypedArray())
+      }
       "selection",
       "sel" -> {
         if (!requireAccess(sender, CommandKey.SELECTION)) return true
@@ -206,6 +212,7 @@ class CitiesSkyMineCommand(
       "columns" -> columnLayoutCommand.onTabComplete(sender, command, alias, childArgs)
       "stack",
       "ns" -> stackCommand.onTabComplete(sender, command, alias, childArgs)
+      "crowd" -> crowdCommand.onTabComplete(sender, command, alias, childArgs)
       "selection",
       "sel" -> selectionCommand.onTabComplete(sender, command, alias, childArgs)
       "settings" -> settingsCommand.onTabComplete(sender, command, alias, childArgs)
@@ -246,6 +253,11 @@ class CitiesSkyMineCommand(
         "/csm stack <forward|back|left|right|up|down...> <times>",
         "選択範囲を視点基準で複製",
     )
+    MessageUtil.helpEntry(
+        sender,
+        "/csm crowd <人数|左右x奥行> [間隔] [壁材] [頭部材]",
+        "選択範囲に群衆シルエットを生成",
+    )
     MessageUtil.helpEntry(sender, "/csm selection <save|list|p|name>", "WorldEdit選択範囲を保存・復元")
     MessageUtil.helpEntry(sender, "/csm settings", "個人設定GUIを開く")
     MessageUtil.helpEntry(sender, "/csm config access <...>", "config.yml の権限設定を編集")
@@ -265,7 +277,7 @@ class CitiesSkyMineCommand(
     MessageUtil.helpEntry(sender, "/csm reload", "設定をリロード")
     MessageUtil.send(
         sender,
-        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.sel, /.settings, /.config, /.cloud, /.bez, /.ds, /.brp, /.sc</gray>",
+        "<gray>Shortcuts: /.help, /.rc, /.ri, /.hb, /.pl, /.win, /.ss, /.col, /.ns, /.crowd, /.sel, /.settings, /.config, /.cloud, /.bez, /.ds, /.brp, /.sc</gray>",
     )
     MessageUtil.send(sender, "<gray>Command help: /csm help <command> or /.help <command></gray>")
   }
@@ -301,6 +313,12 @@ class CitiesSkyMineCommand(
               sender,
               "/csm stack <forward|back|left|right|up|down...> <times>",
               "選択範囲を視点基準で複製",
+          )
+      "crowd" ->
+          MessageUtil.helpEntry(
+              sender,
+              "/csm crowd <人数|左右x奥行> [間隔] [壁材] [頭部材]",
+              "選択範囲に群衆シルエットを生成",
           )
       "debugstick" ->
           MessageUtil.helpEntry(sender, "/csm debugstick <select|cycle>", "BlockDataをデバッグ棒相当に変更")
@@ -351,6 +369,7 @@ class CitiesSkyMineCommand(
             "slabstairs",
             "columns",
             "stack",
+            "crowd",
             "selection",
             "settings",
             "config",
