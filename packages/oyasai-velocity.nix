@@ -13,7 +13,6 @@ oyasaiVelocity {
     # keep-sorted start
     floodgate
     geyser
-    skinsrestorer
     venturechat
     # keep-sorted end
   ];
