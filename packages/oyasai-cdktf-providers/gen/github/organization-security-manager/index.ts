@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/organization_security_manager
+// https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/organization_security_manager
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,7 +8,7 @@ import * as cdktf from 'cdktf';
 
 export interface OrganizationSecurityManagerConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/organization_security_manager#id OrganizationSecurityManager#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/organization_security_manager#id OrganizationSecurityManager#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -17,13 +17,13 @@ export interface OrganizationSecurityManagerConfig extends cdktf.TerraformMetaAr
   /**
   * The slug of the team to manage.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/organization_security_manager#team_slug OrganizationSecurityManager#team_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/organization_security_manager#team_slug OrganizationSecurityManager#team_slug}
   */
   readonly teamSlug: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/organization_security_manager github_organization_security_manager}
+* Represents a {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/organization_security_manager github_organization_security_manager}
 */
 export class OrganizationSecurityManager extends cdktf.TerraformResource {
 
@@ -39,7 +39,7 @@ export class OrganizationSecurityManager extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OrganizationSecurityManager resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OrganizationSecurityManager to import
-  * @param importFromId The id of the existing OrganizationSecurityManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/organization_security_manager#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OrganizationSecurityManager that should be imported. Refer to the {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/organization_security_manager#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OrganizationSecurityManager to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -51,7 +51,7 @@ export class OrganizationSecurityManager extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/integrations/github/6.12.1/docs/resources/organization_security_manager github_organization_security_manager} Resource
+  * Create a new {@link https://registry.terraform.io/providers/integrations/github/6.13.0/docs/resources/organization_security_manager github_organization_security_manager} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -62,7 +62,7 @@ export class OrganizationSecurityManager extends cdktf.TerraformResource {
       terraformResourceType: 'github_organization_security_manager',
       terraformGeneratorMetadata: {
         providerName: 'github',
-        providerVersion: '6.12.1'
+        providerVersion: '6.13.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

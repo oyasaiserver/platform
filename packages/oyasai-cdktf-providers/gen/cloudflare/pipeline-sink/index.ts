@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,34 +10,34 @@ export interface PipelineSinkConfig extends cdktf.TerraformMetaArguments {
   /**
   * Specifies the public ID of the account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#account_id PipelineSink#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#account_id PipelineSink#account_id}
   */
   readonly accountId: string;
   /**
   * Defines the configuration of the R2 Sink.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#config PipelineSink#config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#config PipelineSink#config}
   */
   readonly config?: PipelineSinkConfigA;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#format PipelineSink#format}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#format PipelineSink#format}
   */
   readonly format?: PipelineSinkFormat;
   /**
   * Defines the name of the Sink.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#name PipelineSink#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#name PipelineSink#name}
   */
   readonly name: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#schema PipelineSink#schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#schema PipelineSink#schema}
   */
   readonly schema?: PipelineSinkSchema;
   /**
   * Specifies the type of sink.
   * Available values: "r2", "r2_data_catalog".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#type PipelineSink#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#type PipelineSink#type}
   */
   readonly type: string;
 }
@@ -45,13 +45,13 @@ export interface PipelineSinkConfigCredentials {
   /**
   * Cloudflare Account ID for the bucket
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#access_key_id PipelineSink#access_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#access_key_id PipelineSink#access_key_id}
   */
   readonly accessKeyId: string;
   /**
   * Cloudflare Account ID for the bucket
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#secret_access_key PipelineSink#secret_access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#secret_access_key PipelineSink#secret_access_key}
   */
   readonly secretAccessKey: string;
 }
@@ -170,20 +170,20 @@ export interface PipelineSinkConfigFileNaming {
   /**
   * The prefix to use in file name. i.e prefix-<uuid>.parquet
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#prefix PipelineSink#prefix}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#prefix PipelineSink#prefix}
   */
   readonly prefix?: string;
   /**
   * Filename generation strategy.
   * Available values: "serial", "uuid", "uuid_v7", "ulid".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#strategy PipelineSink#strategy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#strategy PipelineSink#strategy}
   */
   readonly strategy?: string;
   /**
   * This will overwrite the default file suffix. i.e .parquet, use with caution
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#suffix PipelineSink#suffix}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#suffix PipelineSink#suffix}
   */
   readonly suffix?: string;
 }
@@ -337,7 +337,7 @@ export interface PipelineSinkConfigPartitioning {
   /**
   * The pattern of the date string
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#time_pattern PipelineSink#time_pattern}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#time_pattern PipelineSink#time_pattern}
   */
   readonly timePattern?: string;
 }
@@ -433,19 +433,19 @@ export interface PipelineSinkConfigRollingPolicy {
   /**
   * Files will be rolled after reaching this number of bytes
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#file_size_bytes PipelineSink#file_size_bytes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#file_size_bytes PipelineSink#file_size_bytes}
   */
   readonly fileSizeBytes?: number;
   /**
   * Number of seconds of inactivity to wait before rolling over to a new file
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#inactivity_seconds PipelineSink#inactivity_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#inactivity_seconds PipelineSink#inactivity_seconds}
   */
   readonly inactivitySeconds?: number;
   /**
   * Number of seconds to wait before rolling over to a new file
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#interval_seconds PipelineSink#interval_seconds}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#interval_seconds PipelineSink#interval_seconds}
   */
   readonly intervalSeconds?: number;
 }
@@ -599,65 +599,65 @@ export interface PipelineSinkConfigA {
   /**
   * Cloudflare Account ID for the bucket
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#account_id PipelineSink#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#account_id PipelineSink#account_id}
   */
   readonly accountId: string;
   /**
   * R2 Bucket to write to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#bucket PipelineSink#bucket}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#bucket PipelineSink#bucket}
   */
   readonly bucket: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#credentials PipelineSink#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#credentials PipelineSink#credentials}
   */
   readonly credentials?: PipelineSinkConfigCredentials;
   /**
   * Controls filename prefix/suffix and strategy.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#file_naming PipelineSink#file_naming}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#file_naming PipelineSink#file_naming}
   */
   readonly fileNaming?: PipelineSinkConfigFileNaming;
   /**
   * Jurisdiction this bucket is hosted in
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#jurisdiction PipelineSink#jurisdiction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#jurisdiction PipelineSink#jurisdiction}
   */
   readonly jurisdiction?: string;
   /**
   * Table namespace
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#namespace PipelineSink#namespace}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#namespace PipelineSink#namespace}
   */
   readonly namespace?: string;
   /**
   * Data-layout partitioning for sinks.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#partitioning PipelineSink#partitioning}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#partitioning PipelineSink#partitioning}
   */
   readonly partitioning?: PipelineSinkConfigPartitioning;
   /**
   * Subpath within the bucket to write to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#path PipelineSink#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#path PipelineSink#path}
   */
   readonly path?: string;
   /**
   * Rolling policy for file sinks (when & why to close a file and open a new one).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#rolling_policy PipelineSink#rolling_policy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#rolling_policy PipelineSink#rolling_policy}
   */
   readonly rollingPolicy?: PipelineSinkConfigRollingPolicy;
   /**
   * Table name
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#table_name PipelineSink#table_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#table_name PipelineSink#table_name}
   */
   readonly tableName?: string;
   /**
   * Authentication token
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#token PipelineSink#token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#token PipelineSink#token}
   */
   readonly token?: string;
 }
@@ -1037,33 +1037,33 @@ export interface PipelineSinkFormat {
   /**
   * Available values: "uncompressed", "snappy", "gzip", "zstd", "lz4".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#compression PipelineSink#compression}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#compression PipelineSink#compression}
   */
   readonly compression?: string;
   /**
   * Available values: "number", "string", "bytes".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#decimal_encoding PipelineSink#decimal_encoding}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#decimal_encoding PipelineSink#decimal_encoding}
   */
   readonly decimalEncoding?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#row_group_bytes PipelineSink#row_group_bytes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#row_group_bytes PipelineSink#row_group_bytes}
   */
   readonly rowGroupBytes?: number;
   /**
   * Available values: "rfc3339", "unix_millis".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#timestamp_format PipelineSink#timestamp_format}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#timestamp_format PipelineSink#timestamp_format}
   */
   readonly timestampFormat?: string;
   /**
   * Available values: "json", "parquet".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#type PipelineSink#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#type PipelineSink#type}
   */
   readonly type: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#unstructured PipelineSink#unstructured}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#unstructured PipelineSink#unstructured}
   */
   readonly unstructured?: boolean | cdktf.IResolvable;
 }
@@ -1299,31 +1299,31 @@ export class PipelineSinkFormatOutputReference extends cdktf.ComplexObject {
 }
 export interface PipelineSinkSchemaFields {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#metadata_key PipelineSink#metadata_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#metadata_key PipelineSink#metadata_key}
   */
   readonly metadataKey?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#name PipelineSink#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#name PipelineSink#name}
   */
   readonly name?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#required PipelineSink#required}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#required PipelineSink#required}
   */
   readonly required?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#sql_name PipelineSink#sql_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#sql_name PipelineSink#sql_name}
   */
   readonly sqlName?: string;
   /**
   * Available values: "int32", "int64", "float32", "float64", "bool", "string", "binary", "timestamp", "json".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#type PipelineSink#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#type PipelineSink#type}
   */
   readonly type: string;
   /**
   * Available values: "second", "millisecond", "microsecond", "nanosecond".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#unit PipelineSink#unit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#unit PipelineSink#unit}
   */
   readonly unit?: string;
 }
@@ -1583,33 +1583,33 @@ export interface PipelineSinkSchemaFormat {
   /**
   * Available values: "uncompressed", "snappy", "gzip", "zstd", "lz4".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#compression PipelineSink#compression}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#compression PipelineSink#compression}
   */
   readonly compression?: string;
   /**
   * Available values: "number", "string", "bytes".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#decimal_encoding PipelineSink#decimal_encoding}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#decimal_encoding PipelineSink#decimal_encoding}
   */
   readonly decimalEncoding?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#row_group_bytes PipelineSink#row_group_bytes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#row_group_bytes PipelineSink#row_group_bytes}
   */
   readonly rowGroupBytes?: number;
   /**
   * Available values: "rfc3339", "unix_millis".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#timestamp_format PipelineSink#timestamp_format}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#timestamp_format PipelineSink#timestamp_format}
   */
   readonly timestampFormat?: string;
   /**
   * Available values: "json", "parquet".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#type PipelineSink#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#type PipelineSink#type}
   */
   readonly type: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#unstructured PipelineSink#unstructured}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#unstructured PipelineSink#unstructured}
   */
   readonly unstructured?: boolean | cdktf.IResolvable;
 }
@@ -1845,15 +1845,15 @@ export class PipelineSinkSchemaFormatOutputReference extends cdktf.ComplexObject
 }
 export interface PipelineSinkSchema {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#fields PipelineSink#fields}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#fields PipelineSink#fields}
   */
   readonly fields?: PipelineSinkSchemaFields[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#format PipelineSink#format}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#format PipelineSink#format}
   */
   readonly format?: PipelineSinkSchemaFormat;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#inferred PipelineSink#inferred}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#inferred PipelineSink#inferred}
   */
   readonly inferred?: boolean | cdktf.IResolvable;
 }
@@ -2005,7 +2005,7 @@ export class PipelineSinkSchemaOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink cloudflare_pipeline_sink}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink cloudflare_pipeline_sink}
 */
 export class PipelineSink extends cdktf.TerraformResource {
 
@@ -2021,7 +2021,7 @@ export class PipelineSink extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a PipelineSink resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the PipelineSink to import
-  * @param importFromId The id of the existing PipelineSink that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing PipelineSink that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the PipelineSink to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -2033,7 +2033,7 @@ export class PipelineSink extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/pipeline_sink cloudflare_pipeline_sink} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/pipeline_sink cloudflare_pipeline_sink} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -2044,7 +2044,7 @@ export class PipelineSink extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_pipeline_sink',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

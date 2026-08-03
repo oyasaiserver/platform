@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippets
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippets
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface SnippetsConfig extends cdktf.TerraformMetaArguments {
   /**
   * The list of files belonging to the snippet.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippets#files Snippets#files}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippets#files Snippets#files}
   */
   readonly files: string[];
   /**
   * Metadata about the snippet.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippets#metadata Snippets#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippets#metadata Snippets#metadata}
   */
   readonly metadata: SnippetsMetadata;
   /**
   * The identifying name of the snippet.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippets#snippet_name Snippets#snippet_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippets#snippet_name Snippets#snippet_name}
   */
   readonly snippetName: string;
   /**
   * The unique ID of the zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippets#zone_id Snippets#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippets#zone_id Snippets#zone_id}
   */
   readonly zoneId: string;
 }
@@ -36,7 +36,7 @@ export interface SnippetsMetadata {
   /**
   * Name of the file that contains the main module of the snippet.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippets#main_module Snippets#main_module}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippets#main_module Snippets#main_module}
   */
   readonly mainModule: string;
 }
@@ -127,7 +127,7 @@ export class SnippetsMetadataOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippets cloudflare_snippets}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippets cloudflare_snippets}
 */
 export class Snippets extends cdktf.TerraformResource {
 
@@ -143,7 +143,7 @@ export class Snippets extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Snippets resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Snippets to import
-  * @param importFromId The id of the existing Snippets that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippets#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Snippets that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippets#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Snippets to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -155,7 +155,7 @@ export class Snippets extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/resources/snippets cloudflare_snippets} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/snippets cloudflare_snippets} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -166,7 +166,7 @@ export class Snippets extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_snippets',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

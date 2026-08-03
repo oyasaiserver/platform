@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/d1_database
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/d1_database
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,24 +10,24 @@ export interface DataCloudflareD1DatabaseConfig extends cdktf.TerraformMetaArgum
   /**
   * Account identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/d1_database#account_id DataCloudflareD1Database#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/d1_database#account_id DataCloudflareD1Database#account_id}
   */
   readonly accountId?: string;
   /**
   * D1 database identifier (UUID).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/d1_database#database_id DataCloudflareD1Database#database_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/d1_database#database_id DataCloudflareD1Database#database_id}
   */
   readonly databaseId?: string;
   /**
   * Comma-separated list of fields to include in the response. When omitted,
   * all fields are returned.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/d1_database#fields DataCloudflareD1Database#fields}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/d1_database#fields DataCloudflareD1Database#fields}
   */
   readonly fields?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/d1_database#filter DataCloudflareD1Database#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/d1_database#filter DataCloudflareD1Database#filter}
   */
   readonly filter?: DataCloudflareD1DatabaseFilter;
 }
@@ -35,7 +35,7 @@ export interface DataCloudflareD1DatabaseFilter {
   /**
   * a database name to search for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/d1_database#name DataCloudflareD1Database#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/d1_database#name DataCloudflareD1Database#name}
   */
   readonly name?: string;
 }
@@ -183,7 +183,7 @@ export class DataCloudflareD1DatabaseReadReplicationOutputReference extends cdkt
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/d1_database cloudflare_d1_database}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/d1_database cloudflare_d1_database}
 */
 export class DataCloudflareD1Database extends cdktf.TerraformDataSource {
 
@@ -199,7 +199,7 @@ export class DataCloudflareD1Database extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareD1Database resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareD1Database to import
-  * @param importFromId The id of the existing DataCloudflareD1Database that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/d1_database#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareD1Database that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/d1_database#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareD1Database to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -211,7 +211,7 @@ export class DataCloudflareD1Database extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/d1_database cloudflare_d1_database} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/d1_database cloudflare_d1_database} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -222,7 +222,7 @@ export class DataCloudflareD1Database extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_d1_database',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

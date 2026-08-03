@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_environment
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_environment
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface ProjectEnvironmentConfig extends cdktf.TerraformMetaArguments {
   /**
   * The name of the environment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_environment#name ProjectEnvironment#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_environment#name ProjectEnvironment#name}
   */
   readonly name: string;
   /**
   * The position of the environment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_environment#position ProjectEnvironment#position}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_environment#position ProjectEnvironment#position}
   */
   readonly position?: number;
   /**
   * The Infisical project ID (Required for Machine Identity auth, and service tokens with multiple scopes)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_environment#project_id ProjectEnvironment#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_environment#project_id ProjectEnvironment#project_id}
   */
   readonly projectId: string;
   /**
   * The slug of the environment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_environment#slug ProjectEnvironment#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_environment#slug ProjectEnvironment#slug}
   */
   readonly slug: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_environment infisical_project_environment}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_environment infisical_project_environment}
 */
 export class ProjectEnvironment extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class ProjectEnvironment extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ProjectEnvironment resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ProjectEnvironment to import
-  * @param importFromId The id of the existing ProjectEnvironment that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_environment#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ProjectEnvironment that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_environment#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ProjectEnvironment to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class ProjectEnvironment extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/project_environment infisical_project_environment} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_environment infisical_project_environment} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class ProjectEnvironment extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_project_environment',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.18.0'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

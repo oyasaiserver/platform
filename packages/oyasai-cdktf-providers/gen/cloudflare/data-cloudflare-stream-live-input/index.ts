@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/stream_live_input
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/stream_live_input
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareStreamLiveInputConfig extends cdktf.TerraformMeta
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/stream_live_input#account_id DataCloudflareStreamLiveInput#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/stream_live_input#account_id DataCloudflareStreamLiveInput#account_id}
   */
   readonly accountId: string;
   /**
   * A unique identifier for a live input.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/stream_live_input#live_input_identifier DataCloudflareStreamLiveInput#live_input_identifier}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/stream_live_input#live_input_identifier DataCloudflareStreamLiveInput#live_input_identifier}
   */
   readonly liveInputIdentifier: string;
 }
@@ -450,7 +450,7 @@ export class DataCloudflareStreamLiveInputWebRtcPlaybackOutputReference extends 
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/stream_live_input cloudflare_stream_live_input}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/stream_live_input cloudflare_stream_live_input}
 */
 export class DataCloudflareStreamLiveInput extends cdktf.TerraformDataSource {
 
@@ -466,7 +466,7 @@ export class DataCloudflareStreamLiveInput extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareStreamLiveInput resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareStreamLiveInput to import
-  * @param importFromId The id of the existing DataCloudflareStreamLiveInput that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/stream_live_input#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareStreamLiveInput that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/stream_live_input#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareStreamLiveInput to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -478,7 +478,7 @@ export class DataCloudflareStreamLiveInput extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/stream_live_input cloudflare_stream_live_input} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/stream_live_input cloudflare_stream_live_input} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -489,7 +489,7 @@ export class DataCloudflareStreamLiveInput extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_stream_live_input',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -535,6 +535,11 @@ export class DataCloudflareStreamLiveInput extends cdktf.TerraformDataSource {
     return this.getBooleanAttribute('enabled');
   }
 
+  // keys_rotated_at - computed: true, optional: false, required: false
+  public get keysRotatedAt() {
+    return this.getStringAttribute('keys_rotated_at');
+  }
+
   // live_input_identifier - computed: false, optional: false, required: true
   private _liveInputIdentifier?: string; 
   public get liveInputIdentifier() {
@@ -556,6 +561,11 @@ export class DataCloudflareStreamLiveInput extends cdktf.TerraformDataSource {
   // modified - computed: true, optional: false, required: false
   public get modified() {
     return this.getStringAttribute('modified');
+  }
+
+  // prefer_low_latency - computed: true, optional: false, required: false
+  public get preferLowLatency() {
+    return this.getBooleanAttribute('prefer_low_latency');
   }
 
   // recording - computed: true, optional: false, required: false

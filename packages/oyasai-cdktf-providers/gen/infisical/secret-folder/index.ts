@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,43 +10,43 @@ export interface SecretFolderConfig extends cdktf.TerraformMetaArguments {
   /**
   * The description of the folder. Defaults to an empty string.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder#description SecretFolder#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder#description SecretFolder#description}
   */
   readonly description?: string;
   /**
   * The environment slug of the folder to modify/create
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder#environment_slug SecretFolder#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder#environment_slug SecretFolder#environment_slug}
   */
   readonly environmentSlug: string;
   /**
   * The path where the folder should be created/updated
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder#folder_path SecretFolder#folder_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder#folder_path SecretFolder#folder_path}
   */
   readonly folderPath: string;
   /**
   * Whether to force delete the folder even if it contains resources.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder#force_delete SecretFolder#force_delete}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder#force_delete SecretFolder#force_delete}
   */
   readonly forceDelete?: boolean | cdktf.IResolvable;
   /**
   * The name for the folder
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder#name SecretFolder#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder#name SecretFolder#name}
   */
   readonly name: string;
   /**
   * The Infisical project ID (Required for Machine Identity auth, and service tokens with multiple scopes)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder#project_id SecretFolder#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder#project_id SecretFolder#project_id}
   */
   readonly projectId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder infisical_secret_folder}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder infisical_secret_folder}
 */
 export class SecretFolder extends cdktf.TerraformResource {
 
@@ -62,7 +62,7 @@ export class SecretFolder extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretFolder resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretFolder to import
-  * @param importFromId The id of the existing SecretFolder that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretFolder that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretFolder to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -74,7 +74,7 @@ export class SecretFolder extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_folder infisical_secret_folder} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_folder infisical_secret_folder} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -85,7 +85,7 @@ export class SecretFolder extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_folder',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.18.0'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

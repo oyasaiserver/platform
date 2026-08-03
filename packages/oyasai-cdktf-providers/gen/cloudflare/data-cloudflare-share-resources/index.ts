@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resources
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resources
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,33 +10,33 @@ export interface DataCloudflareShareResourcesAConfig extends cdktf.TerraformMeta
   /**
   * Account identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resources#account_id DataCloudflareShareResourcesA#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resources#account_id DataCloudflareShareResourcesA#account_id}
   */
   readonly accountId: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resources#max_items DataCloudflareShareResourcesA#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resources#max_items DataCloudflareShareResourcesA#max_items}
   */
   readonly maxItems?: number;
   /**
   * Filter share resources by resource_type.
   * Available values: "custom-ruleset", "gateway-policy", "gateway-destination-ip", "gateway-block-page-settings", "gateway-extended-email-matching", "idp-federation-grant".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resources#resource_type DataCloudflareShareResourcesA#resource_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resources#resource_type DataCloudflareShareResourcesA#resource_type}
   */
   readonly resourceType?: string;
   /**
   * Share identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resources#share_id DataCloudflareShareResourcesA#share_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resources#share_id DataCloudflareShareResourcesA#share_id}
   */
   readonly shareId: string;
   /**
   * Filter share resources by status.
   * Available values: "active", "deleting", "deleted".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resources#status DataCloudflareShareResourcesA#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resources#status DataCloudflareShareResourcesA#status}
   */
   readonly status?: string;
 }
@@ -157,7 +157,7 @@ export class DataCloudflareShareResourcesResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resources cloudflare_share_resources}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resources cloudflare_share_resources}
 */
 export class DataCloudflareShareResourcesA extends cdktf.TerraformDataSource {
 
@@ -173,7 +173,7 @@ export class DataCloudflareShareResourcesA extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareShareResourcesA resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareShareResourcesA to import
-  * @param importFromId The id of the existing DataCloudflareShareResourcesA that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resources#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareShareResourcesA that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resources#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareShareResourcesA to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -185,7 +185,7 @@ export class DataCloudflareShareResourcesA extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/share_resources cloudflare_share_resources} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/share_resources cloudflare_share_resources} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -196,7 +196,7 @@ export class DataCloudflareShareResourcesA extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_share_resources',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

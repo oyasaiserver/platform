@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/oauth_clients
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/oauth_clients
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareOauthClientsConfig extends cdktf.TerraformMetaArg
   /**
   * Account identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/oauth_clients#account_id DataCloudflareOauthClients#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/oauth_clients#account_id DataCloudflareOauthClients#account_id}
   */
   readonly accountId: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/oauth_clients#max_items DataCloudflareOauthClients#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/oauth_clients#max_items DataCloudflareOauthClients#max_items}
   */
   readonly maxItems?: number;
 }
@@ -247,7 +247,7 @@ export class DataCloudflareOauthClientsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/oauth_clients cloudflare_oauth_clients}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/oauth_clients cloudflare_oauth_clients}
 */
 export class DataCloudflareOauthClients extends cdktf.TerraformDataSource {
 
@@ -263,7 +263,7 @@ export class DataCloudflareOauthClients extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareOauthClients resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareOauthClients to import
-  * @param importFromId The id of the existing DataCloudflareOauthClients that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/oauth_clients#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareOauthClients that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/oauth_clients#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareOauthClients to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -275,7 +275,7 @@ export class DataCloudflareOauthClients extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/oauth_clients cloudflare_oauth_clients} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/oauth_clients cloudflare_oauth_clients} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -286,7 +286,7 @@ export class DataCloudflareOauthClients extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_oauth_clients',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

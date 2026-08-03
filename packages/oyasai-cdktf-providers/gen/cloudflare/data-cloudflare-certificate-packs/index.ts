@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/certificate_packs
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/certificate_packs
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -11,26 +11,26 @@ export interface DataCloudflareCertificatePacksConfig extends cdktf.TerraformMet
   * Specify the deployment environment for the certificate packs.
   * Available values: "staging", "production".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/certificate_packs#deploy DataCloudflareCertificatePacks#deploy}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/certificate_packs#deploy DataCloudflareCertificatePacks#deploy}
   */
   readonly deploy?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/certificate_packs#max_items DataCloudflareCertificatePacks#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/certificate_packs#max_items DataCloudflareCertificatePacks#max_items}
   */
   readonly maxItems?: number;
   /**
   * Include Certificate Packs of all statuses, not just active ones.
   * Available values: "all".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/certificate_packs#status DataCloudflareCertificatePacks#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/certificate_packs#status DataCloudflareCertificatePacks#status}
   */
   readonly status?: string;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/certificate_packs#zone_id DataCloudflareCertificatePacks#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/certificate_packs#zone_id DataCloudflareCertificatePacks#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -655,7 +655,7 @@ export class DataCloudflareCertificatePacksResultList extends cdktf.ComplexList 
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/certificate_packs cloudflare_certificate_packs}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/certificate_packs cloudflare_certificate_packs}
 */
 export class DataCloudflareCertificatePacks extends cdktf.TerraformDataSource {
 
@@ -671,7 +671,7 @@ export class DataCloudflareCertificatePacks extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareCertificatePacks resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareCertificatePacks to import
-  * @param importFromId The id of the existing DataCloudflareCertificatePacks that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/certificate_packs#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareCertificatePacks that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/certificate_packs#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareCertificatePacks to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -683,7 +683,7 @@ export class DataCloudflareCertificatePacks extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/certificate_packs cloudflare_certificate_packs} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/certificate_packs cloudflare_certificate_packs} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -694,7 +694,7 @@ export class DataCloudflareCertificatePacks extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_certificate_packs',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

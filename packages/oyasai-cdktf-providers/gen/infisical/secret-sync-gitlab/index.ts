@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncGitlabConfig extends cdktf.TerraformMetaArguments {
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#auto_sync_enabled SecretSyncGitlab#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#auto_sync_enabled SecretSyncGitlab#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the gitlab Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#connection_id SecretSyncGitlab#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#connection_id SecretSyncGitlab#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the GitLab sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#description SecretSyncGitlab#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#description SecretSyncGitlab#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#destination_config SecretSyncGitlab#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#destination_config SecretSyncGitlab#destination_config}
   */
   readonly destinationConfig: SecretSyncGitlabDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#environment SecretSyncGitlab#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#environment SecretSyncGitlab#environment}
   */
   readonly environment: string;
   /**
   * The name of the GitLab sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#name SecretSyncGitlab#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#name SecretSyncGitlab#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#project_id SecretSyncGitlab#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#project_id SecretSyncGitlab#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#secret_path SecretSyncGitlab#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#secret_path SecretSyncGitlab#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#sync_options SecretSyncGitlab#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#sync_options SecretSyncGitlab#sync_options}
   */
   readonly syncOptions: SecretSyncGitlabSyncOptions;
 }
@@ -66,55 +66,55 @@ export interface SecretSyncGitlabDestinationConfig {
   /**
   * The GitLab Group ID to sync secrets to. Required when scope is 'group'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#group_id SecretSyncGitlab#group_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#group_id SecretSyncGitlab#group_id}
   */
   readonly groupId?: string;
   /**
   * The GitLab Group Name to sync secrets to. Optional when scope is 'group'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#group_name SecretSyncGitlab#group_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#group_name SecretSyncGitlab#group_name}
   */
   readonly groupName?: string;
   /**
   * The GitLab Project ID to sync secrets to. Required when scope is 'project'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#project_id SecretSyncGitlab#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#project_id SecretSyncGitlab#project_id}
   */
   readonly projectId?: string;
   /**
   * The GitLab Project Name to sync secrets to. Optional when scope is 'project'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#project_name SecretSyncGitlab#project_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#project_name SecretSyncGitlab#project_name}
   */
   readonly projectName?: string;
   /**
   * The GitLab scope that secrets should be synced to. Supported options: 'project', 'group'
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#scope SecretSyncGitlab#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#scope SecretSyncGitlab#scope}
   */
   readonly scope: string;
   /**
   * Whether variables should be hidden
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#should_hide_secrets SecretSyncGitlab#should_hide_secrets}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#should_hide_secrets SecretSyncGitlab#should_hide_secrets}
   */
   readonly shouldHideSecrets?: boolean | cdktf.IResolvable;
   /**
   * Whether variables should be masked in logs
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#should_mask_secrets SecretSyncGitlab#should_mask_secrets}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#should_mask_secrets SecretSyncGitlab#should_mask_secrets}
   */
   readonly shouldMaskSecrets?: boolean | cdktf.IResolvable;
   /**
   * Whether variables should be protected
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#should_protect_secrets SecretSyncGitlab#should_protect_secrets}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#should_protect_secrets SecretSyncGitlab#should_protect_secrets}
   */
   readonly shouldProtectSecrets?: boolean | cdktf.IResolvable;
   /**
   * The GitLab environment scope that secrets should be synced to. (default: *)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#target_environment SecretSyncGitlab#target_environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#target_environment SecretSyncGitlab#target_environment}
   */
   readonly targetEnvironment: string;
 }
@@ -436,19 +436,19 @@ export interface SecretSyncGitlabSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from GitLab. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#disable_secret_deletion SecretSyncGitlab#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#disable_secret_deletion SecretSyncGitlab#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#initial_sync_behavior SecretSyncGitlab#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#initial_sync_behavior SecretSyncGitlab#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the GitLab destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#key_schema SecretSyncGitlab#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#key_schema SecretSyncGitlab#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -597,7 +597,7 @@ export class SecretSyncGitlabSyncOptionsOutputReference extends cdktf.ComplexObj
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab infisical_secret_sync_gitlab}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab infisical_secret_sync_gitlab}
 */
 export class SecretSyncGitlab extends cdktf.TerraformResource {
 
@@ -613,7 +613,7 @@ export class SecretSyncGitlab extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncGitlab resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncGitlab to import
-  * @param importFromId The id of the existing SecretSyncGitlab that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncGitlab that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncGitlab to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -625,7 +625,7 @@ export class SecretSyncGitlab extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.18.0/docs/resources/secret_sync_gitlab infisical_secret_sync_gitlab} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_gitlab infisical_secret_sync_gitlab} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -636,7 +636,7 @@ export class SecretSyncGitlab extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_gitlab',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.18.0'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

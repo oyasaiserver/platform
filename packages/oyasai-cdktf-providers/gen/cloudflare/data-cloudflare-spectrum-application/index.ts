@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/spectrum_application
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/spectrum_application
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface DataCloudflareSpectrumApplicationConfig extends cdktf.Terraform
   /**
   * App identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/spectrum_application#app_id DataCloudflareSpectrumApplication#app_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/spectrum_application#app_id DataCloudflareSpectrumApplication#app_id}
   */
   readonly appId?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/spectrum_application#filter DataCloudflareSpectrumApplication#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/spectrum_application#filter DataCloudflareSpectrumApplication#filter}
   */
   readonly filter?: DataCloudflareSpectrumApplicationFilter;
   /**
   * Zone identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/spectrum_application#zone_id DataCloudflareSpectrumApplication#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/spectrum_application#zone_id DataCloudflareSpectrumApplication#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -152,14 +152,14 @@ export interface DataCloudflareSpectrumApplicationFilter {
   * Sets the direction by which results are ordered.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/spectrum_application#direction DataCloudflareSpectrumApplication#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/spectrum_application#direction DataCloudflareSpectrumApplication#direction}
   */
   readonly direction?: string;
   /**
   * Application field by which results are ordered.
   * Available values: "protocol", "app_id", "created_on", "modified_on", "dns".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/spectrum_application#order DataCloudflareSpectrumApplication#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/spectrum_application#order DataCloudflareSpectrumApplication#order}
   */
   readonly order?: string;
 }
@@ -346,7 +346,7 @@ export class DataCloudflareSpectrumApplicationOriginDnsOutputReference extends c
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/spectrum_application cloudflare_spectrum_application}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/spectrum_application cloudflare_spectrum_application}
 */
 export class DataCloudflareSpectrumApplication extends cdktf.TerraformDataSource {
 
@@ -362,7 +362,7 @@ export class DataCloudflareSpectrumApplication extends cdktf.TerraformDataSource
   * Generates CDKTF code for importing a DataCloudflareSpectrumApplication resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareSpectrumApplication to import
-  * @param importFromId The id of the existing DataCloudflareSpectrumApplication that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/spectrum_application#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareSpectrumApplication that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/spectrum_application#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareSpectrumApplication to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -374,7 +374,7 @@ export class DataCloudflareSpectrumApplication extends cdktf.TerraformDataSource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.21.1/docs/data-sources/spectrum_application cloudflare_spectrum_application} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/spectrum_application cloudflare_spectrum_application} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -385,7 +385,7 @@ export class DataCloudflareSpectrumApplication extends cdktf.TerraformDataSource
       terraformResourceType: 'cloudflare_spectrum_application',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.21.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
