@@ -25,7 +25,7 @@ Minecraft向けペット召喚・育成・管理プラグイン（v2.5.0）。
 | 主要コード | `plugins/OyasaiPets/src/main/kotlin/` |
 | 重要設計 | `ActivePetRegistry` と `onPetSpawned` 呼び出し順序 |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:OyasaiPets:compileKotlin` |
-| ローカル反映 | ビルド済みjarを `dev-server/plugins/` にコピーし、必要に応じてリロードまたは再起動 |
+| ローカル反映 | ビルド済みjarを `local/paperclip-tmp/plugins/` にコピーし、必要に応じてリロードまたは再起動 |
 | 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置き、このファイルには公開可能な判断だけを書く |
 
 ## 主要クラス

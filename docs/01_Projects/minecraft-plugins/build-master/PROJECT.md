@@ -34,4 +34,4 @@ Paperサーバーにプラグインとしてデプロイ。FAWEとCSMが前提�
 | ランタイム | Paper 1.21.x |
 | 依存 | FAWE, CitiesSkyMine (CSM) |
 | ビルド | Gradle + Kotlin |
-| 配置 | `dev-server/plugins/` |
+| 配置 | `local/paperclip-tmp/plugins/` |

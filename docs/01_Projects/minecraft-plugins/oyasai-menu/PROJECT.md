@@ -27,7 +27,7 @@ YAMLで定義されたメニューをチェスト型GUIで表示し、アクシ�
 | 主要コード | `plugins/OyasaiMenu/src/main/kotlin/com/github/sahyuya/oyasaiMenu/` |
 | エディター資料 | `docs/02_Docs/tools/oyasai-menu-editors-doc/` |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:OyasaiMenu:compileKotlin` |
-| ローカル反映 | `plugins/OyasaiMenu/build/libs/OyasaiMenu.jar` を `dev-server/plugins/OyasaiMenu.jar` にコピーし、必要に応じてリロードまたは再起動 |
+| ローカル反映 | `plugins/OyasaiMenu/build/libs/OyasaiMenu.jar` を `local/paperclip-tmp/plugins/OyasaiMenu.jar` にコピーし、必要に応じてリロードまたは再起動 |
 | 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置き、このファイルには公開可能な判断だけを書く |
 
 ## 主要コマンド
