@@ -37,7 +37,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       this.createCloudBackend();
 
       new DockerProvider(this, id, {
-        host: `tcp://${platformInfra.ipv4}:2376`,
+        host: "tcp://oyasai.io:2376",
         caMaterial: secrets.get("TLS_CA_PEM"),
         certMaterial: secrets.get("TLS_CERT_PEM"),
         keyMaterial: secrets.get("TLS_KEY_PEM"),
