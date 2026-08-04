@@ -434,3 +434,8 @@ archive
 
 # Misc
 data
+
+# LLM
+CLAUDE.md
+GEMINI.md
+AGENTS.md
