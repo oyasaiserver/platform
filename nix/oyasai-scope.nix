@@ -1,5 +1,6 @@
 {
   inputs,
+  constants,
   pkgs,
   lib,
   stdenv,
@@ -52,7 +53,7 @@ let
       };
     in
     {
-      inherit inputs oyasaiTerraformProviders;
+      inherit inputs constants oyasaiTerraformProviders;
       inherit (pkgs) bore-cli;
       inherit (inputs.gradle2nix.packages.${system}) gradle2nix;
       inherit (inputs.tools.packages.${system}) nix-flake-check-changed nix-grep-to-build npm-list;
@@ -85,7 +86,6 @@ let
 
       oyasaiPurpur = callPackage ./oyasai-purpur.nix { };
       oyasaiVelocity = callPackage ./oyasai-velocity.nix { };
-
       oyasaiDockerTools = callPackage ./oyasai-docker-tools.nix { };
     }
     // lib.packagesFromDirectoryRecursive {

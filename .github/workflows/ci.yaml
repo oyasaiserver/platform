@@ -134,7 +134,6 @@ jobs:
             exit 1
           fi
         env:
-          # TODO: same as plugins derivation. Come up with a unified way.
           _JAVA_OPTIONS: -Xmx8g -Xms1g -XX:MaxMetaspaceSize=512m
 
   push-to-ghcr:

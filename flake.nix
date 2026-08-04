@@ -62,6 +62,7 @@
       imports = [
         # keep-sorted start
         ./nix/flake-parts/codegen.nix
+        ./nix/flake-parts/constants.nix
         ./nix/flake-parts/devshells.nix
         ./nix/flake-parts/docker.nix
         ./nix/flake-parts/misc.nix
