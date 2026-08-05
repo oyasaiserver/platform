@@ -204,6 +204,11 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         destroyGraceSeconds: 2 * 60,
         init: true,
         networksAdvanced: [network],
+        ports: ports({
+          tcp: [
+            25575, // Rcon
+          ],
+        }),
         env: envs({
           MEMORY: "8G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
