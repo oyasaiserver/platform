@@ -16,6 +16,7 @@ import net.minecraft.core.ClientAsset
 import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket
 import net.minecraft.resources.Identifier
+import net.minecraft.world.item.ItemStackTemplate
 import org.bukkit.Material
 import org.bukkit.craftbukkit.entity.CraftPlayer
 import org.bukkit.craftbukkit.inventory.CraftItemStack
@@ -60,7 +61,9 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
             advancement(
                 noParent,
                 DisplayInfo(
-                    CraftItemStack.asNMSCopy(ItemStack(Material.GRASS_BLOCK)),
+                    ItemStackTemplate.fromNonEmptyStack(
+                        CraftItemStack.asNMSCopy(ItemStack(Material.GRASS_BLOCK))
+                    ),
                     Component.literal("OyasaiMusic"),
                     Component.literal("OyasaiMusic notification root."),
                     noBackground,
@@ -74,7 +77,7 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
         )
     val toastDisplay =
         DisplayInfo(
-            nmsIcon(icon),
+            ItemStackTemplate.fromNonEmptyStack(nmsIcon(icon)),
             legacyComponent(title.ifBlank { "OyasaiMusic" }),
             legacyComponent("\n§7いいねを受け取りました"),
             noBackground,
