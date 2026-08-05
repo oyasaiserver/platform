@@ -117,8 +117,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.0/builds/1204/downloads/velocity",
-      "hash": "sha256-UBoEyDmMoPMi7/kGmNaXEsIFHohEiYJPRCOcRzteE7Y="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.1/builds/1208/downloads/velocity",
+      "hash": "sha256-XYvTgxk1+KWAVuZObuvCnNINtDzLsk6UAF1FwV+1Fig="
     }
   },
   "gsit": {
@@ -312,8 +312,8 @@
   "skript": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/1FoOjYHA/Skript-2.16.0.jar",
-        "hash": "sha256-vNvREqdAMXHUec2qXw/pgPbzYqJASJzgcFKeiZ4XqpM="
+        "url": "https://cdn.modrinth.com/data/xFNYAvMk/versions/9s2QlgIA/Skript-2.16.1.jar",
+        "hash": "sha256-g1ejSLJ82KLPdJmY5K0UvR3KMWACa9MELW0Xz7TJinA="
       }
     }
   },
@@ -328,8 +328,8 @@
   "tab": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/t5Bd9Ajx/TAB%20v6.1.0.jar",
-        "hash": "sha256-FP6WAc4J8u/oo5XvI1nb8QmjVyqhsLFAuZwEsbOR05c="
+        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/S17Z7n97/TAB%20v6.1.1.jar",
+        "hash": "sha256-wu84hJXPRhsc3NrOplWPcPYmSIxXtO/oanW9XzooBwE="
       }
     }
   },
@@ -352,8 +352,8 @@
   "veinminer": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/OhduvhIc/versions/L4VqZYyJ/veinminer-paper-2.10.1%2B1.21.11.jar",
-        "hash": "sha256-BQYC4ZretXLKtB0TmB9lioZ4RSzcLVf32S/QaiuOAEs="
+        "url": "https://cdn.modrinth.com/data/OhduvhIc/versions/kR2Qk3QZ/veinminer-paper-2.11.2%2B1.21.11.jar",
+        "hash": "sha256-tHiTsu3v9pvohbz1/SQMem2n5EvPSNvxAsPMX/h8jcM="
       }
     }
   },
@@ -372,8 +372,8 @@
   "viaversion": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/ZhlgRvXY/ViaVersion-5.11.1-SNAPSHOT.jar",
-        "hash": "sha256-6MG89MVkcCHpMfy4LGGo1Qlq3uaNvMt4GhfMhYoBvT0="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/uz2jbJLI/ViaVersion-5.11.1-SNAPSHOT.jar",
+        "hash": "sha256-xA5DOX2D3opxXldjVWytc3e579lKGy6o/84PtG3k4Vo="
       }
     }
   },
