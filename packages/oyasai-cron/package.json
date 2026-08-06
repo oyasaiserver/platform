@@ -1,0 +1,13 @@
+{
+  "name": "oyasai-cron",
+  "type": "module",
+  "bin": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "26.0.0",
+    "typescript": "6.0.3"
+  }
+}
