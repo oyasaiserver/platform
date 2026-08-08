@@ -18,7 +18,7 @@ updates:
     directory: "/"
     cooldown:
       default-days: 14
-    schedule:
+    schedule: # TODO
       interval: "weekly"
     groups:
       all:
