@@ -1,24 +1,24 @@
 ---
-title: "antigravity-toolkit"
+title: "nexus-toolkit"
 category: tool
 status: active
 owner: marzipan99
-source_of_truth: "~/Desktop/Antigravity/01_Projects/antigravity-toolkit/"
+source_of_truth: "~/Desktop/Nexus/01_Projects/nexus-toolkit/"
 related_paths: []
-last_validated: "2026-05-20"
+last_validated: "2026-07-22"
 agent_task: null
 ---
 
-# antigravity-toolkit
+# nexus-toolkit
 
 ## 概要
 
-Antigravityワークスペースの統合ランチャー（.app / launcher.py）とスクリプト集。Minecraftビルド・SocialLikes可視化・ユーティリティを一元管理するGUIランチャー。
+Nexusワークスペースの統合ランチャー（.app / launcher.py）とスクリプト集。Minecraftビルド・SocialLikes可視化・ユーティリティを一元管理するGUIランチャー。
 
 ## 起動方法
 
 ```bash
-open "Antigravity Toolkit.app"   # macOS アプリとして起動
+open "Nexus Toolkit.app"   # macOS アプリとして起動
 # または
 bash Launch_Toolkit.command
 ```

@@ -351,7 +351,7 @@ def build_glb(all_triangles, with_texture, base_dirs):
 
     # --- assemble glTF JSON -----------------------------------------------
     gltf = {
-        "asset": {"version": "2.0", "generator": "Antigravity CityGML converter"},
+        "asset": {"version": "2.0", "generator": "Nexus CityGML converter"},
         "scene": 0,
         "scenes": [{"nodes": [0]}],
         "nodes":  [{"mesh": 0}],

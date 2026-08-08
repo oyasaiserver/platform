@@ -70,4 +70,4 @@ agent_task: null
 ## 詳細理論文書（正本）
 
 アルゴリズムの詳細・RGB空間カバレッジ分析・miniLED数学的背景:
-→ `~/Desktop/Antigravity/02_Docs/glass_gradient_theory.md`（Antigravityリポジトリ）
+→ `~/Desktop/Nexus/02_Docs/glass_gradient_theory.md`（Nexusリポジトリ）

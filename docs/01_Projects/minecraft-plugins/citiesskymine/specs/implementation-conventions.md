@@ -285,14 +285,13 @@ Run this after every implementation change.
 
 ### Local deployment
 
-Copy the built jar to the dev server:
+Copy the built jar to the local test server:
 
 ```
-plugins/CitiesSkyMine/build/libs/CitiesSkyMine.jar → dev-server/plugins/CitiesSkyMine.jar
+plugins/CitiesSkyMine/build/libs/CitiesSkyMine.jar → local/paperclip-tmp/plugins/CitiesSkyMine.jar
 ```
 
-The actual deployment path may vary by environment.
-If `dev-server/` does not exist, check for `local/plugins/` or ask the user.
+The local test server runtime is documented in `docs/02_Docs/ops/local-server.md`.
 
 ## 7. MessageUtil Usage
 

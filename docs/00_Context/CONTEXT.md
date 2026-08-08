@@ -35,7 +35,7 @@ It contains Minecraft server plugins, infrastructure packages, Nix build definit
 | Build system | `build.gradle.kts`, `gradle/`, `gradle.lock` | Gradle-based build |
 | Reproducible env | `flake.nix`, `nix/` | Use `/nix/var/nix/profiles/default/bin/nix` if `nix` is not on PATH |
 | Packages / infra | `packages/` | Nix-buildable packages and generated providers |
-| Local runtime | `dev-server/`, `local/` | Local-only runtime state is not the docs SOT |
+| Local runtime | `local/` | Local-only runtime state is not the docs SOT |
 | Documentation | `docs/` | Public shared docs and AI entrypoints |
 
 ## Docs Structure
@@ -83,7 +83,7 @@ context.
 | Goal | Read next |
 |---|---|
 | Understand docs at a human level | `docs/README.md` |
-| Follow a PR, docs, plugin, or dev-server workflow | `docs/00_Context/WORKFLOWS.md` |
+| Follow a PR, docs, plugin, or local-server workflow | `docs/00_Context/WORKFLOWS.md` |
 | Add or update a project page | `docs/01_Projects/_MANIFEST.md` |
 | Edit a plugin | use `docs/01_Projects/INDEX.md` to find the plugin `PROJECT.md`, then `plugins/<Plugin>/` |
 | Work on a Minecraft-related non-plugin tool | target `docs/01_Projects/tools/<tool>/PROJECT.md` |

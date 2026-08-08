@@ -3,7 +3,7 @@ title: "auto-transcription"
 category: tool
 status: active
 owner: marzipan99
-source_of_truth: "~/Desktop/Antigravity/01_Projects/auto-transcription/"
+source_of_truth: "~/Desktop/Nexus/01_Projects/auto-transcription/"
 related_paths: []
 last_validated: "2026-05-20"
 agent_task: null
