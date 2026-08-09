@@ -18,8 +18,8 @@
   "bkcommonlib": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/rTg6ckWb/versions/BtLkakNV/BKCommonLib-2.0.1-2025.jar",
-        "hash": "sha256-FxtOL7cuDj32xbWIWs8cEnxsrDbezQ17r7xVNbVyt7U="
+        "url": "https://cdn.modrinth.com/data/rTg6ckWb/versions/Kkg3lniF/BKCommonLib-2.0.2-2034.jar",
+        "hash": "sha256-j86GI+9fOpQpN5jW7BvsVpvwYurniqNZFjfi/jY5t8c="
       }
     }
   },
@@ -106,19 +106,19 @@
   "floodgate": {
     "paper": {
       "1.21.11": {
-        "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/138/downloads/spigot",
-        "hash": "sha256-RL25COL7T/G5dNUxPQSKYlohVVqYRM+4Ylapjo4ca9E="
+        "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/140/downloads/spigot",
+        "hash": "sha256-n0NsQv/YsQkaQ316Thb4IYG51TFPixcy36nVpP/7Gf4="
       }
     },
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/138/downloads/velocity",
-      "hash": "sha256-UkdExcPeZ99LhK3IC6u/XZ8AQSwaWT90qK5ubd6SwG8="
+      "url": "https://download.geysermc.org/v2/projects/floodgate/versions/2.2.5/builds/140/downloads/velocity",
+      "hash": "sha256-9YZ615uQ04q8xydVpoVCj7z0I7UsmDCjn/7VID3mk2o="
     }
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.1/builds/1208/downloads/velocity",
-      "hash": "sha256-XYvTgxk1+KWAVuZObuvCnNINtDzLsk6UAF1FwV+1Fig="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.1/builds/1212/downloads/velocity",
+      "hash": "sha256-9ooN/TaL2s3KsAsvsI8rHjvKlA4n91PKaV+ijn9MK2I="
     }
   },
   "gsit": {
@@ -156,8 +156,8 @@
   "luckperms": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/MBSY8toc/LuckPerms-Bukkit-5.5.53.jar",
-        "hash": "sha256-/I1OzL8RwehEr0Un8Bi7/ekMGGapq6G/iAFzqOZEzVk="
+        "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar",
+        "hash": "sha256-Sc7LZvof0ioTMDmkkOnB5QlaI4581m650qFv5siXVQ0="
       }
     }
   },
@@ -188,8 +188,8 @@
   "multiversecore": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/wvHdu4gu/multiverse-core-5.7.3.jar",
-        "hash": "sha256-yRp8LCWtfYeCV7CMmAOB6LX/uo32P69AIkK/tWoFiIQ="
+        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/qt30zlnm/multiverse-core-5.8.0-pre.jar",
+        "hash": "sha256-QxCenvAgLDuGsbUaxbNbuaZeRDheVugPluCM6y1LB1U="
       }
     }
   },
@@ -328,8 +328,8 @@
   "tab": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/S17Z7n97/TAB%20v6.1.1.jar",
-        "hash": "sha256-wu84hJXPRhsc3NrOplWPcPYmSIxXtO/oanW9XzooBwE="
+        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/ZGc6Iq1X/TAB%20v6.1.2.jar",
+        "hash": "sha256-/ZljMoDSNnvijgAJSAQHwqh/qQLr6QSEZTtsChfq1ww="
       }
     }
   },
@@ -372,8 +372,8 @@
   "viaversion": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/uz2jbJLI/ViaVersion-5.11.1-SNAPSHOT.jar",
-        "hash": "sha256-xA5DOX2D3opxXldjVWytc3e579lKGy6o/84PtG3k4Vo="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/N1tHqKId/ViaVersion-5.12.0-SNAPSHOT.jar",
+        "hash": "sha256-VU3lgr8+QzsMlg6IOs+aFltu5yQRdh98he8Q6rz2yvA="
       }
     }
   },
@@ -410,3 +410,4 @@
     }
   }
 }
+
