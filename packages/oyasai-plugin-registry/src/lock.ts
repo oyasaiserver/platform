@@ -120,7 +120,6 @@ if (import.meta.main) {
   );
 
   const registryPath = new URL("../registry.json", import.meta.url);
-  const lockPath = new URL("../lock.json", import.meta.url);
 
   const registry = JSON.parse(readFileSync(registryPath, "utf8")) as Record<
     string,
@@ -154,5 +153,5 @@ if (import.meta.main) {
     }
   }
 
-  writeFileSync(lockPath, JSON.stringify(lock, null, 2) + "\n");
+  console.log(JSON.stringify(lock, null, 2));
 }
