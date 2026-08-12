@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo -i aws configure set aws_access_key_id "$CLOUDFLARE_ACCESS_KEY_ID"
           sudo -i aws configure set aws_secret_access_key "$CLOUDFLARE_SECRET_ACCESS_KEY"
-      - uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
