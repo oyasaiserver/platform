@@ -26,7 +26,7 @@ fawe-bukkit = {module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", vers
 paperweight-userdev = {id = "io.papermc.paperweight.userdev", version.ref = "paperweight"}
 
 [versions]
-sqlite-jdbc = "3.53.2.0"
+sqlite-jdbc = "3.53.2.1"
 anvilgui = "1.10.11-SNAPSHOT"
 discord-webhooks = "0.8.4"
 discordsrv = "1.30.5"
@@ -39,7 +39,7 @@ luckperms = "5.5"
 nuvotifier = "2.7.2"
 placeholderapi = "2.11.6"
 purpur-api = "1.21.11-R0.1-SNAPSHOT"
-shadow = "9.5.1"
+shadow = "9.6.1"
 spotless = "8.5.1" # Ktfmt version must match that of Nixpkgs
 paperweight = "2.0.0-beta.21"
 tokenmanager = "3.2.4"
