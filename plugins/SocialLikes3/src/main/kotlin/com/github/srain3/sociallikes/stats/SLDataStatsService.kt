@@ -435,7 +435,8 @@ object SLDataStatsService {
     val givenLongTail = calculateLongTail(givenLikeEvents)
     val receivedLongTail = calculateLongTail(receivedLikeEvents)
     val personalBestHistory = calculatePersonalBestHistory(givenLikeEvents)
-    val likeDiversity = calculateLikeDiversity(givenLikeEvents)
+    val likeDiversity =
+        calculateLikeDiversity(SLDatabase.loadGivenLikeDimensionsBlocking(playerUuid))
     val ownBuildLikeCounts = SLDatabase.loadBuildLikeCountsBlocking(playerUuid)
     val globalBuildLikeCounts = SLDatabase.loadBuildLikeCountsBlocking()
     val likedBuildLikeCounts = SLDatabase.loadLikedBuildLikeCountsBlocking(playerUuid)
@@ -773,7 +774,9 @@ object SLDataStatsService {
     )
   }
 
-  private fun calculateLikeDiversity(events: List<SLDatabase.BuildLikeEvent>): LikeDiversityStats {
+  private fun calculateLikeDiversity(
+      likes: List<SLDatabase.BuildLikeDimension>
+  ): LikeDiversityStats {
     fun top(values: List<String>): List<DimensionTop> =
         values
             .groupingBy { it }
@@ -784,20 +787,20 @@ object SLDataStatsService {
             .map { DimensionTop(it.key, it.value) }
     val dimensionEntropies =
         listOf(
-                events.map { it.ownerUuid },
-                events.map { it.worldName },
-                events.map { "${it.worldName} (${it.chunkX}, ${it.chunkZ})" },
+                likes.map { it.ownerUuid },
+                likes.map { it.worldName },
+                likes.map { "${it.worldName} (${it.chunkX}, ${it.chunkZ})" },
             )
             .map(::normalizedEntropy)
     val score =
-        if (events.isEmpty()) 0 else (dimensionEntropies.average() * 100).toInt().coerceIn(0, 100)
+        if (likes.isEmpty()) 0 else (dimensionEntropies.average() * 100).toInt().coerceIn(0, 100)
     return LikeDiversityStats(
         score = score,
         diagnosis = if (score >= 55) "分散型" else "集中型",
-        ownerTop = top(events.map { it.ownerUuid }),
-        worldTop = top(events.map { it.worldName }),
-        chunkTop = top(events.map { "${it.worldName} (${it.chunkX}, ${it.chunkZ})" }),
-        ageBuckets = calculateAgeBuckets(events),
+        ownerTop = top(likes.map { it.ownerUuid }),
+        worldTop = top(likes.map { it.worldName }),
+        chunkTop = top(likes.map { "${it.worldName} (${it.chunkX}, ${it.chunkZ})" }),
+        ageBuckets = emptyList(),
     )
   }
 

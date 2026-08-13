@@ -80,6 +80,13 @@ object SLDatabase {
       val likedAt: Long,
   )
 
+  data class BuildLikeDimension(
+      val ownerUuid: String,
+      val worldName: String,
+      val chunkX: Int,
+      val chunkZ: Int,
+  )
+
   data class MutualLikePair(
       val playerUuid: String,
       val likesGiven: Int,
@@ -654,7 +661,7 @@ object SLDatabase {
                   SELECT bl.player_uuid, COUNT(bl.build_id) AS likes_count
                   FROM builds b
                   JOIN build_likes bl ON bl.build_id = b.id
-                  WHERE b.owner_uuid = ? AND bl.liked_at IS NOT NULL
+                  WHERE b.owner_uuid = ?
                   GROUP BY bl.player_uuid
                   ORDER BY likes_count DESC, bl.player_uuid ASC
                   LIMIT ?
@@ -744,11 +751,11 @@ object SLDatabase {
           rawConnection()
               ?.prepareStatement(
                   """
-                  SELECT b.id, b.title, COUNT(bl.player_uuid) AS likes_count
-                  FROM builds b
-                  LEFT JOIN build_likes bl ON bl.build_id = b.id AND bl.liked_at IS NOT NULL
-                  WHERE b.owner_uuid = ?
-                  GROUP BY b.id, b.title
+                   SELECT b.id, b.title, COUNT(bl.player_uuid) AS likes_count
+                   FROM builds b
+                   LEFT JOIN build_likes bl ON bl.build_id = b.id
+                   WHERE b.owner_uuid = ?
+                   GROUP BY b.id, b.title
                   ORDER BY likes_count DESC, b.id ASC
                   LIMIT ?
                   """
@@ -782,7 +789,7 @@ object SLDatabase {
               SELECT COUNT(DISTINCT b.owner_uuid) AS count
               FROM build_likes bl
               JOIN builds b ON b.id = bl.build_id
-              WHERE bl.player_uuid = ? AND b.owner_uuid <> ? AND bl.liked_at IS NOT NULL
+              WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
               """
                   .trimIndent()
           ) { statement ->
@@ -795,7 +802,7 @@ object SLDatabase {
               SELECT COUNT(DISTINCT bl.player_uuid) AS count
               FROM builds b
               JOIN build_likes bl ON bl.build_id = b.id
-              WHERE b.owner_uuid = ? AND bl.player_uuid <> ? AND bl.liked_at IS NOT NULL
+              WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
               """
                   .trimIndent()
           ) { statement ->
@@ -806,15 +813,15 @@ object SLDatabase {
           countQuery(
               """
               WITH outgoing AS (
-                SELECT DISTINCT b.owner_uuid AS player_uuid
-                FROM build_likes bl
-                JOIN builds b ON b.id = bl.build_id
-                WHERE bl.player_uuid = ? AND b.owner_uuid <> ? AND bl.liked_at IS NOT NULL
-              ), incoming AS (
-                SELECT DISTINCT bl.player_uuid
-                FROM builds b
-                JOIN build_likes bl ON bl.build_id = b.id
-                WHERE b.owner_uuid = ? AND bl.player_uuid <> ? AND bl.liked_at IS NOT NULL
+                 SELECT DISTINCT b.owner_uuid AS player_uuid
+                 FROM build_likes bl
+                 JOIN builds b ON b.id = bl.build_id
+                 WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+               ), incoming AS (
+                 SELECT DISTINCT bl.player_uuid
+                 FROM builds b
+                 JOIN build_likes bl ON bl.build_id = b.id
+                 WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
               )
               SELECT COUNT(*) AS count
               FROM outgoing o
@@ -832,16 +839,16 @@ object SLDatabase {
           ?.prepareStatement(
               """
               WITH outgoing AS (
-                SELECT b.owner_uuid AS player_uuid, COUNT(bl.build_id) AS likes_given
-                FROM build_likes bl
-                JOIN builds b ON b.id = bl.build_id
-                WHERE bl.player_uuid = ? AND b.owner_uuid <> ? AND bl.liked_at IS NOT NULL
-                GROUP BY b.owner_uuid
-              ), incoming AS (
-                SELECT bl.player_uuid, COUNT(bl.build_id) AS likes_received
-                FROM builds b
-                JOIN build_likes bl ON bl.build_id = b.id
-                WHERE b.owner_uuid = ? AND bl.player_uuid <> ? AND bl.liked_at IS NOT NULL
+                 SELECT b.owner_uuid AS player_uuid, COUNT(bl.build_id) AS likes_given
+                 FROM build_likes bl
+                 JOIN builds b ON b.id = bl.build_id
+                 WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+                 GROUP BY b.owner_uuid
+               ), incoming AS (
+                 SELECT bl.player_uuid, COUNT(bl.build_id) AS likes_received
+                 FROM builds b
+                 JOIN build_likes bl ON bl.build_id = b.id
+                 WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
                 GROUP BY bl.player_uuid
               )
               SELECT o.player_uuid, o.likes_given, i.likes_received
@@ -881,7 +888,7 @@ object SLDatabase {
               SELECT COUNT(DISTINCT b.owner_uuid) AS count
               FROM build_likes bl
               JOIN builds b ON b.id = bl.build_id
-              WHERE bl.player_uuid = ? AND b.owner_uuid <> ? AND bl.liked_at IS NOT NULL
+              WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
               """
                   .trimIndent()
           ) { statement ->
@@ -894,7 +901,7 @@ object SLDatabase {
               SELECT COUNT(DISTINCT bl.player_uuid) AS count
               FROM builds b
               JOIN build_likes bl ON bl.build_id = b.id
-              WHERE b.owner_uuid = ? AND bl.player_uuid <> ? AND bl.liked_at IS NOT NULL
+              WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
               """
                   .trimIndent()
           ) { statement ->
@@ -911,10 +918,10 @@ object SLDatabase {
           ?.prepareStatement(
               """
               WITH favorite_owner AS (
-                SELECT b.owner_uuid, COUNT(bl.build_id) AS liked_build_count
-                FROM build_likes bl
-                JOIN builds b ON b.id = bl.build_id
-                WHERE bl.player_uuid = ? AND b.owner_uuid <> ? AND bl.liked_at IS NOT NULL
+                 SELECT b.owner_uuid, COUNT(bl.build_id) AS liked_build_count
+                 FROM build_likes bl
+                 JOIN builds b ON b.id = bl.build_id
+                 WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
                 GROUP BY b.owner_uuid
                 ORDER BY liked_build_count DESC, b.owner_uuid ASC
                 LIMIT 1
@@ -994,18 +1001,17 @@ object SLDatabase {
               ?.prepareStatement(
                   """
                   WITH liked_owners AS (
-                    SELECT DISTINCT b.owner_uuid
-                    FROM build_likes bl
-                    JOIN builds b ON b.id = bl.build_id
-                    WHERE bl.player_uuid = ? AND b.owner_uuid <> ? AND bl.liked_at IS NOT NULL
-                  )
-                  SELECT bl.player_uuid, COUNT(DISTINCT b.owner_uuid) AS shared_owner_count
-                  FROM builds b
-                  JOIN build_likes bl ON bl.build_id = b.id
-                  WHERE b.owner_uuid IN (SELECT owner_uuid FROM liked_owners)
-                    AND bl.player_uuid <> ?
-                    AND bl.liked_at IS NOT NULL
-                  GROUP BY bl.player_uuid
+                     SELECT DISTINCT b.owner_uuid
+                     FROM build_likes bl
+                     JOIN builds b ON b.id = bl.build_id
+                     WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+                   )
+                   SELECT bl.player_uuid, COUNT(DISTINCT b.owner_uuid) AS shared_owner_count
+                   FROM builds b
+                   JOIN build_likes bl ON bl.build_id = b.id
+                   WHERE b.owner_uuid IN (SELECT owner_uuid FROM liked_owners)
+                     AND bl.player_uuid <> ?
+                   GROUP BY bl.player_uuid
                   ORDER BY shared_owner_count DESC, bl.player_uuid ASC
                   LIMIT ?
                   """
@@ -1041,13 +1047,15 @@ object SLDatabase {
           rawConnection()
               ?.prepareStatement(
                   """
-                  SELECT
-                    bl.player_uuid,
-                    COUNT(bl.build_id) AS like_count,
-                    COUNT(DISTINCT strftime('%Y-%W', bl.liked_at / 1000, 'unixepoch')) AS active_week_count
-                  FROM builds b
-                  JOIN build_likes bl ON bl.build_id = b.id
-                  WHERE b.owner_uuid = ? AND bl.player_uuid <> ? AND bl.liked_at IS NOT NULL
+                   SELECT
+                     bl.player_uuid,
+                     COUNT(bl.build_id) AS like_count,
+                     COUNT(DISTINCT CASE WHEN bl.liked_at IS NOT NULL
+                                         THEN strftime('%Y-%W', bl.liked_at / 1000, 'unixepoch')
+                                    END) AS active_week_count
+                   FROM builds b
+                   JOIN build_likes bl ON bl.build_id = b.id
+                   WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
                   GROUP BY bl.player_uuid
                   ORDER BY like_count DESC, active_week_count DESC, bl.player_uuid ASC
                   LIMIT ?
@@ -1082,7 +1090,7 @@ object SLDatabase {
               SELECT COUNT(DISTINCT bl.player_uuid) AS count
               FROM builds b
               JOIN build_likes bl ON bl.build_id = b.id
-              WHERE b.owner_uuid = ? AND bl.player_uuid <> ? AND bl.liked_at IS NOT NULL
+              WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
               """
                   .trimIndent()
           ) { statement ->
@@ -1094,10 +1102,10 @@ object SLDatabase {
               """
               SELECT COUNT(*) AS count
               FROM (
-                SELECT bl.player_uuid
-                FROM builds b
-                JOIN build_likes bl ON bl.build_id = b.id
-                WHERE b.owner_uuid = ? AND bl.player_uuid <> ? AND bl.liked_at IS NOT NULL
+                 SELECT bl.player_uuid
+                 FROM builds b
+                 JOIN build_likes bl ON bl.build_id = b.id
+                 WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
                 GROUP BY bl.player_uuid
                 HAVING COUNT(DISTINCT bl.build_id) >= 2
               )
@@ -1346,11 +1354,11 @@ object SLDatabase {
           rawConnection()
               ?.prepareStatement(
                   """
-                  SELECT b.id, b.title, b.created_at, COUNT(bl.player_uuid) AS likes_received
-                  FROM builds b
-                  LEFT JOIN build_likes bl ON bl.build_id = b.id AND bl.liked_at IS NOT NULL
-                  WHERE b.owner_uuid = ?
-                  GROUP BY b.id, b.title, b.created_at
+                   SELECT b.id, b.title, b.created_at, COUNT(bl.player_uuid) AS likes_received
+                   FROM builds b
+                   LEFT JOIN build_likes bl ON bl.build_id = b.id
+                   WHERE b.owner_uuid = ?
+                   GROUP BY b.id, b.title, b.created_at
                   ORDER BY b.created_at ASC, b.id ASC
                   """
                       .trimIndent()
@@ -1385,15 +1393,14 @@ object SLDatabase {
           rawConnection()
               ?.prepareStatement(
                   """
-                  SELECT b.world_name,
-                         COUNT(DISTINCT CASE WHEN b.owner_uuid = ? THEN b.id END) AS own_build_count,
-                         COUNT(DISTINCT CASE WHEN b.owner_uuid = ? AND bl.liked_at IS NOT NULL
-                                             THEN bl.player_uuid || ':' || b.id END) AS own_received_likes,
-                         COUNT(DISTINCT b.id) AS global_build_count,
-                         COUNT(DISTINCT CASE WHEN bl.liked_at IS NOT NULL
-                                             THEN bl.player_uuid || ':' || b.id END) AS global_received_likes,
-                         COUNT(DISTINCT CASE WHEN bl.player_uuid = ? AND bl.liked_at IS NOT NULL
-                                             THEN b.id END) AS given_likes
+                   SELECT b.world_name,
+                          COUNT(DISTINCT CASE WHEN b.owner_uuid = ? THEN b.id END) AS own_build_count,
+                          COUNT(DISTINCT CASE WHEN b.owner_uuid = ?
+                                              THEN bl.player_uuid || ':' || b.id END) AS own_received_likes,
+                          COUNT(DISTINCT b.id) AS global_build_count,
+                          COUNT(DISTINCT bl.player_uuid || ':' || b.id) AS global_received_likes,
+                          COUNT(DISTINCT CASE WHEN bl.player_uuid = ?
+                                              THEN b.id END) AS given_likes
                   FROM builds b
                   LEFT JOIN build_likes bl ON bl.build_id = b.id
                   GROUP BY b.world_name
@@ -1434,7 +1441,7 @@ object SLDatabase {
                      COUNT(DISTINCT b.id) AS build_count,
                      COUNT(bl.player_uuid) AS received_likes
               FROM builds b
-              LEFT JOIN build_likes bl ON bl.build_id = b.id AND bl.liked_at IS NOT NULL
+              LEFT JOIN build_likes bl ON bl.build_id = b.id
               WHERE b.owner_uuid = ?
               GROUP BY b.world_name, b.chunk_x, b.chunk_z
               ORDER BY build_count DESC, received_likes DESC, b.world_name ASC, b.chunk_x ASC, b.chunk_z ASC
@@ -1467,7 +1474,7 @@ object SLDatabase {
                   SELECT b.chunk_x, b.chunk_z, COUNT(DISTINCT b.id) AS build_count,
                          COUNT(bl.player_uuid) AS received_likes
                   FROM builds b
-                  LEFT JOIN build_likes bl ON bl.build_id = b.id AND bl.liked_at IS NOT NULL
+                  LEFT JOIN build_likes bl ON bl.build_id = b.id
                   WHERE b.owner_uuid = ? AND b.world_name = ?
                   GROUP BY b.chunk_x, b.chunk_z
                   ORDER BY build_count DESC, received_likes DESC, b.chunk_x ASC, b.chunk_z ASC
@@ -1538,14 +1545,14 @@ object SLDatabase {
               if (ownerUuid == null) {
                 """
                 SELECT b.id, COUNT(bl.player_uuid) AS like_count
-                FROM builds b LEFT JOIN build_likes bl ON bl.build_id = b.id AND bl.liked_at IS NOT NULL
+                FROM builds b LEFT JOIN build_likes bl ON bl.build_id = b.id
                 GROUP BY b.id
                 """
                     .trimIndent()
               } else {
                 """
                 SELECT b.id, COUNT(bl.player_uuid) AS like_count
-                FROM builds b LEFT JOIN build_likes bl ON bl.build_id = b.id AND bl.liked_at IS NOT NULL
+                FROM builds b LEFT JOIN build_likes bl ON bl.build_id = b.id
                 WHERE b.owner_uuid = ?
                 GROUP BY b.id
                 """
@@ -1572,8 +1579,8 @@ object SLDatabase {
                   FROM build_likes mine
                   JOIN builds b ON b.id = mine.build_id
                   LEFT JOIN build_likes all_likes
-                    ON all_likes.build_id = b.id AND all_likes.liked_at IS NOT NULL
-                  WHERE mine.player_uuid = ? AND mine.liked_at IS NOT NULL
+                    ON all_likes.build_id = b.id
+                  WHERE mine.player_uuid = ?
                   GROUP BY b.id
                   """
                       .trimIndent()
@@ -1585,6 +1592,39 @@ object SLDatabase {
                 }
               }
           counts
+        }
+        .orEmpty()
+  }
+
+  fun loadGivenLikeDimensionsBlocking(playerUuid: String): List<BuildLikeDimension> {
+    return submitBlocking("loadGivenLikeDimensions") {
+          val dimensions = mutableListOf<BuildLikeDimension>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT b.owner_uuid, b.world_name, b.chunk_x, b.chunk_z
+                  FROM build_likes bl
+                  JOIN builds b ON b.id = bl.build_id
+                  WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, playerUuid)
+                statement.setString(2, playerUuid)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    dimensions +=
+                        BuildLikeDimension(
+                            ownerUuid = results.getString("owner_uuid"),
+                            worldName = results.getString("world_name"),
+                            chunkX = results.getInt("chunk_x"),
+                            chunkZ = results.getInt("chunk_z"),
+                        )
+                  }
+                }
+              }
+          dimensions
         }
         .orEmpty()
   }
