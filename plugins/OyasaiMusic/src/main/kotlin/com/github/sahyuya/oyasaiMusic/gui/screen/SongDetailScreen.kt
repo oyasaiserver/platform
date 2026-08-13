@@ -316,9 +316,14 @@ class SongDetailScreen(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              if (song.isMonetizationEligible()) {
-                plugin.userRepository.addPending(song.authorUuid, money = authorShare)
-              }
+              plugin.recordSaleRepository.recordSale(
+                  songId = songId,
+                  buyerUuid = viewer.uniqueId,
+                  authorUuid = song.authorUuid,
+                  grossAmount = song.price.toLong(),
+                  authorShare = authorShare,
+                  creditAuthor = song.isMonetizationEligible(),
+              )
             },
         )
     viewer.sendMessage("§aレコードを受け取りました: ${song.title}")

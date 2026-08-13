@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack
  *
  * ランキング表示（サヒュヤ氏の指示に基づく仕様）:
  * - 3枠(額縁, slot 21,22,23) = 左から 日間 / 週間 / 総合 ランキング。
- * - 各枠は独立して現在の指標(いいね/再生数/お気に入り/フォロワー)を持ち、 既定はいいね数順。クリックで自分の枠だけ指標を切替（いいね→再生数→お気に入り→フォロワー→…）。
+ * - 各枠は独立して現在の指標を持ち、クリックでいいね→再生→お気に入り→フォロワー→レコード総売上の順に切替える。
  * - 各枠のアイテム名=期間+現在の指標、Loreに1〜7位を列挙する （楽曲系: "{順位} {mcid} - 「{題名}」 {回数}回" / フォロワー: "{順位} {mcid} -
  *   {人数}フォロワー"）。
  * - 実データは [OyasaiMusic.rankingCacheService] のキャッシュ済みスナップショットをそのまま読む
@@ -147,6 +147,7 @@ class MainMenuScreen(
           RankingMetric.VIEWS -> "再生数"
           RankingMetric.FAVORITES -> "お気に入り数"
           RankingMetric.FOLLOWERS -> "フォロワー数"
+          RankingMetric.RECORD_SALES -> "レコード総売上"
         }
     val entries: List<RankingEntryDto> = snapshot?.entries?.get(metric).orEmpty()
 
@@ -170,11 +171,16 @@ class MainMenuScreen(
             }
         val rankAndAuthor = Component.text("${entry.rank} ${entry.authorName}", rankColor)
         val line =
-            if (metric == RankingMetric.FOLLOWERS) {
-              rankAndAuthor.append(Component.text(" - ${entry.score}フォロワー", NamedTextColor.WHITE))
+            if (metric.isAuthorMetric) {
+              val scoreLabel =
+                  if (metric == RankingMetric.RECORD_SALES) "${entry.score}円"
+                  else "${entry.score}フォロワー"
+              rankAndAuthor.append(Component.text(" - $scoreLabel", NamedTextColor.WHITE))
             } else {
               rankAndAuthor.append(
-                  Component.text(" - 「${entry.title}」 ${entry.score}回", NamedTextColor.WHITE)
+                  Component.text(" - 「", NamedTextColor.WHITE)
+                      .append(formattedSongTitle(entry.title.orEmpty()))
+                      .append(Component.text("」 ${entry.score}回", NamedTextColor.WHITE))
               )
             }
         lore += line
@@ -184,9 +190,9 @@ class MainMenuScreen(
 
     val name = Component.text("${column.label}ランキング ($metricLabel)", NamedTextColor.GOLD)
 
-    // フォロワーランキングは1位作者のプレイヤーヘッドを、それ以外は1位の楽曲のレコード種類を
+    // 作者ランキングは1位作者のプレイヤーヘッドを、それ以外は1位の楽曲のレコード種類を
     // アイコンにする（recordMaterialが取得できない古いキャッシュ等では汎用ディスクにフォールバック）。
-    if (metric == RankingMetric.FOLLOWERS) {
+    if (metric.isAuthorMetric) {
       val topAuthorUuid =
           entries.firstOrNull()?.let {
             runCatching { java.util.UUID.fromString(it.authorUuid) }.getOrNull()

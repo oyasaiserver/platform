@@ -1,12 +1,13 @@
 package com.github.sahyuya.oyasaiMusic.audio
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
-import com.github.sahyuya.oyasaiMusic.item.AmbientRange
+import com.github.sahyuya.oyasaiMusic.item.AmbientPlaybackRange
 import com.github.sahyuya.oyasaiMusic.item.AmbientTrigger
 import com.github.sahyuya.oyasaiMusic.model.Song
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.entity.Player
 
@@ -24,9 +25,11 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) {
   data class AmbientEntry(
       val location: Location,
       val song: Song,
-      val range: AmbientRange,
+      val range: AmbientPlaybackRange,
       val trigger: AmbientTrigger,
       val loop: Boolean,
+      /** 装填した時のゲームモード。同じゲームモードでのみ回収できる。 */
+      val insertedGameMode: GameMode,
       var session: PlaybackSession? = null,
       /** 音源読み込み中の二重起動を防ぐ。状態変更はメインスレッド上で行う。 */
       var loading: Boolean = false,
@@ -54,15 +57,16 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) {
   fun register(
       location: Location,
       song: Song,
-      range: AmbientRange,
+      range: AmbientPlaybackRange,
       trigger: AmbientTrigger,
       loop: Boolean,
+      insertedGameMode: GameMode,
   ) {
     val k = key(location)
     // 既に何か設置されていた場合、その再生セッションを確実に止めてから上書きする
     // （そうしないと古いセッションが止まらず二重に音が鳴り続けるバグになる）。
     entries[k]?.session?.let { plugin.playbackEngine.stop(it) }
-    entries[k] = AmbientEntry(location.clone(), song, range, trigger, loop)
+    entries[k] = AmbientEntry(location.clone(), song, range, trigger, loop, insertedGameMode)
     if (trigger == AmbientTrigger.JUKEBOX) startPlayback(k)
   }
 
@@ -138,9 +142,9 @@ class AmbientPlaybackRegistry(private val plugin: OyasaiMusic) {
 
   private fun nearbyPlayers(entry: AmbientEntry): List<Player> {
     val world = entry.location.world ?: return emptyList()
-    val range = entry.range.blocks
+    val range = entry.range.blocks?.toDouble()
     return world.players.filter { p ->
-      range == null || p.location.distance(entry.location) <= range
+      range == null || p.location.distanceSquared(entry.location) <= range * range
     }
   }
 
