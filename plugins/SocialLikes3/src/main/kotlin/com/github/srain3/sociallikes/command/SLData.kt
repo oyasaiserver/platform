@@ -15,6 +15,7 @@ import io.papermc.paper.registry.data.dialog.ActionButton
 import io.papermc.paper.registry.data.dialog.DialogBase
 import io.papermc.paper.registry.data.dialog.action.DialogAction
 import io.papermc.paper.registry.data.dialog.body.DialogBody
+import io.papermc.paper.registry.data.dialog.body.PlainMessageDialogBody
 import io.papermc.paper.registry.data.dialog.type.DialogType
 import java.awt.BasicStroke
 import java.awt.Color
@@ -33,9 +34,11 @@ import kotlin.math.ceil
 import kotlin.math.max
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -113,6 +116,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private const val DIALOG_FULL_SPACE = '\u3000'
   private const val DIALOG_CONFIG_FILE_NAME = "sldata-dialog.yml"
   private const val DIALOG_PREVIEW_FILE_NAME = "sldata-dialog-preview.yml"
+  private const val DIALOG_STATS_DUMP_FILE_NAME = "sldata-stats2-dump.txt"
   private val dialogStatsAliases = setOf("stats2", "stats", "detail", "details")
   private const val BOARD_COLUMNS = 2
   private const val BOARD_ROWS = 2
@@ -130,6 +134,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private val dialogStatsIncludeLifeWorld = mutableMapOf<UUID, Boolean>()
   @Volatile private var dialogRenderConfig: DialogRenderConfig? = null
   @Volatile private var dialogPreviewConfig: DialogPreviewConfig? = null
+  private val dialogStatsPlainTextSerializer = PlainTextComponentSerializer.plainText()
   private val dialogWeekKey = Key.key("sociallikes3", "sldata_week")
   private val dialogMonthKey = Key.key("sociallikes3", "sldata_month")
   private val dialogYearKey = Key.key("sociallikes3", "sldata_year")
@@ -247,13 +252,28 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           when (args[0].lowercase()) {
                 "dialog" ->
                     if (args[1].lowercase() in dialogStatsAliases) {
-                      dialogStatsPlayerSuggestions(sender, args[2])
+                      (listOf("dump") + dialogStatsPlayerSuggestions(sender, args[2]))
                     } else {
                       dialogArgumentSuggestions(args.drop(1).dropLast(1))
                     }
                 else -> emptyList()
               }
               .filter { it.startsWith(args[2], ignoreCase = true) }
+              .toMutableList()
+      4 ->
+          when (args[0].lowercase()) {
+                "dialog" ->
+                    if (
+                        args[1].lowercase() in dialogStatsAliases &&
+                            args[2].equals("dump", ignoreCase = true)
+                    ) {
+                      dialogStatsPlayerSuggestions(sender, args[3])
+                    } else {
+                      emptyList()
+                    }
+                else -> emptyList()
+              }
+              .filter { it.startsWith(args[3], ignoreCase = true) }
               .toMutableList()
       else -> mutableListOf()
     }
@@ -411,6 +431,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun handleDialogStats(player: Player, args: List<String>) {
+    if (args.getOrNull(1)?.equals("dump", ignoreCase = true) == true) {
+      dumpDialogStats(player, args)
+      return
+    }
     val targetName = args.getOrNull(1)
     if (targetName == null) {
       openDialogStats(player)
@@ -433,6 +457,38 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       return
     }
     openDialogStats(player, target.uniqueId, target.name ?: targetName)
+  }
+
+  private fun dumpDialogStats(player: Player, args: List<String>) {
+    if (!player.isOp) {
+      player.sendMessage(Tools.socialLikesLOGO + " &c詳細統計dumpを実行できるのはOPのみです。".color())
+      return
+    }
+    if (args.size > 3) {
+      player.sendMessage(
+          Tools.socialLikesLOGO + " &c使い方: /sldata dialog stats2 dump [プレイヤー名]".color()
+      )
+      return
+    }
+    val targetName = args.getOrNull(2)
+    val target =
+        if (targetName == null) DialogStatsTarget(player.uniqueId, player.name)
+        else {
+          val offlinePlayer = Bukkit.getOfflinePlayer(targetName)
+          if (!offlinePlayer.isOnline && !offlinePlayer.hasPlayedBefore()) {
+            player.sendMessage(
+                Tools.socialLikesLOGO +
+                    " &cプレイヤー「$targetName」が見つかりません。参加済みのプレイヤー名を指定してください。".color()
+            )
+            return
+          }
+          DialogStatsTarget(offlinePlayer.uniqueId, offlinePlayer.name ?: targetName)
+        }
+    val outputFile = writeDialogStatsDump(player, target.uuid, target.name)
+    player.sendMessage(
+        Tools.socialLikesLOGO +
+            " &fdialog stats2 dump: ${target.name} の詳細統計を書き出しました: ${outputFile.path}".color()
+    )
   }
 
   private fun dialogPeriod(raw: String?): Period? =
@@ -1836,306 +1892,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       targetName: String = player.name,
   ) {
     activeDialogStatsTargets[player.uniqueId] = DialogStatsTarget(targetUuid, targetName)
-    val includeLifeWorld = dialogStatsIncludeLifeWorld[player.uniqueId] == true
-    val stats = SLDataStatsService.loadExtendedStats(targetUuid.toString(), 5, includeLifeWorld)
-    val palette = dialogTextPalette(player)
-    val bodyWidth = 560
-    val body =
-        listOf(
-            DialogBody.plainMessage(
-                dialogStatsSummaryComponent(stats, targetName, palette),
-                bodyWidth,
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "概要ダッシュボード",
-                listOf(
-                    "応援している作者 ${formatCount(stats.socialOverview.supportedOwnerCount)}人",
-                    "応援されている層 ${formatCount(stats.socialOverview.supporterCount)}人",
-                ),
-                "概要データはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "ワールド別の反応${if (includeLifeWorld) "（ライフ含む）" else "（ライフ除外）"}",
-                stats.worldReactions.map { row ->
-                  "${compactDialogText(row.worldName, 14)} 受${formatDoublePercent(row.receivedShare)} / 押${formatDoublePercent(row.givenShare)} / 受効率差 ${formatSignedAverage(row.receivedAverageDelta)}"
-                },
-                "対象ワールドの反応データはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "自分 vs 全体平均",
-                dialogTwoBarRows(
-                    "自分",
-                    stats.comparison.ownAverage,
-                    "全体",
-                    stats.comparison.globalAverage,
-                ) +
-                    listOf(
-                        "自作品平均 ${formatAverageCount(stats.comparison.ownAverage)} / 全作品平均 ${formatAverageCount(stats.comparison.globalAverage)}",
-                        "いいね効率 ${formatAverageCount(stats.comparison.ownAverage)}/作品（全体平均との差 ${formatSignedAverage(stats.comparison.ownAverage - stats.comparison.globalAverage)}）",
-                        "押した作品の平均 ${formatAverageCount(stats.comparison.givenTargetAverage)}（全体平均 ${formatAverageCount(stats.comparison.globalAverage)} / 中央値 ${formatAverageCount(stats.comparison.globalMedian)}） — ${givenLikeDeviationDiagnosis(stats.comparison)}",
-                    ),
-                "比較できる建築データはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "送った・受け取ったいいねの差分",
-                listOf(
-                    "送 ${formatCount(stats.balance.given)} / 受 ${formatCount(stats.balance.received)} / 差 ${formatCount(stats.balance.received - stats.balance.given)}",
-                    "受÷送 ratio ${formatRatio(stats.balance.receivePerGiven)} — ${stats.balance.diagnosis}",
-                ),
-                "いいねデータはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "自作品のいいね分布",
-                listOf(
-                    "平均 ${formatAverageCount(stats.likeDistribution.average)} / 中央値 ${formatAverageCount(stats.likeDistribution.median)} / 最大 ${formatCount(stats.likeDistribution.maximum)}",
-                ),
-                "自作品データはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "最新建築 vs 過去建築",
-                stats.recentBuildComparison
-                    ?.let { comparison ->
-                      dialogTwoBarRows(
-                          "過去(${comparison.olderCount})",
-                          comparison.olderAverage,
-                          "最新(${comparison.newerCount})",
-                          comparison.newerAverage,
-                      ) +
-                          listOf(
-                              "過去 ${formatAverageCount(comparison.olderAverage)} / 最新 ${formatAverageCount(comparison.newerAverage)}"
-                          )
-                    }
-                    .orEmpty(),
-                "新旧比較には2作品以上必要です。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "いいね集中度",
-                listOf(
-                    "上位${stats.likeConcentration.topCount}作品の占有率 ${formatDoublePercent(stats.likeConcentration.topShare)} / HHI風 ${String.format("%.2f", stats.likeConcentration.hhi)}",
-                    stats.likeConcentration.diagnosis,
-                ),
-                "自作品のいいねデータはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "相互いいねペア ${formatCount(stats.mutualLikes.pairCount)}組",
-                listOf(
-                    "応援相手ベース ${formatDialogPercent(stats.mutualLikes.pairCount, stats.mutualLikes.likedOwnerCount)} / 応援者ベース ${formatDialogPercent(stats.mutualLikes.pairCount, stats.mutualLikes.likerCount)}",
-                ) +
-                    stats.mutualLikes.pairs.mapIndexed { index, row ->
-                      "${index + 1}. ${dialogPlayerName(row.playerUuid, stats.playerNames)} 送${formatCount(row.likesGiven)} / 受${formatCount(row.likesReceived)}"
-                    },
-                "まだ相互いいねペアはありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "お気に入りビルダーの捕捉率",
-                stats.favoriteBuilderCapture
-                    ?.let { capture ->
-                      val rate =
-                          formatDialogPercent(capture.likedBuildCount, capture.totalBuildCount)
-                      listOf(
-                          "${dialogPlayerName(capture.ownerUuid, stats.playerNames)} ${formatCount(capture.likedBuildCount)} / ${formatCount(capture.totalBuildCount)}建築 ($rate)",
-                          dialogProgressBar(capture.likedBuildCount, capture.totalBuildCount),
-                      )
-                    }
-                    .orEmpty(),
-                "いいね済みの作者がまだいないため、既定の対象を選べません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "初対面いいね（記録開始 2026/1/14 後）",
-                stats.firstEncounters.map { row ->
-                  "◆ ${dialogPlayerName(row.ownerUuid, stats.playerNames)}\n　初いいね ${dialogDateLabel(row.firstLikedAt)}"
-                },
-                "記録開始後の初対面いいねはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "共通の推し・似た好みのプレイヤー",
-                stats.similarTastePlayers.mapIndexed { index, row ->
-                  dialogPlayerCountLine(
-                      index,
-                      row.playerUuid,
-                      row.count,
-                      "人の推しが共通",
-                      stats.playerNames,
-                  )
-                },
-                "共通の推しを持つプレイヤーはまだ見つかりません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "常連サポーター",
-                stats.regularSupporters.mapIndexed { index, row ->
-                  "${index + 1}. ${dialogPlayerName(row.playerUuid, stats.playerNames)} ${formatCount(row.likeCount)}いいね / ${formatCount(row.activeWeekCount)}週"
-                },
-                "$targetName の建築への常連サポーターはまだいません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "リピーター率",
-                listOf(
-                    "${formatCount(stats.repeaterRate.repeaterCount)} / ${formatCount(stats.repeaterRate.uniqueLikerCount)}人 (${formatDialogPercent(stats.repeaterRate.repeaterCount, stats.repeaterRate.uniqueLikerCount)})",
-                    repeaterRateDiagnosis(
-                        stats.repeaterRate.repeaterCount,
-                        stats.repeaterRate.uniqueLikerCount,
-                    ),
-                ),
-                "リピーター率データはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "新作最速サポーター",
-                stats.fastestSupporters.mapIndexed { index, row ->
-                  dialogPlayerCountLine(
-                      index,
-                      row.playerUuid,
-                      row.count,
-                      "作品で最速",
-                      stats.playerNames,
-                  )
-                },
-                "$targetName の新作への最速サポーターデータはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "初速（作品別・初いいねまで）",
-                stats.initialLikeSpeed
-                    ?.let { speed ->
-                      listOf(
-                          "最短 ${formatDialogDuration(speed.minimumMillis)}",
-                          "中央値 ${formatDialogDuration(speed.medianMillis)}",
-                          "最長 ${formatDialogDuration(speed.maximumMillis)}",
-                          "対象 ${formatCount(speed.buildCount)}作品（いいね未到達は除外）",
-                      )
-                    }
-                    .orEmpty(),
-                "$targetName の作品で、初いいね時刻を持つデータはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "活動リズム（JST）",
-                dialogRhythmRows(stats.activityRhythm),
-                "いいねした時刻のデータはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "いいね対象の築年数（いいね時点）",
-                stats.buildAgeDistribution.map { bucket ->
-                  "${bucket.label} ${formatCount(bucket.count)}件"
-                },
-                "築年数を計算できるいいねはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "いいね継続日数",
-                listOf(
-                    "送ったいいね: 現在 ${formatCount(stats.givenStreak.currentDays)}日連続 / 最長 ${formatCount(stats.givenStreak.longestDays)}日 — ${streakTitle(stats.givenStreak)}",
-                    "受けいいね: 現在 ${formatCount(stats.receivedStreak.currentDays)}日連続 / 最長 ${formatCount(stats.receivedStreak.longestDays)}日 — ${streakTitle(stats.receivedStreak)}",
-                ),
-                "日次いいねデータはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "宣伝効果（前後24時間）",
-                listOf(
-                    "リポスト ${formatCount(stats.publicity.totalReposts)}回 / 通常時 ${formatAverageCount(stats.publicity.normalReactionAverage)} / 宣伝後 ${formatAverageCount(stats.publicity.publicityReactionAverage)} / 差 ${formatSignedAverage(stats.publicity.reactionDelta)}",
-                    "掲載直後24時間の反響を、同じ長さの直前24時間と比較しています。",
-                ),
-                "このプレイヤーの建築には、まだ宣伝履歴がありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "宣伝回数ランキング Top5",
-                stats.publicity.topBuilds.mapIndexed { index, row ->
-                  "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 18)} ${formatCount(row.publicityCount)}回"
-                },
-                "まだ宣伝された建築はありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "複数回宣伝の反応変化（イベント分析）",
-                stats.publicity.recurringBuilds.map { row ->
-                  "#${row.buildId} ${compactDialogText(row.title, 15)}: 通常 ${formatAverageCount(row.normalReactionAverage)} → 宣伝後 ${formatAverageCount(row.publicityReactionAverage)} (${formatSignedAverage(row.reactionDelta)}) / 平均間隔 ${row.averageIntervalHours?.let { formatDialogDuration((it * 3_600_000).toLong()) } ?: "-"}"
-                },
-                "複数回宣伝された建築はまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "ロングテールいいね（公開30日後以降）",
-                listOf(
-                    "プレイヤー: ${formatCount(stats.givenLongTail.longTailCount)} / ${formatCount(stats.givenLongTail.totalCount)}件 (${formatDoublePercent(stats.givenLongTail.percentage)}) — 古い作品を掘る人",
-                    "作者: ${formatCount(stats.receivedLongTail.longTailCount)} / ${formatCount(stats.receivedLongTail.totalCount)}件 (${formatDoublePercent(stats.receivedLongTail.percentage)}) — 過去作が後から愛された",
-                ),
-                "ロングテールを計算できるいいねはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "自己ベスト更新履歴（送ったいいね）",
-                dialogPersonalBestRows(stats.personalBestHistory),
-                "日・週・月の自己ベスト更新はまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "いいねの偏り自己診断",
-                dialogDiversityRows(stats.likeDiversity, stats.playerNames),
-                "いいねした対象の分散データはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "いいねDNA診断",
-                listOf("${stats.likeDna.label} — 活動リズムと偏り自己診断の複合結果") + stats.likeDna.insights,
-                "いいねDNAを作るデータはまだありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "一番乗りランキング",
-                stats.globalFirstLikers.mapIndexed { index, row ->
-                  dialogPlayerCountLine(index, row.playerUuid, row.count, "回", stats.playerNames)
-                },
-                "まだ一番乗りデータはありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "$targetName の建築への一番乗り",
-                stats.ownFirstLikers.mapIndexed { index, row ->
-                  dialogPlayerCountLine(index, row.playerUuid, row.count, "回", stats.playerNames)
-                },
-                "$targetName の建築への一番乗りデータはありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "恩人プレイヤー",
-                stats.benefactors.mapIndexed { index, row ->
-                  dialogPlayerCountLine(index, row.playerUuid, row.count, "いいね", stats.playerNames)
-                },
-                "$targetName の建築へいいねしたプレイヤーはまだいません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "今週いいねした制作者",
-                stats.weeklyLikedOwners.mapIndexed { index, row ->
-                  dialogOwnerCountLine(index, row.ownerUuid, row.count, "いいね", stats.playerNames)
-                },
-                "今週いいねした制作者データはありません。",
-            ),
-            dialogStatsRowsBody(
-                palette,
-                "$targetName の建築 Top5",
-                stats.ownBuilds.mapIndexed { index, row ->
-                  "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 18)} ${formatCount(row.likeCount)}いいね"
-                },
-                "$targetName の登録済み建築データはありません。",
-            ),
-        )
+    val statsContent = buildDialogStatsContent(player, targetUuid, targetName)
+    val includeLifeWorld = statsContent.includeLifeWorld
 
     val actions =
         listOf(
@@ -2156,13 +1914,13 @@ object SLData : CommandExecutor, TabCompleter, Listener {
               .base(
                   DialogBase.builder(
                           Component.text(
-                              "SocialLikes 詳細統計: $targetName",
+                              statsContent.title,
                               NamedTextColor.LIGHT_PURPLE,
                           )
                       )
                       .canCloseWithEscape(true)
                       .afterAction(DialogBase.DialogAfterAction.CLOSE)
-                      .body(body)
+                      .body(statsContent.bodies)
                       .build()
               )
               .type(
@@ -2179,6 +1937,426 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     )
   }
 
+  private fun buildDialogStatsContent(
+      player: Player,
+      targetUuid: UUID,
+      targetName: String,
+  ): DialogStatsContent {
+    val includeLifeWorld = dialogStatsIncludeLifeWorld[player.uniqueId] == true
+    val stats = SLDataStatsService.loadExtendedStats(targetUuid.toString(), 5, includeLifeWorld)
+    val palette = dialogTextPalette(player)
+    val bodyWidth = 560
+    val sections =
+        listOf(
+            DialogStatsSection(
+                "サマリー",
+                DialogBody.plainMessage(
+                    dialogStatsSummaryComponent(stats, targetName, palette),
+                    bodyWidth,
+                ),
+                dumpSkipsFirstLine = false,
+            ),
+            dialogStatsSection(
+                palette,
+                "概要ダッシュボード",
+                listOf(
+                    "応援している作者 ${formatCount(stats.socialOverview.supportedOwnerCount)}人",
+                    "応援されている層 ${formatCount(stats.socialOverview.supporterCount)}人",
+                ),
+                "概要データはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "ワールド別の反応${if (includeLifeWorld) "（ライフ含む）" else "（ライフ除外）"}",
+                stats.worldReactions.map { row ->
+                  "${compactDialogText(row.worldName, 14)} 受${formatDoublePercent(row.receivedShare)} / 押${formatDoublePercent(row.givenShare)} / 受効率差 ${formatSignedAverage(row.receivedAverageDelta)}"
+                },
+                "対象ワールドの反応データはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "自分 vs 全体平均",
+                dialogTwoBarRows(
+                    "自分",
+                    stats.comparison.ownAverage,
+                    "全体",
+                    stats.comparison.globalAverage,
+                ) +
+                    listOf(
+                        "自作品平均 ${formatAverageCount(stats.comparison.ownAverage)} / 全作品平均 ${formatAverageCount(stats.comparison.globalAverage)}",
+                        "いいね効率 ${formatAverageCount(stats.comparison.ownAverage)}/作品（全体平均との差 ${formatSignedAverage(stats.comparison.ownAverage - stats.comparison.globalAverage)}）",
+                        "押した作品の平均 ${formatAverageCount(stats.comparison.givenTargetAverage)}（全体平均 ${formatAverageCount(stats.comparison.globalAverage)} / 中央値 ${formatAverageCount(stats.comparison.globalMedian)}） — ${givenLikeDeviationDiagnosis(stats.comparison)}",
+                    ),
+                "比較できる建築データはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "送った・受け取ったいいねの差分",
+                listOf(
+                    "送 ${formatCount(stats.balance.given)} / 受 ${formatCount(stats.balance.received)} / 差 ${formatCount(stats.balance.received - stats.balance.given)}",
+                    "受÷送 ratio ${formatRatio(stats.balance.receivePerGiven)} — ${stats.balance.diagnosis}",
+                ),
+                "いいねデータはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "自作品のいいね分布",
+                listOf(
+                    "平均 ${formatAverageCount(stats.likeDistribution.average)} / 中央値 ${formatAverageCount(stats.likeDistribution.median)} / 最大 ${formatCount(stats.likeDistribution.maximum)}",
+                ),
+                "自作品データはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "最新建築 vs 過去建築",
+                stats.recentBuildComparison
+                    ?.let { comparison ->
+                      dialogTwoBarRows(
+                          "過去(${comparison.olderCount})",
+                          comparison.olderAverage,
+                          "最新(${comparison.newerCount})",
+                          comparison.newerAverage,
+                      ) +
+                          listOf(
+                              "過去 ${formatAverageCount(comparison.olderAverage)} / 最新 ${formatAverageCount(comparison.newerAverage)}"
+                          )
+                    }
+                    .orEmpty(),
+                "新旧比較には2作品以上必要です。",
+            ),
+            dialogStatsSection(
+                palette,
+                "いいね集中度",
+                listOf(
+                    "上位${stats.likeConcentration.topCount}作品の占有率 ${formatDoublePercent(stats.likeConcentration.topShare)} / HHI風 ${String.format("%.2f", stats.likeConcentration.hhi)}",
+                    stats.likeConcentration.diagnosis,
+                ),
+                "自作品のいいねデータはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "相互いいねペア ${formatCount(stats.mutualLikes.pairCount)}組",
+                listOf(
+                    "応援相手ベース ${formatDialogPercent(stats.mutualLikes.pairCount, stats.mutualLikes.likedOwnerCount)} / 応援者ベース ${formatDialogPercent(stats.mutualLikes.pairCount, stats.mutualLikes.likerCount)}",
+                ) +
+                    stats.mutualLikes.pairs.mapIndexed { index, row ->
+                      "${index + 1}. ${dialogPlayerName(row.playerUuid, stats.playerNames)} 送${formatCount(row.likesGiven)} / 受${formatCount(row.likesReceived)}"
+                    },
+                "まだ相互いいねペアはありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "お気に入りビルダーの捕捉率",
+                stats.favoriteBuilderCapture
+                    ?.let { capture ->
+                      val rate =
+                          formatDialogPercent(capture.likedBuildCount, capture.totalBuildCount)
+                      listOf(
+                          "${dialogPlayerName(capture.ownerUuid, stats.playerNames)} ${formatCount(capture.likedBuildCount)} / ${formatCount(capture.totalBuildCount)}建築 ($rate)",
+                          dialogProgressBar(capture.likedBuildCount, capture.totalBuildCount),
+                      )
+                    }
+                    .orEmpty(),
+                "いいね済みの作者がまだいないため、既定の対象を選べません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "初対面いいね（記録開始 2026/1/14 後）",
+                stats.firstEncounters.map { row ->
+                  "◆ ${dialogPlayerName(row.ownerUuid, stats.playerNames)}\n　初いいね ${dialogDateLabel(row.firstLikedAt)}"
+                },
+                "記録開始後の初対面いいねはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "共通の推し・似た好みのプレイヤー",
+                stats.similarTastePlayers.mapIndexed { index, row ->
+                  dialogPlayerCountLine(
+                      index,
+                      row.playerUuid,
+                      row.count,
+                      "人の推しが共通",
+                      stats.playerNames,
+                  )
+                },
+                "共通の推しを持つプレイヤーはまだ見つかりません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "常連サポーター",
+                stats.regularSupporters.mapIndexed { index, row ->
+                  "${index + 1}. ${dialogPlayerName(row.playerUuid, stats.playerNames)} ${formatCount(row.likeCount)}いいね / ${formatCount(row.activeWeekCount)}週"
+                },
+                "$targetName の建築への常連サポーターはまだいません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "リピーター率",
+                listOf(
+                    "${formatCount(stats.repeaterRate.repeaterCount)} / ${formatCount(stats.repeaterRate.uniqueLikerCount)}人 (${formatDialogPercent(stats.repeaterRate.repeaterCount, stats.repeaterRate.uniqueLikerCount)})",
+                    repeaterRateDiagnosis(
+                        stats.repeaterRate.repeaterCount,
+                        stats.repeaterRate.uniqueLikerCount,
+                    ),
+                ),
+                "リピーター率データはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "新作最速サポーター",
+                stats.fastestSupporters.mapIndexed { index, row ->
+                  dialogPlayerCountLine(
+                      index,
+                      row.playerUuid,
+                      row.count,
+                      "作品で最速",
+                      stats.playerNames,
+                  )
+                },
+                "$targetName の新作への最速サポーターデータはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "初速（作品別・初いいねまで）",
+                stats.initialLikeSpeed
+                    ?.let { speed ->
+                      listOf(
+                          "最短 ${formatDialogDuration(speed.minimumMillis)}",
+                          "中央値 ${formatDialogDuration(speed.medianMillis)}",
+                          "最長 ${formatDialogDuration(speed.maximumMillis)}",
+                          "対象 ${formatCount(speed.buildCount)}作品（いいね未到達は除外）",
+                      )
+                    }
+                    .orEmpty(),
+                "$targetName の作品で、初いいね時刻を持つデータはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "活動リズム（JST）",
+                dialogRhythmRows(stats.activityRhythm),
+                "いいねした時刻のデータはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "いいね対象の築年数（いいね時点）",
+                stats.buildAgeDistribution.map { bucket ->
+                  "${bucket.label} ${formatCount(bucket.count)}件"
+                },
+                "築年数を計算できるいいねはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "いいね継続日数",
+                listOf(
+                    "送ったいいね: 現在 ${formatCount(stats.givenStreak.currentDays)}日連続 / 最長 ${formatCount(stats.givenStreak.longestDays)}日 — ${streakTitle(stats.givenStreak)}",
+                    "受けいいね: 現在 ${formatCount(stats.receivedStreak.currentDays)}日連続 / 最長 ${formatCount(stats.receivedStreak.longestDays)}日 — ${streakTitle(stats.receivedStreak)}",
+                ),
+                "日次いいねデータはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "宣伝効果（前後24時間）",
+                listOf(
+                    "リポスト ${formatCount(stats.publicity.totalReposts)}回 / 通常時 ${formatAverageCount(stats.publicity.normalReactionAverage)} / 宣伝後 ${formatAverageCount(stats.publicity.publicityReactionAverage)} / 差 ${formatSignedAverage(stats.publicity.reactionDelta)}",
+                    "掲載直後24時間の反響を、同じ長さの直前24時間と比較しています。",
+                ),
+                "このプレイヤーの建築には、まだ宣伝履歴がありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "宣伝回数ランキング Top5",
+                stats.publicity.topBuilds.mapIndexed { index, row ->
+                  "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 18)} ${formatCount(row.publicityCount)}回"
+                },
+                "まだ宣伝された建築はありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "複数回宣伝の反応変化（イベント分析）",
+                stats.publicity.recurringBuilds.map { row ->
+                  "#${row.buildId} ${compactDialogText(row.title, 15)}: 通常 ${formatAverageCount(row.normalReactionAverage)} → 宣伝後 ${formatAverageCount(row.publicityReactionAverage)} (${formatSignedAverage(row.reactionDelta)}) / 平均間隔 ${row.averageIntervalHours?.let { formatDialogDuration((it * 3_600_000).toLong()) } ?: "-"}"
+                },
+                "複数回宣伝された建築はまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "ロングテールいいね（公開30日後以降）",
+                listOf(
+                    "プレイヤー: ${formatCount(stats.givenLongTail.longTailCount)} / ${formatCount(stats.givenLongTail.totalCount)}件 (${formatDoublePercent(stats.givenLongTail.percentage)}) — 古い作品を掘る人",
+                    "作者: ${formatCount(stats.receivedLongTail.longTailCount)} / ${formatCount(stats.receivedLongTail.totalCount)}件 (${formatDoublePercent(stats.receivedLongTail.percentage)}) — 過去作が後から愛された",
+                ),
+                "ロングテールを計算できるいいねはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "自己ベスト更新履歴（送ったいいね）",
+                dialogPersonalBestRows(stats.personalBestHistory),
+                "日・週・月の自己ベスト更新はまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "いいねの偏り自己診断",
+                dialogDiversityRows(stats.likeDiversity, stats.playerNames),
+                "いいねした対象の分散データはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "いいねDNA診断",
+                listOf("${stats.likeDna.label} — 活動リズムと偏り自己診断の複合結果") + stats.likeDna.insights,
+                "いいねDNAを作るデータはまだありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "一番乗りランキング",
+                stats.globalFirstLikers.mapIndexed { index, row ->
+                  dialogPlayerCountLine(index, row.playerUuid, row.count, "回", stats.playerNames)
+                },
+                "まだ一番乗りデータはありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "$targetName の建築への一番乗り",
+                stats.ownFirstLikers.mapIndexed { index, row ->
+                  dialogPlayerCountLine(index, row.playerUuid, row.count, "回", stats.playerNames)
+                },
+                "$targetName の建築への一番乗りデータはありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "恩人プレイヤー",
+                stats.benefactors.mapIndexed { index, row ->
+                  dialogPlayerCountLine(index, row.playerUuid, row.count, "いいね", stats.playerNames)
+                },
+                "$targetName の建築へいいねしたプレイヤーはまだいません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "今週いいねした制作者",
+                stats.weeklyLikedOwners.mapIndexed { index, row ->
+                  dialogOwnerCountLine(index, row.ownerUuid, row.count, "いいね", stats.playerNames)
+                },
+                "今週いいねした制作者データはありません。",
+            ),
+            dialogStatsSection(
+                palette,
+                "$targetName の建築 Top5",
+                stats.ownBuilds.mapIndexed { index, row ->
+                  "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 18)} ${formatCount(row.likeCount)}いいね"
+                },
+                "$targetName の登録済み建築データはありません。",
+            ),
+        )
+
+    return DialogStatsContent(
+        title = "SocialLikes 詳細統計: $targetName",
+        includeLifeWorld = includeLifeWorld,
+        sections = sections,
+        defaultDumpColorValues =
+            setOf(
+                palette.primary.value(),
+                palette.secondary.value(),
+                NamedTextColor.WHITE.value(),
+            ),
+    )
+  }
+
+  private fun dialogStatsSection(
+      palette: DialogTextPalette,
+      title: String,
+      rows: List<String>,
+      emptyMessage: String,
+  ): DialogStatsSection =
+      DialogStatsSection(
+          title,
+          dialogStatsRowsBody(palette, title, rows, emptyMessage),
+          dumpSkipsFirstLine = true,
+      )
+
+  private fun writeDialogStatsDump(player: Player, targetUuid: UUID, targetName: String): File {
+    val statsContent = buildDialogStatsContent(player, targetUuid, targetName)
+    Tools.plugin.dataFolder.mkdirs()
+    val outputFile = File(Tools.plugin.dataFolder, DIALOG_STATS_DUMP_FILE_NAME)
+    outputFile.writeText(dialogStatsDumpText(statsContent), Charsets.UTF_8)
+    return outputFile
+  }
+
+  private fun dialogStatsDumpText(statsContent: DialogStatsContent): String =
+      buildString {
+            appendLine("=== ${statsContent.title} ===")
+            statsContent.sections.forEach { section ->
+              appendLine()
+              appendLine("[${section.title}]")
+              val plainLines =
+                  dialogStatsPlainTextSerializer.serialize(section.body.contents()).lines()
+              val colors =
+                  dialogComponentLineColors(
+                      section.body.contents(),
+                      statsContent.defaultDumpColorValues,
+                  )
+              val startIndex = if (section.dumpSkipsFirstLine) 1 else 0
+              plainLines.drop(startIndex).forEachIndexed { index, line ->
+                val colorName = colors.getOrNull(startIndex + index)?.let(::dialogDumpColorName)
+                appendLine(if (colorName == null) line else "($colorName) $line")
+              }
+            }
+          }
+          .trimEnd() + "\n"
+
+  private fun dialogComponentLineColors(
+      component: Component,
+      defaultColorValues: Set<Int>,
+  ): List<TextColor?> {
+    val lineColors = mutableListOf<TextColor?>()
+    var currentLineColor: TextColor? = null
+
+    fun appendText(text: String, color: TextColor?) {
+      text.forEach { character ->
+        if (character == '\n') {
+          lineColors += currentLineColor
+          currentLineColor = null
+        } else if (
+            currentLineColor == null &&
+                color != null &&
+                color.value() !in defaultColorValues &&
+                !character.isWhitespace()
+        ) {
+          currentLineColor = color
+        }
+      }
+    }
+
+    fun visit(part: Component, inheritedColor: TextColor?) {
+      val color = part.color() ?: inheritedColor
+      if (part is TextComponent) appendText(part.content(), color)
+      part.children().forEach { child -> visit(child, color) }
+    }
+
+    visit(component, null)
+    lineColors += currentLineColor
+    return lineColors
+  }
+
+  private fun dialogDumpColorName(color: TextColor): String =
+      when (color.value()) {
+        NamedTextColor.BLACK.value() -> "black"
+        NamedTextColor.DARK_BLUE.value() -> "dark_blue"
+        NamedTextColor.DARK_GREEN.value() -> "dark_green"
+        NamedTextColor.DARK_AQUA.value() -> "dark_aqua"
+        NamedTextColor.DARK_RED.value() -> "dark_red"
+        NamedTextColor.DARK_PURPLE.value() -> "dark_purple"
+        NamedTextColor.GOLD.value() -> "gold"
+        NamedTextColor.GRAY.value() -> "gray"
+        NamedTextColor.DARK_GRAY.value() -> "dark_gray"
+        NamedTextColor.BLUE.value() -> "blue"
+        NamedTextColor.GREEN.value() -> "green"
+        NamedTextColor.AQUA.value() -> "aqua"
+        NamedTextColor.RED.value() -> "red"
+        NamedTextColor.LIGHT_PURPLE.value() -> "light_purple"
+        NamedTextColor.YELLOW.value() -> "yellow"
+        NamedTextColor.WHITE.value() -> "white"
+        else -> String.format("#%06x", color.value())
+      }
+
   private fun dialogStatsSummaryComponent(
       stats: SLDataStatsService.ExtendedStats,
       targetName: String,
@@ -2193,8 +2371,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             "週${dialogLatestPersonalBest(stats.personalBestHistory.weekly)} / " +
             "月${dialogLatestPersonalBest(stats.personalBestHistory.monthly)}"
     val week = stats.playerWeek
-    return Component.text()
-        .style(Style.style().font(DIALOG_FONT).build())
+    return Component.empty()
+        .font(DIALOG_FONT)
         .append(Component.text("今週 ${week.label}\n", palette.secondary))
         .append(
             Component.text(
@@ -2210,7 +2388,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 NamedTextColor.AQUA,
             )
         )
-        .build()
   }
 
   private fun dialogStatsRowsBody(
@@ -2218,14 +2395,13 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       title: String,
       rows: List<String>,
       emptyMessage: String,
-  ): DialogBody {
+  ): PlainMessageDialogBody {
     val lines = if (rows.isEmpty()) listOf(emptyMessage) else rows
     val component =
-        Component.text()
-            .style(Style.style().font(DIALOG_FONT).build())
+        Component.empty()
+            .font(DIALOG_FONT)
             .append(Component.text("$title\n", NamedTextColor.LIGHT_PURPLE))
             .append(Component.text(lines.joinToString("\n"), palette.secondary))
-            .build()
     return DialogBody.plainMessage(component, 560)
   }
 
@@ -2963,6 +3139,21 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       val name: String,
   )
 
+  private data class DialogStatsContent(
+      val title: String,
+      val includeLifeWorld: Boolean,
+      val sections: List<DialogStatsSection>,
+      val defaultDumpColorValues: Set<Int>,
+  ) {
+    val bodies: List<DialogBody> = sections.map { it.body }
+  }
+
+  private data class DialogStatsSection(
+      val title: String,
+      val body: PlainMessageDialogBody,
+      val dumpSkipsFirstLine: Boolean,
+  )
+
   // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
   private enum class DialogTextPalette(
       val label: String,
@@ -3355,7 +3546,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                   .coerceIn(1, maxUnits)
         }
     val plain = StringBuilder()
-    val component = Component.text().style(Style.style().font(DIALOG_FONT).build())
+    var component = Component.empty().font(DIALOG_FONT)
     val gridColor = TextColor.color(104, 112, 124)
     val hiddenColor = TextColor.color(0, 0, 0)
     val barColor = TextColor.color(108, 205, 117)
@@ -3383,9 +3574,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
     fun append(text: String, color: TextColor) {
       plain.append(text)
-      component.append(
-          Component.text(text).style(Style.style().font(DIALOG_FONT).color(color).build())
-      )
+      component = component.append(Component.text(text, color).font(DIALOG_FONT))
       text.forEach { if (it != '\n') usedGlyphs += it }
     }
 
@@ -3479,7 +3668,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     recordLineAdvance("x-axis")
 
     return DialogGraph(
-        component.build(),
+        component,
         plain.toString().trimEnd(),
         axisMax,
         ticks,
