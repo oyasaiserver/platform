@@ -32,6 +32,12 @@ commands:
     description: "建築数とログイン数/ログイン率でランクアップ候補を確認するコマンド"
   slsignbreak:
     description: "SLTP看板を破壊するコマンド"
+  sldatafont:
+    description: "週次いいね数をカスタムフォントGUIタイトルに描画するPOCコマンド"
+  sldata:
+    description: "週次いいね統計の表示方式を切り替えて比較する実験コマンド"
+  sldatapack:
+    description: "フォントグラフPOC用リソースパックを再配布するコマンド"
 permissions:
   sociallikes3.slrankup:
     description: "/slrankup commnad use permission"

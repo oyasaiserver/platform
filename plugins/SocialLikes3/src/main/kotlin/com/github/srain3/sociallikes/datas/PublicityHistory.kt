@@ -26,6 +26,8 @@ object PublicityHistory {
                 data[dataID] = PublicityData(dataID, time, user, id)
                 lastID = max(lastID, dataID)
               }
+              // The YAML file remains authoritative; SQLite is only the /sldata statistics shadow.
+              SLDatabase.syncPublicityHistory(data.values)
             },
             "SL3-loadPublicityHistoryData",
         )
@@ -37,11 +39,13 @@ object PublicityHistory {
     val dataID = lastID + 1
     lastID++
 
-    data[dataID] = PublicityData(dataID, time, user, slid)
+    val publicityData = PublicityData(dataID, time, user, slid)
+    data[dataID] = publicityData
     yaml.set("${dataID}.TimeStamp", time.toString())
     yaml.set("${dataID}.User", user.toString())
     yaml.set("${dataID}.SLID", slid)
     yaml.save()
+    SLDatabase.savePublicityHistory(publicityData)
   }
 
   fun delSLID(slid: Int) {
@@ -52,6 +56,7 @@ object PublicityHistory {
       }
     }
     yaml.save()
+    SLDatabase.deletePublicityHistoryForBuild(slid)
   }
 
   fun getData(): Map<Int, PublicityData> {

@@ -18,6 +18,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Biome
 import org.bukkit.block.BlockFace
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -62,6 +63,7 @@ object Data {
       set("DiscordTextID", data.discordTextID)
     }
     yml.save()
+    SLDatabase.saveBuild(data)
 
     // Cacheへ保存する(既にデータが有る場合は追加しない)
     val list = dataMap[dirName] ?: mutableListOf()
@@ -156,6 +158,7 @@ object Data {
 
     val yml = CustomYaml("data/" + dirName + "/${slData.id}.yml")
     yml.delete()
+    SLDatabase.deleteBuild(slData.id)
 
     SLRankUp.minusBuildTask(slData.owner)
   }
@@ -243,18 +246,7 @@ object Data {
                   val likes: MutableList<UUID> = mutableListOf()
                   likesStr.forEach { uuidStr -> likes.add(UUID.fromString(uuidStr)) }
 
-                  // likesWithTimestampのロード
-                  val rawLikesWithTimestamp = yml.get("likesWithTimestamp")
-                  val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf()
-                  if (rawLikesWithTimestamp is Map<*, *>) {
-                    rawLikesWithTimestamp.forEach { (k, v) ->
-                      try {
-                        val uuid = UUID.fromString(k as String)
-                        val ts = (v as? Number)?.toLong() ?: v.toString().toLongOrNull()
-                        if (ts != null) likesWithTimestamp[uuid] = ts
-                      } catch (_: Exception) {}
-                    }
-                  }
+                  val likesWithTimestamp = loadLikesWithTimestamp(yml, id)
 
                   // Cacheへ入れる
                   val slData =
@@ -308,12 +300,61 @@ object Data {
                 Tools.plugin.logger.severe("SLRankUp.createDataTaskにエラー: ${e.toString()}")
               }
 
+              SLDatabase.syncBuilds(getSLDataAll())
+
               loading = true
               Bukkit.getLogger().info("[SL3] Load completion!")
             },
             "SL3-loadFileToDataCache",
         )
         .start()
+  }
+
+  private fun loadLikesWithTimestamp(yml: CustomYamlFile, id: Int): MutableMap<UUID, Long> {
+    val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf()
+    var parseFailureCount = 0
+
+    fun putTimestamp(key: Any?, value: Any?, section: ConfigurationSection? = null) {
+      try {
+        val keyString =
+            key as? String
+                ?: run {
+                  parseFailureCount++
+                  return
+                }
+        val uuid = UUID.fromString(keyString)
+        val ts =
+            when (value) {
+              is Number -> section?.getLong(keyString) ?: value.toLong()
+              else -> value?.toString()?.toLongOrNull()
+            }
+        if (ts != null) {
+          likesWithTimestamp[uuid] = ts
+        } else {
+          parseFailureCount++
+        }
+      } catch (_: Exception) {
+        parseFailureCount++
+      }
+    }
+
+    val section = yml.getConfigurationSection("likesWithTimestamp")
+    if (section != null) {
+      section.getKeys(false).forEach { key -> putTimestamp(key, section.get(key), section) }
+    } else {
+      val rawLikesWithTimestamp = yml.get("likesWithTimestamp")
+      if (rawLikesWithTimestamp is Map<*, *>) {
+        rawLikesWithTimestamp.forEach { (key, value) -> putTimestamp(key, value) }
+      }
+    }
+
+    if (parseFailureCount > 0) {
+      Tools.plugin.logger.warning(
+          "[SL3] ID:$id likesWithTimestamp parse skipped $parseFailureCount invalid entr${if (parseFailureCount == 1) "y" else "ies"}"
+      )
+    }
+
+    return likesWithTimestamp
   }
 
   /** WorldNameとchunk別のslDataMap */

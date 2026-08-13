@@ -1,4 +1,5 @@
 [libraries]
+sqlite-jdbc = {module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc"}
 anvilgui = {module = "net.wesjd:anvilgui", version.ref = "anvilgui"}
 discord-webhooks = {module = "club.minnced:discord-webhooks", version.ref = "discord-webhooks"}
 discordsrv = {module = "com.discordsrv:discordsrv", version.ref = "discordsrv"}
@@ -24,6 +25,7 @@ fawe-bukkit = {module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", vers
 paperweight-userdev = {id = "io.papermc.paperweight.userdev", version.ref = "paperweight"}
 
 [versions]
+sqlite-jdbc = "3.53.2.0"
 anvilgui = "1.10.11-SNAPSHOT"
 discord-webhooks = "0.8.4"
 discordsrv = "1.30.5"
