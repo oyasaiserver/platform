@@ -127,6 +127,8 @@ object SLDatabase {
       val publicityCount: Int,
   )
 
+  data class LikeTimestampCoverage(val totalLikes: Int, val timestampedLikes: Int)
+
   /**
    * A single repost together with the reactions immediately around it (all windows are 24 hours).
    */
@@ -479,6 +481,30 @@ object SLDatabase {
   /** Returns all timestamped likes received by one build owner with their build dimensions. */
   fun loadReceivedLikeEventsBlocking(ownerUuid: String): List<BuildLikeEvent> =
       loadLikeEventsBlocking("loadReceivedLikeEvents", "b.owner_uuid = ?", ownerUuid)
+
+  fun loadLikeTimestampCoverageBlocking(): LikeTimestampCoverage =
+      submitBlocking("loadLikeTimestampCoverage") {
+        LikeTimestampCoverage(
+            totalLikes = countQuery("SELECT COUNT(*) AS count FROM build_likes"),
+            timestampedLikes =
+                countQuery("SELECT COUNT(*) AS count FROM build_likes WHERE liked_at IS NOT NULL"),
+        )
+      } ?: LikeTimestampCoverage(totalLikes = 0, timestampedLikes = 0)
+
+  fun loadOwnerBuildCountCreatedSinceBlocking(ownerUuid: String, since: LocalDateTime): Int =
+      submitBlocking("loadOwnerBuildCountCreatedSince") {
+        countQuery(
+            """
+            SELECT COUNT(id) AS count
+            FROM builds
+            WHERE owner_uuid = ? AND created_at >= ?
+            """
+                .trimIndent()
+        ) { statement ->
+          statement.setString(1, ownerUuid)
+          statement.setString(2, since.toString())
+        }
+      } ?: 0
 
   fun loadWeeklyLikeCountsBlocking(weeks: Int = 12): List<WeeklyLikeCount> {
     val normalizedWeeks = weeks.coerceIn(1, 52)

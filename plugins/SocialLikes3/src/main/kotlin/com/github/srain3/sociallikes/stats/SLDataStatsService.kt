@@ -5,6 +5,7 @@ import java.time.DayOfWeek
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.ZoneId
 import java.time.temporal.TemporalAdjusters
@@ -20,6 +21,9 @@ object SLDataStatsService {
 
   private val analysisZoneId: ZoneId
     get() = ZoneId.of("Asia/Tokyo")
+
+  private val reliableInitialLikeBuildCreatedSince: LocalDateTime =
+      LocalDateTime.of(2026, 7, 2, 0, 0)
 
   enum class Period(val label: String) {
     WEEK("週間"),
@@ -158,11 +162,13 @@ object SLDataStatsService {
       val likeConcentration: LikeConcentration,
       val publicity: PublicityStats,
       val likeDna: LikeDnaDiagnosis,
+      val likeTimestampCoverage: SLDatabase.LikeTimestampCoverage,
       val playerNames: Map<String, String>,
   )
 
   data class InitialLikeSpeedStats(
-      val buildCount: Int,
+      val measuredBuildCount: Int,
+      val targetBuildCount: Int,
       val minimumMillis: Long,
       val medianMillis: Long,
       val maximumMillis: Long,
@@ -411,7 +417,17 @@ object SLDataStatsService {
         }
     val givenLikeEvents = SLDatabase.loadGivenLikeEventsBlocking(playerUuid)
     val receivedLikeEvents = SLDatabase.loadReceivedLikeEventsBlocking(playerUuid)
-    val initialLikeSpeed = calculateInitialLikeSpeed(receivedLikeEvents)
+    val likeTimestampCoverage = SLDatabase.loadLikeTimestampCoverageBlocking()
+    val initialLikeSpeed =
+        calculateInitialLikeSpeed(
+            receivedLikeEvents.filter {
+              !it.createdAt.isBefore(reliableInitialLikeBuildCreatedSince)
+            },
+            SLDatabase.loadOwnerBuildCountCreatedSinceBlocking(
+                playerUuid,
+                reliableInitialLikeBuildCreatedSince,
+            ),
+        )
     val activityRhythm = calculateActivityRhythm(givenLikeEvents)
     val buildAgeDistribution = calculateAgeBuckets(givenLikeEvents)
     val givenStreak = calculateStreak(givenLikeEvents.map { it.likedAt })
@@ -449,8 +465,7 @@ object SLDataStatsService {
             SLDatabase.loadPublicityReactionsBlocking(playerUuid),
             normalizedLimit,
         )
-    val likeDna =
-        calculateLikeDna(activityRhythm, likeDiversity, givenLongTail, givenLikeEvents.size)
+    val likeDna = calculateLikeDna(activityRhythm, likeDiversity)
     val playerNames =
         SLDatabase.loadPlayerNamesBlocking(
             globalFirstLikers.map { it.playerUuid } +
@@ -525,6 +540,7 @@ object SLDataStatsService {
         likeConcentration = concentration,
         publicity = publicity,
         likeDna = likeDna,
+        likeTimestampCoverage = likeTimestampCoverage,
         playerNames = playerNames,
     )
   }
@@ -580,11 +596,8 @@ object SLDataStatsService {
   private fun calculateLikeDna(
       rhythm: ActivityRhythmStats,
       diversity: LikeDiversityStats,
-      longTail: LongTailStats,
-      eventCount: Int,
   ): LikeDnaDiagnosis {
     val counts = rhythm.weekdayCounts.flatten()
-    val total = counts.sum()
     val night =
         counts.chunked(8).sumOf { row ->
           (row.getOrNull(0) ?: 0) + (row.getOrNull(1) ?: 0) + (row.getOrNull(7) ?: 0)
@@ -594,26 +607,21 @@ object SLDataStatsService {
             counts.chunked(8).sumOf { row -> row.getOrNull(3) ?: 0 }
     val rhythmLabel = if (night > morning) "深夜特化" else "朝活"
     val distributionLabel = if (diversity.diagnosis == "集中型") "一点集中型" else "分散型"
-    val ownerTop = diversity.ownerTop.firstOrNull()?.count ?: 0
-    val worldTop = diversity.worldTop.firstOrNull()?.count ?: 0
-    val denominator = eventCount.coerceAtLeast(1)
     return LikeDnaDiagnosis(
         "$rhythmLabel の$distributionLabel",
         listOf(
-            "活動時刻: 夜 ${formatPercent(night, total)} / 朝 ${formatPercent(morning, total)}",
-            "作者の集中: 上位1人 ${formatPercent(ownerTop, denominator)}",
-            "ワールドの集中: 上位1world ${formatPercent(worldTop, denominator)}",
-            "古作を掘る: 公開30日後 ${formatPercent(longTail.longTailCount, longTail.totalCount)}",
+            if (distributionLabel == "一点集中型") {
+              "特定の作者・場所を重点的に応援する傾向です。"
+            } else {
+              "応援先が広く、色々な作者や場所を見ている傾向です。"
+            },
         ),
     )
   }
 
-  private fun formatPercent(numerator: Int, denominator: Int): String =
-      if (denominator <= 0) "0.0%"
-      else String.format(java.util.Locale.ROOT, "%.1f%%", numerator * 100.0 / denominator)
-
   private fun calculateInitialLikeSpeed(
-      events: List<SLDatabase.BuildLikeEvent>
+      events: List<SLDatabase.BuildLikeEvent>,
+      targetBuildCount: Int,
   ): InitialLikeSpeedStats? {
     val delays =
         events
@@ -637,7 +645,13 @@ object SLDataStatsService {
     val median =
         if (delays.size % 2 == 1) delays[delays.size / 2]
         else (delays[delays.size / 2 - 1] + delays[delays.size / 2]) / 2
-    return InitialLikeSpeedStats(delays.size, delays.first(), median, delays.last())
+    return InitialLikeSpeedStats(
+        delays.size,
+        targetBuildCount,
+        delays.first(),
+        median,
+        delays.last(),
+    )
   }
 
   private fun calculateActivityRhythm(
