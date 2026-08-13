@@ -72,6 +72,7 @@ object SLDatabase {
   data class BuildLikeEvent(
       val buildId: Int,
       val title: String,
+      val playerUuid: String,
       val ownerUuid: String,
       val worldName: String,
       val chunkX: Int,
@@ -1811,7 +1812,7 @@ object SLDatabase {
           rawConnection()
               ?.prepareStatement(
                   """
-                  SELECT b.id, b.title, b.owner_uuid, b.world_name, b.chunk_x, b.chunk_z, b.created_at, bl.liked_at
+                  SELECT b.id, b.title, bl.player_uuid, b.owner_uuid, b.world_name, b.chunk_x, b.chunk_z, b.created_at, bl.liked_at
                   FROM build_likes bl
                   JOIN builds b ON b.id = bl.build_id
                   WHERE $filterSql AND bl.liked_at IS NOT NULL
@@ -1827,6 +1828,7 @@ object SLDatabase {
                         BuildLikeEvent(
                             buildId = results.getInt("id"),
                             title = results.getString("title"),
+                            playerUuid = results.getString("player_uuid"),
                             ownerUuid = results.getString("owner_uuid"),
                             worldName = results.getString("world_name"),
                             chunkX = results.getInt("chunk_x"),

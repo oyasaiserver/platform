@@ -169,9 +169,11 @@ object SLDataStatsService {
   data class InitialLikeSpeedStats(
       val measuredBuildCount: Int,
       val targetBuildCount: Int,
+      val ownerSelfFirstLikeBuildCount: Int,
       val minimumMillis: Long,
       val medianMillis: Long,
       val maximumMillis: Long,
+      val averageMillis: Long,
   )
 
   data class ActivityRhythmStats(
@@ -418,11 +420,12 @@ object SLDataStatsService {
     val givenLikeEvents = SLDatabase.loadGivenLikeEventsBlocking(playerUuid)
     val receivedLikeEvents = SLDatabase.loadReceivedLikeEventsBlocking(playerUuid)
     val likeTimestampCoverage = SLDatabase.loadLikeTimestampCoverageBlocking()
+    val initialLikeEvents =
+        receivedLikeEvents.filter { !it.createdAt.isBefore(reliableInitialLikeBuildCreatedSince) }
     val initialLikeSpeed =
         calculateInitialLikeSpeed(
-            receivedLikeEvents.filter {
-              !it.createdAt.isBefore(reliableInitialLikeBuildCreatedSince)
-            },
+            initialLikeEvents,
+            playerUuid,
             SLDatabase.loadOwnerBuildCountCreatedSinceBlocking(
                 playerUuid,
                 reliableInitialLikeBuildCreatedSince,
@@ -620,20 +623,30 @@ object SLDataStatsService {
     )
   }
 
+  private fun createdAtInstant(createdAt: LocalDateTime): Instant =
+      createdAt.atZone(zoneId).toInstant()
+
   private fun calculateInitialLikeSpeed(
       events: List<SLDatabase.BuildLikeEvent>,
+      ownerUuid: String,
       targetBuildCount: Int,
   ): InitialLikeSpeedStats? {
+    val grouped = events.groupBy { it.buildId }
+    val ownerSelfFirstLikeBuildCount =
+        grouped.values.count { buildEvents ->
+          val firstLikedAt = buildEvents.minOfOrNull { it.likedAt }
+          firstLikedAt != null &&
+              buildEvents.any { it.likedAt == firstLikedAt && it.playerUuid == ownerUuid }
+        }
     val delays =
-        events
-            .groupBy { it.buildId }
-            .values
+        grouped.values
             .mapNotNull { buildEvents ->
               buildEvents
                   .asSequence()
+                  .filter { it.playerUuid != ownerUuid }
                   .map {
                     Duration.between(
-                            it.createdAt.atZone(analysisZoneId).toInstant(),
+                            createdAtInstant(it.createdAt),
                             Instant.ofEpochMilli(it.likedAt),
                         )
                         .toMillis()
@@ -647,11 +660,13 @@ object SLDataStatsService {
         if (delays.size % 2 == 1) delays[delays.size / 2]
         else (delays[delays.size / 2 - 1] + delays[delays.size / 2]) / 2
     return InitialLikeSpeedStats(
-        delays.size,
-        targetBuildCount,
-        delays.first(),
-        median,
-        delays.last(),
+        measuredBuildCount = delays.size,
+        targetBuildCount = targetBuildCount,
+        ownerSelfFirstLikeBuildCount = ownerSelfFirstLikeBuildCount,
+        minimumMillis = delays.first(),
+        medianMillis = median,
+        maximumMillis = delays.last(),
+        averageMillis = delays.average().toLong(),
     )
   }
 
@@ -691,7 +706,7 @@ object SLDataStatsService {
     events.forEach { event ->
       val ageDays =
           Duration.between(
-                  event.createdAt.atZone(analysisZoneId).toInstant(),
+                  createdAtInstant(event.createdAt),
                   Instant.ofEpochMilli(event.likedAt),
               )
               .toDays()
@@ -734,7 +749,7 @@ object SLDataStatsService {
     val longTail =
         events.count {
           Duration.between(
-                  it.createdAt.atZone(analysisZoneId).toInstant(),
+                  createdAtInstant(it.createdAt),
                   Instant.ofEpochMilli(it.likedAt),
               )
               .toDays() >= 30

@@ -2009,7 +2009,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 "ワールド別の反応${if (includeLifeWorld) "（ライフ含む）" else "（ライフ除外）"}",
                 scopedRows(
                     null,
-                    listOf("差は自作品平均-全体平均（いいね/作品）。上位10ワールド。") +
+                    listOf(
+                        "受%＝$targetName の受けたいいね内の割合 / 押%＝$targetName が押したいいね内の割合",
+                        "差＝$targetName 自作品平均-全体平均（いいね/作品）。上位10ワールド。",
+                    ) +
                         stats.worldReactions.take(10).map { row ->
                           "${compactDialogText(row.worldName, 14)} 受${formatDoublePercent(row.receivedShare)} / 押${formatDoublePercent(row.givenShare)} / 差 ${formatSignedAverage(row.receivedAverageDelta)}/作品"
                         },
@@ -2019,11 +2022,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "自分 vs 全体平均",
+                "$targetName vs 全体平均",
                 scopedRows(
                     null,
                     dialogTwoBarRows(
-                        "自分",
+                        targetName,
                         stats.comparison.ownAverage,
                         "全体",
                         stats.comparison.globalAverage,
@@ -2054,7 +2057,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "自作品のいいね分布・集中度",
+                "$targetName の自作品いいね分布・集中度",
                 scopedRows(
                     null,
                     listOf(
@@ -2074,14 +2077,16 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                     null,
                     stats.recentBuildComparison
                         ?.let { comparison ->
-                          dialogTwoBarRows(
-                              "過去(${comparison.olderCount})",
-                              comparison.olderAverage,
-                              "最新(${comparison.newerCount})",
-                              comparison.newerAverage,
-                          ) +
+                          val unitLine = "値＝累積いいね数/作品（平均）。古い作品ほど公開期間が長いぶん有利です。"
+                          listOf(unitLine) +
+                              dialogTwoBarRows(
+                                  "過去 ${comparison.olderCount}作品",
+                                  comparison.olderAverage,
+                                  "最新 ${comparison.newerCount}作品",
+                                  comparison.newerAverage,
+                              ) +
                               listOf(
-                                  "過去 ${formatAverageCount(comparison.olderAverage)} / 最新 ${formatAverageCount(comparison.newerAverage)}"
+                                  "過去平均 ${formatAverageCount(comparison.olderAverage)}いいね/作品 / 最新平均 ${formatAverageCount(comparison.newerAverage)}いいね/作品",
                               )
                         }
                         .orEmpty(),
@@ -2106,7 +2111,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "お気に入りビルダーの捕捉率",
+                "$targetName が押したいいね：お気に入り作者の捕捉率",
                 scopedRows(
                     null,
                     stats.favoriteBuilderCapture
@@ -2125,7 +2130,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "初対面いいね ⏱",
+                "$targetName が押したいいね：初対面の作者 ⏱",
                 scopedRows(
                     "期間: 2026/1/14以降",
                     stats.firstEncounters.map { row ->
@@ -2137,7 +2142,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "共通の推し・似た好みのプレイヤー",
+                "$targetName が押したいいね：共通の推し・似た好み",
                 scopedRows(
                     null,
                     stats.similarTastePlayers.mapIndexed { index, row ->
@@ -2155,11 +2160,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "常連サポーター ⏱",
+                "$targetName の建築に押してくれた常連サポーター ⏱",
                 scopedRows(
-                    "週数のみ時刻記録あり",
+                    "いいね数は全期間。活動週は時刻記録ありのみ。",
                     stats.regularSupporters.mapIndexed { index, row ->
-                      "${index + 1}. ${dialogPlayerName(row.playerUuid, stats.playerNames)} ${formatCount(row.likeCount)}いいね / ${formatCount(row.activeWeekCount)}週"
+                      "${index + 1}. ${dialogPlayerName(row.playerUuid, stats.playerNames)} ${formatCount(row.likeCount)}いいね（全期間）・時刻あり活動 ${formatCount(row.activeWeekCount)}週"
                     },
                     "$targetName の建築への常連サポーターはまだいません。",
                 ),
@@ -2167,7 +2172,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "建築リピーター率",
+                "$targetName の建築リピーター率",
                 scopedRows(
                     null,
                     listOf(
@@ -2183,7 +2188,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "新作最速サポーター ⏱",
+                "$targetName の建築：新作最速サポーター ⏱",
                 scopedRows(
                     "初いいね時刻ありのみ",
                     listOf("2026/7/2以前の作品は初いいね時刻が不完全です。") +
@@ -2202,27 +2207,25 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "初速（作品別・初いいねまで）⏱",
+                "$targetName の建築：初速（初いいねまで）⏱",
                 scopedRows(
                     "期間: 2026/7/2以降に公開した建築のみ",
                     stats.initialLikeSpeed
                         ?.let { speed ->
                           listOf(
-                              "最短 ${formatDialogDuration(speed.minimumMillis)}",
-                              "中央値 ${formatDialogDuration(speed.medianMillis)}",
-                              "最長 ${formatDialogDuration(speed.maximumMillis)}",
-                              "対象 ${formatCount(speed.targetBuildCount)}作品（2026/7/2以降に公開したもの）",
-                              "計測 ${formatCount(speed.measuredBuildCount)}作品（初いいね到達済み）",
+                              "本人いいねは除外。作成時刻といいね時刻を同じ基準で計算。",
+                              "最短 ${formatDialogDuration(speed.minimumMillis)} / 中央値 ${formatDialogDuration(speed.medianMillis)} / 最長 ${formatDialogDuration(speed.maximumMillis)} / 平均 ${formatDialogDuration(speed.averageMillis)}",
+                              "対象 ${formatCount(speed.targetBuildCount)}作品 / 計測 ${formatCount(speed.measuredBuildCount)}作品 / 本人が初いいね ${formatCount(speed.ownerSelfFirstLikeBuildCount)}作品",
                           )
                         }
                         .orEmpty(),
-                    "$targetName の作品で、2026/7/2以降に初いいね時刻を持つデータはまだありません。",
+                    "$targetName の作品で、2026/7/2以降に本人以外の初いいね時刻を持つデータはまだありません。",
                 ),
-                "$targetName の作品で、初いいね時刻を持つデータはまだありません。",
+                "$targetName の作品で、本人以外の初いいね時刻を持つデータはまだありません。",
             ),
             dialogStatsSection(
                 palette,
-                "活動リズム（JST）⏱",
+                "$targetName が押したいいね：活動リズム（JST）⏱",
                 scopedRows(
                     "時刻記録ありのみ",
                     dialogRhythmRows(stats.activityRhythm),
@@ -2232,7 +2235,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "いいね対象の築年数（いいね時点）⏱",
+                "$targetName が押したいいね：対象の築年数（いいね時点）⏱",
                 scopedRows(
                     "時刻記録ありのみ",
                     stats.buildAgeDistribution.map { bucket ->
@@ -2244,7 +2247,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "いいね継続日数 ⏱",
+                "$targetName のいいね継続日数 ⏱",
                 scopedRows(
                     "時刻記録ありのみ",
                     listOf(
@@ -2261,6 +2264,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 scopedRows(
                     "宣伝履歴全期間 / 前後24時間",
                     listOf(
+                        "宣伝＝10Pを消費し、オンラインプレイヤーへ建築をリポスト表示する機能。",
                         "リポスト ${formatCount(stats.publicity.totalReposts)}回 / 通常時 ${formatAverageCount(stats.publicity.normalReactionAverage)} / 宣伝後 ${formatAverageCount(stats.publicity.publicityReactionAverage)} / 差 ${formatSignedAverage(stats.publicity.reactionDelta)}",
                         "掲載直後24時間の反響を、同じ長さの直前24時間と比較しています。",
                     ),
@@ -2273,9 +2277,14 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 "宣伝回数ランキング Top5",
                 scopedRows(
                     "全期間の宣伝履歴",
-                    stats.publicity.topBuilds.mapIndexed { index, row ->
-                      "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 18)} ${formatCount(row.publicityCount)}回"
-                    },
+                    listOf("宣伝＝10Pを消費し、オンラインプレイヤーへ建築をリポスト表示する機能。") +
+                        (if (stats.publicity.topBuilds.isEmpty()) {
+                          listOf("まだ宣伝された建築はありません。")
+                        } else {
+                          stats.publicity.topBuilds.mapIndexed { index, row ->
+                            "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 18)} ${formatCount(row.publicityCount)}回"
+                          }
+                        }),
                     "まだ宣伝された建築はありません。",
                 ),
                 "まだ宣伝された建築はありません。",
@@ -2285,16 +2294,21 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 "複数回宣伝の反応変化（イベント分析）⏱",
                 scopedRows(
                     "宣伝履歴全期間 / 前後24時間",
-                    stats.publicity.recurringBuilds.map { row ->
-                      "#${row.buildId} ${compactDialogText(row.title, 15)}: 通常 ${formatAverageCount(row.normalReactionAverage)} → 宣伝後 ${formatAverageCount(row.publicityReactionAverage)} (${formatSignedAverage(row.reactionDelta)}) / 平均間隔 ${row.averageIntervalHours?.let { formatDialogDuration((it * 3_600_000).toLong()) } ?: "-"}"
-                    },
+                    listOf("宣伝＝10Pを消費し、オンラインプレイヤーへ建築をリポスト表示する機能。") +
+                        (if (stats.publicity.recurringBuilds.isEmpty()) {
+                          listOf("複数回宣伝された建築はまだありません。")
+                        } else {
+                          stats.publicity.recurringBuilds.map { row ->
+                            "#${row.buildId} ${compactDialogText(row.title, 15)}: 通常 ${formatAverageCount(row.normalReactionAverage)} → 宣伝後 ${formatAverageCount(row.publicityReactionAverage)} (${formatSignedAverage(row.reactionDelta)}) / 平均間隔 ${row.averageIntervalHours?.let { formatDialogDuration((it * 3_600_000).toLong()) } ?: "-"}"
+                          }
+                        }),
                     "複数回宣伝された建築はまだありません。",
                 ),
                 "複数回宣伝された建築はまだありません。",
             ),
             dialogStatsSection(
                 palette,
-                "ロングテールいいね（公開30日後以降）⏱",
+                "$targetName の送受ロングテールいいね（公開30日後以降）⏱",
                 scopedRows(
                     "時刻記録ありのみ",
                     listOf(
@@ -2317,7 +2331,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "応援先の偏り自己診断",
+                "$targetName が押したいいね：応援先の偏り診断",
                 scopedRows(
                     null,
                     dialogDiversityRows(stats.likeDiversity, stats.playerNames),
@@ -2327,7 +2341,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "一番乗りランキング ⏱",
+                "全体の一番乗りランキング（押した人）⏱",
                 scopedRows(
                     "初いいね時刻ありのみ",
                     listOf("2026/7/2以前の作品は初いいね時刻が不完全です。") +
@@ -2509,18 +2523,19 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 palette.primary,
             )
         )
-        .append(
-            Component.text(
-                "※ いいね時刻は2026/7/2以降のみ完全記録。それ以前の時系列は参考値（${dialogLikeTimestampCoverage(stats)}）\n",
-                NamedTextColor.GRAY,
-            )
-        )
+        .append(Component.text("これまでの記録\n", palette.secondary))
         .append(Component.text("$peak\n", NamedTextColor.YELLOW))
         .append(Component.text("$personalBest\n", NamedTextColor.GOLD))
         .append(
             Component.text(
-                "$targetName の一番乗り回数 ${formatCount(stats.ownFirstLikeCount)} / 週合計 ${formatCount(stats.weekly.total)}いいね",
+                "一番乗り ${formatCount(stats.ownFirstLikeCount)}回\n",
                 NamedTextColor.AQUA,
+            )
+        )
+        .append(
+            Component.text(
+                "※ いいね時刻は2026/7/2以降のみ完全記録。それ以前の時系列は参考値（${dialogLikeTimestampCoverage(stats)}）",
+                NamedTextColor.GRAY,
             )
         )
   }
@@ -2671,7 +2686,9 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       else rows.joinToString(" / ") { "${label(it.label)} ${formatCount(it.count)}件" }
 
   private fun formatDialogDuration(millis: Long): String {
-    val minutes = (millis / 60_000L).coerceAtLeast(0L)
+    val seconds = ((millis.coerceAtLeast(0L) + 500L) / 1_000L)
+    if (seconds < 60L) return "${seconds}秒"
+    val minutes = seconds / 60L
     val days = minutes / (24L * 60L)
     val hours = (minutes % (24L * 60L)) / 60L
     val remainingMinutes = minutes % 60L
