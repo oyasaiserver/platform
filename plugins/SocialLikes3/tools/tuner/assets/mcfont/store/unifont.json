@@ -1,0 +1,108 @@
+{
+  "providers": [
+    {
+      "filter": {
+        "jp": true
+      },
+      "hex_file": "minecraft:font/unifont_jp.zip",
+      "size_overrides": [
+        {
+          "__ranges": [
+            "Enclosed CJK Letters and Months",
+            "CJK Compatibility",
+            "CJK Unified Ideographs Extension A",
+            "Yijing Hexagram Symbols",
+            "CJK Unified Ideographs"
+          ],
+          "from": "㈀",
+          "left": 0,
+          "right": 15,
+          "to": "鿿"
+        },
+        {
+          "__ranges": ["CJK Compatibility Ideographs"],
+          "from": "豈",
+          "left": 0,
+          "right": 15,
+          "to": "﫿"
+        }
+      ],
+      "type": "unihex"
+    },
+    {
+      "hex_file": "minecraft:font/unifont.zip",
+      "size_overrides": [
+        {
+          "__ranges": ["CJK Symbols and Punctuation", "Hiragana", "Katakana"],
+          "from": "、",
+          "left": 0,
+          "right": 15,
+          "to": "ヿ"
+        },
+        {
+          "__ranges": [
+            "Enclosed CJK Letters and Months",
+            "CJK Compatibility",
+            "CJK Unified Ideographs Extension A",
+            "Yijing Hexagram Symbols",
+            "CJK Unified Ideographs"
+          ],
+          "from": "㈀",
+          "left": 0,
+          "right": 15,
+          "to": "鿿"
+        },
+        {
+          "__ranges": ["Hangul Jamo"],
+          "from": "ᄀ",
+          "left": 0,
+          "right": 15,
+          "to": "ᇿ"
+        },
+        {
+          "__ranges": ["Hangul Compatibility Jamo"],
+          "from": "㄰",
+          "left": 0,
+          "right": 15,
+          "to": "㆏"
+        },
+        {
+          "__ranges": ["Hangul Jamo Extended-A"],
+          "from": "ꥠ",
+          "left": 0,
+          "right": 15,
+          "to": "꥿"
+        },
+        {
+          "__ranges": ["Hangul Jamo Extended-B"],
+          "from": "ힰ",
+          "left": 0,
+          "right": 15,
+          "to": "퟿"
+        },
+        {
+          "__ranges": ["Hangul Syllables"],
+          "from": "가",
+          "left": 1,
+          "right": 15,
+          "to": "힯"
+        },
+        {
+          "__ranges": ["CJK Compatibility Ideographs"],
+          "from": "豈",
+          "left": 0,
+          "right": 15,
+          "to": "﫿"
+        },
+        {
+          "__ranges": ["Halfwidth and Fullwidth Forms"],
+          "from": "！",
+          "left": 0,
+          "right": 15,
+          "to": "～"
+        }
+      ],
+      "type": "unihex"
+    }
+  ]
+}

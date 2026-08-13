@@ -1,0 +1,228 @@
+{
+  "type": "minecraft:notice",
+  "title": {
+    "text": "いいね数 Top5",
+    "color": "light_purple"
+  },
+  "external_title": {
+    "text": "いいね数 Top5"
+  },
+  "body": [
+    {
+      "type": "minecraft:plain_message",
+      "width": 300,
+      "contents": {
+        "text": "今週 ／ 制作者別いいね数 Top5 ／ 合計 ３３，３７８",
+        "color": "gray",
+        "font": "minecraft:uniform"
+      }
+    },
+    {
+      "type": "minecraft:item",
+      "item": {
+        "id": "minecraft:player_head",
+        "count": 1,
+        "components": {
+          "minecraft:custom_name": {
+            "text": "１位 f2ebf4ff",
+            "color": "gold",
+            "italic": false
+          },
+          "minecraft:lore": [
+            {
+              "text": "今週のいいね：246",
+              "color": "yellow",
+              "italic": false
+            },
+            {
+              "text": "製作者UUID：f2ebf4ff-5691-41bf-b239-a78bcdbdfc3b",
+              "color": "gray",
+              "italic": false
+            }
+          ]
+        }
+      },
+      "description": {
+        "width": 250,
+        "contents": [
+          { "text": "１位　", "color": "gray", "font": "minecraft:uniform" },
+          { "text": "f2ebf4ff　", "color": "white", "font": "minecraft:uniform" },
+          {
+            "text": "████████████████████████",
+            "color": "gold",
+            "font": "minecraft:uniform",
+            "hover_event": {
+              "action": "show_text",
+              "value": { "text": "f2ebf4ff\n今週のいいね：246", "color": "yellow" }
+            }
+          },
+          { "text": "　２４６", "color": "gray", "font": "minecraft:uniform" }
+        ]
+      },
+      "show_decoration": false,
+      "show_tooltip": true,
+      "width": 16,
+      "height": 16
+    },
+    {
+      "type": "minecraft:item",
+      "item": {
+        "id": "minecraft:player_head",
+        "count": 1,
+        "components": {
+          "minecraft:custom_name": {
+            "text": "２位 fbeb739b",
+            "color": "green",
+            "italic": false
+          },
+          "minecraft:lore": [
+            { "text": "今週のいいね：198", "color": "yellow", "italic": false },
+            { "text": "製作者UUID：fbeb739b-1147-45ec-9fe1-a037c51c88a5", "color": "gray", "italic": false }
+          ]
+        }
+      },
+      "description": {
+        "width": 250,
+        "contents": [
+          { "text": "２位　", "color": "gray", "font": "minecraft:uniform" },
+          { "text": "fbeb739b　", "color": "white", "font": "minecraft:uniform" },
+          {
+            "text": "████████████████████",
+            "color": "green",
+            "font": "minecraft:uniform",
+            "hover_event": {
+              "action": "show_text",
+              "value": { "text": "fbeb739b\n今週のいいね：198", "color": "yellow" }
+            }
+          },
+          { "text": "████", "color": "dark_gray", "font": "minecraft:uniform" },
+          { "text": "　１９８", "color": "gray", "font": "minecraft:uniform" }
+        ]
+      },
+      "show_decoration": false,
+      "show_tooltip": true,
+      "width": 16,
+      "height": 16
+    },
+    {
+      "type": "minecraft:item",
+      "item": {
+        "id": "minecraft:player_head",
+        "count": 1,
+        "components": {
+          "minecraft:custom_name": {
+            "text": "３位 733b372e",
+            "color": "green",
+            "italic": false
+          },
+          "minecraft:lore": [
+            { "text": "今週のいいね：165", "color": "yellow", "italic": false },
+            { "text": "製作者UUID：733b372e-43e5-4d74-b866-e9c9ab87f0dc", "color": "gray", "italic": false }
+          ]
+        }
+      },
+      "description": {
+        "width": 250,
+        "contents": [
+          { "text": "３位　", "color": "gray", "font": "minecraft:uniform" },
+          { "text": "733b372e　", "color": "white", "font": "minecraft:uniform" },
+          {
+            "text": "█████████████████",
+            "color": "green",
+            "font": "minecraft:uniform",
+            "hover_event": {
+              "action": "show_text",
+              "value": { "text": "733b372e\n今週のいいね：165", "color": "yellow" }
+            }
+          },
+          { "text": "███████", "color": "dark_gray", "font": "minecraft:uniform" },
+          { "text": "　１６５", "color": "gray", "font": "minecraft:uniform" }
+        ]
+      },
+      "show_decoration": false,
+      "show_tooltip": true,
+      "width": 16,
+      "height": 16
+    },
+    {
+      "type": "minecraft:item",
+      "item": {
+        "id": "minecraft:player_head",
+        "count": 1,
+        "components": {
+          "minecraft:custom_name": {
+            "text": "４位 c51f57c8",
+            "color": "green",
+            "italic": false
+          },
+          "minecraft:lore": [
+            { "text": "今週のいいね：125", "color": "yellow", "italic": false },
+            { "text": "製作者UUID：c51f57c8-6664-4000-a3e1-aaf4a4c8b0b8", "color": "gray", "italic": false }
+          ]
+        }
+      },
+      "description": {
+        "width": 250,
+        "contents": [
+          { "text": "４位　", "color": "gray", "font": "minecraft:uniform" },
+          { "text": "c51f57c8　", "color": "white", "font": "minecraft:uniform" },
+          {
+            "text": "█████████████",
+            "color": "green",
+            "font": "minecraft:uniform",
+            "hover_event": {
+              "action": "show_text",
+              "value": { "text": "c51f57c8\n今週のいいね：125", "color": "yellow" }
+            }
+          },
+          { "text": "███████████", "color": "dark_gray", "font": "minecraft:uniform" },
+          { "text": "　１２５", "color": "gray", "font": "minecraft:uniform" }
+        ]
+      },
+      "show_decoration": false,
+      "show_tooltip": true,
+      "width": 16,
+      "height": 16
+    },
+    {
+      "type": "minecraft:item",
+      "item": {
+        "id": "minecraft:player_head",
+        "count": 1,
+        "components": {
+          "minecraft:custom_name": {
+            "text": "５位 6d32e5d0",
+            "color": "green",
+            "italic": false
+          },
+          "minecraft:lore": [
+            { "text": "今週のいいね：121", "color": "yellow", "italic": false },
+            { "text": "製作者UUID：6d32e5d0-1b29-4e8a-b857-30a1ae397867", "color": "gray", "italic": false }
+          ]
+        }
+      },
+      "description": {
+        "width": 250,
+        "contents": [
+          { "text": "５位　", "color": "gray", "font": "minecraft:uniform" },
+          { "text": "6d32e5d0　", "color": "white", "font": "minecraft:uniform" },
+          {
+            "text": "████████████",
+            "color": "green",
+            "font": "minecraft:uniform",
+            "hover_event": {
+              "action": "show_text",
+              "value": { "text": "6d32e5d0\n今週のいいね：121", "color": "yellow" }
+            }
+          },
+          { "text": "████████████", "color": "dark_gray", "font": "minecraft:uniform" },
+          { "text": "　１２１", "color": "gray", "font": "minecraft:uniform" }
+        ]
+      },
+      "show_decoration": false,
+      "show_tooltip": true,
+      "width": 16,
+      "height": 16
+    }
+  ]
+}

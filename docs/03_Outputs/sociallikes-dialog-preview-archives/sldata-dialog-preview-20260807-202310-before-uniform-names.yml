@@ -1,0 +1,201 @@
+# SocialLikes3 Dialog UI preview.
+# Edit this file, then click "再読込" in the dialog or run:
+#   /sldata dialog reload
+#   /sldata dialog preview
+# No plugin rebuild or server restart is required after the preview engine is installed.
+
+title: "いいね数 Top5"
+subtitle: ""
+body-width: 300
+columns: 2
+
+# Legacy preview fields are disabled while elements are present.
+show-player-head: false
+
+elements:
+  - type: plain-message
+    width: 300
+    segments:
+      - text: "今週 ／ 制作者別いいね数 Top5 ／ 合計 ３３，３７８"
+        color: gray
+        font: uniform
+
+  - type: item
+    material: PLAYER_HEAD
+    player-uuid: "f2ebf4ff-5691-41bf-b239-a78bcdbdfc3b"
+    item-name: "１位 f2ebf4ff"
+    item-name-color: gold
+    lore:
+      - text: "今週のいいね：246"
+        color: yellow
+      - text: "製作者UUID：f2ebf4ff-5691-41bf-b239-a78bcdbdfc3b"
+        color: gray
+    show-tooltip: true
+    show-decorations: false
+    width: 16
+    height: 16
+    description:
+      width: 250
+      segments:
+        - text: "１位　"
+          color: gray
+        - text: "f2ebf4ff　"
+          color: white
+        - text: "█"
+          repeat: 24
+          color: gold
+          hover: |-
+            f2ebf4ff
+            今週のいいね：246
+        - text: "█"
+          repeat: 0
+          color: dark_gray
+          hover: |-
+            f2ebf4ff
+            今週のいいね：246
+        - text: "　２４６"
+          color: gray
+
+  - type: item
+    material: PLAYER_HEAD
+    player-uuid: "fbeb739b-1147-45ec-9fe1-a037c51c88a5"
+    item-name: "２位 fbeb739b"
+    item-name-color: green
+    lore:
+      - text: "今週のいいね：198"
+        color: yellow
+      - text: "製作者UUID：fbeb739b-1147-45ec-9fe1-a037c51c88a5"
+        color: gray
+    show-tooltip: true
+    show-decorations: false
+    width: 16
+    height: 16
+    description:
+      width: 250
+      segments:
+        - text: "２位　"
+          color: gray
+        - text: "fbeb739b　"
+          color: white
+        - text: "█"
+          repeat: 20
+          color: green
+          hover: |-
+            fbeb739b
+            今週のいいね：198
+        - text: "█"
+          repeat: 4
+          color: dark_gray
+          hover: |-
+            fbeb739b
+            今週のいいね：198
+        - text: "　１９８"
+          color: gray
+
+  - type: item
+    material: PLAYER_HEAD
+    player-uuid: "733b372e-43e5-4d74-b866-e9c9ab87f0dc"
+    item-name: "３位 733b372e"
+    item-name-color: green
+    lore:
+      - text: "今週のいいね：165"
+        color: yellow
+      - text: "製作者UUID：733b372e-43e5-4d74-b866-e9c9ab87f0dc"
+        color: gray
+    show-tooltip: true
+    show-decorations: false
+    width: 16
+    height: 16
+    description:
+      width: 250
+      segments:
+        - text: "３位　"
+          color: gray
+        - text: "733b372e　"
+          color: white
+        - text: "█"
+          repeat: 17
+          color: green
+          hover: |-
+            733b372e
+            今週のいいね：165
+        - text: "█"
+          repeat: 7
+          color: dark_gray
+          hover: |-
+            733b372e
+            今週のいいね：165
+        - text: "　１６５"
+          color: gray
+
+  - type: item
+    material: PLAYER_HEAD
+    player-uuid: "c51f57c8-6664-4000-a3e1-aaf4a4c8b0b8"
+    item-name: "４位 c51f57c8"
+    item-name-color: green
+    lore:
+      - text: "今週のいいね：125"
+        color: yellow
+      - text: "製作者UUID：c51f57c8-6664-4000-a3e1-aaf4a4c8b0b8"
+        color: gray
+    show-tooltip: true
+    show-decorations: false
+    width: 16
+    height: 16
+    description:
+      width: 250
+      segments:
+        - text: "４位　"
+          color: gray
+        - text: "c51f57c8　"
+          color: white
+        - text: "█"
+          repeat: 13
+          color: green
+          hover: |-
+            c51f57c8
+            今週のいいね：125
+        - text: "█"
+          repeat: 11
+          color: dark_gray
+          hover: |-
+            c51f57c8
+            今週のいいね：125
+        - text: "　１２５"
+          color: gray
+
+  - type: item
+    material: PLAYER_HEAD
+    player-uuid: "6d32e5d0-1b29-4e8a-b857-30a1ae397867"
+    item-name: "５位 6d32e5d0"
+    item-name-color: green
+    lore:
+      - text: "今週のいいね：121"
+        color: yellow
+      - text: "製作者UUID：6d32e5d0-1b29-4e8a-b857-30a1ae397867"
+        color: gray
+    show-tooltip: true
+    show-decorations: false
+    width: 16
+    height: 16
+    description:
+      width: 250
+      segments:
+        - text: "５位　"
+          color: gray
+        - text: "6d32e5d0　"
+          color: white
+        - text: "█"
+          repeat: 12
+          color: green
+          hover: |-
+            6d32e5d0
+            今週のいいね：121
+        - text: "█"
+          repeat: 12
+          color: dark_gray
+          hover: |-
+            6d32e5d0
+            今週のいいね：121
+        - text: "　１２１"
+          color: gray

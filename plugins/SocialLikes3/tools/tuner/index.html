@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>/sldata GUI チューナー — 大型チェスト実寸プレビュー</title>
+    <link rel="stylesheet" href="css/tuner.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <h1>/sldata GUI チューナー</h1>
+        <p class="sub">
+          大型チェスト（176 × 222 px）を実寸の canvas
+          に描画し、その上にオーバーレイを重ねて位置・色・グラフ形状を詰めるための道具。画面下の出力値が、そのままリソースパックとプラグインに入れる数値になる。
+        </p>
+      </header>
+
+      <div class="layout">
+        <div class="stagewrap">
+          <canvas id="cv" width="176" height="222"></canvas>
+          <div class="stagebar">
+            <label
+              ><input type="checkbox" id="showSlots" checked />
+              スロット枠</label
+            >
+            <label><input type="checkbox" id="showGuide" /> 整列ガイド</label>
+            <label><input type="checkbox" id="showHover" /> ホバー列</label>
+            <label><input type="checkbox" id="showInv" checked /> 持ち物</label>
+            <span
+              >倍率
+              <select
+                id="zoom"
+                style="width: auto; display: inline-block; margin-left: 5px"
+              >
+                <option value="2">2×</option>
+                <option value="3" selected>3×</option>
+                <option value="4">4×</option>
+                <option value="5">5×</option>
+              </select>
+            </span>
+          </div>
+        </div>
+
+        <div class="panelcol">
+          <fieldset>
+            <legend>表示領域</legend>
+            <div class="row">
+              <label>左 X</label
+              ><input type="range" id="pxR" min="0" max="60" /><input
+                type="number"
+                id="pxN"
+              />
+            </div>
+            <div class="row">
+              <label>上 Y</label
+              ><input type="range" id="pyR" min="0" max="60" /><input
+                type="number"
+                id="pyN"
+              />
+            </div>
+            <div class="row">
+              <label>幅 W</label
+              ><input type="range" id="pwR" min="40" max="176" /><input
+                type="number"
+                id="pwN"
+              />
+            </div>
+            <div class="row">
+              <label>高さ H</label
+              ><input type="range" id="phR" min="20" max="130" /><input
+                type="number"
+                id="phN"
+              />
+            </div>
+            <div class="btnrow">
+              <button class="act" id="snap5">1〜5段にぴたり</button>
+              <button class="act" id="snap6">1〜6段にぴたり</button>
+              <button class="act" id="snapNow">現在の実装値</button>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>指標</legend>
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>カテゴリ</label>
+              <select id="metricCategory"></select>
+            </div>
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>名前検索</label>
+              <input
+                type="text"
+                id="metricFilter"
+                placeholder="いいね、ワールド、ランキング..."
+              />
+            </div>
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>指標</label>
+              <select id="metricSelect"></select>
+            </div>
+            <p class="note" id="metricNote">—</p>
+          </fieldset>
+
+          <fieldset>
+            <legend>グラフ</legend>
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>棒の形</label>
+              <div class="segbar" id="barStyle" style="margin-top: 0">
+                <button data-v="bevel" aria-pressed="true">ベベル</button>
+                <button data-v="flat" aria-pressed="false">フラット</button>
+              </div>
+            </div>
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>種類</label>
+              <select id="chart">
+                <option value="bar">縦棒</option>
+                <option value="line">折れ線</option>
+                <option value="area">エリア</option>
+                <option value="hbar">横棒（ランキング）</option>
+                <option value="donut">ドーナツ</option>
+                <option value="heat">ヒートマップ</option>
+              </select>
+            </div>
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>データ</label
+              ><input
+                type="text"
+                id="dataTxt"
+                value="12,18,9,24,31,22,28,35,41"
+              />
+            </div>
+            <div class="row">
+              <label>データ数</label
+              ><input type="range" id="nR" min="3" max="18" /><input
+                type="number"
+                id="nN"
+              />
+            </div>
+            <div class="row">
+              <label>棒の幅</label
+              ><input type="range" id="bwR" min="2" max="18" /><input
+                type="number"
+                id="bwN"
+              />
+            </div>
+            <div class="row">
+              <label>上の余白</label
+              ><input type="range" id="topR" min="0" max="40" /><input
+                type="number"
+                id="topN"
+              />
+            </div>
+            <div class="row">
+              <label>下の余白</label
+              ><input type="range" id="padR" min="0" max="30" /><input
+                type="number"
+                id="padN"
+              />
+            </div>
+            <div class="row">
+              <label>目盛り線</label
+              ><input type="range" id="glR" min="0" max="6" /><input
+                type="number"
+                id="glN"
+              />
+            </div>
+
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>軸の上限</label>
+              <div class="segbar" id="axisMode" style="margin-top: 0">
+                <button data-v="auto" aria-pressed="true">変動</button>
+                <button data-v="nice" aria-pressed="false">変動＋切上げ</button>
+                <button data-v="fixed" aria-pressed="false">固定</button>
+              </div>
+            </div>
+            <div
+              class="row"
+              id="axisFixedRow"
+              style="grid-template-columns: 74px 1fr 62px; display: none"
+            >
+              <label>固定の上限</label
+              ><input type="range" id="amR" min="1" max="200" /><input
+                type="number"
+                id="amN"
+              />
+            </div>
+            <div class="row" style="grid-template-columns: 1fr">
+              <label
+                style="
+                  display: flex;
+                  gap: 7px;
+                  align-items: center;
+                  cursor: pointer;
+                "
+              >
+                <input type="checkbox" id="showTicks" /> 目盛りの値を出す
+              </label>
+            </div>
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>値の置き場所</label>
+              <div class="segbar" id="tickSide" style="margin-top: 0">
+                <button data-v="right" aria-pressed="true">右に余白</button>
+                <button data-v="left" aria-pressed="false">左に余白</button>
+                <button data-v="inside" aria-pressed="false">
+                  内側に重ねる
+                </button>
+              </div>
+            </div>
+            <div class="row" style="grid-template-columns: 1fr">
+              <label
+                style="
+                  display: flex;
+                  gap: 7px;
+                  align-items: center;
+                  cursor: pointer;
+                "
+              >
+                <input type="checkbox" id="autoBw" />
+                棒の幅を本数から自動で決める
+              </label>
+            </div>
+            <div class="row" style="grid-template-columns: 1fr">
+              <label
+                style="
+                  display: flex;
+                  gap: 7px;
+                  align-items: center;
+                  cursor: pointer;
+                "
+              >
+                <input type="checkbox" id="showXLabels" /> X軸ラベルを出す
+              </label>
+            </div>
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>Xラベル</label
+              ><input
+                type="text"
+                id="xLabelsTxt"
+                value="6/8,6/15,6/22,6/29,7/6,7/13,7/20,7/27,8/3"
+              />
+            </div>
+            <div class="row">
+              <label>間引き</label
+              ><input type="range" id="xlsR" min="1" max="6" /><input
+                type="number"
+                id="xlsN"
+              />
+            </div>
+            <div class="row">
+              <label>ラベル高</label
+              ><input type="range" id="xlhR" min="0" max="20" /><input
+                type="number"
+                id="xlhN"
+              />
+            </div>
+            <div class="row">
+              <label>棒 : ピッチ</label
+              ><input type="range" id="brR" min="30" max="95" /><input
+                type="number"
+                id="brN"
+              />
+            </div>
+            <p class="note" id="axisNote"></p>
+            <p class="note">
+              上限に意味のある量（％・目標・満充電）は<strong>固定</strong>、意味のない量（いいね数・歩数）は<strong>変動＋切上げ</strong>。
+              HIG
+              はどちらも認めていて、判断基準は「その最大値が全データにとって意味を持つか」。
+              <strong>固定なら目盛りの数字がパネル画像に焼き込める</strong
+              >ので実装が軽い（書き出しタブ参照）。
+            </p>
+            <p class="note" id="chartNote"></p>
+          </fieldset>
+
+          <fieldset>
+            <legend>テキスト配置</legend>
+            <div id="textList"></div>
+            <div class="btnrow">
+              <button class="act" id="addText">＋ 行を追加</button>
+              <button class="act" id="presetTitle">見出しの例</button>
+            </div>
+            <p class="note">
+              幅は Minecraft の実測値で計算している（ASCII
+              は文字ごとに可変、全角は 9px、半角スペース 4px）。<strong
+                >倍率 1 が通常の文字</strong
+              >。倍率を変える・タイトル行以外に置く場合はカスタムフォントが要る（下に必要な
+              ascent が出る）。
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>配色</legend>
+            <div
+              class="row"
+              style="grid-template-columns: 74px 1fr; margin-bottom: 10px"
+            >
+              <label>テーマ</label>
+              <div class="segbar" id="guiTheme" style="margin-top: 0">
+                <button data-v="light" aria-pressed="false">Light</button>
+                <button data-v="dark" aria-pressed="true">Dark</button>
+              </div>
+            </div>
+            <div class="colorgrid">
+              <div>
+                <span>パネル地</span
+                ><input type="color" id="cBg" value="#0e1210" />
+              </div>
+              <div>
+                <span>目盛り線</span
+                ><input type="color" id="cGrid" value="#3a4438" />
+              </div>
+              <div>
+                <span>目盛りの値</span
+                ><input type="color" id="cTick" value="#7d8c72" />
+              </div>
+              <div>
+                <span>棒（通常）</span
+                ><input type="color" id="cBar" value="#6e9e3e" />
+              </div>
+              <div>
+                <span>棒（最新）</span
+                ><input type="color" id="cBarHi" value="#d9a441" />
+              </div>
+              <div>
+                <span>タイトル文字</span
+                ><input type="color" id="cTitle" value="#e6efd8" />
+              </div>
+              <div>
+                <span>枠線</span
+                ><input type="color" id="cEdge" value="#232b20" />
+              </div>
+            </div>
+            <div
+              class="row"
+              style="grid-template-columns: 74px 1fr 62px; margin-top: 9px"
+            >
+              <label>地の不透明度</label
+              ><input type="range" id="opR" min="0" max="255" /><input
+                type="number"
+                id="opN"
+              />
+            </div>
+            <p class="note">不透明度が 255 未満だとスロット枠が透ける。</p>
+          </fieldset>
+
+          <fieldset>
+            <legend>Apple システムカラー</legend>
+            <div class="row" style="grid-template-columns: 74px 1fr">
+              <label>適用先</label>
+              <select id="swTarget">
+                <option value="cBar">棒（通常）</option>
+                <option value="cBarHi">棒（最新）</option>
+                <option value="cGrid">目盛り線</option>
+                <option value="cTick">目盛りの値</option>
+                <option value="cBg">パネル地</option>
+                <option value="cEdge">枠線</option>
+                <option value="text">テキスト（1行目）</option>
+              </select>
+            </div>
+            <div class="segbar" id="swVariant">
+              <button data-v="0" aria-pressed="true">Light</button>
+              <button data-v="1" aria-pressed="false">Dark</button>
+              <button data-v="2" aria-pressed="false">A11y Light</button>
+              <button data-v="3" aria-pressed="false">A11y Dark</button>
+            </div>
+            <div class="swatches" id="swGrid"></div>
+            <p class="note">
+              macOS の公式値。クリックで「適用先」に入る。Apple
+              は<strong>指標ごとに1色を固定</strong>し、強調したい1点だけ別色にする。
+            </p>
+          </fieldset>
+
+          <fieldset>
+            <legend>デザイン点検</legend>
+            <ul class="lint" id="lintList"></ul>
+            <div
+              class="row"
+              style="grid-template-columns: 1fr; margin-top: 9px"
+            >
+              <label
+                style="
+                  display: flex;
+                  gap: 7px;
+                  align-items: center;
+                  cursor: pointer;
+                "
+              >
+                <input type="checkbox" id="markLatest" checked />
+                最新の棒に形の手がかり（▼）を付ける
+              </label>
+            </div>
+            <div class="row" style="grid-template-columns: 1fr">
+              <label
+                style="
+                  display: flex;
+                  gap: 7px;
+                  align-items: center;
+                  cursor: pointer;
+                "
+              >
+                <input type="checkbox" id="showTip" />
+                ツールチップの見え方を確認
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>実装に入れる値</legend>
+            <div class="out">
+              <dl>
+                <dt>パネル座標</dt>
+                <dd id="oRect">—</dd>
+                <dt>テクスチャ寸法</dt>
+                <dd id="oTex">—</dd>
+                <dt class="hl">font height</dt>
+                <dd class="hl" id="oH">—</dd>
+                <dt class="hl">font ascent</dt>
+                <dd class="hl" id="oA">—</dd>
+                <dt class="hl">先頭オフセット</dt>
+                <dd class="hl" id="oOff">—</dd>
+                <dt>棒ピッチ</dt>
+                <dd id="oPitch">—</dd>
+                <dt>プロット領域</dt>
+                <dd id="oPlot">—</dd>
+              </dl>
+            </div>
+            <div id="status" class="status ok">—</div>
+            <p class="note">
+              ascent は「タイトル描画 Y（6）+ 7 −
+              パネル上端」で決まる。負の値も有効。先頭オフセットは、タイトル開始位置
+              x=8
+              からパネル左端までの差で、この幅の負スペース文字を先に挿入する。
+            </p>
+            <div class="segbar" id="expTab">
+              <button data-e="font" aria-pressed="true">font json</button>
+              <button data-e="py" aria-pressed="false">テクスチャ生成</button>
+              <button data-e="yml" aria-pressed="false">sldata-font.yml</button>
+            </div>
+            <pre class="out-code" id="expCode">—</pre>
+            <div class="btnrow">
+              <button class="act" id="copyCode">コピー</button>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    <script src="js/mcfont-data.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/mcfont.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/axis.js"></script>
+    <script src="js/metrics.js"></script>
+    <script src="js/controls.js"></script>
+    <script src="js/gui.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/palette.js"></script>
+    <script src="js/tooltip.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/lint.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
