@@ -25,16 +25,14 @@
       flake = false;
     };
     nix-minecraft = {
-      url = "github:infinidoge/nix-minecraft";
+      url = "github:infinidoge/nix-minecraft/pull/230/merge";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.systems.follows = "systems";
     };
-    nixpkgs-25-11.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-terraform-providers-bin = {
       url = "github:nix-community/nixpkgs-terraform-providers-bin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     package-lock2nix = {
       url = "github:anteriorcore/package-lock2nix";
@@ -64,6 +62,7 @@
       imports = [
         # keep-sorted start
         ./nix/flake-parts/codegen.nix
+        ./nix/flake-parts/constants.nix
         ./nix/flake-parts/devshells.nix
         ./nix/flake-parts/docker.nix
         ./nix/flake-parts/misc.nix

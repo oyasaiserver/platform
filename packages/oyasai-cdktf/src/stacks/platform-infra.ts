@@ -12,9 +12,10 @@ type Props = {
 };
 
 export class PlatformInfra extends OyasaiPlatformTerraformStack {
-  public readonly ipv4 = "121.81.157.109";
+  public readonly ipv4 = "182.166.151.3";
 
   public readonly r2Bucket: R2Bucket;
+  public readonly rootDnsRecord: DnsRecord;
 
   public constructor(
     scope: Construct,
@@ -34,26 +35,28 @@ export class PlatformInfra extends OyasaiPlatformTerraformStack {
     const secrets = createSecrets(this, commonInfra);
 
     this.r2Bucket = new R2Bucket(this, this.t("r2-bucket"), {
-      accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
+      accountId: commonInfra.cloudflareAccountId,
       name: `oyasai-${this.t("platform")}`,
       // If master, pick the closest to on-prem server location, otherwise use
       // the most popular location for GitHub Action runners.
       location: this.isMaster ? "apac" : "enam",
     });
 
-    if (this.isMaster) {
-      // We _can_ make dns record for every environment, though it's currently
-      // unnecessary. - shun 2026-04
-      new DnsRecord(this, this.t("root-dns-record"), {
-        ttl: 1, // automatic
-        zoneId: oyasaiIoZone.id,
-        name: oyasaiIoRegistrarDomain.domainName,
-        type: "A",
-        proxied: false,
-        content: this.ipv4,
-      });
+    // TODO: centralize to vanity domains
+    this.rootDnsRecord = new DnsRecord(this, this.t("root-dns-record"), {
+      ttl: 1, // automatic
+      zoneId: oyasaiIoZone.id,
+      name: this.isMaster
+        ? oyasaiIoRegistrarDomain.domainName
+        : `${this.environment}.${oyasaiIoRegistrarDomain.domainName}`,
+      type: "A",
+      proxied: false,
+      content: this.ipv4,
+    });
 
+    if (this.isMaster) {
       // Proxy to our seesaawiki. Implicitly reserves `wiki.oyasai.io`.
+      // TODO: centralize to vanity domains
       new DnsRecord(this, "seesaawiki-cname-dns-record", {
         ttl: 1, // automatic
         zoneId: oyasaiIoZone.id,

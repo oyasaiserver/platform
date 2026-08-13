@@ -6,7 +6,11 @@ owner: marzipan99
 source_of_truth: "plugins/OyasaiMenu/"
 related_paths:
   - plugins/OyasaiMenu/src/main/kotlin/com/github/sahyuya/oyasaiMenu/
-last_validated: "2026-05-20"
+  - docs/02_Docs/tools/oyasai-menu-editors-doc/
+project_kind: plugin
+runtime_kind: paper-plugin
+minecraft_related: true
+last_validated: "2026-06-05"
 agent_task: null
 ---
 
@@ -14,6 +18,17 @@ agent_task: null
 
 Minecraft（Purpur 1.21.x）向けの高機能GUIメニュープラグイン。
 YAMLで定義されたメニューをチェスト型GUIで表示し、アクション・マクロ・ショップ・ポイントシステムを提供する。
+
+## AI 作業入口
+
+| 項目 | 内容 |
+|---|---|
+| 実装の正本 | `plugins/OyasaiMenu/` |
+| 主要コード | `plugins/OyasaiMenu/src/main/kotlin/com/github/sahyuya/oyasaiMenu/` |
+| エディター資料 | `docs/02_Docs/tools/oyasai-menu-editors-doc/` |
+| ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:OyasaiMenu:compileKotlin` |
+| ローカル反映 | `plugins/OyasaiMenu/build/libs/OyasaiMenu.jar` を `local/paperclip-tmp/plugins/OyasaiMenu.jar` にコピーし、必要に応じてリロードまたは再起動 |
+| 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置き、このファイルには公開可能な判断だけを書く |
 
 ## 主要コマンド
 
@@ -59,4 +74,4 @@ items:
 ## 関連ドキュメント
 
 - エディター向け詳細: [`../../../02_Docs/tools/oyasai-menu-editors-doc/`](../../../02_Docs/tools/oyasai-menu-editors-doc/)
-- GuiMaker: [citiesskymine.md](citiesskymine.md)
+- GuiMaker: [`../citiesskymine/PROJECT.md`](../citiesskymine/PROJECT.md)

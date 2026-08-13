@@ -2,11 +2,11 @@
 title: "デプロイ・ビルド手順"
 category: ops
 status: active
-owner: marzipan99
+owner: platform-maintainers
 source_of_truth: "docs/02_Docs/ops/deploy.md"
 related_paths:
-  - dev-server/
-last_validated: "2026-05-20"
+  - local/paperclip-tmp/
+last_validated: "2026-07-22"
 agent_task: null
 ---
 
@@ -36,21 +36,21 @@ agent_task: null
 /nix/var/nix/profiles/default/bin/nix fmt
 ```
 
-## 開発サーバーへのデプロイ
+## ローカル検証環境へのデプロイ
 
 ```bash
 # ビルド後
-cp plugins/OyasaiMenu/build/libs/OyasaiMenu.jar dev-server/plugins/
+cp plugins/OyasaiMenu/build/libs/OyasaiMenu.jar local/paperclip-tmp/plugins/
 
 # Minecraft上でPlugManXによるリロード
 /plugman reload OyasaiMenu
 ```
 
-**開発サーバー**: `/Users/aa/platform/dev-server/`
-- Purpur 1.21.10
-- 主要プラグイン: FAWE, CitiesSkyMine, OyasaiMenu, Vault, PlaceholderAPI, PlugManX
+**ローカル検証環境**: `local/paperclip-tmp/`（リポジトリルートからの相対パス）
+- Paper 1.21.11 build 69（`paper-paperclip.jar`）
+- 起動・停止・トラブルシューティングの詳細は [[local-server.md]] を参照
 
-## 外部ツール（Antigravity）のデプロイ
+## 外部ツール（Nexus）のデプロイ
 
 各ツールはHTMLファイル1枚で動作するため、以下の方法でデプロイ可能:
 

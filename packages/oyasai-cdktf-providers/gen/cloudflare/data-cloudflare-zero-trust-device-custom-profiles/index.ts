@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_device_custom_profiles
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_custom_profiles
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,15 +8,95 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustDeviceCustomProfilesConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_device_custom_profiles#account_id DataCloudflareZeroTrustDeviceCustomProfiles#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_custom_profiles#account_id DataCloudflareZeroTrustDeviceCustomProfiles#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_device_custom_profiles#max_items DataCloudflareZeroTrustDeviceCustomProfiles#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_custom_profiles#max_items DataCloudflareZeroTrustDeviceCustomProfiles#max_items}
   */
   readonly maxItems?: number;
+}
+export interface DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixes {
+}
+
+export function dataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixesToTerraform(struct?: DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixes): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixesToHclTerraform(struct?: DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixes): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixesOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixes | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixes | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // description - computed: true, optional: false, required: false
+  public get description() {
+    return this.getStringAttribute('description');
+  }
+
+  // suffix - computed: true, optional: false, required: false
+  public get suffix() {
+    return this.getStringAttribute('suffix');
+  }
+}
+
+export class DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixesList extends cdktf.ComplexList {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixesOutputReference {
+    return new DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
 }
 export interface DataCloudflareZeroTrustDeviceCustomProfilesResultExclude {
 }
@@ -412,6 +492,65 @@ export class DataCloudflareZeroTrustDeviceCustomProfilesResultTargetTestsList ex
     return new DataCloudflareZeroTrustDeviceCustomProfilesResultTargetTestsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
+export interface DataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworks {
+}
+
+export function dataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworksToTerraform(struct?: DataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworks): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworksToHclTerraform(struct?: DataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworks): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworksOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworks | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworks | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // allowed - computed: true, optional: false, required: false
+  public get allowed() {
+    return this.getListAttribute('allowed');
+  }
+
+  // default - computed: true, optional: false, required: false
+  public get default() {
+    return this.getStringAttribute('default');
+  }
+}
 export interface DataCloudflareZeroTrustDeviceCustomProfilesResult {
 }
 
@@ -501,6 +640,12 @@ export class DataCloudflareZeroTrustDeviceCustomProfilesResultOutputReference ex
   // disable_auto_fallback - computed: true, optional: false, required: false
   public get disableAutoFallback() {
     return this.getBooleanAttribute('disable_auto_fallback');
+  }
+
+  // dns_search_suffixes - computed: true, optional: false, required: false
+  private _dnsSearchSuffixes = new DataCloudflareZeroTrustDeviceCustomProfilesResultDnsSearchSuffixesList(this, "dns_search_suffixes", false);
+  public get dnsSearchSuffixes() {
+    return this._dnsSearchSuffixes;
   }
 
   // enabled - computed: true, optional: false, required: false
@@ -607,6 +752,12 @@ export class DataCloudflareZeroTrustDeviceCustomProfilesResultOutputReference ex
   public get tunnelProtocol() {
     return this.getStringAttribute('tunnel_protocol');
   }
+
+  // virtual_networks - computed: true, optional: false, required: false
+  private _virtualNetworks = new DataCloudflareZeroTrustDeviceCustomProfilesResultVirtualNetworksOutputReference(this, "virtual_networks");
+  public get virtualNetworks() {
+    return this._virtualNetworks;
+  }
 }
 
 export class DataCloudflareZeroTrustDeviceCustomProfilesResultList extends cdktf.ComplexList {
@@ -629,7 +780,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfilesResultList extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_device_custom_profiles cloudflare_zero_trust_device_custom_profiles}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_custom_profiles cloudflare_zero_trust_device_custom_profiles}
 */
 export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.TerraformDataSource {
 
@@ -645,7 +796,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
   * Generates CDKTF code for importing a DataCloudflareZeroTrustDeviceCustomProfiles resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDeviceCustomProfiles to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceCustomProfiles that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_device_custom_profiles#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceCustomProfiles that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_custom_profiles#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDeviceCustomProfiles to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -657,7 +808,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/zero_trust_device_custom_profiles cloudflare_zero_trust_device_custom_profiles} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_custom_profiles cloudflare_zero_trust_device_custom_profiles} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -668,7 +819,7 @@ export class DataCloudflareZeroTrustDeviceCustomProfiles extends cdktf.Terraform
       terraformResourceType: 'cloudflare_zero_trust_device_custom_profiles',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

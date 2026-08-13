@@ -1,5 +1,6 @@
 {
   lib,
+  jre,
   oyasaiDockerTools,
   stdenv,
   velocityServers,
@@ -15,7 +16,7 @@
 }:
 
 let
-  package = velocityServers.velocity;
+  package = velocityServers.velocity.override { jre_headless = jre; };
 
   velocityToml = (formats.toml { }).generate "velocity.toml" velocityConfig;
 

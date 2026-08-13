@@ -227,7 +227,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     if (!command.name.equals("sldata", ignoreCase = true)) return mutableListOf()
     return when (args.size) {
       1 ->
-          listOf("font", "slots", "display", "map", "board", "dialog", "server", "lucky")
+          listOf("font", "slots", "display", "map", "board", "dialog", "server", "lucky", "spec")
               .filter { it.startsWith(args[0], ignoreCase = true) }
               .toMutableList()
       2 ->

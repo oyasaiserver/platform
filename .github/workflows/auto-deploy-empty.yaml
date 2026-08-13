@@ -1,0 +1,54 @@
+name: Auto Deploy on Empty Server
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+  id-token: write
+  packages: write
+
+jobs:
+  check-players:
+    runs-on: ubuntu-latest
+    outputs:
+      count: ${{ steps.players.outputs.count }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
+          path: "~/.cache/nix"
+      - uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342
+        with:
+          extra_nix_config: |
+            extra-substituters = ${{ vars.NIX_CACHE_SUBSTITUTER }}
+            extra-trusted-public-keys = ${{ vars.NIX_CACHE_PUBLIC_KEY }}
+      - uses: ./packages/oyasai-secrets-action
+        with:
+          env-slug: common
+          project-slug: platform
+          identity-id: "c3685c4e-acbd-4668-aca0-1920d1e0c83d"
+          secrets: |
+            CLOUDFLARE_ACCESS_KEY_ID
+            CLOUDFLARE_SECRET_ACCESS_KEY
+            NIX_CACHE_SIGNING_KEY
+      - name: Configure Cloudflare R2 credentials
+        run: |
+          sudo -i aws configure set aws_access_key_id "${CLOUDFLARE_ACCESS_KEY_ID}"
+          sudo -i aws configure set aws_secret_access_key "${CLOUDFLARE_SECRET_ACCESS_KEY}"
+      - name: Check player count
+        id: players
+        run: |
+          count=$(nix run .#mc-monitor -- status -host oyasai.io -show-player-count | tee /dev/stderr)
+          echo "count=$count" >>"$GITHUB_OUTPUT"
+  deploy:
+    needs: check-players
+    if: needs.check-players.outputs.count == '0'
+    uses: ./.github/workflows/deploy-platform.yaml
+    secrets: inherit
+    with:
+      environment: master

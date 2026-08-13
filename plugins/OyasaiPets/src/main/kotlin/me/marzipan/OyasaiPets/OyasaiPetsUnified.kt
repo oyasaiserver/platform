@@ -90,9 +90,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
   private val openedGuis = guiManager.openedPetGuis
   private val openedShopGuis = guiManager.openedShopGuis
   private val openedMainMenus = guiManager.openedMainMenus
-  // --- shopremoveall 確認待ち管理 ---
-  // --- abandon 確認待ち管理 ---
-  private val pendingAbandonConfirm = ConcurrentHashMap<UUID, Pair<Int, Long>>()
 
   // Cooldowns & Tasks
   private val mountCooldowns = ConcurrentHashMap<UUID, Long>()
@@ -366,7 +363,6 @@ class BigWolfPlugin : JavaPlugin(), CommandExecutor, TabCompleter {
               PetDataManager.clearPlayerCache(player.uniqueId)
               mountCooldowns.remove(player.uniqueId)
               dropCooldowns.remove(player.uniqueId)
-              pendingAbandonConfirm.remove(player.uniqueId)
               PetDebugger.disable(player.uniqueId)
             },
         )
@@ -970,12 +966,6 @@ object BigWolfConfig {
         3 -> skillBookUseCostLv3
         else -> 0
       }
-
-  @Deprecated(
-      "Use getSkillBookShopCost or getSkillBookUseCost instead",
-      replaceWith = ReplaceWith("getSkillBookUseCost(level)"),
-  )
-  fun getSkillBookCost(level: Int): Int = getSkillBookUseCost(level)
 
   /** 全コンフィグキーと現在値のリストを返す */
   fun asEntryList(): List<Pair<String, Any>> =
@@ -1918,7 +1908,7 @@ object ParrotFloatEffectRegistry {
 }
 
 // ===== File: debug/PetDebugger.kt =====
-/** /bigwolfop perf_debug で有効化するパフォーマンスデバッグ機能。 有効化中のプレイヤーに対してのみ動作し、無効時はほぼゼロコスト。 */
+/** パフォーマンスデバッグ用の集計機能。 有効化中のプレイヤーに対してのみ動作し、無効時はほぼゼロコスト。 */
 object PetDebugger {
   private val debugTargets = ConcurrentHashMap.newKeySet<UUID>()
 
@@ -1932,12 +1922,6 @@ object PetDebugger {
   )
 
   private val controlStats = ConcurrentHashMap<UUID, ControlStats>()
-
-  @Suppress("unused")
-  fun enable(playerUuid: UUID) {
-    debugTargets.add(playerUuid)
-    controlStats[playerUuid] = ControlStats()
-  }
 
   fun disable(playerUuid: UUID) {
     debugTargets.remove(playerUuid)
@@ -2271,9 +2255,6 @@ var LivingEntity.temperament: String
 
 /** このペットが非定型かどうかを判定 */
 fun LivingEntity.isAtypical(): Boolean = temperament == "atypical"
-
-/** 指定されたプレイヤーがこのペットの飼い主かどうかを判定 */
-@Suppress("unused") fun LivingEntity.isOwnedBy(playerId: String): Boolean = ownerId == playerId
 
 fun String.containsDefaultPetMarker(): Boolean = this.contains("'s Big ") || this.contains("の大")
 
@@ -3706,16 +3687,6 @@ object TemperamentHelper {
   fun getLevelUpMultiplier(temperament: String): Double {
     return if (temperament == ATYPICAL) {
       BigWolfConfig.atypicalLevelUpBonus
-    } else {
-      1.0
-    }
-  }
-
-  /** 性質に応じた親密度上昇倍率を取得 */
-  @Suppress("unused")
-  fun getAffectionMultiplier(temperament: String): Double {
-    return if (temperament == ATYPICAL) {
-      BigWolfConfig.atypicalAffectionBonus
     } else {
       1.0
     }

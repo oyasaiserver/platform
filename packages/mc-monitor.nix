@@ -2,9 +2,9 @@
 
 buildGo126Module {
   pname = "mc-monitor";
-  version = "0.16.5";
+  version = "0.17.0";
   src = inputs.mc-monitor;
-  vendorHash = "sha256-Zc1KpKFQq4Q+eKj3V1d6uC4RQm7R4fd1XKqAwuqsEWk=";
+  vendorHash = "sha256-FBoyQ3w34FJDVzTPmnaQah1IAPcR5aCVThv1IQodFWk=";
 
   meta.mainProgram = "mc-monitor";
 }

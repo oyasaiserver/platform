@@ -13,21 +13,160 @@ import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.format.DateTimeFormatter
+import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.chat.hover.content.Text
-import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Sign
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.SkullMeta
+import org.bukkit.scheduler.BukkitTask
 
 object SLSignLikes {
+
+  private val profileCache = ConcurrentHashMap<UUID, SLPlayerHeads.ProfileData>()
+
+  private fun createLoadingItem(): ItemStack {
+    return ItemStack(Material.PLAYER_HEAD).apply {
+      itemMeta =
+          itemMeta?.apply {
+            setDisplayName("§7読み込み中...")
+            lore = mutableListOf("§7プレイヤーデータを取得中...")
+            addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+          }
+    }
+  }
+
+  // 保留中のGUI更新タスク (スレッド安全のためConcurrentHashMapを使用)
+  private val pendingUpdates = ConcurrentHashMap<ChestGui, BukkitTask>()
+
+  private fun scheduleUpdate(pagePane: PaginatedPane, headStacks: List<ItemStack>, gui: ChestGui) {
+    pendingUpdates[gui]?.cancel()
+    val task =
+        Bukkit.getScheduler()
+            .runTaskLater(
+                Tools.plugin,
+                Runnable {
+                  pendingUpdates.remove(gui)
+                  val currentPage = pagePane.page
+                  pagePane.populateWithItemStacks(headStacks)
+                  if (currentPage < pagePane.pages) {
+                    pagePane.setPage(currentPage)
+                  } else if (pagePane.pages > 0) {
+                    pagePane.setPage(pagePane.pages - 1)
+                  }
+                  gui.update()
+                },
+                2L,
+            )
+    pendingUpdates[gui] = task
+  }
+
+  private fun loadHeadsAsync(
+      uuids: List<UUID>,
+      headStacks: MutableList<ItemStack>,
+      pagePane: PaginatedPane,
+      gui: ChestGui,
+  ) {
+    if (uuids.isEmpty()) return
+
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            Tools.plugin,
+            Runnable {
+              uuids.forEachIndexed { index, uuid ->
+                // 1. キャッシュヒット
+                val cached = profileCache[uuid]
+                if (cached != null) {
+                  Bukkit.getScheduler()
+                      .runTask(
+                          Tools.plugin,
+                          Runnable {
+                            headStacks[index] = SLPlayerHeads.createHead(uuid, cached)
+                            scheduleUpdate(pagePane, headStacks, gui)
+                          },
+                      )
+                  return@forEachIndexed
+                }
+
+                val resolvedName = SLPlayerHeads.resolveName(uuid)
+
+                val skinsRestorerResult = SLPlayerHeads.fetchFromSkinsRestorer(uuid, resolvedName)
+                if (skinsRestorerResult != null) {
+                  profileCache[uuid] = skinsRestorerResult
+                  Bukkit.getScheduler()
+                      .runTask(
+                          Tools.plugin,
+                          Runnable {
+                            headStacks[index] = SLPlayerHeads.createHead(uuid, skinsRestorerResult)
+                            scheduleUpdate(pagePane, headStacks, gui)
+                          },
+                      )
+                  Thread.sleep(50)
+                  return@forEachIndexed
+                }
+
+                val playerDBResult =
+                    if (SLPlayerHeads.isFloodgatePseudoUUID(uuid)) {
+                      null
+                    } else {
+                      SLPlayerHeads.fetchFromPlayerDB(uuid)
+                    }
+                if (playerDBResult != null) {
+                  profileCache[uuid] = playerDBResult
+                  Bukkit.getScheduler()
+                      .runTask(
+                          Tools.plugin,
+                          Runnable {
+                            headStacks[index] = SLPlayerHeads.createHead(uuid, playerDBResult)
+                            scheduleUpdate(pagePane, headStacks, gui)
+                          },
+                      )
+                  Thread.sleep(50)
+                  return@forEachIndexed
+                }
+
+                if (resolvedName != null) {
+                  val fallback = SLPlayerHeads.ProfileData(resolvedName, null)
+                  profileCache[uuid] = fallback
+                  Bukkit.getScheduler()
+                      .runTask(
+                          Tools.plugin,
+                          Runnable {
+                            headStacks[index] = SLPlayerHeads.createHead(uuid, fallback)
+                            scheduleUpdate(pagePane, headStacks, gui)
+                          },
+                      )
+                  return@forEachIndexed
+                }
+
+                Bukkit.getScheduler()
+                    .runTask(
+                        Tools.plugin,
+                        Runnable {
+                          headStacks[index] =
+                              if (SLPlayerHeads.isFloodgatePseudoUUID(uuid)) {
+                                SLPlayerHeads.createBedrockFallbackItem()
+                              } else {
+                                SLPlayerHeads.createUnknownItem()
+                              }
+                          scheduleUpdate(pagePane, headStacks, gui)
+                        },
+                    )
+
+                Thread.sleep(50)
+              }
+            },
+        )
+  }
+
   fun createGUI(sign: Sign, slData: SLData, owner: Boolean, isOP: Boolean): ChestGui {
     val gui =
         ChestGui(6, Tools.socialLikesLOGOShort + "&0ID:${slData.id}「&2${slData.title}&0」p1".color())
@@ -41,16 +180,15 @@ object SLSignLikes {
     gui.setOnTopDrag { it.isCancelled = true }
 
     val pagePane = PaginatedPane(9, 5)
-    val headItemList = mutableListOf<ItemStack>()
-    slData.likes.forEach {
-      val item = ItemStack(Material.PLAYER_HEAD)
-      val meta = item.itemMeta as SkullMeta
-      meta.setOwningPlayer(Bukkit.getOfflinePlayer(it))
-      item.itemMeta = meta
-      headItemList.add(item)
-    }
-    pagePane.populateWithItemStacks(headItemList)
+    val headStacks =
+        java.util.Collections.synchronizedList(
+            MutableList(slData.likes.size) { createLoadingItem() }
+        )
+    pagePane.populateWithItemStacks(headStacks)
     gui.addPane(Slot.fromXY(0, 0), pagePane)
+
+    loadHeadsAsync(slData.likes, headStacks, pagePane, gui)
+    val ownerName = SLPlayerHeads.resolveName(slData.owner) ?: "Unknown"
 
     val navigation = StaticPane(9, 1)
     navigation.addItem(
@@ -65,6 +203,7 @@ object SLSignLikes {
             gui.title =
                 Tools.socialLikesLOGOShort +
                     "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
+            pagePane.populateWithItemStacks(headStacks)
             gui.update()
           }
         },
@@ -83,6 +222,7 @@ object SLSignLikes {
             gui.title =
                 Tools.socialLikesLOGOShort +
                     "&0ID:${slData.id}「&2${slData.title}&0」p${pagePane.page+1}".color()
+            pagePane.populateWithItemStacks(headStacks)
             gui.update()
           }
         },
@@ -122,7 +262,7 @@ object SLSignLikes {
                 .addText(
                     "&f>>&a${slData.title} &rID:${slData.id}",
                     mutableListOf(
-                        "&3制作者:&f ${Bukkit.getOfflinePlayer(slData.owner).name}",
+                        "&3制作者:&f $ownerName",
                         "&3イイね:&f ${slData.likes.count()}",
                         "&3作成日:&f " +
                             slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
@@ -156,22 +296,22 @@ object SLSignLikes {
           0,
       )
     }
-    val ownerHeadItem = ItemStack(Material.PLAYER_HEAD)
-    val meta = ownerHeadItem.itemMeta as SkullMeta
-    val offlineOwnerPlayer = Bukkit.getOfflinePlayer(slData.owner)
-    meta.setOwningPlayer(offlineOwnerPlayer)
-    ownerHeadItem.itemMeta = meta
+
+    // --- 所有者ヘッド: createPlayerHead で統一 ---
+    val ownerHeadItem = SLPlayerHeads.createHead(slData.owner, ownerName)
+
     navigation.addItem(
         GuiItem(
             ownerHeadItem
                 .allFlag()
                 .addText(
-                    "&f${offlineOwnerPlayer.name}さんの建築一覧を見る",
+                    "&f${ownerName}さんの建築一覧を見る",
                     mutableListOf("&7この方が建てた他の建築を見れます"),
                 )
         ) {
           it.whoClicked.closeInventory()
-          UserBuild.createGUI(offlineOwnerPlayer, (it.whoClicked as Player)).show(it.whoClicked)
+          UserBuild.createGUI(Bukkit.getOfflinePlayer(slData.owner), (it.whoClicked as Player))
+              .show(it.whoClicked)
         },
         5,
         0,
@@ -216,8 +356,7 @@ object SLSignLikes {
               .broadcast(
                   TextComponent(
                           Tools.socialLikesLOGO +
-                              "&f${offlineOwnerPlayer.name}さん&rの「&a${slData.title}&r」を見に行きましょう！"
-                                  .color()
+                              "&f${ownerName}さん&rの「&a${slData.title}&r」を見に行きましょう！".color()
                       )
                       .apply {
                         this.clickEvent =
@@ -260,36 +399,23 @@ object SLSignLikes {
   }
 
   private fun commentEdit(player: Player, slData: SLData) {
-    AnvilGUI.Builder().apply {
-      itemLeft(
-          ItemStack(Material.WRITABLE_BOOK)
-              .allFlag()
-              .addText(
-                  slData.comment,
-                  mutableListOf(
-                      "&7出力先(右側)にあるこの本をクリックで確定します",
-                      "&7普通に閉じた場合はキャンセルです",
-                      "&7カンマ(,)で改行扱いします",
-                  ),
-              )
-      )
-      onClick { slot, e ->
-        if (slot != AnvilGUI.Slot.OUTPUT) {
-          return@onClick listOf()
-        }
-
-        if (e.text.isNotBlank()) {
-          slData.comment = e.text
-          Data.save(slData)
-          e.player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-          return@onClick listOf(AnvilGUI.ResponseAction.close())
-        } else {
-          return@onClick listOf(AnvilGUI.ResponseAction.replaceInputText(""))
-        }
-      }
-      title(Tools.socialLikesLOGOShort + "&0コメント編集".color())
-      plugin(Tools.plugin)
-      open(player)
+    val item =
+        ItemStack(Material.WRITABLE_BOOK)
+            .allFlag()
+            .addText(
+                slData.comment,
+                mutableListOf(
+                    "&7出力先(右側)にあるこの本をクリックで確定します",
+                    "&7普通に閉じた場合はキャンセルです",
+                    "&7カンマ(,)で改行扱いします",
+                ),
+            )
+    SocialLikesAnvilInput.open(player, Tools.socialLikesLOGOShort + "&0コメント編集".color(), item) {
+        p,
+        text ->
+      slData.comment = text
+      Data.save(slData)
+      p.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
     }
   }
 }

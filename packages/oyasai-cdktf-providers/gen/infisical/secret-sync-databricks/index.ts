@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface SecretSyncDatabricksConfig extends cdktf.TerraformMetaArguments
   /**
   * Whether secrets should be automatically synced when changes occur at the source location or not.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#auto_sync_enabled SecretSyncDatabricks#auto_sync_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#auto_sync_enabled SecretSyncDatabricks#auto_sync_enabled}
   */
   readonly autoSyncEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the databricks Connection to use for syncing.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#connection_id SecretSyncDatabricks#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#connection_id SecretSyncDatabricks#connection_id}
   */
   readonly connectionId: string;
   /**
   * An optional description for the Databricks sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#description SecretSyncDatabricks#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#description SecretSyncDatabricks#description}
   */
   readonly description?: string;
   /**
   * The destination configuration for the secret sync.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#destination_config SecretSyncDatabricks#destination_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#destination_config SecretSyncDatabricks#destination_config}
   */
   readonly destinationConfig: SecretSyncDatabricksDestinationConfig;
   /**
   * The slug of the project environment to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#environment SecretSyncDatabricks#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#environment SecretSyncDatabricks#environment}
   */
   readonly environment: string;
   /**
   * The name of the Databricks sync to create. Must be slug-friendly.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#name SecretSyncDatabricks#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#name SecretSyncDatabricks#name}
   */
   readonly name: string;
   /**
   * The ID of the Infisical project to create the sync in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#project_id SecretSyncDatabricks#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#project_id SecretSyncDatabricks#project_id}
   */
   readonly projectId: string;
   /**
   * The folder path to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#secret_path SecretSyncDatabricks#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#secret_path SecretSyncDatabricks#secret_path}
   */
   readonly secretPath: string;
   /**
   * Parameters to modify how secrets are synced.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#sync_options SecretSyncDatabricks#sync_options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#sync_options SecretSyncDatabricks#sync_options}
   */
   readonly syncOptions: SecretSyncDatabricksSyncOptions;
 }
@@ -66,7 +66,7 @@ export interface SecretSyncDatabricksDestinationConfig {
   /**
   * The Databricks secret scope to sync secrets to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#scope SecretSyncDatabricks#scope}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#scope SecretSyncDatabricks#scope}
   */
   readonly scope: string;
 }
@@ -159,19 +159,19 @@ export interface SecretSyncDatabricksSyncOptions {
   /**
   * When set to true, Infisical will not remove secrets from Databricks. Enable this option if you intend to manage some secrets manually outside of Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#disable_secret_deletion SecretSyncDatabricks#disable_secret_deletion}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#disable_secret_deletion SecretSyncDatabricks#disable_secret_deletion}
   */
   readonly disableSecretDeletion?: boolean | cdktf.IResolvable;
   /**
   * Specify how Infisical should resolve the initial sync to the destination. Supported options: overwrite-destination
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#initial_sync_behavior SecretSyncDatabricks#initial_sync_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#initial_sync_behavior SecretSyncDatabricks#initial_sync_behavior}
   */
   readonly initialSyncBehavior: string;
   /**
   * The format to use for structuring secret keys in the Databricks destination.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#key_schema SecretSyncDatabricks#key_schema}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#key_schema SecretSyncDatabricks#key_schema}
   */
   readonly keySchema?: string;
 }
@@ -320,7 +320,7 @@ export class SecretSyncDatabricksSyncOptionsOutputReference extends cdktf.Comple
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks infisical_secret_sync_databricks}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks infisical_secret_sync_databricks}
 */
 export class SecretSyncDatabricks extends cdktf.TerraformResource {
 
@@ -336,7 +336,7 @@ export class SecretSyncDatabricks extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretSyncDatabricks resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretSyncDatabricks to import
-  * @param importFromId The id of the existing SecretSyncDatabricks that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretSyncDatabricks that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretSyncDatabricks to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -348,7 +348,7 @@ export class SecretSyncDatabricks extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_sync_databricks infisical_secret_sync_databricks} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_sync_databricks infisical_secret_sync_databricks} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -359,7 +359,7 @@ export class SecretSyncDatabricks extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_sync_databricks',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

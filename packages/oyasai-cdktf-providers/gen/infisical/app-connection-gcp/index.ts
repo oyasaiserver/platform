@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionGcpConfig extends cdktf.TerraformMetaArguments {
   /**
   * The credentials for the GCP App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp#credentials AppConnectionGcp#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp#credentials AppConnectionGcp#credentials}
   */
   readonly credentials: AppConnectionGcpCredentials;
   /**
   * An optional description for the GCP App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp#description AppConnectionGcp#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp#description AppConnectionGcp#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with GCP. Possible values are: service-account-impersonation
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp#method AppConnectionGcp#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp#method AppConnectionGcp#method}
   */
   readonly method: string;
   /**
   * The name of the GCP App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp#name AppConnectionGcp#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp#name AppConnectionGcp#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp#project_id AppConnectionGcp#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp#project_id AppConnectionGcp#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,7 +42,7 @@ export interface AppConnectionGcpCredentials {
   /**
   * The service account email to connect with GCP. The service account ID (the part of the email before '@') must be suffixed with the first two sections of your organization ID e.g. service-account-df92581a-0fe9@my-project.iam.gserviceaccount.com. For more details, refer to the documentation here https://infisical.com/docs/integrations/app-connections/gcp#configure-service-account-for-infisical
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp#service_account_email AppConnectionGcp#service_account_email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp#service_account_email AppConnectionGcp#service_account_email}
   */
   readonly serviceAccountEmail?: string;
 }
@@ -136,7 +136,7 @@ export class AppConnectionGcpCredentialsOutputReference extends cdktf.ComplexObj
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp infisical_app_connection_gcp}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp infisical_app_connection_gcp}
 */
 export class AppConnectionGcp extends cdktf.TerraformResource {
 
@@ -152,7 +152,7 @@ export class AppConnectionGcp extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionGcp resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionGcp to import
-  * @param importFromId The id of the existing AppConnectionGcp that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionGcp that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionGcp to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -164,7 +164,7 @@ export class AppConnectionGcp extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_gcp infisical_app_connection_gcp} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_gcp infisical_app_connection_gcp} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -175,7 +175,7 @@ export class AppConnectionGcp extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_gcp',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

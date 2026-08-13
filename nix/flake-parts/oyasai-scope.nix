@@ -1,4 +1,9 @@
-{ inputs, flake-parts-lib, ... }:
+{
+  inputs,
+  flake-parts-lib,
+  config,
+  ...
+}:
 {
   options.perSystem = flake-parts-lib.mkPerSystemOption (
     {
@@ -11,7 +16,10 @@
       options.oyasai.scope = lib.mkOption { type = lib.types.raw; };
       config =
         let
-          oyasaiScope = pkgs.callPackage ../oyasai-scope.nix { inherit inputs; };
+          oyasaiScope = pkgs.callPackage ../oyasai-scope.nix {
+            inherit inputs;
+            inherit (config) constants;
+          };
           availableOnSystem = lib.meta.availableOn { inherit system; };
           packages = lib.filterAttrs (_: v: lib.isDerivation v && availableOnSystem v) oyasaiScope;
         in

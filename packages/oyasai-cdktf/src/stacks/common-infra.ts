@@ -1,5 +1,5 @@
-import { DataCloudflareRegistrarDomain } from "@oyasaiserver/cdktf-providers/cloudflare/data-cloudflare-registrar-domain";
 import { CloudflareProvider } from "@oyasaiserver/cdktf-providers/cloudflare/provider";
+import { RegistrarDomain } from "@oyasaiserver/cdktf-providers/cloudflare/registrar-domain";
 import { Zone } from "@oyasaiserver/cdktf-providers/cloudflare/zone";
 import { Identity } from "@oyasaiserver/cdktf-providers/infisical/identity";
 import { IdentityOidcAuth } from "@oyasaiserver/cdktf-providers/infisical/identity-oidc-auth";
@@ -8,17 +8,18 @@ import { ProjectEnvironment } from "@oyasaiserver/cdktf-providers/infisical/proj
 import { ProjectIdentity } from "@oyasaiserver/cdktf-providers/infisical/project-identity";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
 import type { Construct } from "constructs";
-import { createSecrets } from "../secrets.ts";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
 
 export class CommonInfra extends OyasaiTerraformStack {
   private readonly infisicalOrgId = "a8e8e008-81e0-4a4f-81a9-8441c6820e7e";
 
-  public readonly oyasaiIoRegistrarDomain: DataCloudflareRegistrarDomain;
-  public readonly oyasaiIoZone: Zone;
+  readonly cloudflareAccountId = "7befe273c79e6f7993c1cd4534d6afff";
 
-  public readonly platformInfisicalProject: Project;
-  public readonly platformInfisicalProjectEnvironment: ProjectEnvironment;
+  readonly oyasaiIoRegistrarDomain: RegistrarDomain;
+  readonly oyasaiIoZone: Zone;
+
+  readonly platformInfisicalProject: Project;
+  readonly platformInfisicalProjectEnvironment: ProjectEnvironment;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -80,22 +81,19 @@ export class CommonInfra extends OyasaiTerraformStack {
       },
     );
 
-    const secrets = createSecrets(this, this);
-
-    // TODO: Data because Cloudflare doesn't support importing registrar domain
-    // - shun 2026-04
-    this.oyasaiIoRegistrarDomain = new DataCloudflareRegistrarDomain(
+    this.oyasaiIoRegistrarDomain = new RegistrarDomain(
       this,
       this.t("oyasai-io-registrar-domain"),
       {
-        accountId: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
+        accountId: this.cloudflareAccountId,
         domainName: "oyasai.io",
+        privacy: true,
       },
     );
 
     this.oyasaiIoZone = new Zone(this, "oyasai-io-zone", {
       account: {
-        id: secrets.get("CLOUDFLARE_ACCOUNT_ID"),
+        id: this.cloudflareAccountId,
       },
       name: this.oyasaiIoRegistrarDomain.domainName,
       type: "full",

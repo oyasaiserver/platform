@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,73 +10,73 @@ export interface SecretRotationAzureClientSecretConfig extends cdktf.TerraformMe
   /**
   * Whether secrets should be automatically rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#auto_rotation_enabled SecretRotationAzureClientSecret#auto_rotation_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#auto_rotation_enabled SecretRotationAzureClientSecret#auto_rotation_enabled}
   */
   readonly autoRotationEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the connection to use for the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#connection_id SecretRotationAzureClientSecret#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#connection_id SecretRotationAzureClientSecret#connection_id}
   */
   readonly connectionId: string;
   /**
   * The description of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#description SecretRotationAzureClientSecret#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#description SecretRotationAzureClientSecret#description}
   */
   readonly description?: string;
   /**
   * The slug of the project environment to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#environment SecretRotationAzureClientSecret#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#environment SecretRotationAzureClientSecret#environment}
   */
   readonly environment: string;
   /**
   * The name of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#name SecretRotationAzureClientSecret#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#name SecretRotationAzureClientSecret#name}
   */
   readonly name: string;
   /**
   * Parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#parameters SecretRotationAzureClientSecret#parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#parameters SecretRotationAzureClientSecret#parameters}
   */
   readonly parameters: SecretRotationAzureClientSecretParameters;
   /**
   * The ID of the Infisical project to create the secret rotation in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#project_id SecretRotationAzureClientSecret#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#project_id SecretRotationAzureClientSecret#project_id}
   */
   readonly projectId: string;
   /**
   * At which UTC time the rotation should occur.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#rotate_at_utc SecretRotationAzureClientSecret#rotate_at_utc}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#rotate_at_utc SecretRotationAzureClientSecret#rotate_at_utc}
   */
   readonly rotateAtUtc?: SecretRotationAzureClientSecretRotateAtUtc;
   /**
   * How many days to wait between each rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#rotation_interval SecretRotationAzureClientSecret#rotation_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#rotation_interval SecretRotationAzureClientSecret#rotation_interval}
   */
   readonly rotationInterval?: number;
   /**
   * The folder path to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#secret_path SecretRotationAzureClientSecret#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#secret_path SecretRotationAzureClientSecret#secret_path}
   */
   readonly secretPath: string;
   /**
   * Secret mappings to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#secrets_mapping SecretRotationAzureClientSecret#secrets_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#secrets_mapping SecretRotationAzureClientSecret#secrets_mapping}
   */
   readonly secretsMapping: SecretRotationAzureClientSecretSecretsMapping;
   /**
   * Temporary parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#temporary_parameters SecretRotationAzureClientSecret#temporary_parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#temporary_parameters SecretRotationAzureClientSecret#temporary_parameters}
   */
   readonly temporaryParameters?: SecretRotationAzureClientSecretTemporaryParameters;
 }
@@ -84,13 +84,13 @@ export interface SecretRotationAzureClientSecretParameters {
   /**
   * The client ID of the Azure Application to rotate the client secret for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#client_id SecretRotationAzureClientSecret#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#client_id SecretRotationAzureClientSecret#client_id}
   */
   readonly clientId: string;
   /**
   * The ID of the Azure Application to rotate the client secret for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#object_id SecretRotationAzureClientSecret#object_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#object_id SecretRotationAzureClientSecret#object_id}
   */
   readonly objectId: string;
 }
@@ -209,13 +209,13 @@ export interface SecretRotationAzureClientSecretRotateAtUtc {
   /**
   * The hour at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#hours SecretRotationAzureClientSecret#hours}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#hours SecretRotationAzureClientSecret#hours}
   */
   readonly hours?: number;
   /**
   * The minute at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#minutes SecretRotationAzureClientSecret#minutes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#minutes SecretRotationAzureClientSecret#minutes}
   */
   readonly minutes?: number;
 }
@@ -340,13 +340,13 @@ export interface SecretRotationAzureClientSecretSecretsMapping {
   /**
   * The name of the secret that the client ID will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#client_id SecretRotationAzureClientSecret#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#client_id SecretRotationAzureClientSecret#client_id}
   */
   readonly clientId: string;
   /**
   * The name of the secret that the rotated client secret will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#client_secret SecretRotationAzureClientSecret#client_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#client_secret SecretRotationAzureClientSecret#client_secret}
   */
   readonly clientSecret: string;
 }
@@ -522,7 +522,7 @@ export class SecretRotationAzureClientSecretTemporaryParametersOutputReference e
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret infisical_secret_rotation_azure_client_secret}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret infisical_secret_rotation_azure_client_secret}
 */
 export class SecretRotationAzureClientSecret extends cdktf.TerraformResource {
 
@@ -538,7 +538,7 @@ export class SecretRotationAzureClientSecret extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretRotationAzureClientSecret resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretRotationAzureClientSecret to import
-  * @param importFromId The id of the existing SecretRotationAzureClientSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretRotationAzureClientSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretRotationAzureClientSecret to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -550,7 +550,7 @@ export class SecretRotationAzureClientSecret extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_azure_client_secret infisical_secret_rotation_azure_client_secret} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_azure_client_secret infisical_secret_rotation_azure_client_secret} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -561,7 +561,7 @@ export class SecretRotationAzureClientSecret extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_rotation_azure_client_secret',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

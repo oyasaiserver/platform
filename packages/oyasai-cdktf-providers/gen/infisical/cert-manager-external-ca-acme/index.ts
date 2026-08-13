@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,67 +10,61 @@ export interface CertManagerExternalCaAcmeConfig extends cdktf.TerraformMetaArgu
   /**
   * The email address for ACME account registration
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#account_email CertManagerExternalCaAcme#account_email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#account_email CertManagerExternalCaAcme#account_email}
   */
   readonly accountEmail: string;
   /**
   * The ACME directory URL
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#directory_url CertManagerExternalCaAcme#directory_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#directory_url CertManagerExternalCaAcme#directory_url}
   */
   readonly directoryUrl: string;
   /**
   * The ID of the DNS app connection for ACME challenge validation
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#dns_app_connection_id CertManagerExternalCaAcme#dns_app_connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#dns_app_connection_id CertManagerExternalCaAcme#dns_app_connection_id}
   */
   readonly dnsAppConnectionId: string;
   /**
   * The hosted zone ID for DNS-01 challenge validation
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#dns_hosted_zone_id CertManagerExternalCaAcme#dns_hosted_zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#dns_hosted_zone_id CertManagerExternalCaAcme#dns_hosted_zone_id}
   */
   readonly dnsHostedZoneId?: string;
   /**
   * The DNS provider for ACME challenge validation. Supported values: route53, cloudflare, dns-made-easy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#dns_provider CertManagerExternalCaAcme#dns_provider}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#dns_provider CertManagerExternalCaAcme#dns_provider}
   */
   readonly dnsProvider: string;
   /**
   * External Account Binding (EAB) HMAC key (optional)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#eab_hmac_key CertManagerExternalCaAcme#eab_hmac_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#eab_hmac_key CertManagerExternalCaAcme#eab_hmac_key}
   */
   readonly eabHmacKey?: string;
   /**
   * External Account Binding (EAB) Key ID (optional)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#eab_kid CertManagerExternalCaAcme#eab_kid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#eab_kid CertManagerExternalCaAcme#eab_kid}
   */
   readonly eabKid?: string;
   /**
   * The name of the ACME CA
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#name CertManagerExternalCaAcme#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#name CertManagerExternalCaAcme#name}
   */
   readonly name: string;
   /**
-  * The slug of the cert-manager project
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#project_slug CertManagerExternalCaAcme#project_slug}
-  */
-  readonly projectSlug: string;
-  /**
   * The status of the CA. Supported values: active, disabled. Defaults to 'active'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#status CertManagerExternalCaAcme#status}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#status CertManagerExternalCaAcme#status}
   */
   readonly status?: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme infisical_cert_manager_external_ca_acme}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme infisical_cert_manager_external_ca_acme}
 */
 export class CertManagerExternalCaAcme extends cdktf.TerraformResource {
 
@@ -86,7 +80,7 @@ export class CertManagerExternalCaAcme extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerExternalCaAcme resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerExternalCaAcme to import
-  * @param importFromId The id of the existing CertManagerExternalCaAcme that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerExternalCaAcme that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerExternalCaAcme to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -98,7 +92,7 @@ export class CertManagerExternalCaAcme extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_external_ca_acme infisical_cert_manager_external_ca_acme} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_external_ca_acme infisical_cert_manager_external_ca_acme} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -109,7 +103,7 @@ export class CertManagerExternalCaAcme extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_external_ca_acme',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -127,7 +121,6 @@ export class CertManagerExternalCaAcme extends cdktf.TerraformResource {
     this._eabHmacKey = config.eabHmacKey;
     this._eabKid = config.eabKid;
     this._name = config.name;
-    this._projectSlug = config.projectSlug;
     this._status = config.status;
   }
 
@@ -253,19 +246,6 @@ export class CertManagerExternalCaAcme extends cdktf.TerraformResource {
     return this._name;
   }
 
-  // project_slug - computed: false, optional: false, required: true
-  private _projectSlug?: string; 
-  public get projectSlug() {
-    return this.getStringAttribute('project_slug');
-  }
-  public set projectSlug(value: string) {
-    this._projectSlug = value;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get projectSlugInput() {
-    return this._projectSlug;
-  }
-
   // status - computed: true, optional: true, required: false
   private _status?: string; 
   public get status() {
@@ -296,7 +276,6 @@ export class CertManagerExternalCaAcme extends cdktf.TerraformResource {
       eab_hmac_key: cdktf.stringToTerraform(this._eabHmacKey),
       eab_kid: cdktf.stringToTerraform(this._eabKid),
       name: cdktf.stringToTerraform(this._name),
-      project_slug: cdktf.stringToTerraform(this._projectSlug),
       status: cdktf.stringToTerraform(this._status),
     };
   }
@@ -347,12 +326,6 @@ export class CertManagerExternalCaAcme extends cdktf.TerraformResource {
       },
       name: {
         value: cdktf.stringToHclTerraform(this._name),
-        isBlock: false,
-        type: "simple",
-        storageClassType: "string",
-      },
-      project_slug: {
-        value: cdktf.stringToHclTerraform(this._projectSlug),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

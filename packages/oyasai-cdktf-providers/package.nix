@@ -1,5 +1,4 @@
 {
-  cdktf-cli,
   writableTmpDirAsHomeHook,
   nodejs,
   terraform,
@@ -11,6 +10,10 @@
 }:
 
 let
+  final = package-lock2nix.mkNpmModule {
+    src = ./.;
+    passthru = { inherit gen; };
+  };
   # Minimal cdktf.json used for geneting the bindings.
   cdktfJson = writeTextFile {
     name = "cdktf.json";
@@ -29,7 +32,7 @@ let
     name = "cdktf-providers";
 
     nativeBuildInputs = [
-      cdktf-cli
+      final
       nodejs
       terraform
       # cdktf wants to write in homedir for cache
@@ -54,7 +57,4 @@ let
     '';
   };
 in
-package-lock2nix.mkNpmModule {
-  src = ./.;
-  passthru = { inherit gen; };
-}
+final

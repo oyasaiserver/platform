@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,51 +8,75 @@ import * as cdktf from 'cdktf';
 
 export interface AccessApprovalPolicyConfig extends cdktf.TerraformMetaArguments {
   /**
+  * Whether to allow approvers to approve their own requests
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#allow_self_approval AccessApprovalPolicy#allow_self_approval}
+  */
+  readonly allowSelfApproval?: boolean | cdktf.IResolvable;
+  /**
   * The required approvers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#approvers AccessApprovalPolicy#approvers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#approvers AccessApprovalPolicy#approvers}
   */
   readonly approvers: AccessApprovalPolicyApprovers[] | cdktf.IResolvable;
   /**
+  * The bypassers who can bypass the approval policy
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#bypassers AccessApprovalPolicy#bypassers}
+  */
+  readonly bypassers?: AccessApprovalPolicyBypassers[] | cdktf.IResolvable;
+  /**
   * The enforcement level of the policy. This can either be hard or soft
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#enforcement_level AccessApprovalPolicy#enforcement_level}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#enforcement_level AccessApprovalPolicy#enforcement_level}
   */
   readonly enforcementLevel?: string;
   /**
   * (DEPRECATED, Use environment_slugs instead) The environment to apply the access approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#environment_slug AccessApprovalPolicy#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#environment_slug AccessApprovalPolicy#environment_slug}
   */
   readonly environmentSlug?: string;
   /**
   * The environments to apply the access approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#environment_slugs AccessApprovalPolicy#environment_slugs}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#environment_slugs AccessApprovalPolicy#environment_slugs}
   */
   readonly environmentSlugs?: string[];
   /**
+  * The maximum time period for the access approval, specified as a duration string (e.g. '1h', '30m', '2d'). If omitted, the default behavior is 'permanent'.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#max_time_period AccessApprovalPolicy#max_time_period}
+  */
+  readonly maxTimePeriod?: string;
+  /**
   * The name of the access approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#name AccessApprovalPolicy#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#name AccessApprovalPolicy#name}
   */
   readonly name?: string;
   /**
   * The ID of the project to add the access approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#project_id AccessApprovalPolicy#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#project_id AccessApprovalPolicy#project_id}
   */
   readonly projectId: string;
   /**
+  * The time after which the access request expires, specified as a duration string (e.g. '1h', '3d', '72h'). Must be between 1 minute and 1 year. If omitted, the default behavior is 'never'.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#request_expiration_time AccessApprovalPolicy#request_expiration_time}
+  */
+  readonly requestExpirationTime?: string;
+  /**
   * The number of required approvers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#required_approvals AccessApprovalPolicy#required_approvals}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#required_approvals AccessApprovalPolicy#required_approvals}
   */
   readonly requiredApprovals: number;
   /**
   * The secret path to apply the access approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#secret_path AccessApprovalPolicy#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#secret_path AccessApprovalPolicy#secret_path}
   */
   readonly secretPath: string;
 }
@@ -60,7 +84,7 @@ export interface AccessApprovalPolicyApprovers {
   /**
   * The ID of the approver
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#id AccessApprovalPolicy#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#id AccessApprovalPolicy#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -69,13 +93,13 @@ export interface AccessApprovalPolicyApprovers {
   /**
   * The type of approver. Either group or user
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#type AccessApprovalPolicy#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#type AccessApprovalPolicy#type}
   */
   readonly type: string;
   /**
   * The username of the approver. By default, this is the email
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#username AccessApprovalPolicy#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#username AccessApprovalPolicy#username}
   */
   readonly username?: string;
 }
@@ -244,9 +268,197 @@ export class AccessApprovalPolicyApproversList extends cdktf.ComplexList {
     return new AccessApprovalPolicyApproversOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
+export interface AccessApprovalPolicyBypassers {
+  /**
+  * The ID of the bypasser
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#id AccessApprovalPolicy#id}
+  *
+  * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
+  * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+  */
+  readonly id?: string;
+  /**
+  * The type of bypasser. Either group or user
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#type AccessApprovalPolicy#type}
+  */
+  readonly type: string;
+  /**
+  * The username of the bypasser. By default, this is the email
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#username AccessApprovalPolicy#username}
+  */
+  readonly username?: string;
+}
+
+export function accessApprovalPolicyBypassersToTerraform(struct?: AccessApprovalPolicyBypassers | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    id: cdktf.stringToTerraform(struct!.id),
+    type: cdktf.stringToTerraform(struct!.type),
+    username: cdktf.stringToTerraform(struct!.username),
+  }
+}
+
+
+export function accessApprovalPolicyBypassersToHclTerraform(struct?: AccessApprovalPolicyBypassers | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    id: {
+      value: cdktf.stringToHclTerraform(struct!.id),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    type: {
+      value: cdktf.stringToHclTerraform(struct!.type),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    username: {
+      value: cdktf.stringToHclTerraform(struct!.username),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class AccessApprovalPolicyBypassersOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): AccessApprovalPolicyBypassers | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._id !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.id = this._id;
+    }
+    if (this._type !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.type = this._type;
+    }
+    if (this._username !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.username = this._username;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: AccessApprovalPolicyBypassers | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._id = undefined;
+      this._type = undefined;
+      this._username = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._id = value.id;
+      this._type = value.type;
+      this._username = value.username;
+    }
+  }
+
+  // id - computed: false, optional: true, required: false
+  private _id?: string; 
+  public get id() {
+    return this.getStringAttribute('id');
+  }
+  public set id(value: string) {
+    this._id = value;
+  }
+  public resetId() {
+    this._id = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get idInput() {
+    return this._id;
+  }
+
+  // type - computed: false, optional: false, required: true
+  private _type?: string; 
+  public get type() {
+    return this.getStringAttribute('type');
+  }
+  public set type(value: string) {
+    this._type = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get typeInput() {
+    return this._type;
+  }
+
+  // username - computed: false, optional: true, required: false
+  private _username?: string; 
+  public get username() {
+    return this.getStringAttribute('username');
+  }
+  public set username(value: string) {
+    this._username = value;
+  }
+  public resetUsername() {
+    this._username = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get usernameInput() {
+    return this._username;
+  }
+}
+
+export class AccessApprovalPolicyBypassersList extends cdktf.ComplexList {
+  public internalValue? : AccessApprovalPolicyBypassers[] | cdktf.IResolvable
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): AccessApprovalPolicyBypassersOutputReference {
+    return new AccessApprovalPolicyBypassersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy infisical_access_approval_policy}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy infisical_access_approval_policy}
 */
 export class AccessApprovalPolicy extends cdktf.TerraformResource {
 
@@ -262,7 +474,7 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AccessApprovalPolicy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AccessApprovalPolicy to import
-  * @param importFromId The id of the existing AccessApprovalPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AccessApprovalPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AccessApprovalPolicy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -274,7 +486,7 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/access_approval_policy infisical_access_approval_policy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy infisical_access_approval_policy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -285,7 +497,7 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_access_approval_policy',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -295,12 +507,16 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
       connection: config.connection,
       forEach: config.forEach
     });
+    this._allowSelfApproval = config.allowSelfApproval;
     this._approvers.internalValue = config.approvers;
+    this._bypassers.internalValue = config.bypassers;
     this._enforcementLevel = config.enforcementLevel;
     this._environmentSlug = config.environmentSlug;
     this._environmentSlugs = config.environmentSlugs;
+    this._maxTimePeriod = config.maxTimePeriod;
     this._name = config.name;
     this._projectId = config.projectId;
+    this._requestExpirationTime = config.requestExpirationTime;
     this._requiredApprovals = config.requiredApprovals;
     this._secretPath = config.secretPath;
   }
@@ -308,6 +524,22 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
   // ==========
   // ATTRIBUTES
   // ==========
+
+  // allow_self_approval - computed: true, optional: true, required: false
+  private _allowSelfApproval?: boolean | cdktf.IResolvable; 
+  public get allowSelfApproval() {
+    return this.getBooleanAttribute('allow_self_approval');
+  }
+  public set allowSelfApproval(value: boolean | cdktf.IResolvable) {
+    this._allowSelfApproval = value;
+  }
+  public resetAllowSelfApproval() {
+    this._allowSelfApproval = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get allowSelfApprovalInput() {
+    return this._allowSelfApproval;
+  }
 
   // approvers - computed: false, optional: false, required: true
   private _approvers = new AccessApprovalPolicyApproversList(this, "approvers", true);
@@ -320,6 +552,22 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get approversInput() {
     return this._approvers.internalValue;
+  }
+
+  // bypassers - computed: false, optional: true, required: false
+  private _bypassers = new AccessApprovalPolicyBypassersList(this, "bypassers", true);
+  public get bypassers() {
+    return this._bypassers;
+  }
+  public putBypassers(value: AccessApprovalPolicyBypassers[] | cdktf.IResolvable) {
+    this._bypassers.internalValue = value;
+  }
+  public resetBypassers() {
+    this._bypassers.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get bypassersInput() {
+    return this._bypassers.internalValue;
   }
 
   // enforcement_level - computed: true, optional: true, required: false
@@ -375,6 +623,22 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
     return this.getStringAttribute('id');
   }
 
+  // max_time_period - computed: false, optional: true, required: false
+  private _maxTimePeriod?: string; 
+  public get maxTimePeriod() {
+    return this.getStringAttribute('max_time_period');
+  }
+  public set maxTimePeriod(value: string) {
+    this._maxTimePeriod = value;
+  }
+  public resetMaxTimePeriod() {
+    this._maxTimePeriod = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get maxTimePeriodInput() {
+    return this._maxTimePeriod;
+  }
+
   // name - computed: true, optional: true, required: false
   private _name?: string; 
   public get name() {
@@ -402,6 +666,22 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get projectIdInput() {
     return this._projectId;
+  }
+
+  // request_expiration_time - computed: false, optional: true, required: false
+  private _requestExpirationTime?: string; 
+  public get requestExpirationTime() {
+    return this.getStringAttribute('request_expiration_time');
+  }
+  public set requestExpirationTime(value: string) {
+    this._requestExpirationTime = value;
+  }
+  public resetRequestExpirationTime() {
+    this._requestExpirationTime = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get requestExpirationTimeInput() {
+    return this._requestExpirationTime;
   }
 
   // required_approvals - computed: false, optional: false, required: true
@@ -436,12 +716,16 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
 
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
+      allow_self_approval: cdktf.booleanToTerraform(this._allowSelfApproval),
       approvers: cdktf.listMapper(accessApprovalPolicyApproversToTerraform, false)(this._approvers.internalValue),
+      bypassers: cdktf.listMapper(accessApprovalPolicyBypassersToTerraform, false)(this._bypassers.internalValue),
       enforcement_level: cdktf.stringToTerraform(this._enforcementLevel),
       environment_slug: cdktf.stringToTerraform(this._environmentSlug),
       environment_slugs: cdktf.listMapper(cdktf.stringToTerraform, false)(this._environmentSlugs),
+      max_time_period: cdktf.stringToTerraform(this._maxTimePeriod),
       name: cdktf.stringToTerraform(this._name),
       project_id: cdktf.stringToTerraform(this._projectId),
+      request_expiration_time: cdktf.stringToTerraform(this._requestExpirationTime),
       required_approvals: cdktf.numberToTerraform(this._requiredApprovals),
       secret_path: cdktf.stringToTerraform(this._secretPath),
     };
@@ -449,11 +733,23 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
 
   protected synthesizeHclAttributes(): { [name: string]: any } {
     const attrs = {
+      allow_self_approval: {
+        value: cdktf.booleanToHclTerraform(this._allowSelfApproval),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
+      },
       approvers: {
         value: cdktf.listMapperHcl(accessApprovalPolicyApproversToHclTerraform, false)(this._approvers.internalValue),
         isBlock: true,
         type: "set",
         storageClassType: "AccessApprovalPolicyApproversList",
+      },
+      bypassers: {
+        value: cdktf.listMapperHcl(accessApprovalPolicyBypassersToHclTerraform, false)(this._bypassers.internalValue),
+        isBlock: true,
+        type: "set",
+        storageClassType: "AccessApprovalPolicyBypassersList",
       },
       enforcement_level: {
         value: cdktf.stringToHclTerraform(this._enforcementLevel),
@@ -473,6 +769,12 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
         type: "list",
         storageClassType: "stringList",
       },
+      max_time_period: {
+        value: cdktf.stringToHclTerraform(this._maxTimePeriod),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
       name: {
         value: cdktf.stringToHclTerraform(this._name),
         isBlock: false,
@@ -481,6 +783,12 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
       },
       project_id: {
         value: cdktf.stringToHclTerraform(this._projectId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      request_expiration_time: {
+        value: cdktf.stringToHclTerraform(this._requestExpirationTime),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

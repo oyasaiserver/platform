@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface IntegrationAwsParameterStoreConfig extends cdktf.TerraformMetaA
   /**
   * The AWS access key ID. Used to authenticate with AWS Parameter Store. You must either set secret_access_key and access_key_id, or set assume_role_arn to assume a role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#access_key_id IntegrationAwsParameterStore#access_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#access_key_id IntegrationAwsParameterStore#access_key_id}
   */
   readonly accessKeyId?: string;
   /**
   * The ARN of the role to assume when syncing secrets to AWS Parameter Store. You must either set secret_access_key and access_key_id, or set assume_role_arn to assume a role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#assume_role_arn IntegrationAwsParameterStore#assume_role_arn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#assume_role_arn IntegrationAwsParameterStore#assume_role_arn}
   */
   readonly assumeRoleArn?: string;
   /**
   * The AWS region to sync secrets to. (us-east-1, us-east-2, etc)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#aws_region IntegrationAwsParameterStore#aws_region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#aws_region IntegrationAwsParameterStore#aws_region}
   */
   readonly awsRegion: string;
   /**
   * The slug of the environment to sync to AWS Parameter Store (prod, dev, staging, etc).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#environment IntegrationAwsParameterStore#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#environment IntegrationAwsParameterStore#environment}
   */
   readonly environment: string;
   /**
   * Integration options
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#options IntegrationAwsParameterStore#options}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#options IntegrationAwsParameterStore#options}
   */
   readonly options?: IntegrationAwsParameterStoreOptions;
   /**
   * The path in AWS Parameter Store to sync secrets to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#parameter_store_path IntegrationAwsParameterStore#parameter_store_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#parameter_store_path IntegrationAwsParameterStore#parameter_store_path}
   */
   readonly parameterStorePath: string;
   /**
   * The ID of your Infisical project.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#project_id IntegrationAwsParameterStore#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#project_id IntegrationAwsParameterStore#project_id}
   */
   readonly projectId: string;
   /**
   * The AWS secret access key. Used to authenticate with AWS Parameter Store. You must either set secret_access_key and access_key_id, or set assume_role_arn to assume a role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#secret_access_key IntegrationAwsParameterStore#secret_access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#secret_access_key IntegrationAwsParameterStore#secret_access_key}
   */
   readonly secretAccessKey?: string;
   /**
   * The secret path in Infisical to sync secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#secret_path IntegrationAwsParameterStore#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#secret_path IntegrationAwsParameterStore#secret_path}
   */
   readonly secretPath: string;
 }
@@ -66,13 +66,13 @@ export interface IntegrationAwsParameterStoreOptionsAwsTags {
   /**
   * The key of the tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#key IntegrationAwsParameterStore#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#key IntegrationAwsParameterStore#key}
   */
   readonly key?: string;
   /**
   * The value of the tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#value IntegrationAwsParameterStore#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#value IntegrationAwsParameterStore#value}
   */
   readonly value?: string;
 }
@@ -219,13 +219,13 @@ export interface IntegrationAwsParameterStoreOptions {
   /**
   * Tags to attach to the AWS parameter store secrets.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#aws_tags IntegrationAwsParameterStore#aws_tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#aws_tags IntegrationAwsParameterStore#aws_tags}
   */
   readonly awsTags?: IntegrationAwsParameterStoreOptionsAwsTags[] | cdktf.IResolvable;
   /**
   * Whether to disable deletion of existing secrets in AWS Parameter Store.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#should_disable_delete IntegrationAwsParameterStore#should_disable_delete}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#should_disable_delete IntegrationAwsParameterStore#should_disable_delete}
   */
   readonly shouldDisableDelete?: boolean | cdktf.IResolvable;
 }
@@ -348,7 +348,7 @@ export class IntegrationAwsParameterStoreOptionsOutputReference extends cdktf.Co
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store infisical_integration_aws_parameter_store}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store infisical_integration_aws_parameter_store}
 */
 export class IntegrationAwsParameterStore extends cdktf.TerraformResource {
 
@@ -364,7 +364,7 @@ export class IntegrationAwsParameterStore extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IntegrationAwsParameterStore resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IntegrationAwsParameterStore to import
-  * @param importFromId The id of the existing IntegrationAwsParameterStore that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IntegrationAwsParameterStore that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IntegrationAwsParameterStore to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -376,7 +376,7 @@ export class IntegrationAwsParameterStore extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/integration_aws_parameter_store infisical_integration_aws_parameter_store} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/integration_aws_parameter_store infisical_integration_aws_parameter_store} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -387,7 +387,7 @@ export class IntegrationAwsParameterStore extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_integration_aws_parameter_store',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

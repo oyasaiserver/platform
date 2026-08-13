@@ -2,7 +2,7 @@
 
 oyasaiPurpur rec {
   name = "oyasai-minecraft-main";
-  version = "1.21.10";
+  version = "1.21.11";
 
   icon = ../assets/icon-64x64.png;
 
@@ -57,7 +57,9 @@ oyasaiPurpur rec {
     fastasyncvoxelsniper
     fastasyncworldedit
     floodgate
+    gakubuchilocker
     gsit
+    headhuntplugin
     imageonmap
     inventoryshop
     joincommands
@@ -72,6 +74,7 @@ oyasaiPurpur rec {
     openinv
     oyasaiadmintools
     oyasaimenu
+    oyasaimusic
     oyasaipets
     oyasaiutilities
     oyasaivehicles
@@ -81,6 +84,8 @@ oyasaiPurpur rec {
     plugmanx
     protocollib
     pvparena
+    sba
+    screamingbedwars
     signshop
     simpleelevator
     skinsrestorer

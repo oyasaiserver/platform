@@ -13,7 +13,10 @@ softdepend:
 commands:
   csm:
     description: "CitiesSkyMine 統合コマンド"
-    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|stack|selection|config|debugstick|preset>"
+    usage: "/csm <help|version|info|reload|road|intersection|facade|payload|load|load64|window|slabstairs|columns|stack|crowd|selection|settings|config|cloud|bezier|debugstick|preset|schematic>"
+  ".help":
+    description: "CitiesSkyMine ヘルプショートカット"
+    usage: "/.help <command>"
   rc:
     description: "道路カーブを生成するコマンド"
     usage: "/rc <help|set|build|reset|status|debugline|smoothline|version>"
@@ -34,31 +37,46 @@ commands:
     usage: "/.hb <build|schem|help> [options]"
   ".pl":
     description: "CitiesSkyMine payload 配置ショートカット"
-    usage: "/.pl <load|load64> <payload> [0-3] [L|R]"
+    usage: "/.pl <load|load64|p|r|clear> <payload|id> [0-3] [L|R]"
   ".win":
     description: "窓生成ショートカット"
     usage: "/.win [width] [height] [frame] [glass] [backing]"
   ".ss":
     description: "SlabStairs 生成ショートカット"
-    usage: "/.ss [build] [slab] [stair] [full]"
+    usage: "/.ss [material]"
+  ".col":
+    description: "柱割り生成ショートカット"
+    usage: "/.col <columnWidth> <gap|count> [edge|center] [2d] [-s] [-p]"
   ".ns":
     description: "選択範囲をプレイヤー視点基準で複製するショートカット"
     usage: "/.ns <forward|back|left|right|up|down...> <times> [skip-blocks...]"
+  ".crowd":
+    description: "群衆シルエット生成ショートカット"
+    usage: "/.crowd <count|leftxdepth> [gap] [wall] [head]"
   ".sel":
     description: "WorldEdit 選択範囲の保存・復元ショートカット"
     usage: "/.sel <save|list|delete|p|name>"
-  ".cf":
+  ".settings":
     description: "CitiesSkyMine 個人設定GUI"
-    usage: "/.cf"
+    usage: "/.settings"
+  ".config":
+    description: "CitiesSkyMine config.yml 編集ショートカット"
+    usage: "/.config <access|reload>"
+  ".cloud":
+    description: "雲生成ショートカット"
+    usage: "/.cloud [size] [height] [density] [seed] [yOffset]"
+  ".bez":
+    description: "ベジェ曲線プレビューショートカット"
+    usage: "/.bez <add|set|plane|remove|preview|build|segments|status|clear>"
   ".ds":
     description: "debug-stick 互換ショートカット"
     usage: "/.ds <select|cycle>"
   ".brp":
     description: "ブラシプリセットショートカット"
-    usage: "/.brp <save|load|list|delete|名前>"
-  ".csmenu":
-    description: "CsmMenu — CitiesSkyMine 独自メニューエンジン (OyasaiMenu フォーク)"
-    usage: "/.csmenu <menu-id|reload>"
+    usage: '/.brp <save|load|list|delete|名前> ["<brush>"] [-m "<mask>"] [-g "<global mask>"]'
+  ".sc":
+    description: "スキマティック貼り付けショートカット"
+    usage: "/.sc <name|list|reload> [-a]"
 
 permissions:
   citiesskymine.*:
@@ -75,11 +93,17 @@ permissions:
       citiesskymine.payload: true
       citiesskymine.window: true
       citiesskymine.slabstairs: true
+      citiesskymine.columns: true
       citiesskymine.stack: true
+      citiesskymine.crowd: true
       citiesskymine.selection: true
+      citiesskymine.settings: true
       citiesskymine.config: true
+      citiesskymine.cloud: true
+      citiesskymine.bezier: true
       citiesskymine.debugstick: true
       citiesskymine.preset: true
+      citiesskymine.schematic: true
   citiesskymine.role.admin:
     description: "CSM アドミンロール"
     default: op
@@ -110,18 +134,36 @@ permissions:
   citiesskymine.slabstairs:
     description: "旧形式: SlabStairs 生成コマンドの使用権限"
     default: false
+  citiesskymine.columns:
+    description: "旧形式: 柱割り生成コマンドの使用権限"
+    default: false
   citiesskymine.stack:
     description: "旧形式: 選択範囲複製コマンドの使用権限"
+    default: false
+  citiesskymine.crowd:
+    description: "旧形式: 群衆シルエット生成コマンドの使用権限"
     default: false
   citiesskymine.selection:
     description: "旧形式: WorldEdit 選択範囲保存コマンドの使用権限"
     default: false
-  citiesskymine.config:
+  citiesskymine.settings:
     description: "旧形式: 個人設定GUIの使用権限"
+    default: false
+  citiesskymine.config:
+    description: "旧形式: CitiesSkyMine config.yml 編集コマンドの使用権限"
+    default: false
+  citiesskymine.cloud:
+    description: "旧形式: 雲生成コマンドの使用権限"
+    default: false
+  citiesskymine.bezier:
+    description: "旧形式: ベジェ曲線プレビューコマンドの使用権限"
     default: false
   citiesskymine.debugstick:
     description: "旧形式: debug-stick 互換コマンドの使用権限"
     default: false
   citiesskymine.preset:
     description: "旧形式: ブラシプリセットコマンドの使用権限"
+    default: false
+  citiesskymine.schematic:
+    description: "旧形式: スキマティック貼り付けコマンドの使用権限"
     default: false

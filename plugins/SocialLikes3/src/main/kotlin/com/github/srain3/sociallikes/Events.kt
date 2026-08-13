@@ -1,6 +1,5 @@
 package com.github.srain3.sociallikes
 
-import com.fren_gor.ultimateAdvancementAPI.advancement.display.AdvancementFrameType
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.Tools.isLegacySLSign
 import com.github.srain3.sociallikes.Tools.isSLSign
@@ -36,6 +35,7 @@ import org.bukkit.block.HangingSign
 import org.bukkit.block.Sign
 import org.bukkit.block.data.type.WallSign
 import org.bukkit.block.sign.Side
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -176,6 +176,9 @@ object Events : Listener {
   /** このPluginの看板内部データKey */
   val idKey = NamespacedKey(plugin, "SocialLikes_ID")
 
+  /** 再取得したSL看板アイテムの復元用データKey */
+  val slSignItemIdKey = NamespacedKey(plugin, "sociallikes_id")
+
   /** 運営チェックマーク */
   val checkMarkRegex = Regex("""✓""")
 
@@ -254,19 +257,17 @@ object Events : Listener {
               this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
               this.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
           })*/
-          Tools.advAPI.displayCustomToast(
+          Tools.displaySocialLikeToast(
               ownerPlayer,
               ItemStack(Material.OAK_SIGN),
               Tools.socialLikesLOGOShort +
-                  "&a${data.title}&7ID:${id}&r\n${e.player.name}&7<&rイイね!".color(),
-              AdvancementFrameType.TASK,
+                  "&a${data.title} &7ID:${id}&r\n${e.player.name}&7 > &rイイね!".color(),
           )
           ownerPlayer.playSound(ownerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F)
           if (e.player.uniqueId != data.owner) {
-            Bukkit.dispatchCommand(
-                Bukkit.getConsoleSender(),
-                "tokenmanager:tm add ${ownerPlayer.name} 2",
-            )
+            if (Tools.addTokens(ownerPlayer, 2)) {
+              sendLikeRewardMessage(ownerPlayer, 2)
+            }
           }
         } else {
           offlineLikesPoint[data.owner] = (offlineLikesPoint[data.owner] ?: 0) + 2
@@ -358,6 +359,16 @@ object Events : Listener {
   /** オフラインの時イイねされたPointを貯めておく */
   val offlineLikesPoint = mutableMapOf<UUID, Int>()
 
+  private fun sendLikeRewardMessage(player: Player, amount: Long, offline: Boolean = false) {
+    val message =
+        if (offline) {
+          "&aオフライン中のいいね報酬として投票ポイントを${amount}pt獲得しました！"
+        } else {
+          "&aいいね報酬として投票ポイントを2pt獲得しました！"
+        }
+    player.sendMessage(Tools.socialLikesLOGO + " " + message.color())
+  }
+
   /** オフライン時のいいねPointをプラグイン無効化時ファイルへ保存 */
   fun offlineLikePointSave() {
     val oldYml = CustomYaml("offlineLikePoint.yml")
@@ -381,11 +392,17 @@ object Events : Listener {
   fun joinEvent(e: PlayerJoinEvent) {
     SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
     val pointInt = offlineLikesPoint[e.player.uniqueId] ?: return
-    Bukkit.dispatchCommand(
-        Bukkit.getConsoleSender(),
-        "tokenmanager:tm add ${e.player.name} $pointInt",
-    )
-    offlineLikesPoint.remove(e.player.uniqueId)
+    val player = e.player
+    object : BukkitRunnable() {
+          override fun run() {
+            if (!player.isOnline) return
+            if (Tools.addTokens(player, pointInt.toLong())) {
+              sendLikeRewardMessage(player, pointInt.toLong(), offline = true)
+              offlineLikesPoint.remove(player.uniqueId)
+            }
+          }
+        }
+        .runTaskLater(plugin, 20L)
   }
 
   /** SocialLikesの看板が壊れないようにする */
@@ -450,60 +467,67 @@ object Events : Listener {
     // if (!Geyser.api().isBedrockPlayer(e.player.uniqueId)) return
     if (!signRegex.containsMatchIn(e.itemInHand.type.name.uppercase())) return
     val meta = e.itemInHand.itemMeta ?: return
-    if (!sl3Regex.containsMatchIn(meta.asString)) return
-
-    val slIDStr = sl3Regex.find(meta.asString)?.value ?: return
-    val id = slIDStr.replace("\"sociallikes3:sociallikes_id\":", "").toIntOrNull() ?: return
+    val sourceSign = (meta as? BlockStateMeta)?.blockState as? Sign
+    val sourceSignId =
+        sourceSign?.persistentDataContainer?.get(slSignItemIdKey, PersistentDataType.INTEGER)
+            ?: sourceSign?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
+    val id =
+        sourceSignId
+            ?: meta.persistentDataContainer.get(slSignItemIdKey, PersistentDataType.INTEGER)
+            ?: legacySLSignItemId(meta.asString)
+            ?: return
     val slData = Data.getSLData(id) ?: return
+    val sourceSignForRestore = sourceSign.takeIf { sourceSignId != null }
 
-    val sign = e.blockPlaced.state
-    if (sign !is Sign) return
+    if (e.blockPlaced.state !is Sign) return
     object : BukkitRunnable() {
           override fun run() {
-            beSignTask(sign, slData)
+            val sign = e.blockPlaced.state as? Sign ?: return
+            beSignTask(sign, slData, sourceSignForRestore)
           }
         }
         .runTaskLater(plugin, 1)
     // e.isCancelled = true
   }
 
-  private fun beSignTask(sign: Sign, slData: SLData) {
-    /*val signData = sign.blockData
-    val rotation = if (signData is Rotatable) {
-        signData.rotation.name
+  private fun legacySLSignItemId(metaAsString: String): Int? {
+    val slIDStr = sl3Regex.find(metaAsString)?.value ?: return null
+    return slIDStr.replace("\"sociallikes3:sociallikes_id\":", "").toIntOrNull()
+  }
+
+  private fun beSignTask(sign: Sign, slData: SLData, sourceSign: Sign?) {
+    if (sourceSign != null) {
+      copySignSide(sourceSign, sign, Side.FRONT)
+      copySignSide(sourceSign, sign, Side.BACK)
+      sign.isWaxed = sourceSign.isWaxed
     } else {
-        null
+      sign.getSide(Side.FRONT).apply {
+        setLine(0, Tools.socialLikesLOGO)
+        setLine(1, "&a".color() + slData.title)
+        setLine(2, "&f${Bukkit.getOfflinePlayer(slData.owner).name}".color())
+        setLine(
+            3,
+            "&7Likes&8: &6${slData.likes.count()}${if (slData.check){" &e✓"}else{""}}".color(),
+        )
+      }
+      sign.isWaxed = true
     }
-    val face = if (signData is Directional) {
-        signData.facing
-    } else {
-        null
-    }*/
 
-    // sign.type = newMaterial
-    // sign.update(true,false)
-
-    /*val data = sign.blockData
-    if (data is Rotatable) {
-        data.rotation = BlockFace.valueOf(rotation!!)
-    }
-    if (data is Directional) {
-        data.facing = face!!
-    }
-    sign.blockData = data*/
-    // sign.update(true,false)
-
-    sign.getSide(Side.FRONT).apply {
-      setLine(0, Tools.socialLikesLOGO)
-      setLine(1, "&a".color() + slData.title)
-      setLine(2, "&f${Bukkit.getOfflinePlayer(slData.owner).name}".color())
-      setLine(3, "&7Likes&8: &6${slData.likes.count()}${if (slData.check){" &e✓"}else{""}}".color())
-    }
-    // sign.update(true,false)
-
-    sign.isWaxed = true
-    sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, slData.id)
+    val id =
+        sourceSign?.persistentDataContainer?.get(slSignItemIdKey, PersistentDataType.INTEGER)
+            ?: sourceSign?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
+            ?: slData.id
+    sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
+    sign.persistentDataContainer.set(slSignItemIdKey, PersistentDataType.INTEGER, id)
     sign.update(true)
+  }
+
+  private fun copySignSide(sourceSign: Sign, targetSign: Sign, side: Side) {
+    val sourceSide = sourceSign.getSide(side)
+    val targetSide = targetSign.getSide(side)
+    (0 until 4).forEach { index -> targetSide.line(index, sourceSide.line(index)) }
+    targetSide.isGlowingText = sourceSide.isGlowingText
+    targetSide.color = sourceSide.color
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

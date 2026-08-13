@@ -13,7 +13,6 @@ import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.*
 import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Player
@@ -34,7 +33,7 @@ object UserBuild {
 
   /** GUIを返す */
   fun createGUI(user: OfflinePlayer, player: Player): ChestGui {
-    val name = user.name
+    val name = SLPlayerHeads.resolveName(user.uniqueId) ?: user.name ?: "Unknown"
     val gui = ChestGui(6, Tools.socialLikesLOGOShort + "&r ${name}の建築 p1".color())
     gui.setOnTopClick {
       it.isCancelled = true
@@ -113,9 +112,7 @@ object UserBuild {
           ) { event: InventoryClickEvent ->
             event.whoClicked.closeInventory()
             FollowBuild.newFollowerSave(user.uniqueId, event.whoClicked.uniqueId, true)
-            event.whoClicked.sendMessage(
-                Tools.socialLikesLOGO + "&r ${user.name}さんへのフォローを外しました".color()
-            )
+            event.whoClicked.sendMessage(Tools.socialLikesLOGO + "&r ${name}さんへのフォローを外しました".color())
           },
           6,
           0,
@@ -130,9 +127,7 @@ object UserBuild {
           ) { event: InventoryClickEvent ->
             event.whoClicked.closeInventory()
             FollowBuild.newFollowerSave(user.uniqueId, event.whoClicked.uniqueId, false)
-            event.whoClicked.sendMessage(
-                Tools.socialLikesLOGO + "&r ${user.name}さんをフォローしました！".color()
-            )
+            event.whoClicked.sendMessage(Tools.socialLikesLOGO + "&r ${name}さんをフォローしました！".color())
             event.whoClicked.sendMessage(
                 Tools.socialLikesLOGO + "&r \"/slmenu\"のフォロー建築一覧から建築を確認できます".color()
             )
@@ -188,11 +183,7 @@ object UserBuild {
         "&f>>&a${slData.title} &rID:${slData.id}",
         mutableListOf(
             "&3制作者:&f ${
-                try {
-                    Bukkit.getOfflinePlayer(slData.owner).name
-                } catch (_: Exception) {
-                    "不明"
-                }
+                SLPlayerHeads.resolveName(slData.owner) ?: "不明"
             }",
             "&3イイね:&f ${slData.likes.count()}",
             "&3作成日:&f " + slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")),
@@ -320,9 +311,8 @@ object UserBuild {
   private fun onlinePlayerHeadItem(): MutableList<ItemStack> {
     val headItemList = mutableListOf<ItemStack>()
     Bukkit.getOnlinePlayers().forEach { player ->
-      val item = ItemStack(Material.PLAYER_HEAD)
+      val item = SLPlayerHeads.createOnlineHead(player)
       val meta = item.itemMeta as SkullMeta
-      meta.setOwningPlayer(player)
       meta.persistentDataContainer.set(key, PersistentDataType.STRING, player.uniqueId.toString())
       item.itemMeta = meta
       headItemList.add(item)
@@ -330,40 +320,27 @@ object UserBuild {
     return headItemList
   }
 
-  /** オフラインプレイヤーを検索するためのAnvilGUIを開く */
+  /** オフラインプレイヤー検索用の金床入力を開く */
   @Suppress("DEPRECATION")
   private fun offlinePlayerSearch(player: Player) {
-    AnvilGUI.Builder().apply {
-      itemLeft(
-          ItemStack(Material.PLAYER_HEAD)
-              .allFlag()
-              .addText(
-                  "ここにプレイヤー名",
-                  mutableListOf("&7出力先(右側)にあるこのヘッドをクリックで確定します", "&7普通に閉じた場合はキャンセルです"),
-              )
-      )
-      onClick { slot, e ->
-        if (slot != AnvilGUI.Slot.OUTPUT) {
-          return@onClick listOf()
-        }
-
-        if (e.text.isNotBlank()) {
-          val sPlayer = Bukkit.getOfflinePlayer(e.text)
-          object : BukkitRunnable() {
-                override fun run() {
-                  createGUI(sPlayer, player).show(player)
-                }
-              }
-              .runTaskLater(Tools.plugin, 1)
-          e.player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-          return@onClick listOf(AnvilGUI.ResponseAction.close())
-        } else {
-          return@onClick listOf(AnvilGUI.ResponseAction.replaceInputText(""))
-        }
-      }
-      title(Tools.socialLikesLOGOShort + "&0プレイヤー名検索".color())
-      plugin(Tools.plugin)
-      open(player)
+    val item =
+        ItemStack(Material.PLAYER_HEAD)
+            .allFlag()
+            .addText(
+                "ここにプレイヤー名",
+                mutableListOf("&7出力先(右側)にあるこのヘッドをクリックで確定します", "&7普通に閉じた場合はキャンセルです"),
+            )
+    SocialLikesAnvilInput.open(player, Tools.socialLikesLOGOShort + "&0プレイヤー名検索".color(), item) {
+        p,
+        text ->
+      val sPlayer = Bukkit.getOfflinePlayer(text)
+      object : BukkitRunnable() {
+            override fun run() {
+              createGUI(sPlayer, p).show(p)
+            }
+          }
+          .runTaskLater(Tools.plugin, 1)
+      p.playSound(p, Sound.UI_BUTTON_CLICK, 1F, 1F)
     }
   }
 }

@@ -4,8 +4,12 @@ category: tool
 status: active
 owner: marzipan99
 source_of_truth: "https://github.com/marzipan99/minecraft-world-analyzer"
-related_paths: []
-last_validated: "2026-05-20"
+related_paths:
+  - docs/01_Projects/tools/minecraft-analyzer/
+project_kind: tool
+runtime_kind: browser-tool
+minecraft_related: true
+last_validated: "2026-06-05"
 agent_task: null
 ---
 
@@ -13,6 +17,16 @@ agent_task: null
 
 Minecraftのリージョンファイル（`.mca`）を解析し、ワールド全体のブロック統計・
 コマンド使用箇所・構造物を一覧するブラウザツール。
+
+## AI 作業入口
+
+| 項目 | 内容 |
+|---|---|
+| 実装の正本 | 外部リポジトリ `https://github.com/marzipan99/minecraft-world-analyzer` |
+| Platform内ミラー | `docs/01_Projects/tools/minecraft-analyzer/` |
+| 実行入口 | `index.html` または `run.sh` |
+| Minecraft連携 | ワールド/リージョンファイル解析ツール。サーバープラグインとしてロードしない |
+| 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置き、このファイルには公開可能な判断だけを書く |
 
 ## 使用方法
 

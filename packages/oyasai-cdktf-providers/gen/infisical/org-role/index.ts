@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface OrgRoleConfig extends cdktf.TerraformMetaArguments {
   /**
   * The description for the new role. Defaults to an empty string.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role#description OrgRole#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role#description OrgRole#description}
   */
   readonly description?: string;
   /**
   * The name for the new role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role#name OrgRole#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role#name OrgRole#name}
   */
   readonly name: string;
   /**
   * The permissions assigned to the organization role. Refer to the documentation here https://infisical.com/docs/internals/permissions for its usage.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role#permissions OrgRole#permissions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role#permissions OrgRole#permissions}
   */
   readonly permissions: OrgRolePermissions[] | cdktf.IResolvable;
   /**
   * The slug for the new role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role#slug OrgRole#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role#slug OrgRole#slug}
   */
   readonly slug: string;
 }
@@ -36,25 +36,25 @@ export interface OrgRolePermissions {
   /**
   * Describe what actions an entity can take.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role#action OrgRole#action}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role#action OrgRole#action}
   */
   readonly action: string[];
   /**
   * When specified, only matching conditions will be allowed to access given resource. Refer to the documentation in https://infisical.com/docs/internals/permissions#conditions for the complete list of supported properties and operators.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role#conditions OrgRole#conditions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role#conditions OrgRole#conditions}
   */
   readonly conditions?: string;
   /**
   * Whether rule forbids. Set this to true if permission forbids.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role#inverted OrgRole#inverted}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role#inverted OrgRole#inverted}
   */
   readonly inverted?: boolean | cdktf.IResolvable;
   /**
   * Describe the entity the permission pertains to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role#subject OrgRole#subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role#subject OrgRole#subject}
   */
   readonly subject: string;
 }
@@ -251,7 +251,7 @@ export class OrgRolePermissionsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role infisical_org_role}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role infisical_org_role}
 */
 export class OrgRole extends cdktf.TerraformResource {
 
@@ -267,7 +267,7 @@ export class OrgRole extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a OrgRole resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the OrgRole to import
-  * @param importFromId The id of the existing OrgRole that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing OrgRole that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the OrgRole to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -279,7 +279,7 @@ export class OrgRole extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/org_role infisical_org_role} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/org_role infisical_org_role} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -290,7 +290,7 @@ export class OrgRole extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_org_role',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -9,12 +9,12 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           key: "nix-eval-cache-${{ runner.os }}-${{ runner.arch }}"
           path: "~/.cache/nix"
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - uses: cachix/install-nix-action@8aa03977d8d733052d78f4e008a241fd1dbf36b3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342
       - uses: ./packages/oyasai-secrets-action
         with:
           env-slug: common
@@ -28,12 +28,13 @@ jobs:
         run: |
           sudo -i aws configure set aws_access_key_id "$CLOUDFLARE_ACCESS_KEY_ID"
           sudo -i aws configure set aws_secret_access_key "$CLOUDFLARE_SECRET_ACCESS_KEY"
-      - uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
       - run: nix run .#oyasai-push-nix-images
       - run: nix run .#nix-copy-to-s3
+        if: always()
         env:
           NIX_CACHE_SUBSTITUTER: ${{ vars.NIX_CACHE_SUBSTITUTER }}

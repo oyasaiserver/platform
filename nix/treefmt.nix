@@ -1,5 +1,4 @@
-{ prettier-plugins }:
-{
+{ prettier-plugins }: {
   programs = {
     # keep-sorted start block=yes
     actionlint.enable = true;
@@ -64,6 +63,7 @@
   };
   settings.global.excludes = [
     "*/gen/*"
+    "*/generated.*"
     "docs/*"
   ];
 }

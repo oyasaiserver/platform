@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,61 @@ export interface SecretApprovalPolicyConfig extends cdktf.TerraformMetaArguments
   /**
   * Whether to allow the  approvers to approve their own changes
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#allow_self_approval SecretApprovalPolicy#allow_self_approval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#allow_self_approval SecretApprovalPolicy#allow_self_approval}
   */
   readonly allowSelfApproval?: boolean | cdktf.IResolvable;
   /**
   * The required approvers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#approvers SecretApprovalPolicy#approvers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#approvers SecretApprovalPolicy#approvers}
   */
   readonly approvers: SecretApprovalPolicyApprovers[] | cdktf.IResolvable;
   /**
+  * The bypassers who can bypass the approval policy
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#bypassers SecretApprovalPolicy#bypassers}
+  */
+  readonly bypassers?: SecretApprovalPolicyBypassers[] | cdktf.IResolvable;
+  /**
   * The enforcement level of the policy. This can either be hard or soft
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#enforcement_level SecretApprovalPolicy#enforcement_level}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#enforcement_level SecretApprovalPolicy#enforcement_level}
   */
   readonly enforcementLevel?: string;
   /**
   *  (DEPRECATED, Use environment_slugs instead) The environment to apply the secret approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#environment_slug SecretApprovalPolicy#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#environment_slug SecretApprovalPolicy#environment_slug}
   */
   readonly environmentSlug?: string;
   /**
   * The environments to apply the secret approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#environment_slugs SecretApprovalPolicy#environment_slugs}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#environment_slugs SecretApprovalPolicy#environment_slugs}
   */
   readonly environmentSlugs?: string[];
   /**
   * The name of the secret approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#name SecretApprovalPolicy#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#name SecretApprovalPolicy#name}
   */
   readonly name?: string;
   /**
   * The ID of the project to add the secret approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#project_id SecretApprovalPolicy#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#project_id SecretApprovalPolicy#project_id}
   */
   readonly projectId: string;
   /**
   * The number of required approvers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#required_approvals SecretApprovalPolicy#required_approvals}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#required_approvals SecretApprovalPolicy#required_approvals}
   */
   readonly requiredApprovals: number;
   /**
   * The secret path to apply the secret approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#secret_path SecretApprovalPolicy#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#secret_path SecretApprovalPolicy#secret_path}
   */
   readonly secretPath: string;
 }
@@ -66,7 +72,7 @@ export interface SecretApprovalPolicyApprovers {
   /**
   * The ID of the approver
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#id SecretApprovalPolicy#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#id SecretApprovalPolicy#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -75,13 +81,13 @@ export interface SecretApprovalPolicyApprovers {
   /**
   * The type of approver. Either group or user
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#type SecretApprovalPolicy#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#type SecretApprovalPolicy#type}
   */
   readonly type: string;
   /**
   * The username of the approver. By default, this is the email
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#username SecretApprovalPolicy#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#username SecretApprovalPolicy#username}
   */
   readonly username?: string;
 }
@@ -250,9 +256,197 @@ export class SecretApprovalPolicyApproversList extends cdktf.ComplexList {
     return new SecretApprovalPolicyApproversOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
+export interface SecretApprovalPolicyBypassers {
+  /**
+  * The ID of the bypasser
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#id SecretApprovalPolicy#id}
+  *
+  * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
+  * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
+  */
+  readonly id?: string;
+  /**
+  * The type of bypasser. Either group or user
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#type SecretApprovalPolicy#type}
+  */
+  readonly type: string;
+  /**
+  * The username of the bypasser. By default, this is the email
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#username SecretApprovalPolicy#username}
+  */
+  readonly username?: string;
+}
+
+export function secretApprovalPolicyBypassersToTerraform(struct?: SecretApprovalPolicyBypassers | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    id: cdktf.stringToTerraform(struct!.id),
+    type: cdktf.stringToTerraform(struct!.type),
+    username: cdktf.stringToTerraform(struct!.username),
+  }
+}
+
+
+export function secretApprovalPolicyBypassersToHclTerraform(struct?: SecretApprovalPolicyBypassers | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    id: {
+      value: cdktf.stringToHclTerraform(struct!.id),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    type: {
+      value: cdktf.stringToHclTerraform(struct!.type),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    username: {
+      value: cdktf.stringToHclTerraform(struct!.username),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class SecretApprovalPolicyBypassersOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): SecretApprovalPolicyBypassers | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._id !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.id = this._id;
+    }
+    if (this._type !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.type = this._type;
+    }
+    if (this._username !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.username = this._username;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: SecretApprovalPolicyBypassers | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._id = undefined;
+      this._type = undefined;
+      this._username = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._id = value.id;
+      this._type = value.type;
+      this._username = value.username;
+    }
+  }
+
+  // id - computed: false, optional: true, required: false
+  private _id?: string; 
+  public get id() {
+    return this.getStringAttribute('id');
+  }
+  public set id(value: string) {
+    this._id = value;
+  }
+  public resetId() {
+    this._id = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get idInput() {
+    return this._id;
+  }
+
+  // type - computed: false, optional: false, required: true
+  private _type?: string; 
+  public get type() {
+    return this.getStringAttribute('type');
+  }
+  public set type(value: string) {
+    this._type = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get typeInput() {
+    return this._type;
+  }
+
+  // username - computed: false, optional: true, required: false
+  private _username?: string; 
+  public get username() {
+    return this.getStringAttribute('username');
+  }
+  public set username(value: string) {
+    this._username = value;
+  }
+  public resetUsername() {
+    this._username = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get usernameInput() {
+    return this._username;
+  }
+}
+
+export class SecretApprovalPolicyBypassersList extends cdktf.ComplexList {
+  public internalValue? : SecretApprovalPolicyBypassers[] | cdktf.IResolvable
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): SecretApprovalPolicyBypassersOutputReference {
+    return new SecretApprovalPolicyBypassersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy infisical_secret_approval_policy}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy infisical_secret_approval_policy}
 */
 export class SecretApprovalPolicy extends cdktf.TerraformResource {
 
@@ -268,7 +462,7 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretApprovalPolicy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretApprovalPolicy to import
-  * @param importFromId The id of the existing SecretApprovalPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretApprovalPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretApprovalPolicy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -280,7 +474,7 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_approval_policy infisical_secret_approval_policy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy infisical_secret_approval_policy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -291,7 +485,7 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_approval_policy',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -303,6 +497,7 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
     });
     this._allowSelfApproval = config.allowSelfApproval;
     this._approvers.internalValue = config.approvers;
+    this._bypassers.internalValue = config.bypassers;
     this._enforcementLevel = config.enforcementLevel;
     this._environmentSlug = config.environmentSlug;
     this._environmentSlugs = config.environmentSlugs;
@@ -343,6 +538,22 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
   // Temporarily expose input value. Use with caution.
   public get approversInput() {
     return this._approvers.internalValue;
+  }
+
+  // bypassers - computed: false, optional: true, required: false
+  private _bypassers = new SecretApprovalPolicyBypassersList(this, "bypassers", true);
+  public get bypassers() {
+    return this._bypassers;
+  }
+  public putBypassers(value: SecretApprovalPolicyBypassers[] | cdktf.IResolvable) {
+    this._bypassers.internalValue = value;
+  }
+  public resetBypassers() {
+    this._bypassers.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get bypassersInput() {
+    return this._bypassers.internalValue;
   }
 
   // enforcement_level - computed: true, optional: true, required: false
@@ -461,6 +672,7 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
     return {
       allow_self_approval: cdktf.booleanToTerraform(this._allowSelfApproval),
       approvers: cdktf.listMapper(secretApprovalPolicyApproversToTerraform, false)(this._approvers.internalValue),
+      bypassers: cdktf.listMapper(secretApprovalPolicyBypassersToTerraform, false)(this._bypassers.internalValue),
       enforcement_level: cdktf.stringToTerraform(this._enforcementLevel),
       environment_slug: cdktf.stringToTerraform(this._environmentSlug),
       environment_slugs: cdktf.listMapper(cdktf.stringToTerraform, false)(this._environmentSlugs),
@@ -484,6 +696,12 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
         isBlock: true,
         type: "set",
         storageClassType: "SecretApprovalPolicyApproversList",
+      },
+      bypassers: {
+        value: cdktf.listMapperHcl(secretApprovalPolicyBypassersToHclTerraform, false)(this._bypassers.internalValue),
+        isBlock: true,
+        type: "set",
+        storageClassType: "SecretApprovalPolicyBypassersList",
       },
       enforcement_level: {
         value: cdktf.stringToHclTerraform(this._enforcementLevel),

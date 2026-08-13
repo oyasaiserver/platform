@@ -1,6 +1,5 @@
 package com.github.srain3.sociallikes
 
-import com.fren_gor.ultimateAdvancementAPI.UltimateAdvancementAPI
 import com.github.srain3.sociallikes.Events.idKey
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
@@ -33,12 +32,22 @@ object Tools {
 
   /** TokenManagerを返す、無ければnull */
   fun getTokenManager(): TokenManager? {
-    val tmPlugin = Bukkit.getServer().pluginManager.getPlugin("TokenManager")
-    return if (tmPlugin != null) {
-      tmPlugin as TokenManager
-    } else {
-      null
+    Bukkit.getServer().servicesManager.getRegistration(TokenManager::class.java)?.provider?.let {
+      return it
     }
+
+    return Bukkit.getServer().pluginManager.getPlugin("TokenManager") as? TokenManager
+  }
+
+  fun addTokens(player: Player, amount: Long): Boolean {
+    val tokenManager = getTokenManager()
+    if (tokenManager == null) {
+      plugin.logger.warning(
+          "TokenManager is not available. Failed to add $amount tokens to ${player.name}."
+      )
+      return false
+    }
+    return tokenManager.addTokens(player, amount)
   }
 
   fun canUseCreative(player: Player): Boolean {
@@ -68,6 +77,9 @@ object Tools {
 
   /** SocialLikeロゴ？ */
   val socialLikesLOGOShort = "&8(&5S&7L&8)".color()
+
+  private val legacyAmpersandColorRegex = Regex("(?i)&[0-9A-FK-OR]")
+  private var advancementToastDisabled = false
 
   /** ItemStackに表示名と説明を追加する(自動カラー化付き) */
   fun ItemStack.addText(title: String?, lore: MutableList<String>): ItemStack {
@@ -207,6 +219,46 @@ object Tools {
     block.update()
   }
 
-  /** AdvancementAPI */
-  val advAPI by lazy { UltimateAdvancementAPI.getInstance(plugin) }
+  fun displaySocialLikeToast(player: Player, icon: ItemStack, text: String): Boolean {
+    val fallbackText = text.withoutLegacyColorCodes()
+    if (advancementToastDisabled) {
+      sendSocialLikeActionBar(player, fallbackText)
+      return false
+    }
+    return try {
+      SocialLikeToastSender.display(player, icon, text)
+      true
+    } catch (throwable: LinkageError) {
+      handleAdvancementToastFailure(player, fallbackText, throwable)
+    } catch (throwable: RuntimeException) {
+      handleAdvancementToastFailure(player, fallbackText, throwable)
+    }
+  }
+
+  private fun String.withoutLegacyColorCodes(): String {
+    return (ChatColor.stripColor(this) ?: this).replace(legacyAmpersandColorRegex, "")
+  }
+
+  private fun handleAdvancementToastFailure(
+      player: Player,
+      text: String,
+      throwable: Throwable,
+  ): Boolean {
+    disableAdvancementToast(throwable)
+    sendSocialLikeActionBar(player, text)
+    return false
+  }
+
+  private fun sendSocialLikeActionBar(player: Player, text: String) {
+    player.sendActionBar(text.lines().filter { it.isNotBlank() }.joinToString(" "))
+  }
+
+  private fun disableAdvancementToast(throwable: Throwable) {
+    advancementToastDisabled = true
+    plugin.logger.warning(
+        "[SocialLikes3] Advancement toast notification has been disabled: " +
+            "${throwable.javaClass.name}: ${throwable.message}"
+    )
+    plugin.logger.warning("[SocialLikes3] Likes, rewards, and sign updates will continue.")
+  }
 }

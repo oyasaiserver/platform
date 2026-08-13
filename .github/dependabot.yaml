@@ -4,6 +4,8 @@ updates:
   - package-ecosystem: "npm"
     directories:
       - "packages/*"
+    exclude-paths:
+      - "docs/**"
     cooldown:
       default-days: 14
     schedule:
@@ -32,8 +34,6 @@ updates:
       all:
         patterns:
           - "*"
-    ignore:
-      - dependency-name: "nixpkgs-*"
     commit-message:
       prefix: "build"
   - package-ecosystem: "gradle"
@@ -47,7 +47,7 @@ updates:
         patterns:
           - "*"
     ignore:
+      - dependency-name: "*paperweight*"
       - dependency-name: "*purpur-api*"
       - dependency-name: "gradle-wrapper"
-      - dependency-name: "spotless-plugin"
-      - dependency-name: "paperweight-userdev"
+      - dependency-name: "*spotless*"

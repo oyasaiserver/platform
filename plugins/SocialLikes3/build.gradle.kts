@@ -2,8 +2,10 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
+plugins { alias(libs.plugins.paperweight.userdev) }
+
 dependencies {
-  compileOnly(libs.purpur.api)
+  paperweightDevelopmentBundle(libs.paper.dev.bundle)
   compileOnly(libs.placeholderapi)
   compileOnly(libs.discordsrv)
   compileOnly(libs.luckperms.api)
@@ -11,9 +13,9 @@ dependencies {
   compileOnly(libs.fawe.bukkit)
   implementation(libs.kotlin.stdlib)
   implementation(libs.inventoryframework)
-  implementation(libs.anvilgui)
   implementation(libs.javacord)
-  implementation(libs.ultimateadvancementapi)
+  implementation(libs.exposed.core)
+  implementation(libs.exposed.jdbc)
   implementation(libs.sqlite.jdbc)
 }
 

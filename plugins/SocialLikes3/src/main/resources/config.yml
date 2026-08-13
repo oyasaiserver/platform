@@ -1,0 +1,4 @@
+# Data source used to initialize the in-memory SocialLikes build cache.
+# yaml keeps the existing startup behavior and also syncs YAML data into SQLite.
+# sqlite loads the cache from SocialLikesShadow.db and skips startup SQLite sync.
+readSource: yaml

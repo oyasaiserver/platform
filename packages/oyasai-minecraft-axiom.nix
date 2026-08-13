@@ -2,7 +2,7 @@
 
 oyasaiPurpur rec {
   name = "oyasai-minecraft-axiom";
-  version = "1.21.10";
+  version = "1.21.11";
 
   properties = {
     # keep-sorted start
@@ -34,7 +34,10 @@ oyasaiPurpur rec {
     lunachat
     multiversecore
     multiverseportals
+    placeholderapi
     plugmanx
+    protocollib
+    vault
     venturechat
     viaversion
     worldeditsui

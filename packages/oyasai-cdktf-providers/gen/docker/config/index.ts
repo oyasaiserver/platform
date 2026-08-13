@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config
+// https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface ConfigConfig extends cdktf.TerraformMetaArguments {
   /**
   * Base64-url-safe-encoded config data
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config#data Config#data}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config#data Config#data}
   */
   readonly data?: string;
   /**
   * Raw (plain text) config data
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config#data_raw Config#data_raw}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config#data_raw Config#data_raw}
   */
   readonly dataRaw?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config#id Config#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config#id Config#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -29,13 +29,13 @@ export interface ConfigConfig extends cdktf.TerraformMetaArguments {
   /**
   * User-defined name of the config
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config#name Config#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config#name Config#name}
   */
   readonly name: string;
   /**
   * labels block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config#labels Config#labels}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config#labels Config#labels}
   */
   readonly labels?: ConfigLabels[] | cdktf.IResolvable;
 }
@@ -43,13 +43,13 @@ export interface ConfigLabels {
   /**
   * Name of the label
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config#label Config#label}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config#label Config#label}
   */
   readonly label: string;
   /**
   * Value of the label
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config#value Config#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config#value Config#value}
   */
   readonly value: string;
 }
@@ -188,7 +188,7 @@ export class ConfigLabelsList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config docker_config}
+* Represents a {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config docker_config}
 */
 export class Config extends cdktf.TerraformResource {
 
@@ -204,7 +204,7 @@ export class Config extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a Config resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the Config to import
-  * @param importFromId The id of the existing Config that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing Config that should be imported. Refer to the {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the Config to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -216,7 +216,7 @@ export class Config extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.4.0/docs/resources/config docker_config} Resource
+  * Create a new {@link https://registry.terraform.io/providers/kreuzwerker/docker/4.5.0/docs/resources/config docker_config} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -227,7 +227,7 @@ export class Config extends cdktf.TerraformResource {
       terraformResourceType: 'docker_config',
       terraformGeneratorMetadata: {
         providerName: 'docker',
-        providerVersion: '4.4.0'
+        providerVersion: '4.5.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

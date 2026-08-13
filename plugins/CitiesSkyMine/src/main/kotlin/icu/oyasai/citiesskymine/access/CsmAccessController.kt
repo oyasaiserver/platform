@@ -18,11 +18,17 @@ class CsmAccessController(private val plugin: Main) {
     LOAD64("load64", "citiesskymine.payload"),
     WINDOW("window", "citiesskymine.window"),
     SLAB_STAIRS("slabstairs", "citiesskymine.slabstairs"),
+    COLUMNS("columns", "citiesskymine.columns"),
     STACK("stack", "citiesskymine.stack"),
+    CROWD("crowd", "citiesskymine.crowd"),
     SELECTION("selection", "citiesskymine.selection"),
+    SETTINGS("settings", "citiesskymine.settings"),
     CONFIG("config", "citiesskymine.config"),
+    CLOUD("cloud", "citiesskymine.cloud"),
+    BEZIER("bezier", "citiesskymine.bezier"),
     DEBUGSTICK("debugstick", "citiesskymine.debugstick"),
     PRESET("preset", "citiesskymine.preset"),
+    SCHEMATIC("schematic", "citiesskymine.schematic"),
   }
 
   fun require(sender: CommandSender, command: CommandKey): Boolean {
@@ -146,11 +152,17 @@ class CsmAccessController(private val plugin: Main) {
             CommandKey.LOAD64 to listOf("takumi", "admin"),
             CommandKey.WINDOW to listOf("builder", "takumi", "admin"),
             CommandKey.SLAB_STAIRS to listOf("builder", "takumi", "admin"),
+            CommandKey.COLUMNS to listOf("builder", "takumi", "admin"),
             CommandKey.STACK to listOf("builder", "takumi", "admin"),
+            CommandKey.CROWD to listOf("builder", "takumi", "admin"),
             CommandKey.SELECTION to listOf("builder", "takumi", "admin"),
-            CommandKey.CONFIG to listOf("builder", "takumi", "admin"),
+            CommandKey.SETTINGS to listOf("builder", "takumi", "admin"),
+            CommandKey.CONFIG to listOf("admin"),
+            CommandKey.CLOUD to listOf("builder", "takumi", "admin"),
+            CommandKey.BEZIER to listOf("builder", "takumi", "admin"),
             CommandKey.DEBUGSTICK to listOf("takumi", "admin"),
             CommandKey.PRESET to listOf("builder", "takumi", "admin"),
+            CommandKey.SCHEMATIC to listOf("builder", "takumi", "admin"),
         )
   }
 }

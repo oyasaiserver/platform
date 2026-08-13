@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/api_shield_operation
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/api_shield_operation
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,28 +10,28 @@ export interface ApiShieldOperationConfig extends cdktf.TerraformMetaArguments {
   /**
   * The endpoint which can contain path parameter templates in curly braces, each will be replaced from left to right with {varN}, starting with {var1}, during insertion. This will further be Cloudflare-normalized upon insertion. See: https://developers.cloudflare.com/rules/normalization/how-it-works/.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/api_shield_operation#endpoint ApiShieldOperation#endpoint}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/api_shield_operation#endpoint ApiShieldOperation#endpoint}
   */
   readonly endpoint: string;
   /**
   * RFC3986-compliant host.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/api_shield_operation#host ApiShieldOperation#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/api_shield_operation#host ApiShieldOperation#host}
   */
   readonly host: string;
   /**
   * The HTTP method used to access the endpoint.
   * Available values: "GET", "POST", "HEAD", "OPTIONS", "PUT", "DELETE", "CONNECT", "PATCH", "TRACE".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/api_shield_operation#method ApiShieldOperation#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/api_shield_operation#method ApiShieldOperation#method}
   */
   readonly method: string;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/api_shield_operation#zone_id ApiShieldOperation#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/api_shield_operation#zone_id ApiShieldOperation#zone_id}
   */
-  readonly zoneId?: string;
+  readonly zoneId: string;
 }
 export interface ApiShieldOperationFeaturesApiRouting {
 }
@@ -882,9 +882,192 @@ export class ApiShieldOperationFeaturesOutputReference extends cdktf.ComplexObje
     return this._thresholds;
   }
 }
+export interface ApiShieldOperationSchemasLearned {
+}
+
+export function apiShieldOperationSchemasLearnedToTerraform(struct?: ApiShieldOperationSchemasLearned): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function apiShieldOperationSchemasLearnedToHclTerraform(struct?: ApiShieldOperationSchemasLearned): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class ApiShieldOperationSchemasLearnedOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): ApiShieldOperationSchemasLearned | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: ApiShieldOperationSchemasLearned | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // parameters - computed: true, optional: false, required: false
+  private _parameters = new cdktf.StringMapList(this, "parameters", false);
+  public get parameters() {
+    return this._parameters;
+  }
+
+  // request_body - computed: true, optional: false, required: false
+  private _requestBody = new cdktf.StringMap(this, "request_body");
+  public get requestBody() {
+    return this._requestBody;
+  }
+}
+export interface ApiShieldOperationSchemasUploaded {
+}
+
+export function apiShieldOperationSchemasUploadedToTerraform(struct?: ApiShieldOperationSchemasUploaded): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function apiShieldOperationSchemasUploadedToHclTerraform(struct?: ApiShieldOperationSchemasUploaded): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class ApiShieldOperationSchemasUploadedOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): ApiShieldOperationSchemasUploaded | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: ApiShieldOperationSchemasUploaded | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // parameters - computed: true, optional: false, required: false
+  private _parameters = new cdktf.StringMapList(this, "parameters", false);
+  public get parameters() {
+    return this._parameters;
+  }
+
+  // request_body - computed: true, optional: false, required: false
+  private _requestBody = new cdktf.StringMap(this, "request_body");
+  public get requestBody() {
+    return this._requestBody;
+  }
+}
+export interface ApiShieldOperationSchemas {
+}
+
+export function apiShieldOperationSchemasToTerraform(struct?: ApiShieldOperationSchemas): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function apiShieldOperationSchemasToHclTerraform(struct?: ApiShieldOperationSchemas): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class ApiShieldOperationSchemasOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): ApiShieldOperationSchemas | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: ApiShieldOperationSchemas | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // learned - computed: true, optional: false, required: false
+  private _learned = new ApiShieldOperationSchemasLearnedOutputReference(this, "learned");
+  public get learned() {
+    return this._learned;
+  }
+
+  // uploaded - computed: true, optional: false, required: false
+  private _uploaded = new ApiShieldOperationSchemasUploadedOutputReference(this, "uploaded");
+  public get uploaded() {
+    return this._uploaded;
+  }
+}
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/api_shield_operation cloudflare_api_shield_operation}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/api_shield_operation cloudflare_api_shield_operation}
 */
 export class ApiShieldOperation extends cdktf.TerraformResource {
 
@@ -900,7 +1083,7 @@ export class ApiShieldOperation extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ApiShieldOperation resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ApiShieldOperation to import
-  * @param importFromId The id of the existing ApiShieldOperation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/api_shield_operation#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ApiShieldOperation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/api_shield_operation#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ApiShieldOperation to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -912,7 +1095,7 @@ export class ApiShieldOperation extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/api_shield_operation cloudflare_api_shield_operation} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/api_shield_operation cloudflare_api_shield_operation} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -923,7 +1106,7 @@ export class ApiShieldOperation extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_api_shield_operation',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -1003,16 +1186,19 @@ export class ApiShieldOperation extends cdktf.TerraformResource {
     return this.getStringAttribute('operation_id');
   }
 
-  // zone_id - computed: false, optional: true, required: false
+  // schemas - computed: true, optional: false, required: false
+  private _schemas = new ApiShieldOperationSchemasOutputReference(this, "schemas");
+  public get schemas() {
+    return this._schemas;
+  }
+
+  // zone_id - computed: false, optional: false, required: true
   private _zoneId?: string; 
   public get zoneId() {
     return this.getStringAttribute('zone_id');
   }
   public set zoneId(value: string) {
     this._zoneId = value;
-  }
-  public resetZoneId() {
-    this._zoneId = undefined;
   }
   // Temporarily expose input value. Use with caution.
   public get zoneIdInput() {

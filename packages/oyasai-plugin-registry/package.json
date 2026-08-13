@@ -1,15 +1,12 @@
 {
   "name": "@oyasaiserver/plugin-registry",
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts",
-    "./*": "./src/*.ts"
-  },
   "bin": {
-    "plugin-registry-lock": "src/lock.ts"
+    "lock": "src/lock.ts"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "lock": "node src/lock.ts"
   },
   "peerDependencies": {
     "@types/node": "25.0.3",

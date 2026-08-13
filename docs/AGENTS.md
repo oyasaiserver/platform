@@ -1,11 +1,10 @@
-# Agents Instructions (docs/)
+# Agents Entry
 
-Codexおよびその他のエージェント向けの入口ファイル。
+Read `docs/_MANIFEST.md` first.
 
-## 必読
-`_MANIFEST.md` を読んでから作業を開始すること。
+Shared context starts at `docs/00_Context/CONTEXT.md`.
 
-## ルーティング
-- コード修正・アルゴリズム → `docs/00_Context/AGENTS.md` のルールに従う（2026-08-13訂正: `/Users/aa/platform/CLAUDE.md`は実在しないファイルへの誤参照だったため修正）
-- ドキュメント調査・更新 → このディレクトリ内の対応ファイルを参照
-- ローカル検証・デプロイの実行手順 → `.claude/skills/oyasai-dev-flow/SKILL.md`、`.claude/skills/oyasai-local-server/SKILL.md`
+## Routing
+- Code changes and algorithms: follow the root repository guidance and current code state.
+- Documentation updates: start from `docs/_MANIFEST.md` and the target section manifest.
+- Local verification and deploy workflows: use `.agents/skills/oyasai-dev-flow/SKILL.md` and `.agents/skills/oyasai-local-server/SKILL.md`.

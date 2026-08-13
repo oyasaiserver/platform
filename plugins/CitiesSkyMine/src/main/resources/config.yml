@@ -4,7 +4,15 @@ limits:
   max-columns-csm: 100000
   max-blocks-window: 512
   max-blocks-slab-stairs: 200000
+  max-blocks-columns: 200000
   max-blocks-stack: 2000000
+  max-blocks-crowd: 200000
+  max-blocks-cloud: 200000
+  max-volume-cloud: 4000000
+  max-blocks-bezier: 20000
+  max-blocks-schematic: 500000
+  max-volume-schematic: 500000
+  max-schematic-file-bytes: 10485760
 
 window:
   default-width: 2
@@ -17,15 +25,21 @@ window:
   select-after-fill: true
 
 slab-stairs:
-  slab: STONE_BRICK_SLAB
-  stair: STONE_BRICK_STAIRS
-  full: STONE_BRICKS
+  material: stone_brick
+
+crowd:
+  default-gap: 2
+  wall: COBBLESTONE_WALL
+  head: PLAYER_HEAD
 
 csm:
   default-rotation: 0
   default-side: R
   select-after-load: true
   hollow-on-load: true
+
+schematic:
+  select-after-paste: true
 
 access:
   enabled: true
@@ -79,7 +93,15 @@ access:
       - builder
       - takumi
       - admin
+    columns:
+      - builder
+      - takumi
+      - admin
     stack:
+      - builder
+      - takumi
+      - admin
+    crowd:
       - builder
       - takumi
       - admin
@@ -87,7 +109,17 @@ access:
       - builder
       - takumi
       - admin
+    settings:
+      - builder
+      - takumi
+      - admin
     config:
+      - admin
+    cloud:
+      - builder
+      - takumi
+      - admin
+    bezier:
       - builder
       - takumi
       - admin
@@ -95,6 +127,10 @@ access:
       - takumi
       - admin
     preset:
+      - builder
+      - takumi
+      - admin
+    schematic:
       - builder
       - takumi
       - admin
@@ -115,7 +151,6 @@ brush-preset:
     - "//brush "
     - "//mask "
     - "//gmask "
-    - "//replace "
 
 debug-stick:
   enabled: true

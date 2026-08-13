@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,73 +10,73 @@ export interface SecretRotationLdapPasswordConfig extends cdktf.TerraformMetaArg
   /**
   * Whether secrets should be automatically rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#auto_rotation_enabled SecretRotationLdapPassword#auto_rotation_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#auto_rotation_enabled SecretRotationLdapPassword#auto_rotation_enabled}
   */
   readonly autoRotationEnabled?: boolean | cdktf.IResolvable;
   /**
   * The ID of the connection to use for the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#connection_id SecretRotationLdapPassword#connection_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#connection_id SecretRotationLdapPassword#connection_id}
   */
   readonly connectionId: string;
   /**
   * The description of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#description SecretRotationLdapPassword#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#description SecretRotationLdapPassword#description}
   */
   readonly description?: string;
   /**
   * The slug of the project environment to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#environment SecretRotationLdapPassword#environment}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#environment SecretRotationLdapPassword#environment}
   */
   readonly environment: string;
   /**
   * The name of the secret rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#name SecretRotationLdapPassword#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#name SecretRotationLdapPassword#name}
   */
   readonly name: string;
   /**
   * Parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#parameters SecretRotationLdapPassword#parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#parameters SecretRotationLdapPassword#parameters}
   */
   readonly parameters: SecretRotationLdapPasswordParameters;
   /**
   * The ID of the Infisical project to create the secret rotation in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#project_id SecretRotationLdapPassword#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#project_id SecretRotationLdapPassword#project_id}
   */
   readonly projectId: string;
   /**
   * At which UTC time the rotation should occur.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#rotate_at_utc SecretRotationLdapPassword#rotate_at_utc}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#rotate_at_utc SecretRotationLdapPassword#rotate_at_utc}
   */
   readonly rotateAtUtc?: SecretRotationLdapPasswordRotateAtUtc;
   /**
   * How many days to wait between each rotation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#rotation_interval SecretRotationLdapPassword#rotation_interval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#rotation_interval SecretRotationLdapPassword#rotation_interval}
   */
   readonly rotationInterval?: number;
   /**
   * The folder path to rotate secrets from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#secret_path SecretRotationLdapPassword#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#secret_path SecretRotationLdapPassword#secret_path}
   */
   readonly secretPath: string;
   /**
   * Secret mappings to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#secrets_mapping SecretRotationLdapPassword#secrets_mapping}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#secrets_mapping SecretRotationLdapPassword#secrets_mapping}
   */
   readonly secretsMapping: SecretRotationLdapPasswordSecretsMapping;
   /**
   * Temporary parameters to modify how secrets are rotated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#temporary_parameters SecretRotationLdapPassword#temporary_parameters}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#temporary_parameters SecretRotationLdapPassword#temporary_parameters}
   */
   readonly temporaryParameters?: SecretRotationLdapPasswordTemporaryParameters;
 }
@@ -84,25 +84,25 @@ export interface SecretRotationLdapPasswordParametersPasswordRequirementsRequire
   /**
   * Minimum number of digits required in the password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#digits SecretRotationLdapPassword#digits}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#digits SecretRotationLdapPassword#digits}
   */
   readonly digits: number;
   /**
   * Minimum number of lowercase letters required in the password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#lowercase SecretRotationLdapPassword#lowercase}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#lowercase SecretRotationLdapPassword#lowercase}
   */
   readonly lowercase: number;
   /**
   * Minimum number of symbols required in the password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#symbols SecretRotationLdapPassword#symbols}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#symbols SecretRotationLdapPassword#symbols}
   */
   readonly symbols: number;
   /**
   * Minimum number of uppercase letters required in the password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#uppercase SecretRotationLdapPassword#uppercase}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#uppercase SecretRotationLdapPassword#uppercase}
   */
   readonly uppercase: number;
 }
@@ -273,19 +273,19 @@ export interface SecretRotationLdapPasswordParametersPasswordRequirements {
   /**
   * String of allowed symbols for password generation.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#allowed_symbols SecretRotationLdapPassword#allowed_symbols}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#allowed_symbols SecretRotationLdapPassword#allowed_symbols}
   */
   readonly allowedSymbols?: string;
   /**
   * The length of the generated password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#length SecretRotationLdapPassword#length}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#length SecretRotationLdapPassword#length}
   */
   readonly length: number;
   /**
   * Required character types in the generated password.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#required SecretRotationLdapPassword#required}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#required SecretRotationLdapPassword#required}
   */
   readonly required: SecretRotationLdapPasswordParametersPasswordRequirementsRequired;
 }
@@ -433,19 +433,19 @@ export interface SecretRotationLdapPasswordParameters {
   /**
   * The Distinguished Name (DN) of the LDAP entry to rotate the password for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#dn SecretRotationLdapPassword#dn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#dn SecretRotationLdapPassword#dn}
   */
   readonly dn: string;
   /**
   * Password generation requirements.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#password_requirements SecretRotationLdapPassword#password_requirements}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#password_requirements SecretRotationLdapPassword#password_requirements}
   */
   readonly passwordRequirements: SecretRotationLdapPasswordParametersPasswordRequirements;
   /**
   * The method to use for rotating the password. Supported options: connection-principal and target-principal (default: connection-principal)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#rotation_method SecretRotationLdapPassword#rotation_method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#rotation_method SecretRotationLdapPassword#rotation_method}
   */
   readonly rotationMethod?: string;
 }
@@ -593,13 +593,13 @@ export interface SecretRotationLdapPasswordRotateAtUtc {
   /**
   * The hour at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#hours SecretRotationLdapPassword#hours}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#hours SecretRotationLdapPassword#hours}
   */
   readonly hours?: number;
   /**
   * The minute at which the rotation should occur (UTC).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#minutes SecretRotationLdapPassword#minutes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#minutes SecretRotationLdapPassword#minutes}
   */
   readonly minutes?: number;
 }
@@ -724,13 +724,13 @@ export interface SecretRotationLdapPasswordSecretsMapping {
   /**
   * The name of the secret that the Distinguished Name will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#dn SecretRotationLdapPassword#dn}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#dn SecretRotationLdapPassword#dn}
   */
   readonly dn: string;
   /**
   * The name of the secret that the generated password will be mapped to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#password SecretRotationLdapPassword#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#password SecretRotationLdapPassword#password}
   */
   readonly password: string;
 }
@@ -849,7 +849,7 @@ export interface SecretRotationLdapPasswordTemporaryParameters {
   /**
   * The password of the provided principal if 'parameters.rotation_method' is set to 'target-principal'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#password SecretRotationLdapPassword#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#password SecretRotationLdapPassword#password}
   */
   readonly password?: string;
 }
@@ -943,7 +943,7 @@ export class SecretRotationLdapPasswordTemporaryParametersOutputReference extend
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password infisical_secret_rotation_ldap_password}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password infisical_secret_rotation_ldap_password}
 */
 export class SecretRotationLdapPassword extends cdktf.TerraformResource {
 
@@ -959,7 +959,7 @@ export class SecretRotationLdapPassword extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretRotationLdapPassword resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretRotationLdapPassword to import
-  * @param importFromId The id of the existing SecretRotationLdapPassword that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretRotationLdapPassword that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretRotationLdapPassword to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -971,7 +971,7 @@ export class SecretRotationLdapPassword extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/secret_rotation_ldap_password infisical_secret_rotation_ldap_password} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_rotation_ldap_password infisical_secret_rotation_ldap_password} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -982,7 +982,7 @@ export class SecretRotationLdapPassword extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_rotation_ldap_password',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

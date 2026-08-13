@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,38 +10,52 @@ export interface ZeroTrustAccessIdentityProviderConfig extends cdktf.TerraformMe
   /**
   * The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#account_id ZeroTrustAccessIdentityProvider#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#account_id ZeroTrustAccessIdentityProvider#account_id}
   */
   readonly accountId?: string;
   /**
   * The configuration parameters for the identity provider. To view the required parameters for a specific provider, refer to our [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#config ZeroTrustAccessIdentityProvider#config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#config ZeroTrustAccessIdentityProvider#config}
   */
   readonly config: ZeroTrustAccessIdentityProviderConfigA;
   /**
   * The name of the identity provider, shown to users on the login page.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#name ZeroTrustAccessIdentityProvider#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#name ZeroTrustAccessIdentityProvider#name}
   */
   readonly name: string;
   /**
+  * Indicates that the identity provider is immutable and cannot be updated or deleted via the API.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#read_only ZeroTrustAccessIdentityProvider#read_only}
+  */
+  readonly readOnly?: boolean | cdktf.IResolvable;
+  /**
+  * The UID of the SAML encryption certificate set assigned to this Identity Provider.
+  * Only present for SAML identity providers with encryption configured.
+  * Create a certificate set via POST to `/identity_providers/{id}/saml_certificate`.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#saml_certificate_set_id ZeroTrustAccessIdentityProvider#saml_certificate_set_id}
+  */
+  readonly samlCertificateSetId?: string;
+  /**
   * The configuration settings for enabling a System for Cross-Domain Identity Management (SCIM) with the identity provider.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#scim_config ZeroTrustAccessIdentityProvider#scim_config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#scim_config ZeroTrustAccessIdentityProvider#scim_config}
   */
   readonly scimConfig?: ZeroTrustAccessIdentityProviderScimConfig;
   /**
   * The type of identity provider. To determine the value for a specific provider, refer to our [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-  * Available values: "onetimepin", "azureAD", "saml", "centrify", "facebook", "github", "google-apps", "google", "linkedin", "oidc", "okta", "onelogin", "pingone", "yandex".
+  * Available values: "onetimepin", "azureAD", "saml", "centrify", "facebook", "github", "google-apps", "google", "linkedin", "oidc", "okta", "onelogin", "pingone", "yandex", "cloudflare".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#type ZeroTrustAccessIdentityProvider#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#type ZeroTrustAccessIdentityProvider#type}
   */
   readonly type: string;
   /**
   * The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#zone_id ZeroTrustAccessIdentityProvider#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#zone_id ZeroTrustAccessIdentityProvider#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -49,13 +63,13 @@ export interface ZeroTrustAccessIdentityProviderConfigHeaderAttributes {
   /**
   * attribute name from the IDP
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#attribute_name ZeroTrustAccessIdentityProvider#attribute_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#attribute_name ZeroTrustAccessIdentityProvider#attribute_name}
   */
   readonly attributeName?: string;
   /**
   * header that will be added on the request to the origin
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#header_name ZeroTrustAccessIdentityProvider#header_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#header_name ZeroTrustAccessIdentityProvider#header_name}
   */
   readonly headerName?: string;
 }
@@ -202,164 +216,184 @@ export interface ZeroTrustAccessIdentityProviderConfigA {
   /**
   * Your companies TLD
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#apps_domain ZeroTrustAccessIdentityProvider#apps_domain}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#apps_domain ZeroTrustAccessIdentityProvider#apps_domain}
   */
   readonly appsDomain?: string;
   /**
   * A list of SAML attribute names that will be added to your signed JWT token and can be used in SAML policy rules.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#attributes ZeroTrustAccessIdentityProvider#attributes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#attributes ZeroTrustAccessIdentityProvider#attributes}
   */
   readonly attributes?: string[];
   /**
   * The authorization_endpoint URL of your IdP
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#auth_url ZeroTrustAccessIdentityProvider#auth_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#auth_url ZeroTrustAccessIdentityProvider#auth_url}
   */
   readonly authUrl?: string;
   /**
   * Your okta authorization server id
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#authorization_server_id ZeroTrustAccessIdentityProvider#authorization_server_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#authorization_server_id ZeroTrustAccessIdentityProvider#authorization_server_id}
   */
   readonly authorizationServerId?: string;
   /**
   * Your centrify account url
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#centrify_account ZeroTrustAccessIdentityProvider#centrify_account}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#centrify_account ZeroTrustAccessIdentityProvider#centrify_account}
   */
   readonly centrifyAccount?: string;
   /**
   * Your centrify app id
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#centrify_app_id ZeroTrustAccessIdentityProvider#centrify_app_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#centrify_app_id ZeroTrustAccessIdentityProvider#centrify_app_id}
   */
   readonly centrifyAppId?: string;
   /**
   * The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#certs_url ZeroTrustAccessIdentityProvider#certs_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#certs_url ZeroTrustAccessIdentityProvider#certs_url}
   */
   readonly certsUrl?: string;
   /**
   * Custom claims
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#claims ZeroTrustAccessIdentityProvider#claims}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#claims ZeroTrustAccessIdentityProvider#claims}
   */
   readonly claims?: string[];
   /**
   * Your OAuth Client ID
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#client_id ZeroTrustAccessIdentityProvider#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#client_id ZeroTrustAccessIdentityProvider#client_id}
   */
   readonly clientId?: string;
   /**
   * Your OAuth Client Secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#client_secret ZeroTrustAccessIdentityProvider#client_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#client_secret ZeroTrustAccessIdentityProvider#client_secret}
   */
   readonly clientSecret?: string;
   /**
   * Should Cloudflare try to load authentication contexts from your account
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#conditional_access_enabled ZeroTrustAccessIdentityProvider#conditional_access_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#conditional_access_enabled ZeroTrustAccessIdentityProvider#conditional_access_enabled}
   */
   readonly conditionalAccessEnabled?: boolean | cdktf.IResolvable;
   /**
   * Your Azure directory uuid
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#directory_id ZeroTrustAccessIdentityProvider#directory_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#directory_id ZeroTrustAccessIdentityProvider#directory_id}
   */
   readonly directoryId?: string;
   /**
   * The attribute name for email in the SAML response.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#email_attribute_name ZeroTrustAccessIdentityProvider#email_attribute_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#email_attribute_name ZeroTrustAccessIdentityProvider#email_attribute_name}
   */
   readonly emailAttributeName?: string;
   /**
   * The claim name for email in the id_token response.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#email_claim_name ZeroTrustAccessIdentityProvider#email_claim_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#email_claim_name ZeroTrustAccessIdentityProvider#email_claim_name}
   */
   readonly emailClaimName?: string;
   /**
+  * Enable SAML assertion encryption. When enabled, the Identity Provider will encrypt 
+  * SAML assertions using the certificate from the assigned certificate set.
+  * 
+  * To enable encryption:
+  * 1. Create a certificate set via POST to `/identity_providers/{id}/saml_certificate`
+  * 2. Set this field to `true` and include `saml_certificate_set_id` in the PUT request
+  * 3. Configure the public certificate in your external Identity Provider
+  * 
+  * Note: Requires `saml_certificate_set_id` to be set when `true`.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#enable_encryption ZeroTrustAccessIdentityProvider#enable_encryption}
+  */
+  readonly enableEncryption?: boolean | cdktf.IResolvable;
+  /**
   * Add a list of attribute names that will be returned in the response header from the Access callback.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#header_attributes ZeroTrustAccessIdentityProvider#header_attributes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#header_attributes ZeroTrustAccessIdentityProvider#header_attributes}
   */
   readonly headerAttributes?: ZeroTrustAccessIdentityProviderConfigHeaderAttributes[] | cdktf.IResolvable;
   /**
   * X509 certificate to verify the signature in the SAML authentication response
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#idp_public_certs ZeroTrustAccessIdentityProvider#idp_public_certs}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#idp_public_certs ZeroTrustAccessIdentityProvider#idp_public_certs}
   */
   readonly idpPublicCerts?: string[];
   /**
   * IdP Entity ID or Issuer URL
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#issuer_url ZeroTrustAccessIdentityProvider#issuer_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#issuer_url ZeroTrustAccessIdentityProvider#issuer_url}
   */
   readonly issuerUrl?: string;
   /**
   * Your okta account url
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#okta_account ZeroTrustAccessIdentityProvider#okta_account}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#okta_account ZeroTrustAccessIdentityProvider#okta_account}
   */
   readonly oktaAccount?: string;
   /**
   * Your OneLogin account url
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#onelogin_account ZeroTrustAccessIdentityProvider#onelogin_account}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#onelogin_account ZeroTrustAccessIdentityProvider#onelogin_account}
   */
   readonly oneloginAccount?: string;
   /**
   * Your PingOne environment identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#ping_env_id ZeroTrustAccessIdentityProvider#ping_env_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#ping_env_id ZeroTrustAccessIdentityProvider#ping_env_id}
   */
   readonly pingEnvId?: string;
   /**
   * Enable Proof Key for Code Exchange (PKCE)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#pkce_enabled ZeroTrustAccessIdentityProvider#pkce_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#pkce_enabled ZeroTrustAccessIdentityProvider#pkce_enabled}
   */
   readonly pkceEnabled?: boolean | cdktf.IResolvable;
   /**
   * Indicates the type of user interaction that is required. prompt=login forces the user to enter their credentials on that request, negating single-sign on. prompt=none is the opposite. It ensures that the user isn't presented with any interactive prompt. If the request can't be completed silently by using single-sign on, the Microsoft identity platform returns an interaction_required error. prompt=select_account interrupts single sign-on providing account selection experience listing all the accounts either in session or any remembered account or an option to choose to use a different account altogether.
   * Available values: "login", "select_account", "none".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#prompt ZeroTrustAccessIdentityProvider#prompt}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#prompt ZeroTrustAccessIdentityProvider#prompt}
   */
   readonly prompt?: string;
   /**
+  * When enabled, only users who are members of your Cloudflare account can authenticate through this identity provider. When disabled, any user with a Cloudflare account can authenticate, subject to your Access policies.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#restrict_to_account_members ZeroTrustAccessIdentityProvider#restrict_to_account_members}
+  */
+  readonly restrictToAccountMembers?: boolean | cdktf.IResolvable;
+  /**
   * OAuth scopes
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#scopes ZeroTrustAccessIdentityProvider#scopes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#scopes ZeroTrustAccessIdentityProvider#scopes}
   */
   readonly scopes?: string[];
   /**
   * Sign the SAML authentication request with Access credentials. To verify the signature, use the public key from the Access certs endpoints.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#sign_request ZeroTrustAccessIdentityProvider#sign_request}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#sign_request ZeroTrustAccessIdentityProvider#sign_request}
   */
   readonly signRequest?: boolean | cdktf.IResolvable;
   /**
   * URL to send the SAML authentication requests to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#sso_target_url ZeroTrustAccessIdentityProvider#sso_target_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#sso_target_url ZeroTrustAccessIdentityProvider#sso_target_url}
   */
   readonly ssoTargetUrl?: string;
   /**
   * Should Cloudflare try to load groups from your account
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#support_groups ZeroTrustAccessIdentityProvider#support_groups}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#support_groups ZeroTrustAccessIdentityProvider#support_groups}
   */
   readonly supportGroups?: boolean | cdktf.IResolvable;
   /**
   * The token_endpoint URL of your IdP
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#token_url ZeroTrustAccessIdentityProvider#token_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#token_url ZeroTrustAccessIdentityProvider#token_url}
   */
   readonly tokenUrl?: string;
 }
@@ -384,6 +418,7 @@ export function zeroTrustAccessIdentityProviderConfigAToTerraform(struct?: ZeroT
     directory_id: cdktf.stringToTerraform(struct!.directoryId),
     email_attribute_name: cdktf.stringToTerraform(struct!.emailAttributeName),
     email_claim_name: cdktf.stringToTerraform(struct!.emailClaimName),
+    enable_encryption: cdktf.booleanToTerraform(struct!.enableEncryption),
     header_attributes: cdktf.listMapper(zeroTrustAccessIdentityProviderConfigHeaderAttributesToTerraform, false)(struct!.headerAttributes),
     idp_public_certs: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.idpPublicCerts),
     issuer_url: cdktf.stringToTerraform(struct!.issuerUrl),
@@ -392,6 +427,7 @@ export function zeroTrustAccessIdentityProviderConfigAToTerraform(struct?: ZeroT
     ping_env_id: cdktf.stringToTerraform(struct!.pingEnvId),
     pkce_enabled: cdktf.booleanToTerraform(struct!.pkceEnabled),
     prompt: cdktf.stringToTerraform(struct!.prompt),
+    restrict_to_account_members: cdktf.booleanToTerraform(struct!.restrictToAccountMembers),
     scopes: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.scopes),
     sign_request: cdktf.booleanToTerraform(struct!.signRequest),
     sso_target_url: cdktf.stringToTerraform(struct!.ssoTargetUrl),
@@ -491,6 +527,12 @@ export function zeroTrustAccessIdentityProviderConfigAToHclTerraform(struct?: Ze
       type: "simple",
       storageClassType: "string",
     },
+    enable_encryption: {
+      value: cdktf.booleanToHclTerraform(struct!.enableEncryption),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "boolean",
+    },
     header_attributes: {
       value: cdktf.listMapperHcl(zeroTrustAccessIdentityProviderConfigHeaderAttributesToHclTerraform, false)(struct!.headerAttributes),
       isBlock: true,
@@ -538,6 +580,12 @@ export function zeroTrustAccessIdentityProviderConfigAToHclTerraform(struct?: Ze
       isBlock: false,
       type: "simple",
       storageClassType: "string",
+    },
+    restrict_to_account_members: {
+      value: cdktf.booleanToHclTerraform(struct!.restrictToAccountMembers),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "boolean",
     },
     scopes: {
       value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.scopes),
@@ -649,6 +697,10 @@ export class ZeroTrustAccessIdentityProviderConfigAOutputReference extends cdktf
       hasAnyValues = true;
       internalValueResult.emailClaimName = this._emailClaimName;
     }
+    if (this._enableEncryption !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.enableEncryption = this._enableEncryption;
+    }
     if (this._headerAttributes?.internalValue !== undefined) {
       hasAnyValues = true;
       internalValueResult.headerAttributes = this._headerAttributes?.internalValue;
@@ -680,6 +732,10 @@ export class ZeroTrustAccessIdentityProviderConfigAOutputReference extends cdktf
     if (this._prompt !== undefined) {
       hasAnyValues = true;
       internalValueResult.prompt = this._prompt;
+    }
+    if (this._restrictToAccountMembers !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.restrictToAccountMembers = this._restrictToAccountMembers;
     }
     if (this._scopes !== undefined) {
       hasAnyValues = true;
@@ -722,6 +778,7 @@ export class ZeroTrustAccessIdentityProviderConfigAOutputReference extends cdktf
       this._directoryId = undefined;
       this._emailAttributeName = undefined;
       this._emailClaimName = undefined;
+      this._enableEncryption = undefined;
       this._headerAttributes.internalValue = undefined;
       this._idpPublicCerts = undefined;
       this._issuerUrl = undefined;
@@ -730,6 +787,7 @@ export class ZeroTrustAccessIdentityProviderConfigAOutputReference extends cdktf
       this._pingEnvId = undefined;
       this._pkceEnabled = undefined;
       this._prompt = undefined;
+      this._restrictToAccountMembers = undefined;
       this._scopes = undefined;
       this._signRequest = undefined;
       this._ssoTargetUrl = undefined;
@@ -757,6 +815,7 @@ export class ZeroTrustAccessIdentityProviderConfigAOutputReference extends cdktf
       this._directoryId = value.directoryId;
       this._emailAttributeName = value.emailAttributeName;
       this._emailClaimName = value.emailClaimName;
+      this._enableEncryption = value.enableEncryption;
       this._headerAttributes.internalValue = value.headerAttributes;
       this._idpPublicCerts = value.idpPublicCerts;
       this._issuerUrl = value.issuerUrl;
@@ -765,6 +824,7 @@ export class ZeroTrustAccessIdentityProviderConfigAOutputReference extends cdktf
       this._pingEnvId = value.pingEnvId;
       this._pkceEnabled = value.pkceEnabled;
       this._prompt = value.prompt;
+      this._restrictToAccountMembers = value.restrictToAccountMembers;
       this._scopes = value.scopes;
       this._signRequest = value.signRequest;
       this._ssoTargetUrl = value.ssoTargetUrl;
@@ -997,6 +1057,22 @@ export class ZeroTrustAccessIdentityProviderConfigAOutputReference extends cdktf
     return this._emailClaimName;
   }
 
+  // enable_encryption - computed: true, optional: true, required: false
+  private _enableEncryption?: boolean | cdktf.IResolvable; 
+  public get enableEncryption() {
+    return this.getBooleanAttribute('enable_encryption');
+  }
+  public set enableEncryption(value: boolean | cdktf.IResolvable) {
+    this._enableEncryption = value;
+  }
+  public resetEnableEncryption() {
+    this._enableEncryption = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get enableEncryptionInput() {
+    return this._enableEncryption;
+  }
+
   // header_attributes - computed: false, optional: true, required: false
   private _headerAttributes = new ZeroTrustAccessIdentityProviderConfigHeaderAttributesList(this, "header_attributes", false);
   public get headerAttributes() {
@@ -1130,6 +1206,22 @@ export class ZeroTrustAccessIdentityProviderConfigAOutputReference extends cdktf
     return this.getStringAttribute('redirect_url');
   }
 
+  // restrict_to_account_members - computed: true, optional: true, required: false
+  private _restrictToAccountMembers?: boolean | cdktf.IResolvable; 
+  public get restrictToAccountMembers() {
+    return this.getBooleanAttribute('restrict_to_account_members');
+  }
+  public set restrictToAccountMembers(value: boolean | cdktf.IResolvable) {
+    this._restrictToAccountMembers = value;
+  }
+  public resetRestrictToAccountMembers() {
+    this._restrictToAccountMembers = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get restrictToAccountMembersInput() {
+    return this._restrictToAccountMembers;
+  }
+
   // scopes - computed: false, optional: true, required: false
   private _scopes?: string[]; 
   public get scopes() {
@@ -1210,30 +1302,174 @@ export class ZeroTrustAccessIdentityProviderConfigAOutputReference extends cdktf
     return this._tokenUrl;
   }
 }
+export interface ZeroTrustAccessIdentityProviderSamlCertificateSetCurrentCertificate {
+}
+
+export function zeroTrustAccessIdentityProviderSamlCertificateSetCurrentCertificateToTerraform(struct?: ZeroTrustAccessIdentityProviderSamlCertificateSetCurrentCertificate): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function zeroTrustAccessIdentityProviderSamlCertificateSetCurrentCertificateToHclTerraform(struct?: ZeroTrustAccessIdentityProviderSamlCertificateSetCurrentCertificate): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class ZeroTrustAccessIdentityProviderSamlCertificateSetCurrentCertificateOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): ZeroTrustAccessIdentityProviderSamlCertificateSetCurrentCertificate | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: ZeroTrustAccessIdentityProviderSamlCertificateSetCurrentCertificate | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // is_current - computed: true, optional: false, required: false
+  public get isCurrent() {
+    return this.getBooleanAttribute('is_current');
+  }
+
+  // not_after - computed: true, optional: false, required: false
+  public get notAfter() {
+    return this.getStringAttribute('not_after');
+  }
+
+  // public_certificate - computed: true, optional: false, required: false
+  public get publicCertificate() {
+    return this.getStringAttribute('public_certificate');
+  }
+
+  // uid - computed: true, optional: false, required: false
+  public get uid() {
+    return this.getStringAttribute('uid');
+  }
+}
+export interface ZeroTrustAccessIdentityProviderSamlCertificateSet {
+}
+
+export function zeroTrustAccessIdentityProviderSamlCertificateSetToTerraform(struct?: ZeroTrustAccessIdentityProviderSamlCertificateSet): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function zeroTrustAccessIdentityProviderSamlCertificateSetToHclTerraform(struct?: ZeroTrustAccessIdentityProviderSamlCertificateSet): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class ZeroTrustAccessIdentityProviderSamlCertificateSetOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): ZeroTrustAccessIdentityProviderSamlCertificateSet | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: ZeroTrustAccessIdentityProviderSamlCertificateSet | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // created_at - computed: true, optional: false, required: false
+  public get createdAt() {
+    return this.getStringAttribute('created_at');
+  }
+
+  // current_certificate - computed: true, optional: false, required: false
+  private _currentCertificate = new ZeroTrustAccessIdentityProviderSamlCertificateSetCurrentCertificateOutputReference(this, "current_certificate");
+  public get currentCertificate() {
+    return this._currentCertificate;
+  }
+
+  // previous_certificate - computed: true, optional: false, required: false
+  public get previousCertificate() {
+    return this.getStringAttribute('previous_certificate');
+  }
+
+  // uid - computed: true, optional: false, required: false
+  public get uid() {
+    return this.getStringAttribute('uid');
+  }
+
+  // updated_at - computed: true, optional: false, required: false
+  public get updatedAt() {
+    return this.getStringAttribute('updated_at');
+  }
+}
 export interface ZeroTrustAccessIdentityProviderScimConfig {
   /**
   * A flag to enable or disable SCIM for the identity provider.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#enabled ZeroTrustAccessIdentityProvider#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#enabled ZeroTrustAccessIdentityProvider#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * Indicates how a SCIM event updates a user identity used for policy evaluation. Use "automatic" to automatically update a user's identity and augment it with fields from the SCIM user resource. Use "reauth" to force re-authentication on group membership updates, user identity update will only occur after successful re-authentication. With "reauth" identities will not contain fields from the SCIM user resource. With "no_action" identities will not be changed by SCIM updates in any way and users will not be prompted to reauthenticate.
   * Available values: "automatic", "reauth", "no_action".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#identity_update_behavior ZeroTrustAccessIdentityProvider#identity_update_behavior}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#identity_update_behavior ZeroTrustAccessIdentityProvider#identity_update_behavior}
   */
   readonly identityUpdateBehavior?: string;
   /**
   * A flag to remove a user's seat in Zero Trust when they have been deprovisioned in the Identity Provider.  This cannot be enabled unless user_deprovision is also enabled.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#seat_deprovision ZeroTrustAccessIdentityProvider#seat_deprovision}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#seat_deprovision ZeroTrustAccessIdentityProvider#seat_deprovision}
   */
   readonly seatDeprovision?: boolean | cdktf.IResolvable;
   /**
   * A flag to enable revoking a user's session in Access and Gateway when they have been deprovisioned in the Identity Provider.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#user_deprovision ZeroTrustAccessIdentityProvider#user_deprovision}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#user_deprovision ZeroTrustAccessIdentityProvider#user_deprovision}
   */
   readonly userDeprovision?: boolean | cdktf.IResolvable;
 }
@@ -1424,7 +1660,7 @@ export class ZeroTrustAccessIdentityProviderScimConfigOutputReference extends cd
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider cloudflare_zero_trust_access_identity_provider}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider cloudflare_zero_trust_access_identity_provider}
 */
 export class ZeroTrustAccessIdentityProvider extends cdktf.TerraformResource {
 
@@ -1440,7 +1676,7 @@ export class ZeroTrustAccessIdentityProvider extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ZeroTrustAccessIdentityProvider resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ZeroTrustAccessIdentityProvider to import
-  * @param importFromId The id of the existing ZeroTrustAccessIdentityProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ZeroTrustAccessIdentityProvider that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ZeroTrustAccessIdentityProvider to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1452,7 +1688,7 @@ export class ZeroTrustAccessIdentityProvider extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/resources/zero_trust_access_identity_provider cloudflare_zero_trust_access_identity_provider} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/zero_trust_access_identity_provider cloudflare_zero_trust_access_identity_provider} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1463,7 +1699,7 @@ export class ZeroTrustAccessIdentityProvider extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_zero_trust_access_identity_provider',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -1476,6 +1712,8 @@ export class ZeroTrustAccessIdentityProvider extends cdktf.TerraformResource {
     this._accountId = config.accountId;
     this._config.internalValue = config.config;
     this._name = config.name;
+    this._readOnly = config.readOnly;
+    this._samlCertificateSetId = config.samlCertificateSetId;
     this._scimConfig.internalValue = config.scimConfig;
     this._type = config.type;
     this._zoneId = config.zoneId;
@@ -1532,6 +1770,44 @@ export class ZeroTrustAccessIdentityProvider extends cdktf.TerraformResource {
     return this._name;
   }
 
+  // read_only - computed: false, optional: true, required: false
+  private _readOnly?: boolean | cdktf.IResolvable; 
+  public get readOnly() {
+    return this.getBooleanAttribute('read_only');
+  }
+  public set readOnly(value: boolean | cdktf.IResolvable) {
+    this._readOnly = value;
+  }
+  public resetReadOnly() {
+    this._readOnly = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get readOnlyInput() {
+    return this._readOnly;
+  }
+
+  // saml_certificate_set - computed: true, optional: false, required: false
+  private _samlCertificateSet = new ZeroTrustAccessIdentityProviderSamlCertificateSetOutputReference(this, "saml_certificate_set");
+  public get samlCertificateSet() {
+    return this._samlCertificateSet;
+  }
+
+  // saml_certificate_set_id - computed: false, optional: true, required: false
+  private _samlCertificateSetId?: string; 
+  public get samlCertificateSetId() {
+    return this.getStringAttribute('saml_certificate_set_id');
+  }
+  public set samlCertificateSetId(value: string) {
+    this._samlCertificateSetId = value;
+  }
+  public resetSamlCertificateSetId() {
+    this._samlCertificateSetId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get samlCertificateSetIdInput() {
+    return this._samlCertificateSetId;
+  }
+
   // scim_config - computed: true, optional: true, required: false
   private _scimConfig = new ZeroTrustAccessIdentityProviderScimConfigOutputReference(this, "scim_config");
   public get scimConfig() {
@@ -1586,6 +1862,8 @@ export class ZeroTrustAccessIdentityProvider extends cdktf.TerraformResource {
       account_id: cdktf.stringToTerraform(this._accountId),
       config: zeroTrustAccessIdentityProviderConfigAToTerraform(this._config.internalValue),
       name: cdktf.stringToTerraform(this._name),
+      read_only: cdktf.booleanToTerraform(this._readOnly),
+      saml_certificate_set_id: cdktf.stringToTerraform(this._samlCertificateSetId),
       scim_config: zeroTrustAccessIdentityProviderScimConfigToTerraform(this._scimConfig.internalValue),
       type: cdktf.stringToTerraform(this._type),
       zone_id: cdktf.stringToTerraform(this._zoneId),
@@ -1608,6 +1886,18 @@ export class ZeroTrustAccessIdentityProvider extends cdktf.TerraformResource {
       },
       name: {
         value: cdktf.stringToHclTerraform(this._name),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      read_only: {
+        value: cdktf.booleanToHclTerraform(this._readOnly),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
+      },
+      saml_certificate_set_id: {
+        value: cdktf.stringToHclTerraform(this._samlCertificateSetId),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

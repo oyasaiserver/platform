@@ -9,6 +9,7 @@ softdepend:
 commands:
   ban:
     aliases: ["oyasaiban", "aban", "tempban"]
+    permission: oyasai.admin
   syokaku:
     description: サブコマンド（promote, demote, getrank, iscandidate, seerequirements, seeplayerinfo）
     usage: |
@@ -30,7 +31,21 @@ commands:
     description: 個人ワールド拡張用マクロ
     usage: /kakutyo <プレイヤー名> <ポイント>
     permission: oyasai.kakutyo
+  bulletin:
+    description: お知らせ・アンケート管理用コマンド
+    aliases: [bl, anno]
+    usage: /bulletin <subcommand>
+    permission: oyasai.survey
+  anke:
+    description: 最新のアンケートを開く (短縮用)
+    permission: oyasai.survey
 permissions:
+  oyasai.survey:
+    description: お知らせ・アンケートコマンドの使用権限
+    default: true
+  oyasai.admin:
+    description: 管理者用権限
+    default: op
   oyasai.syokaku:
     description: syokakuコマンドの使用権限
     default: op

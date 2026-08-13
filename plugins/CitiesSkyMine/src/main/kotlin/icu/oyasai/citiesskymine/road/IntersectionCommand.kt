@@ -2,6 +2,8 @@ package icu.oyasai.citiesskymine.road
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
+import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import kotlin.math.round
 import org.bukkit.Location
@@ -65,13 +67,30 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
 
   private fun tabCompleteValue(param: String, prefix: String): List<String> =
       when (param) {
-        "arms" -> listOf("3", "4", "5", "6").filter { it.startsWith(prefix) }
-        "armlength" -> listOf("8", "12", "16", "24", "32").filter { it.startsWith(prefix) }
-        "cornerradius" -> listOf("0", "2", "3", "4", "6", "8").filter { it.startsWith(prefix) }
+        "arms" ->
+            ArgSuggest.filterSuggestions(
+                ArgSuggest.positional("arms", "3-6", listOf("3", "4", "5", "6")),
+                prefix,
+            )
+        "armlength" ->
+            ArgSuggest.filterSuggestions(
+                ArgSuggest.positional("armlength", "4-64", listOf("8", "12", "16", "24", "32")),
+                prefix,
+            )
+        "cornerradius" ->
+            ArgSuggest.filterSuggestions(
+                ArgSuggest.positional("cornerradius", "0-16", listOf("0", "2", "3", "4", "6", "8")),
+                prefix,
+            )
         "rotation" ->
-            listOf("0", "45", "90", "135", "180", "225", "270", "315").filter {
-              it.startsWith(prefix)
-            }
+            ArgSuggest.filterSuggestions(
+                ArgSuggest.positional(
+                    "rotation",
+                    "0-359",
+                    listOf("0", "45", "90", "135", "180", "225", "270", "315"),
+                ),
+                prefix,
+            )
         else -> emptyList()
       }
 
@@ -118,6 +137,10 @@ class IntersectionCommand(private val plugin: Main) : CommandExecutor, TabComple
       param: String,
       value: String,
   ): Boolean {
+    if (ArgSuggest.isPlaceholder(value)) {
+      MessageUtil.error(player, "無効な引数です。数値を入力してください: $value")
+      return false
+    }
     try {
       when (param.lowercase()) {
         "arms" -> {

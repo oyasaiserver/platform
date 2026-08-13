@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secrets
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/secrets
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataInfisicalSecretsConfig extends cdktf.TerraformMetaArguments
   /**
   * The environment from where secrets should be fetched from
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secrets#env_slug DataInfisicalSecrets#env_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/secrets#env_slug DataInfisicalSecrets#env_slug}
   */
   readonly envSlug: string;
   /**
   * The path to the folder from where secrets should be fetched from
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secrets#folder_path DataInfisicalSecrets#folder_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/secrets#folder_path DataInfisicalSecrets#folder_path}
   */
   readonly folderPath: string;
   /**
   * The Infisical project ID (Required for Machine Identity auth, and service tokens with multiple scopes)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secrets#workspace_id DataInfisicalSecrets#workspace_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/secrets#workspace_id DataInfisicalSecrets#workspace_id}
   */
   readonly workspaceId?: string;
 }
@@ -111,7 +111,7 @@ export class DataInfisicalSecretsSecretsMap extends cdktf.ComplexMap {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secrets infisical_secrets}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/secrets infisical_secrets}
 */
 export class DataInfisicalSecrets extends cdktf.TerraformDataSource {
 
@@ -127,7 +127,7 @@ export class DataInfisicalSecrets extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataInfisicalSecrets resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataInfisicalSecrets to import
-  * @param importFromId The id of the existing DataInfisicalSecrets that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secrets#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataInfisicalSecrets that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/secrets#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataInfisicalSecrets to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -139,7 +139,7 @@ export class DataInfisicalSecrets extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/data-sources/secrets infisical_secrets} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/secrets infisical_secrets} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -150,7 +150,7 @@ export class DataInfisicalSecrets extends cdktf.TerraformDataSource {
       terraformResourceType: 'infisical_secrets',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

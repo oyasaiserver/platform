@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,23 +10,29 @@ export interface DataCloudflareApiShieldOperationConfig extends cdktf.TerraformM
   /**
   * Add feature(s) to the results. The feature name that is given here corresponds to the resulting feature object. Have a look at the top-level object description for more details on the specific meaning.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#feature DataCloudflareApiShieldOperation#feature}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#feature DataCloudflareApiShieldOperation#feature}
   */
   readonly feature?: string[];
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#filter DataCloudflareApiShieldOperation#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#filter DataCloudflareApiShieldOperation#filter}
   */
   readonly filter?: DataCloudflareApiShieldOperationFilter;
   /**
   * UUID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#operation_id DataCloudflareApiShieldOperation#operation_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#operation_id DataCloudflareApiShieldOperation#operation_id}
   */
   readonly operationId?: string;
   /**
+  * When true, includes OpenAPI schemas (both uploaded and learned) for the operation in the response. Due to the conversion overhead, this parameter is only supported on single-operation retrieval.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#with_schemas DataCloudflareApiShieldOperation#with_schemas}
+  */
+  readonly withSchemas?: boolean | cdktf.IResolvable;
+  /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#zone_id DataCloudflareApiShieldOperation#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#zone_id DataCloudflareApiShieldOperation#zone_id}
   */
   readonly zoneId?: string;
 }
@@ -884,38 +890,38 @@ export interface DataCloudflareApiShieldOperationFilter {
   * Direction to order results.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#direction DataCloudflareApiShieldOperation#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#direction DataCloudflareApiShieldOperation#direction}
   */
   readonly direction?: string;
   /**
   * Filter results to only include endpoints containing this pattern.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#endpoint DataCloudflareApiShieldOperation#endpoint}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#endpoint DataCloudflareApiShieldOperation#endpoint}
   */
   readonly endpoint?: string;
   /**
   * Add feature(s) to the results. The feature name that is given here corresponds to the resulting feature object. Have a look at the top-level object description for more details on the specific meaning.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#feature DataCloudflareApiShieldOperation#feature}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#feature DataCloudflareApiShieldOperation#feature}
   */
   readonly feature?: string[];
   /**
   * Filter results to only include the specified hosts.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#host DataCloudflareApiShieldOperation#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#host DataCloudflareApiShieldOperation#host}
   */
   readonly host?: string[];
   /**
   * Filter results to only include the specified HTTP methods.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#method DataCloudflareApiShieldOperation#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#method DataCloudflareApiShieldOperation#method}
   */
   readonly method?: string[];
   /**
   * Field to order by. When requesting a feature, the feature keys are available for ordering as well, e.g., `thresholds.suggested_threshold`.
   * Available values: "method", "host", "endpoint", "thresholds.$key".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#order DataCloudflareApiShieldOperation#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#order DataCloudflareApiShieldOperation#order}
   */
   readonly order?: string;
 }
@@ -1152,9 +1158,192 @@ export class DataCloudflareApiShieldOperationFilterOutputReference extends cdktf
     return this._order;
   }
 }
+export interface DataCloudflareApiShieldOperationSchemasLearned {
+}
+
+export function dataCloudflareApiShieldOperationSchemasLearnedToTerraform(struct?: DataCloudflareApiShieldOperationSchemasLearned): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareApiShieldOperationSchemasLearnedToHclTerraform(struct?: DataCloudflareApiShieldOperationSchemasLearned): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareApiShieldOperationSchemasLearnedOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareApiShieldOperationSchemasLearned | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareApiShieldOperationSchemasLearned | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // parameters - computed: true, optional: false, required: false
+  private _parameters = new cdktf.StringMapList(this, "parameters", false);
+  public get parameters() {
+    return this._parameters;
+  }
+
+  // request_body - computed: true, optional: false, required: false
+  private _requestBody = new cdktf.StringMap(this, "request_body");
+  public get requestBody() {
+    return this._requestBody;
+  }
+}
+export interface DataCloudflareApiShieldOperationSchemasUploaded {
+}
+
+export function dataCloudflareApiShieldOperationSchemasUploadedToTerraform(struct?: DataCloudflareApiShieldOperationSchemasUploaded): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareApiShieldOperationSchemasUploadedToHclTerraform(struct?: DataCloudflareApiShieldOperationSchemasUploaded): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareApiShieldOperationSchemasUploadedOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareApiShieldOperationSchemasUploaded | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareApiShieldOperationSchemasUploaded | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // parameters - computed: true, optional: false, required: false
+  private _parameters = new cdktf.StringMapList(this, "parameters", false);
+  public get parameters() {
+    return this._parameters;
+  }
+
+  // request_body - computed: true, optional: false, required: false
+  private _requestBody = new cdktf.StringMap(this, "request_body");
+  public get requestBody() {
+    return this._requestBody;
+  }
+}
+export interface DataCloudflareApiShieldOperationSchemas {
+}
+
+export function dataCloudflareApiShieldOperationSchemasToTerraform(struct?: DataCloudflareApiShieldOperationSchemas): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareApiShieldOperationSchemasToHclTerraform(struct?: DataCloudflareApiShieldOperationSchemas): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareApiShieldOperationSchemasOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareApiShieldOperationSchemas | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareApiShieldOperationSchemas | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // learned - computed: true, optional: false, required: false
+  private _learned = new DataCloudflareApiShieldOperationSchemasLearnedOutputReference(this, "learned");
+  public get learned() {
+    return this._learned;
+  }
+
+  // uploaded - computed: true, optional: false, required: false
+  private _uploaded = new DataCloudflareApiShieldOperationSchemasUploadedOutputReference(this, "uploaded");
+  public get uploaded() {
+    return this._uploaded;
+  }
+}
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation cloudflare_api_shield_operation}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation cloudflare_api_shield_operation}
 */
 export class DataCloudflareApiShieldOperation extends cdktf.TerraformDataSource {
 
@@ -1170,7 +1359,7 @@ export class DataCloudflareApiShieldOperation extends cdktf.TerraformDataSource 
   * Generates CDKTF code for importing a DataCloudflareApiShieldOperation resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareApiShieldOperation to import
-  * @param importFromId The id of the existing DataCloudflareApiShieldOperation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareApiShieldOperation that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareApiShieldOperation to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -1182,7 +1371,7 @@ export class DataCloudflareApiShieldOperation extends cdktf.TerraformDataSource 
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.19.1/docs/data-sources/api_shield_operation cloudflare_api_shield_operation} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_shield_operation cloudflare_api_shield_operation} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -1193,7 +1382,7 @@ export class DataCloudflareApiShieldOperation extends cdktf.TerraformDataSource 
       terraformResourceType: 'cloudflare_api_shield_operation',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.19.1'
+        providerVersion: '5.22.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -1206,6 +1395,7 @@ export class DataCloudflareApiShieldOperation extends cdktf.TerraformDataSource 
     this._feature = config.feature;
     this._filter.internalValue = config.filter;
     this._operationId = config.operationId;
+    this._withSchemas = config.withSchemas;
     this._zoneId = config.zoneId;
   }
 
@@ -1292,6 +1482,28 @@ export class DataCloudflareApiShieldOperation extends cdktf.TerraformDataSource 
     return this._operationId;
   }
 
+  // schemas - computed: true, optional: false, required: false
+  private _schemas = new DataCloudflareApiShieldOperationSchemasOutputReference(this, "schemas");
+  public get schemas() {
+    return this._schemas;
+  }
+
+  // with_schemas - computed: true, optional: true, required: false
+  private _withSchemas?: boolean | cdktf.IResolvable; 
+  public get withSchemas() {
+    return this.getBooleanAttribute('with_schemas');
+  }
+  public set withSchemas(value: boolean | cdktf.IResolvable) {
+    this._withSchemas = value;
+  }
+  public resetWithSchemas() {
+    this._withSchemas = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get withSchemasInput() {
+    return this._withSchemas;
+  }
+
   // zone_id - computed: false, optional: true, required: false
   private _zoneId?: string; 
   public get zoneId() {
@@ -1317,6 +1529,7 @@ export class DataCloudflareApiShieldOperation extends cdktf.TerraformDataSource 
       feature: cdktf.listMapper(cdktf.stringToTerraform, false)(this._feature),
       filter: dataCloudflareApiShieldOperationFilterToTerraform(this._filter.internalValue),
       operation_id: cdktf.stringToTerraform(this._operationId),
+      with_schemas: cdktf.booleanToTerraform(this._withSchemas),
       zone_id: cdktf.stringToTerraform(this._zoneId),
     };
   }
@@ -1340,6 +1553,12 @@ export class DataCloudflareApiShieldOperation extends cdktf.TerraformDataSource 
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      with_schemas: {
+        value: cdktf.booleanToHclTerraform(this._withSchemas),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "boolean",
       },
       zone_id: {
         value: cdktf.stringToHclTerraform(this._zoneId),

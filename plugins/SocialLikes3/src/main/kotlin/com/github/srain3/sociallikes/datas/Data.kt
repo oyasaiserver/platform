@@ -27,15 +27,7 @@ object Data {
   /** [SLData]からPluginフォルダ内へファイル保存を行いつつCacheに無ければ追加する */
   fun save(data: SLData) {
     // IDから50間隔で区切り、Yamlファイルを作成する
-    val fPage = (data.id / 50.0).toInt()
-    val dirName =
-        if (data.id in -49..-1) {
-          "-1--49"
-        } else if (fPage < 0) {
-          "${fPage*50}-${(fPage-1)*50+1}"
-        } else {
-          "${fPage*50}-${(fPage+1)*50-1}"
-        }
+    val dirName = getDirName(data.id)
     val yml = CustomYaml("data/" + dirName + "/${data.id}.yml")
 
     // UUIDListをそのままYamlに保存するといらない情報があるので
@@ -63,6 +55,7 @@ object Data {
       set("DiscordTextID", data.discordTextID)
     }
     yml.save()
+
     SLDatabase.saveBuild(data)
 
     // Cacheへ保存する(既にデータが有る場合は追加しない)
@@ -100,30 +93,14 @@ object Data {
 
   /** IDから[SLData]を取得する、ない場合nullを返す */
   fun getSLData(id: Int): SLData? {
-    val fPage = (id / 50.0).toInt()
-    val dirName =
-        if (id in -49..-1) {
-          "-1--49"
-        } else if (fPage < 0) {
-          "${fPage*50}-${(fPage-1)*50+1}"
-        } else {
-          "${fPage*50}-${(fPage+1)*50-1}"
-        }
+    val dirName = getDirName(id)
     val list = dataMap[dirName] ?: return null
     return list.firstOrNull { it.id == id }
   }
 
   /** [SLData]を元にデータを消去する */
   fun delID(slData: SLData, updateMode: Boolean = false) {
-    val fPage = (slData.id / 50.0).toInt()
-    val dirName =
-        if (slData.id in -49..-1) {
-          "-1--49"
-        } else if (fPage < 0) {
-          "${fPage*50}-${(fPage-1)*50+1}"
-        } else {
-          "${fPage*50}-${(fPage+1)*50-1}"
-        }
+    val dirName = getDirName(slData.id)
     val list = dataMap[dirName] ?: return
 
     if (!updateMode) {
@@ -158,6 +135,7 @@ object Data {
 
     val yml = CustomYaml("data/" + dirName + "/${slData.id}.yml")
     yml.delete()
+
     SLDatabase.deleteBuild(slData.id)
 
     SLRankUp.minusBuildTask(slData.owner)
@@ -200,75 +178,82 @@ object Data {
   fun loadFileToDataCache() {
     dataMap.clear()
     userLikesInt.clear()
+    lastID = 0
+    emptyIDList.clear()
+    slNearData.clear()
     // SocialLikes3/data/ココのディレクトリ全てのlist
-    val dir = Tools.getFolderToFolder("data") ?: return
-    Bukkit.getLogger().info("[SL3] File Loading...")
+    val readSource = getReadSource()
+    val dir = if (readSource == ReadSource.YAML) Tools.getFolderToFolder("data") ?: return else null
+    Bukkit.getLogger().info("[SL3] ${readSource.logName} Loading...")
     Thread(
             {
               val ids = mutableSetOf<Int>()
               loading = false
-              dir.forEach dir@{
-                // SocialLikes3/data/???-???(dir)/ココのファイル全てのlist
-                val files = Tools.getFolderToFile(it) ?: return@dir
-                files.forEach file@{ file ->
-                  // ID.ymlを読み込む
-                  val yml = CustomYamlFile(file)
-                  // ファイルから値を取り出す
-                  val id = yml.getInt("id", -1)
-                  val worldStr = yml.getString("loc.world") ?: return@file
-                  val x = yml.getDouble("loc.x")
-                  val y = yml.getDouble("loc.y")
-                  val z = yml.getDouble("loc.z")
-                  val time = LocalDateTime.parse(yml.getString("time"))
-                  val owner = UUID.fromString(yml.getString("owner"))
-                  val title = yml.getString("title") ?: return@file
-                  val likesStr = yml.getStringList("likes")
-                  val check = yml.getBoolean("check", false)
-                  val comment = yml.getString("comment") ?: "No comment"
-                  val textID = yml.getLong("DiscordTextID", 0)
+              when (readSource) {
+                ReadSource.YAML -> {
+                  dir?.forEach dir@{
+                    // SocialLikes3/data/???-???(dir)/ココのファイル全てのlist
+                    val files = Tools.getFolderToFile(it) ?: return@dir
+                    files.forEach file@{ file ->
+                      // ID.ymlを読み込む
+                      val yml = CustomYamlFile(file)
+                      // ファイルから値を取り出す
+                      val id = yml.getInt("id", -1)
+                      val worldStr = yml.getString("loc.world") ?: return@file
+                      val x = yml.getDouble("loc.x")
+                      val y = yml.getDouble("loc.y")
+                      val z = yml.getDouble("loc.z")
+                      val time = LocalDateTime.parse(yml.getString("time"))
+                      val owner = UUID.fromString(yml.getString("owner"))
+                      val title = yml.getString("title") ?: return@file
+                      val likesStr = yml.getStringList("likes")
+                      val check = yml.getBoolean("check", false)
+                      val comment = yml.getString("comment") ?: "No comment"
+                      val textID = yml.getLong("DiscordTextID", 0)
 
-                  // 比較して大きいIDへ更新する
-                  lastID = max(lastID, id)
-                  // 存在するidリストへ保存する
-                  ids.add(id)
+                      // locationへ変換
+                      val world =
+                          Bukkit.getServer().getWorld(worldStr)
+                              ?: run {
+                                Tools.plugin.logger.warning(
+                                    "ID:$id world $worldStr does not exist!"
+                                )
+                                // return@file
+                                null
+                              }
+                      val loc = Location(world, x, y, z)
 
-                  // locationへ変換
-                  val world =
-                      Bukkit.getServer().getWorld(worldStr)
-                          ?: run {
-                            Tools.plugin.logger.warning("ID:$id world $worldStr does not exist!")
-                            // return@file
-                            null
-                          }
-                  val loc = Location(world, x, y, z)
+                      // likesのStringListからUUIDListへ変換
+                      val likes: MutableList<UUID> = mutableListOf()
+                      likesStr.forEach { uuidStr -> likes.add(UUID.fromString(uuidStr)) }
 
-                  // likesのStringListからUUIDListへ変換
-                  val likes: MutableList<UUID> = mutableListOf()
-                  likesStr.forEach { uuidStr -> likes.add(UUID.fromString(uuidStr)) }
+                      // likesWithTimestampのロード
+                      val likesWithTimestamp = loadLikesWithTimestamp(yml)
 
-                  val likesWithTimestamp = loadLikesWithTimestamp(yml, id)
-
-                  // Cacheへ入れる
-                  val slData =
-                      SLData(
-                          id,
-                          loc,
-                          time,
-                          owner,
-                          title,
-                          likes,
-                          likesWithTimestamp,
-                          check,
-                          comment,
-                          worldStr,
-                          textID,
+                      addToCache(
+                          SLData(
+                              id,
+                              loc,
+                              time,
+                              owner,
+                              title,
+                              likes,
+                              likesWithTimestamp,
+                              check,
+                              comment,
+                              worldStr,
+                              textID,
+                          ),
+                          it.name,
+                          ids,
                       )
-                  val list = dataMap[it.name] ?: mutableListOf()
-                  list.add(slData)
-                  dataMap[it.name] = list
-
-                  // userLikes数を加算する
-                  userLikesInt[owner] = (userLikesInt[owner] ?: 0) + likes.count()
+                    }
+                  }
+                }
+                ReadSource.SQLITE -> {
+                  SLDatabase.loadBuildsBlocking().forEach { slData ->
+                    addToCache(slData, getDirName(slData.id), ids)
+                  }
                 }
               }
 
@@ -300,61 +285,96 @@ object Data {
                 Tools.plugin.logger.severe("SLRankUp.createDataTaskにエラー: ${e.toString()}")
               }
 
-              SLDatabase.syncBuilds(getSLDataAll())
+              if (readSource == ReadSource.YAML) {
+                try {
+                  SLDatabase.syncBuilds(getSLDataAll())
+                } catch (e: Exception) {
+                  Tools.plugin.logger.warning("[SL3] SQLite shadow syncBuilds failed: ${e.message}")
+                }
+              }
 
               loading = true
-              Bukkit.getLogger().info("[SL3] Load completion!")
+              Bukkit.getLogger()
+                  .info(
+                      "[SL3] Load completion! source=${readSource.configValue}, builds=${getBuildingInt()}"
+                  )
             },
             "SL3-loadFileToDataCache",
         )
         .start()
   }
 
-  private fun loadLikesWithTimestamp(yml: CustomYamlFile, id: Int): MutableMap<UUID, Long> {
-    val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf()
-    var parseFailureCount = 0
+  private enum class ReadSource(val configValue: String, val logName: String) {
+    YAML("yaml", "File"),
+    SQLITE("sqlite", "SQLite"),
+  }
 
-    fun putTimestamp(key: Any?, value: Any?, section: ConfigurationSection? = null) {
-      try {
-        val keyString =
-            key as? String
-                ?: run {
-                  parseFailureCount++
-                  return
-                }
-        val uuid = UUID.fromString(keyString)
-        val ts =
-            when (value) {
-              is Number -> section?.getLong(keyString) ?: value.toLong()
-              else -> value?.toString()?.toLongOrNull()
-            }
-        if (ts != null) {
-          likesWithTimestamp[uuid] = ts
-        } else {
-          parseFailureCount++
+  private fun getReadSource(): ReadSource {
+    val value = Tools.plugin.config.getString("readSource", ReadSource.YAML.configValue)
+    return ReadSource.values().firstOrNull { it.configValue == value?.lowercase(Locale.ROOT) }
+        ?: run {
+          Tools.plugin.logger.warning("[SL3] Unknown readSource '$value'. Falling back to yaml.")
+          ReadSource.YAML
         }
-      } catch (_: Exception) {
-        parseFailureCount++
-      }
-    }
+  }
 
-    val section = yml.getConfigurationSection("likesWithTimestamp")
-    if (section != null) {
-      section.getKeys(false).forEach { key -> putTimestamp(key, section.get(key), section) }
+  private fun getDirName(id: Int): String {
+    val fPage = (id / 50.0).toInt()
+    return if (id in -49..-1) {
+      "-1--49"
+    } else if (fPage < 0) {
+      "${fPage*50}-${(fPage-1)*50+1}"
     } else {
-      val rawLikesWithTimestamp = yml.get("likesWithTimestamp")
-      if (rawLikesWithTimestamp is Map<*, *>) {
-        rawLikesWithTimestamp.forEach { (key, value) -> putTimestamp(key, value) }
+      "${fPage*50}-${(fPage+1)*50-1}"
+    }
+  }
+
+  private fun addToCache(slData: SLData, dirName: String, ids: MutableSet<Int>) {
+    lastID = max(lastID, slData.id)
+    ids.add(slData.id)
+
+    val list = dataMap[dirName] ?: mutableListOf()
+    list.add(slData)
+    dataMap[dirName] = list
+
+    userLikesInt[slData.owner] = (userLikesInt[slData.owner] ?: 0) + slData.likes.count()
+  }
+
+  private fun loadLikesWithTimestamp(yml: CustomYamlFile): MutableMap<UUID, Long> {
+    val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf()
+    val section = yml.getConfigurationSection("likesWithTimestamp")
+
+    if (section != null) {
+      section.getKeys(false).forEach { uuidStr ->
+        putLikeTimestamp(likesWithTimestamp, uuidStr, section.get(uuidStr))
       }
+      return likesWithTimestamp
     }
 
-    if (parseFailureCount > 0) {
-      Tools.plugin.logger.warning(
-          "[SL3] ID:$id likesWithTimestamp parse skipped $parseFailureCount invalid entr${if (parseFailureCount == 1) "y" else "ies"}"
-      )
+    val rawLikesWithTimestamp = yml.get("likesWithTimestamp")
+    if (rawLikesWithTimestamp is Map<*, *>) {
+      rawLikesWithTimestamp.forEach { (uuid, timestamp) ->
+        putLikeTimestamp(likesWithTimestamp, uuid as? String, timestamp)
+      }
+    } else if (rawLikesWithTimestamp is ConfigurationSection) {
+      rawLikesWithTimestamp.getKeys(false).forEach { uuidStr ->
+        putLikeTimestamp(likesWithTimestamp, uuidStr, rawLikesWithTimestamp.get(uuidStr))
+      }
     }
 
     return likesWithTimestamp
+  }
+
+  private fun putLikeTimestamp(
+      likesWithTimestamp: MutableMap<UUID, Long>,
+      uuidStr: String?,
+      timestamp: Any?,
+  ) {
+    try {
+      val uuid = UUID.fromString(uuidStr ?: return)
+      val ts = (timestamp as? Number)?.toLong() ?: timestamp?.toString()?.toLongOrNull() ?: return
+      likesWithTimestamp[uuid] = ts
+    } catch (_: Exception) {}
   }
 
   /** WorldNameとchunk別のslDataMap */

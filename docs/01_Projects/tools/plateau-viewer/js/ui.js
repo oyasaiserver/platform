@@ -81,16 +81,22 @@ btnCopy.addEventListener("click", async () => {
     const copied = await copyText(data.command);
     focusCommandOutput();
     btnCopy.textContent = "📋 表示済みコマンドをコピー";
+    const commandLabel = data.command_mode === "split"
+      ? `${data.command_line_count.toLocaleString()}行 / 各${data.player_command_limit}文字以内`
+      : `${data.command_length.toLocaleString()}文字`;
     showToast(
       copied
-        ? `コピーしました (${data.command_length.toLocaleString()}文字)`
+        ? `コピーしました (${commandLabel})`
         : "コマンドを生成しました"
     );
     const boxes = data.boxes != null
       ? `<b>${data.boxes.toLocaleString()}</b> boxes / `
       : "";
+    const commandNote = data.command_mode === "split"
+      ? ` / paste <b>${data.command_line_count.toLocaleString()}</b> lines`
+      : "";
     setStatus(
-      `Minecraft コマンド生成完了 — <b>${data.schema}</b> / ${boxes}<b>${data.columns.toLocaleString()}</b> columns / <b>${data.blocks.toLocaleString()}</b> blocks`
+      `Minecraft コマンド生成完了 — <b>${data.schema}</b> / ${boxes}<b>${data.columns.toLocaleString()}</b> columns / <b>${data.blocks.toLocaleString()}</b> blocks${commandNote}`
     );
   } catch (e) {
     showToast("コマンド生成に失敗しました");

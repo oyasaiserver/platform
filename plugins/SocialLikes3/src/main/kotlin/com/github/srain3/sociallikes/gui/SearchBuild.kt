@@ -12,7 +12,6 @@ import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
 import com.github.stefvanschie.inventoryframework.pane.StaticPane
 import com.github.stefvanschie.inventoryframework.pane.util.Slot
 import java.time.format.DateTimeFormatter
-import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -125,50 +124,37 @@ object SearchBuild {
     return item
   }
 
-  /** オフラインプレイヤーを検索するためのAnvilGUIを開く */
+  /** 建築名検索用の金床入力を開く */
   fun offlinePlayerSearch(player: Player) {
-    AnvilGUI.Builder().apply {
-      itemLeft(
-          ItemStack(Material.OAK_SIGN)
-              .allFlag()
-              .addText(
-                  "ここに探したい建築名",
-                  mutableListOf("&7出力先(右側)にあるこの看板をクリックで確定します", "&7普通に閉じた場合はキャンセルです"),
-              )
-      )
-      onClick { slot, e ->
-        if (slot != AnvilGUI.Slot.OUTPUT) {
-          return@onClick listOf()
-        }
-
-        if (e.text.isNotBlank()) {
-          player.sendMessage(Tools.socialLikesLOGO + "&r 検索中です…".color())
-          Thread {
-                // 検索処理
-                val regex = Regex(e.text)
-                val slDataList = Data.getSLDataAll()
-                val hitSLDataList = slDataList.filter { regex.containsMatchIn(it.title) }
-                val gui = createGUI(hitSLDataList, e.text)
-                object : BukkitRunnable() {
-                      override fun run() {
-                        if (player.isOnline) {
-                          gui.show(player)
-                        }
-                      }
+    val item =
+        ItemStack(Material.OAK_SIGN)
+            .allFlag()
+            .addText(
+                "ここに探したい建築名",
+                mutableListOf("&7出力先(右側)にあるこの看板をクリックで確定します", "&7普通に閉じた場合はキャンセルです"),
+            )
+    SocialLikesAnvilInput.open(player, Tools.socialLikesLOGOShort + "&0建築名検索".color(), item) {
+        p,
+        text ->
+      p.sendMessage(Tools.socialLikesLOGO + "&r 検索中です…".color())
+      Thread {
+            // 検索処理
+            val regex = Regex(Regex.escape(text))
+            val slDataList = Data.getSLDataAll()
+            val hitSLDataList = slDataList.filter { regex.containsMatchIn(it.title) }
+            val gui = createGUI(hitSLDataList, text)
+            object : BukkitRunnable() {
+                  override fun run() {
+                    if (p.isOnline) {
+                      gui.show(p)
                     }
-                    .runTaskLater(Tools.plugin, 2)
-              }
-              .start()
+                  }
+                }
+                .runTaskLater(Tools.plugin, 2)
+          }
+          .start()
 
-          e.player.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
-          return@onClick listOf(AnvilGUI.ResponseAction.close())
-        } else {
-          return@onClick listOf(AnvilGUI.ResponseAction.replaceInputText(""))
-        }
-      }
-      title(Tools.socialLikesLOGOShort + "&0建築名検索".color())
-      plugin(Tools.plugin)
-      open(player)
+      p.playSound(p, Sound.UI_BUTTON_CLICK, 1F, 1F)
     }
   }
 }

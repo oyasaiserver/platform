@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,105 +10,211 @@ export interface CertManagerCertificateProfileConfig extends cdktf.TerraformMeta
   /**
   * The ID of the certificate authority to use (required unless issuer_type is 'self-signed')
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#ca_id CertManagerCertificateProfile#ca_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#ca_id CertManagerCertificateProfile#ca_id}
   */
   readonly caId?: string;
   /**
   * The ID of the certificate policy to use
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#certificate_policy_id CertManagerCertificateProfile#certificate_policy_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#certificate_policy_id CertManagerCertificateProfile#certificate_policy_id}
   */
   readonly certificatePolicyId: string;
   /**
   * The description of the certificate profile
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#description CertManagerCertificateProfile#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#description CertManagerCertificateProfile#description}
   */
   readonly description?: string;
   /**
-  * The enrollment type for the profile. Supported values: api, est, acme
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#enrollment_type CertManagerCertificateProfile#enrollment_type}
-  */
-  readonly enrollmentType: string;
-  /**
   * The issuer type for the profile. Supported values: ca, self-signed. Defaults to 'ca'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#issuer_type CertManagerCertificateProfile#issuer_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#issuer_type CertManagerCertificateProfile#issuer_type}
   */
   readonly issuerType?: string;
   /**
   * The unique name of the certificate profile
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#name CertManagerCertificateProfile#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#name CertManagerCertificateProfile#name}
   */
   readonly name: string;
   /**
-  * The slug of the cert-manager project
+  * defaults block
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#project_slug CertManagerCertificateProfile#project_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#defaults CertManagerCertificateProfile#defaults}
   */
-  readonly projectSlug: string;
-  /**
-  * api_config block
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#api_config CertManagerCertificateProfile#api_config}
-  */
-  readonly apiConfig?: CertManagerCertificateProfileApiConfig;
-  /**
-  * est_config block
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#est_config CertManagerCertificateProfile#est_config}
-  */
-  readonly estConfig?: CertManagerCertificateProfileEstConfig;
-  /**
-  * external_configs block
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#external_configs CertManagerCertificateProfile#external_configs}
-  */
-  readonly externalConfigs?: CertManagerCertificateProfileExternalConfigs;
+  readonly defaults?: CertManagerCertificateProfileDefaults;
 }
-export interface CertManagerCertificateProfileApiConfig {
+export interface CertManagerCertificateProfileDefaults {
   /**
-  * Whether to automatically renew certificates
+  * Default common name
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#auto_renew CertManagerCertificateProfile#auto_renew}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#common_name CertManagerCertificateProfile#common_name}
   */
-  readonly autoRenew?: boolean | cdktf.IResolvable;
+  readonly commonName?: string;
   /**
-  * Number of days before expiration to renew certificates (1-30)
+  * Default country (C)
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#renew_before_days CertManagerCertificateProfile#renew_before_days}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#country CertManagerCertificateProfile#country}
   */
-  readonly renewBeforeDays?: number;
+  readonly country?: string;
+  /**
+  * Default domain components (DC). Multi-valued; each entry becomes a DC attribute in the certificate subject.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#domain_components CertManagerCertificateProfile#domain_components}
+  */
+  readonly domainComponents?: string[];
+  /**
+  * Default extended key usages. Supported values: client_auth, server_auth, code_signing, email_protection, ocsp_signing, time_stamping
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#extended_key_usages CertManagerCertificateProfile#extended_key_usages}
+  */
+  readonly extendedKeyUsages?: string[];
+  /**
+  * Default key algorithm. Supported values: RSA_2048, RSA_3072, RSA_4096, EC_prime256v1, EC_secp384r1, EC_secp521r1
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#key_algorithm CertManagerCertificateProfile#key_algorithm}
+  */
+  readonly keyAlgorithm?: string;
+  /**
+  * Default key usages. Supported values: digital_signature, key_encipherment, non_repudiation, data_encipherment, key_agreement, key_cert_sign, crl_sign, encipher_only, decipher_only
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#key_usages CertManagerCertificateProfile#key_usages}
+  */
+  readonly keyUsages?: string[];
+  /**
+  * Default locality (L)
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#locality CertManagerCertificateProfile#locality}
+  */
+  readonly locality?: string;
+  /**
+  * Default organization (O)
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#organization CertManagerCertificateProfile#organization}
+  */
+  readonly organization?: string;
+  /**
+  * Default organizational unit (OU)
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#organizational_unit CertManagerCertificateProfile#organizational_unit}
+  */
+  readonly organizationalUnit?: string;
+  /**
+  * Default signature algorithm. Supported values: RSA-SHA256, RSA-SHA384, RSA-SHA512, ECDSA-SHA256, ECDSA-SHA384, ECDSA-SHA512
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#signature_algorithm CertManagerCertificateProfile#signature_algorithm}
+  */
+  readonly signatureAlgorithm?: string;
+  /**
+  * Default state/province (ST)
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#state CertManagerCertificateProfile#state}
+  */
+  readonly state?: string;
+  /**
+  * Default certificate validity in days
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#ttl_days CertManagerCertificateProfile#ttl_days}
+  */
+  readonly ttlDays?: number;
 }
 
-export function certManagerCertificateProfileApiConfigToTerraform(struct?: CertManagerCertificateProfileApiConfig | cdktf.IResolvable): any {
+export function certManagerCertificateProfileDefaultsToTerraform(struct?: CertManagerCertificateProfileDefaults | cdktf.IResolvable): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   return {
-    auto_renew: cdktf.booleanToTerraform(struct!.autoRenew),
-    renew_before_days: cdktf.numberToTerraform(struct!.renewBeforeDays),
+    common_name: cdktf.stringToTerraform(struct!.commonName),
+    country: cdktf.stringToTerraform(struct!.country),
+    domain_components: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.domainComponents),
+    extended_key_usages: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.extendedKeyUsages),
+    key_algorithm: cdktf.stringToTerraform(struct!.keyAlgorithm),
+    key_usages: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.keyUsages),
+    locality: cdktf.stringToTerraform(struct!.locality),
+    organization: cdktf.stringToTerraform(struct!.organization),
+    organizational_unit: cdktf.stringToTerraform(struct!.organizationalUnit),
+    signature_algorithm: cdktf.stringToTerraform(struct!.signatureAlgorithm),
+    state: cdktf.stringToTerraform(struct!.state),
+    ttl_days: cdktf.numberToTerraform(struct!.ttlDays),
   }
 }
 
 
-export function certManagerCertificateProfileApiConfigToHclTerraform(struct?: CertManagerCertificateProfileApiConfig | cdktf.IResolvable): any {
+export function certManagerCertificateProfileDefaultsToHclTerraform(struct?: CertManagerCertificateProfileDefaults | cdktf.IResolvable): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
   }
   const attrs = {
-    auto_renew: {
-      value: cdktf.booleanToHclTerraform(struct!.autoRenew),
+    common_name: {
+      value: cdktf.stringToHclTerraform(struct!.commonName),
       isBlock: false,
       type: "simple",
-      storageClassType: "boolean",
+      storageClassType: "string",
     },
-    renew_before_days: {
-      value: cdktf.numberToHclTerraform(struct!.renewBeforeDays),
+    country: {
+      value: cdktf.stringToHclTerraform(struct!.country),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    domain_components: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.domainComponents),
+      isBlock: false,
+      type: "list",
+      storageClassType: "stringList",
+    },
+    extended_key_usages: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.extendedKeyUsages),
+      isBlock: false,
+      type: "list",
+      storageClassType: "stringList",
+    },
+    key_algorithm: {
+      value: cdktf.stringToHclTerraform(struct!.keyAlgorithm),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    key_usages: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.keyUsages),
+      isBlock: false,
+      type: "list",
+      storageClassType: "stringList",
+    },
+    locality: {
+      value: cdktf.stringToHclTerraform(struct!.locality),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    organization: {
+      value: cdktf.stringToHclTerraform(struct!.organization),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    organizational_unit: {
+      value: cdktf.stringToHclTerraform(struct!.organizationalUnit),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    signature_algorithm: {
+      value: cdktf.stringToHclTerraform(struct!.signatureAlgorithm),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    state: {
+      value: cdktf.stringToHclTerraform(struct!.state),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    ttl_days: {
+      value: cdktf.numberToHclTerraform(struct!.ttlDays),
       isBlock: false,
       type: "simple",
       storageClassType: "number",
@@ -119,7 +225,7 @@ export function certManagerCertificateProfileApiConfigToHclTerraform(struct?: Ce
   return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
 }
 
-export class CertManagerCertificateProfileApiConfigOutputReference extends cdktf.ComplexObject {
+export class CertManagerCertificateProfileDefaultsOutputReference extends cdktf.ComplexObject {
   private isEmptyObject = false;
   private resolvableValue?: cdktf.IResolvable;
 
@@ -131,29 +237,79 @@ export class CertManagerCertificateProfileApiConfigOutputReference extends cdktf
     super(terraformResource, terraformAttribute, false);
   }
 
-  public get internalValue(): CertManagerCertificateProfileApiConfig | cdktf.IResolvable | undefined {
+  public get internalValue(): CertManagerCertificateProfileDefaults | cdktf.IResolvable | undefined {
     if (this.resolvableValue) {
       return this.resolvableValue;
     }
     let hasAnyValues = this.isEmptyObject;
     const internalValueResult: any = {};
-    if (this._autoRenew !== undefined) {
+    if (this._commonName !== undefined) {
       hasAnyValues = true;
-      internalValueResult.autoRenew = this._autoRenew;
+      internalValueResult.commonName = this._commonName;
     }
-    if (this._renewBeforeDays !== undefined) {
+    if (this._country !== undefined) {
       hasAnyValues = true;
-      internalValueResult.renewBeforeDays = this._renewBeforeDays;
+      internalValueResult.country = this._country;
+    }
+    if (this._domainComponents !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.domainComponents = this._domainComponents;
+    }
+    if (this._extendedKeyUsages !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.extendedKeyUsages = this._extendedKeyUsages;
+    }
+    if (this._keyAlgorithm !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.keyAlgorithm = this._keyAlgorithm;
+    }
+    if (this._keyUsages !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.keyUsages = this._keyUsages;
+    }
+    if (this._locality !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.locality = this._locality;
+    }
+    if (this._organization !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.organization = this._organization;
+    }
+    if (this._organizationalUnit !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.organizationalUnit = this._organizationalUnit;
+    }
+    if (this._signatureAlgorithm !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.signatureAlgorithm = this._signatureAlgorithm;
+    }
+    if (this._state !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.state = this._state;
+    }
+    if (this._ttlDays !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.ttlDays = this._ttlDays;
     }
     return hasAnyValues ? internalValueResult : undefined;
   }
 
-  public set internalValue(value: CertManagerCertificateProfileApiConfig | cdktf.IResolvable | undefined) {
+  public set internalValue(value: CertManagerCertificateProfileDefaults | cdktf.IResolvable | undefined) {
     if (value === undefined) {
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
-      this._autoRenew = undefined;
-      this._renewBeforeDays = undefined;
+      this._commonName = undefined;
+      this._country = undefined;
+      this._domainComponents = undefined;
+      this._extendedKeyUsages = undefined;
+      this._keyAlgorithm = undefined;
+      this._keyUsages = undefined;
+      this._locality = undefined;
+      this._organization = undefined;
+      this._organizationalUnit = undefined;
+      this._signatureAlgorithm = undefined;
+      this._state = undefined;
+      this._ttlDays = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
       this.isEmptyObject = false;
@@ -162,308 +318,216 @@ export class CertManagerCertificateProfileApiConfigOutputReference extends cdktf
     else {
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
-      this._autoRenew = value.autoRenew;
-      this._renewBeforeDays = value.renewBeforeDays;
+      this._commonName = value.commonName;
+      this._country = value.country;
+      this._domainComponents = value.domainComponents;
+      this._extendedKeyUsages = value.extendedKeyUsages;
+      this._keyAlgorithm = value.keyAlgorithm;
+      this._keyUsages = value.keyUsages;
+      this._locality = value.locality;
+      this._organization = value.organization;
+      this._organizationalUnit = value.organizationalUnit;
+      this._signatureAlgorithm = value.signatureAlgorithm;
+      this._state = value.state;
+      this._ttlDays = value.ttlDays;
     }
   }
 
-  // auto_renew - computed: true, optional: true, required: false
-  private _autoRenew?: boolean | cdktf.IResolvable; 
-  public get autoRenew() {
-    return this.getBooleanAttribute('auto_renew');
+  // common_name - computed: false, optional: true, required: false
+  private _commonName?: string; 
+  public get commonName() {
+    return this.getStringAttribute('common_name');
   }
-  public set autoRenew(value: boolean | cdktf.IResolvable) {
-    this._autoRenew = value;
+  public set commonName(value: string) {
+    this._commonName = value;
   }
-  public resetAutoRenew() {
-    this._autoRenew = undefined;
+  public resetCommonName() {
+    this._commonName = undefined;
   }
   // Temporarily expose input value. Use with caution.
-  public get autoRenewInput() {
-    return this._autoRenew;
+  public get commonNameInput() {
+    return this._commonName;
   }
 
-  // renew_before_days - computed: true, optional: true, required: false
-  private _renewBeforeDays?: number; 
-  public get renewBeforeDays() {
-    return this.getNumberAttribute('renew_before_days');
+  // country - computed: false, optional: true, required: false
+  private _country?: string; 
+  public get country() {
+    return this.getStringAttribute('country');
   }
-  public set renewBeforeDays(value: number) {
-    this._renewBeforeDays = value;
+  public set country(value: string) {
+    this._country = value;
   }
-  public resetRenewBeforeDays() {
-    this._renewBeforeDays = undefined;
+  public resetCountry() {
+    this._country = undefined;
   }
   // Temporarily expose input value. Use with caution.
-  public get renewBeforeDaysInput() {
-    return this._renewBeforeDays;
-  }
-}
-export interface CertManagerCertificateProfileEstConfig {
-  /**
-  * The CA certificate chain for EST enrollment
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#ca_chain CertManagerCertificateProfile#ca_chain}
-  */
-  readonly caChain?: string;
-  /**
-  * Whether to disable bootstrap CA validation
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#disable_bootstrap_ca_validation CertManagerCertificateProfile#disable_bootstrap_ca_validation}
-  */
-  readonly disableBootstrapCaValidation?: boolean | cdktf.IResolvable;
-  /**
-  * The passphrase for EST enrollment
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#passphrase CertManagerCertificateProfile#passphrase}
-  */
-  readonly passphrase?: string;
-}
-
-export function certManagerCertificateProfileEstConfigToTerraform(struct?: CertManagerCertificateProfileEstConfig | cdktf.IResolvable): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  return {
-    ca_chain: cdktf.stringToTerraform(struct!.caChain),
-    disable_bootstrap_ca_validation: cdktf.booleanToTerraform(struct!.disableBootstrapCaValidation),
-    passphrase: cdktf.stringToTerraform(struct!.passphrase),
-  }
-}
-
-
-export function certManagerCertificateProfileEstConfigToHclTerraform(struct?: CertManagerCertificateProfileEstConfig | cdktf.IResolvable): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  const attrs = {
-    ca_chain: {
-      value: cdktf.stringToHclTerraform(struct!.caChain),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "string",
-    },
-    disable_bootstrap_ca_validation: {
-      value: cdktf.booleanToHclTerraform(struct!.disableBootstrapCaValidation),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "boolean",
-    },
-    passphrase: {
-      value: cdktf.stringToHclTerraform(struct!.passphrase),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "string",
-    },
-  };
-
-  // remove undefined attributes
-  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
-}
-
-export class CertManagerCertificateProfileEstConfigOutputReference extends cdktf.ComplexObject {
-  private isEmptyObject = false;
-  private resolvableValue?: cdktf.IResolvable;
-
-  /**
-  * @param terraformResource The parent resource
-  * @param terraformAttribute The attribute on the parent resource this class is referencing
-  */
-  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
-    super(terraformResource, terraformAttribute, false);
+  public get countryInput() {
+    return this._country;
   }
 
-  public get internalValue(): CertManagerCertificateProfileEstConfig | cdktf.IResolvable | undefined {
-    if (this.resolvableValue) {
-      return this.resolvableValue;
-    }
-    let hasAnyValues = this.isEmptyObject;
-    const internalValueResult: any = {};
-    if (this._caChain !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.caChain = this._caChain;
-    }
-    if (this._disableBootstrapCaValidation !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.disableBootstrapCaValidation = this._disableBootstrapCaValidation;
-    }
-    if (this._passphrase !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.passphrase = this._passphrase;
-    }
-    return hasAnyValues ? internalValueResult : undefined;
+  // domain_components - computed: false, optional: true, required: false
+  private _domainComponents?: string[]; 
+  public get domainComponents() {
+    return this.getListAttribute('domain_components');
   }
-
-  public set internalValue(value: CertManagerCertificateProfileEstConfig | cdktf.IResolvable | undefined) {
-    if (value === undefined) {
-      this.isEmptyObject = false;
-      this.resolvableValue = undefined;
-      this._caChain = undefined;
-      this._disableBootstrapCaValidation = undefined;
-      this._passphrase = undefined;
-    }
-    else if (cdktf.Tokenization.isResolvable(value)) {
-      this.isEmptyObject = false;
-      this.resolvableValue = value;
-    }
-    else {
-      this.isEmptyObject = Object.keys(value).length === 0;
-      this.resolvableValue = undefined;
-      this._caChain = value.caChain;
-      this._disableBootstrapCaValidation = value.disableBootstrapCaValidation;
-      this._passphrase = value.passphrase;
-    }
+  public set domainComponents(value: string[]) {
+    this._domainComponents = value;
   }
-
-  // ca_chain - computed: false, optional: true, required: false
-  private _caChain?: string; 
-  public get caChain() {
-    return this.getStringAttribute('ca_chain');
-  }
-  public set caChain(value: string) {
-    this._caChain = value;
-  }
-  public resetCaChain() {
-    this._caChain = undefined;
+  public resetDomainComponents() {
+    this._domainComponents = undefined;
   }
   // Temporarily expose input value. Use with caution.
-  public get caChainInput() {
-    return this._caChain;
+  public get domainComponentsInput() {
+    return this._domainComponents;
   }
 
-  // disable_bootstrap_ca_validation - computed: true, optional: true, required: false
-  private _disableBootstrapCaValidation?: boolean | cdktf.IResolvable; 
-  public get disableBootstrapCaValidation() {
-    return this.getBooleanAttribute('disable_bootstrap_ca_validation');
+  // extended_key_usages - computed: false, optional: true, required: false
+  private _extendedKeyUsages?: string[]; 
+  public get extendedKeyUsages() {
+    return this.getListAttribute('extended_key_usages');
   }
-  public set disableBootstrapCaValidation(value: boolean | cdktf.IResolvable) {
-    this._disableBootstrapCaValidation = value;
+  public set extendedKeyUsages(value: string[]) {
+    this._extendedKeyUsages = value;
   }
-  public resetDisableBootstrapCaValidation() {
-    this._disableBootstrapCaValidation = undefined;
+  public resetExtendedKeyUsages() {
+    this._extendedKeyUsages = undefined;
   }
   // Temporarily expose input value. Use with caution.
-  public get disableBootstrapCaValidationInput() {
-    return this._disableBootstrapCaValidation;
+  public get extendedKeyUsagesInput() {
+    return this._extendedKeyUsages;
   }
 
-  // passphrase - computed: false, optional: true, required: false
-  private _passphrase?: string; 
-  public get passphrase() {
-    return this.getStringAttribute('passphrase');
+  // key_algorithm - computed: false, optional: true, required: false
+  private _keyAlgorithm?: string; 
+  public get keyAlgorithm() {
+    return this.getStringAttribute('key_algorithm');
   }
-  public set passphrase(value: string) {
-    this._passphrase = value;
+  public set keyAlgorithm(value: string) {
+    this._keyAlgorithm = value;
   }
-  public resetPassphrase() {
-    this._passphrase = undefined;
+  public resetKeyAlgorithm() {
+    this._keyAlgorithm = undefined;
   }
   // Temporarily expose input value. Use with caution.
-  public get passphraseInput() {
-    return this._passphrase;
-  }
-}
-export interface CertManagerCertificateProfileExternalConfigs {
-  /**
-  * Certificate template name for Azure AD CS
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#template CertManagerCertificateProfile#template}
-  */
-  readonly template?: string;
-}
-
-export function certManagerCertificateProfileExternalConfigsToTerraform(struct?: CertManagerCertificateProfileExternalConfigs | cdktf.IResolvable): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  return {
-    template: cdktf.stringToTerraform(struct!.template),
-  }
-}
-
-
-export function certManagerCertificateProfileExternalConfigsToHclTerraform(struct?: CertManagerCertificateProfileExternalConfigs | cdktf.IResolvable): any {
-  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
-  if (cdktf.isComplexElement(struct)) {
-    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
-  }
-  const attrs = {
-    template: {
-      value: cdktf.stringToHclTerraform(struct!.template),
-      isBlock: false,
-      type: "simple",
-      storageClassType: "string",
-    },
-  };
-
-  // remove undefined attributes
-  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
-}
-
-export class CertManagerCertificateProfileExternalConfigsOutputReference extends cdktf.ComplexObject {
-  private isEmptyObject = false;
-  private resolvableValue?: cdktf.IResolvable;
-
-  /**
-  * @param terraformResource The parent resource
-  * @param terraformAttribute The attribute on the parent resource this class is referencing
-  */
-  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
-    super(terraformResource, terraformAttribute, false);
+  public get keyAlgorithmInput() {
+    return this._keyAlgorithm;
   }
 
-  public get internalValue(): CertManagerCertificateProfileExternalConfigs | cdktf.IResolvable | undefined {
-    if (this.resolvableValue) {
-      return this.resolvableValue;
-    }
-    let hasAnyValues = this.isEmptyObject;
-    const internalValueResult: any = {};
-    if (this._template !== undefined) {
-      hasAnyValues = true;
-      internalValueResult.template = this._template;
-    }
-    return hasAnyValues ? internalValueResult : undefined;
+  // key_usages - computed: false, optional: true, required: false
+  private _keyUsages?: string[]; 
+  public get keyUsages() {
+    return this.getListAttribute('key_usages');
   }
-
-  public set internalValue(value: CertManagerCertificateProfileExternalConfigs | cdktf.IResolvable | undefined) {
-    if (value === undefined) {
-      this.isEmptyObject = false;
-      this.resolvableValue = undefined;
-      this._template = undefined;
-    }
-    else if (cdktf.Tokenization.isResolvable(value)) {
-      this.isEmptyObject = false;
-      this.resolvableValue = value;
-    }
-    else {
-      this.isEmptyObject = Object.keys(value).length === 0;
-      this.resolvableValue = undefined;
-      this._template = value.template;
-    }
+  public set keyUsages(value: string[]) {
+    this._keyUsages = value;
   }
-
-  // template - computed: false, optional: true, required: false
-  private _template?: string; 
-  public get template() {
-    return this.getStringAttribute('template');
-  }
-  public set template(value: string) {
-    this._template = value;
-  }
-  public resetTemplate() {
-    this._template = undefined;
+  public resetKeyUsages() {
+    this._keyUsages = undefined;
   }
   // Temporarily expose input value. Use with caution.
-  public get templateInput() {
-    return this._template;
+  public get keyUsagesInput() {
+    return this._keyUsages;
+  }
+
+  // locality - computed: false, optional: true, required: false
+  private _locality?: string; 
+  public get locality() {
+    return this.getStringAttribute('locality');
+  }
+  public set locality(value: string) {
+    this._locality = value;
+  }
+  public resetLocality() {
+    this._locality = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get localityInput() {
+    return this._locality;
+  }
+
+  // organization - computed: false, optional: true, required: false
+  private _organization?: string; 
+  public get organization() {
+    return this.getStringAttribute('organization');
+  }
+  public set organization(value: string) {
+    this._organization = value;
+  }
+  public resetOrganization() {
+    this._organization = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get organizationInput() {
+    return this._organization;
+  }
+
+  // organizational_unit - computed: false, optional: true, required: false
+  private _organizationalUnit?: string; 
+  public get organizationalUnit() {
+    return this.getStringAttribute('organizational_unit');
+  }
+  public set organizationalUnit(value: string) {
+    this._organizationalUnit = value;
+  }
+  public resetOrganizationalUnit() {
+    this._organizationalUnit = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get organizationalUnitInput() {
+    return this._organizationalUnit;
+  }
+
+  // signature_algorithm - computed: false, optional: true, required: false
+  private _signatureAlgorithm?: string; 
+  public get signatureAlgorithm() {
+    return this.getStringAttribute('signature_algorithm');
+  }
+  public set signatureAlgorithm(value: string) {
+    this._signatureAlgorithm = value;
+  }
+  public resetSignatureAlgorithm() {
+    this._signatureAlgorithm = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get signatureAlgorithmInput() {
+    return this._signatureAlgorithm;
+  }
+
+  // state - computed: false, optional: true, required: false
+  private _state?: string; 
+  public get state() {
+    return this.getStringAttribute('state');
+  }
+  public set state(value: string) {
+    this._state = value;
+  }
+  public resetState() {
+    this._state = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get stateInput() {
+    return this._state;
+  }
+
+  // ttl_days - computed: false, optional: true, required: false
+  private _ttlDays?: number; 
+  public get ttlDays() {
+    return this.getNumberAttribute('ttl_days');
+  }
+  public set ttlDays(value: number) {
+    this._ttlDays = value;
+  }
+  public resetTtlDays() {
+    this._ttlDays = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get ttlDaysInput() {
+    return this._ttlDays;
   }
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile infisical_cert_manager_certificate_profile}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile infisical_cert_manager_certificate_profile}
 */
 export class CertManagerCertificateProfile extends cdktf.TerraformResource {
 
@@ -479,7 +543,7 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerCertificateProfile resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerCertificateProfile to import
-  * @param importFromId The id of the existing CertManagerCertificateProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerCertificateProfile that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerCertificateProfile to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -491,7 +555,7 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/cert_manager_certificate_profile infisical_cert_manager_certificate_profile} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_certificate_profile infisical_cert_manager_certificate_profile} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -502,7 +566,7 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_certificate_profile',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -515,13 +579,9 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
     this._caId = config.caId;
     this._certificatePolicyId = config.certificatePolicyId;
     this._description = config.description;
-    this._enrollmentType = config.enrollmentType;
     this._issuerType = config.issuerType;
     this._name = config.name;
-    this._projectSlug = config.projectSlug;
-    this._apiConfig.internalValue = config.apiConfig;
-    this._estConfig.internalValue = config.estConfig;
-    this._externalConfigs.internalValue = config.externalConfigs;
+    this._defaults.internalValue = config.defaults;
   }
 
   // ==========
@@ -573,19 +633,6 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
     return this._description;
   }
 
-  // enrollment_type - computed: false, optional: false, required: true
-  private _enrollmentType?: string; 
-  public get enrollmentType() {
-    return this.getStringAttribute('enrollment_type');
-  }
-  public set enrollmentType(value: string) {
-    this._enrollmentType = value;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get enrollmentTypeInput() {
-    return this._enrollmentType;
-  }
-
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
@@ -620,65 +667,20 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
     return this._name;
   }
 
-  // project_slug - computed: false, optional: false, required: true
-  private _projectSlug?: string; 
-  public get projectSlug() {
-    return this.getStringAttribute('project_slug');
+  // defaults - computed: false, optional: true, required: false
+  private _defaults = new CertManagerCertificateProfileDefaultsOutputReference(this, "defaults");
+  public get defaults() {
+    return this._defaults;
   }
-  public set projectSlug(value: string) {
-    this._projectSlug = value;
+  public putDefaults(value: CertManagerCertificateProfileDefaults) {
+    this._defaults.internalValue = value;
   }
-  // Temporarily expose input value. Use with caution.
-  public get projectSlugInput() {
-    return this._projectSlug;
-  }
-
-  // api_config - computed: false, optional: true, required: false
-  private _apiConfig = new CertManagerCertificateProfileApiConfigOutputReference(this, "api_config");
-  public get apiConfig() {
-    return this._apiConfig;
-  }
-  public putApiConfig(value: CertManagerCertificateProfileApiConfig) {
-    this._apiConfig.internalValue = value;
-  }
-  public resetApiConfig() {
-    this._apiConfig.internalValue = undefined;
+  public resetDefaults() {
+    this._defaults.internalValue = undefined;
   }
   // Temporarily expose input value. Use with caution.
-  public get apiConfigInput() {
-    return this._apiConfig.internalValue;
-  }
-
-  // est_config - computed: false, optional: true, required: false
-  private _estConfig = new CertManagerCertificateProfileEstConfigOutputReference(this, "est_config");
-  public get estConfig() {
-    return this._estConfig;
-  }
-  public putEstConfig(value: CertManagerCertificateProfileEstConfig) {
-    this._estConfig.internalValue = value;
-  }
-  public resetEstConfig() {
-    this._estConfig.internalValue = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get estConfigInput() {
-    return this._estConfig.internalValue;
-  }
-
-  // external_configs - computed: false, optional: true, required: false
-  private _externalConfigs = new CertManagerCertificateProfileExternalConfigsOutputReference(this, "external_configs");
-  public get externalConfigs() {
-    return this._externalConfigs;
-  }
-  public putExternalConfigs(value: CertManagerCertificateProfileExternalConfigs) {
-    this._externalConfigs.internalValue = value;
-  }
-  public resetExternalConfigs() {
-    this._externalConfigs.internalValue = undefined;
-  }
-  // Temporarily expose input value. Use with caution.
-  public get externalConfigsInput() {
-    return this._externalConfigs.internalValue;
+  public get defaultsInput() {
+    return this._defaults.internalValue;
   }
 
   // =========
@@ -690,13 +692,9 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
       ca_id: cdktf.stringToTerraform(this._caId),
       certificate_policy_id: cdktf.stringToTerraform(this._certificatePolicyId),
       description: cdktf.stringToTerraform(this._description),
-      enrollment_type: cdktf.stringToTerraform(this._enrollmentType),
       issuer_type: cdktf.stringToTerraform(this._issuerType),
       name: cdktf.stringToTerraform(this._name),
-      project_slug: cdktf.stringToTerraform(this._projectSlug),
-      api_config: certManagerCertificateProfileApiConfigToTerraform(this._apiConfig.internalValue),
-      est_config: certManagerCertificateProfileEstConfigToTerraform(this._estConfig.internalValue),
-      external_configs: certManagerCertificateProfileExternalConfigsToTerraform(this._externalConfigs.internalValue),
+      defaults: certManagerCertificateProfileDefaultsToTerraform(this._defaults.internalValue),
     };
   }
 
@@ -720,12 +718,6 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
         type: "simple",
         storageClassType: "string",
       },
-      enrollment_type: {
-        value: cdktf.stringToHclTerraform(this._enrollmentType),
-        isBlock: false,
-        type: "simple",
-        storageClassType: "string",
-      },
       issuer_type: {
         value: cdktf.stringToHclTerraform(this._issuerType),
         isBlock: false,
@@ -738,29 +730,11 @@ export class CertManagerCertificateProfile extends cdktf.TerraformResource {
         type: "simple",
         storageClassType: "string",
       },
-      project_slug: {
-        value: cdktf.stringToHclTerraform(this._projectSlug),
-        isBlock: false,
-        type: "simple",
-        storageClassType: "string",
-      },
-      api_config: {
-        value: certManagerCertificateProfileApiConfigToHclTerraform(this._apiConfig.internalValue),
+      defaults: {
+        value: certManagerCertificateProfileDefaultsToHclTerraform(this._defaults.internalValue),
         isBlock: true,
         type: "struct",
-        storageClassType: "CertManagerCertificateProfileApiConfig",
-      },
-      est_config: {
-        value: certManagerCertificateProfileEstConfigToHclTerraform(this._estConfig.internalValue),
-        isBlock: true,
-        type: "struct",
-        storageClassType: "CertManagerCertificateProfileEstConfig",
-      },
-      external_configs: {
-        value: certManagerCertificateProfileExternalConfigsToHclTerraform(this._externalConfigs.internalValue),
-        isBlock: true,
-        type: "struct",
-        storageClassType: "CertManagerCertificateProfileExternalConfigs",
+        storageClassType: "CertManagerCertificateProfileDefaults",
       },
     };
 

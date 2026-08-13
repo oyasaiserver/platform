@@ -1,0 +1,34 @@
+name: Gakubuchi-Locker
+version: ${version}
+main: com.gakubuchilocker.GakubuchiLockerPlugin
+api-version: "1.21"
+description: 額縁をロックして保護するプラグイン
+authors:
+  - GakubuchiLocker
+
+commands:
+  gakubuchilock:
+    description: 額縁のLockモードを切り替える
+    usage: /gakubuchilock <on|off>
+    permission: gakubuchilocker.use
+    aliases: [glock]
+  gakubuchiunlock:
+    description: 額縁のUnlockモードを切り替える
+    usage: /gakubuchiunlock <on|off>
+    permission: gakubuchilocker.use
+    aliases: [gunlock]
+  gakubuchifinder:
+    description: 周囲の透明化されたロック済み額縁を赤いパーティクルで表示する
+    usage: /gakubuchifinder [radius]
+    permission: gakubuchilocker.use
+    aliases: [gfinder]
+  gakubuchitoumei:
+    description: 額縁設置時の自動透明化モードを切り替える
+    usage: /gakubuchitoumei <on|off>
+    permission: gakubuchilocker.use
+    aliases: [gtoumei]
+
+permissions:
+  gakubuchilocker.use:
+    description: gakubuchilocker コマンドの使用を許可
+    default: true

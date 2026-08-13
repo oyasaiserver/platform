@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionPostgresConfig extends cdktf.TerraformMetaArgument
   /**
   * The credentials for the PostgreSQL App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#credentials AppConnectionPostgres#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#credentials AppConnectionPostgres#credentials}
   */
   readonly credentials: AppConnectionPostgresCredentials;
   /**
   * An optional description for the PostgreSQL App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#description AppConnectionPostgres#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#description AppConnectionPostgres#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with PostgreSQL. Possible values are: username-and-password
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#method AppConnectionPostgres#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#method AppConnectionPostgres#method}
   */
   readonly method: string;
   /**
   * The name of the PostgreSQL App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#name AppConnectionPostgres#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#name AppConnectionPostgres#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#project_id AppConnectionPostgres#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#project_id AppConnectionPostgres#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,49 +42,49 @@ export interface AppConnectionPostgresCredentials {
   /**
   * The name of the database to connect to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#database AppConnectionPostgres#database}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#database AppConnectionPostgres#database}
   */
   readonly database: string;
   /**
   * The hostname of the database server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#host AppConnectionPostgres#host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#host AppConnectionPostgres#host}
   */
   readonly host: string;
   /**
   * The password to connect to the database with.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#password AppConnectionPostgres#password}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#password AppConnectionPostgres#password}
   */
   readonly password: string;
   /**
   * The port number of the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#port AppConnectionPostgres#port}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#port AppConnectionPostgres#port}
   */
   readonly port?: number;
   /**
   * The SSL certificate to use for connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#ssl_certificate AppConnectionPostgres#ssl_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#ssl_certificate AppConnectionPostgres#ssl_certificate}
   */
   readonly sslCertificate?: string;
   /**
   * Whether or not to use SSL when connecting to the database.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#ssl_enabled AppConnectionPostgres#ssl_enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#ssl_enabled AppConnectionPostgres#ssl_enabled}
   */
   readonly sslEnabled?: boolean | cdktf.IResolvable;
   /**
   * Whether or not to reject unauthorized SSL certificates.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#ssl_reject_unauthorized AppConnectionPostgres#ssl_reject_unauthorized}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#ssl_reject_unauthorized AppConnectionPostgres#ssl_reject_unauthorized}
   */
   readonly sslRejectUnauthorized?: boolean | cdktf.IResolvable;
   /**
   * The username to connect to the database with.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#username AppConnectionPostgres#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#username AppConnectionPostgres#username}
   */
   readonly username: string;
 }
@@ -369,7 +369,7 @@ export class AppConnectionPostgresCredentialsOutputReference extends cdktf.Compl
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres infisical_app_connection_postgres}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres infisical_app_connection_postgres}
 */
 export class AppConnectionPostgres extends cdktf.TerraformResource {
 
@@ -385,7 +385,7 @@ export class AppConnectionPostgres extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionPostgres resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionPostgres to import
-  * @param importFromId The id of the existing AppConnectionPostgres that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionPostgres that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionPostgres to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -397,7 +397,7 @@ export class AppConnectionPostgres extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/app_connection_postgres infisical_app_connection_postgres} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_postgres infisical_app_connection_postgres} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -408,7 +408,7 @@ export class AppConnectionPostgres extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_postgres',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

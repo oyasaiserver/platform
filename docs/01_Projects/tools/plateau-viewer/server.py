@@ -85,7 +85,9 @@ CITYGML_DIR = _resolve_citygml_dir()
 MC_SCALE = float(os.environ.get("CSM_MC_SCALE", "1.5"))
 LAT_TO_M = 111320.0
 AXIS_CONFIDENCE_MIN = 0.35
-COMMAND_PREFIX = "/csm load "
+COMMAND_PREFIX = "/.pl load "
+COMMAND64_PREFIX = "/.pl load64 "
+PLAYER_COMMAND_LIMIT = 250
 COMMAND_BLOCK_LIMIT = 65536
 BASE997_MARKER = "$"
 BASE997_SEPARATOR = "~"
@@ -613,6 +615,76 @@ def _encode_base997(data: bytes) -> str:
     return f"{BASE997_MARKER}{len(data)}{BASE997_SEPARATOR}{encoded}"
 
 
+def _base36(value: int) -> str:
+    chars = "0123456789abcdefghijklmnopqrstuvwxyz"
+    if value == 0:
+        return "0"
+    out = []
+    while value:
+        value, rem = divmod(value, 36)
+        out.append(chars[rem])
+    return "".join(reversed(out))
+
+
+def _split_payload_commands(payload: str, command_limit: int = PLAYER_COMMAND_LIMIT) -> list[str]:
+    payload_id = "p" + _base36(zlib.crc32(payload.encode("utf-8")) & 0xFFFFFFFF)
+
+    def build_chunks(assumed_total: int) -> list[str]:
+        chunks = []
+        pos = 0
+        index = 1
+        while pos < len(payload):
+            prefix = f"/.pl p {payload_id} {index}/{assumed_total} "
+            capacity = command_limit - len(prefix)
+            if capacity <= 0:
+                raise ValueError("分割コマンドのヘッダーが長すぎます")
+            chunks.append(payload[pos : pos + capacity])
+            pos += capacity
+            index += 1
+        return chunks
+
+    total = 1
+    while True:
+        chunks = build_chunks(total)
+        if len(chunks) == total:
+            break
+        total = len(chunks)
+
+    commands = [
+        f"/.pl p {payload_id} {index}/{total} {chunk}"
+        for index, chunk in enumerate(chunks, start=1)
+    ]
+    commands.append(f"/.pl r {payload_id}")
+
+    for command in commands:
+        if len(command) > command_limit:
+            raise ValueError(f"分割後のコマンドが {command_limit} 文字を超えています")
+    return commands
+
+
+def _copyable_payload_command(payload: str) -> dict:
+    direct_command = f"{COMMAND_PREFIX}{payload}"
+    if len(direct_command) <= PLAYER_COMMAND_LIMIT:
+        return {
+            "command": direct_command,
+            "direct_command": direct_command,
+            "command_mode": "single",
+            "command_lines": [direct_command],
+            "command_line_count": 1,
+            "player_command_limit": PLAYER_COMMAND_LIMIT,
+        }
+
+    commands = _split_payload_commands(payload)
+    return {
+        "command": "\n".join(commands),
+        "direct_command": direct_command,
+        "command_mode": "split",
+        "command_lines": commands,
+        "command_line_count": len(commands),
+        "player_command_limit": PLAYER_COMMAND_LIMIT,
+    }
+
+
 def _build_chat_payload(geom: dict) -> dict:
     surfaces, transform_meta = _transform_surfaces(geom)
     if not surfaces:
@@ -648,21 +720,28 @@ def _build_chat_payload(geom: dict) -> dict:
     compressed = selected["compressed"]
     payload = selected["payload"]
     payload64 = base64.urlsafe_b64encode(compressed).rstrip(b"=").decode("ascii")
-    command = f"{COMMAND_PREFIX}{payload}"
-    command64 = f"{COMMAND_PREFIX}{payload64}"
-    command_length = len(command)
+    command_info = _copyable_payload_command(payload)
+    direct_command = command_info["direct_command"]
+    command64 = f"{COMMAND64_PREFIX}{payload64}"
 
     return {
         "schema": selected_schema,
         "version": 1,
         "encoding": "base997",
-        "command": command,
+        "command": command_info["command"],
+        "direct_command": direct_command,
         "command64": command64,
+        "command_mode": command_info["command_mode"],
+        "command_lines": command_info["command_lines"],
+        "command_line_count": command_info["command_line_count"],
         "payload": payload,
         "payload64": payload64,
-        "command_length": command_length,
+        "command_length": len(command_info["command"]),
+        "direct_command_length": len(direct_command),
         "command64_length": len(command64),
-        "fits_command_block": command_length <= COMMAND_BLOCK_LIMIT,
+        "fits_player_command": len(direct_command) <= PLAYER_COMMAND_LIMIT,
+        "player_command_limit": command_info["player_command_limit"],
+        "fits_command_block": len(direct_command) <= COMMAND_BLOCK_LIMIT,
         "limit": COMMAND_BLOCK_LIMIT,
         "columns": len(columns),
         "boxes": len(boxes),

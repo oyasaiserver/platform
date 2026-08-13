@@ -1,14 +1,21 @@
 package com.github.srain3.sociallikes.command
 
+import com.github.srain3.sociallikes.Events
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
 import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.block.Sign
+import org.bukkit.block.sign.Side
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.BlockStateMeta
+import org.bukkit.persistence.PersistentDataType
 
 object SLSignGet : CommandExecutor {
   override fun onCommand(
@@ -29,15 +36,8 @@ object SLSignGet : CommandExecutor {
               return true
             }
     if (slData.owner == sender.uniqueId || sender.isOp) {
-      if (args.size == 2) {
-        if (args[1].lowercase() == "hanging") {
-          genSignItem(slData, sender, true)
-        } else {
-          genSignItem(slData, sender, false)
-        }
-      } else {
-        genSignItem(slData, sender, false)
-      }
+      val requestedHanging = args.getOrNull(1)?.let { it.lowercase() == "hanging" }
+      genSignItem(slData, sender, requestedHanging)
       sender.sendMessage(
           Tools.socialLikesLOGO + "&r Like看板のアイテムを渡しました! 設置して/slupdateを行ってください".color()
       )
@@ -47,48 +47,59 @@ object SLSignGet : CommandExecutor {
     return true
   }
 
-  private fun genSignItem(slData: SLData, player: Player, hanging: Boolean) {
-    if (slData.check) {
-      Bukkit.dispatchCommand(
-          Bukkit.getConsoleSender(),
-          "minecraft:give ${player.name} ${
-          if (hanging) {
-            "oak_hanging_sign"
-          } else {
-            "oak_sign"
-          }
-        }[item_name='\"${escapeForNBT(slData.title)}\"',lore=['[{\"color\":\"gray\",\"text\":\"設置後に\"},{\"color\":\"yellow\",\"text\":\"/slupdate\"}]'],minecraft:block_entity_data={PublicBukkitValues:{\"sociallikes3:sociallikes_id\":${slData.id}},id:\"minecraft:sign\",is_waxed:1b,front_text:{messages:[[{\"text\":\"(\",\"color\":\"dark_gray\"},{\"text\":\"Social\",\"color\":\"dark_purple\"},{\"text\":\"Likes\",\"color\":\"gray\"},{\"text\":\")\",\"color\":\"dark_gray\"}],{\"text\":\"${
-          escapeForNBT(
-            slData.title
-          )
-        }\",\"color\":\"green\"},{\"text\":\"${
-          Bukkit.getOfflinePlayer(
-            slData.owner
-          ).name
-        }\",\"color\":\"white\"},[{\"text\":\"Likes\",\"color\":\"gray\"},{\"text\":\":\",\"color\":\"dark_gray\"},{\"text\":\"${slData.likes.count()}\",\"color\":\"gold\"},{\"text\":\" ✓\",\"color\":\"yellow\"}]]}}] 1",
-      )
-    } else {
-      Bukkit.dispatchCommand(
-          Bukkit.getConsoleSender(),
-          "minecraft:give ${player.name} ${
-          if (hanging) {
-            "oak_hanging_sign"
-          } else {
-            "oak_sign"
-          }
-        }[item_name='\"${escapeForNBT(slData.title)}\"',lore=['[{\"color\":\"gray\",\"text\":\"設置後に\"},{\"color\":\"yellow\",\"text\":\"/slupdate\"}]'],minecraft:block_entity_data={PublicBukkitValues:{\"sociallikes3:sociallikes_id\":${slData.id}},id:\"minecraft:sign\",is_waxed:1b,front_text:{messages:[[{\"text\":\"(\",\"color\":\"dark_gray\"},{\"text\":\"Social\",\"color\":\"dark_purple\"},{\"text\":\"Likes\",\"color\":\"gray\"},{\"text\":\")\",\"color\":\"dark_gray\"}],{\"text\":\"${
-          escapeForNBT(
-            slData.title
-          )
-        }\",\"color\":\"green\"},{\"text\":\"${
-          Bukkit.getOfflinePlayer(
-            slData.owner
-          ).name
-        }\",\"color\":\"white\"},[{\"text\":\"Likes\",\"color\":\"gray\"},{\"text\":\":\",\"color\":\"dark_gray\"},{\"text\":\"${slData.likes.count()}\",\"color\":\"gold\"}]]}}] 1",
-      )
-    }
+  private fun genSignItem(slData: SLData, player: Player, requestedHanging: Boolean?) {
+    val itemMaterial = resolveSignItemMaterial(slData, requestedHanging)
+    val item = ItemStack(itemMaterial)
+    val meta = item.itemMeta as? BlockStateMeta ?: return
+    val signState = meta.blockState as? Sign ?: return
+
+    writeSLSignLines(signState, slData)
+    signState.isWaxed = true
+    signState.persistentDataContainer.set(
+        Events.slSignItemIdKey,
+        PersistentDataType.INTEGER,
+        slData.id,
+    )
+    meta.blockState = signState
+    meta.persistentDataContainer.set(Events.slSignItemIdKey, PersistentDataType.INTEGER, slData.id)
+    meta.setDisplayName("&a${slData.title}".color())
+    meta.lore = listOf("&7設置後に&e/slupdate".color())
+    item.itemMeta = meta
+
+    player.inventory.addItem(item)
   }
 
-  private fun escapeForNBT(input: String): String =
-      input.replace("\\", "\\\\").replace("\"", "\\\"").replace("'", "\\'").replace("§", "\\u00A7")
+  private fun resolveSignItemMaterial(slData: SLData, requestedHanging: Boolean?): Material {
+    val sourceMaterial = sourceSignMaterial(slData)
+    val woodName = sourceMaterial?.woodName() ?: "OAK"
+    val hanging = requestedHanging ?: sourceMaterial?.isHangingSignMaterial() ?: false
+    return Material.matchMaterial("$woodName${if (hanging) "_HANGING_SIGN" else "_SIGN"}")
+        ?: if (hanging) Material.OAK_HANGING_SIGN else Material.OAK_SIGN
+  }
+
+  private fun sourceSignMaterial(slData: SLData): Material? {
+    slData.loc.world ?: return null
+    val sourceState = slData.loc.block.state
+    return if (sourceState is Sign) sourceState.type else null
+  }
+
+  private fun Material.woodName(): String =
+      when {
+        name.endsWith("_WALL_HANGING_SIGN") -> name.removeSuffix("_WALL_HANGING_SIGN")
+        name.endsWith("_HANGING_SIGN") -> name.removeSuffix("_HANGING_SIGN")
+        name.endsWith("_WALL_SIGN") -> name.removeSuffix("_WALL_SIGN")
+        name.endsWith("_SIGN") -> name.removeSuffix("_SIGN")
+        else -> "OAK"
+      }
+
+  private fun Material.isHangingSignMaterial(): Boolean = name.contains("HANGING_SIGN")
+
+  private fun writeSLSignLines(sign: Sign, slData: SLData) {
+    sign.getSide(Side.FRONT).apply {
+      setLine(0, Tools.socialLikesLOGO)
+      setLine(1, "&a".color() + slData.title)
+      setLine(2, "&f${Bukkit.getOfflinePlayer(slData.owner).name}".color())
+      setLine(3, "&7Likes&8: &6${slData.likes.count()}${if (slData.check){" &e✓"}else{""}}".color())
+    }
+  }
 }

@@ -3,7 +3,6 @@
   lib,
   fetchurl,
   oyasai-plugins,
-  writeShellApplication,
 }:
 
 let
@@ -12,46 +11,34 @@ let
   final = package-lock2nix.mkNpmModule {
     src = ./.;
 
-    passthru = {
-      update = writeShellApplication {
-        name = "plugin-registry-update";
-        runtimeInputs = [ final ];
-        text = ''
-          <${./registry.json} plugin-registry-lock --mc-version "$1" >lock.json
-        '';
-      };
+    meta.mainProgram = "lock";
 
-      forPlatform = (
-        platform:
+    passthru.forPlatform =
+      platform:
+      let
+        staticFrom =
+          dir:
+          lib.optionalAttrs (builtins.pathExists dir) (
+            lib.mapAttrs' (name: _: lib.nameValuePair (lib.removeSuffix ".jar" name) (dir + "/${name}")) (
+              lib.filterAttrs (_: t: t == "regular") (builtins.readDir dir)
+            )
+          );
+      in
+      if platform == "velocity" then
+        let
+          fromLock = lib.mapAttrs (id: plugins: fetchurl (plugins.velocity // { name = "${id}.jar"; })) (
+            lib.filterAttrs (_: p: p ? velocity) lock
+          );
+        in
+        fromLock // staticFrom (./static + "/velocity")
+      else
+        version:
         let
           fromLock = lib.mapAttrs (
-            id: platforms: fetchurl (platforms.${platform} // { name = "${id}.jar"; })
-          ) (lib.filterAttrs (_: lib.hasAttr platform) lock);
-
-          mkRegistryFromDir =
-            dir:
-            let
-              fromStatic = lib.optionalAttrs (builtins.pathExists dir) (
-                lib.mapAttrs' (
-                  name: _:
-                  let
-                    id = lib.removeSuffix ".jar" name;
-                  in
-                  lib.nameValuePair id (dir + "/${name}")
-                ) (builtins.readDir dir)
-              );
-            in
-            fromLock // fromStatic;
-
-          dir = ./static + "/${platform}";
+            id: plugins: fetchurl (plugins.${platform}.${version} // { name = "${id}.jar"; })
+          ) (lib.filterAttrs (_: p: lib.hasAttr version (p.${platform} or { })) lock);
         in
-        if platform == "velocity" then
-          mkRegistryFromDir dir
-        else
-          (version: (mkRegistryFromDir (dir + "/${version}")) // oyasai-plugins)
-
-      );
-    };
+        fromLock // staticFrom (./static + "/${platform}/${version}") // oyasai-plugins;
   };
 in
 final

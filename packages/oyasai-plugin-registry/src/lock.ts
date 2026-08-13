@@ -1,9 +1,8 @@
 #!/usr/bin/env node --enable-source-maps
 import { ok } from "node:assert/strict";
-import { createHash } from "node:crypto";
-import { argv, stderr, stdin } from "node:process";
-import { json } from "node:stream/consumers";
-import { parseArgs } from "node:util";
+import { hash } from "node:crypto";
+import { readFileSync, writeFileSync } from "node:fs";
+import { argv, stderr } from "node:process";
 
 type RegistryEntry =
   | { type: "modrinth"; slug: string; skipVersionCheck?: boolean }
@@ -13,12 +12,18 @@ type RegistryEntry =
   | { type: "url"; url: string };
 
 type LockEntry = { url: string; hash: string };
-type LockFile = Record<string, Record<string, LockEntry>>;
+type LockFile = Record<
+  string,
+  Record<string, LockEntry | Record<string, LockEntry>>
+>;
+
+// Platforms with no MC version concept
+const UNVERSIONED_PLATFORMS = new Set(["velocity"]);
 
 async function resolveStableUrl(
   id: string,
   platform: string,
-  mcVersion: string,
+  mcVersion: string | undefined,
   entry: RegistryEntry,
 ): Promise<string> {
   switch (entry.type) {
@@ -26,26 +31,22 @@ async function resolveStableUrl(
       return `https://github.com/${entry.owner}/${entry.repo}/releases/download/${entry.tag}/${entry.name}`;
 
     case "modrinth": {
-      const queryModrinth = async (withVersion: boolean) => {
-        const url = new URL(
-          `https://api.modrinth.com/v2/project/${entry.slug}/version`,
-        );
-        if (withVersion)
-          url.searchParams.set("game_versions", JSON.stringify([mcVersion]));
-        url.searchParams.set("loaders", JSON.stringify([platform]));
-        const results = (await (await fetch(url)).json()) as {
-          files: { url: string }[];
-        }[];
-        return results
-          .flatMap((v) => v.files)
-          .map((f) => f.url)
-          .at(0);
-      };
-      const url =
-        (entry.skipVersionCheck ? undefined : await queryModrinth(true)) ??
-        (await queryModrinth(false));
-      ok(url, `No modrinth URL for ${id} (${platform})`);
-      return url;
+      const url = new URL(
+        `https://api.modrinth.com/v2/project/${entry.slug}/version`,
+      );
+      if (!entry.skipVersionCheck) {
+        url.searchParams.set("game_versions", JSON.stringify([mcVersion]));
+      }
+      url.searchParams.set("loaders", JSON.stringify([platform]));
+      const results = (await (await fetch(url)).json()) as {
+        files: { url: string }[];
+      }[];
+      const resolved = results
+        .flatMap((v) => v.files)
+        .map((f) => f.url)
+        .at(0);
+      ok(resolved, `No modrinth URL for ${id} (${platform})`);
+      return resolved;
     }
 
     case "hangar": {
@@ -55,7 +56,8 @@ async function resolveStableUrl(
         );
         url.searchParams.set("platform", platform.toUpperCase());
         url.searchParams.set("limit", "1");
-        if (withVersion) url.searchParams.set("platformVersion", mcVersion);
+        if (withVersion && mcVersion)
+          url.searchParams.set("platformVersion", mcVersion);
         const response = (await (await fetch(url)).json()) as {
           result?: {
             downloads: Record<
@@ -68,8 +70,9 @@ async function resolveStableUrl(
         return d?.downloadUrl ?? d?.externalUrl;
       };
       const url =
-        (entry.skipVersionCheck ? undefined : await queryHangar(true)) ??
-        (await queryHangar(false));
+        (!mcVersion || entry.skipVersionCheck
+          ? undefined
+          : await queryHangar(true)) ?? (await queryHangar(false));
       ok(url, `No hangar URL for ${id} (${platform})`);
       return url;
     }
@@ -100,29 +103,25 @@ const hashAlgo = "sha256" as const;
 
 async function computeHash(url: string): Promise<string> {
   const response = await fetch(url);
-  const buffer = await response.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
+  const bytes = await response.bytes();
   ok(
     zipMagic.every((b, i) => bytes[i] === b),
     `Expected a JAR (ZIP) file but got wrong magic bytes at ${url}`,
   );
-  const digest = createHash(hashAlgo).update(bytes).digest("base64");
+  const digest = hash(hashAlgo, bytes, "base64");
   return `${hashAlgo}-${digest}`;
 }
 
 if (import.meta.main) {
-  const {
-    values: { "mc-version": mcVersion },
-  } = parseArgs({
-    args: argv.slice(2),
-    options: { "mc-version": { type: "string" } },
-  });
+  const mcVersions = argv.slice(2);
   ok(
-    mcVersion,
-    "Usage: plugin-registry-lock --mc-version <version> < registry.json > lock.json",
+    mcVersions.length > 0,
+    "Usage: plugin-registry-lock <mc-version> [mc-version...]",
   );
 
-  const registry = (await json(stdin)) as Record<
+  const registryPath = new URL("../registry.json", import.meta.url);
+
+  const registry = JSON.parse(readFileSync(registryPath, "utf8")) as Record<
     string,
     Record<string, RegistryEntry>
   >;
@@ -131,12 +130,26 @@ if (import.meta.main) {
 
   for (const [id, platforms] of Object.entries(registry)) {
     for (const [platform, entry] of Object.entries(platforms)) {
-      stderr.write(`lock  ${id}@${platform} ... `);
-      const url = await resolveStableUrl(id, platform, mcVersion, entry);
-      const hash = await computeHash(url);
       lock[id] ??= {};
-      lock[id][platform] = { url, hash };
-      stderr.write("done\n");
+      if (UNVERSIONED_PLATFORMS.has(platform)) {
+        stderr.write(`lock  ${id}@${platform} ... `);
+        const url = await resolveStableUrl(id, platform, undefined, entry);
+        const hash = await computeHash(url);
+        lock[id][platform] = { url, hash };
+        stderr.write("done\n");
+      } else {
+        const versionedEntry = (lock[id][platform] ??= {}) as Record<
+          string,
+          LockEntry
+        >;
+        for (const mcVersion of mcVersions) {
+          stderr.write(`lock  ${id}@${platform}@${mcVersion} ... `);
+          const url = await resolveStableUrl(id, platform, mcVersion, entry);
+          const hash = await computeHash(url);
+          versionedEntry[mcVersion] = { url, hash };
+          stderr.write("done\n");
+        }
+      }
     }
   }
 

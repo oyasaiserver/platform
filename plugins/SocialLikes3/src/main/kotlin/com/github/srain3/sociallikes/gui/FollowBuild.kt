@@ -23,7 +23,6 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
 
 object FollowBuild : Listener {
@@ -259,14 +258,13 @@ object FollowBuild : Listener {
     val pane = PaginatedPane(9, 5)
     val headItemList = mutableListOf<ItemStack>()
     userList.forEach {
-      val item = ItemStack(Material.PLAYER_HEAD)
-      val meta = item.itemMeta as SkullMeta
-      val offPlayer = Bukkit.getOfflinePlayer(it)
-      meta.setOwningPlayer(offPlayer)
+      val name = SLPlayerHeads.resolveName(it) ?: "Unknown"
+      val item = SLPlayerHeads.createHead(it, name)
+      val meta = item.itemMeta ?: return@forEach
       meta.persistentDataContainer.set(
           followKey,
           PersistentDataType.STRING,
-          offPlayer.name ?: "NULL",
+          name,
       )
       item.itemMeta = meta
       headItemList.add(item)

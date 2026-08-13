@@ -11,11 +11,13 @@ import com.sk89q.worldedit.world.block.BlockState
 import com.sk89q.worldedit.world.block.BlockTypes
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.shared.ArgSuggest
 import icu.oyasai.citiesskymine.util.MessageUtil
 import icu.oyasai.citiesskymine.worldedit.CsmEditSession
 import java.io.ByteArrayInputStream
 import java.math.BigInteger
 import java.util.Base64
+import java.util.UUID
 import java.util.zip.InflaterInputStream
 import kotlin.math.roundToInt
 import org.bukkit.World
@@ -32,6 +34,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
   private val base997Alphabet = buildBase997Alphabet()
   private val base997Index = base997Alphabet.withIndex().associate { it.value to it.index }
+  private val splitPayloads = HashMap<UUID, MutableMap<String, SplitPayloadBuffer>>()
 
   override fun onCommand(
       sender: CommandSender,
@@ -48,6 +51,18 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     if (sub == "undo") {
       MessageUtil.info(sender, "payload 配置の取り消しは FAWE の //undo を使ってください。")
       return true
+    }
+
+    if (sub == "part" || sub == "p" || sub == "chunk") {
+      return handlePayloadPart(sender, args)
+    }
+
+    if (sub == "run" || sub == "r" || sub == "paste") {
+      return handlePayloadRun(sender, command, label, args)
+    }
+
+    if (sub == "clear" || sub == "c") {
+      return handlePayloadClear(sender, args)
     }
 
     if (sub != "load" && sub != "load64") {
@@ -188,7 +203,21 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       args: Array<String>,
   ): List<String> {
     return when (args.size) {
-      1 -> listOf("load", "load64", "help").filter { it.startsWith(args[0], ignoreCase = true) }
+      1 ->
+          listOf("load", "load64", "p", "r", "clear", "help").filter {
+            it.startsWith(args[0], ignoreCase = true)
+          }
+      2 ->
+          if (
+              args[0].equals("r", ignoreCase = true) ||
+                  args[0].equals("run", ignoreCase = true) ||
+                  args[0].equals("clear", ignoreCase = true) ||
+                  args[0].equals("c", ignoreCase = true)
+          ) {
+            splitPayloadIds(sender).filter { it.startsWith(args[1], ignoreCase = true) }
+          } else {
+            emptyList()
+          }
       3 ->
           if (
               args[0].equals("load", ignoreCase = true) ||
@@ -224,7 +253,8 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
     }
 
     val suggestions = ArrayList<String>()
-    if (!hasRotation) suggestions.addAll(listOf("0", "1", "2", "3"))
+    if (!hasRotation)
+        suggestions.addAll(ArgSuggest.positional("rotation", "0-3", listOf("0", "1", "2", "3")))
     if (!hasSide) suggestions.addAll(listOf("L", "R"))
     if (!hasRotation && !hasSide) {
       suggestions.addAll(
@@ -249,7 +279,7 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       )
     }
     if (!hasHollow) suggestions.addAll(listOf("hollow", "solid"))
-    return suggestions.filter { it.startsWith(args.last(), ignoreCase = true) }
+    return ArgSuggest.filterSuggestions(suggestions, args.last())
   }
 
   private fun showHelp(sender: CommandSender) {
@@ -261,7 +291,152 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         "/csm payload load <payload> [0-3] [L|R] [hollow|solid]",
         "建物回転、プレイヤー基準の左右、hollowを指定",
     )
+    MessageUtil.helpEntry(sender, "/.pl p <id> <番号>/<総数> <payload片>", "長いpayloadを分割登録")
+    MessageUtil.helpEntry(sender, "/.pl r <id> [0-3] [L|R] [hollow|solid]", "分割payloadを結合して配置")
+    MessageUtil.helpEntry(sender, "/.pl clear [id]", "分割payloadの一時保存を削除")
     MessageUtil.helpEntry(sender, "//undo", "直前のpayload配置をFAWEで取り消し")
+  }
+
+  private fun handlePayloadPart(sender: CommandSender, args: Array<String>): Boolean {
+    if (!plugin.access.require(sender, CommandKey.LOAD)) return true
+    val player =
+        sender as? Player
+            ?: run {
+              MessageUtil.error(sender, "分割payloadはプレイヤーが実行してください。")
+              return true
+            }
+
+    cleanupSplitPayloads(player.uniqueId)
+
+    if (args.size != 4) {
+      MessageUtil.error(sender, "使い方: /.pl p <id> <番号>/<総数> <payload片>")
+      return true
+    }
+
+    val id = args[1]
+    if (!isValidSplitPayloadId(id)) {
+      MessageUtil.error(sender, "id は英数字、_、- の32文字以内で指定してください。")
+      return true
+    }
+
+    val indexTotal = args[2].split("/", limit = 2)
+    if (indexTotal.size != 2) {
+      MessageUtil.error(sender, "番号は 1/3 のように <番号>/<総数> で指定してください。")
+      return true
+    }
+    val index = indexTotal[0].toIntOrNull()
+    val total = indexTotal[1].toIntOrNull()
+    if (index == null || total == null || total !in 1..MAX_SPLIT_PARTS || index !in 1..total) {
+      MessageUtil.error(sender, "番号または総数が不正です。総数の上限は $MAX_SPLIT_PARTS です。")
+      return true
+    }
+
+    val part = args[3]
+    if (part.isBlank()) {
+      MessageUtil.error(sender, "payload片が空です。")
+      return true
+    }
+
+    val buffers = splitPayloads.getOrPut(player.uniqueId) { HashMap() }
+    val buffer = buffers[id]
+    if (buffer != null && buffer.total != total) {
+      MessageUtil.error(sender, "同じ id で総数が異なります。やり直す場合は /.pl clear $id を実行してください。")
+      return true
+    }
+
+    val nextBuffer =
+        buffer ?: SplitPayloadBuffer(total, Array(total) { null }, System.currentTimeMillis())
+    nextBuffer.parts[index - 1] = part
+    buffers[id] = nextBuffer
+
+    val received = nextBuffer.parts.count { it != null }
+    if (received == total) {
+      MessageUtil.success(sender, "分割payload $id を受信しました。実行: /.pl r $id")
+    } else {
+      MessageUtil.info(sender, "分割payload $id: $received/$total を受信しました。")
+    }
+    return true
+  }
+
+  private fun handlePayloadRun(
+      sender: CommandSender,
+      command: Command,
+      label: String,
+      args: Array<String>,
+  ): Boolean {
+    if (!plugin.access.require(sender, CommandKey.LOAD)) return true
+    val player =
+        sender as? Player
+            ?: run {
+              MessageUtil.error(sender, "分割payloadはプレイヤーが実行してください。")
+              return true
+            }
+
+    cleanupSplitPayloads(player.uniqueId)
+
+    if (args.size < 2) {
+      MessageUtil.error(sender, "使い方: /.pl r <id> [0-3] [L|R] [hollow|solid]")
+      return true
+    }
+
+    val id = args[1]
+    val buffer = splitPayloads[player.uniqueId]?.get(id)
+    if (buffer == null) {
+      MessageUtil.error(sender, "分割payload $id が見つかりません。")
+      return true
+    }
+    val missing = buffer.parts.withIndex().filter { it.value == null }.map { it.index + 1 }
+    if (missing.isNotEmpty()) {
+      MessageUtil.error(sender, "分割payload $id は未完了です。未受信: ${missing.joinToString(",")}")
+      return true
+    }
+
+    val payload = buffer.parts.joinToString(separator = "") { it ?: "" }
+    if (payload.length > MAX_SPLIT_PAYLOAD_CHARS) {
+      MessageUtil.error(sender, "payload が長すぎます: ${payload.length} chars")
+      return true
+    }
+
+    val loadArgs = arrayOf("load", payload) + args.drop(2).toTypedArray()
+    return onCommand(sender, command, label, loadArgs)
+  }
+
+  private fun handlePayloadClear(sender: CommandSender, args: Array<String>): Boolean {
+    val player =
+        sender as? Player
+            ?: run {
+              MessageUtil.error(sender, "分割payloadはプレイヤーが実行してください。")
+              return true
+            }
+    val buffers = splitPayloads[player.uniqueId]
+    if (args.size >= 2) {
+      val removed = buffers?.remove(args[1]) != null
+      if (buffers != null && buffers.isEmpty()) splitPayloads.remove(player.uniqueId)
+      MessageUtil.info(
+          sender,
+          if (removed) "分割payload ${args[1]} を削除しました。" else "分割payload ${args[1]} はありません。",
+      )
+      return true
+    }
+    splitPayloads.remove(player.uniqueId)
+    MessageUtil.info(sender, "分割payloadの一時保存を削除しました。")
+    return true
+  }
+
+  private fun splitPayloadIds(sender: CommandSender): List<String> {
+    val player = sender as? Player ?: return emptyList()
+    cleanupSplitPayloads(player.uniqueId)
+    return splitPayloads[player.uniqueId]?.keys?.sorted().orEmpty()
+  }
+
+  private fun isValidSplitPayloadId(id: String): Boolean =
+      id.length in 1..32 && id.all { it.isLetterOrDigit() || it == '_' || it == '-' }
+
+  private fun cleanupSplitPayloads(playerId: UUID) {
+    val buffers = splitPayloads[playerId] ?: return
+    val now = System.currentTimeMillis()
+    buffers.entries.removeIf { now - it.value.createdAtMillis > SPLIT_PAYLOAD_TTL_MILLIS }
+    if (buffers.isEmpty()) splitPayloads.remove(playerId)
   }
 
   private fun placementContext(sender: CommandSender): PlacementContext? {
@@ -561,6 +736,9 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private fun parsePlacementToken(raw: String?): PlacementToken? {
     if (raw == null) {
       return PlacementToken(null, null, null)
+    }
+    if (ArgSuggest.isPlaceholder(raw)) {
+      return null
     }
 
     val token = raw.trim().uppercase()
@@ -898,6 +1076,12 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
       val actor: Player?,
   )
 
+  private data class SplitPayloadBuffer(
+      val total: Int,
+      val parts: Array<String?>,
+      val createdAtMillis: Long,
+  )
+
   private data class Column(val x: Int, val z: Int, val yMin: Int, val height: Int)
 
   private data class PlacementColumn(
@@ -956,6 +1140,12 @@ class PayloadCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
   private enum class PayloadBlock {
     WALL,
     ROOF_FLOOR,
+  }
+
+  private companion object {
+    const val MAX_SPLIT_PARTS = 512
+    const val MAX_SPLIT_PAYLOAD_CHARS = 200_000
+    const val SPLIT_PAYLOAD_TTL_MILLIS = 10 * 60 * 1000L
   }
 
   private class ByteReader(private val data: ByteArray) {

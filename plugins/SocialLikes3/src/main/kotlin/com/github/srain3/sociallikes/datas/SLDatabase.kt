@@ -3,7 +3,6 @@ package com.github.srain3.sociallikes.datas
 import com.github.srain3.sociallikes.Tools
 import java.io.File
 import java.sql.Connection
-import java.sql.DriverManager
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
@@ -16,12 +15,28 @@ import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.notInList
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.deleteAll
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
+import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.upsert
 
 object SLDatabase {
-  private var connection: Connection? = null
+  private var database: Database? = null
   private var executor: ExecutorService? = null
   private lateinit var dbFile: File
+  private lateinit var plugin: JavaPlugin
 
   data class WeeklyLikeCount(val weekStart: LocalDate, val count: Int)
 
@@ -64,25 +79,6 @@ object SLDatabase {
       val createdAt: LocalDateTime,
       val likedAt: Long,
   )
-
-  private data class BuildSnapshot(
-      val id: Int,
-      val worldName: String,
-      val locX: Double,
-      val locY: Double,
-      val locZ: Double,
-      val chunkX: Int,
-      val chunkZ: Int,
-      val createdAt: String,
-      val ownerUuid: String,
-      val title: String,
-      val checked: Boolean,
-      val comment: String,
-      val discordTextId: Long,
-      val likes: List<LikeSnapshot>,
-  )
-
-  private data class LikeSnapshot(val playerUuid: String, val likedAt: Long?)
 
   data class MutualLikePair(
       val playerUuid: String,
@@ -193,7 +189,77 @@ object SLDatabase {
       val z: Double,
   )
 
+  private object Builds : Table("builds") {
+    val id = integer("id")
+    val worldName = varchar("world_name", 255)
+    val locX = double("loc_x")
+    val locY = double("loc_y")
+    val locZ = double("loc_z")
+    val chunkX = integer("chunk_x")
+    val chunkZ = integer("chunk_z")
+    val createdAt = varchar("created_at", 64)
+    val ownerUuid = varchar("owner_uuid", 36)
+    val title = text("title")
+    val checked = bool("checked")
+    val comment = text("comment")
+    val discordTextId = long("discord_text_id")
+
+    override val primaryKey = PrimaryKey(id)
+  }
+
+  private object BuildLikes : Table("build_likes") {
+    val buildId = integer("build_id").references(Builds.id, onDelete = ReferenceOption.CASCADE)
+    val playerUuid = varchar("player_uuid", 36)
+    val likedAt = long("liked_at").nullable()
+
+    override val primaryKey = PrimaryKey(buildId, playerUuid)
+  }
+
+  private object Players : Table("players") {
+    val uuid = varchar("uuid", 36)
+    val lastKnownName = text("last_known_name")
+    val lastSeenAt = long("last_seen_at")
+
+    override val primaryKey = PrimaryKey(uuid)
+  }
+
+  private object PublicityHistoryRows : Table("publicity_history") {
+    val id = integer("id").autoIncrement()
+    val timestamp = varchar("timestamp", 64)
+    val userUuid = varchar("user_uuid", 36)
+    val slId = integer("sl_id")
+
+    override val primaryKey = PrimaryKey(id)
+  }
+
+  private data class BuildSnapshot(
+      val id: Int,
+      val worldName: String,
+      val locX: Double,
+      val locY: Double,
+      val locZ: Double,
+      val chunkX: Int,
+      val chunkZ: Int,
+      val createdAt: String,
+      val ownerUuid: String,
+      val title: String,
+      val checked: Boolean,
+      val comment: String,
+      val discordTextId: Long,
+      val likes: List<LikeSnapshot>,
+  )
+
+  private data class LikeSnapshot(val playerUuid: String, val likedAt: Long?)
+
+  private data class PublicityHistorySnapshot(
+      val id: Int,
+      val timestamp: String,
+      val userUuid: String,
+      val slId: Int,
+  )
+
   fun init(plugin: JavaPlugin) {
+    this.plugin = plugin
     dbFile = File(plugin.dataFolder, "SocialLikesShadow.db")
     plugin.dataFolder.mkdirs()
 
@@ -204,83 +270,33 @@ object SLDatabase {
 
     executor?.submit {
       try {
-        Class.forName("org.sqlite.JDBC")
-        connection =
-            DriverManager.getConnection(
-                    "jdbc:sqlite:${dbFile.absolutePath}?busy_timeout=5000&journal_mode=WAL"
-                )
-                .apply {
-                  createStatement().use { statement ->
-                    statement.execute("PRAGMA foreign_keys=ON")
-                    statement.execute("PRAGMA synchronous=NORMAL")
-                    statement.execute(
-                        """
-                        CREATE TABLE IF NOT EXISTS players (
-                          uuid TEXT PRIMARY KEY,
-                          last_known_name TEXT NOT NULL,
-                          last_seen_at INTEGER NOT NULL
-                        )
-                        """
-                            .trimIndent()
-                    )
-                    statement.execute(
-                        """
-                        CREATE TABLE IF NOT EXISTS builds (
-                          id INTEGER PRIMARY KEY,
-                          world_name TEXT NOT NULL,
-                          loc_x REAL NOT NULL,
-                          loc_y REAL NOT NULL,
-                          loc_z REAL NOT NULL,
-                          chunk_x INTEGER NOT NULL,
-                          chunk_z INTEGER NOT NULL,
-                          created_at TEXT NOT NULL,
-                          owner_uuid TEXT NOT NULL,
-                          title TEXT NOT NULL,
-                          checked INTEGER NOT NULL,
-                          comment TEXT NOT NULL,
-                          discord_text_id INTEGER NOT NULL
-                        )
-                        """
-                            .trimIndent()
-                    )
-                    statement.execute(
-                        """
-                        CREATE TABLE IF NOT EXISTS build_likes (
-                          build_id INTEGER NOT NULL,
-                          player_uuid TEXT NOT NULL,
-                          liked_at INTEGER,
-                          PRIMARY KEY (build_id, player_uuid),
-                          FOREIGN KEY (build_id) REFERENCES builds(id) ON DELETE CASCADE
-                        )
-                        """
-                            .trimIndent()
-                    )
-                    statement.execute(
-                        """
-                        CREATE TABLE IF NOT EXISTS publicity_history (
-                          id INTEGER PRIMARY KEY,
-                          timestamp TEXT NOT NULL,
-                          user_uuid TEXT NOT NULL,
-                          sl_id INTEGER NOT NULL
-                        )
-                        """
-                            .trimIndent()
-                    )
-                    statement.execute(
-                        "CREATE INDEX IF NOT EXISTS idx_build_likes_player_liked_at ON build_likes(player_uuid, liked_at)"
-                    )
-                    statement.execute(
-                        "CREATE INDEX IF NOT EXISTS idx_build_likes_liked_at ON build_likes(liked_at)"
-                    )
-                    statement.execute(
-                        "CREATE INDEX IF NOT EXISTS idx_builds_owner_created_at ON builds(owner_uuid, created_at)"
-                    )
-                    statement.execute(
-                        "CREATE INDEX IF NOT EXISTS idx_publicity_history_sl_id_timestamp ON publicity_history(sl_id, timestamp)"
-                    )
-                  }
-                }
-        connection?.let { db -> logStartupSummary(plugin, db) }
+        val dbUrl =
+            "jdbc:sqlite:${dbFile.absolutePath}" +
+                "?journal_mode=WAL" +
+                "&busy_timeout=5000" +
+                "&foreign_keys=ON" +
+                "&synchronous=NORMAL"
+
+        database = Database.connect(dbUrl, driver = "org.sqlite.JDBC")
+
+        transaction(database) {
+          SchemaUtils.create(Builds, BuildLikes, PublicityHistoryRows, Players)
+          rawConnection()?.createStatement()?.use { statement ->
+            statement.execute(
+                "CREATE INDEX IF NOT EXISTS idx_build_likes_player_liked_at ON build_likes(player_uuid, liked_at)"
+            )
+            statement.execute(
+                "CREATE INDEX IF NOT EXISTS idx_build_likes_liked_at ON build_likes(liked_at)"
+            )
+            statement.execute(
+                "CREATE INDEX IF NOT EXISTS idx_builds_owner_created_at ON builds(owner_uuid, created_at)"
+            )
+            statement.execute(
+                "CREATE INDEX IF NOT EXISTS idx_publicity_history_sl_id_timestamp ON publicity_history(sl_id, timestamp)"
+            )
+          }
+          rawConnection()?.let { logStartupSummary(plugin, it) }
+        }
       } catch (e: Exception) {
         loggerWarning("init", e)
       }
@@ -289,13 +305,13 @@ object SLDatabase {
 
   fun close() {
     val service = executor ?: return
-    val db = connection
+    val db = database
 
     try {
       service
           .submit {
             try {
-              db?.close()
+              db?.let { TransactionManager.closeAndUnregister(it) }
             } catch (e: Exception) {
               loggerWarning("close", e)
             }
@@ -306,7 +322,7 @@ object SLDatabase {
     } finally {
       service.shutdown()
       executor = null
-      connection = null
+      database = null
     }
   }
 
@@ -318,7 +334,7 @@ object SLDatabase {
     val seenAt = System.currentTimeMillis()
 
     submit("upsertPlayer") {
-      connection
+      rawConnection()
           ?.prepareStatement(
               """
               INSERT INTO players (uuid, last_known_name, last_seen_at)
@@ -338,87 +354,91 @@ object SLDatabase {
     }
   }
 
-  /** Mirrors the YAML-backed build cache into the statistics-only SQLite shadow. */
   fun saveBuild(data: SLData) {
     val snapshot = data.toBuildSnapshot()
     submit("saveBuild") { upsertBuild(snapshot) }
   }
 
   fun deleteBuild(id: Int) {
-    submit("deleteBuild") {
-      connection?.prepareStatement("DELETE FROM builds WHERE id = ?")?.use { statement ->
-        statement.setInt(1, id)
-        statement.executeUpdate()
-      }
-    }
+    submit("deleteBuild") { Builds.deleteWhere { Builds.id eq id } }
   }
 
-  /** Mirrors a YAML publicity entry. Timestamp text is kept in the legacy local-time format. */
-  fun savePublicityHistory(data: PublicityData) {
-    submit("savePublicityHistory") {
-      connection
-          ?.prepareStatement(
-              """
-              INSERT INTO publicity_history (id, timestamp, user_uuid, sl_id)
-              VALUES (?, ?, ?, ?)
-              ON CONFLICT(id) DO UPDATE SET
-                timestamp = excluded.timestamp,
-                user_uuid = excluded.user_uuid,
-                sl_id = excluded.sl_id
-              """
-                  .trimIndent()
-          )
-          ?.use { statement ->
-            statement.setInt(1, data.dataID)
-            statement.setString(2, data.timeStamp.toString())
-            statement.setString(3, data.user.toString())
-            statement.setInt(4, data.slid)
-            statement.executeUpdate()
-          }
-    }
-  }
-
-  fun deletePublicityHistoryForBuild(slid: Int) {
-    submit("deletePublicityHistoryForBuild") {
-      connection?.prepareStatement("DELETE FROM publicity_history WHERE sl_id = ?")?.use { statement
-        ->
-        statement.setInt(1, slid)
-        statement.executeUpdate()
-      }
-    }
-  }
-
-  /** Rebuilds the publicity mirror once the YAML load finishes. */
-  fun syncPublicityHistory(entries: Collection<PublicityData>) {
-    submit("syncPublicityHistory") {
-      val db = connection ?: return@submit
-      db.createStatement().use { it.executeUpdate("DELETE FROM publicity_history") }
-      db.prepareStatement(
-              "INSERT INTO publicity_history (id, timestamp, user_uuid, sl_id) VALUES (?, ?, ?, ?)"
-          )
-          .use { statement ->
-            entries.forEach { data ->
-              statement.setInt(1, data.dataID)
-              statement.setString(2, data.timeStamp.toString())
-              statement.setString(3, data.user.toString())
-              statement.setInt(4, data.slid)
-              statement.addBatch()
-            }
-            statement.executeBatch()
-          }
-    }
-  }
-
-  /** Rebuilds the shadow after the asynchronous YAML load completes. */
   fun syncBuilds(dataList: Collection<SLData>) {
     val snapshots = dataList.map { it.toBuildSnapshot() }
     submit("syncBuilds") {
-      val db = connection ?: return@submit
-      db.createStatement().use { statement ->
-        statement.executeUpdate("DELETE FROM build_likes")
-        statement.executeUpdate("DELETE FROM builds")
+      val ids = snapshots.map { it.id }
+
+      if (ids.isEmpty()) {
+        BuildLikes.deleteAll()
+        Builds.deleteAll()
+      } else {
+        BuildLikes.deleteWhere { buildId notInList ids }
+        Builds.deleteWhere { id notInList ids }
       }
-      snapshots.forEach(::upsertBuild)
+
+      snapshots.forEach { upsertBuild(it) }
+    }
+  }
+
+  fun loadBuildsBlocking(): List<SLData> {
+    return submitBlocking("loadBuilds") {
+          val likesByBuildId =
+              BuildLikes.selectAll()
+                  .map { row ->
+                    row[BuildLikes.buildId] to
+                        LikeSnapshot(
+                            playerUuid = row[BuildLikes.playerUuid],
+                            likedAt = row[BuildLikes.likedAt],
+                        )
+                  }
+                  .groupBy({ it.first }, { it.second })
+
+          Builds.selectAll().orderBy(Builds.id).map { row ->
+            BuildSnapshot(
+                    id = row[Builds.id],
+                    worldName = row[Builds.worldName],
+                    locX = row[Builds.locX],
+                    locY = row[Builds.locY],
+                    locZ = row[Builds.locZ],
+                    chunkX = row[Builds.chunkX],
+                    chunkZ = row[Builds.chunkZ],
+                    createdAt = row[Builds.createdAt],
+                    ownerUuid = row[Builds.ownerUuid],
+                    title = row[Builds.title],
+                    checked = row[Builds.checked],
+                    comment = row[Builds.comment],
+                    discordTextId = row[Builds.discordTextId],
+                    likes = likesByBuildId[row[Builds.id]].orEmpty(),
+                )
+                .toSLData()
+          }
+        }
+        .orEmpty()
+  }
+
+  fun savePublicityHistory(data: PublicityData) {
+    val snapshot = data.toPublicityHistorySnapshot()
+    submit("savePublicityHistory") { upsertPublicityHistory(snapshot) }
+  }
+
+  fun deletePublicityHistoryBySLID(slid: Int) {
+    submit("deletePublicityHistoryBySLID") {
+      PublicityHistoryRows.deleteWhere { PublicityHistoryRows.slId eq slid }
+    }
+  }
+
+  fun syncPublicityHistory(dataList: Collection<PublicityData>) {
+    val snapshots = dataList.map { it.toPublicityHistorySnapshot() }
+    submit("syncPublicityHistory") {
+      val ids = snapshots.map { it.id }
+
+      if (ids.isEmpty()) {
+        PublicityHistoryRows.deleteAll()
+      } else {
+        PublicityHistoryRows.deleteWhere { id notInList ids }
+      }
+
+      snapshots.forEach { upsertPublicityHistory(it) }
     }
   }
 
@@ -434,7 +454,7 @@ object SLDatabase {
           val names = mutableMapOf<String, String>()
           normalizedUuids.chunked(900).forEach { chunk ->
             val placeholders = chunk.joinToString(",") { "?" }
-            connection
+            rawConnection()
                 ?.prepareStatement(
                     "SELECT uuid, last_known_name FROM players WHERE uuid IN ($placeholders)"
                 )
@@ -470,7 +490,7 @@ object SLDatabase {
 
     return submitBlocking("loadWeeklyLikeCounts") {
           loadWeeklyLikeCountsDirect(
-              connection,
+              rawConnection(),
               normalizedWeeks,
               zoneId,
               firstWeekStart,
@@ -487,7 +507,7 @@ object SLDatabase {
     val normalizedLimit = limit.coerceIn(1, 20)
     return submitBlocking("loadBuildLikeLeadersSince") {
           val summaries = mutableListOf<BuildLikeSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.id, b.title, b.owner_uuid, COUNT(bl.player_uuid) AS likes_count
@@ -527,7 +547,7 @@ object SLDatabase {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadOwnerLikeLeadersSince") {
           val summaries = mutableListOf<OwnerLikeSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.owner_uuid, COUNT(bl.player_uuid) AS likes_count
@@ -566,7 +586,7 @@ object SLDatabase {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadWeeklyLikedOwners") {
           val summaries = mutableListOf<OwnerLikeSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.owner_uuid, COUNT(bl.build_id) AS likes_count
@@ -602,7 +622,7 @@ object SLDatabase {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadTopLikersForOwner") {
           val summaries = mutableListOf<PlayerLikeSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT bl.player_uuid, COUNT(bl.build_id) AS likes_count
@@ -641,7 +661,7 @@ object SLDatabase {
     return submitBlocking("loadFirstLikerRanking") {
           val summaries = mutableListOf<PlayerLikeSummary>()
           val ownerFilter = if (ownerUuid == null) "" else "AND b.owner_uuid = ?"
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   WITH first_likes AS (
@@ -695,7 +715,7 @@ object SLDatabase {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadOwnBuildLikeRanking") {
           val summaries = mutableListOf<OwnBuildLikeSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.id, b.title, COUNT(bl.player_uuid) AS likes_count
@@ -782,7 +802,7 @@ object SLDatabase {
             statement.setString(4, playerUuid)
           }
       val pairs = mutableListOf<MutualLikePair>()
-      connection
+      rawConnection()
           ?.prepareStatement(
               """
               WITH outgoing AS (
@@ -861,7 +881,7 @@ object SLDatabase {
 
   fun loadFavoriteBuilderCaptureBlocking(playerUuid: String): FavoriteBuilderCapture? {
     return submitBlocking("loadFavoriteBuilderCapture") {
-      connection
+      rawConnection()
           ?.prepareStatement(
               """
               WITH favorite_owner AS (
@@ -906,7 +926,7 @@ object SLDatabase {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadFirstEncounterLikes") {
           val encounters = mutableListOf<FirstEncounterLike>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.owner_uuid, MIN(bl.liked_at) AS first_liked_at
@@ -944,7 +964,7 @@ object SLDatabase {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadSimilarTastePlayers") {
           val summaries = mutableListOf<PlayerLikeSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   WITH liked_owners AS (
@@ -992,7 +1012,7 @@ object SLDatabase {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadRegularSupporters") {
           val summaries = mutableListOf<RegularSupporterSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT
@@ -1072,7 +1092,7 @@ object SLDatabase {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadFastestSupporters") {
           val summaries = mutableListOf<FastestSupporterSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   WITH first_likes AS (
@@ -1119,7 +1139,7 @@ object SLDatabase {
   fun loadLikeTimestampsSinceBlocking(sinceMillis: Long): List<Long> {
     return submitBlocking("loadLikeTimestampsSince") {
           val timestamps = mutableListOf<Long>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   "SELECT liked_at FROM build_likes WHERE liked_at IS NOT NULL AND liked_at >= ?"
               )
@@ -1144,7 +1164,7 @@ object SLDatabase {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadBuildLikeGrowth") {
           val summaries = mutableListOf<BuildLikeSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT
@@ -1219,7 +1239,7 @@ object SLDatabase {
             listOf(FirstLikeCount(playerUuid, count))
           } else {
             val summaries = mutableListOf<FirstLikeCount>()
-            connection
+            rawConnection()
                 ?.prepareStatement(
                     """
                     WITH first_likes AS (
@@ -1264,7 +1284,7 @@ object SLDatabase {
     val zoneId = ZoneId.of("UTC")
     return submitBlocking("loadPeakLikeDay") {
       val dailyCounts = mutableMapOf<LocalDate, Int>()
-      connection
+      rawConnection()
           ?.prepareStatement(
               "SELECT liked_at FROM build_likes WHERE liked_at IS NOT NULL AND liked_at >= ?"
           )
@@ -1297,7 +1317,7 @@ object SLDatabase {
   fun loadBuildHistoryTimelineBlocking(ownerUuid: String): List<BuildHistoryEntry> {
     return submitBlocking("loadBuildHistoryTimeline") {
           val entries = mutableListOf<BuildHistoryEntry>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.id, b.title, b.created_at, COUNT(bl.player_uuid) AS likes_received
@@ -1336,7 +1356,7 @@ object SLDatabase {
   fun loadWorldReactionSummariesBlocking(playerUuid: String): List<WorldReactionSummary> {
     return submitBlocking("loadWorldReactionSummaries") {
           val rows = mutableListOf<WorldReactionSummary>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.world_name,
@@ -1381,7 +1401,7 @@ object SLDatabase {
   /** The most established own chunk: build count first, then received likes as a tie-breaker. */
   fun loadHomeGroundBlocking(playerUuid: String): HomeGround? {
     return submitBlocking("loadHomeGround") {
-      connection
+      rawConnection()
           ?.prepareStatement(
               """
               SELECT b.world_name, b.chunk_x, b.chunk_z,
@@ -1415,7 +1435,7 @@ object SLDatabase {
   fun loadHomeGroundPointsBlocking(playerUuid: String, worldName: String): List<HomeGroundPoint> {
     return submitBlocking("loadHomeGroundPoints") {
           val points = mutableListOf<HomeGroundPoint>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.chunk_x, b.chunk_z, COUNT(DISTINCT b.id) AS build_count,
@@ -1453,7 +1473,7 @@ object SLDatabase {
    */
   fun loadLuckyUnlikedBuildBlocking(playerUuid: String): LuckyBuild? {
     return submitBlocking("loadLuckyUnlikedBuild") {
-      connection
+      rawConnection()
           ?.prepareStatement(
               """
               SELECT b.id, b.title, b.owner_uuid, b.world_name, b.loc_x, b.loc_y, b.loc_z
@@ -1505,7 +1525,7 @@ object SLDatabase {
                 """
                     .trimIndent()
               }
-          connection?.prepareStatement(sql)?.use { statement ->
+          rawConnection()?.prepareStatement(sql)?.use { statement ->
             ownerUuid?.let { statement.setString(1, it) }
             statement.executeQuery().use { results ->
               while (results.next()) counts += results.getInt("like_count")
@@ -1519,7 +1539,7 @@ object SLDatabase {
   fun loadLikedBuildLikeCountsBlocking(playerUuid: String): List<Int> {
     return submitBlocking("loadLikedBuildLikeCounts") {
           val counts = mutableListOf<Int>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.id, COUNT(all_likes.player_uuid) AS like_count
@@ -1560,7 +1580,7 @@ object SLDatabase {
           )
           val rows = mutableListOf<RawEvent>()
           val ownerClause = if (ownerUuid == null) "" else "AND b.owner_uuid = ?"
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT ph.id AS publicity_id, ph.sl_id, ph.timestamp, b.title, b.owner_uuid, bl.liked_at
@@ -1722,7 +1742,7 @@ object SLDatabase {
   ): List<BuildLikeEvent> {
     return submitBlocking(taskName) {
           val events = mutableListOf<BuildLikeEvent>()
-          connection
+          rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.id, b.title, b.owner_uuid, b.world_name, b.chunk_x, b.chunk_z, b.created_at, bl.liked_at
@@ -1768,25 +1788,19 @@ object SLDatabase {
 
     service.submit {
       try {
-        val db = connection
-        if (db == null || db.isClosed) {
-          Tools.plugin.logger.warning(
-              "[SL3] SQLite shadow $taskName skipped: database is not connected"
-          )
-          return@submit
-        }
-        block()
+        val db =
+            database
+                ?: run {
+                  Tools.plugin.logger.warning(
+                      "[SL3] SQLite shadow $taskName skipped: database is not connected"
+                  )
+                  return@submit
+                }
+
+        transaction(db) { block() }
       } catch (e: Exception) {
         loggerWarning(taskName, e)
       }
-    }
-  }
-
-  private fun countQuery(sql: String, bind: (java.sql.PreparedStatement) -> Unit = {}): Int {
-    val db = connection ?: return 0
-    return db.prepareStatement(sql).use { statement ->
-      bind(statement)
-      statement.executeQuery().use { results -> if (results.next()) results.getInt("count") else 0 }
     }
   }
 
@@ -1805,7 +1819,7 @@ object SLDatabase {
             Callable<T?> {
               try {
                 val db =
-                    connection
+                    database
                         ?: run {
                           Tools.plugin.logger.warning(
                               "[SL3] SQLite shadow $taskName skipped: database is not connected"
@@ -1813,14 +1827,7 @@ object SLDatabase {
                           return@Callable null
                         }
 
-                if (db.isClosed) {
-                  Tools.plugin.logger.warning(
-                      "[SL3] SQLite shadow $taskName skipped: database is closed"
-                  )
-                  return@Callable null
-                }
-
-                block()
+                transaction(db) { block() }
               } catch (e: Exception) {
                 loggerWarning(taskName, e)
                 null
@@ -1836,9 +1843,15 @@ object SLDatabase {
     }
   }
 
-  private fun loggerWarning(taskName: String, e: Exception) {
-    val message = e.message ?: e.javaClass.simpleName
-    Tools.plugin.logger.warning("[SL3] SQLite shadow $taskName failed: $message")
+  private fun rawConnection(): Connection? =
+      TransactionManager.current().connection.connection as? Connection
+
+  private fun countQuery(sql: String, bind: (java.sql.PreparedStatement) -> Unit = {}): Int {
+    val db = rawConnection() ?: return 0
+    return db.prepareStatement(sql).use { statement ->
+      bind(statement)
+      statement.executeQuery().use { results -> if (results.next()) results.getInt("count") else 0 }
+    }
   }
 
   private fun loadWeeklyLikeCountsDirect(
@@ -1906,81 +1919,105 @@ object SLDatabase {
       }
 
   private fun upsertBuild(snapshot: BuildSnapshot) {
-    val db = connection ?: return
-    db.prepareStatement(
-            """
-            INSERT INTO builds (
-              id, world_name, loc_x, loc_y, loc_z, chunk_x, chunk_z, created_at,
-              owner_uuid, title, checked, comment, discord_text_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(id) DO UPDATE SET
-              world_name = excluded.world_name,
-              loc_x = excluded.loc_x,
-              loc_y = excluded.loc_y,
-              loc_z = excluded.loc_z,
-              chunk_x = excluded.chunk_x,
-              chunk_z = excluded.chunk_z,
-              created_at = excluded.created_at,
-              owner_uuid = excluded.owner_uuid,
-              title = excluded.title,
-              checked = excluded.checked,
-              comment = excluded.comment,
-              discord_text_id = excluded.discord_text_id
-            """
-                .trimIndent()
-        )
-        .use { statement ->
-          statement.setInt(1, snapshot.id)
-          statement.setString(2, snapshot.worldName)
-          statement.setDouble(3, snapshot.locX)
-          statement.setDouble(4, snapshot.locY)
-          statement.setDouble(5, snapshot.locZ)
-          statement.setInt(6, snapshot.chunkX)
-          statement.setInt(7, snapshot.chunkZ)
-          statement.setString(8, snapshot.createdAt)
-          statement.setString(9, snapshot.ownerUuid)
-          statement.setString(10, snapshot.title)
-          statement.setInt(11, if (snapshot.checked) 1 else 0)
-          statement.setString(12, snapshot.comment)
-          statement.setLong(13, snapshot.discordTextId)
-          statement.executeUpdate()
-        }
-    db.prepareStatement("DELETE FROM build_likes WHERE build_id = ?").use { statement ->
-      statement.setInt(1, snapshot.id)
-      statement.executeUpdate()
+    Builds.upsert {
+      it[id] = snapshot.id
+      it[worldName] = snapshot.worldName
+      it[locX] = snapshot.locX
+      it[locY] = snapshot.locY
+      it[locZ] = snapshot.locZ
+      it[chunkX] = snapshot.chunkX
+      it[chunkZ] = snapshot.chunkZ
+      it[createdAt] = snapshot.createdAt
+      it[ownerUuid] = snapshot.ownerUuid
+      it[title] = snapshot.title
+      it[checked] = snapshot.checked
+      it[comment] = snapshot.comment
+      it[discordTextId] = snapshot.discordTextId
     }
-    db.prepareStatement(
-            "INSERT INTO build_likes (build_id, player_uuid, liked_at) VALUES (?, ?, ?)"
-        )
-        .use { statement ->
-          snapshot.likes.forEach { like ->
-            statement.setInt(1, snapshot.id)
-            statement.setString(2, like.playerUuid)
-            if (like.likedAt == null) statement.setNull(3, java.sql.Types.BIGINT)
-            else statement.setLong(3, like.likedAt)
-            statement.addBatch()
+
+    BuildLikes.deleteWhere { buildId eq snapshot.id }
+    snapshot.likes
+        .distinctBy { it.playerUuid }
+        .forEach { like ->
+          BuildLikes.insert {
+            it[buildId] = snapshot.id
+            it[playerUuid] = like.playerUuid
+            it[likedAt] = like.likedAt
           }
-          statement.executeBatch()
         }
   }
 
+  private fun upsertPublicityHistory(snapshot: PublicityHistorySnapshot) {
+    PublicityHistoryRows.upsert {
+      it[id] = snapshot.id
+      it[timestamp] = snapshot.timestamp
+      it[userUuid] = snapshot.userUuid
+      it[slId] = snapshot.slId
+    }
+  }
+
   private fun SLData.toBuildSnapshot(): BuildSnapshot {
-    val location = loc
     return BuildSnapshot(
         id = id,
         worldName = worldName,
-        locX = location.x,
-        locY = location.y,
-        locZ = location.z,
-        chunkX = kotlin.math.floor(location.x / 16.0).toInt(),
-        chunkZ = kotlin.math.floor(location.z / 16.0).toInt(),
+        locX = loc.x,
+        locY = loc.y,
+        locZ = loc.z,
+        chunkX = loc.blockX shr 4,
+        chunkZ = loc.blockZ shr 4,
         createdAt = time.toString(),
         ownerUuid = owner.toString(),
         title = title,
         checked = check,
         comment = comment,
         discordTextId = discordTextID,
-        likes = likes.map { liker -> LikeSnapshot(liker.toString(), likesWithTimestamp[liker]) },
+        likes =
+            likes.map { uuid ->
+              LikeSnapshot(playerUuid = uuid.toString(), likedAt = likesWithTimestamp[uuid])
+            },
     )
+  }
+
+  private fun BuildSnapshot.toSLData(): SLData {
+    val world =
+        Bukkit.getServer().getWorld(worldName)
+            ?: run {
+              Tools.plugin.logger.warning("ID:$id world $worldName does not exist!")
+              null
+            }
+    val likeUuids = likes.map { UUID.fromString(it.playerUuid) }.toMutableList()
+    val likesWithTimestamp =
+        likes
+            .mapNotNull { like -> like.likedAt?.let { UUID.fromString(like.playerUuid) to it } }
+            .toMap()
+            .toMutableMap()
+
+    return SLData(
+        id,
+        Location(world, locX, locY, locZ),
+        LocalDateTime.parse(createdAt),
+        UUID.fromString(ownerUuid),
+        title,
+        likeUuids,
+        likesWithTimestamp,
+        checked,
+        comment,
+        worldName,
+        discordTextId,
+    )
+  }
+
+  private fun PublicityData.toPublicityHistorySnapshot(): PublicityHistorySnapshot {
+    return PublicityHistorySnapshot(
+        id = dataID,
+        timestamp = timeStamp.toString(),
+        userUuid = user.toString(),
+        slId = slid,
+    )
+  }
+
+  private fun loggerWarning(taskName: String, e: Exception) {
+    val message = e.message ?: e.javaClass.simpleName
+    Tools.plugin.logger.warning("[SL3] SQLite shadow $taskName failed: $message")
   }
 }

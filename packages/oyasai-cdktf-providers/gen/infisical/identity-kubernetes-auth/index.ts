@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth
+// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,85 +10,85 @@ export interface IdentityKubernetesAuthConfig extends cdktf.TerraformMetaArgumen
   /**
   * The maximum lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#access_token_max_ttl IdentityKubernetesAuth#access_token_max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#access_token_max_ttl IdentityKubernetesAuth#access_token_max_ttl}
   */
   readonly accessTokenMaxTtl?: number;
   /**
   * The maximum number of times that an access token can be used; a value of 0 implies infinite number of uses. Default:0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#access_token_num_uses_limit IdentityKubernetesAuth#access_token_num_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#access_token_num_uses_limit IdentityKubernetesAuth#access_token_num_uses_limit}
   */
   readonly accessTokenNumUsesLimit?: number;
   /**
   * A list of IPs or CIDR ranges that access tokens can be used from. You can use 0.0.0.0/0, to allow usage from any network address..
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#access_token_trusted_ips IdentityKubernetesAuth#access_token_trusted_ips}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#access_token_trusted_ips IdentityKubernetesAuth#access_token_trusted_ips}
   */
   readonly accessTokenTrustedIps?: IdentityKubernetesAuthAccessTokenTrustedIps[] | cdktf.IResolvable;
   /**
   * The lifetime for an access token in seconds. This value will be referenced at renewal time. Default: 2592000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#access_token_ttl IdentityKubernetesAuth#access_token_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#access_token_ttl IdentityKubernetesAuth#access_token_ttl}
   */
   readonly accessTokenTtl?: number;
   /**
   * An optional audience claim that the service account JWT token must have to authenticate with Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#allowed_audience IdentityKubernetesAuth#allowed_audience}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#allowed_audience IdentityKubernetesAuth#allowed_audience}
   */
   readonly allowedAudience?: string;
   /**
   * List of trusted namespaces that service accounts must belong to authenticate with Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#allowed_namespaces IdentityKubernetesAuth#allowed_namespaces}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#allowed_namespaces IdentityKubernetesAuth#allowed_namespaces}
   */
   readonly allowedNamespaces?: string[];
   /**
   * List of trusted service account names that are allowed to authenticate with Infisical.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#allowed_service_account_names IdentityKubernetesAuth#allowed_service_account_names}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#allowed_service_account_names IdentityKubernetesAuth#allowed_service_account_names}
   */
   readonly allowedServiceAccountNames?: string[];
   /**
   * Select a gateway for private cluster access. If not specified, the Internet Gateway will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#gateway_id IdentityKubernetesAuth#gateway_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#gateway_id IdentityKubernetesAuth#gateway_id}
   */
   readonly gatewayId?: string;
   /**
   * The ID of the identity to attach the configuration onto.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#identity_id IdentityKubernetesAuth#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#identity_id IdentityKubernetesAuth#identity_id}
   */
   readonly identityId: string;
   /**
   * The PEM-encoded CA cert for the Kubernetes API server. This is used by the TLS client for secure communication with the Kubernetes API server.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#kubernetes_ca_certificate IdentityKubernetesAuth#kubernetes_ca_certificate}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#kubernetes_ca_certificate IdentityKubernetesAuth#kubernetes_ca_certificate}
   */
   readonly kubernetesCaCertificate?: string;
   /**
   * The host string, host:port pair, or URL to the base of the Kubernetes API server. This can usually be obtained by running `kubectl cluster-info`.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#kubernetes_host IdentityKubernetesAuth#kubernetes_host}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#kubernetes_host IdentityKubernetesAuth#kubernetes_host}
   */
   readonly kubernetesHost?: string;
   /**
   * A long-lived service account JWT token for Infisical to access the [TokenReview API](https://kubernetes.io/docs/reference/kubernetes-api/authentication-resources/token-review-v1/) to validate other service account JWT tokens submitted by applications/pods. This is the JWT token obtained from step 1.5.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#token_reviewer_jwt IdentityKubernetesAuth#token_reviewer_jwt}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#token_reviewer_jwt IdentityKubernetesAuth#token_reviewer_jwt}
   */
   readonly tokenReviewerJwt?: string;
   /**
   * Choose between Token ('api') or 'gateway' authentication. If using Gateway, the Gateway must be deployed in your Kubernetes cluster.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#token_reviewer_mode IdentityKubernetesAuth#token_reviewer_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#token_reviewer_mode IdentityKubernetesAuth#token_reviewer_mode}
   */
   readonly tokenReviewerMode?: string;
 }
 export interface IdentityKubernetesAuthAccessTokenTrustedIps {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#ip_address IdentityKubernetesAuth#ip_address}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#ip_address IdentityKubernetesAuth#ip_address}
   */
   readonly ipAddress?: string;
 }
@@ -204,7 +204,7 @@ export class IdentityKubernetesAuthAccessTokenTrustedIpsList extends cdktf.Compl
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth infisical_identity_kubernetes_auth}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth infisical_identity_kubernetes_auth}
 */
 export class IdentityKubernetesAuth extends cdktf.TerraformResource {
 
@@ -220,7 +220,7 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityKubernetesAuth resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityKubernetesAuth to import
-  * @param importFromId The id of the existing IdentityKubernetesAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityKubernetesAuth that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityKubernetesAuth to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -232,7 +232,7 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.16.25/docs/resources/identity_kubernetes_auth infisical_identity_kubernetes_auth} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_kubernetes_auth infisical_identity_kubernetes_auth} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -243,7 +243,7 @@ export class IdentityKubernetesAuth extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_kubernetes_auth',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.16.25'
+        providerVersion: '0.19.6'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
