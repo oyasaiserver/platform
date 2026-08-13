@@ -24,7 +24,7 @@ data class RankingEntryDto(
     val recordMaterial: String? = null,
 )
 
-/** ある期間(日間/週間/総合)における、4指標分のランキングスナップショット。 */
+/** ある期間(日間/週間/総合)におけるランキングスナップショット。 */
 data class RankingSnapshot(
     val generatedAtEpochSec: Long,
     /** 表示用の期間ラベル（例: "2026-07-14" や "2026-07-06〜2026-07-12"、総合は"総合"固定）。 */
@@ -46,8 +46,7 @@ private data class RankingCacheFile(
  * - 日間: 毎日0時に「前日」分を集計してキャッシュ（表示は常に確定済みの前日結果）。
  * - 週間: 毎週月曜0時に「前週(月〜日)」分を集計してキャッシュ。
  * - 総合: 期間の窓なし（全期間累計）。30分ごとに再集計。
- * - 各ランキングは7位まで。song_likes/view_history/favorites/followsの各テーブルから
- *   いいね数・再生数・お気に入り数(楽曲ごと)・フォロワー数(作者ごと)を集計する。
+ * - 各ランキングは7位まで。いいね・再生・お気に入り・フォロワー・作者別レコード総売上を集計する。
  *
  * 集計結果は `plugins/OyasaiMusic/ranking_cache.json` へ保存し、GUI表示のたびに再集計しない。
  * サーバー停止中に日付/週の境界を跨いでいた場合は、起動時のチェックで追いついて再集計する。
@@ -137,7 +136,7 @@ class RankingCacheService(
     val todayEpochDay = today.toEpochDay()
 
     var changed = false
-    if (state.lastDailyBoundaryEpochDay != todayEpochDay) {
+    if (state.lastDailyBoundaryEpochDay != todayEpochDay || isIncomplete(state.daily)) {
       recomputeDaily(today, zone)
       state.lastDailyBoundaryEpochDay = todayEpochDay
       changed = true
@@ -145,13 +144,13 @@ class RankingCacheService(
 
     val mondayOfThisWeek = today.with(DayOfWeek.MONDAY)
     val mondayEpochDay = mondayOfThisWeek.toEpochDay()
-    if (state.lastWeeklyBoundaryEpochDay != mondayEpochDay) {
+    if (state.lastWeeklyBoundaryEpochDay != mondayEpochDay || isIncomplete(state.weekly)) {
       recomputeWeekly(mondayOfThisWeek, zone)
       state.lastWeeklyBoundaryEpochDay = mondayEpochDay
       changed = true
     }
 
-    if (forceTotal || state.total == null) {
+    if (forceTotal || isIncomplete(state.total)) {
       recomputeTotalSync()
       changed = true
     }
@@ -199,8 +198,9 @@ class RankingCacheService(
     val entries = mutableMapOf<RankingMetric, List<RankingEntryDto>>()
     for (metric in RankingMetric.entries) {
       entries[metric] =
-          if (metric == RankingMetric.FOLLOWERS) {
-            rankingRepository.topAuthorsInRange(since, until, limit = 7).mapIndexed { i, a ->
+          if (metric.isAuthorMetric) {
+            rankingRepository.topAuthorsInRange(metric, since, until, limit = 7).mapIndexed { i, a
+              ->
               val name = Bukkit.getOfflinePlayer(a.authorUuid).name ?: "unknown"
               RankingEntryDto(
                   rank = i + 1,
@@ -232,6 +232,10 @@ class RankingCacheService(
         entries = entries,
     )
   }
+
+  /** 指標追加前のJSONキャッシュを検出し、起動時に自動再集計する。 */
+  private fun isIncomplete(snapshot: RankingSnapshot?): Boolean =
+      snapshot == null || !snapshot.entries.keys.containsAll(RankingMetric.entries)
 
   private fun load() {
     try {

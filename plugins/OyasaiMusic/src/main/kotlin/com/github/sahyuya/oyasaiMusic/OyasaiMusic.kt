@@ -20,6 +20,7 @@ import com.github.sahyuya.oyasaiMusic.db.PlaybackPreferenceRepository
 import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository
 import com.github.sahyuya.oyasaiMusic.db.RankingCacheService
 import com.github.sahyuya.oyasaiMusic.db.RankingRepository
+import com.github.sahyuya.oyasaiMusic.db.RecordSaleRepository
 import com.github.sahyuya.oyasaiMusic.db.SocialRepository
 import com.github.sahyuya.oyasaiMusic.db.SongRepository
 import com.github.sahyuya.oyasaiMusic.db.UserRepository
@@ -82,6 +83,9 @@ class OyasaiMusic : JavaPlugin() {
   lateinit var rankingRepository: RankingRepository
     private set
 
+  lateinit var recordSaleRepository: RecordSaleRepository
+    private set
+
   lateinit var rankingCacheService: RankingCacheService
     private set
 
@@ -137,6 +141,7 @@ class OyasaiMusic : JavaPlugin() {
     playbackPreferenceRepository = PlaybackPreferenceRepository(databaseManager)
     playbackModeService = PlaybackModeService(playbackPreferenceRepository)
     rankingRepository = RankingRepository(databaseManager)
+    recordSaleRepository = RecordSaleRepository(databaseManager)
 
     // --- サービス層 ---
     configureRuntimeServices()
@@ -275,6 +280,7 @@ class OyasaiMusic : JavaPlugin() {
         plugin = this,
         bedrockPrefix = config.getString("bedrock.name-prefix", ".") ?: ".",
         chordLimit = config.getInt("bedrock.chord-limit", 3),
+        lookaheadMs = config.getLong("playback.lookahead-ms", 35L).coerceIn(0L, 50L),
         defaultMode = defaultMode,
     )
   }

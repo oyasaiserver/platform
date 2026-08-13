@@ -17,6 +17,9 @@ playback:
   # 実際にどちらで再生するかは、対応楽曲(songs.supports_positional=true)であれば
   # リスナーごとの選択(playback_preferences)が優先される。この値は選択が無い場合の既定値。
   default-mode: default
+  # 音符をメインスレッドへ少し早めに渡し、混雑時の遅延を吸収する（0〜50ms）。
+  # 35msは追加タスクを増やさず、通常時のズレも目立ちにくい推奨値。
+  lookahead-ms: 35
   # 視聴カウント判定: 直近1時間の再生回数上限
   view-limit-per-hour: 3
   # 視聴カウント判定: 直近24時間の再生回数上限

@@ -30,7 +30,13 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
       if (heldItem == null || heldItem.type == Material.AIR) {
         val entry = plugin.ambientPlaybackRegistry.entryAt(clickedBlock.location) ?: return
         event.isCancelled = true
-        plugin.ambientPlaybackRegistry.unregister(clickedBlock.location)
+        if (player.gameMode != entry.insertedGameMode) {
+          player.sendMessage(
+              "§cこのレコードは ${gameModeLabel(entry.insertedGameMode)} で装填されています。" +
+                  "同じゲームモードで取り出してください。"
+          )
+          return
+        }
         val songId = entry.song.id ?: return
         val authorName = org.bukkit.Bukkit.getOfflinePlayer(entry.song.authorUuid).name ?: "不明"
         val material = Material.matchMaterial(entry.song.recordMaterial) ?: Material.MUSIC_DISC_13
@@ -39,10 +45,12 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
         ejected = PhysicalRecordItem.withRange(plugin, ejected, entry.range)
         ejected = PhysicalRecordItem.withTrigger(plugin, ejected, entry.trigger)
         ejected = PhysicalRecordItem.withLoop(plugin, ejected, entry.loop)
-        clickedBlock.world.dropItemNaturally(
-            clickedBlock.location.clone().add(0.5, 1.0, 0.5),
-            ejected,
-        )
+        if (!canFit(player, ejected)) {
+          player.sendMessage("§cインベントリに空きがないため、レコードを取り出せません。")
+          return
+        }
+        plugin.ambientPlaybackRegistry.unregister(clickedBlock.location)
+        player.inventory.addItem(ejected)
         player.sendMessage("§a環境BGMを停止し、レコードを取り出しました。")
         return
       }
@@ -65,13 +73,20 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
         return
       }
       val range = PhysicalRecordItem.range(plugin, item)
-      if (!player.hasPermission(range.permission)) {
-        player.sendMessage("§c再生範囲${range.label}ブロックを使う権限がありません。")
+      if (!AmbientRange.canUse(player, range)) {
+        player.sendMessage("§c再生範囲 ${range.label} を使う権限がありません。")
         return
       }
       val trigger = PhysicalRecordItem.trigger(plugin, item)
       val loop = PhysicalRecordItem.loop(plugin, item)
-      plugin.ambientPlaybackRegistry.register(clickedBlock.location, song, range, trigger, loop)
+      plugin.ambientPlaybackRegistry.register(
+          clickedBlock.location,
+          song,
+          range,
+          trigger,
+          loop,
+          player.gameMode,
+      )
       player.sendMessage(
           "§a環境BGMを設置しました: ${song.title} " +
               "(範囲:${range.label} / トリガー:${trigger.label} / ループ:${if (loop) "ON" else "OFF"})",
@@ -129,4 +144,22 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
     if (event.block.type != Material.JUKEBOX) return
     plugin.ambientPlaybackRegistry.unregister(event.block.location)
   }
+
+  private fun canFit(
+      player: org.bukkit.entity.Player,
+      item: org.bukkit.inventory.ItemStack,
+  ): Boolean =
+      player.inventory.storageContents.any { existing ->
+        existing == null ||
+            existing.type == Material.AIR ||
+            (existing.isSimilar(item) && existing.amount + item.amount <= existing.maxStackSize)
+      }
+
+  private fun gameModeLabel(gameMode: org.bukkit.GameMode): String =
+      when (gameMode) {
+        org.bukkit.GameMode.CREATIVE -> "クリエイティブ"
+        org.bukkit.GameMode.SURVIVAL -> "サバイバル"
+        org.bukkit.GameMode.ADVENTURE -> "アドベンチャー"
+        org.bukkit.GameMode.SPECTATOR -> "スペクテイター"
+      }
 }
