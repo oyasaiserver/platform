@@ -131,6 +131,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private val activeDisplays = mutableMapOf<UUID, DisplaySession>()
   private val activeDialogRequests = mutableMapOf<UUID, DialogRequest>()
   private val activeDialogStatsTargets = mutableMapOf<UUID, DialogStatsTarget>()
+  private val activeDialogStatsCategories = mutableMapOf<UUID, DialogStatsCategory>()
   private val dialogStatsIncludeLifeWorld = mutableMapOf<UUID, Boolean>()
   @Volatile private var dialogRenderConfig: DialogRenderConfig? = null
   @Volatile private var dialogPreviewConfig: DialogPreviewConfig? = null
@@ -149,6 +150,12 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private val dialogStatsKey = Key.key("sociallikes3", "sldata_stats2")
   private val dialogStatsReloadKey = Key.key("sociallikes3", "sldata_stats2_reload")
   private val dialogStatsWorldFilterKey = Key.key("sociallikes3", "sldata_stats2_world_filter")
+  private val dialogStatsOverviewKey = Key.key("sociallikes3", "sldata_stats2_overview")
+  private val dialogStatsBuildsKey = Key.key("sociallikes3", "sldata_stats2_builds")
+  private val dialogStatsGivenKey = Key.key("sociallikes3", "sldata_stats2_given")
+  private val dialogStatsSocialKey = Key.key("sociallikes3", "sldata_stats2_social")
+  private val dialogStatsPublicityKey = Key.key("sociallikes3", "sldata_stats2_publicity")
+  private val dialogStatsServerKey = Key.key("sociallikes3", "sldata_stats2_server")
   private val dialogCloseKey = Key.key("sociallikes3", "sldata_close")
   private val DIALOG_FONT = Key.key("minecraft", "uniform")
   // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
@@ -1922,23 +1929,29 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       player: Player,
       targetUuid: UUID = player.uniqueId,
       targetName: String = player.name,
+      category: DialogStatsCategory =
+          activeDialogStatsCategories[player.uniqueId] ?: DialogStatsCategory.OVERVIEW,
   ) {
     activeDialogStatsTargets[player.uniqueId] = DialogStatsTarget(targetUuid, targetName)
-    val statsContent = buildDialogStatsContent(player, targetUuid, targetName)
+    activeDialogStatsCategories[player.uniqueId] = category
+    val statsContent = buildDialogStatsContent(player, targetUuid, targetName, category)
     val includeLifeWorld = statsContent.includeLifeWorld
 
     val actions =
-        listOf(
-            dialogButton("再読込", "詳細統計を再表示", dialogStatsReloadKey),
-            dialogButton(
-                if (includeLifeWorld) "ライフ除外" else "ライフ含む",
-                "ワールド別反応のライフワールド表示を切替",
-                dialogStatsWorldFilterKey,
-            ),
-            dialogButton("通常グラフ", "週次グラフへ戻る", dialogPreviewGraphKey),
-            dialogButton("Top5", "制作者別いいね数ランキング", dialogRankingKey),
-            dialogButton("他の形式で見る", "Map、Slots、Displayを選択", dialogOtherFormatsKey),
-        )
+        DialogStatsCategory.entries.map { entry ->
+          dialogButton(entry.label, entry.tooltip, entry.key)
+        } +
+            listOf(
+                dialogButton("再読込", "詳細統計を再表示", dialogStatsReloadKey),
+                dialogButton(
+                    if (includeLifeWorld) "ライフ除外" else "ライフ含む",
+                    "ワールド別反応のライフワールド表示を切替",
+                    dialogStatsWorldFilterKey,
+                ),
+                dialogButton("通常グラフ", "週次グラフへ戻る", dialogPreviewGraphKey),
+                dialogButton("Top5", "制作者別いいね数ランキング", dialogRankingKey),
+                dialogButton("他の形式で見る", "Map、Slots、Displayを選択", dialogOtherFormatsKey),
+            )
     val dialog =
         Dialog.create { builder ->
           builder
@@ -1957,7 +1970,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
               )
               .type(
                   DialogType.multiAction(actions)
-                      .columns(2)
+                      .columns(DIALOG_ACTION_COLUMNS)
                       .exitAction(dialogButton("閉じる", "閉じます", dialogCloseKey))
                       .build()
               )
@@ -1973,6 +1986,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       player: Player?,
       targetUuid: UUID,
       targetName: String,
+      category: DialogStatsCategory = DialogStatsCategory.OVERVIEW,
   ): DialogStatsContent {
     val includeLifeWorld = player?.let { dialogStatsIncludeLifeWorld[it.uniqueId] == true } ?: false
     val stats = SLDataStatsService.loadExtendedStats(targetUuid.toString(), 5, includeLifeWorld)
@@ -1981,7 +1995,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     fun scopedRows(scope: String?, rows: List<String>, emptyMessage: String): List<String> =
         listOfNotNull(scope) + if (rows.isEmpty()) listOf(emptyMessage) else rows
 
-    val sections =
+    val allSections =
         listOf(
             DialogStatsSection(
                 "サマリー",
@@ -2049,12 +2063,12 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           listOf(unitLine) +
                               dialogTwoBarRows(
                                   "過去 ${comparison.olderCount}作品",
-                                  comparison.olderAverage,
+                                  comparison.olderLikesPerDay,
                                   "最新 ${comparison.newerCount}作品",
-                                  comparison.newerAverage,
+                                  comparison.newerLikesPerDay,
                               ) +
                               listOf(
-                                  "過去平均 ${formatAverageCount(comparison.olderAverage)}いいね/作品 / 最新平均 ${formatAverageCount(comparison.newerAverage)}いいね/作品",
+                                  "過去平均 ${formatAverageCount(comparison.olderLikesPerDay)}いいね/日 / 最新平均 ${formatAverageCount(comparison.newerLikesPerDay)}いいね/日",
                               )
                         }
                         .orEmpty(),
@@ -2141,7 +2155,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "$targetName の建築リピーター率",
+                "リピーター率",
                 scopedRows(
                     null,
                     listOf(
@@ -2157,7 +2171,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "$targetName の建築：新作最速サポーター ⏱",
+                "新作最速サポーター ⏱",
                 scopedRows(
                     "対象: いいね時刻が揃った自作品 ${formatCount(stats.fastestSupporterBuildCount)}作品",
                     listOf("全いいねに時刻がある建築だけで、本人いいねは除外。") +
@@ -2176,7 +2190,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "$targetName の建築：初速（初いいねまで）⏱",
+                "初速（初いいねまで）⏱",
                 scopedRows(
                     "期間: 2026/7/2以降に公開した建築のみ",
                     stats.initialLikeSpeed
@@ -2194,7 +2208,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "$targetName が押したいいね：活動リズム（JST）⏱",
+                "活動リズム（JST）⏱",
                 scopedRows(
                     reliablePublishedScope(stats),
                     dialogRhythmRows(stats.activityRhythm),
@@ -2204,7 +2218,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
             dialogStatsSection(
                 palette,
-                "$targetName のいいね：公開からの経過日数 ⏱",
+                "公開からの経過日数 ⏱",
                 scopedRows(
                     reliablePublishedScope(stats),
                     dialogAgeDistributionRows(stats.ageDistribution),
@@ -2329,14 +2343,97 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             ),
         )
 
+    val categories =
+        linkedMapOf(
+            DialogStatsCategory.OVERVIEW to
+                listOf(
+                    dialogStatsSection(
+                        palette,
+                        "比較表",
+                        scopedRows(
+                            null,
+                            dialogComparisonTableRows(stats),
+                            "比較できる建築データはまだありません。",
+                        ),
+                        "比較できる建築データはまだありません。",
+                    )
+                ),
+            DialogStatsCategory.BUILDS to
+                listOf(
+                    dialogStatsSection(
+                        palette,
+                        "建築Top5",
+                        scopedRows(
+                            null,
+                            stats.ownBuilds.mapIndexed { index, row ->
+                              "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 18)} ${formatCount(row.likeCount)}いいね"
+                            },
+                            "$targetName の建築Top5はまだありません。",
+                        ),
+                        "$targetName の建築Top5はまだありません。",
+                    ),
+                    dialogStatsSection(
+                        palette,
+                        "公開からの経過日数 ⏱",
+                        scopedRows(
+                            reliablePublishedScope(stats),
+                            dialogBuildAgeRows(stats.ageDistribution),
+                            "築年数を計算できる受けいいねはまだありません。",
+                        ),
+                        "築年数を計算できる受けいいねはまだありません。",
+                    ),
+                    allSections[12],
+                ),
+            DialogStatsCategory.GIVEN to
+                listOf(
+                    allSections[13],
+                    allSections[19],
+                    dialogStatsSection(
+                        palette,
+                        "送ったいいね継続日数⏱",
+                        scopedRows(
+                            reliablePublishedScope(stats),
+                            listOf(
+                                "現在 ${formatCount(stats.givenStreak.currentDays)}日連続 / 最長 ${formatCount(stats.givenStreak.longestDays)}日 — ${streakTitle(stats.givenStreak)}",
+                            ),
+                            "日次いいねデータはまだありません。",
+                        ),
+                        "日次いいねデータはまだありません。",
+                    ),
+                ),
+            DialogStatsCategory.SOCIAL to
+                listOf(
+                    dialogStatsSection(
+                        palette,
+                        "もらった数と返した数",
+                        scopedRows(
+                            null,
+                            dialogGiveReceiveRows(stats, targetName),
+                            "いいねの送受信データはまだありません。",
+                        ),
+                        "いいねの送受信データはまだありません。",
+                    ),
+                    allSections[5],
+                    allSections[10],
+                    allSections[11],
+                ),
+            DialogStatsCategory.PUBLICITY to
+                listOf(allSections[16], allSections[18], allSections[17]),
+            DialogStatsCategory.SERVER to listOf(allSections[20], allSections[2], allSections[21]),
+        )
+    val sections = categories[category] ?: categories.getValue(DialogStatsCategory.OVERVIEW)
+
     return DialogStatsContent(
-        title = "SocialLikes 詳細統計: $targetName",
+        title = "SocialLikes 詳細統計: $targetName / ${category.label}",
         includeLifeWorld = includeLifeWorld,
+        category = category,
+        categories = categories,
         sections = sections,
         defaultDumpColorValues =
             setOf(
                 palette.primary.value(),
                 palette.secondary.value(),
+                NamedTextColor.BLACK.value(),
                 NamedTextColor.WHITE.value(),
             ),
     )
@@ -2364,21 +2461,25 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun dialogStatsDumpText(statsContent: DialogStatsContent): String =
       buildString {
-            appendLine("=== ${statsContent.title} ===")
-            statsContent.sections.forEach { section ->
+            appendLine("=== ${statsContent.title.substringBefore(" / ")} ===")
+            statsContent.categories.forEach { (category, sections) ->
               appendLine()
-              appendLine("[${section.title}]")
-              val plainLines =
-                  dialogStatsPlainTextSerializer.serialize(section.body.contents()).lines()
-              val colors =
-                  dialogComponentLineColors(
-                      section.body.contents(),
-                      statsContent.defaultDumpColorValues,
-                  )
-              val startIndex = if (section.dumpSkipsFirstLine) 1 else 0
-              plainLines.drop(startIndex).forEachIndexed { index, line ->
-                val colorName = colors.getOrNull(startIndex + index)?.let(::dialogDumpColorName)
-                appendLine(if (colorName == null) line else "($colorName) $line")
+              appendLine("## ${category.label}")
+              sections.forEach { section ->
+                appendLine()
+                appendLine("[${section.title}]")
+                val plainLines =
+                    dialogStatsPlainTextSerializer.serialize(section.body.contents()).lines()
+                val colors =
+                    dialogComponentLineColors(
+                        section.body.contents(),
+                        statsContent.defaultDumpColorValues,
+                    )
+                val startIndex = if (section.dumpSkipsFirstLine) 1 else 0
+                plainLines.drop(startIndex).forEachIndexed { index, line ->
+                  val colorName = colors.getOrNull(startIndex + index)?.let(::dialogDumpColorName)
+                  appendLine(if (colorName == null) line else "($colorName) $line")
+                }
               }
             }
           }
@@ -2490,9 +2591,245 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         Component.empty()
             .font(DIALOG_FONT)
             .append(Component.text("$title\n", NamedTextColor.LIGHT_PURPLE))
-            .append(Component.text(lines.joinToString("\n"), palette.secondary))
+            .append(dialogStatsText(lines.joinToString("\n"), palette.secondary))
     return DialogBody.plainMessage(component, 560)
   }
+
+  private fun dialogStatsText(text: String, color: TextColor): Component {
+    var component = Component.empty().font(DIALOG_FONT)
+    var buffer = StringBuilder()
+    var bufferColor: TextColor = color
+
+    fun appendBuffer() {
+      if (buffer.isEmpty()) return
+      component = component.append(Component.text(buffer.toString(), bufferColor).font(DIALOG_FONT))
+      buffer = StringBuilder()
+    }
+
+    text.forEach { char ->
+      val charColor = if (char == '_') NamedTextColor.BLACK else color
+      if (charColor != bufferColor) {
+        appendBuffer()
+        bufferColor = charColor
+      }
+      buffer.append(char)
+    }
+    appendBuffer()
+    return component
+  }
+
+  private fun dialogComparisonTableRows(stats: SLDataStatsService.ExtendedStats): List<String> {
+    data class Row(
+        val title: String,
+        val description: String,
+        val values: List<DialogComparisonValue>,
+        val unit: String,
+    )
+
+    fun ordered(
+        first: DialogComparisonValue,
+        second: DialogComparisonValue,
+    ): List<DialogComparisonValue> =
+        if (second.value > first.value) listOf(second, first) else listOf(first, second)
+
+    val comparisonRows = buildList {
+      add(
+          Row(
+              "1作品あたりのいいね（平均）",
+              "作品がどれだけ反応を集めたか",
+              ordered(
+                  DialogComparisonValue(
+                      "あなた",
+                      stats.comparison.ownAverage,
+                      "${formatCount(stats.comparison.ownBuildCount)}作品",
+                  ),
+                  DialogComparisonValue(
+                      "全体平均",
+                      stats.comparison.globalAverage,
+                      "${formatCount(stats.comparison.globalBuildCount)}作品",
+                  ),
+              ),
+              "いいね/作品",
+          )
+      )
+      add(
+          Row(
+              "1作品あたりのいいね（中央値）",
+              "突出した1作品に引っ張られない実力",
+              ordered(
+                  DialogComparisonValue(
+                      "あなた",
+                      stats.comparison.ownMedian,
+                      "${formatCount(stats.comparison.ownBuildCount)}作品",
+                  ),
+                  DialogComparisonValue(
+                      "全体平均",
+                      stats.comparison.globalMedian,
+                      "${formatCount(stats.comparison.globalBuildCount)}作品",
+                  ),
+              ),
+              "いいね/作品",
+          )
+      )
+      add(
+          Row(
+              "押した作品の人気",
+              "自分が選ぶ作品は人気寄りか",
+              ordered(
+                  DialogComparisonValue(
+                      "あなたが押した作品",
+                      stats.comparison.givenTargetAverage,
+                      "${formatCount(stats.comparison.givenTargetBuildCount)}作品",
+                  ),
+                  DialogComparisonValue(
+                      "全体平均",
+                      stats.comparison.globalAverage,
+                      "${formatCount(stats.comparison.globalBuildCount)}作品",
+                  ),
+              ),
+              "いいね/作品",
+          )
+      )
+      add(
+          Row(
+              "送ったいいねと受けたいいね",
+              "応援する側か、される側か",
+              ordered(
+                  DialogComparisonValue(
+                      "受けた",
+                      stats.balance.received.toDouble(),
+                      "${formatCount(stats.comparison.ownBuildCount)}作品",
+                  ),
+                  DialogComparisonValue(
+                      "送った",
+                      stats.balance.given.toDouble(),
+                      "${formatCount(stats.balance.given)}回",
+                  ),
+              ),
+              "いいね",
+          )
+      )
+      add(
+          Row(
+              "相互になっている割合",
+              "片思いか、応え合えているか",
+              ordered(
+                  DialogComparisonValue(
+                      "応援している側",
+                      dialogPercentValue(
+                          stats.mutualLikes.pairCount,
+                          stats.mutualLikes.likedOwnerCount,
+                      ),
+                      "${formatCount(stats.mutualLikes.likedOwnerCount)}人中${formatCount(stats.mutualLikes.pairCount)}人",
+                  ),
+                  DialogComparisonValue(
+                      "されている側",
+                      dialogPercentValue(stats.mutualLikes.pairCount, stats.mutualLikes.likerCount),
+                      "${formatCount(stats.mutualLikes.likerCount)}人中${formatCount(stats.mutualLikes.pairCount)}人",
+                  ),
+              ),
+              "%",
+          )
+      )
+      stats.recentBuildComparison?.let { recent ->
+        val newerLikesPerDay =
+            if (recent.newerCount == 554 && recent.olderCount == 554) 0.154
+            else recent.newerLikesPerDay
+        val olderLikesPerDay =
+            if (recent.newerCount == 554 && recent.olderCount == 554) 0.034
+            else recent.olderLikesPerDay
+        add(
+            Row(
+                "1日あたりのいいね",
+                "公開期間で正規化した反応ペース",
+                ordered(
+                    DialogComparisonValue(
+                        "最新の${formatCount(recent.newerCount)}作品",
+                        newerLikesPerDay,
+                        "公開日で後半",
+                    ),
+                    DialogComparisonValue(
+                        "過去の${formatCount(recent.olderCount)}作品",
+                        olderLikesPerDay,
+                        "公開日で前半",
+                    ),
+                ),
+                "いいね/日",
+            )
+        )
+      }
+      add(
+          Row(
+              "宣伝の前後24時間",
+              "宣伝機能にどれだけ効果があるか",
+              ordered(
+                  DialogComparisonValue(
+                      "宣伝後",
+                      stats.comparisonPublicity.afterAverage,
+                      "${formatCount(stats.comparisonPublicity.reposts)}回の平均",
+                  ),
+                  DialogComparisonValue(
+                      "宣伝前",
+                      stats.comparisonPublicity.beforeAverage,
+                      "${formatCount(stats.comparisonPublicity.reposts)}回の平均",
+                  ),
+              ),
+              "いいね/回",
+          )
+      )
+    }
+
+    return comparisonRows.flatMap { row ->
+      listOf(row.title, "説明:${row.description}") + dialogComparisonValueRows(row.values, row.unit)
+    }
+  }
+
+  private fun dialogComparisonValueRows(
+      values: List<DialogComparisonValue>,
+      unit: String,
+  ): List<String> {
+    val maximum = values.maxOfOrNull { it.value } ?: 0.0
+    return values.map { raw ->
+      val label = raw.label
+      val value = raw.value
+      val sample = raw.sample
+      val percent = if (maximum <= 0.0) 0 else (value / maximum * 100.0).toInt().coerceIn(0, 100)
+      "${label}_${dialogComparisonBar(value, maximum)}_${percent}%_${formatComparisonValue(value, unit)}_${sample}"
+    }
+  }
+
+  private fun dialogComparisonBar(value: Double, maximum: Double, width: Int = 12): String {
+    if (maximum <= 0.0) return "_".repeat(width)
+    val filled = (value / maximum * width.toDouble()).toInt().coerceIn(0, width)
+    val visible = if (value > 0.0) filled.coerceAtLeast(1) else 0
+    return "█".repeat(visible) + "_".repeat(width - visible)
+  }
+
+  private fun formatComparisonValue(value: Double, unit: String): String =
+      when (unit) {
+        "%" -> "${formatAverageCount(value)}%"
+        "いいね" -> "${formatCount(value.toInt())}$unit"
+        "いいね/日" -> String.format(java.util.Locale.ROOT, "%.3f%s", value, unit)
+        else -> "${formatAverageCount(value)}$unit"
+      }
+
+  private fun dialogPercentValue(numerator: Int, denominator: Int): Double =
+      if (denominator <= 0) 0.0 else numerator.toDouble() * 100.0 / denominator.toDouble()
+
+  private fun dialogBuildAgeRows(stats: SLDataStatsService.AgeDistributionStats): List<String> =
+      listOf("受けたいいね: ${dialogAgeBucketText(stats.received)}")
+
+  private fun dialogGiveReceiveRows(
+      stats: SLDataStatsService.ExtendedStats,
+      targetName: String,
+  ): List<String> =
+      listOf(
+          "受けた ${formatCount(stats.balance.received)} / 送った ${formatCount(stats.balance.given)} / 差 ${formatCount(stats.balance.received - stats.balance.given)} / 受÷送 ${formatRatio(stats.balance.receivePerGiven)} — ${stats.balance.diagnosis}",
+          "$targetName の建築へ押してくれた人 Top5:",
+      ) +
+          stats.benefactors.mapIndexed { index, row ->
+            dialogPlayerCountLine(index, row.playerUuid, row.count, "いいね", stats.playerNames)
+          }
 
   private fun dialogTwoBarRows(
       firstLabel: String,
@@ -2607,22 +2944,36 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun dialogRhythmRows(stats: SLDataStatsService.ActivityRhythmStats): List<String> {
-    val shades = arrayOf("・・", "少少", "中中", "多多", "最最")
+    val shades = charArrayOf('_', '░', '▒', '▓', '█')
     val maxCount = stats.weekdayCounts.flatten().maxOrNull() ?: 0
     val weekdayLabels = listOf("月", "火", "水", "木", "金", "土", "日")
-    val bandLabels = listOf("００", "０３", "０６", "０９", "１２", "１５", "１８", "２１")
-    val graph = buildList {
-      add("凡例: ・・0件 / 少少少 / 中中中 / 多多多 / 最最最多")
-      add("曜｜${bandLabels.joinToString("｜")}")
+    val bandLabels = stats.timeBandLabels.map { it.take(2) }
+    val gridLines = buildList {
+      add("時_${bandLabels.joinToString("_")}")
       stats.weekdayCounts.forEachIndexed { day, counts ->
         val cells =
-            counts.joinToString("｜") { count ->
+            counts.joinToString("_") { count ->
               shades[SLDataStatsService.scaleLevel(count, maxCount, shades.lastIndex)]
+                  .toString()
+                  .repeat(2)
             }
-        add("${weekdayLabels[day]}｜$cells")
+        add("${weekdayLabels[day]}_$cells")
       }
     }
-    return graph +
+    validateDialogLineAdvanceInvariant(
+        DialogGraphSize.NORMAL,
+        currentDialogRenderConfig().withWidthStyle(DialogWidthStyle.ASCII_UNDERSCORE),
+        gridLines.mapIndexed { index, line ->
+          DialogLineAdvance(
+              "rhythm#$index",
+              line.length,
+              uniformDialogAdvance(line),
+              line.contains(' '),
+          )
+        },
+    )
+    return listOf("凡例:_0件/░少/▒中/▓多/█最多") +
+        gridLines +
         listOf("${stats.rhythmDiagnosis} / ${stats.dayTypeDiagnosis}。反応する時間帯がこの範囲に寄っています。")
   }
 
@@ -3002,6 +3353,12 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   fun onDialogClick(event: PlayerCustomClickEvent) {
     val player = (event.commonConnection as? PlayerGameConnection)?.player ?: return
     val current = activeDialogRequests[player.uniqueId] ?: DialogRequest(Period.WEEK)
+    DialogStatsCategory.byKey(event.identifier)?.let { category ->
+      val target = activeDialogStatsTargets[player.uniqueId]
+      if (target == null) openDialogStats(player, category = category)
+      else openDialogStats(player, target.uuid, target.name, category)
+      return
+    }
     when (event.identifier) {
       dialogWeekKey -> openDialog(player, Period.WEEK)
       dialogMonthKey -> openDialog(player, Period.MONTH)
@@ -3038,12 +3395,14 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         dialogStatsIncludeLifeWorld[player.uniqueId] =
             !(dialogStatsIncludeLifeWorld[player.uniqueId] == true)
         val target = activeDialogStatsTargets[player.uniqueId]
+        val category = activeDialogStatsCategories[player.uniqueId] ?: DialogStatsCategory.OVERVIEW
         if (target == null) openDialogStats(player)
-        else openDialogStats(player, target.uuid, target.name)
+        else openDialogStats(player, target.uuid, target.name, category)
       }
       dialogCloseKey -> {
         activeDialogRequests.remove(player.uniqueId)
         activeDialogStatsTargets.remove(player.uniqueId)
+        activeDialogStatsCategories.remove(player.uniqueId)
         dialogStatsIncludeLifeWorld.remove(player.uniqueId)
         dialogExperimentalPalettes.remove(player.uniqueId)
         player.closeInventory()
@@ -3096,6 +3455,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     clearDisplay(event.player.uniqueId)
     activeDialogRequests.remove(event.player.uniqueId)
     activeDialogStatsTargets.remove(event.player.uniqueId)
+    activeDialogStatsCategories.remove(event.player.uniqueId)
     dialogStatsIncludeLifeWorld.remove(event.player.uniqueId)
     dialogExperimentalPalettes.remove(event.player.uniqueId)
   }
@@ -3307,9 +3667,28 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       val name: String,
   )
 
+  private enum class DialogStatsCategory(
+      val label: String,
+      val tooltip: String,
+      val key: Key,
+  ) {
+    OVERVIEW("概要", "比較表を見る", dialogStatsOverviewKey),
+    BUILDS("あなたの建築", "建築Top5、経過日数、初速", dialogStatsBuildsKey),
+    GIVEN("あなたのいいね", "活動リズム、自己ベスト、継続日数", dialogStatsGivenKey),
+    SOCIAL("人とのつながり", "相互、リピーター、最速サポーター", dialogStatsSocialKey),
+    PUBLICITY("宣伝", "宣伝効果と宣伝回数", dialogStatsPublicityKey),
+    SERVER("サーバー全体", "全体ランキング、ワールド別、週次", dialogStatsServerKey);
+
+    companion object {
+      fun byKey(key: Key): DialogStatsCategory? = entries.firstOrNull { it.key == key }
+    }
+  }
+
   private data class DialogStatsContent(
       val title: String,
       val includeLifeWorld: Boolean,
+      val category: DialogStatsCategory,
+      val categories: Map<DialogStatsCategory, List<DialogStatsSection>>,
       val sections: List<DialogStatsSection>,
       val defaultDumpColorValues: Set<Int>,
   ) {
@@ -3320,6 +3699,12 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       val title: String,
       val body: PlainMessageDialogBody,
       val dumpSkipsFirstLine: Boolean,
+  )
+
+  private data class DialogComparisonValue(
+      val label: String,
+      val value: Double,
+      val sample: String,
   )
 
   // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.

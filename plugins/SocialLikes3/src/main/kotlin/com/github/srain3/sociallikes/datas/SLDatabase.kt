@@ -1678,7 +1678,10 @@ object SLDatabase {
   }
 
   /** Like totals for all works, one's own works, and works the player has liked. */
-  fun loadBuildLikeCountsBlocking(ownerUuid: String? = null): List<Int> {
+  fun loadBuildLikeCountsBlocking(
+      ownerUuid: String? = null,
+      onlyWithLikes: Boolean = false,
+  ): List<Int> {
     return submitBlocking("loadBuildLikeCounts") {
           val counts = mutableListOf<Int>()
           val sql =
@@ -1687,6 +1690,7 @@ object SLDatabase {
                 SELECT b.id, COUNT(bl.player_uuid) AS like_count
                 FROM builds b LEFT JOIN build_likes bl ON bl.build_id = b.id
                 GROUP BY b.id
+                ${if (onlyWithLikes) "HAVING like_count > 0" else ""}
                 """
                     .trimIndent()
               } else {
@@ -1695,6 +1699,7 @@ object SLDatabase {
                 FROM builds b LEFT JOIN build_likes bl ON bl.build_id = b.id
                 WHERE b.owner_uuid = ?
                 GROUP BY b.id
+                ${if (onlyWithLikes) "HAVING like_count > 0" else ""}
                 """
                     .trimIndent()
               }

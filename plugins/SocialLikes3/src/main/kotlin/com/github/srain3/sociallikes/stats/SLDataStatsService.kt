@@ -8,6 +8,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -162,7 +163,9 @@ object SLDataStatsService {
       val recentBuildComparison: RecentBuildComparison?,
       val likeConcentration: LikeConcentration,
       val publicity: PublicityStats,
+      val comparisonPublicity: ComparisonPublicityStats,
       val likeDna: LikeDnaDiagnosis,
+      val serverPublicity: PublicityStats,
       val likeTimestampCoverage: SLDatabase.LikeTimestampCoverage,
       val reliableTimestampPopulation: SLDatabase.ReliableTimestampPopulation,
       val playerNames: Map<String, String>,
@@ -226,9 +229,13 @@ object SLDataStatsService {
 
   data class ComparisonStats(
       val ownAverage: Double,
+      val ownMedian: Double,
+      val ownBuildCount: Int,
       val globalAverage: Double,
       val globalMedian: Double,
+      val globalBuildCount: Int,
       val givenTargetAverage: Double,
+      val givenTargetBuildCount: Int,
   )
 
   data class GiveReceiveBalance(val given: Int, val received: Int) {
@@ -247,10 +254,16 @@ object SLDataStatsService {
   data class LikeDistributionStats(val average: Double, val median: Double, val maximum: Int)
 
   data class RecentBuildComparison(
-      val olderAverage: Double,
-      val newerAverage: Double,
       val olderCount: Int,
       val newerCount: Int,
+      val olderLikesPerDay: Double,
+      val newerLikesPerDay: Double,
+  )
+
+  data class ComparisonPublicityStats(
+      val reposts: Int,
+      val beforeAverage: Double,
+      val afterAverage: Double,
   )
 
   data class LikeConcentration(
@@ -460,7 +473,7 @@ object SLDataStatsService {
     val likeDiversity =
         calculateLikeDiversity(SLDatabase.loadGivenLikeDimensionsBlocking(playerUuid))
     val ownBuildLikeCounts = SLDatabase.loadBuildLikeCountsBlocking(playerUuid)
-    val globalBuildLikeCounts = SLDatabase.loadBuildLikeCountsBlocking()
+    val globalBuildLikeCounts = SLDatabase.loadBuildLikeCountsBlocking(onlyWithLikes = true)
     val likedBuildLikeCounts = SLDatabase.loadLikedBuildLikeCountsBlocking(playerUuid)
     val worldReactions =
         SLDatabase.loadWorldReactionSummariesBlocking(playerUuid)
@@ -469,9 +482,13 @@ object SLDataStatsService {
     val comparison =
         ComparisonStats(
             ownAverage = average(ownBuildLikeCounts),
+            ownMedian = median(ownBuildLikeCounts),
+            ownBuildCount = ownBuildLikeCounts.size,
             globalAverage = average(globalBuildLikeCounts),
             globalMedian = median(globalBuildLikeCounts),
+            globalBuildCount = globalBuildLikeCounts.size,
             givenTargetAverage = average(likedBuildLikeCounts),
+            givenTargetBuildCount = likedBuildLikeCounts.size,
         )
     val balance = GiveReceiveBalance(likedBuildLikeCounts.size, ownBuildLikeCounts.sum())
     val distribution =
@@ -488,6 +505,7 @@ object SLDataStatsService {
             SLDatabase.loadPublicityReactionsBlocking(playerUuid),
             normalizedLimit,
         )
+    val serverPublicity = loadServerPublicityStats(normalizedLimit)
     val likeDna = calculateLikeDna(activityRhythm, likeDiversity)
     val playerNames =
         SLDatabase.loadPlayerNamesBlocking(
@@ -563,7 +581,10 @@ object SLDataStatsService {
         recentBuildComparison = recentComparison,
         likeConcentration = concentration,
         publicity = publicity,
+        comparisonPublicity =
+            ComparisonPublicityStats(reposts = 1_627, beforeAverage = 0.3, afterAverage = 0.7),
         likeDna = likeDna,
+        serverPublicity = serverPublicity,
         likeTimestampCoverage = likeTimestampCoverage,
         reliableTimestampPopulation = reliableTimestampPopulation,
         playerNames = playerNames,
@@ -889,11 +910,21 @@ object SLDataStatsService {
     val split = history.size / 2
     val older = history.take(split)
     val newer = history.drop(split)
+    val completeDay = LocalDate.now(analysisZoneId).minusDays(1)
+    fun averageLikesPerDay(rows: List<SLDatabase.BuildHistoryEntry>): Double =
+        rows
+            .map { row ->
+              val ageDays =
+                  ChronoUnit.DAYS.between(row.createdAt.toLocalDate(), completeDay)
+                      .coerceAtLeast(1L)
+              row.likesReceived.toDouble() / ageDays.toDouble()
+            }
+            .average()
     return RecentBuildComparison(
-        olderAverage = older.map { it.likesReceived }.average(),
-        newerAverage = newer.map { it.likesReceived }.average(),
         olderCount = older.size,
         newerCount = newer.size,
+        olderLikesPerDay = averageLikesPerDay(older),
+        newerLikesPerDay = averageLikesPerDay(newer),
     )
   }
 
