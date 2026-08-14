@@ -626,7 +626,10 @@ object SLDatabase {
                   SELECT b.owner_uuid, COUNT(bl.build_id) AS likes_count
                   FROM build_likes bl
                   JOIN builds b ON b.id = bl.build_id
-                  WHERE bl.player_uuid = ? AND bl.liked_at IS NOT NULL AND bl.liked_at >= ?
+                  WHERE bl.player_uuid = ?
+                    AND b.owner_uuid <> ?
+                    AND bl.liked_at IS NOT NULL
+                    AND bl.liked_at >= ?
                   GROUP BY b.owner_uuid
                   ORDER BY likes_count DESC, b.owner_uuid ASC
                   LIMIT ?
@@ -635,8 +638,9 @@ object SLDatabase {
               )
               ?.use { statement ->
                 statement.setString(1, playerUuid)
-                statement.setLong(2, sinceMillis)
-                statement.setInt(3, normalizedLimit)
+                statement.setString(2, playerUuid)
+                statement.setLong(3, sinceMillis)
+                statement.setInt(4, normalizedLimit)
                 statement.executeQuery().use { results ->
                   while (results.next()) {
                     summaries +=
@@ -662,7 +666,7 @@ object SLDatabase {
                   SELECT bl.player_uuid, COUNT(bl.build_id) AS likes_count
                   FROM builds b
                   JOIN build_likes bl ON bl.build_id = b.id
-                  WHERE b.owner_uuid = ?
+                  WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
                   GROUP BY bl.player_uuid
                   ORDER BY likes_count DESC, bl.player_uuid ASC
                   LIMIT ?
@@ -671,7 +675,8 @@ object SLDatabase {
               )
               ?.use { statement ->
                 statement.setString(1, ownerUuid)
-                statement.setInt(2, normalizedLimit)
+                statement.setString(2, ownerUuid)
+                statement.setInt(3, normalizedLimit)
                 statement.executeQuery().use { results ->
                   while (results.next()) {
                     summaries +=
@@ -709,6 +714,7 @@ object SLDatabase {
                     FROM build_likes bl
                     JOIN builds b ON b.id = bl.build_id
                     WHERE bl.liked_at IS NOT NULL
+                    AND bl.player_uuid <> b.owner_uuid
                     $ownerFilter
                   )
                   SELECT player_uuid, COUNT(build_id) AS first_like_count
@@ -1259,9 +1265,11 @@ object SLDatabase {
                         ROW_NUMBER() OVER (
                           PARTITION BY bl.build_id
                           ORDER BY bl.liked_at ASC, bl.player_uuid ASC
-                        ) AS row_number
+                      ) AS row_number
                       FROM build_likes bl
+                      JOIN builds b ON b.id = bl.build_id
                       WHERE bl.liked_at IS NOT NULL
+                        AND bl.player_uuid <> b.owner_uuid
                     )
                     SELECT COUNT(build_id) AS count
                     FROM first_likes
@@ -1284,9 +1292,11 @@ object SLDatabase {
                         ROW_NUMBER() OVER (
                           PARTITION BY bl.build_id
                           ORDER BY bl.liked_at ASC, bl.player_uuid ASC
-                        ) AS row_number
+                      ) AS row_number
                       FROM build_likes bl
+                      JOIN builds b ON b.id = bl.build_id
                       WHERE bl.liked_at IS NOT NULL
+                        AND bl.player_uuid <> b.owner_uuid
                     )
                     SELECT player_uuid, COUNT(build_id) AS first_like_count
                     FROM first_likes
@@ -1653,7 +1663,10 @@ object SLDatabase {
                   SELECT ph.id AS publicity_id, ph.sl_id, ph.timestamp, b.title, b.owner_uuid, bl.liked_at
                   FROM publicity_history ph
                   JOIN builds b ON b.id = ph.sl_id
-                  LEFT JOIN build_likes bl ON bl.build_id = b.id AND bl.liked_at IS NOT NULL
+                  LEFT JOIN build_likes bl
+                    ON bl.build_id = b.id
+                   AND bl.liked_at IS NOT NULL
+                   AND bl.player_uuid <> b.owner_uuid
                   WHERE 1 = 1 $ownerClause
                   ORDER BY ph.sl_id ASC, ph.timestamp ASC, bl.liked_at ASC
                   """

@@ -365,7 +365,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                     .append(Component.text("サーバー公開統計: 宣伝効果\n", NamedTextColor.LIGHT_PURPLE))
                     .append(
                         Component.text(
-                            "リポスト ${formatCount(stats.totalReposts)}回 / 通常時 ${formatAverageCount(stats.normalReactionAverage)} / 宣伝後24時間 ${formatAverageCount(stats.publicityReactionAverage)} / 差 ${formatSignedAverage(stats.reactionDelta)}",
+                            "リポスト ${formatCount(stats.totalReposts)}回 / 直前24h平均 ${formatAverageCount(stats.normalReactionAverage)}件/回 / 宣伝後24h平均 ${formatAverageCount(stats.publicityReactionAverage)}件/回 / 差 ${formatSignedAverage(stats.reactionDelta)}件/回",
                             palette.secondary,
                         )
                     )
@@ -384,7 +384,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 palette,
                 "複数回宣伝された建築のイベント分析",
                 stats.recurringBuilds.map { row ->
-                  "#${row.buildId} ${compactDialogText(row.title, 16)}: 通常 ${formatAverageCount(row.normalReactionAverage)} → 宣伝後24h ${formatAverageCount(row.publicityReactionAverage)} (${formatSignedAverage(row.reactionDelta)}) / 間隔 ${row.averageIntervalHours?.let { formatDialogDuration((it * 3_600_000).toLong()) } ?: "-"}"
+                  "#${row.buildId} ${compactDialogText(row.title, 16)}: 直前24h平均 ${formatAverageCount(row.normalReactionAverage)}件/回 → 宣伝後24h平均 ${formatAverageCount(row.publicityReactionAverage)}件/回 (${formatSignedAverage(row.reactionDelta)}件/回) / 間隔 ${row.averageIntervalHours?.let { formatDialogDuration((it * 3_600_000).toLong()) } ?: "-"}"
                 },
                 "複数回宣伝された建築はまだありません。",
             ),
@@ -2100,7 +2100,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 scopedRows(
                     null,
                     listOf(
-                        "応援相手ベース ${formatDialogPercent(stats.mutualLikes.pairCount, stats.mutualLikes.likedOwnerCount)} / 応援者ベース ${formatDialogPercent(stats.mutualLikes.pairCount, stats.mutualLikes.likerCount)}",
+                        "$targetName が応援している${formatCount(stats.mutualLikes.likedOwnerCount)}人中 ${formatCount(stats.mutualLikes.pairCount)}人が相互 (${formatDialogPercent(stats.mutualLikes.pairCount, stats.mutualLikes.likedOwnerCount)})",
+                        "$targetName を応援している${formatCount(stats.mutualLikes.likerCount)}人中 ${formatCount(stats.mutualLikes.pairCount)}人に応援返し (${formatDialogPercent(stats.mutualLikes.pairCount, stats.mutualLikes.likerCount)})",
                     ) +
                         stats.mutualLikes.pairs.mapIndexed { index, row ->
                           "${index + 1}. ${dialogPlayerName(row.playerUuid, stats.playerNames)} 送${formatCount(row.likesGiven)} / 受${formatCount(row.likesReceived)}"
@@ -2265,7 +2266,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                     "宣伝履歴全期間 / 前後24時間",
                     listOf(
                         "宣伝＝10Pを消費し、オンラインプレイヤーへ建築をリポスト表示する機能。",
-                        "リポスト ${formatCount(stats.publicity.totalReposts)}回 / 通常時 ${formatAverageCount(stats.publicity.normalReactionAverage)} / 宣伝後 ${formatAverageCount(stats.publicity.publicityReactionAverage)} / 差 ${formatSignedAverage(stats.publicity.reactionDelta)}",
+                        "リポスト ${formatCount(stats.publicity.totalReposts)}回 / 直前24h平均 ${formatAverageCount(stats.publicity.normalReactionAverage)}件/回 / 宣伝後24h平均 ${formatAverageCount(stats.publicity.publicityReactionAverage)}件/回 / 差 ${formatSignedAverage(stats.publicity.reactionDelta)}件/回",
                         "掲載直後24時間の反響を、同じ長さの直前24時間と比較しています。",
                     ),
                     "このプレイヤーの建築には、まだ宣伝履歴がありません。",
@@ -2299,7 +2300,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           listOf("複数回宣伝された建築はまだありません。")
                         } else {
                           stats.publicity.recurringBuilds.map { row ->
-                            "#${row.buildId} ${compactDialogText(row.title, 15)}: 通常 ${formatAverageCount(row.normalReactionAverage)} → 宣伝後 ${formatAverageCount(row.publicityReactionAverage)} (${formatSignedAverage(row.reactionDelta)}) / 平均間隔 ${row.averageIntervalHours?.let { formatDialogDuration((it * 3_600_000).toLong()) } ?: "-"}"
+                            "#${row.buildId} ${compactDialogText(row.title, 15)}: 直前24h平均 ${formatAverageCount(row.normalReactionAverage)}件/回 → 宣伝後24h平均 ${formatAverageCount(row.publicityReactionAverage)}件/回 (${formatSignedAverage(row.reactionDelta)}件/回) / 平均間隔 ${row.averageIntervalHours?.let { formatDialogDuration((it * 3_600_000).toLong()) } ?: "-"}"
                           }
                         }),
                     "複数回宣伝された建築はまだありません。",
@@ -2507,10 +2508,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   ): Component {
     val peak =
         stats.peakLikeDay?.let {
-          "爆発日 ${it.dateLabel} ${formatCount(it.count)}件 平均${formatAverageCount(it.averageCount)}/日"
-        } ?: "爆発日はまだありません"
+          "全体の受けいいね最多日 ${it.dateLabel} ${formatCount(it.count)}件 / 直近12週平均${formatAverageCount(it.averageCount)}件/日"
+        } ?: "全体の受けいいね最多日はまだありません"
     val personalBest =
-        "自己ベスト 日${dialogLatestPersonalBest(stats.personalBestHistory.daily)} / " +
+        "送ったいいね自己ベスト 日${dialogLatestPersonalBest(stats.personalBestHistory.daily)} / " +
             "週${dialogLatestPersonalBest(stats.personalBestHistory.weekly)} / " +
             "月${dialogLatestPersonalBest(stats.personalBestHistory.monthly)}"
     val week = stats.playerWeek
