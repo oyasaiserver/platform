@@ -145,9 +145,10 @@ object SLDataStatsService {
       val regularSupporters: List<RegularSupporterRow>,
       val repeaterRate: RepeaterRateStats,
       val fastestSupporters: List<PlayerCountRow>,
+      val fastestSupporterBuildCount: Int,
       val initialLikeSpeed: InitialLikeSpeedStats?,
       val activityRhythm: ActivityRhythmStats,
-      val buildAgeDistribution: List<AgeBucket>,
+      val ageDistribution: AgeDistributionStats,
       val givenStreak: StreakStats,
       val receivedStreak: StreakStats,
       val givenLongTail: LongTailStats,
@@ -163,6 +164,7 @@ object SLDataStatsService {
       val publicity: PublicityStats,
       val likeDna: LikeDnaDiagnosis,
       val likeTimestampCoverage: SLDatabase.LikeTimestampCoverage,
+      val reliableTimestampPopulation: SLDatabase.ReliableTimestampPopulation,
       val playerNames: Map<String, String>,
   )
 
@@ -184,6 +186,11 @@ object SLDataStatsService {
   )
 
   data class AgeBucket(val label: String, val count: Int)
+
+  data class AgeDistributionStats(
+      val given: List<AgeBucket>,
+      val received: List<AgeBucket>,
+  )
 
   data class StreakStats(val currentDays: Int, val longestDays: Int)
 
@@ -255,6 +262,7 @@ object SLDataStatsService {
 
   data class PublicityStats(
       val totalReposts: Int,
+      val targetBuildCount: Int,
       val normalReactionAverage: Double,
       val publicityReactionAverage: Double,
       val topBuilds: List<PublicityBuildRow>,
@@ -417,11 +425,15 @@ object SLDataStatsService {
         SLDatabase.loadFastestSupportersBlocking(playerUuid, normalizedLimit).map {
           PlayerCountRow(it.playerUuid, it.firstSupportCount)
         }
-    val givenLikeEvents = SLDatabase.loadGivenLikeEventsBlocking(playerUuid)
-    val receivedLikeEvents = SLDatabase.loadReceivedLikeEventsBlocking(playerUuid)
+    val fastestSupporterBuildCount = SLDatabase.loadOwnerCompleteLikedBuildCountBlocking(playerUuid)
+    val givenLikeEvents =
+        SLDatabase.loadGivenLikeEventsBlocking(playerUuid, reliableInitialLikeBuildCreatedSince)
+    val receivedLikeEvents =
+        SLDatabase.loadReceivedLikeEventsBlocking(playerUuid, reliableInitialLikeBuildCreatedSince)
     val likeTimestampCoverage = SLDatabase.loadLikeTimestampCoverageBlocking()
-    val initialLikeEvents =
-        receivedLikeEvents.filter { !it.createdAt.isBefore(reliableInitialLikeBuildCreatedSince) }
+    val reliableTimestampPopulation =
+        SLDatabase.loadReliableTimestampPopulationBlocking(reliableInitialLikeBuildCreatedSince)
+    val initialLikeEvents = receivedLikeEvents
     val initialLikeSpeed =
         calculateInitialLikeSpeed(
             initialLikeEvents,
@@ -432,7 +444,14 @@ object SLDataStatsService {
             ),
         )
     val activityRhythm = calculateActivityRhythm(givenLikeEvents)
-    val buildAgeDistribution = calculateAgeBuckets(givenLikeEvents)
+    val ageDistribution =
+        AgeDistributionStats(
+            given = calculateAgeBuckets(givenLikeEvents),
+            received =
+                calculateAgeBuckets(
+                    receivedLikeEvents.filter { it.playerUuid != playerUuid },
+                ),
+        )
     val givenStreak = calculateStreak(givenLikeEvents.map { it.likedAt })
     val receivedStreak = calculateStreak(receivedLikeEvents.map { it.likedAt })
     val givenLongTail = calculateLongTail(givenLikeEvents)
@@ -527,9 +546,10 @@ object SLDataStatsService {
         regularSupporters = regularSupporters,
         repeaterRate = repeaterRate,
         fastestSupporters = fastestSupporters,
+        fastestSupporterBuildCount = fastestSupporterBuildCount,
         initialLikeSpeed = initialLikeSpeed,
         activityRhythm = activityRhythm,
-        buildAgeDistribution = buildAgeDistribution,
+        ageDistribution = ageDistribution,
         givenStreak = givenStreak,
         receivedStreak = receivedStreak,
         givenLongTail = givenLongTail,
@@ -545,6 +565,7 @@ object SLDataStatsService {
         publicity = publicity,
         likeDna = likeDna,
         likeTimestampCoverage = likeTimestampCoverage,
+        reliableTimestampPopulation = reliableTimestampPopulation,
         playerNames = playerNames,
     )
   }
@@ -581,6 +602,7 @@ object SLDataStatsService {
             )
     return PublicityStats(
         totalReposts = reactions.size,
+        targetBuildCount = reactions.map { it.buildId }.distinct().size,
         normalReactionAverage =
             reactions.map { it.likesBefore24Hours }.average().takeUnless { it.isNaN() } ?: 0.0,
         publicityReactionAverage =
@@ -711,13 +733,13 @@ object SLDataStatsService {
               )
               .toDays()
       when {
-        ageDays <= 7 -> counts[0]++
-        ageDays <= 30 -> counts[1]++
-        ageDays <= 90 -> counts[2]++
+        ageDays <= 0 -> counts[0]++
+        ageDays < 7 -> counts[1]++
+        ageDays <= 30 -> counts[2]++
         else -> counts[3]++
       }
     }
-    return listOf("公開7日以内", "公開30日以内", "公開90日以内", "公開90日超").mapIndexed { index, label ->
+    return listOf("当日", "7日以内", "30日以内", "30日超").mapIndexed { index, label ->
       AgeBucket(label, counts[index])
     }
   }

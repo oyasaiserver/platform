@@ -137,6 +137,12 @@ object SLDatabase {
 
   data class LikeTimestampCoverage(val totalLikes: Int, val timestampedLikes: Int)
 
+  data class ReliableTimestampPopulation(
+      val postCutoffBuildCount: Int,
+      val postCutoffCompleteBuildCount: Int,
+      val completeLikedBuildCount: Int,
+  )
+
   /**
    * A single repost together with the reactions immediately around it (all windows are 24 hours).
    */
@@ -482,13 +488,29 @@ object SLDatabase {
         .orEmpty()
   }
 
-  /** Returns all timestamped likes made by one player with their build dimensions. */
-  fun loadGivenLikeEventsBlocking(playerUuid: String): List<BuildLikeEvent> =
-      loadLikeEventsBlocking("loadGivenLikeEvents", "bl.player_uuid = ?", playerUuid)
+  /** Returns timestamped likes made by one player with their build dimensions. */
+  fun loadGivenLikeEventsBlocking(
+      playerUuid: String,
+      reliablePublishedSince: LocalDateTime? = null,
+  ): List<BuildLikeEvent> =
+      loadLikeEventsBlocking(
+          "loadGivenLikeEvents",
+          "bl.player_uuid = ?",
+          playerUuid,
+          reliablePublishedSince,
+      )
 
-  /** Returns all timestamped likes received by one build owner with their build dimensions. */
-  fun loadReceivedLikeEventsBlocking(ownerUuid: String): List<BuildLikeEvent> =
-      loadLikeEventsBlocking("loadReceivedLikeEvents", "b.owner_uuid = ?", ownerUuid)
+  /** Returns timestamped likes received by one build owner with their build dimensions. */
+  fun loadReceivedLikeEventsBlocking(
+      ownerUuid: String,
+      reliablePublishedSince: LocalDateTime? = null,
+  ): List<BuildLikeEvent> =
+      loadLikeEventsBlocking(
+          "loadReceivedLikeEvents",
+          "b.owner_uuid = ?",
+          ownerUuid,
+          reliablePublishedSince,
+      )
 
   fun loadLikeTimestampCoverageBlocking(): LikeTimestampCoverage =
       submitBlocking("loadLikeTimestampCoverage") {
@@ -499,6 +521,58 @@ object SLDatabase {
         )
       } ?: LikeTimestampCoverage(totalLikes = 0, timestampedLikes = 0)
 
+  fun loadReliableTimestampPopulationBlocking(cutoff: LocalDateTime): ReliableTimestampPopulation =
+      submitBlocking("loadReliableTimestampPopulation") {
+        val cutoffText = cutoff.toString()
+        val postCutoffBuildCount =
+            countQuery(
+                """
+                SELECT COUNT(id) AS count
+                FROM builds
+                WHERE created_at >= ?
+                """
+                    .trimIndent()
+            ) { statement ->
+              statement.setString(1, cutoffText)
+            }
+        val postCutoffCompleteBuildCount =
+            countQuery(
+                """
+                SELECT COUNT(*) AS count
+                FROM (
+                  SELECT b.id
+                  FROM builds b
+                  LEFT JOIN build_likes bl ON bl.build_id = b.id
+                  WHERE b.created_at >= ?
+                  GROUP BY b.id
+                  HAVING COUNT(bl.player_uuid) = COUNT(bl.liked_at)
+                )
+                """
+                    .trimIndent()
+            ) { statement ->
+              statement.setString(1, cutoffText)
+            }
+        val completeLikedBuildCount =
+            countQuery(
+                """
+                SELECT COUNT(*) AS count
+                FROM (
+                  SELECT b.id
+                  FROM builds b
+                  JOIN build_likes bl ON bl.build_id = b.id
+                  GROUP BY b.id
+                  HAVING COUNT(bl.player_uuid) = COUNT(bl.liked_at)
+                )
+                """
+                    .trimIndent()
+            )
+        ReliableTimestampPopulation(
+            postCutoffBuildCount,
+            postCutoffCompleteBuildCount,
+            completeLikedBuildCount,
+        )
+      } ?: ReliableTimestampPopulation(0, 0, 0)
+
   fun loadOwnerBuildCountCreatedSinceBlocking(ownerUuid: String, since: LocalDateTime): Int =
       submitBlocking("loadOwnerBuildCountCreatedSince") {
         countQuery(
@@ -506,11 +580,38 @@ object SLDatabase {
             SELECT COUNT(id) AS count
             FROM builds
             WHERE owner_uuid = ? AND created_at >= ?
+              AND id IN (
+                SELECT b2.id
+                FROM builds b2
+                LEFT JOIN build_likes bl2 ON bl2.build_id = b2.id
+                GROUP BY b2.id
+                HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+              )
             """
                 .trimIndent()
         ) { statement ->
           statement.setString(1, ownerUuid)
           statement.setString(2, since.toString())
+        }
+      } ?: 0
+
+  fun loadOwnerCompleteLikedBuildCountBlocking(ownerUuid: String): Int =
+      submitBlocking("loadOwnerCompleteLikedBuildCount") {
+        countQuery(
+            """
+            SELECT COUNT(*) AS count
+            FROM (
+              SELECT b.id
+              FROM builds b
+              JOIN build_likes bl ON bl.build_id = b.id
+              WHERE b.owner_uuid = ?
+              GROUP BY b.id
+              HAVING COUNT(bl.player_uuid) = COUNT(bl.liked_at)
+            )
+            """
+                .trimIndent()
+        ) { statement ->
+          statement.setString(1, ownerUuid)
         }
       } ?: 0
 
@@ -713,6 +814,13 @@ object SLDatabase {
                       ) AS row_number
                     FROM build_likes bl
                     JOIN builds b ON b.id = bl.build_id
+                    JOIN (
+                      SELECT b2.id
+                      FROM builds b2
+                      JOIN build_likes bl2 ON bl2.build_id = b2.id
+                      GROUP BY b2.id
+                      HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                    ) complete_builds ON complete_builds.id = b.id
                     WHERE bl.liked_at IS NOT NULL
                     AND bl.player_uuid <> b.owner_uuid
                     $ownerFilter
@@ -1139,6 +1247,13 @@ object SLDatabase {
                   WITH first_likes AS (
                     SELECT b.id AS build_id, MIN(bl.liked_at) AS first_liked_at
                     FROM builds b
+                    JOIN (
+                      SELECT b2.id
+                      FROM builds b2
+                      JOIN build_likes bl2 ON bl2.build_id = b2.id
+                      GROUP BY b2.id
+                      HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                    ) complete_builds ON complete_builds.id = b.id
                     JOIN build_likes bl ON bl.build_id = b.id
                     WHERE b.owner_uuid = ?
                       AND bl.player_uuid <> ?
@@ -1152,7 +1267,7 @@ object SLDatabase {
                     ON bl.build_id = first_likes.build_id AND bl.liked_at = first_likes.first_liked_at
                   WHERE bl.player_uuid <> ?
                   GROUP BY bl.player_uuid
-                  ORDER BY first_support_count DESC, bl.player_uuid ASC
+                  ORDER BY first_support_count DESC, bl.player_uuid DESC
                   LIMIT ?
                   """
                       .trimIndent()
@@ -1259,15 +1374,22 @@ object SLDatabase {
                 countQuery(
                     """
                     WITH first_likes AS (
-                      SELECT
-                        bl.build_id,
-                        bl.player_uuid,
-                        ROW_NUMBER() OVER (
+                    SELECT
+                      bl.build_id,
+                      bl.player_uuid,
+                      ROW_NUMBER() OVER (
                           PARTITION BY bl.build_id
                           ORDER BY bl.liked_at ASC, bl.player_uuid ASC
                       ) AS row_number
                       FROM build_likes bl
                       JOIN builds b ON b.id = bl.build_id
+                      JOIN (
+                        SELECT b2.id
+                        FROM builds b2
+                        JOIN build_likes bl2 ON bl2.build_id = b2.id
+                        GROUP BY b2.id
+                        HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                      ) complete_builds ON complete_builds.id = b.id
                       WHERE bl.liked_at IS NOT NULL
                         AND bl.player_uuid <> b.owner_uuid
                     )
@@ -1295,6 +1417,13 @@ object SLDatabase {
                       ) AS row_number
                       FROM build_likes bl
                       JOIN builds b ON b.id = bl.build_id
+                      JOIN (
+                        SELECT b2.id
+                        FROM builds b2
+                        JOIN build_likes bl2 ON bl2.build_id = b2.id
+                        GROUP BY b2.id
+                        HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                      ) complete_builds ON complete_builds.id = b.id
                       WHERE bl.liked_at IS NOT NULL
                         AND bl.player_uuid <> b.owner_uuid
                     )
@@ -1663,6 +1792,13 @@ object SLDatabase {
                   SELECT ph.id AS publicity_id, ph.sl_id, ph.timestamp, b.title, b.owner_uuid, bl.liked_at
                   FROM publicity_history ph
                   JOIN builds b ON b.id = ph.sl_id
+                  JOIN (
+                    SELECT b2.id
+                    FROM builds b2
+                    JOIN build_likes bl2 ON bl2.build_id = b2.id
+                    GROUP BY b2.id
+                    HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                  ) complete_builds ON complete_builds.id = b.id
                   LEFT JOIN build_likes bl
                     ON bl.build_id = b.id
                    AND bl.liked_at IS NOT NULL
@@ -1819,22 +1955,43 @@ object SLDatabase {
       taskName: String,
       filterSql: String,
       uuid: String,
+      reliablePublishedSince: LocalDateTime?,
   ): List<BuildLikeEvent> {
     return submitBlocking(taskName) {
           val events = mutableListOf<BuildLikeEvent>()
+          val reliableBuildJoin =
+              reliablePublishedSince?.let {
+                """
+                JOIN (
+                  SELECT b2.id
+                  FROM builds b2
+                  JOIN build_likes bl2 ON bl2.build_id = b2.id
+                  WHERE b2.created_at >= ?
+                  GROUP BY b2.id
+                  HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                ) reliable_builds ON reliable_builds.id = b.id
+                """
+                    .trimIndent()
+              } ?: ""
           rawConnection()
               ?.prepareStatement(
                   """
                   SELECT b.id, b.title, bl.player_uuid, b.owner_uuid, b.world_name, b.chunk_x, b.chunk_z, b.created_at, bl.liked_at
                   FROM build_likes bl
                   JOIN builds b ON b.id = bl.build_id
+                  $reliableBuildJoin
                   WHERE $filterSql AND bl.liked_at IS NOT NULL
                   ORDER BY bl.liked_at ASC, b.id ASC
                   """
                       .trimIndent()
               )
               ?.use { statement ->
-                statement.setString(1, uuid)
+                var parameterIndex = 1
+                if (reliablePublishedSince != null) {
+                  statement.setString(parameterIndex, reliablePublishedSince.toString())
+                  parameterIndex++
+                }
+                statement.setString(parameterIndex, uuid)
                 statement.executeQuery().use { results ->
                   while (results.next()) {
                     events +=
