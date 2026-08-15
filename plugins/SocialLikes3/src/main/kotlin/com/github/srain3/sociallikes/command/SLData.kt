@@ -1894,7 +1894,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         )
     body +=
         DialogBody.plainMessage(
-            Component.text("制作者ごとの受信数（自己いいねを除外）", palette.secondary).font(DIALOG_FONT),
+            Component.text("制作者ごとの受信いいね数", palette.secondary).font(DIALOG_FONT),
             bodyWidth,
         )
     if (rows.isEmpty()) {
@@ -1927,7 +1927,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             dialogButton("週間", "今週の制作者別いいね数", dialogRankingWeekKey),
             dialogButton("月間", "今月の制作者別いいね数", dialogRankingMonthKey),
             dialogButton("年間", "今年の制作者別いいね数", dialogRankingYearKey),
-            dialogButton("全期間", "記録済みの全期間", dialogRankingAllKey),
+            dialogButton("全期間", "全いいね（いいね時刻を問わない）", dialogRankingAllKey),
             dialogButton("再読込", "ランキングを再表示", dialogRankingKey),
             dialogButton("通常グラフ", "週次グラフへ戻る", dialogPreviewGraphKey),
             dialogButton("詳細統計", "交流・応援・一番乗りの詳細を表示", dialogStatsKey),
@@ -3193,7 +3193,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       startDate: java.time.LocalDate?,
   ): String =
       when (period) {
-        RankingPeriod.ALL -> "全期間"
+        RankingPeriod.ALL -> "全期間（いいね時刻を問わない）"
         else ->
             "${period.label}（${startDate?.year}/${startDate?.monthValue}/${startDate?.dayOfMonth}〜）"
       }

@@ -682,7 +682,10 @@ object SLDatabase {
   ): List<OwnerLikeSummary> {
     val normalizedLimit = normalizedStatsLimit(limit)
     val selfLikeClause = if (excludeOwnerSelfLikes) "AND bl.player_uuid <> b.owner_uuid" else ""
-    val sinceClause = if (sinceMillis == null) "" else "AND bl.liked_at >= ?"
+    // An all-time ranking is not a timestamped-time-series query. Historical likes predate
+    // liked_at, so do not discard them when no calendar boundary was requested.
+    val periodClause =
+        if (sinceMillis == null) "" else "AND bl.liked_at IS NOT NULL AND bl.liked_at >= ?"
     return submitBlocking("loadOwnerLikeLeadersSince") {
           val summaries = mutableListOf<OwnerLikeSummary>()
           rawConnection()
@@ -691,7 +694,7 @@ object SLDatabase {
                   SELECT b.owner_uuid, COUNT(bl.player_uuid) AS likes_count
                   FROM build_likes bl
                   JOIN builds b ON b.id = bl.build_id
-                  WHERE bl.liked_at IS NOT NULL $sinceClause
+                  WHERE 1 = 1 $periodClause
                     $selfLikeClause
                   GROUP BY b.owner_uuid
                   ORDER BY likes_count DESC, b.owner_uuid ASC
@@ -720,15 +723,17 @@ object SLDatabase {
         .orEmpty()
   }
 
-  /** Counts all timestamped likes in a ranking period, including owner self-likes. */
+  /** Counts likes in a ranking period, including owner self-likes. */
   fun loadLikeCountSinceBlocking(sinceMillis: Long?): Int =
       submitBlocking("loadLikeCountSince") {
-        val sinceClause = if (sinceMillis == null) "" else "AND bl.liked_at >= ?"
+        // See loadOwnerLikeLeadersSinceBlocking: only bounded periods require liked_at.
+        val periodClause =
+            if (sinceMillis == null) "" else "AND bl.liked_at IS NOT NULL AND bl.liked_at >= ?"
         countQuery(
             """
             SELECT COUNT(*) AS count
             FROM build_likes bl
-            WHERE bl.liked_at IS NOT NULL $sinceClause
+            WHERE 1 = 1 $periodClause
             """
                 .trimIndent()
         ) { statement ->

@@ -63,7 +63,8 @@ class SocialLikes : JavaPlugin() {
     PublicityHistory.loadYAML()
 
     SLDiscord.enable()
-    server.scheduler.runTaskLater(this, Runnable { SLData.logWeeklyDialogGraphPreview() }, 20L * 4L)
+    // Do not generate the diagnostic graph preview at startup. It runs aggregate SQLite queries
+    // through submitBlocking and used to block the server thread a few seconds after enable.
   }
 
   override fun onDisable() {

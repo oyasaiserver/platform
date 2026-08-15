@@ -384,8 +384,8 @@ object SLDataStatsService {
 
   /**
    * Loads the creator ranking with one calendar boundary for both the displayed total and Top5. The
-   * total deliberately remains the total number of likes, while the ranking excludes owner
-   * self-likes to match the other support-oriented statistics.
+   * total and ranking both include every received like. For ALL this deliberately includes likes
+   * without liked_at because a calendar boundary was not requested.
    */
   fun loadOwnerLikeRanking(period: RankingPeriod, limit: Int = 5): OwnerLikeRanking {
     val startDate = rankingPeriodStart(period)
@@ -398,7 +398,7 @@ object SLDataStatsService {
             SLDatabase.loadOwnerLikeLeadersSinceBlocking(
                 sinceMillis,
                 limit,
-                excludeOwnerSelfLikes = true,
+                excludeOwnerSelfLikes = false,
             ),
     )
   }
