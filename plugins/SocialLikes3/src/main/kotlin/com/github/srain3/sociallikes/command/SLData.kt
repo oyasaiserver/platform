@@ -28,6 +28,7 @@ import java.awt.Shape
 import java.awt.image.BufferedImage
 import java.io.File
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.util.UUID
 import kotlin.math.abs
@@ -2059,11 +2060,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 scopedRows(
                     null,
                     listOf(
-                        "受%＝$targetName の受けたいいね内の割合 / 押%＝$targetName が押したいいね内の割合",
-                        "差＝$targetName 自作品平均-全体平均（いいね/作品）。上位10ワールド。",
+                        "いいねレシオ＝受けたいいね ÷ 押したいいね。押していないワールドは比較から除外。",
                     ) +
                         stats.worldReactions.take(10).map { row ->
-                          "${compactDialogText(row.worldName, 14)} 受${formatDoublePercent(row.receivedShare)} / 押${formatDoublePercent(row.givenShare)} / 差 ${formatSignedAverage(row.receivedAverageDelta)}/作品"
+                          "${compactDialogText(row.worldName, 14)} 受÷押 ${formatRatio(row.likeRatio ?: 0.0)}"
                         },
                     "対象ワールドの反応データはまだありません。",
                 ),
@@ -2248,7 +2248,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 palette,
                 "活動リズム（JST）⏱",
                 scopedRows(
-                    reliablePublishedScope(stats),
+                    dialogRhythmScope(stats.activityRhythm),
                     dialogRhythmRows(stats.activityRhythm),
                     "いいねした時刻のデータはまだありません。",
                 ),
@@ -2398,33 +2398,40 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 ),
             DialogStatsCategory.BUILDS to
                 listOf(
-                    dialogStatsSection(
+                    dialogStatsRankingSection(
                         palette,
                         "建築Top5",
-                        scopedRows(
-                            null,
-                            stats.ownBuilds.mapIndexed { index, row ->
-                              "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 18)} ${formatCount(row.likeCount)}いいね"
-                            },
-                            "$targetName の建築Top5はまだありません。",
-                        ),
+                        null,
+                        stats.ownBuilds.map { row ->
+                          DialogStatsRankingRow(
+                              "#${row.buildId}",
+                              row.likeCount,
+                              "${formatCount(row.likeCount)}いいね",
+                              row.title,
+                          )
+                        },
                         "$targetName の建築Top5はまだありません。",
                     ),
-                    dialogStatsSection(
+                    dialogStatsVerticalBarSection(
                         palette,
                         "公開からの経過日数 ⏱",
-                        scopedRows(
-                            reliablePublishedScope(stats),
-                            dialogBuildAgeRows(stats.ageDistribution),
-                            "築年数を計算できる受けいいねはまだありません。",
-                        ),
-                        "築年数を計算できる受けいいねはまだありません。",
+                        reliablePublishedScope(stats),
+                        dialogCategoricalSeries(stats.ageDistribution.received),
+                        "受けたいいねが付くまでの日数。",
                     ),
                     allSections[12],
                 ),
             DialogStatsCategory.GIVEN to
                 listOf(
                     allSections[13],
+                    dialogStatsVerticalBarSection(
+                        palette,
+                        "月別ペース変化（送ったいいね）⏱",
+                        "縞の棒＝集計途中の当月。完了月との比較には使いません。",
+                        stats.monthlyGiven.series,
+                        incompleteBucketIndices =
+                            setOfNotNull(stats.monthlyGiven.incompleteBucketIndex),
+                    ),
                     allSections[19],
                     dialogStatsSection(
                         palette,
@@ -2451,13 +2458,123 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                         ),
                         "いいねの送受信データはまだありません。",
                     ),
-                    allSections[5],
-                    allSections[10],
-                    allSections[11],
+                    dialogStatsRankingSection(
+                        palette,
+                        "押した順の往復",
+                        "棒＝あなたが押したいいね / 数字＝相手から返ったいいね",
+                        stats.mutualLikes.pairs.map { row ->
+                          DialogStatsRankingRow(
+                              dialogPlayerName(row.playerUuid, stats.playerNames),
+                              row.likesGiven,
+                              "返${formatCount(row.likesReceived)}",
+                              "あなたが送ったいいね",
+                          )
+                        },
+                        "まだ相互いいねペアはありません。",
+                    ),
+                    dialogStatsRankingSection(
+                        palette,
+                        "常連サポーター",
+                        "あなたの建築へ複数回いいねした人。",
+                        stats.regularSupporters.map { row ->
+                          DialogStatsRankingRow(
+                              dialogPlayerName(row.playerUuid, stats.playerNames),
+                              row.likeCount,
+                              "${formatCount(row.likeCount)}いいね",
+                              "あなたの建築へ送ったいいね",
+                          )
+                        },
+                        "$targetName の建築への常連サポーターはまだいません。",
+                    ),
+                    dialogStatsVerticalBarSection(
+                        palette,
+                        "リピーター率",
+                        null,
+                        dialogCategoricalSeries(
+                            listOf(
+                                SLDataStatsService.AgeBucket(
+                                    "リピーター",
+                                    stats.repeaterRate.repeaterCount,
+                                ),
+                                SLDataStatsService.AgeBucket(
+                                    "初回のみ",
+                                    (stats.repeaterRate.uniqueLikerCount -
+                                            stats.repeaterRate.repeaterCount)
+                                        .coerceAtLeast(0),
+                                ),
+                            )
+                        ),
+                        "${formatDialogPercent(stats.repeaterRate.repeaterCount, stats.repeaterRate.uniqueLikerCount)} が2作品以上にいいね。",
+                    ),
+                    dialogStatsRankingSection(
+                        palette,
+                        "新作最速サポーター ⏱",
+                        "対象: いいね時刻が揃った自作品 ${formatCount(stats.fastestSupporterBuildCount)}作品",
+                        stats.fastestSupporters.map { row ->
+                          DialogStatsRankingRow(
+                              dialogPlayerName(row.playerUuid, stats.playerNames),
+                              row.count,
+                              "${formatCount(row.count)}回",
+                              "最速でいいねした作品数",
+                          )
+                        },
+                        "$targetName の新作への最速サポーターデータはまだありません。",
+                    ),
                 ),
             DialogStatsCategory.PUBLICITY to
                 listOf(allSections[16], allSections[18], allSections[17]),
-            DialogStatsCategory.SERVER to listOf(allSections[20], allSections[2], allSections[21]),
+            DialogStatsCategory.SERVER to
+                listOf(
+                    dialogStatsRankingSection(
+                        palette,
+                        "全体の一番乗りランキング（押した人）⏱",
+                        "対象: いいね時刻が揃った建築 ${formatCount(stats.reliableTimestampPopulation.completeLikedBuildCount)}件",
+                        stats.globalFirstLikers.map { row ->
+                          DialogStatsRankingRow(
+                              dialogPlayerName(row.playerUuid, stats.playerNames),
+                              row.count,
+                              "${formatCount(row.count)}回",
+                              "一番乗り回数",
+                          )
+                        },
+                        "まだ一番乗りデータはありません。",
+                    ),
+                    dialogStatsRankingSection(
+                        palette,
+                        "ワールド別のいいねレシオ${if (includeLifeWorld) "（ライフ含む）" else "（ライフ除外）"}",
+                        "受けたいいね ÷ 押したいいね。押していないワールドは比較から除外。",
+                        stats.worldReactions.take(10).map { row ->
+                          val ratio = row.likeRatio ?: 0.0
+                          DialogStatsRankingRow(
+                              row.worldName,
+                              (ratio * 100.0).toInt().coerceAtLeast(0),
+                              "受÷押 ${formatRatio(ratio)}",
+                              "いいねレシオ",
+                          )
+                        },
+                        "押したいいねを持つワールドはまだありません。",
+                    ),
+                    dialogStatsRankingSection(
+                        palette,
+                        "今週いいねした制作者 ⏱",
+                        "今週",
+                        stats.weeklyLikedOwners.map { row ->
+                          DialogStatsRankingRow(
+                              dialogPlayerName(row.ownerUuid, stats.playerNames),
+                              row.count,
+                              "${formatCount(row.count)}いいね",
+                              "今週送ったいいね",
+                          )
+                        },
+                        "今週いいねした制作者データはありません。",
+                    ),
+                    dialogStatsVerticalBarSection(
+                        palette,
+                        "週次いいね（サーバー全体）",
+                        "直近${stats.weekly.buckets.size}週。",
+                        stats.weekly,
+                    ),
+                ),
         )
     val sections = categories[category] ?: categories.getValue(DialogStatsCategory.OVERVIEW)
 
@@ -2487,6 +2604,92 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           title,
           dialogStatsRowsBody(palette, title, rows, emptyMessage),
           dumpSkipsFirstLine = true,
+      )
+
+  private data class DialogStatsRankingRow(
+      val name: String,
+      val barValue: Int,
+      val valueText: String,
+      val hoverLabel: String,
+  )
+
+  private fun dialogStatsRankingSection(
+      palette: DialogTextPalette,
+      title: String,
+      scope: String?,
+      rows: List<DialogStatsRankingRow>,
+      emptyMessage: String,
+  ): DialogStatsSection {
+    if (rows.isEmpty())
+        return dialogStatsSection(palette, title, listOf(emptyMessage), emptyMessage)
+    val maximum = rows.maxOf { it.barValue }.coerceAtLeast(1)
+    var component =
+        Component.empty()
+            .style(Style.style().font(DIALOG_FONT).build())
+            .append(Component.text("$title\n", NamedTextColor.LIGHT_PURPLE))
+    if (scope != null) component = component.append(Component.text("$scope\n", palette.secondary))
+    rows.forEachIndexed { index, row ->
+      component =
+          component
+              .append(
+                  dialogRankingRowComponent(
+                      index,
+                      dialogRankingDisplayName(row.name),
+                      row.barValue,
+                      maximum,
+                      toDialogFullWidth(row.valueText),
+                      row.hoverLabel,
+                  )
+              )
+              .append(Component.newline())
+    }
+    return DialogStatsSection(
+        title,
+        DialogBody.plainMessage(component, 560),
+        dumpSkipsFirstLine = true,
+    )
+  }
+
+  private fun dialogStatsVerticalBarSection(
+      palette: DialogTextPalette,
+      title: String,
+      scope: String?,
+      series: LikeSeries,
+      note: String? = null,
+      incompleteBucketIndices: Set<Int> = emptySet(),
+  ): DialogStatsSection {
+    val graph =
+        buildDialogGraph(
+            series,
+            DialogGraphSize.NORMAL,
+            currentDialogRenderConfig().withWidthStyle(DialogWidthStyle.ASCII_LOW),
+            incompleteBucketIndices,
+            SLDataStatsService.niceMax(series.peak),
+        )
+    var component =
+        Component.empty()
+            .style(Style.style().font(DIALOG_FONT).build())
+            .append(Component.text("$title\n", NamedTextColor.LIGHT_PURPLE))
+    if (scope != null) component = component.append(Component.text("$scope\n", palette.secondary))
+    component = component.append(graph.component)
+    if (note != null) component = component.append(Component.text("\n$note", palette.secondary))
+    return DialogStatsSection(
+        title,
+        DialogBody.plainMessage(component, 560),
+        dumpSkipsFirstLine = true,
+    )
+  }
+
+  private fun dialogCategoricalSeries(buckets: List<SLDataStatsService.AgeBucket>): LikeSeries =
+      LikeSeries(
+          Period.MONTH,
+          buckets.mapIndexed { index, bucket ->
+            SLDataStatsService.LikeBucket(
+                bucket.label,
+                LocalDate.of(2000, 1, 1).plusDays(index.toLong()),
+                bucket.count,
+            )
+          },
       )
 
   private fun writeDialogStatsDump(player: Player?, targetUuid: UUID, targetName: String): File {
@@ -2966,6 +3169,9 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     return "対象: 2026/7/2以降に公開した建築 ${formatCount(population.postCutoffBuildCount)}件$suffix"
   }
 
+  private fun dialogRhythmScope(stats: SLDataStatsService.ActivityRhythmStats): String =
+      "対象: いいね時刻がある送ったいいね ${formatCount(stats.weekdayCounts.flatten().sum())}件"
+
   private fun dialogAgeDistributionRows(
       stats: SLDataStatsService.AgeDistributionStats
   ): List<String> =
@@ -3162,6 +3368,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       displayName: DialogRankingDisplayName,
       count: Int,
       maxCount: Int,
+      valueText: String = formatDialogCount(count, DialogLabelStyle.FULLWIDTH),
+      hoverLabel: String = "今週のいいね",
   ): Component {
     val rank = toDialogFullWidth("${index + 1}位")
     val filledCount = horizontalRankingBarFilledCount(count, maxCount, DIALOG_RANK_BAR_COLUMNS)
@@ -3170,7 +3378,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val hover =
         Component.text()
             .append(Component.text("${displayName.original}\n", rankColor))
-            .append(Component.text("今週のいいね：${formatCount(count)}", NamedTextColor.YELLOW))
+            .append(Component.text("$hoverLabel：${formatCount(count)}", NamedTextColor.YELLOW))
             .build()
     return Component.text()
         .style(Style.style().font(DIALOG_FONT).build())
@@ -3187,7 +3395,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         )
         .append(
             Component.text(
-                "　${formatDialogCount(count, DialogLabelStyle.FULLWIDTH)}",
+                "　$valueText",
                 NamedTextColor.GRAY,
             )
         )
@@ -4174,8 +4382,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       series: LikeSeries,
       size: DialogGraphSize,
       config: DialogRenderConfig,
+      incompleteBucketIndices: Set<Int> = emptySet(),
+      axisMaxOverride: Int = likeAxisMaxForDisplay(series.peak),
   ): DialogGraph {
-    val axisMax = likeAxisMaxForDisplay(series.peak)
+    val axisMax = axisMaxOverride
     val ticks = SLDataStatsService.axisTicks(axisMax, DIALOG_AXIS_DIVISIONS)
     val blocks = config.widthStyle.barBlocks
     val horizontalScale =
@@ -4258,6 +4468,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         val char =
             when {
               row == latestMarkerRow && index == latestIndex -> null
+              index in incompleteBucketIndices && cellUnits > 0 -> '░'
               cellUnits >= blocks.size -> blocks.last()
               cellUnits > 0 -> blocks[cellUnits - 1]
               else -> config.emptyChar

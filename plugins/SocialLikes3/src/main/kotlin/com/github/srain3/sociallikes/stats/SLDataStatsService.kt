@@ -66,6 +66,12 @@ object SLDataStatsService {
     val sparkline: String = buildSparkline(buckets.map { it.count })
   }
 
+  /** Monthly likes given by one player; the current month is deliberately marked incomplete. */
+  data class MonthlyGivenSeries(
+      val series: LikeSeries,
+      val incompleteBucketIndex: Int?,
+  )
+
   data class BoardStats(
       val weekly: LikeSeries,
       val weeklyMvp: List<SLDatabase.BuildLikeSummary>,
@@ -166,6 +172,7 @@ object SLDataStatsService {
       val fastestSupporterBuildCount: Int,
       val initialLikeSpeed: InitialLikeSpeedStats?,
       val activityRhythm: ActivityRhythmStats,
+      val monthlyGiven: MonthlyGivenSeries,
       val ageDistribution: AgeDistributionStats,
       val givenStreak: StreakStats,
       val receivedStreak: StreakStats,
@@ -239,10 +246,12 @@ object SLDataStatsService {
 
   data class WorldReactionRow(
       val worldName: String,
-      val receivedShare: Double,
-      val givenShare: Double,
-      val receivedAverageDelta: Double,
-  )
+      val receivedLikes: Int,
+      val givenLikes: Int,
+  ) {
+    val likeRatio: Double? =
+        if (givenLikes == 0) null else receivedLikes.toDouble() / givenLikes.toDouble()
+  }
 
   data class ComparisonStats(
       val ownAverage: Double,
@@ -479,6 +488,7 @@ object SLDataStatsService {
     val fastestSupporterBuildCount = SLDatabase.loadOwnerCompleteLikedBuildCountBlocking(playerUuid)
     val givenLikeEvents =
         SLDatabase.loadGivenLikeEventsBlocking(playerUuid, reliableInitialLikeBuildCreatedSince)
+    val allGivenLikeEvents = SLDatabase.loadGivenLikeEventsBlocking(playerUuid)
     val receivedLikeEvents =
         SLDatabase.loadReceivedLikeEventsBlocking(playerUuid, reliableInitialLikeBuildCreatedSince)
     val likeTimestampCoverage = SLDatabase.loadLikeTimestampCoverageBlocking()
@@ -494,7 +504,8 @@ object SLDataStatsService {
                 reliableInitialLikeBuildCreatedSince,
             ),
         )
-    val activityRhythm = calculateActivityRhythm(givenLikeEvents)
+    val activityRhythm = calculateActivityRhythm(allGivenLikeEvents)
+    val monthlyGiven = calculateMonthlyGivenSeries(allGivenLikeEvents)
     val ageDistribution =
         AgeDistributionStats(
             given = calculateAgeBuckets(givenLikeEvents),
@@ -605,6 +616,7 @@ object SLDataStatsService {
         fastestSupporterBuildCount = fastestSupporterBuildCount,
         initialLikeSpeed = initialLikeSpeed,
         activityRhythm = activityRhythm,
+        monthlyGiven = monthlyGiven,
         ageDistribution = ageDistribution,
         givenStreak = givenStreak,
         receivedStreak = receivedStreak,
@@ -782,6 +794,37 @@ object SLDataStatsService {
     )
   }
 
+  private fun calculateMonthlyGivenSeries(
+      events: List<SLDatabase.BuildLikeEvent>
+  ): MonthlyGivenSeries {
+    val currentMonth = YearMonth.now(analysisZoneId)
+    val counts = mutableMapOf<YearMonth, Int>()
+    events.forEach { event ->
+      val month = YearMonth.from(Instant.ofEpochMilli(event.likedAt).atZone(analysisZoneId))
+      counts[month] = (counts[month] ?: 0) + 1
+    }
+    val firstMonth = (counts.keys.minOrNull() ?: currentMonth).coerceAtMost(currentMonth)
+    val months =
+        generateSequence(firstMonth) { month -> month.plusMonths(1) }
+            .takeWhile { it <= currentMonth }
+            .toList()
+            .takeLast(9)
+    return MonthlyGivenSeries(
+        series =
+            LikeSeries(
+                Period.MONTH,
+                months.map { month ->
+                  LikeBucket(
+                      "${month.year}/${month.monthValue}",
+                      month.atDay(1),
+                      counts[month] ?: 0,
+                  )
+                },
+            ),
+        incompleteBucketIndex = months.lastIndex.takeIf { it >= 0 },
+    )
+  }
+
   private fun calculateAgeBuckets(events: List<SLDatabase.BuildLikeEvent>): List<AgeBucket> {
     val counts = IntArray(4)
     events.forEach { event ->
@@ -916,27 +959,17 @@ object SLDataStatsService {
   private fun calculateWorldReactions(
       rows: List<SLDatabase.WorldReactionSummary>
   ): List<WorldReactionRow> {
-    val receivedTotal = rows.sumOf { it.ownReceivedLikes }
-    val givenTotal = rows.sumOf { it.givenLikes }
     return rows
-        .filter { it.ownBuildCount > 0 || it.givenLikes > 0 }
+        .filter { it.givenLikes > 0 }
         .map { row ->
-          val ownAverage =
-              if (row.ownBuildCount == 0) 0.0
-              else row.ownReceivedLikes.toDouble() / row.ownBuildCount
-          val globalAverage =
-              if (row.globalBuildCount == 0) 0.0
-              else row.globalReceivedLikes.toDouble() / row.globalBuildCount
           WorldReactionRow(
               worldName = row.worldName,
-              receivedShare =
-                  if (receivedTotal == 0) 0.0 else row.ownReceivedLikes * 100.0 / receivedTotal,
-              givenShare = if (givenTotal == 0) 0.0 else row.givenLikes * 100.0 / givenTotal,
-              receivedAverageDelta = ownAverage - globalAverage,
+              receivedLikes = row.ownReceivedLikes,
+              givenLikes = row.givenLikes,
           )
         }
         .sortedWith(
-            compareByDescending<WorldReactionRow> { max(it.receivedShare, it.givenShare) }
+            compareByDescending<WorldReactionRow> { it.likeRatio ?: Double.NEGATIVE_INFINITY }
                 .thenBy { it.worldName }
         )
   }
@@ -1006,9 +1039,13 @@ object SLDataStatsService {
     return (0..normalizedDivisions).map { axisMax * it / normalizedDivisions }
   }
 
+  /**
+   * Converts a heat-map count into a visible level. Square-root scaling keeps the common low counts
+   * distinguishable when one exceptional cell would otherwise flatten the grid.
+   */
   fun scaleLevel(count: Int, maxCount: Int, levels: Int): Int {
     if (levels <= 0 || maxCount <= 0 || count <= 0) return 0
-    return ceil(count.toDouble() / maxCount.toDouble() * levels.toDouble())
+    return ceil(kotlin.math.sqrt(count.toDouble() / maxCount.toDouble()) * levels.toDouble())
         .toInt()
         .coerceIn(1, levels)
   }
