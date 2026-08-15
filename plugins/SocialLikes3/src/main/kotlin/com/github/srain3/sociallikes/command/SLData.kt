@@ -116,7 +116,9 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private const val DIALOG_RANK_BAR_COLUMNS = 24
   // Weekly graph layout constants; unrelated to the 24-cell ranking bar above.
   private const val DIALOG_BAR_WIDTH_CHARS = 1
-  private const val DIALOG_BAR_GAP_CHARS = 3
+  // A 2x vertical graph needs enough horizontal room for its Japanese X-axis labels.  Four base
+  // cells become eight cells at 2x, which gives each categorical label its own column.
+  private const val DIALOG_BAR_GAP_CHARS = 4
   private const val DIALOG_NBSP = '\u00A0'
   private const val DIALOG_FULL_SPACE = '\u3000'
   private const val DIALOG_CONFIG_FILE_NAME = "sldata-dialog.yml"
@@ -409,7 +411,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 palette,
                 "宣伝回数ランキング Top5",
                 stats.topBuilds.mapIndexed { index, row ->
-                  "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 20)} ${formatCount(row.publicityCount)}回"
+                  "${index + 1}. ${dialogBuildTitleLabel(row.title, 20)} ${formatCount(row.publicityCount)}回"
                 },
                 "まだ宣伝履歴はありません。",
             ),
@@ -417,7 +419,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 palette,
                 "複数回宣伝された建築のイベント分析",
                 stats.recurringBuilds.map { row ->
-                  "#${row.buildId} ${compactDialogText(row.title, 16)}: リポスト前平均 ${formatAverageCount(row.normalReactionAverage)}件 → リポスト後平均 ${formatAverageCount(row.publicityReactionAverage)}件（${formatSignedAverage(row.reactionDelta)}件）"
+                  "${dialogBuildTitleLabel(row.title, 16)}: リポスト前平均 ${formatAverageCount(row.normalReactionAverage)}件 → リポスト後平均 ${formatAverageCount(row.publicityReactionAverage)}件（${formatSignedAverage(row.reactionDelta)}件）"
                 },
                 "複数回宣伝された建築はまだありません。",
             ),
@@ -2449,7 +2451,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           listOf("まだ宣伝された建築はありません。")
                         } else {
                           stats.publicity.topBuilds.mapIndexed { index, row ->
-                            "${index + 1}. #${row.buildId} ${compactDialogText(row.title, 18)} ${formatCount(row.publicityCount)}回"
+                            "${index + 1}. ${dialogBuildTitleLabel(row.title, 18)} ${formatCount(row.publicityCount)}回"
                           }
                         }),
                     "まだ宣伝された建築はありません。",
@@ -2469,7 +2471,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           listOf("複数回宣伝された建築はまだありません。")
                         } else {
                           stats.publicity.recurringBuilds.map { row ->
-                            "#${row.buildId} ${compactDialogText(row.title, 15)}: リポスト前平均 ${formatAverageCount(row.normalReactionAverage)}件 → リポスト後平均 ${formatAverageCount(row.publicityReactionAverage)}件（${formatSignedAverage(row.reactionDelta)}件）"
+                            "${dialogBuildTitleLabel(row.title, 15)}: リポスト前平均 ${formatAverageCount(row.normalReactionAverage)}件 → リポスト後平均 ${formatAverageCount(row.publicityReactionAverage)}件（${formatSignedAverage(row.reactionDelta)}件）"
                           }
                         }),
                     "複数回宣伝された建築はまだありません。",
@@ -2536,10 +2538,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                         null,
                         stats.ownBuilds.map { row ->
                           DialogStatsRankingRow(
-                              "#${row.buildId}",
+                              dialogBuildTitleLabel(row.title),
                               row.likeCount,
                               "${formatCount(row.likeCount)}いいね",
-                              row.title,
+                              "SL ID #${row.buildId} / ${row.title}",
                           )
                         },
                         stats2Text(
@@ -2557,6 +2559,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                             "Section.stats2.builds.age.note",
                             "受けたいいねが付くまでの日数。",
                         ),
+                        showAllXAxisLabels = true,
                     ),
                     allSections[12],
                 ),
@@ -2775,17 +2778,17 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                         stats.publicity.recurringBuilds.flatMap { row ->
                           listOf(
                               DialogStatsBarRow(
-                                  "#${row.buildId} 前",
+                                  "${dialogBuildTitleLabel(row.title, 8)} 前",
                                   row.normalReactionAverage,
                                   "前${formatAverageCount(row.normalReactionAverage)}",
-                                  row.title,
+                                  "SL ID #${row.buildId} / ${row.title}",
                                   NamedTextColor.GRAY,
                               ),
                               DialogStatsBarRow(
-                                  "#${row.buildId} 後",
+                                  "${dialogBuildTitleLabel(row.title, 8)} 後",
                                   row.publicityReactionAverage,
                                   "後${formatAverageCount(row.publicityReactionAverage)}",
-                                  row.title,
+                                  "SL ID #${row.buildId} / ${row.title}",
                                   NamedTextColor.GREEN,
                               ),
                           )
@@ -2804,10 +2807,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                         ),
                         stats.publicity.topBuilds.map { row ->
                           DialogStatsBarRow(
-                              "#${row.buildId}",
+                              dialogBuildTitleLabel(row.title),
                               row.publicityCount.toDouble(),
                               "${formatCount(row.publicityCount)}回",
-                              row.title,
+                              "SL ID #${row.buildId} / ${row.title}",
                               NamedTextColor.GREEN,
                           )
                         },
@@ -3033,14 +3036,16 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       series: LikeSeries,
       note: String? = null,
       incompleteBucketIndices: Set<Int> = emptySet(),
+      showAllXAxisLabels: Boolean = false,
   ): DialogStatsSection {
     val graph =
         buildDialogGraph(
             series,
-            DialogGraphSize.NORMAL,
+            DialogGraphSize.LARGE,
             currentDialogRenderConfig().withWidthStyle(DialogWidthStyle.ASCII_LOW),
             incompleteBucketIndices,
-            SLDataStatsService.niceMax(series.peak),
+            showAllXAxisLabels = showAllXAxisLabels,
+            axisMaxOverride = SLDataStatsService.niceMax(series.peak),
         )
     var component =
         Component.empty()
@@ -3067,6 +3072,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             )
           },
       )
+
+  private fun dialogBuildTitleLabel(
+      title: String,
+      maxLength: Int = DIALOG_RANKING_NAME_COLUMNS,
+  ): String = compactDialogText(title, maxLength)
 
   private fun writeDialogStatsDump(player: Player?, targetUuid: UUID, targetName: String): File {
     val statsContent = buildDialogStatsContent(player, targetUuid, targetName)
@@ -3553,7 +3563,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         } ?: "なし"
     val topBuilds =
         stats.ownBuilds.take(5).joinToString(" / ") { row ->
-          "#${row.buildId} ${compactDialogText(row.title, 10)} ${formatCount(row.likeCount)}"
+          "${dialogBuildTitleLabel(row.title, 10)} ${formatCount(row.likeCount)}"
         }
     return listOf(
         "あなたがいいねした作者 ${formatCount(stats.socialOverview.supportedOwnerCount)}人 / あなたにいいねした人数 ${formatCount(stats.socialOverview.supporterCount)}人",
@@ -3688,8 +3698,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       else rows.joinToString(" / ") { "${label(it.label)} ${formatCount(it.count)}件" }
 
   private fun formatDialogDuration(millis: Long): String {
-    val seconds = ((millis.coerceAtLeast(0L) + 500L) / 1_000L)
-    if (seconds < 60L) return "${seconds}秒"
+    val nonNegativeMillis = millis.coerceAtLeast(0L)
+    if (nonNegativeMillis < 60_000L) {
+      return String.format(java.util.Locale.ROOT, "%.1f秒", nonNegativeMillis / 1_000.0)
+    }
+    val seconds = (nonNegativeMillis + 500L) / 1_000L
     val minutes = seconds / 60L
     val days = minutes / (24L * 60L)
     val hours = (minutes % (24L * 60L)) / 60L
@@ -4629,7 +4642,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         '▁',
         '▁',
         '▁',
-        "▁",
+        "▁▁▁",
         charArrayOf('▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'),
         5,
     ),
@@ -4638,7 +4651,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         '▁',
         '▁',
         '▁',
-        "▁",
+        "▁▁▁",
         charArrayOf('▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'),
         5,
     ),
@@ -4647,7 +4660,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         '▁',
         '▁',
         '▁',
-        "▁",
+        "▁▁▁",
         charArrayOf('▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'),
         5,
     ),
@@ -4656,7 +4669,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         '▁',
         '▁',
         '▁',
-        "▁",
+        "▁▁▁",
         charArrayOf('▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'),
         5,
         false,
@@ -4893,6 +4906,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       size: DialogGraphSize,
       config: DialogRenderConfig,
       incompleteBucketIndices: Set<Int> = emptySet(),
+      showAllXAxisLabels: Boolean = false,
       axisMaxOverride: Int = likeAxisMaxForDisplay(series.peak),
   ): DialogGraph {
     val axisMax = axisMaxOverride
@@ -4937,7 +4951,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val plotStartColumn = 0
     val rightAxisWidthChars = config.rightAxisGap.length + rightLabelWidth
     val graphRowChars = plotWidth + rightAxisWidthChars
-    val xLabels = dialogXAxisLabels(series, layout, config)
+    val xLabels = dialogXAxisLabels(series, layout, config, showAllXAxisLabels)
     val xAxisRowChars = xLabels.text.length + rightAxisWidthChars
     val yAxisLabels = dialogYAxisLabels(axisMax, graphRows, verticalScale, config)
     val latestIndex = series.buckets.lastIndex
@@ -5288,7 +5302,9 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       series: LikeSeries,
       layout: DialogPlotLayout,
       config: DialogRenderConfig,
+      showAllBuckets: Boolean = false,
   ): DialogXAxisLabels {
+    if (showAllBuckets) return dialogAllBucketXAxisLabels(series, layout, config)
     val chars = CharArray(layout.plotWidth) { config.fillerChar }
     val placed = mutableListOf<DialogXAxisLabel>()
     val targets =
@@ -5350,6 +5366,56 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           )
     }
     return DialogXAxisLabels(String(chars), placed)
+  }
+
+  /**
+   * Categorical charts have no redundant labels: every bucket needs its own X-axis label. Unlike
+   * dates, Japanese labels have a 9px advance while the graph grid uses 5px low blocks. Compose
+   * this row in pixel advance order so labels stay inside their own enlarged slots instead of
+   * overwriting neighbouring labels by character index.
+   */
+  private fun dialogAllBucketXAxisLabels(
+      series: LikeSeries,
+      layout: DialogPlotLayout,
+      config: DialogRenderConfig,
+  ): DialogXAxisLabels {
+    val cellAdvance = uniformDialogAdvance(config.lineChar)
+    val plotAdvance = layout.plotWidth * cellAdvance
+    val text = StringBuilder()
+    val placed = mutableListOf<DialogXAxisLabel>()
+    var cursorPx = 0
+
+    series.buckets.forEachIndexed { bucketIndex, bucket ->
+      val bar = layout.bars.getOrNull(bucketIndex) ?: return@forEachIndexed
+      // These labels are not dates; adding the period suffix ("月") both changes their meaning and
+      // consumes the next column's width.
+      val label = toDialogFullWidth(bucket.label)
+      val labelAdvance = uniformDialogAdvance(label)
+      val barCenterPx = bar.centerColumn * cellAdvance + cellAdvance / 2.0
+      val desiredStartPx = (barCenterPx - labelAdvance / 2.0).coerceAtLeast(cursorPx.toDouble())
+      val fillerCount = ((desiredStartPx - cursorPx) / cellAdvance).toInt().coerceAtLeast(0)
+      text.append(config.fillerChar.toString().repeat(fillerCount))
+      cursorPx += fillerCount * cellAdvance
+      val labelStartChar = text.length
+      val labelStartPx = cursorPx
+      text.append(label)
+      cursorPx += labelAdvance
+      placed +=
+          DialogXAxisLabel(
+              bucketIndex = bucketIndex,
+              label = label,
+              anchorColumn = bar.centerColumn,
+              startColumn = labelStartChar,
+              centerColumn = labelStartChar + label.length / 2,
+              idealStartColumn = (desiredStartPx / cellAdvance).toInt(),
+              barCenterPx = barCenterPx,
+              labelStartPx = labelStartPx,
+              labelCenterPx = labelStartPx + labelAdvance / 2.0,
+          )
+    }
+    val trailingFillers = ((plotAdvance - cursorPx) / cellAdvance).coerceAtLeast(0)
+    text.append(config.fillerChar.toString().repeat(trailingFillers))
+    return DialogXAxisLabels(text.toString(), placed)
   }
 
   private fun dialogYAxisLabels(
