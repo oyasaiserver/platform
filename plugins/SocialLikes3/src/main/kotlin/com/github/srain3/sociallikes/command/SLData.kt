@@ -277,7 +277,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           when (args[0].lowercase()) {
                 "dialog" ->
                     if (args[1].lowercase() in dialogStatsAliases) {
-                      (listOf("dump") + dialogStatsPlayerSuggestions(sender, args[2]))
+                      (listOf("dump", "tab") + dialogStatsPlayerSuggestions(sender, args[2]))
                     } else {
                       dialogArgumentSuggestions(args.drop(1).dropLast(1))
                     }
@@ -293,6 +293,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                             args[2].equals("dump", ignoreCase = true)
                     ) {
                       dialogStatsPlayerSuggestions(sender, args[3])
+                    } else if (
+                        args[1].lowercase() in dialogStatsAliases &&
+                            args[2].equals("tab", ignoreCase = true)
+                    ) {
+                      DialogStatsCategory.entries.map { it.name.lowercase() }
                     } else {
                       emptyList()
                     }
@@ -458,6 +463,22 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private fun handleDialogStats(player: Player, args: List<String>) {
     if (args.getOrNull(1)?.equals("dump", ignoreCase = true) == true) {
       dumpDialogStats(player, args)
+      return
+    }
+    if (args.getOrNull(1)?.equals("tab", ignoreCase = true) == true) {
+      val category =
+          args.getOrNull(2)?.let { raw ->
+            DialogStatsCategory.entries.firstOrNull { it.name.equals(raw, ignoreCase = true) }
+          }
+      if (category == null || args.size != 3) {
+        player.sendMessage(
+            Tools.socialLikesLOGO +
+                " &c使い方: /sldata dialog stats2 tab <overview|builds|given|social|publicity|server>"
+                    .color()
+        )
+        return
+      }
+      openDialogStats(player, category = category)
       return
     }
     val targetName = args.getOrNull(1)
@@ -2236,7 +2257,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           listOf(
                               "本人いいねは除外。作成時刻といいね時刻を同じ基準で計算。",
                               "最短 ${formatDialogDuration(speed.minimumMillis)} / 中央値 ${formatDialogDuration(speed.medianMillis)} / 最長 ${formatDialogDuration(speed.maximumMillis)} / 平均 ${formatDialogDuration(speed.averageMillis)}",
-                              "対象 ${formatCount(speed.targetBuildCount)}作品 / 計測 ${formatCount(speed.measuredBuildCount)}作品 / 本人が初いいね ${formatCount(speed.ownerSelfFirstLikeBuildCount)}作品",
+                              "対象 ${formatCount(speed.targetBuildCount)}作品 / 計測 ${formatCount(speed.measuredBuildCount)}作品",
                           )
                         }
                         .orEmpty(),
@@ -2283,7 +2304,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 scopedRows(
                     "対象: いいね時刻が揃った建築 ${formatCount(stats.publicity.targetBuildCount)}件・リポスト ${formatCount(stats.publicity.totalReposts)}回 / 前後24時間",
                     listOf(
-                        "宣伝＝10Pを消費し、オンラインプレイヤーへ建築をリポスト表示する機能。",
+                        "宣伝＝10ポイント（P）を消費し、オンラインプレイヤーへ建築をリポスト表示する機能。",
                         "他人があなたの建築をリポストした分も含まれます。",
                         "リポスト ${formatCount(stats.publicity.totalReposts)}回 / リポスト前平均 ${formatAverageCount(stats.publicity.normalReactionAverage)}件 → リポスト後平均 ${formatAverageCount(stats.publicity.publicityReactionAverage)}件（${formatSignedAverage(stats.publicity.reactionDelta)}件）",
                         "掲載直後24時間の反響を、同じ長さの直前24時間と比較しています。",
@@ -2298,7 +2319,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 scopedRows(
                     "対象: いいね時刻が揃った建築 ${formatCount(stats.publicity.targetBuildCount)}件・リポスト ${formatCount(stats.publicity.totalReposts)}回",
                     listOf(
-                        "宣伝＝10Pを消費し、オンラインプレイヤーへ建築をリポスト表示する機能。",
+                        "宣伝＝10ポイント（P）を消費し、オンラインプレイヤーへ建築をリポスト表示する機能。",
                         "他人があなたの建築をリポストした分も含まれます。",
                     ) +
                         (if (stats.publicity.topBuilds.isEmpty()) {
@@ -2318,7 +2339,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 scopedRows(
                     "対象: いいね時刻が揃った建築 ${formatCount(stats.publicity.targetBuildCount)}件・リポスト ${formatCount(stats.publicity.totalReposts)}回 / 前後24時間",
                     listOf(
-                        "宣伝＝10Pを消費し、オンラインプレイヤーへ建築をリポスト表示する機能。",
+                        "宣伝＝10ポイント（P）を消費し、オンラインプレイヤーへ建築をリポスト表示する機能。",
                         "他人があなたの建築をリポストした分も含まれます。",
                     ) +
                         (if (stats.publicity.recurringBuilds.isEmpty()) {
@@ -2336,7 +2357,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 palette,
                 "自己ベスト更新履歴（送ったいいね）⏱",
                 scopedRows(
-                    reliablePublishedScope(stats),
+                    dialogGivenTimestampScope(stats),
                     dialogPersonalBestRows(stats.personalBestHistory),
                     "日・週・月の自己ベスト更新はまだありません。",
                 ),
@@ -2437,7 +2458,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                         palette,
                         "送ったいいね継続日数⏱",
                         scopedRows(
-                            reliablePublishedScope(stats),
+                            dialogGivenTimestampScope(stats),
                             listOf(
                                 "現在 ${formatCount(stats.givenStreak.currentDays)}日連続 / 最長 ${formatCount(stats.givenStreak.longestDays)}日 — ${streakTitle(stats.givenStreak)}",
                             ),
@@ -2448,13 +2469,25 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 ),
             DialogStatsCategory.SOCIAL to
                 listOf(
-                    dialogStatsSection(
+                    dialogStatsBarSection(
                         palette,
                         "もらった数と返した数",
-                        scopedRows(
-                            null,
-                            dialogGiveReceiveRows(stats, targetName),
-                            "いいねの送受信データはまだありません。",
+                        "全期間。受取寄り（受÷送 ${formatRatio(stats.balance.receivePerGiven)}）。",
+                        listOf(
+                            DialogStatsBarRow(
+                                "受けた",
+                                stats.balance.received.toDouble(),
+                                "${formatCount(stats.balance.received)}いいね",
+                                "$targetName の建築が受けたいいね",
+                                NamedTextColor.AQUA,
+                            ),
+                            DialogStatsBarRow(
+                                "送った",
+                                stats.balance.given.toDouble(),
+                                "${formatCount(stats.balance.given)}いいね",
+                                "$targetName が相手の建築へ送ったいいね",
+                                NamedTextColor.GREEN,
+                            ),
                         ),
                         "いいねの送受信データはまだありません。",
                     ),
@@ -2522,7 +2555,69 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                     ),
                 ),
             DialogStatsCategory.PUBLICITY to
-                listOf(allSections[16], allSections[18], allSections[17]),
+                listOf(
+                    dialogStatsBarSection(
+                        palette,
+                        "宣伝効果（前後24時間）⏱",
+                        "あなたの建築のリポスト ${formatCount(stats.publicity.totalReposts)}回。前後24時間平均（差 ${formatSignedAverage(stats.publicity.reactionDelta)}件）。\n宣伝＝10ポイント（P）を消費して建築を再表示する機能。他人のリポスト分も含みます。",
+                        listOf(
+                            DialogStatsBarRow(
+                                "宣伝後",
+                                stats.publicity.publicityReactionAverage,
+                                "${formatAverageCount(stats.publicity.publicityReactionAverage)}いいね/回",
+                                "リポスト後24時間の平均",
+                                NamedTextColor.GREEN,
+                            ),
+                            DialogStatsBarRow(
+                                "宣伝前",
+                                stats.publicity.normalReactionAverage,
+                                "${formatAverageCount(stats.publicity.normalReactionAverage)}いいね/回",
+                                "リポスト前24時間の平均",
+                                NamedTextColor.GRAY,
+                            ),
+                        ),
+                        "このプレイヤーの建築には、まだ宣伝履歴がありません。",
+                    ),
+                    dialogStatsBarSection(
+                        palette,
+                        "複数回宣伝の反応変化（イベント分析）⏱",
+                        "反応増加の大きい順。各作品のリポスト前後24時間平均。",
+                        stats.publicity.recurringBuilds.flatMap { row ->
+                          listOf(
+                              DialogStatsBarRow(
+                                  "#${row.buildId} 前",
+                                  row.normalReactionAverage,
+                                  "前${formatAverageCount(row.normalReactionAverage)}",
+                                  row.title,
+                                  NamedTextColor.GRAY,
+                              ),
+                              DialogStatsBarRow(
+                                  "#${row.buildId} 後",
+                                  row.publicityReactionAverage,
+                                  "後${formatAverageCount(row.publicityReactionAverage)}",
+                                  row.title,
+                                  NamedTextColor.GREEN,
+                              ),
+                          )
+                        },
+                        "複数回宣伝された建築はまだありません。",
+                    ),
+                    dialogStatsBarSection(
+                        palette,
+                        "宣伝回数ランキング Top5",
+                        "宣伝回数の多い順。あなたの建築のリポスト履歴。",
+                        stats.publicity.topBuilds.map { row ->
+                          DialogStatsBarRow(
+                              "#${row.buildId}",
+                              row.publicityCount.toDouble(),
+                              "${formatCount(row.publicityCount)}回",
+                              row.title,
+                              NamedTextColor.GREEN,
+                          )
+                        },
+                        "まだ宣伝された建築はありません。",
+                    ),
+                ),
             DialogStatsCategory.SERVER to
                 listOf(
                     dialogStatsRankingSection(
@@ -2542,7 +2637,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                     dialogStatsRankingSection(
                         palette,
                         "ワールド別のいいねレシオ${if (includeLifeWorld) "（ライフ含む）" else "（ライフ除外）"}",
-                        "受けたいいね ÷ 押したいいね。押していないワールドは比較から除外。",
+                        "ライフ＝生活ワールド（lifeworld）。受÷押の高い順・上位10ワールド。",
                         stats.worldReactions.take(10).map { row ->
                           val ratio = row.likeRatio ?: 0.0
                           DialogStatsRankingRow(
@@ -2557,7 +2652,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                     dialogStatsRankingSection(
                         palette,
                         "今週いいねした制作者 ⏱",
-                        "今週",
+                        "今週、あなたがいいねした建築の制作者。送ったいいね数の多い順。",
                         stats.weeklyLikedOwners.map { row ->
                           DialogStatsRankingRow(
                               dialogPlayerName(row.ownerUuid, stats.playerNames),
@@ -2612,6 +2707,41 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       val valueText: String,
       val hoverLabel: String,
   )
+
+  /** A labeled horizontal bar for comparisons, not a ranked list. */
+  private data class DialogStatsBarRow(
+      val name: String,
+      val barValue: Double,
+      val valueText: String,
+      val hoverLabel: String,
+      val color: NamedTextColor,
+  )
+
+  private fun dialogStatsBarSection(
+      palette: DialogTextPalette,
+      title: String,
+      scope: String?,
+      rows: List<DialogStatsBarRow>,
+      emptyMessage: String,
+  ): DialogStatsSection {
+    if (rows.isEmpty())
+        return dialogStatsSection(palette, title, listOf(emptyMessage), emptyMessage)
+    val maximum = rows.maxOf { it.barValue }.coerceAtLeast(0.0)
+    var component =
+        Component.empty()
+            .style(Style.style().font(DIALOG_FONT).build())
+            .append(Component.text("$title\n", NamedTextColor.LIGHT_PURPLE))
+    if (scope != null) component = component.append(Component.text("$scope\n", palette.secondary))
+    rows.forEach { row ->
+      component =
+          component.append(dialogStatsBarRowComponent(row, maximum)).append(Component.newline())
+    }
+    return DialogStatsSection(
+        title,
+        DialogBody.plainMessage(component, 560),
+        dumpSkipsFirstLine = true,
+    )
+  }
 
   private fun dialogStatsRankingSection(
       palette: DialogTextPalette,
@@ -2904,7 +3034,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                       "${formatCount(stats.comparison.ownBuildCount)}作品",
                   ),
                   DialogComparisonValue(
-                      "全体平均",
+                      "全体中央値",
                       stats.comparison.globalMedian,
                       "${formatCount(stats.comparison.globalBuildCount)}作品",
                   ),
@@ -2939,12 +3069,12 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                   DialogComparisonValue(
                       "受けた",
                       stats.balance.received.toDouble(),
-                      "${formatCount(stats.comparison.ownBuildCount)}作品",
+                      "自分の建築へ",
                   ),
                   DialogComparisonValue(
                       "送った",
                       stats.balance.given.toDouble(),
-                      "${formatCount(stats.balance.given)}回",
+                      "相手の建築へ",
                   ),
               ),
               "いいね",
@@ -3001,16 +3131,16 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       }
       add(
           Row(
-              "宣伝の前後24時間",
-              "宣伝機能にどれだけ効果があるか",
+              "サーバー全体の宣伝・前後24時間",
+              "サーバー全体の宣伝機能にどれだけ効果があるか",
               ordered(
                   DialogComparisonValue(
-                      "宣伝後",
+                      "サーバー全体・宣伝後",
                       stats.comparisonPublicity.afterAverage,
                       "${formatCount(stats.comparisonPublicity.reposts)}回の平均",
                   ),
                   DialogComparisonValue(
-                      "宣伝前",
+                      "サーバー全体・宣伝前",
                       stats.comparisonPublicity.beforeAverage,
                       "${formatCount(stats.comparisonPublicity.reposts)}回の平均",
                   ),
@@ -3040,10 +3170,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun dialogComparisonBar(value: Double, maximum: Double, width: Int = 12): String {
-    if (maximum <= 0.0) return "_".repeat(width)
+    if (maximum <= 0.0) return "▁".repeat(width)
     val filled = (value / maximum * width.toDouble()).toInt().coerceIn(0, width)
     val visible = if (value > 0.0) filled.coerceAtLeast(1) else 0
-    return "█".repeat(visible) + "_".repeat(width - visible)
+    return "█".repeat(visible) + "▁".repeat(width - visible)
   }
 
   private fun formatComparisonValue(value: Double, unit: String): String =
@@ -3171,6 +3301,9 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun dialogRhythmScope(stats: SLDataStatsService.ActivityRhythmStats): String =
       "対象: いいね時刻がある送ったいいね ${formatCount(stats.weekdayCounts.flatten().sum())}件"
+
+  private fun dialogGivenTimestampScope(stats: SLDataStatsService.ExtendedStats): String =
+      dialogRhythmScope(stats.activityRhythm)
 
   private fun dialogAgeDistributionRows(
       stats: SLDataStatsService.AgeDistributionStats
@@ -3306,7 +3439,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun dialogPlayerName(uuidText: String, playerNames: Map<String, String>): String {
     val onlineName = parseUuid(uuidText)?.let { Bukkit.getPlayer(it)?.name }
-    return compactDialogText(onlineName ?: playerNames[uuidText] ?: uuidText.take(8), 18)
+    return compactDialogText(
+        (onlineName ?: playerNames[uuidText] ?: uuidText.take(8)).removePrefix("."),
+        18,
+    )
   }
 
   private fun compactDialogText(text: String, maxLength: Int): String =
@@ -3363,6 +3499,34 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         .build()
   }
 
+  private fun dialogStatsBarRowComponent(
+      row: DialogStatsBarRow,
+      maximum: Double,
+  ): Component {
+    val displayName = dialogRankingDisplayName(row.name)
+    val filledCount = horizontalBarFilledCount(row.barValue, maximum, DIALOG_RANK_BAR_COLUMNS)
+    val remainingCount = DIALOG_RANK_BAR_COLUMNS - filledCount
+    val hover =
+        Component.text()
+            .append(Component.text("${row.hoverLabel}\n", row.color))
+            .append(Component.text(row.valueText, NamedTextColor.YELLOW))
+            .build()
+    return Component.text()
+        .style(Style.style().font(DIALOG_FONT).build())
+        .append(
+            Component.text()
+                .append(Component.text(displayName.fixed, NamedTextColor.WHITE))
+                .append(Component.text(displayName.padding, NamedTextColor.GRAY))
+                .build()
+        )
+        .append(Component.text("█".repeat(filledCount), row.color).hoverEvent(hover))
+        .append(
+            Component.text("▁".repeat(remainingCount), NamedTextColor.DARK_GRAY).hoverEvent(hover)
+        )
+        .append(Component.text("　${toDialogFullWidth(row.valueText)}", NamedTextColor.GRAY))
+        .build()
+  }
+
   private fun dialogRankingRowComponent(
       index: Int,
       displayName: DialogRankingDisplayName,
@@ -3391,7 +3555,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         )
         .append(Component.text("█".repeat(filledCount), rankColor).hoverEvent(hover))
         .append(
-            Component.text("█".repeat(remainingCount), NamedTextColor.DARK_GRAY).hoverEvent(hover)
+            Component.text("▁".repeat(remainingCount), NamedTextColor.DARK_GRAY).hoverEvent(hover)
         )
         .append(
             Component.text(
@@ -3421,6 +3585,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     return ceil(count.toDouble() / maxCount.toDouble() * width.toDouble())
         .toInt()
         .coerceIn(1, width)
+  }
+
+  private fun horizontalBarFilledCount(value: Double, maximum: Double, width: Int): Int {
+    if (value <= 0.0 || maximum <= 0.0) return 0
+    return ceil(value / maximum * width.toDouble()).toInt().coerceIn(1, width)
   }
 
   private data class DialogRankingDisplayName(

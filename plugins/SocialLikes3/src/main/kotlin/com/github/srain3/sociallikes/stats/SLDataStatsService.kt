@@ -482,10 +482,17 @@ object SLDataStatsService {
           RepeaterRateStats(it.repeaterCount, it.uniqueLikerCount)
         }
     val fastestSupporters =
-        SLDatabase.loadFastestSupportersBlocking(playerUuid, normalizedLimit).map {
-          PlayerCountRow(it.playerUuid, it.firstSupportCount)
-        }
-    val fastestSupporterBuildCount = SLDatabase.loadOwnerCompleteLikedBuildCountBlocking(playerUuid)
+        SLDatabase.loadFastestSupportersBlocking(
+                playerUuid,
+                reliableInitialLikeBuildCreatedSince,
+                normalizedLimit,
+            )
+            .map { PlayerCountRow(it.playerUuid, it.firstSupportCount) }
+    val fastestSupporterBuildCount =
+        SLDatabase.loadOwnerBuildCountCreatedSinceBlocking(
+            playerUuid,
+            reliableInitialLikeBuildCreatedSince,
+        )
     val givenLikeEvents =
         SLDatabase.loadGivenLikeEventsBlocking(playerUuid, reliableInitialLikeBuildCreatedSince)
     val allGivenLikeEvents = SLDatabase.loadGivenLikeEventsBlocking(playerUuid)
@@ -514,11 +521,11 @@ object SLDataStatsService {
                     receivedLikeEvents.filter { it.playerUuid != playerUuid },
                 ),
         )
-    val givenStreak = calculateStreak(givenLikeEvents.map { it.likedAt })
+    val givenStreak = calculateStreak(allGivenLikeEvents.map { it.likedAt })
     val receivedStreak = calculateStreak(receivedLikeEvents.map { it.likedAt })
     val givenLongTail = calculateLongTail(givenLikeEvents)
     val receivedLongTail = calculateLongTail(receivedLikeEvents)
-    val personalBestHistory = calculatePersonalBestHistory(givenLikeEvents)
+    val personalBestHistory = calculatePersonalBestHistory(allGivenLikeEvents)
     val likeDiversity =
         calculateLikeDiversity(SLDatabase.loadGivenLikeDimensionsBlocking(playerUuid))
     val ownBuildLikeCounts = SLDatabase.loadBuildLikeCountsBlocking(playerUuid)
@@ -632,7 +639,11 @@ object SLDataStatsService {
         likeConcentration = concentration,
         publicity = publicity,
         comparisonPublicity =
-            ComparisonPublicityStats(reposts = 1_627, beforeAverage = 0.3, afterAverage = 0.7),
+            ComparisonPublicityStats(
+                reposts = serverPublicity.totalReposts,
+                beforeAverage = serverPublicity.normalReactionAverage,
+                afterAverage = serverPublicity.publicityReactionAverage,
+            ),
         likeDna = likeDna,
         serverPublicity = serverPublicity,
         likeTimestampCoverage = likeTimestampCoverage,

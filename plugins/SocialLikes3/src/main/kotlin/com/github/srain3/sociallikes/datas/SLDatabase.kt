@@ -1264,11 +1264,13 @@ object SLDatabase {
 
   fun loadFastestSupportersBlocking(
       ownerUuid: String,
+      createdSince: LocalDateTime? = null,
       limit: Int = 5,
   ): List<FastestSupporterSummary> {
     val normalizedLimit = normalizedStatsLimit(limit)
     return submitBlocking("loadFastestSupporters") {
           val summaries = mutableListOf<FastestSupporterSummary>()
+          val createdSinceClause = if (createdSince == null) "" else "AND b.created_at >= ?"
           rawConnection()
               ?.prepareStatement(
                   """
@@ -1285,6 +1287,7 @@ object SLDatabase {
                     JOIN build_likes bl ON bl.build_id = b.id
                     WHERE b.owner_uuid = ?
                       AND bl.player_uuid <> ?
+                      $createdSinceClause
                       AND bl.liked_at IS NOT NULL
                       AND bl.liked_at >= CAST(strftime('%s', b.created_at) AS INTEGER) * 1000
                     GROUP BY b.id
@@ -1303,8 +1306,14 @@ object SLDatabase {
               ?.use { statement ->
                 statement.setString(1, ownerUuid)
                 statement.setString(2, ownerUuid)
-                statement.setString(3, ownerUuid)
-                statement.setInt(4, normalizedLimit)
+                var parameterIndex = 3
+                if (createdSince != null) {
+                  statement.setString(parameterIndex, createdSince.toString())
+                  parameterIndex++
+                }
+                statement.setString(parameterIndex, ownerUuid)
+                parameterIndex++
+                statement.setInt(parameterIndex, normalizedLimit)
                 statement.executeQuery().use { results ->
                   while (results.next()) {
                     summaries +=
