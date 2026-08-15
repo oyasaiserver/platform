@@ -77,6 +77,7 @@ tooltip: 全体ランキング、ワールド別、週次
 
 ```
 title: 比較表
+population: 母集団：あなたの建築　{own_build_count}件　／　あなたが押した作品　{given_build_count}件　／　全体の建築　{global_build_count}件
 desc_line: 説明:{description}
 empty: 比較できる建築データはまだありません。
 ```
@@ -87,9 +88,7 @@ empty: 比較できる建築データはまだありません。
 label: 1作品あたりのいいね（平均）
 desc: 作品がどれだけ反応を集めたか
 own_label: あなた
-own_sample: {own_build_count}作品
 global_label: 全体平均
-global_sample: {global_build_count}作品
 unit: いいね/作品
 ```
 
@@ -99,9 +98,7 @@ unit: いいね/作品
 label: 1作品あたりのいいね（中央値）
 desc: 突出した1作品に引っ張られない実力
 own_label: あなた
-own_sample: {own_build_count}作品
 global_label: 全体中央値
-global_sample: {global_build_count}作品
 unit: いいね/作品
 ```
 
@@ -111,9 +108,7 @@ unit: いいね/作品
 label: 押した作品の人気
 desc: 自分が選ぶ作品は人気寄りか
 given_label: あなたが押した作品
-given_sample: {given_build_count}作品
 global_label: 全体平均
-global_sample: {global_build_count}作品
 unit: いいね/作品
 ```
 

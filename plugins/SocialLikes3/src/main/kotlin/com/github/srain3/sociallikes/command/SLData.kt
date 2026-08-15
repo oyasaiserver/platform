@@ -3539,11 +3539,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           "あなた",
                       ),
                       stats.comparison.ownAverage,
-                      stats2Text(
-                          "Section.stats2.overview.comparison.row.avg_per_build.own_sample",
-                          "${formatCount(stats.comparison.ownBuildCount)}作品",
-                          mapOf("own_build_count" to formatCount(stats.comparison.ownBuildCount)),
-                      ),
                   ),
                   DialogComparisonValue(
                       stats2Text(
@@ -3551,13 +3546,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           "全体平均",
                       ),
                       stats.comparison.globalAverage,
-                      stats2Text(
-                          "Section.stats2.overview.comparison.row.avg_per_build.global_sample",
-                          "${formatCount(stats.comparison.globalBuildCount)}作品",
-                          mapOf(
-                              "global_build_count" to formatCount(stats.comparison.globalBuildCount)
-                          ),
-                      ),
                   ),
               ),
               stats2Text(
@@ -3584,11 +3572,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           "あなた",
                       ),
                       stats.comparison.ownMedian,
-                      stats2Text(
-                          "Section.stats2.overview.comparison.row.median_per_build.own_sample",
-                          "${formatCount(stats.comparison.ownBuildCount)}作品",
-                          mapOf("own_build_count" to formatCount(stats.comparison.ownBuildCount)),
-                      ),
                   ),
                   DialogComparisonValue(
                       stats2Text(
@@ -3596,13 +3579,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           "全体中央値",
                       ),
                       stats.comparison.globalMedian,
-                      stats2Text(
-                          "Section.stats2.overview.comparison.row.median_per_build.global_sample",
-                          "${formatCount(stats.comparison.globalBuildCount)}作品",
-                          mapOf(
-                              "global_build_count" to formatCount(stats.comparison.globalBuildCount)
-                          ),
-                      ),
                   ),
               ),
               stats2Text(
@@ -3629,14 +3605,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           "あなたが押した作品",
                       ),
                       stats.comparison.givenTargetAverage,
-                      stats2Text(
-                          "Section.stats2.overview.comparison.row.given_build_popularity.given_sample",
-                          "${formatCount(stats.comparison.givenTargetBuildCount)}作品",
-                          mapOf(
-                              "given_build_count" to
-                                  formatCount(stats.comparison.givenTargetBuildCount)
-                          ),
-                      ),
                   ),
                   DialogComparisonValue(
                       stats2Text(
@@ -3644,13 +3612,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                           "全体平均",
                       ),
                       stats.comparison.globalAverage,
-                      stats2Text(
-                          "Section.stats2.overview.comparison.row.given_build_popularity.global_sample",
-                          "${formatCount(stats.comparison.globalBuildCount)}作品",
-                          mapOf(
-                              "global_build_count" to formatCount(stats.comparison.globalBuildCount)
-                          ),
-                      ),
                   ),
               ),
               stats2Text(
@@ -3858,6 +3819,25 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 Component.text(
                     stats2Text("Section.stats2.overview.comparison.title", "比較表") + "\n",
                     NamedTextColor.LIGHT_PURPLE,
+                )
+            )
+            .append(
+                Component.text(
+                    stats2Text(
+                        "Section.stats2.overview.comparison.population",
+                        "母集団：あなたの建築　{own_build_count}件　／　あなたが押した作品　{given_build_count}件　／　全体の建築　{global_build_count}件",
+                        mapOf(
+                            "own_build_count" to
+                                toDialogFullWidth(formatCount(stats.comparison.ownBuildCount)),
+                            "given_build_count" to
+                                toDialogFullWidth(
+                                    formatCount(stats.comparison.givenTargetBuildCount)
+                                ),
+                            "global_build_count" to
+                                toDialogFullWidth(formatCount(stats.comparison.globalBuildCount)),
+                        ),
+                    ) + "\n",
+                    NamedTextColor.GRAY,
                 )
             )
     comparisonRows.forEach { row ->
@@ -4441,24 +4421,25 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val percent =
         if (maximum <= 0.0) 0 else (value.value / maximum * 100.0).toInt().coerceIn(0, 100)
     val label = dialogFixedLabel(value.label, labelWidth)
-    return Component.text()
-        .style(Style.style().font(DIALOG_FONT).build())
-        .append(Component.text(label.fixed, NamedTextColor.WHITE))
-        .append(Component.text(label.padding, NamedTextColor.GRAY))
-        .append(Component.text("▁", NamedTextColor.GRAY))
-        .append(Component.text("█".repeat(filledCount), NamedTextColor.GREEN))
-        .append(Component.text("█".repeat(remainingCount), NamedTextColor.DARK_GRAY))
-        .append(Component.text("▁", NamedTextColor.GRAY))
-        .append(Component.text(toDialogFullWidth("$percent%"), NamedTextColor.GRAY))
-        .append(Component.text("▁", NamedTextColor.GRAY))
-        .append(
-            Component.text(
-                toDialogFullWidth(formatComparisonValue(value.value, row)),
-                NamedTextColor.YELLOW,
+    val component =
+        Component.text()
+            .style(Style.style().font(DIALOG_FONT).build())
+            .append(Component.text(label.fixed, NamedTextColor.WHITE))
+            .append(Component.text(label.padding, NamedTextColor.GRAY))
+            .append(Component.text("▁", NamedTextColor.GRAY))
+            .append(Component.text("█".repeat(filledCount), NamedTextColor.GREEN))
+            .append(Component.text("█".repeat(remainingCount), NamedTextColor.DARK_GRAY))
+            .append(Component.text("▁", NamedTextColor.GRAY))
+            .append(Component.text(toDialogFullWidth("$percent%"), NamedTextColor.GRAY))
+            .append(Component.text("▁", NamedTextColor.GRAY))
+            .append(
+                Component.text(
+                    toDialogFullWidth(formatComparisonValue(value.value, row)),
+                    NamedTextColor.YELLOW,
+                )
             )
-        )
-        .append(Component.text("▁${value.sample}", NamedTextColor.GRAY))
-        .build()
+    value.sample?.let { component.append(Component.text("▁$it", NamedTextColor.GRAY)) }
+    return component.build()
   }
 
   private fun dialogFixedLabel(label: String, width: Int): DialogRankingDisplayName {
@@ -5081,7 +5062,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private data class DialogComparisonValue(
       val label: String,
       val value: Double,
-      val sample: String,
+      val sample: String? = null,
   )
 
   // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
