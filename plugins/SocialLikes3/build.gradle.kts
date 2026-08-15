@@ -4,6 +4,8 @@ import java.time.format.DateTimeFormatter
 
 plugins { alias(libs.plugins.paperweight.userdev) }
 
+tasks.processResources { from("sldata-stats2-text.md") }
+
 dependencies {
   paperweightDevelopmentBundle(libs.paper.dev.bundle)
   compileOnly(libs.placeholderapi)

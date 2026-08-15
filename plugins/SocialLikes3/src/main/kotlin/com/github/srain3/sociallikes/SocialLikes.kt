@@ -33,6 +33,7 @@ class SocialLikes : JavaPlugin() {
     server.pluginManager.registerEvents(SLData, this)
     server.pluginManager.registerEvents(SLResourcePack, this)
     SLData.cleanupLingeringDisplays()
+    SLData.init()
 
     server.getPluginCommand("sltp")?.setExecutor(SLtp)
     server.getPluginCommand("slbuild")?.setExecutor(SLBuilds)
