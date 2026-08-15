@@ -630,12 +630,15 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val entries = mutableMapOf<String, String>()
     var section: String? = null
     var row: String? = null
+    var awaitingConfigBlock = false
+    var inConfigBlock = false
+    var awaitingDisplayImageBlock = false
+    var inDisplayImageBlock = false
 
     textFile.readLines(Charsets.UTF_8).forEachIndexed { index, sourceLine ->
       val lineNumber = index + 1
       val line = sourceLine.trim()
       when {
-        line.isEmpty() || line == "```" || line.startsWith('#') && !line.startsWith("##") -> Unit
         line.startsWith("### ") -> {
           val value = line.removePrefix("### ").trim()
           if (section == null || value.isBlank()) {
@@ -645,7 +648,9 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             row = null
           } else {
             row = value
+            awaitingConfigBlock = true
           }
+          inConfigBlock = false
         }
         line.startsWith("## ") -> {
           val value = line.removePrefix("## ").trim()
@@ -658,8 +663,26 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           } else {
             section = value
             row = null
+            awaitingConfigBlock = true
           }
+          inConfigBlock = false
         }
+        line == "表示イメージ（例。実データではない）:" -> {
+          awaitingConfigBlock = false
+          awaitingDisplayImageBlock = true
+        }
+        awaitingDisplayImageBlock && line == "```" -> {
+          awaitingDisplayImageBlock = false
+          inDisplayImageBlock = true
+        }
+        inDisplayImageBlock && line == "```" -> inDisplayImageBlock = false
+        awaitingDisplayImageBlock || inDisplayImageBlock -> Unit
+        awaitingConfigBlock && line == "```" -> {
+          awaitingConfigBlock = false
+          inConfigBlock = true
+        }
+        inConfigBlock && line == "```" -> inConfigBlock = false
+        line.isEmpty() || !inConfigBlock -> Unit
         ':' !in line || section == null ->
             Tools.plugin.logger.warning(
                 "[SLData] stats2 text ${textFile.name}:$lineNumber is not 'key: value' inside a section; ignoring it"
