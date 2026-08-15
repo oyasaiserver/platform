@@ -110,7 +110,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private const val DIALOG_BODY_WIDTH = 520
   private const val DIALOG_BUTTON_WIDTH = 130
   private const val DIALOG_ACTION_COLUMNS = 2
-  private const val DIALOG_RANK_NAME_COLUMNS = 16
+  private const val DIALOG_FIXED_RANK_NAME_COLUMNS = 16
+  private const val DIALOG_RANKING_NAME_COLUMNS = 10
+  private const val DIALOG_RANK_BAR_COLUMNS = 24
+  // Weekly graph layout constants; unrelated to the 24-cell ranking bar above.
   private const val DIALOG_BAR_WIDTH_CHARS = 1
   private const val DIALOG_BAR_GAP_CHARS = 3
   private const val DIALOG_NBSP = '\u00A0'
@@ -1881,7 +1884,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val playerNames = SLDatabase.loadPlayerNamesBlocking(rows.map { it.ownerUuid })
     val maxCount = rows.maxOfOrNull { it.currentCount } ?: 0
     val palette = dialogTextPalette(player)
-    val bodyWidth = 520
+    val bodyWidth = 250
     val body = mutableListOf<DialogBody>()
     body +=
         DialogBody.plainMessage(
@@ -1916,8 +1919,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 playerNames,
                 maxCount,
                 bodyWidth,
-                palette,
-                ranking.period,
             )
       }
     }
@@ -3110,8 +3111,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
    * each ranking value begins at the same column even when a player name has a different length.
    */
   private fun dialogFixedRankLine(index: Int, playerName: String, value: String): String {
-    val fixedName = compactDialogText(playerName, DIALOG_RANK_NAME_COLUMNS)
-    val padding = DIALOG_NBSP.toString().repeat(DIALOG_RANK_NAME_COLUMNS - fixedName.length)
+    val fixedName = compactDialogText(playerName, DIALOG_FIXED_RANK_NAME_COLUMNS)
+    val padding = DIALOG_NBSP.toString().repeat(DIALOG_FIXED_RANK_NAME_COLUMNS - fixedName.length)
     return "${index + 1}. $fixedName$padding  $value"
   }
 
@@ -3121,70 +3122,72 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       playerNames: Map<String, String>,
       maxCount: Int,
       bodyWidth: Int,
-      palette: DialogTextPalette,
-      period: RankingPeriod,
   ): DialogBody {
     val ownerUuid = parseUuid(summary.ownerUuid)
     val owner = ownerUuid?.let { Bukkit.getOfflinePlayer(it) }
-    val ownerName = playerNames[summary.ownerUuid] ?: owner?.name ?: summary.ownerUuid.take(8)
+    val ownerName = playerNames[summary.ownerUuid] ?: summary.ownerUuid.take(8)
+    val displayName = dialogRankingDisplayName(ownerName)
+    val rankColor = if (index == 0) NamedTextColor.GOLD else NamedTextColor.GREEN
     val head = ItemStack(Material.PLAYER_HEAD)
     val meta = head.itemMeta as? SkullMeta
-    if (meta != null && owner != null) {
-      meta.owningPlayer = owner
+    if (meta != null) {
+      if (owner != null) meta.owningPlayer = owner
+      meta.displayName(
+          Component.text("${toDialogFullWidth("${index + 1}位")} $ownerName", rankColor)
+      )
+      meta.lore(
+          listOf(
+              Component.text("今週のいいね：${formatCount(summary.currentCount)}", NamedTextColor.YELLOW),
+              Component.text("製作者UUID：${summary.ownerUuid}", NamedTextColor.GRAY),
+          )
+      )
       head.itemMeta = meta
     }
-    head.addText(
-        "&a${index + 1}位 $ownerName",
-        mutableListOf(
-            "&7${period.label}のいいね: &e${formatCount(summary.currentCount)}",
-            "&7制作者UUID: &f${summary.ownerUuid}",
-        ),
-    )
 
-    val description =
-        dialogRankingRowComponent(index, ownerName, summary.currentCount, maxCount, palette, period)
+    val description = dialogRankingRowComponent(index, displayName, summary.currentCount, maxCount)
     return DialogBody.item(head)
         .description(DialogBody.plainMessage(description, bodyWidth))
         .showTooltip(true)
         .showDecorations(false)
-        .width(24)
-        .height(32)
+        .width(16)
+        .height(16)
         .build()
   }
 
   private fun dialogRankingRowComponent(
       index: Int,
-      ownerName: String,
+      displayName: DialogRankingDisplayName,
       count: Int,
       maxCount: Int,
-      palette: DialogTextPalette,
-      period: RankingPeriod,
   ): Component {
     val rank = toDialogFullWidth("${index + 1}位")
-    val filled = horizontalRankingBar(count, maxCount, 24)
-    val nameBlock = compactDialogText(ownerName, DIALOG_RANK_NAME_COLUMNS)
-    val namePadding = DIALOG_NBSP.toString().repeat(DIALOG_RANK_NAME_COLUMNS - nameBlock.length)
-    val countText = formatDialogCount(count, DialogLabelStyle.FULLWIDTH)
+    val filledCount = horizontalRankingBarFilledCount(count, maxCount, DIALOG_RANK_BAR_COLUMNS)
+    val remainingCount = DIALOG_RANK_BAR_COLUMNS - filledCount
+    val rankColor = if (index == 0) NamedTextColor.GOLD else NamedTextColor.GREEN
     val hover =
         Component.text()
-            .append(Component.text("$ownerName\n", NamedTextColor.GREEN))
-            .append(
-                Component.text("${period.label}のいいね: ${formatCount(count)}", NamedTextColor.YELLOW)
-            )
+            .append(Component.text("${displayName.original}\n", rankColor))
+            .append(Component.text("今週のいいね：${formatCount(count)}", NamedTextColor.YELLOW))
             .build()
     return Component.text()
-        .style(Style.style().font(DIALOG_FONT).build())
-        .append(Component.text("$rank　", palette.secondary).hoverEvent(hover))
-        .append(Component.text(nameBlock, palette.primary).hoverEvent(hover))
-        .append(Component.text(namePadding, palette.secondary).hoverEvent(hover))
+        .append(Component.text("$rank　", NamedTextColor.GRAY))
+        .append(
+            Component.text()
+                .append(Component.text(displayName.fixed, NamedTextColor.WHITE))
+                .append(Component.text(displayName.padding, NamedTextColor.GRAY))
+                .font(DIALOG_FONT)
+                .build()
+        )
+        .append(Component.text("█".repeat(filledCount), rankColor).hoverEvent(hover))
+        .append(
+            Component.text("█".repeat(remainingCount), NamedTextColor.DARK_GRAY).hoverEvent(hover)
+        )
         .append(
             Component.text(
-                    "　$filled　",
-                    if (index == 0) NamedTextColor.GOLD else NamedTextColor.GREEN,
-                )
-                .hoverEvent(hover)
+                "　${formatDialogCount(count, DialogLabelStyle.FULLWIDTH)}",
+                NamedTextColor.GRAY,
+            )
         )
-        .append(Component.text(countText, palette.secondary).hoverEvent(hover))
         .build()
   }
 
@@ -3198,11 +3201,44 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             "${period.label}（${startDate?.year}/${startDate?.monthValue}/${startDate?.dayOfMonth}〜）"
       }
 
-  private fun horizontalRankingBar(count: Int, maxCount: Int, width: Int): String {
-    if (count <= 0 || maxCount <= 0) return "█"
-    val filled =
-        ceil(count.toDouble() / maxCount.toDouble() * width.toDouble()).toInt().coerceIn(1, width)
-    return "█".repeat(filled)
+  /**
+   * The two ranking-bar segments must always add up to [width]. A zero result is intentionally an
+   * all-dark bar; positive results get one visible colored cell at minimum.
+   */
+  private fun horizontalRankingBarFilledCount(count: Int, maxCount: Int, width: Int): Int {
+    if (count <= 0 || maxCount <= 0) return 0
+    return ceil(count.toDouble() / maxCount.toDouble() * width.toDouble())
+        .toInt()
+        .coerceIn(1, width)
+  }
+
+  private data class DialogRankingDisplayName(
+      /** Original MCID (or UUID fallback), retained for item and bar tooltips. */
+      val original: String,
+      /** Ten 6px uniform-font glyphs after the required MCID display normalization. */
+      val fixed: String,
+      /** Gray underscores completing [fixed] to ten glyphs. */
+      val padding: String,
+  )
+
+  /**
+   * Produces the fixed-width ranking label only. The original MCID is not changed in tooltips.
+   * Offline-account dots and Bedrock's optional ASCII spaces are excluded from the display column
+   * because neither has the common 6px advance used by the normalized name characters.
+   */
+  private fun dialogRankingDisplayName(original: String): DialogRankingDisplayName {
+    val normalized =
+        original
+            .removePrefix(".")
+            .replace(" ", "")
+            .uppercase(java.util.Locale.ROOT)
+            .replace('I', '1')
+            .take(DIALOG_RANKING_NAME_COLUMNS)
+    return DialogRankingDisplayName(
+        original = original,
+        fixed = normalized,
+        padding = "_".repeat(DIALOG_RANKING_NAME_COLUMNS - normalized.length),
+    )
   }
 
   fun logWeeklyDialogGraphPreview() {
