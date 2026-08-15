@@ -45,6 +45,14 @@ object SLDataStatsService {
     }
   }
 
+  /** Calendar period used by the creator-likes ranking dialog. */
+  enum class RankingPeriod(val label: String) {
+    WEEK("今週"),
+    MONTH("今月"),
+    YEAR("今年"),
+    ALL("全期間"),
+  }
+
   data class LikeBucket(val label: String, val sortDate: LocalDate, val count: Int)
 
   data class LikeSeries(
@@ -63,6 +71,15 @@ object SLDataStatsService {
       val weeklyMvp: List<SLDatabase.BuildLikeSummary>,
       val weeklyOwnerMvp: List<SLDatabase.OwnerLikeSummary>,
       val growingBuilds: List<SLDatabase.BuildLikeSummary>,
+  )
+
+  data class OwnerLikeRanking(
+      val period: RankingPeriod,
+      val startDate: LocalDate?,
+      /** All likes made in [period], including likes made by a build owner on their own build. */
+      val total: Int,
+      /** Creator ranking after excluding each owner's likes on their own builds. */
+      val leaders: List<SLDatabase.OwnerLikeSummary>,
   )
 
   data class PlayerCountRow(val playerUuid: String, val count: Int)
@@ -361,6 +378,27 @@ object SLDataStatsService {
                 toMillis(currentWeekStart),
                 toMillis(previousWeekStart),
                 5,
+            ),
+    )
+  }
+
+  /**
+   * Loads the creator ranking with one calendar boundary for both the displayed total and Top5. The
+   * total deliberately remains the total number of likes, while the ranking excludes owner
+   * self-likes to match the other support-oriented statistics.
+   */
+  fun loadOwnerLikeRanking(period: RankingPeriod, limit: Int = 5): OwnerLikeRanking {
+    val startDate = rankingPeriodStart(period)
+    val sinceMillis = startDate?.let(::toMillis)
+    return OwnerLikeRanking(
+        period = period,
+        startDate = startDate,
+        total = SLDatabase.loadLikeCountSinceBlocking(sinceMillis),
+        leaders =
+            SLDatabase.loadOwnerLikeLeadersSinceBlocking(
+                sinceMillis,
+                limit,
+                excludeOwnerSelfLikes = true,
             ),
     )
   }
@@ -997,6 +1035,16 @@ object SLDataStatsService {
 
   private fun currentWeekStart(): LocalDate =
       LocalDate.now(zoneId).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+
+  private fun rankingPeriodStart(period: RankingPeriod): LocalDate? {
+    val today = LocalDate.now(zoneId)
+    return when (period) {
+      RankingPeriod.WEEK -> currentWeekStart()
+      RankingPeriod.MONTH -> YearMonth.from(today).atDay(1)
+      RankingPeriod.YEAR -> LocalDate.of(today.year, 1, 1)
+      RankingPeriod.ALL -> null
+    }
+  }
 
   private fun toMillis(date: LocalDate): Long = date.atStartOfDay(zoneId).toInstant().toEpochMilli()
 }

@@ -676,10 +676,13 @@ object SLDatabase {
   }
 
   fun loadOwnerLikeLeadersSinceBlocking(
-      sinceMillis: Long,
+      sinceMillis: Long?,
       limit: Int = 5,
+      excludeOwnerSelfLikes: Boolean = false,
   ): List<OwnerLikeSummary> {
     val normalizedLimit = normalizedStatsLimit(limit)
+    val selfLikeClause = if (excludeOwnerSelfLikes) "AND bl.player_uuid <> b.owner_uuid" else ""
+    val sinceClause = if (sinceMillis == null) "" else "AND bl.liked_at >= ?"
     return submitBlocking("loadOwnerLikeLeadersSince") {
           val summaries = mutableListOf<OwnerLikeSummary>()
           rawConnection()
@@ -688,7 +691,8 @@ object SLDatabase {
                   SELECT b.owner_uuid, COUNT(bl.player_uuid) AS likes_count
                   FROM build_likes bl
                   JOIN builds b ON b.id = bl.build_id
-                  WHERE bl.liked_at IS NOT NULL AND bl.liked_at >= ?
+                  WHERE bl.liked_at IS NOT NULL $sinceClause
+                    $selfLikeClause
                   GROUP BY b.owner_uuid
                   ORDER BY likes_count DESC, b.owner_uuid ASC
                   LIMIT ?
@@ -696,8 +700,11 @@ object SLDatabase {
                       .trimIndent()
               )
               ?.use { statement ->
-                statement.setLong(1, sinceMillis)
-                statement.setInt(2, normalizedLimit)
+                if (sinceMillis == null) statement.setInt(1, normalizedLimit)
+                else {
+                  statement.setLong(1, sinceMillis)
+                  statement.setInt(2, normalizedLimit)
+                }
                 statement.executeQuery().use { results ->
                   while (results.next()) {
                     summaries +=
@@ -712,6 +719,22 @@ object SLDatabase {
         }
         .orEmpty()
   }
+
+  /** Counts all timestamped likes in a ranking period, including owner self-likes. */
+  fun loadLikeCountSinceBlocking(sinceMillis: Long?): Int =
+      submitBlocking("loadLikeCountSince") {
+        val sinceClause = if (sinceMillis == null) "" else "AND bl.liked_at >= ?"
+        countQuery(
+            """
+            SELECT COUNT(*) AS count
+            FROM build_likes bl
+            WHERE bl.liked_at IS NOT NULL $sinceClause
+            """
+                .trimIndent()
+        ) { statement ->
+          if (sinceMillis != null) statement.setLong(1, sinceMillis)
+        }
+      } ?: 0
 
   fun loadWeeklyLikedOwnersBlocking(
       playerUuid: String,

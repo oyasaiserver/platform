@@ -8,6 +8,7 @@ import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.stats.SLDataStatsService
 import com.github.srain3.sociallikes.stats.SLDataStatsService.LikeSeries
 import com.github.srain3.sociallikes.stats.SLDataStatsService.Period
+import com.github.srain3.sociallikes.stats.SLDataStatsService.RankingPeriod
 import io.papermc.paper.connection.PlayerGameConnection
 import io.papermc.paper.dialog.Dialog
 import io.papermc.paper.event.player.PlayerCustomClickEvent
@@ -130,6 +131,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private val wallMapFrameKey = NamespacedKey(Tools.plugin, "sldata_wall_map_frame")
   private val activeDisplays = mutableMapOf<UUID, DisplaySession>()
   private val activeDialogRequests = mutableMapOf<UUID, DialogRequest>()
+  private val activeDialogRankingPeriods = mutableMapOf<UUID, RankingPeriod>()
   private val activeDialogStatsTargets = mutableMapOf<UUID, DialogStatsTarget>()
   private val activeDialogStatsCategories = mutableMapOf<UUID, DialogStatsCategory>()
   private val dialogStatsIncludeLifeWorld = mutableMapOf<UUID, Boolean>()
@@ -147,6 +149,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private val dialogPreviewReloadKey = Key.key("sociallikes3", "sldata_preview_reload")
   private val dialogPreviewGraphKey = Key.key("sociallikes3", "sldata_preview_graph")
   private val dialogRankingKey = Key.key("sociallikes3", "sldata_ranking")
+  private val dialogRankingWeekKey = Key.key("sociallikes3", "sldata_ranking_week")
+  private val dialogRankingMonthKey = Key.key("sociallikes3", "sldata_ranking_month")
+  private val dialogRankingYearKey = Key.key("sociallikes3", "sldata_ranking_year")
+  private val dialogRankingAllKey = Key.key("sociallikes3", "sldata_ranking_all")
   private val dialogStatsKey = Key.key("sociallikes3", "sldata_stats2")
   private val dialogStatsReloadKey = Key.key("sociallikes3", "sldata_stats2_reload")
   private val dialogStatsWorldFilterKey = Key.key("sociallikes3", "sldata_stats2_world_filter")
@@ -1865,9 +1871,14 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     )
   }
 
-  private fun openDialogRanking(player: Player) {
-    val stats = SLDataStatsService.loadBoardStats()
-    val rows = stats.weeklyOwnerMvp.take(5)
+  private fun openDialogRanking(
+      player: Player,
+      period: RankingPeriod = activeDialogRankingPeriods[player.uniqueId] ?: RankingPeriod.WEEK,
+  ) {
+    activeDialogRankingPeriods[player.uniqueId] = period
+    val ranking = SLDataStatsService.loadOwnerLikeRanking(period)
+    val rows = ranking.leaders
+    val playerNames = SLDatabase.loadPlayerNamesBlocking(rows.map { it.ownerUuid })
     val maxCount = rows.maxOfOrNull { it.currentCount } ?: 0
     val palette = dialogTextPalette(player)
     val bodyWidth = 520
@@ -1875,30 +1886,51 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     body +=
         DialogBody.plainMessage(
             Component.text(
-                    "今週 ／ 制作者別いいね数 Top5 ／ 合計 ${formatDialogCount(stats.weekly.total, DialogLabelStyle.FULLWIDTH)}",
+                    "${dialogRankingPeriodLabel(ranking.period, ranking.startDate)}に押された全いいね ／ 合計 ${formatDialogCount(ranking.total, DialogLabelStyle.FULLWIDTH)}",
                     dialogTextPalette(player).secondary,
                 )
                 .font(DIALOG_FONT),
             bodyWidth,
         )
+    body +=
+        DialogBody.plainMessage(
+            Component.text("制作者ごとの受信数（自己いいねを除外）", palette.secondary).font(DIALOG_FONT),
+            bodyWidth,
+        )
     if (rows.isEmpty()) {
       body +=
           DialogBody.plainMessage(
-              Component.text("今週のいいねデータはまだありません。", dialogTextPalette(player).secondary)
+              Component.text(
+                      "${ranking.period.label}のいいねデータはまだありません。",
+                      dialogTextPalette(player).secondary,
+                  )
                   .font(DIALOG_FONT),
               bodyWidth,
           )
     } else {
       rows.forEachIndexed { index, summary ->
-        body += dialogRankingRowBody(index, summary, maxCount, bodyWidth, palette)
+        body +=
+            dialogRankingRowBody(
+                index,
+                summary,
+                playerNames,
+                maxCount,
+                bodyWidth,
+                palette,
+                ranking.period,
+            )
       }
     }
 
     val actions =
         listOf(
+            dialogButton("週間", "今週の制作者別いいね数", dialogRankingWeekKey),
+            dialogButton("月間", "今月の制作者別いいね数", dialogRankingMonthKey),
+            dialogButton("年間", "今年の制作者別いいね数", dialogRankingYearKey),
+            dialogButton("全期間", "記録済みの全期間", dialogRankingAllKey),
             dialogButton("再読込", "ランキングを再表示", dialogRankingKey),
-            dialogButton("詳細統計", "交流・応援・一番乗りの詳細を表示", dialogStatsKey),
             dialogButton("通常グラフ", "週次グラフへ戻る", dialogPreviewGraphKey),
+            dialogButton("詳細統計", "交流・応援・一番乗りの詳細を表示", dialogStatsKey),
             dialogButton("他の形式で見る", "Map、Slots、Displayを選択", dialogOtherFormatsKey),
         )
     val dialog =
@@ -1906,7 +1938,12 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           builder
               .empty()
               .base(
-                  DialogBase.builder(Component.text("いいね数 Top5", NamedTextColor.LIGHT_PURPLE))
+                  DialogBase.builder(
+                          Component.text(
+                              "いいね数 Top5 — ${ranking.period.label}",
+                              NamedTextColor.LIGHT_PURPLE,
+                          )
+                      )
                       .canCloseWithEscape(true)
                       .afterAction(DialogBase.DialogAfterAction.CLOSE)
                       .body(body)
@@ -3081,13 +3118,15 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private fun dialogRankingRowBody(
       index: Int,
       summary: SLDatabase.OwnerLikeSummary,
+      playerNames: Map<String, String>,
       maxCount: Int,
       bodyWidth: Int,
       palette: DialogTextPalette,
+      period: RankingPeriod,
   ): DialogBody {
     val ownerUuid = parseUuid(summary.ownerUuid)
     val owner = ownerUuid?.let { Bukkit.getOfflinePlayer(it) }
-    val ownerName = owner?.name ?: summary.ownerUuid.take(8)
+    val ownerName = playerNames[summary.ownerUuid] ?: owner?.name ?: summary.ownerUuid.take(8)
     val head = ItemStack(Material.PLAYER_HEAD)
     val meta = head.itemMeta as? SkullMeta
     if (meta != null && owner != null) {
@@ -3097,13 +3136,13 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     head.addText(
         "&a${index + 1}位 $ownerName",
         mutableListOf(
-            "&7今週のいいね: &e${formatCount(summary.currentCount)}",
+            "&7${period.label}のいいね: &e${formatCount(summary.currentCount)}",
             "&7制作者UUID: &f${summary.ownerUuid}",
         ),
     )
 
     val description =
-        dialogRankingRowComponent(index, ownerName, summary.currentCount, maxCount, palette)
+        dialogRankingRowComponent(index, ownerName, summary.currentCount, maxCount, palette, period)
     return DialogBody.item(head)
         .description(DialogBody.plainMessage(description, bodyWidth))
         .showTooltip(true)
@@ -3119,6 +3158,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       count: Int,
       maxCount: Int,
       palette: DialogTextPalette,
+      period: RankingPeriod,
   ): Component {
     val rank = toDialogFullWidth("${index + 1}位")
     val filled = horizontalRankingBar(count, maxCount, 24)
@@ -3128,19 +3168,35 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val hover =
         Component.text()
             .append(Component.text("$ownerName\n", NamedTextColor.GREEN))
-            .append(Component.text("今週のいいね: ${formatCount(count)}", NamedTextColor.YELLOW))
+            .append(
+                Component.text("${period.label}のいいね: ${formatCount(count)}", NamedTextColor.YELLOW)
+            )
             .build()
     return Component.text()
         .style(Style.style().font(DIALOG_FONT).build())
         .append(Component.text("$rank　", palette.secondary).hoverEvent(hover))
         .append(Component.text(nameBlock, palette.primary).hoverEvent(hover))
-        .append(Component.text("$namePadding　$countText\n", palette.secondary).hoverEvent(hover))
+        .append(Component.text(namePadding, palette.secondary).hoverEvent(hover))
         .append(
-            Component.text(filled, if (index == 0) NamedTextColor.GOLD else NamedTextColor.GREEN)
+            Component.text(
+                    "　$filled　",
+                    if (index == 0) NamedTextColor.GOLD else NamedTextColor.GREEN,
+                )
                 .hoverEvent(hover)
         )
+        .append(Component.text(countText, palette.secondary).hoverEvent(hover))
         .build()
   }
+
+  private fun dialogRankingPeriodLabel(
+      period: RankingPeriod,
+      startDate: java.time.LocalDate?,
+  ): String =
+      when (period) {
+        RankingPeriod.ALL -> "全期間"
+        else ->
+            "${period.label}（${startDate?.year}/${startDate?.monthValue}/${startDate?.dayOfMonth}〜）"
+      }
 
   private fun horizontalRankingBar(count: Int, maxCount: Int, width: Int): String {
     if (count <= 0 || maxCount <= 0) return "█"
@@ -3385,6 +3441,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         openDialogPreview(player)
       }
       dialogPreviewGraphKey -> openDialog(player, current)
+      dialogRankingWeekKey -> openDialogRanking(player, RankingPeriod.WEEK)
+      dialogRankingMonthKey -> openDialogRanking(player, RankingPeriod.MONTH)
+      dialogRankingYearKey -> openDialogRanking(player, RankingPeriod.YEAR)
+      dialogRankingAllKey -> openDialogRanking(player, RankingPeriod.ALL)
+      dialogRankingKey -> openDialogRanking(player)
       dialogStatsKey -> openDialogStats(player)
       dialogStatsReloadKey -> {
         val target = activeDialogStatsTargets[player.uniqueId]
@@ -3401,6 +3462,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       }
       dialogCloseKey -> {
         activeDialogRequests.remove(player.uniqueId)
+        activeDialogRankingPeriods.remove(player.uniqueId)
         activeDialogStatsTargets.remove(player.uniqueId)
         activeDialogStatsCategories.remove(player.uniqueId)
         dialogStatsIncludeLifeWorld.remove(player.uniqueId)
@@ -3454,6 +3516,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   fun onQuit(event: PlayerQuitEvent) {
     clearDisplay(event.player.uniqueId)
     activeDialogRequests.remove(event.player.uniqueId)
+    activeDialogRankingPeriods.remove(event.player.uniqueId)
     activeDialogStatsTargets.remove(event.player.uniqueId)
     activeDialogStatsCategories.remove(event.player.uniqueId)
     dialogStatsIncludeLifeWorld.remove(event.player.uniqueId)
