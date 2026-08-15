@@ -881,13 +881,12 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         # Change this file, then run /sldata dialog reload. No plugin rebuild is needed.
         #
         # style chooses one width family for every graph character.
-        #   ascii-hyphen     = 5px cells with - as grid/axis.
-        #   ascii-underscore = 5px cells with _ as grid/axis.
+        #   ascii-low = 5px cells with ▁ as grid/axis.
         #   fullwidth = 9px cells: labels, fillers, grid, empty cells, and right-axis gap all use 9px glyphs.
         #
         # Deprecated legacy keys (line-char, empty-char, label-style, right-axis-gap) are ignored
         # after style is selected. Mixing 5px and 9px glyphs breaks the Paper dialog layout.
-        style: "ascii-underscore"
+        style: "ascii-low"
 
         normal:
           horizontal-scale: 1
@@ -903,18 +902,14 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun defaultDialogPreviewBody(): String =
       """
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁_７，５００
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁_　　　　　
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▃▃▁▁▁▁▁▁▁▁▁▁▁_６，０００
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁_　　　　　
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▃▃▁▁▁▁▁▁██▁▁▁▁▁▁▃▃▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁_４，５００
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁▅▅▁▁▁_　　　　　
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁_３，０００
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▆▆▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁_　　　　　
-      ▁▁▁▂▂▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁_１，５００
-      ▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁▁▁▁██▁▁▁_　　　　　
-      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁_　　　　０
-      ６月８日______________________________７月６日______________________________８月３日_
+      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁７，５００
+      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁６，０００
+      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁３，０００
+      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　　　
+      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁１，５００
+      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　　　
+      ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　　０
+      ６月８日▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁７月６日▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁８月３日▁
       """
           .trimIndent()
 
@@ -929,13 +924,13 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       Tools.plugin.logger.warning(
           "[SLData] Dialog config has invalid style='$explicitStyle'; falling back to style=ascii-underscore"
       )
-      return DialogWidthStyle.ASCII_UNDERSCORE
+      return DialogWidthStyle.ASCII_LOW
     }
 
     val legacyEntries = dialogLegacyWidthEntries(yaml)
     val labelStyle = DialogWidthStyle.parse(yaml.getString("label-style"))
     val selectedStyle =
-        labelStyle ?: legacyEntries.firstOrNull()?.style ?: DialogWidthStyle.ASCII_UNDERSCORE
+        labelStyle ?: legacyEntries.firstOrNull()?.style ?: DialogWidthStyle.ASCII_LOW
     val mixedStyles = (legacyEntries.map { it.style } + listOfNotNull(labelStyle)).distinct()
     if (legacyEntries.isNotEmpty() || yaml.contains("label-style")) {
       val details =
@@ -988,7 +983,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   ): DialogLegacyWidthEntry? {
     if (!yaml.contains(key)) return null
     val value = yaml.getString(key) ?: return null
-    val glyph = parseDialogGlyph(value, '_')
+    val glyph = parseDialogGlyph(value, '▁')
     val style = dialogWidthStyleForAdvance(uniformDialogAdvance(glyph))
     return DialogLegacyWidthEntry(key, value, style)
   }
@@ -1007,13 +1002,13 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun dialogWidthStyleForAdvance(advance: Int): DialogWidthStyle =
       if (advance >= DialogWidthStyle.FULLWIDTH.cellAdvancePx) DialogWidthStyle.FULLWIDTH
-      else DialogWidthStyle.ASCII_UNDERSCORE
+      else DialogWidthStyle.ASCII_LOW
 
   private fun parseDialogGlyph(raw: String?, defaultChar: Char): Char {
     val value = raw?.trim().orEmpty()
     return when {
       value.isEmpty() -> defaultChar
-      value.equals("underscore", ignoreCase = true) -> '_'
+      value.equals("underscore", ignoreCase = true) -> '▁'
       value.equals("dash", ignoreCase = true) -> '─'
       value.equals("fullwidth-underscore", ignoreCase = true) -> '＿'
       else -> value.first()
@@ -2404,19 +2399,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
     val categories =
         linkedMapOf(
-            DialogStatsCategory.OVERVIEW to
-                listOf(
-                    dialogStatsSection(
-                        palette,
-                        "比較表",
-                        scopedRows(
-                            null,
-                            dialogComparisonTableRows(stats),
-                            "比較できる建築データはまだありません。",
-                        ),
-                        "比較できる建築データはまだありません。",
-                    )
-                ),
+            DialogStatsCategory.OVERVIEW to listOf(dialogComparisonTableSection(palette, stats)),
             DialogStatsCategory.BUILDS to
                 listOf(
                     dialogStatsRankingSection(
@@ -2717,6 +2700,13 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       val color: NamedTextColor,
   )
 
+  private data class DialogComparisonTableRow(
+      val title: String,
+      val description: String,
+      val values: List<DialogComparisonValue>,
+      val unit: String,
+  )
+
   private fun dialogStatsBarSection(
       palette: DialogTextPalette,
       title: String,
@@ -2727,6 +2717,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     if (rows.isEmpty())
         return dialogStatsSection(palette, title, listOf(emptyMessage), emptyMessage)
     val maximum = rows.maxOf { it.barValue }.coerceAtLeast(0.0)
+    val labelWidth = rows.maxOf { uniformDialogAdvance(it.name) }
     var component =
         Component.empty()
             .style(Style.style().font(DIALOG_FONT).build())
@@ -2734,7 +2725,9 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     if (scope != null) component = component.append(Component.text("$scope\n", palette.secondary))
     rows.forEach { row ->
       component =
-          component.append(dialogStatsBarRowComponent(row, maximum)).append(Component.newline())
+          component
+              .append(dialogStatsBarRowComponent(row, maximum, labelWidth))
+              .append(Component.newline())
     }
     return DialogStatsSection(
         title,
@@ -2967,36 +2960,13 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun dialogStatsText(text: String, color: TextColor): Component {
-    var component = Component.empty().font(DIALOG_FONT)
-    var buffer = StringBuilder()
-    var bufferColor: TextColor = color
-
-    fun appendBuffer() {
-      if (buffer.isEmpty()) return
-      component = component.append(Component.text(buffer.toString(), bufferColor).font(DIALOG_FONT))
-      buffer = StringBuilder()
-    }
-
-    text.forEach { char ->
-      val charColor = if (char == '_') NamedTextColor.BLACK else color
-      if (charColor != bufferColor) {
-        appendBuffer()
-        bufferColor = charColor
-      }
-      buffer.append(char)
-    }
-    appendBuffer()
-    return component
+    return Component.text(text, color)
   }
 
-  private fun dialogComparisonTableRows(stats: SLDataStatsService.ExtendedStats): List<String> {
-    data class Row(
-        val title: String,
-        val description: String,
-        val values: List<DialogComparisonValue>,
-        val unit: String,
-    )
-
+  private fun dialogComparisonTableSection(
+      palette: DialogTextPalette,
+      stats: SLDataStatsService.ExtendedStats,
+  ): DialogStatsSection {
     fun ordered(
         first: DialogComparisonValue,
         second: DialogComparisonValue,
@@ -3005,7 +2975,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
     val comparisonRows = buildList {
       add(
-          Row(
+          DialogComparisonTableRow(
               "1作品あたりのいいね（平均）",
               "作品がどれだけ反応を集めたか",
               ordered(
@@ -3024,7 +2994,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           )
       )
       add(
-          Row(
+          DialogComparisonTableRow(
               "1作品あたりのいいね（中央値）",
               "突出した1作品に引っ張られない実力",
               ordered(
@@ -3043,7 +3013,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           )
       )
       add(
-          Row(
+          DialogComparisonTableRow(
               "押した作品の人気",
               "自分が選ぶ作品は人気寄りか",
               ordered(
@@ -3062,7 +3032,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           )
       )
       add(
-          Row(
+          DialogComparisonTableRow(
               "送ったいいねと受けたいいね",
               "応援する側か、される側か",
               ordered(
@@ -3081,7 +3051,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           )
       )
       add(
-          Row(
+          DialogComparisonTableRow(
               "相互になっている割合",
               "片思いか、応え合えているか",
               ordered(
@@ -3110,7 +3080,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             if (recent.newerCount == 554 && recent.olderCount == 554) 0.034
             else recent.olderLikesPerDay
         add(
-            Row(
+            DialogComparisonTableRow(
                 "1日あたりのいいね",
                 "公開期間で正規化した反応ペース",
                 ordered(
@@ -3130,7 +3100,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         )
       }
       add(
-          Row(
+          DialogComparisonTableRow(
               "サーバー全体の宣伝・前後24時間",
               "サーバー全体の宣伝機能にどれだけ効果があるか",
               ordered(
@@ -3150,30 +3120,36 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       )
     }
 
-    return comparisonRows.flatMap { row ->
-      listOf(row.title, "説明:${row.description}") + dialogComparisonValueRows(row.values, row.unit)
+    if (comparisonRows.isEmpty())
+        return dialogStatsSection(
+            palette,
+            "比較表",
+            listOf("比較できる建築データはまだありません。"),
+            "比較できる建築データはまだありません。",
+        )
+    val labelWidth = comparisonRows.flatMap { it.values }.maxOf { uniformDialogAdvance(it.label) }
+    var component =
+        Component.empty()
+            .style(Style.style().font(DIALOG_FONT).build())
+            .append(Component.text("比較表\n", NamedTextColor.LIGHT_PURPLE))
+    comparisonRows.forEach { row ->
+      val maximum = row.values.maxOfOrNull { it.value } ?: 0.0
+      component =
+          component
+              .append(Component.text("${row.title}\n", palette.secondary))
+              .append(Component.text("説明:${row.description}\n", NamedTextColor.GRAY))
+      row.values.forEach { value ->
+        component =
+            component
+                .append(dialogComparisonValueRowComponent(value, maximum, row.unit, labelWidth))
+                .append(Component.newline())
+      }
     }
-  }
-
-  private fun dialogComparisonValueRows(
-      values: List<DialogComparisonValue>,
-      unit: String,
-  ): List<String> {
-    val maximum = values.maxOfOrNull { it.value } ?: 0.0
-    return values.map { raw ->
-      val label = raw.label
-      val value = raw.value
-      val sample = raw.sample
-      val percent = if (maximum <= 0.0) 0 else (value / maximum * 100.0).toInt().coerceIn(0, 100)
-      "${label}_${dialogComparisonBar(value, maximum)}_${percent}%_${formatComparisonValue(value, unit)}_${sample}"
-    }
-  }
-
-  private fun dialogComparisonBar(value: Double, maximum: Double, width: Int = 12): String {
-    if (maximum <= 0.0) return "▁".repeat(width)
-    val filled = (value / maximum * width.toDouble()).toInt().coerceIn(0, width)
-    val visible = if (value > 0.0) filled.coerceAtLeast(1) else 0
-    return "█".repeat(visible) + "▁".repeat(width - visible)
+    return DialogStatsSection(
+        "比較表",
+        DialogBody.plainMessage(component, 560),
+        dumpSkipsFirstLine = true,
+    )
   }
 
   private fun formatComparisonValue(value: Double, unit: String): String =
@@ -3211,7 +3187,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     val maximum = max(first, second).coerceAtLeast(1.0)
     fun bar(value: Double): String {
       val filled = ceil(value / maximum * 12.0).toInt().coerceIn(0, 12)
-      return "■".repeat(filled) + "□".repeat(12 - filled)
+      return "█".repeat(filled) + "█".repeat(12 - filled)
     }
     return listOf(
         "$firstLabel ${bar(first)} ${formatAverageCount(first)}",
@@ -3321,25 +3297,25 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun dialogRhythmRows(stats: SLDataStatsService.ActivityRhythmStats): List<String> {
-    val shades = charArrayOf('_', '░', '▒', '▓', '█')
+    val shades = charArrayOf('▁', '░', '▒', '▓', '█')
     val maxCount = stats.weekdayCounts.flatten().maxOrNull() ?: 0
     val weekdayLabels = listOf("月", "火", "水", "木", "金", "土", "日")
     val bandLabels = stats.timeBandLabels.map { it.take(2) }
     val gridLines = buildList {
-      add("時_${bandLabels.joinToString("_")}")
+      add("時▁${bandLabels.joinToString("▁")}")
       stats.weekdayCounts.forEachIndexed { day, counts ->
         val cells =
-            counts.joinToString("_") { count ->
+            counts.joinToString("▁") { count ->
               shades[SLDataStatsService.scaleLevel(count, maxCount, shades.lastIndex)]
                   .toString()
                   .repeat(2)
             }
-        add("${weekdayLabels[day]}_$cells")
+        add("${weekdayLabels[day]}▁$cells")
       }
     }
     validateDialogLineAdvanceInvariant(
         DialogGraphSize.NORMAL,
-        currentDialogRenderConfig().withWidthStyle(DialogWidthStyle.ASCII_UNDERSCORE),
+        currentDialogRenderConfig().withWidthStyle(DialogWidthStyle.ASCII_LOW),
         gridLines.mapIndexed { index, line ->
           DialogLineAdvance(
               "rhythm#$index",
@@ -3349,7 +3325,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           )
         },
     )
-    return listOf("凡例:_0件/░少/▒中/▓多/█最多") +
+    return listOf("凡例:▁0件/░少/▒中/▓多/█最多") +
         gridLines +
         listOf("${stats.rhythmDiagnosis} / ${stats.dayTypeDiagnosis}。反応する時間帯がこの範囲に寄っています。")
   }
@@ -3502,8 +3478,9 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private fun dialogStatsBarRowComponent(
       row: DialogStatsBarRow,
       maximum: Double,
+      labelWidth: Int,
   ): Component {
-    val displayName = dialogRankingDisplayName(row.name)
+    val displayName = dialogFixedLabel(row.name, labelWidth)
     val filledCount = horizontalBarFilledCount(row.barValue, maximum, DIALOG_RANK_BAR_COLUMNS)
     val remainingCount = DIALOG_RANK_BAR_COLUMNS - filledCount
     val hover =
@@ -3519,9 +3496,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                 .append(Component.text(displayName.padding, NamedTextColor.GRAY))
                 .build()
         )
+        .append(Component.text("▁", NamedTextColor.GRAY))
         .append(Component.text("█".repeat(filledCount), row.color).hoverEvent(hover))
         .append(
-            Component.text("▁".repeat(remainingCount), NamedTextColor.DARK_GRAY).hoverEvent(hover)
+            Component.text("█".repeat(remainingCount), NamedTextColor.DARK_GRAY).hoverEvent(hover)
         )
         .append(Component.text("　${toDialogFullWidth(row.valueText)}", NamedTextColor.GRAY))
         .build()
@@ -3555,7 +3533,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         )
         .append(Component.text("█".repeat(filledCount), rankColor).hoverEvent(hover))
         .append(
-            Component.text("▁".repeat(remainingCount), NamedTextColor.DARK_GRAY).hoverEvent(hover)
+            Component.text("█".repeat(remainingCount), NamedTextColor.DARK_GRAY).hoverEvent(hover)
         )
         .append(
             Component.text(
@@ -3592,6 +3570,46 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     return ceil(value / maximum * width.toDouble()).toInt().coerceIn(1, width)
   }
 
+  private fun dialogComparisonValueRowComponent(
+      value: DialogComparisonValue,
+      maximum: Double,
+      unit: String,
+      labelWidth: Int,
+  ): Component {
+    val filledCount = horizontalBarFilledCount(value.value, maximum, 12)
+    val remainingCount = 12 - filledCount
+    val percent =
+        if (maximum <= 0.0) 0 else (value.value / maximum * 100.0).toInt().coerceIn(0, 100)
+    val label = dialogFixedLabel(value.label, labelWidth)
+    return Component.text()
+        .style(Style.style().font(DIALOG_FONT).build())
+        .append(Component.text(label.fixed, NamedTextColor.WHITE))
+        .append(Component.text(label.padding, NamedTextColor.GRAY))
+        .append(Component.text("▁", NamedTextColor.GRAY))
+        .append(Component.text("█".repeat(filledCount), NamedTextColor.GREEN))
+        .append(Component.text("█".repeat(remainingCount), NamedTextColor.DARK_GRAY))
+        .append(Component.text("▁", NamedTextColor.GRAY))
+        .append(Component.text(toDialogFullWidth("$percent%"), NamedTextColor.GRAY))
+        .append(Component.text("▁", NamedTextColor.GRAY))
+        .append(
+            Component.text(
+                toDialogFullWidth(formatComparisonValue(value.value, unit)),
+                NamedTextColor.YELLOW,
+            )
+        )
+        .append(Component.text("▁${value.sample}", NamedTextColor.GRAY))
+        .build()
+  }
+
+  private fun dialogFixedLabel(label: String, width: Int): DialogRankingDisplayName {
+    val paddingWidth = (width - uniformDialogAdvance(label)).coerceAtLeast(0)
+    return DialogRankingDisplayName(
+        original = label,
+        fixed = label,
+        padding = "▁".repeat((paddingWidth + 4) / uniformDialogAdvance('▁')),
+    )
+  }
+
   private data class DialogRankingDisplayName(
       /**
        * MCID with the Bedrock `.` prefix and gamertag spaces removed. Used for tooltips too:
@@ -3601,7 +3619,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       val original: String,
       /** Ten 6px uniform-font glyphs after the required MCID display normalization. */
       val fixed: String,
-      /** Gray underscores completing [fixed] to ten glyphs. */
+      /** Gray low blocks completing [fixed] to ten glyphs. */
       val padding: String,
   )
 
@@ -3617,7 +3635,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     return DialogRankingDisplayName(
         original = plain,
         fixed = normalized,
-        padding = "_".repeat(DIALOG_RANKING_NAME_COLUMNS - normalized.length),
+        padding = "▁".repeat(DIALOG_RANKING_NAME_COLUMNS - normalized.length),
     )
   }
 
@@ -4038,10 +4056,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun dialogProgressBar(current: Int, total: Int, width: Int = 16): String {
-    if (total <= 0) return "░".repeat(width)
+    if (total <= 0) return "█".repeat(width)
     val filled =
         ceil(current.toDouble() / total.toDouble() * width.toDouble()).toInt().coerceIn(0, width)
-    return "█".repeat(filled) + "░".repeat(width - filled)
+    return "█".repeat(filled) + "█".repeat(width - filled)
   }
 
   private fun dialogDateLabel(epochMillis: Long): String {
@@ -4284,19 +4302,19 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   ) {
     ASCII_HYPHEN(
         DialogLabelStyle.ASCII,
-        '-',
-        '-',
-        '-',
-        "-",
+        '▁',
+        '▁',
+        '▁',
+        "▁",
         charArrayOf('▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'),
         5,
     ),
     ASCII_UNDERSCORE(
         DialogLabelStyle.ASCII,
-        '_',
-        '_',
-        '_',
-        "_",
+        '▁',
+        '▁',
+        '▁',
+        "▁",
         charArrayOf('▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'),
         5,
     ),
@@ -4304,17 +4322,17 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         DialogLabelStyle.ASCII,
         '▁',
         '▁',
-        '_',
-        "_",
+        '▁',
+        "▁",
         charArrayOf('▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'),
         5,
     ),
     ASCII_CLEAN(
         DialogLabelStyle.ASCII,
-        '_',
-        '_',
-        '_',
-        "_",
+        '▁',
+        '▁',
+        '▁',
+        "▁",
         charArrayOf('▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'),
         5,
         false,
@@ -4496,7 +4514,6 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       listOf(
           DialogGlyphMetric('█', 0x2588, 8, 0, 7, 8, 4.0, 5),
           DialogGlyphMetric('-', 0x002D, 8, 2, 5, 4, 2.0, 5),
-          DialogGlyphMetric('_', 0x005F, 8, 1, 7, 7, 3.5, 5),
           DialogGlyphMetric('▉', 0x2589, 8, 0, 6, 7, 3.5, 5),
           DialogGlyphMetric('▊', 0x258A, 8, 0, 5, 6, 3.0, 5),
           DialogGlyphMetric('▋', 0x258B, 8, 0, 4, 5, 2.5, 5),
@@ -4856,6 +4873,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun formatDialogXAxisLabel(period: Period, rawLabel: String): String {
     val compact = compactBucketLabel(period, rawLabel)
+    if (period == Period.MONTH) return toDialogFullWidth("${compact}月")
     if (period != Period.WEEK) return toDialogFullWidth(compact)
     val parts = compact.split("/")
     if (parts.size != 2) return toDialogFullWidth(compact)
@@ -5016,7 +5034,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       verticalScale: Int,
       config: DialogRenderConfig,
   ): List<DialogYAxisLabel> {
-    val labelRowOffset = if (config.lineChar == '_') verticalScale / 2 else 0
+    val labelRowOffset = if (config.lineChar == '▁') verticalScale / 2 else 0
     val labels = mutableListOf<DialogYAxisLabel>()
     (0 until DIALOG_AXIS_DIVISIONS).forEach { division ->
       val lineRow = division * verticalScale
