@@ -113,6 +113,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   private const val DIALOG_ACTION_COLUMNS = 2
   private const val DIALOG_FIXED_RANK_NAME_COLUMNS = 16
   private const val DIALOG_RANKING_NAME_COLUMNS = 10
+  private const val DIALOG_BUILD_TITLE_COLUMNS = 12
   private const val DIALOG_RANK_BAR_COLUMNS = 24
   // Weekly graph layout constants; unrelated to the 24-cell ranking bar above.
   private const val DIALOG_BAR_WIDTH_CHARS = 1
@@ -2538,7 +2539,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                         null,
                         stats.ownBuilds.map { row ->
                           DialogStatsRankingRow(
-                              dialogBuildTitleLabel(row.title),
+                              row.title,
                               row.likeCount,
                               "${formatCount(row.likeCount)}いいね",
                               "SL ID #${row.buildId} / ${row.title}",
@@ -2549,6 +2550,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
                             "$targetName の建築Top5はまだありません。",
                             mapOf("target_name" to targetName),
                         ),
+                        displayNameFormatter = ::dialogBuildTitleDisplayName,
                     ),
                     dialogStatsVerticalBarSection(
                         palette,
@@ -2998,6 +3000,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       scope: String?,
       rows: List<DialogStatsRankingRow>,
       emptyMessage: String,
+      displayNameFormatter: (String) -> DialogRankingDisplayName = ::dialogRankingDisplayName,
   ): DialogStatsSection {
     if (rows.isEmpty())
         return dialogStatsSection(palette, title, listOf(emptyMessage), emptyMessage)
@@ -3013,7 +3016,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
               .append(
                   dialogRankingRowComponent(
                       index,
-                      dialogRankingDisplayName(row.name),
+                      displayNameFormatter(row.name),
                       row.barValue,
                       maximum,
                       toDialogFullWidth(row.valueText),
@@ -3077,6 +3080,17 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       title: String,
       maxLength: Int = DIALOG_RANKING_NAME_COLUMNS,
   ): String = compactDialogText(title, maxLength)
+
+  /**
+   * Keeps build titles verbatim (apart from compacting) and pads them to a full-width-based column.
+   * Player-only MCID normalization must never be applied here: case, spaces, Japanese, and symbols
+   * are meaningful parts of a build title.
+   */
+  private fun dialogBuildTitleDisplayName(title: String): DialogRankingDisplayName {
+    val fixed = compactDialogText(title, DIALOG_BUILD_TITLE_COLUMNS)
+    val targetAdvance = DIALOG_BUILD_TITLE_COLUMNS * uniformDialogAdvance('建')
+    return dialogFixedLabel(fixed, targetAdvance).copy(original = title)
+  }
 
   private fun writeDialogStatsDump(player: Player?, targetUuid: UUID, targetName: String): File {
     val statsContent = buildDialogStatsContent(player, targetUuid, targetName)
@@ -5039,7 +5053,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       recordLineAdvance("graph-row-${row + 1}")
       append("\n", gridColor)
     }
-    append(config.lineChar.toString().repeat(plotWidth), baseGridColor)
+    append(dialogAxisFill(config, plotWidth), baseGridColor)
     appendRightAxisLabel(0)
     recordLineAdvance("baseline")
     append("\n", gridColor)
@@ -5305,7 +5319,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       showAllBuckets: Boolean = false,
   ): DialogXAxisLabels {
     if (showAllBuckets) return dialogAllBucketXAxisLabels(series, layout, config)
-    val chars = CharArray(layout.plotWidth) { config.fillerChar }
+    val chars = dialogAxisFill(config, layout.plotWidth).toCharArray()
     val placed = mutableListOf<DialogXAxisLabel>()
     val targets =
         listOf(0, series.buckets.lastIndex / 2, series.buckets.lastIndex).distinct().mapNotNull {
@@ -5394,7 +5408,7 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       val barCenterPx = bar.centerColumn * cellAdvance + cellAdvance / 2.0
       val desiredStartPx = (barCenterPx - labelAdvance / 2.0).coerceAtLeast(cursorPx.toDouble())
       val fillerCount = ((desiredStartPx - cursorPx) / cellAdvance).toInt().coerceAtLeast(0)
-      text.append(config.fillerChar.toString().repeat(fillerCount))
+      text.append(dialogAxisFill(config, fillerCount))
       cursorPx += fillerCount * cellAdvance
       val labelStartChar = text.length
       val labelStartPx = cursorPx
@@ -5414,9 +5428,13 @@ object SLData : CommandExecutor, TabCompleter, Listener {
           )
     }
     val trailingFillers = ((plotAdvance - cursorPx) / cellAdvance).coerceAtLeast(0)
-    text.append(config.fillerChar.toString().repeat(trailingFillers))
+    text.append(dialogAxisFill(config, trailingFillers))
     return DialogXAxisLabels(text.toString(), placed)
   }
+
+  /** Uses the exact same low-block glyph for graph axes and X-axis label gaps. */
+  private fun dialogAxisFill(config: DialogRenderConfig, count: Int): String =
+      config.lineChar.toString().repeat(count.coerceAtLeast(0))
 
   private fun dialogYAxisLabels(
       axisMax: Int,
