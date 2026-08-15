@@ -3133,7 +3133,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     if (meta != null) {
       if (owner != null) meta.owningPlayer = owner
       meta.displayName(
-          Component.text("${toDialogFullWidth("${index + 1}位")} $ownerName", rankColor)
+          Component.text(
+              "${toDialogFullWidth("${index + 1}位")} ${displayName.original}",
+              rankColor,
+          )
       )
       meta.lore(
           listOf(
@@ -3170,12 +3173,12 @@ object SLData : CommandExecutor, TabCompleter, Listener {
             .append(Component.text("今週のいいね：${formatCount(count)}", NamedTextColor.YELLOW))
             .build()
     return Component.text()
+        .style(Style.style().font(DIALOG_FONT).build())
         .append(Component.text("$rank　", NamedTextColor.GRAY))
         .append(
             Component.text()
                 .append(Component.text(displayName.fixed, NamedTextColor.WHITE))
                 .append(Component.text(displayName.padding, NamedTextColor.GRAY))
-                .font(DIALOG_FONT)
                 .build()
         )
         .append(Component.text("█".repeat(filledCount), rankColor).hoverEvent(hover))
@@ -3213,7 +3216,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private data class DialogRankingDisplayName(
-      /** Original MCID (or UUID fallback), retained for item and bar tooltips. */
+      /**
+       * MCID with the Bedrock `.` prefix and gamertag spaces removed. Used for tooltips too:
+       * statistics never show the prefix (2026-08-15). Players stay identifiable by the full UUID
+       * in the lore.
+       */
       val original: String,
       /** Ten 6px uniform-font glyphs after the required MCID display normalization. */
       val fixed: String,
@@ -3227,15 +3234,11 @@ object SLData : CommandExecutor, TabCompleter, Listener {
    * because neither has the common 6px advance used by the normalized name characters.
    */
   private fun dialogRankingDisplayName(original: String): DialogRankingDisplayName {
+    val plain = original.removePrefix(".").replace(" ", "")
     val normalized =
-        original
-            .removePrefix(".")
-            .replace(" ", "")
-            .uppercase(java.util.Locale.ROOT)
-            .replace('I', '1')
-            .take(DIALOG_RANKING_NAME_COLUMNS)
+        plain.uppercase(java.util.Locale.ROOT).replace('I', '1').take(DIALOG_RANKING_NAME_COLUMNS)
     return DialogRankingDisplayName(
-        original = original,
+        original = plain,
         fixed = normalized,
         padding = "_".repeat(DIALOG_RANKING_NAME_COLUMNS - normalized.length),
     )
