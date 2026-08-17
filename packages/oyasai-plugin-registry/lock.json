@@ -90,16 +90,16 @@
   "fastasyncvoxelsniper": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/D7XBSI1y/versions/n77tXMjA/fastasyncvoxelsniper-3.2.4.jar",
-        "hash": "sha256-k1qgEacp/UDLh/0+Nxwg3UWBMDVH1PksMcvGCOfl7LM="
+        "url": "https://cdn.modrinth.com/data/D7XBSI1y/versions/AnYq3r1h/fastasyncvoxelsniper-3.2.5.jar",
+        "hash": "sha256-SF6LVpTfDb2pYDgEnLmnO+5ON9nsjH9YmvXopZD8ouk="
       }
     }
   },
   "fastasyncworldedit": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/Ad3NnAQP/FastAsyncWorldEdit-Paper-2.15.3.jar",
-        "hash": "sha256-1ylB+//6jz578p9blKwpvLIN0EKyqy5dv7BqwSr6RWo="
+        "url": "https://cdn.modrinth.com/data/z4HZZnLr/versions/5TOYHuQr/FastAsyncWorldEdit-Paper-2.15.4.jar",
+        "hash": "sha256-u7GHXoI8oBWRvSNCfob0kOF82C/nady36CqVXdg3Gsw="
       }
     }
   },
@@ -117,8 +117,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.1/builds/1223/downloads/velocity",
-      "hash": "sha256-CCF46eVyNWMDQm5qllrJAOB9lewhGQIpaddv2OV7dms="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.1/builds/1225/downloads/velocity",
+      "hash": "sha256-c2wasqW6bdyNZxju77AXwtwmepOOcUGZXr7Mk2mXJj0="
     }
   },
   "gsit": {
