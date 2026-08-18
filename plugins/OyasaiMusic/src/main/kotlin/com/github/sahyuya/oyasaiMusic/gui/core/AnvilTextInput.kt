@@ -1,5 +1,7 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
+import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.util.BedrockUtil
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import net.kyori.adventure.text.Component
@@ -7,6 +9,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
@@ -46,6 +49,8 @@ object AnvilTextInputSession : Listener {
       val inventory: Inventory,
       val placeholderItem: ItemStack,
       val onSubmit: (String) -> Unit,
+      /** Bedrockクライアントの金床UI解放用に一時付与した1レベル。 */
+      val loanedBedrockLevel: Boolean,
   )
 
   /**
@@ -64,6 +69,16 @@ object AnvilTextInputSession : Listener {
     installListenerOnce(plugin)
     val key = sessionKey ?: NamespacedKey(plugin, "anvil_input_session").also { sessionKey = it }
 
+    // Bedrock版は修理コスト0でもクライアント側UIが1レベルを要求することがある。
+    // サーバー側では引き続きコスト0とし、画面を閉じる際に貸与分だけ回収する。
+    val bedrockPrefix =
+        (plugin as? OyasaiMusic)?.config?.getString("bedrock.name-prefix", ".") ?: "."
+    val loanedBedrockLevel =
+        player.gameMode == GameMode.SURVIVAL &&
+            player.level == 0 &&
+            BedrockUtil.isBedrock(player, bedrockPrefix)
+    if (loanedBedrockLevel) player.giveExpLevels(1)
+
     val view = MenuType.ANVIL.builder().title(title).checkReachable(false).build(player)
     configure(view)
 
@@ -73,7 +88,14 @@ object AnvilTextInputSession : Listener {
     placeholder.editMeta { it.displayName(Component.text(initialDisplayText, NamedTextColor.GRAY)) }
 
     val session =
-        Session(UUID.randomUUID().toString(), plugin, view.topInventory, placeholder, onSubmit)
+        Session(
+            UUID.randomUUID().toString(),
+            plugin,
+            view.topInventory,
+            placeholder,
+            onSubmit,
+            loanedBedrockLevel,
+        )
     sessions[player.uniqueId] = session
 
     view.topInventory.setItem(0, markSessionItem(placeholder.clone(), session.id, key))
@@ -113,6 +135,7 @@ object AnvilTextInputSession : Listener {
     }
 
     sessions.remove(player.uniqueId)
+    reclaimBedrockLevel(player, session)
     session.inventory.clear()
     player.closeInventory()
     Bukkit.getScheduler().runTask(session.plugin, Runnable { session.onSubmit(text) })
@@ -133,6 +156,7 @@ object AnvilTextInputSession : Listener {
     if (event.view.topInventory != session.inventory) return
 
     sessions.remove(player.uniqueId)
+    reclaimBedrockLevel(player, session)
     session.inventory.clear()
     val key = sessionKey ?: return
     // 何らかの理由でアイテムが実インベントリ/カーソルへ漏れ出していた場合の掃除
@@ -146,6 +170,12 @@ object AnvilTextInputSession : Listener {
     view.setRepairItemCountCost(0)
     view.setMaximumRepairCost(Int.MAX_VALUE)
     view.bypassEnchantmentLevelRestriction(true)
+  }
+
+  private fun reclaimBedrockLevel(player: Player, session: Session) {
+    if (session.loanedBedrockLevel && player.level > 0) {
+      player.giveExpLevels(-1)
+    }
   }
 
   private fun createResultItem(session: Session, text: String?, key: NamespacedKey): ItemStack {

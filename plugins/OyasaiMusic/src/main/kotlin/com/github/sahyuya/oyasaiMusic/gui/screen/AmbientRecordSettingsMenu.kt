@@ -1,6 +1,7 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.item.AmbientPlaybackRange
 import com.github.sahyuya.oyasaiMusic.item.AmbientRange
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordItem
 import net.kyori.adventure.text.Component
@@ -25,10 +26,10 @@ class AmbientRecordSettingsMenu(
 ) : OyasaiMusicMenu {
 
   companion object {
-    private const val RANGE_SLOT = 0
-    private const val TRIGGER_SLOT = 1
-    private const val LOOP_SLOT = 2
-    private const val INFO_SLOT = 3
+    private const val INFO_SLOT = 0
+    private const val RANGE_SLOT = 1
+    private const val TRIGGER_SLOT = 2
+    private const val LOOP_SLOT = 3
     private const val CLOSE_SLOT = 4
   }
 
@@ -52,7 +53,7 @@ class AmbientRecordSettingsMenu(
     if (item == null || !PhysicalRecordItem.isRecordItem(plugin, item)) {
       (0..4).forEach { inventory.setItem(it, null) }
       inventory.setItem(
-          INFO_SLOT,
+          RANGE_SLOT,
           GuiItemBuilder(Material.BARRIER)
               .name(Component.text("アイテムが見つかりません", NamedTextColor.RED))
               .build(),
@@ -60,8 +61,23 @@ class AmbientRecordSettingsMenu(
       return
     }
     val range = PhysicalRecordItem.range(plugin, item)
+    val maximumRange = AmbientRange.maximumFor(viewer)
     val trigger = PhysicalRecordItem.trigger(plugin, item)
     val loop = PhysicalRecordItem.loop(plugin, item)
+
+    inventory.setItem(
+        INFO_SLOT,
+        GuiItemBuilder(Material.KNOWLEDGE_BOOK)
+            .name(Component.text("再生範囲の設定上限", NamedTextColor.YELLOW))
+            .lore(
+                Component.text(
+                    "権限による最大値: ${maximumRange?.label ?: "設定不可"}",
+                    if (maximumRange == null) NamedTextColor.RED else NamedTextColor.AQUA,
+                ),
+                Component.text("数値は1以上、ワールド全体は world と入力", NamedTextColor.DARK_GRAY),
+            )
+            .build(),
+    )
 
     inventory.setItem(
         RANGE_SLOT,
@@ -69,13 +85,17 @@ class AmbientRecordSettingsMenu(
             .name(
                 Component.text(
                     "再生範囲: ${range.label}",
-                    if (viewer.hasPermission(range.permission)) NamedTextColor.AQUA
+                    if (AmbientRange.canUse(viewer, range)) NamedTextColor.AQUA
                     else NamedTextColor.RED,
                 )
             )
             .lore(
-                Component.text("必要権限: ${range.permission}", NamedTextColor.DARK_GRAY),
-                Component.text("クリックで切替", NamedTextColor.DARK_GRAY),
+                Component.text(
+                    "設定可能な最大範囲: ${maximumRange?.label ?: "権限なし"}",
+                    NamedTextColor.DARK_GRAY,
+                ),
+                Component.text("クリックして数値を入力", NamedTextColor.DARK_GRAY),
+                Component.text("ワールド全体は world と入力", NamedTextColor.DARK_GRAY),
             )
             .build(),
     )
@@ -95,13 +115,6 @@ class AmbientRecordSettingsMenu(
             .build(),
     )
     inventory.setItem(
-        INFO_SLOT,
-        GuiItemBuilder(item.type)
-            .name(item.itemMeta?.displayName() ?: Component.text("楽曲", NamedTextColor.WHITE))
-            .lore(Component.text("設定はジュークボックスへ設置時に反映されます", NamedTextColor.DARK_GRAY))
-            .build(),
-    )
-    inventory.setItem(
         CLOSE_SLOT,
         GuiItemBuilder(Material.BARRIER).name(Component.text("閉じる", NamedTextColor.RED)).build(),
     )
@@ -111,7 +124,7 @@ class AmbientRecordSettingsMenu(
     val item = currentItem()
     if (item == null || !PhysicalRecordItem.isRecordItem(plugin, item)) return
     when (event.rawSlot) {
-      RANGE_SLOT -> cycleRange(item)
+      RANGE_SLOT -> openRangeInput(item)
       TRIGGER_SLOT ->
           update(
               PhysicalRecordItem.withTrigger(
@@ -136,15 +149,56 @@ class AmbientRecordSettingsMenu(
     render()
   }
 
-  /** 権限のある範囲だけを循環する。既存アイテムの権限外設定もここで復帰できる。 */
-  private fun cycleRange(item: org.bukkit.inventory.ItemStack) {
-    val allowed = AmbientRange.entries.filter { viewer.hasPermission(it.permission) }
-    if (allowed.isEmpty()) {
+  private fun openRangeInput(item: org.bukkit.inventory.ItemStack) {
+    val maximum = AmbientRange.maximumFor(viewer)
+    if (maximum == null) {
       viewer.sendMessage("§c環境BGMの再生範囲を使う権限がありません。")
       return
     }
     val current = PhysicalRecordItem.range(plugin, item)
-    val next = allowed[(allowed.indexOf(current).let { if (it < 0) -1 else it } + 1) % allowed.size]
-    update(PhysicalRecordItem.withRange(plugin, item, next))
+    AnvilTextInputSession.open(
+        plugin = plugin,
+        player = viewer,
+        title = Component.text("再生範囲を入力"),
+        initialText = current.blocks?.toString() ?: "world",
+    ) { input ->
+      val selected = parseRange(input)
+      if (selected == null) {
+        viewer.sendMessage("§c再生範囲は1以上の整数、または world で入力してください。")
+        reopen()
+        return@open
+      }
+      if (!AmbientRange.canUse(viewer, selected)) {
+        viewer.sendMessage("§c設定可能な最大再生範囲は ${maximum.label} です。")
+        reopen()
+        return@open
+      }
+      val latest = currentItem()
+      if (latest == null || !PhysicalRecordItem.isRecordItem(plugin, latest)) {
+        viewer.sendMessage("§c設定対象のレコードが見つかりません。")
+        return@open
+      }
+      viewer.inventory.setItem(handSlot, PhysicalRecordItem.withRange(plugin, latest, selected))
+      viewer.sendMessage("§a再生範囲を ${selected.label} に設定しました。")
+      reopen()
+    }
+  }
+
+  private fun parseRange(input: String): AmbientPlaybackRange? {
+    val normalized = input.trim().lowercase()
+    if (normalized in setOf("world", "ワールド", "全体", "ワールド全体")) {
+      return AmbientPlaybackRange.WORLD
+    }
+    val blocks = normalized.toIntOrNull() ?: return null
+    if (blocks !in 1..AmbientPlaybackRange.MAX_NUMERIC_BLOCKS) return null
+    return AmbientPlaybackRange(blocks)
+  }
+
+  private fun reopen() {
+    if (!viewer.isOnline) return
+    plugin.menuManager.openTransient(
+        viewer,
+        AmbientRecordSettingsMenu(plugin, viewer, handSlot),
+    )
   }
 }

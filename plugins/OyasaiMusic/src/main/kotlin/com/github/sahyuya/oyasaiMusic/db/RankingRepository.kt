@@ -6,12 +6,17 @@ import com.github.sahyuya.oyasaiMusic.util.UuidUtil
 import java.sql.ResultSet
 import java.util.UUID
 
-/** メインメニュー「①ランキング」の指標区分。 LIKES/VIEWS/FAVORITESは楽曲単位、FOLLOWERSは作者単位のランキングになる。 */
+/** LIKES/VIEWS/FAVORITESは楽曲単位、FOLLOWERS/RECORD_SALESは作者単位のランキング。 */
 enum class RankingMetric {
   LIKES,
   VIEWS,
   FAVORITES,
   FOLLOWERS,
+  RECORD_SALES,
+  ;
+
+  val isAuthorMetric: Boolean
+    get() = this == FOLLOWERS || this == RECORD_SALES
 }
 
 data class SongRanking(val song: Song, val score: Long)
@@ -34,13 +39,14 @@ class RankingRepository(private val db: DatabaseManager) {
       untilEpochSec: Long?,
       limit: Int = 7,
   ): List<SongRanking> {
-    require(metric != RankingMetric.FOLLOWERS) { "FOLLOWERSはtopAuthorsInRange()を使用してください" }
+    require(!metric.isAuthorMetric) { "$metric はtopAuthorsInRange()を使用してください" }
     val (table, timeColumn) =
         when (metric) {
           RankingMetric.LIKES -> "song_likes" to "created_at"
           RankingMetric.VIEWS -> "view_history" to "timestamp"
           RankingMetric.FAVORITES -> "favorites" to "created_at"
           RankingMetric.FOLLOWERS -> error("unreachable")
+          RankingMetric.RECORD_SALES -> error("unreachable")
         }
     val conditions = mutableListOf("s.published = 1")
     if (sinceEpochSec != null) conditions += "t.$timeColumn >= ?"
@@ -69,16 +75,25 @@ class RankingRepository(private val db: DatabaseManager) {
   }
 
   fun topAuthorsInRange(
+      metric: RankingMetric,
       sinceEpochSec: Long?,
       untilEpochSec: Long?,
       limit: Int = 7,
   ): List<AuthorRanking> {
+    require(metric.isAuthorMetric) { "$metric は作者ランキングではありません" }
     val conditions = mutableListOf<String>()
     if (sinceEpochSec != null) conditions += "created_at >= ?"
     if (untilEpochSec != null) conditions += "created_at < ?"
     val where = if (conditions.isEmpty()) "" else "WHERE ${conditions.joinToString(" AND ")}"
+    val (table, uuidColumn, aggregate) =
+        when (metric) {
+          RankingMetric.FOLLOWERS -> Triple("follows", "target_uuid", "COUNT(*)")
+          RankingMetric.RECORD_SALES -> Triple("record_sales", "author_uuid", "SUM(gross_amount)")
+          else -> error("unreachable")
+        }
     val sql =
-        "SELECT target_uuid, COUNT(*) AS score FROM follows $where GROUP BY target_uuid ORDER BY score DESC LIMIT ?"
+        "SELECT $uuidColumn AS author_uuid, $aggregate AS score FROM $table $where " +
+            "GROUP BY $uuidColumn ORDER BY score DESC LIMIT ?"
     return db.transaction { conn ->
       conn.prepareStatement(sql).use { ps ->
         var idx = 1
@@ -90,7 +105,7 @@ class RankingRepository(private val db: DatabaseManager) {
           while (rs.next()) {
             list +=
                 AuthorRanking(
-                    authorUuid = UuidUtil.fromBytes(rs.getBytes("target_uuid")),
+                    authorUuid = UuidUtil.fromBytes(rs.getBytes("author_uuid")),
                     score = rs.getLong("score"),
                 )
           }

@@ -198,7 +198,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       nowPlayingBars[player.uniqueId]?.let { bar ->
         val style = bossBarStyle(updatedSong.recordMaterial)
         val authorName = Bukkit.getOfflinePlayer(updatedSong.authorUuid).name ?: "不明"
-        bar.name(Component.text("♪ ${updatedSong.title} - $authorName", style.textColor))
+        bar.name(nowPlayingName(updatedSong.title, authorName, style.textColor))
         bar.color(style.barColor)
       }
     }
@@ -263,7 +263,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     val authorName = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
     val bar =
         BossBar.bossBar(
-            Component.text("♪ ${song.title} - $authorName", style.textColor),
+            nowPlayingName(song.title, authorName, style.textColor),
             0f,
             style.barColor,
             BossBar.Overlay.PROGRESS,
@@ -303,6 +303,15 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     bossBarTasks.remove(viewer.uniqueId)?.cancel()
     nowPlayingBars.remove(viewer.uniqueId)?.let { viewer.hideBossBar(it) }
   }
+
+  private fun nowPlayingName(
+      title: String,
+      authorName: String,
+      defaultColor: TextColor,
+  ): Component =
+      Component.text("♪ ", defaultColor)
+          .append(formattedLegacyText(title, defaultColor))
+          .append(Component.text(" - $authorName", defaultColor))
 
   private fun bossBarStyle(recordMaterial: String): RecordBossBarStyle =
       when (recordMaterial.uppercase()) {

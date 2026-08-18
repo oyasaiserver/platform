@@ -176,6 +176,29 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
             "CREATE INDEX IF NOT EXISTS idx_view_history_lookup ON view_history(user_uuid, song_id, timestamp);"
         )
 
+        // レコード購入額を作者単位・期間単位で集計するための販売履歴。
+        st.executeUpdate(
+            """
+            CREATE TABLE IF NOT EXISTS record_sales (
+                id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                song_id         INTEGER NOT NULL REFERENCES songs(id) ON DELETE CASCADE,
+                buyer_uuid      BLOB(16) NOT NULL,
+                author_uuid     BLOB(16) NOT NULL,
+                gross_amount    INTEGER NOT NULL,
+                author_share    INTEGER NOT NULL,
+                created_at      INTEGER NOT NULL
+            );
+            """
+                .trimIndent()
+        )
+        st.executeUpdate(
+            "CREATE INDEX IF NOT EXISTS idx_record_sales_author_time " +
+                "ON record_sales(author_uuid, created_at);"
+        )
+        st.executeUpdate(
+            "CREATE INDEX IF NOT EXISTS idx_record_sales_song ON record_sales(song_id);"
+        )
+
         // --- ここから: UI/UX設計書のプレイリスト機能のために追加したテーブル ---
         st.executeUpdate(
             """

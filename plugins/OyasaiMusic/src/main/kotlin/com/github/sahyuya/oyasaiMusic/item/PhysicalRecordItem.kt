@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
@@ -17,6 +18,35 @@ enum class AmbientRange(val blocks: Int?, val label: String, val permission: Str
   MEDIUM(64, "64", "oyasaimusic.record.range.64"),
   LONG(256, "256", "oyasaimusic.record.range.256"),
   WORLD(null, "ワールド全体", "oyasaimusic.record.range.world"),
+  ;
+
+  companion object {
+    /** プレイヤーが使用できる最大範囲。entriesの後ろほど上位の権限として扱う。 */
+    fun maximumFor(player: Player): AmbientRange? =
+        entries.lastOrNull { player.hasPermission(it.permission) }
+
+    fun canUse(player: Player, range: AmbientPlaybackRange): Boolean {
+      val maximum = maximumFor(player) ?: return false
+      val requestedBlocks = range.blocks ?: return maximum == WORLD
+      return maximum.blocks?.let { requestedBlocks <= it } ?: true
+    }
+  }
+}
+
+/** 実際にレコードへ保存する再生範囲。nullはワールド全体、数値は任意の半径ブロック数。 */
+data class AmbientPlaybackRange(val blocks: Int?) {
+  init {
+    require(blocks == null || blocks in 1..MAX_NUMERIC_BLOCKS)
+  }
+
+  val label: String
+    get() = blocks?.toString() ?: "ワールド全体"
+
+  companion object {
+    const val MAX_NUMERIC_BLOCKS = 30_000_000
+    val DEFAULT = AmbientPlaybackRange(16)
+    val WORLD = AmbientPlaybackRange(null)
+  }
 }
 
 /** UI/UX設計書9章「環境BGM用レコード」のトリガー種別。 */
@@ -65,7 +95,7 @@ object PhysicalRecordItem {
       meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
       val pdc = meta.persistentDataContainer
       pdc.set(songIdKey(plugin), PersistentDataType.LONG, songId)
-      pdc.set(rangeKey(plugin), PersistentDataType.STRING, AmbientRange.SHORT.name)
+      pdc.set(rangeKey(plugin), PersistentDataType.INTEGER, AmbientPlaybackRange.DEFAULT.blocks!!)
       pdc.set(triggerKey(plugin), PersistentDataType.STRING, AmbientTrigger.JUKEBOX.name)
       pdc.set(loopKey(plugin), PersistentDataType.BYTE, 0)
     }
@@ -79,10 +109,18 @@ object PhysicalRecordItem {
 
   fun isRecordItem(plugin: Plugin, item: ItemStack?): Boolean = songId(plugin, item) != null
 
-  fun range(plugin: Plugin, item: ItemStack): AmbientRange {
-    val name =
-        item.itemMeta?.persistentDataContainer?.get(rangeKey(plugin), PersistentDataType.STRING)
-    return AmbientRange.entries.firstOrNull { it.name == name } ?: AmbientRange.MEDIUM
+  fun range(plugin: Plugin, item: ItemStack): AmbientPlaybackRange {
+    val pdc = item.itemMeta?.persistentDataContainer ?: return AmbientPlaybackRange.DEFAULT
+    val numeric = pdc.get(rangeKey(plugin), PersistentDataType.INTEGER)
+    if (numeric != null) {
+      return if (numeric < 0) AmbientPlaybackRange.WORLD
+      else AmbientPlaybackRange(numeric.coerceIn(1, AmbientPlaybackRange.MAX_NUMERIC_BLOCKS))
+    }
+
+    // 旧仕様（SHORT/MEDIUM/LONG/WORLD）のアイテムもそのまま利用できるようにする。
+    val legacyName = pdc.get(rangeKey(plugin), PersistentDataType.STRING)
+    val legacy = AmbientRange.entries.firstOrNull { it.name == legacyName } ?: AmbientRange.SHORT
+    return legacy.blocks?.let(::AmbientPlaybackRange) ?: AmbientPlaybackRange.WORLD
   }
 
   fun trigger(plugin: Plugin, item: ItemStack): AmbientTrigger {
@@ -95,10 +133,14 @@ object PhysicalRecordItem {
       (item.itemMeta?.persistentDataContainer?.get(loopKey(plugin), PersistentDataType.BYTE)
           ?: 0) != 0.toByte()
 
-  fun withRange(plugin: Plugin, item: ItemStack, range: AmbientRange): ItemStack {
+  fun withRange(plugin: Plugin, item: ItemStack, range: AmbientPlaybackRange): ItemStack {
     val copy = item.clone()
     copy.editMeta {
-      it.persistentDataContainer.set(rangeKey(plugin), PersistentDataType.STRING, range.name)
+      it.persistentDataContainer.set(
+          rangeKey(plugin),
+          PersistentDataType.INTEGER,
+          range.blocks ?: -1,
+      )
     }
     return copy
   }

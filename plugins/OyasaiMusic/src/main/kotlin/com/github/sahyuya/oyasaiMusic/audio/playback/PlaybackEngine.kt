@@ -34,6 +34,8 @@ class PlaybackEngine(
     private val plugin: Plugin,
     private val bedrockPrefix: String,
     private val chordLimit: Int,
+    /** メインスレッドへの引き渡し遅延を吸収する、最大1tick未満の先読み時間。 */
+    private val lookaheadMs: Long = 35L,
     private val defaultMode: PlaybackMode = PlaybackMode.DEFAULT,
 ) {
 
@@ -151,6 +153,9 @@ class PlaybackEngine(
 
     for ((timeMs, group) in groupedByTime) {
       val delay = (timeMs - fromElapsedMs).coerceAtLeast(0)
+      // 音の送信自体はメインスレッド必須で、クライアントへ未来時刻を指定するAPIはない。
+      // そこで負荷を増やさず、Bukkitタスクキューへ最大1tick弱だけ早く渡して混雑分を吸収する。
+      val schedulingDelay = (delay - lookaheadMs).coerceAtLeast(0)
       val future =
           executor.schedule(
               Runnable {
@@ -171,7 +176,7 @@ class PlaybackEngine(
                         },
                     )
               },
-              delay,
+              schedulingDelay,
               TimeUnit.MILLISECONDS,
           )
       session.scheduledTasks.add(future)
