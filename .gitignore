@@ -435,7 +435,9 @@ archive
 # Misc
 data
 
-# LLM
+# LLM / Agents
 CLAUDE.md
 GEMINI.md
 AGENTS.md
+.agents
+.codex
