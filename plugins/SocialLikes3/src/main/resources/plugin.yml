@@ -32,7 +32,23 @@ commands:
     description: "建築数とログイン数/ログイン率でランクアップ候補を確認するコマンド"
   slsignbreak:
     description: "SLTP看板を破壊するコマンド"
+  sldatafont:
+    description: "週次いいね数をカスタムフォントGUIタイトルに描画するPOCコマンド"
+  sldata:
+    description: "総合いいね統計ダイアログを開くコマンド"
+  sldataop:
+    aliases: [slop, sldataadmin]
+    description: "SocialLikes データ管理・他者閲覧・検証用コマンド"
+    permission: sociallikes3.admin
+  sllucky:
+    aliases: [lucky]
+    description: "未いいねの他者建築をランダムに案内するコマンド"
+  sldatapack:
+    description: "フォントグラフPOC用リソースパックを再配布するコマンド"
 permissions:
+  sociallikes3.admin:
+    description: "SocialLikes 管理者権限"
+    default: op
   sociallikes3.slrankup:
     description: "/slrankup commnad use permission"
     default: op

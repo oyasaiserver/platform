@@ -13,6 +13,7 @@ import com.github.srain3.sociallikes.api.LikeEvent
 import com.github.srain3.sociallikes.command.SLUpdate
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
+import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.SLSignLikes
@@ -127,6 +128,7 @@ object Events : Listener {
         )
 
     Data.save(data)
+    SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
 
     // GUIへ反映
     AllBuild.updateSLSignData(data)
@@ -232,6 +234,7 @@ object Events : Listener {
         data.likes.add(e.player.uniqueId)
         data.likesWithTimestamp[e.player.uniqueId] = System.currentTimeMillis()
         Data.save(data)
+        SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
         Data.changeUserLikesInt(data.owner, 1)
         AllBuild.updateSLSignData(data)
         UserBuild.updateSLSignData(data)
@@ -387,6 +390,7 @@ object Events : Listener {
 
   @EventHandler
   fun joinEvent(e: PlayerJoinEvent) {
+    SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
     val pointInt = offlineLikesPoint[e.player.uniqueId] ?: return
     val player = e.player
     object : BukkitRunnable() {

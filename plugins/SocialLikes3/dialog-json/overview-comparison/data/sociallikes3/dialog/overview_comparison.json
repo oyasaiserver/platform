@@ -1,0 +1,596 @@
+{
+  "actions": [
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "概要"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "比較表を見る"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "あなたの建築"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "建築Top5、経過日数、初速"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "あなたのいいね"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "活動リズム、自己ベスト、継続日数"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "人とのつながり"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "相互、リピーター、最速サポーター"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "宣伝"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "宣伝効果と宣伝回数"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "サーバー全体"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "全体ランキング、ワールド別、週次"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "再読込"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "詳細統計を再表示"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "ライフ除外"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "ワールド別反応のライフワールド表示を切替"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "通常グラフ"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "週次グラフへ戻る"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "Top5"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "制作者別いいね数ランキング"
+      }
+    },
+    {
+      "action": {
+        "command": "dialog clear @s",
+        "type": "minecraft:run_command"
+      },
+      "label": {
+        "font": "minecraft:uniform",
+        "text": "他の形式で見る"
+      },
+      "tooltip": {
+        "font": "minecraft:uniform",
+        "text": "Map、Slots、Display"
+      }
+    }
+  ],
+  "body": [
+    {
+      "contents": {
+        "extra": [
+          {
+            "color": "light_purple",
+            "text": "比較表\n"
+          },
+          {
+            "color": "gray",
+            "text": "母集団：あなたの建築　１，１０８件　／　あなたが押した作品　５，６０８件　／　全体の建築　２２，５９０件\n"
+          },
+          {
+            "color": "#cdd6e5",
+            "text": "１作品あたりのいいね（平均）\n"
+          },
+          {
+            "color": "gray",
+            "text": "説明:作品がどれだけ反応を集めたか\n"
+          },
+          {
+            "color": "white",
+            "text": "あなた"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "████████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁１００％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "３８．５いいね／作品\n"
+          },
+          {
+            "color": "white",
+            "text": "全体平均"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "███████"
+          },
+          {
+            "color": "dark_gray",
+            "text": "█████"
+          },
+          {
+            "color": "gray",
+            "text": "▁５６％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "２１．７いいね／作品\n"
+          },
+          {
+            "color": "#cdd6e5",
+            "text": "１作品あたりのいいね（中央値）\n"
+          },
+          {
+            "color": "gray",
+            "text": "説明:突出した1作品に引っ張られない実力\n"
+          },
+          {
+            "color": "white",
+            "text": "あなた"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "████████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁１００％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "２６．５いいね／作品\n"
+          },
+          {
+            "color": "white",
+            "text": "全体中央値"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "████████"
+          },
+          {
+            "color": "dark_gray",
+            "text": "████"
+          },
+          {
+            "color": "gray",
+            "text": "▁６４％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "１７．０いいね／作品\n"
+          },
+          {
+            "color": "#cdd6e5",
+            "text": "押した作品の人気\n"
+          },
+          {
+            "color": "gray",
+            "text": "説明:自分が選ぶ作品は人気寄りか\n"
+          },
+          {
+            "color": "white",
+            "text": "あなたが押した作品"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "████████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁１００％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "３３．１いいね／作品\n"
+          },
+          {
+            "color": "white",
+            "text": "全体平均"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "████████"
+          },
+          {
+            "color": "dark_gray",
+            "text": "████"
+          },
+          {
+            "color": "gray",
+            "text": "▁６５％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "２１．７いいね／作品\n"
+          },
+          {
+            "color": "#cdd6e5",
+            "text": "送ったいいねと受けたいいね\n"
+          },
+          {
+            "color": "gray",
+            "text": "説明:応援する側か、される側か\n"
+          },
+          {
+            "color": "white",
+            "text": "受けた"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "████████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁１００％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "４２，６４２いいね"
+          },
+          {
+            "color": "gray",
+            "text": "▁自分の建築へ\n"
+          },
+          {
+            "color": "white",
+            "text": "送った"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "██"
+          },
+          {
+            "color": "dark_gray",
+            "text": "██████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁１３％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "５，６０８いいね"
+          },
+          {
+            "color": "gray",
+            "text": "▁相手の建築へ\n"
+          },
+          {
+            "color": "#cdd6e5",
+            "text": "相互になっている割合\n"
+          },
+          {
+            "color": "gray",
+            "text": "説明:片思いか、応え合えているか\n"
+          },
+          {
+            "color": "white",
+            "text": "応援している側"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "████████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁１００％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "７４．２％"
+          },
+          {
+            "color": "gray",
+            "text": "▁562人中417人\n"
+          },
+          {
+            "color": "white",
+            "text": "されている側"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "███"
+          },
+          {
+            "color": "dark_gray",
+            "text": "█████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁２５％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "１８．７％"
+          },
+          {
+            "color": "gray",
+            "text": "▁2,228人中417人\n"
+          },
+          {
+            "color": "#cdd6e5",
+            "text": "１日あたりのいいね\n"
+          },
+          {
+            "color": "gray",
+            "text": "説明:公開期間で正規化した反応ペース\n"
+          },
+          {
+            "color": "white",
+            "text": "最新の554作品"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "████████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁１００％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "０．１５４いいね／日"
+          },
+          {
+            "color": "gray",
+            "text": "▁公開日で後半\n"
+          },
+          {
+            "color": "white",
+            "text": "過去の554作品"
+          },
+          {
+            "color": "gray",
+            "text": "▁▁▁▁▁▁▁"
+          },
+          {
+            "color": "green",
+            "text": "███"
+          },
+          {
+            "color": "dark_gray",
+            "text": "█████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁２２％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "０．０３４いいね／日"
+          },
+          {
+            "color": "gray",
+            "text": "▁公開日で前半\n"
+          },
+          {
+            "color": "#cdd6e5",
+            "text": "サーバー全体の宣伝・前後24時間\n"
+          },
+          {
+            "color": "gray",
+            "text": "説明:サーバー全体の宣伝機能にどれだけ効果があるか\n"
+          },
+          {
+            "color": "white",
+            "text": "サーバー全体・宣伝後"
+          },
+          {
+            "color": "gray",
+            "text": "▁"
+          },
+          {
+            "color": "green",
+            "text": "████████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁１００％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "９．２いいね／回"
+          },
+          {
+            "color": "gray",
+            "text": "▁729回の平均\n"
+          },
+          {
+            "color": "white",
+            "text": "サーバー全体・宣伝前"
+          },
+          {
+            "color": "gray",
+            "text": "▁"
+          },
+          {
+            "color": "green",
+            "text": "████"
+          },
+          {
+            "color": "dark_gray",
+            "text": "████████"
+          },
+          {
+            "color": "gray",
+            "text": "▁３６％▁"
+          },
+          {
+            "color": "yellow",
+            "text": "３．４いいね／回"
+          },
+          {
+            "color": "gray",
+            "text": "▁729回の平均"
+          }
+        ],
+        "font": "minecraft:uniform",
+        "text": ""
+      },
+      "type": "minecraft:plain_message",
+      "width": 560
+    }
+  ],
+  "columns": 2,
+  "exit_action": {
+    "action": {
+      "command": "dialog clear @s",
+      "type": "minecraft:run_command"
+    },
+    "label": {
+      "font": "minecraft:uniform",
+      "text": "閉じる"
+    },
+    "tooltip": {
+      "font": "minecraft:uniform",
+      "text": "閉じます"
+    },
+    "width": 130
+  },
+  "title": {
+    "color": "light_purple",
+    "font": "minecraft:uniform",
+    "text": "SocialLikes 詳細統計: marzipan99 / 概要"
+  },
+  "type": "minecraft:multi_action"
+}

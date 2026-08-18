@@ -29,6 +29,11 @@ class SocialLikes : JavaPlugin() {
     server.pluginManager.registerEvents(Events, this)
     server.pluginManager.registerEvents(FollowBuild, this)
     server.pluginManager.registerEvents(SocialLikesAnvilInput, this)
+    server.pluginManager.registerEvents(SLDataFont, this)
+    server.pluginManager.registerEvents(SLData, this)
+    server.pluginManager.registerEvents(SLResourcePack, this)
+    SLData.cleanupLingeringDisplays()
+    SLData.init()
 
     server.getPluginCommand("sltp")?.setExecutor(SLtp)
     server.getPluginCommand("slbuild")?.setExecutor(SLBuilds)
@@ -42,6 +47,14 @@ class SocialLikes : JavaPlugin() {
     server.getPluginCommand("vacanttp")?.tabCompleter = VacantTeleportTAB
     server.getPluginCommand("slrankup")?.setExecutor(SLRankUp)
     server.getPluginCommand("slrankup")?.tabCompleter = SLRankUpTAB
+    server.getPluginCommand("sldatafont")?.setExecutor(SLDataFont)
+    server.getPluginCommand("sldata")?.setExecutor(SLData)
+    server.getPluginCommand("sldata")?.tabCompleter = SLData
+    server.getPluginCommand("sldataop")?.setExecutor(SLDataOp)
+    server.getPluginCommand("sldataop")?.tabCompleter = SLDataOp
+    server.getPluginCommand("sllucky")?.setExecutor(SLLucky)
+    server.getPluginCommand("sllucky")?.tabCompleter = SLLucky
+    server.getPluginCommand("sldatapack")?.setExecutor(SLDataPack)
 
     if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
       PlaceHolder(this).register()
@@ -55,6 +68,8 @@ class SocialLikes : JavaPlugin() {
     PublicityHistory.loadYAML()
 
     SLDiscord.enable()
+    // Do not generate the diagnostic graph preview at startup. It runs aggregate SQLite queries
+    // through submitBlocking and used to block the server thread a few seconds after enable.
   }
 
   override fun onDisable() {
@@ -65,6 +80,7 @@ class SocialLikes : JavaPlugin() {
     }
     SLtp.userLastSLTPTimeSave()
     Events.offlineLikePointSave()
+    SLData.cleanupLingeringDisplays()
     SLDatabase.close()
   }
 

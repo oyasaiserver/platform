@@ -2,7 +2,14 @@ package com.github.srain3.sociallikes.datas
 
 import com.github.srain3.sociallikes.Tools
 import java.io.File
+import java.sql.Connection
+import java.time.DayOfWeek
+import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalAdjusters
 import java.util.UUID
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
@@ -31,6 +38,173 @@ object SLDatabase {
   private lateinit var dbFile: File
   private lateinit var plugin: JavaPlugin
 
+  data class WeeklyLikeCount(val weekStart: LocalDate, val count: Int)
+
+  data class BuildLikeSummary(
+      val buildId: Int,
+      val title: String,
+      val ownerUuid: String,
+      val currentCount: Int,
+      val previousCount: Int = 0,
+  ) {
+    val delta: Int
+      get() = currentCount - previousCount
+  }
+
+  data class OwnerLikeSummary(
+      val ownerUuid: String,
+      val currentCount: Int,
+      val previousCount: Int = 0,
+  ) {
+    val delta: Int
+      get() = currentCount - previousCount
+  }
+
+  data class PlayerLikeSummary(val playerUuid: String, val count: Int)
+
+  data class OwnBuildLikeSummary(val buildId: Int, val title: String, val likeCount: Int)
+
+  data class FirstLikeCount(val playerUuid: String, val count: Int)
+
+  data class PeakLikeDay(val date: LocalDate, val count: Int, val averageCount: Double)
+
+  /** One persisted like together with the build dimensions needed by /sldata analysis. */
+  data class BuildLikeEvent(
+      val buildId: Int,
+      val title: String,
+      val playerUuid: String,
+      val ownerUuid: String,
+      val worldName: String,
+      val chunkX: Int,
+      val chunkZ: Int,
+      val createdAt: LocalDateTime,
+      val likedAt: Long,
+  )
+
+  data class BuildLikeDimension(
+      val ownerUuid: String,
+      val worldName: String,
+      val chunkX: Int,
+      val chunkZ: Int,
+  )
+
+  data class MutualLikePair(
+      val playerUuid: String,
+      val likesGiven: Int,
+      val likesReceived: Int,
+  )
+
+  data class MutualLikeStats(
+      val pairCount: Int,
+      val likedOwnerCount: Int,
+      val likerCount: Int,
+      val pairs: List<MutualLikePair>,
+  )
+
+  data class SocialOverview(val supportedOwnerCount: Int, val supporterCount: Int)
+
+  data class FavoriteBuilderCapture(
+      val ownerUuid: String,
+      val totalBuildCount: Int,
+      val likedBuildCount: Int,
+  )
+
+  data class FirstEncounterLike(val ownerUuid: String, val firstLikedAt: Long)
+
+  data class RegularSupporterSummary(
+      val playerUuid: String,
+      val likeCount: Int,
+      val activeWeekCount: Int,
+  )
+
+  data class RepeaterRate(val repeaterCount: Int, val uniqueLikerCount: Int)
+
+  data class FastestSupporterSummary(val playerUuid: String, val firstSupportCount: Int)
+
+  data class BuildHistoryEntry(
+      val buildId: Int,
+      val title: String,
+      val createdAt: LocalDateTime,
+      val likesReceived: Int,
+  )
+
+  data class PeriodSummary(
+      val buildsCreated: Int,
+      val likesGiven: Int,
+      val likesReceived: Int,
+      val publicityCount: Int,
+  )
+
+  data class LikeTimestampCoverage(val totalLikes: Int, val timestampedLikes: Int)
+
+  data class ReliableTimestampPopulation(
+      val postCutoffBuildCount: Int,
+      val postCutoffCompleteBuildCount: Int,
+      val completeLikedBuildCount: Int,
+  )
+
+  /**
+   * A single repost together with the reactions immediately around it (all windows are 24 hours).
+   */
+  data class PublicityEventReaction(
+      val buildId: Int,
+      val title: String,
+      val ownerUuid: String,
+      val promotedAt: Long,
+      val likesBefore24Hours: Int,
+      val likesAfter24Hours: Int,
+      val intervalSincePreviousHours: Long?,
+  )
+
+  /** Event-analysis result for a build advertised at least once. */
+  data class PublicityBuildReaction(
+      val buildId: Int,
+      val title: String,
+      val ownerUuid: String,
+      val publicityCount: Int,
+      val normalReactionAverage: Double,
+      val publicityReactionAverage: Double,
+      val averageIntervalHours: Double?,
+  ) {
+    val reactionDelta: Double
+      get() = publicityReactionAverage - normalReactionAverage
+  }
+
+  /** Per-world view of a player's received and given reactions. */
+  data class WorldReactionSummary(
+      val worldName: String,
+      val ownBuildCount: Int,
+      val ownReceivedLikes: Int,
+      val globalBuildCount: Int,
+      val globalReceivedLikes: Int,
+      val givenLikes: Int,
+  )
+
+  data class HomeGround(
+      val worldName: String,
+      val chunkX: Int,
+      val chunkZ: Int,
+      val buildCount: Int,
+      val receivedLikes: Int,
+  )
+
+  data class HomeGroundPoint(
+      val chunkX: Int,
+      val chunkZ: Int,
+      val buildCount: Int,
+      val receivedLikes: Int,
+  )
+
+  data class LuckyBuild(
+      val id: Int,
+      val title: String,
+      val ownerUuid: String,
+      val worldName: String,
+      val x: Double,
+      val y: Double,
+      val z: Double,
+  )
+
   private object Builds : Table("builds") {
     val id = integer("id")
     val worldName = varchar("world_name", 255)
@@ -55,6 +229,14 @@ object SLDatabase {
     val likedAt = long("liked_at").nullable()
 
     override val primaryKey = PrimaryKey(buildId, playerUuid)
+  }
+
+  private object Players : Table("players") {
+    val uuid = varchar("uuid", 36)
+    val lastKnownName = text("last_known_name")
+    val lastSeenAt = long("last_seen_at")
+
+    override val primaryKey = PrimaryKey(uuid)
   }
 
   private object PublicityHistoryRows : Table("publicity_history") {
@@ -113,7 +295,24 @@ object SLDatabase {
 
         database = Database.connect(dbUrl, driver = "org.sqlite.JDBC")
 
-        transaction(database) { SchemaUtils.create(Builds, BuildLikes, PublicityHistoryRows) }
+        transaction(database) {
+          SchemaUtils.create(Builds, BuildLikes, PublicityHistoryRows, Players)
+          rawConnection()?.createStatement()?.use { statement ->
+            statement.execute(
+                "CREATE INDEX IF NOT EXISTS idx_build_likes_player_liked_at ON build_likes(player_uuid, liked_at)"
+            )
+            statement.execute(
+                "CREATE INDEX IF NOT EXISTS idx_build_likes_liked_at ON build_likes(liked_at)"
+            )
+            statement.execute(
+                "CREATE INDEX IF NOT EXISTS idx_builds_owner_created_at ON builds(owner_uuid, created_at)"
+            )
+            statement.execute(
+                "CREATE INDEX IF NOT EXISTS idx_publicity_history_sl_id_timestamp ON publicity_history(sl_id, timestamp)"
+            )
+          }
+          rawConnection()?.let { logStartupSummary(plugin, it) }
+        }
       } catch (e: Exception) {
         loggerWarning("init", e)
       }
@@ -140,6 +339,34 @@ object SLDatabase {
       service.shutdown()
       executor = null
       database = null
+    }
+  }
+
+  /** Records a name observed while the player is online, without blocking the server thread. */
+  fun upsertPlayer(uuid: UUID, name: String) {
+    val lastKnownName = name.trim()
+    if (lastKnownName.isEmpty()) return
+    val uuidText = uuid.toString()
+    val seenAt = System.currentTimeMillis()
+
+    submit("upsertPlayer") {
+      rawConnection()
+          ?.prepareStatement(
+              """
+              INSERT INTO players (uuid, last_known_name, last_seen_at)
+              VALUES (?, ?, ?)
+              ON CONFLICT(uuid) DO UPDATE SET
+                last_known_name = excluded.last_known_name,
+                last_seen_at = excluded.last_seen_at
+              """
+                  .trimIndent()
+          )
+          ?.use { statement ->
+            statement.setString(1, uuidText)
+            statement.setString(2, lastKnownName)
+            statement.setLong(3, seenAt)
+            statement.executeUpdate()
+          }
     }
   }
 
@@ -231,6 +458,1635 @@ object SLDatabase {
     }
   }
 
+  private val playerNameCache = java.util.concurrent.ConcurrentHashMap<String, String>()
+
+  /**
+   * Resolves the supplied UUIDs with one query. This is intentionally limited to the /sldata
+   * statistics cache; it does not fall back to Bukkit's offline-player lookup.
+   */
+  fun loadPlayerNamesBlocking(uuids: List<String>): Map<String, String> {
+    val normalizedUuids = uuids.filter { it.isNotBlank() }.distinct()
+    if (normalizedUuids.isEmpty()) return emptyMap()
+
+    val uncached = normalizedUuids.filter { !playerNameCache.containsKey(it) }
+    if (uncached.isNotEmpty()) {
+      submitBlocking("loadPlayerNames") {
+        uncached.chunked(900).forEach { chunk ->
+          val placeholders = chunk.joinToString(",") { "?" }
+          rawConnection()
+              ?.prepareStatement(
+                  "SELECT uuid, last_known_name FROM players WHERE uuid IN ($placeholders)"
+              )
+              ?.use { statement ->
+                chunk.forEachIndexed { index, uuid -> statement.setString(index + 1, uuid) }
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    val u = results.getString("uuid")
+                    val n = results.getString("last_known_name")
+                    if (u != null && n != null) {
+                      playerNameCache[u] = n
+                    }
+                  }
+                }
+              }
+        }
+      }
+    }
+    return normalizedUuids.mapNotNull { u -> playerNameCache[u]?.let { n -> u to n } }.toMap()
+  }
+
+  fun findUuidByNameBlocking(name: String): UUID? {
+    var resultUuid: UUID? = null
+    submitBlocking("findUuidByName") {
+      rawConnection()
+          ?.prepareStatement(
+              "SELECT uuid FROM players WHERE LOWER(last_known_name) = LOWER(?) LIMIT 1"
+          )
+          ?.use { stmt ->
+            stmt.setString(1, name)
+            stmt.executeQuery().use { rs ->
+              if (rs.next()) {
+                val uStr = rs.getString("uuid")
+                if (uStr != null) {
+                  try {
+                    resultUuid = UUID.fromString(uStr)
+                  } catch (e: Exception) {}
+                }
+              }
+            }
+          }
+    }
+    return resultUuid
+  }
+
+  /** Returns timestamped likes made by one player with their build dimensions. */
+  fun loadGivenLikeEventsBlocking(
+      playerUuid: String,
+      reliablePublishedSince: LocalDateTime? = null,
+  ): List<BuildLikeEvent> =
+      loadLikeEventsBlocking(
+          "loadGivenLikeEvents",
+          "bl.player_uuid = ?",
+          playerUuid,
+          reliablePublishedSince,
+      )
+
+  /** Returns timestamped likes received by one build owner with their build dimensions. */
+  fun loadReceivedLikeEventsBlocking(
+      ownerUuid: String,
+      reliablePublishedSince: LocalDateTime? = null,
+  ): List<BuildLikeEvent> =
+      loadLikeEventsBlocking(
+          "loadReceivedLikeEvents",
+          "b.owner_uuid = ?",
+          ownerUuid,
+          reliablePublishedSince,
+      )
+
+  fun loadLikeTimestampCoverageBlocking(): LikeTimestampCoverage =
+      submitBlocking("loadLikeTimestampCoverage") {
+        LikeTimestampCoverage(
+            totalLikes = countQuery("SELECT COUNT(*) AS count FROM build_likes"),
+            timestampedLikes =
+                countQuery("SELECT COUNT(*) AS count FROM build_likes WHERE liked_at IS NOT NULL"),
+        )
+      } ?: LikeTimestampCoverage(totalLikes = 0, timestampedLikes = 0)
+
+  fun loadReliableTimestampPopulationBlocking(cutoff: LocalDateTime): ReliableTimestampPopulation =
+      submitBlocking("loadReliableTimestampPopulation") {
+        val cutoffText = cutoff.toString()
+        val postCutoffBuildCount =
+            countQuery(
+                """
+                SELECT COUNT(id) AS count
+                FROM builds
+                WHERE created_at >= ?
+                """
+                    .trimIndent()
+            ) { statement ->
+              statement.setString(1, cutoffText)
+            }
+        val postCutoffCompleteBuildCount =
+            countQuery(
+                """
+                SELECT COUNT(*) AS count
+                FROM (
+                  SELECT b.id
+                  FROM builds b
+                  LEFT JOIN build_likes bl ON bl.build_id = b.id
+                  WHERE b.created_at >= ?
+                  GROUP BY b.id
+                  HAVING COUNT(bl.player_uuid) = COUNT(bl.liked_at)
+                )
+                """
+                    .trimIndent()
+            ) { statement ->
+              statement.setString(1, cutoffText)
+            }
+        val completeLikedBuildCount =
+            countQuery(
+                """
+                SELECT COUNT(*) AS count
+                FROM (
+                  SELECT b.id
+                  FROM builds b
+                  JOIN build_likes bl ON bl.build_id = b.id
+                  GROUP BY b.id
+                  HAVING COUNT(bl.player_uuid) = COUNT(bl.liked_at)
+                )
+                """
+                    .trimIndent()
+            )
+        ReliableTimestampPopulation(
+            postCutoffBuildCount,
+            postCutoffCompleteBuildCount,
+            completeLikedBuildCount,
+        )
+      } ?: ReliableTimestampPopulation(0, 0, 0)
+
+  fun loadOwnerBuildCountCreatedSinceBlocking(ownerUuid: String, since: LocalDateTime): Int =
+      submitBlocking("loadOwnerBuildCountCreatedSince") {
+        countQuery(
+            """
+            SELECT COUNT(id) AS count
+            FROM builds
+            WHERE owner_uuid = ? AND created_at >= ?
+              AND id IN (
+                SELECT b2.id
+                FROM builds b2
+                LEFT JOIN build_likes bl2 ON bl2.build_id = b2.id
+                GROUP BY b2.id
+                HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+              )
+            """
+                .trimIndent()
+        ) { statement ->
+          statement.setString(1, ownerUuid)
+          statement.setString(2, since.toString())
+        }
+      } ?: 0
+
+  fun loadOwnerCompleteLikedBuildCountBlocking(ownerUuid: String): Int =
+      submitBlocking("loadOwnerCompleteLikedBuildCount") {
+        countQuery(
+            """
+            SELECT COUNT(*) AS count
+            FROM (
+              SELECT b.id
+              FROM builds b
+              JOIN build_likes bl ON bl.build_id = b.id
+              WHERE b.owner_uuid = ?
+              GROUP BY b.id
+              HAVING COUNT(bl.player_uuid) = COUNT(bl.liked_at)
+            )
+            """
+                .trimIndent()
+        ) { statement ->
+          statement.setString(1, ownerUuid)
+        }
+      } ?: 0
+
+  fun loadWeeklyLikeCountsBlocking(weeks: Int = 12): List<WeeklyLikeCount> {
+    val normalizedWeeks = weeks.coerceIn(1, 52)
+    val zoneId = ZoneId.of("UTC")
+    val currentWeekStart =
+        LocalDate.now(zoneId).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+    val firstWeekStart = currentWeekStart.minusWeeks((normalizedWeeks - 1).toLong())
+    val firstWeekStartMillis = firstWeekStart.atStartOfDay(zoneId).toInstant().toEpochMilli()
+
+    return submitBlocking("loadWeeklyLikeCounts") {
+          loadWeeklyLikeCountsDirect(
+              rawConnection(),
+              normalizedWeeks,
+              zoneId,
+              firstWeekStart,
+              firstWeekStartMillis,
+          )
+        }
+        .orEmpty()
+  }
+
+  fun loadBuildLikeLeadersSinceBlocking(
+      sinceMillis: Long,
+      limit: Int = 5,
+  ): List<BuildLikeSummary> {
+    val normalizedLimit = limit.coerceIn(1, 20)
+    return submitBlocking("loadBuildLikeLeadersSince") {
+          val summaries = mutableListOf<BuildLikeSummary>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT b.id, b.title, b.owner_uuid, COUNT(bl.player_uuid) AS likes_count
+                  FROM build_likes bl
+                  JOIN builds b ON b.id = bl.build_id
+                  WHERE bl.liked_at IS NOT NULL AND bl.liked_at >= ?
+                  GROUP BY b.id, b.title, b.owner_uuid
+                  ORDER BY likes_count DESC, b.id ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setLong(1, sinceMillis)
+                statement.setInt(2, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        BuildLikeSummary(
+                            results.getInt("id"),
+                            results.getString("title"),
+                            results.getString("owner_uuid"),
+                            results.getInt("likes_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  fun loadOwnerLikeLeadersSinceBlocking(
+      sinceMillis: Long?,
+      limit: Int = 5,
+      excludeOwnerSelfLikes: Boolean = false,
+  ): List<OwnerLikeSummary> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    val selfLikeClause = if (excludeOwnerSelfLikes) "AND bl.player_uuid <> b.owner_uuid" else ""
+    // An all-time ranking is not a timestamped-time-series query. Historical likes predate
+    // liked_at, so do not discard them when no calendar boundary was requested.
+    val periodClause =
+        if (sinceMillis == null) "" else "AND bl.liked_at IS NOT NULL AND bl.liked_at >= ?"
+    return submitBlocking("loadOwnerLikeLeadersSince") {
+          val summaries = mutableListOf<OwnerLikeSummary>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT b.owner_uuid, COUNT(bl.player_uuid) AS likes_count
+                  FROM build_likes bl
+                  JOIN builds b ON b.id = bl.build_id
+                  WHERE 1 = 1 $periodClause
+                    $selfLikeClause
+                  GROUP BY b.owner_uuid
+                  ORDER BY likes_count DESC, b.owner_uuid ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                if (sinceMillis == null) statement.setInt(1, normalizedLimit)
+                else {
+                  statement.setLong(1, sinceMillis)
+                  statement.setInt(2, normalizedLimit)
+                }
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        OwnerLikeSummary(
+                            results.getString("owner_uuid"),
+                            results.getInt("likes_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  /** Counts likes in a ranking period, including owner self-likes. */
+  fun loadLikeCountSinceBlocking(sinceMillis: Long?): Int =
+      submitBlocking("loadLikeCountSince") {
+        // See loadOwnerLikeLeadersSinceBlocking: only bounded periods require liked_at.
+        val periodClause =
+            if (sinceMillis == null) "" else "AND bl.liked_at IS NOT NULL AND bl.liked_at >= ?"
+        countQuery(
+            """
+            SELECT COUNT(*) AS count
+            FROM build_likes bl
+            WHERE 1 = 1 $periodClause
+            """
+                .trimIndent()
+        ) { statement ->
+          if (sinceMillis != null) statement.setLong(1, sinceMillis)
+        }
+      } ?: 0
+
+  fun loadWeeklyLikedOwnersBlocking(
+      playerUuid: String,
+      sinceMillis: Long,
+      limit: Int = 5,
+  ): List<OwnerLikeSummary> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadWeeklyLikedOwners") {
+          val summaries = mutableListOf<OwnerLikeSummary>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT b.owner_uuid, COUNT(bl.build_id) AS likes_count
+                  FROM build_likes bl
+                  JOIN builds b ON b.id = bl.build_id
+                  WHERE bl.player_uuid = ?
+                    AND b.owner_uuid <> ?
+                    AND bl.liked_at IS NOT NULL
+                    AND bl.liked_at >= ?
+                  GROUP BY b.owner_uuid
+                  ORDER BY likes_count DESC, b.owner_uuid ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, playerUuid)
+                statement.setString(2, playerUuid)
+                statement.setLong(3, sinceMillis)
+                statement.setInt(4, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        OwnerLikeSummary(
+                            results.getString("owner_uuid"),
+                            results.getInt("likes_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  fun loadTopLikersForOwnerBlocking(ownerUuid: String, limit: Int = 5): List<PlayerLikeSummary> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadTopLikersForOwner") {
+          val summaries = mutableListOf<PlayerLikeSummary>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT bl.player_uuid, COUNT(bl.build_id) AS likes_count
+                  FROM builds b
+                  JOIN build_likes bl ON bl.build_id = b.id
+                  WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
+                  GROUP BY bl.player_uuid
+                  ORDER BY likes_count DESC, bl.player_uuid ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, ownerUuid)
+                statement.setString(2, ownerUuid)
+                statement.setInt(3, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        PlayerLikeSummary(
+                            results.getString("player_uuid"),
+                            results.getInt("likes_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  fun loadFirstLikerRankingBlocking(
+      ownerUuid: String?,
+      limit: Int = 5,
+  ): List<PlayerLikeSummary> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadFirstLikerRanking") {
+          val summaries = mutableListOf<PlayerLikeSummary>()
+          val ownerFilter = if (ownerUuid == null) "" else "AND b.owner_uuid = ?"
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  WITH first_likes AS (
+                    SELECT
+                      bl.build_id,
+                      bl.player_uuid,
+                      ROW_NUMBER() OVER (
+                        PARTITION BY bl.build_id
+                        ORDER BY bl.liked_at ASC, bl.player_uuid ASC
+                      ) AS row_number
+                    FROM build_likes bl
+                    JOIN builds b ON b.id = bl.build_id
+                    JOIN (
+                      SELECT b2.id
+                      FROM builds b2
+                      JOIN build_likes bl2 ON bl2.build_id = b2.id
+                      GROUP BY b2.id
+                      HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                    ) complete_builds ON complete_builds.id = b.id
+                    WHERE bl.liked_at IS NOT NULL
+                    AND bl.player_uuid <> b.owner_uuid
+                    $ownerFilter
+                  )
+                  SELECT player_uuid, COUNT(build_id) AS first_like_count
+                  FROM first_likes
+                  WHERE row_number = 1
+                  GROUP BY player_uuid
+                  ORDER BY first_like_count DESC, player_uuid ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                var parameterIndex = 1
+                if (ownerUuid != null) {
+                  statement.setString(parameterIndex, ownerUuid)
+                  parameterIndex++
+                }
+                statement.setInt(parameterIndex, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        PlayerLikeSummary(
+                            results.getString("player_uuid"),
+                            results.getInt("first_like_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  fun loadOwnBuildLikeRankingBlocking(
+      ownerUuid: String,
+      limit: Int = 5,
+  ): List<OwnBuildLikeSummary> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadOwnBuildLikeRanking") {
+          val summaries = mutableListOf<OwnBuildLikeSummary>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                   SELECT b.id, b.title, COUNT(bl.player_uuid) AS likes_count
+                   FROM builds b
+                   LEFT JOIN build_likes bl ON bl.build_id = b.id
+                   WHERE b.owner_uuid = ?
+                   GROUP BY b.id, b.title
+                  ORDER BY likes_count DESC, b.id ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, ownerUuid)
+                statement.setInt(2, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        OwnBuildLikeSummary(
+                            results.getInt("id"),
+                            results.getString("title"),
+                            results.getInt("likes_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  fun loadMutualLikeStatsBlocking(playerUuid: String, limit: Int = 5): MutualLikeStats {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadMutualLikeStats") {
+      val likedOwnerCount =
+          countQuery(
+              """
+              SELECT COUNT(DISTINCT b.owner_uuid) AS count
+              FROM build_likes bl
+              JOIN builds b ON b.id = bl.build_id
+              WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, playerUuid)
+          }
+      val likerCount =
+          countQuery(
+              """
+              SELECT COUNT(DISTINCT bl.player_uuid) AS count
+              FROM builds b
+              JOIN build_likes bl ON bl.build_id = b.id
+              WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, playerUuid)
+          }
+      val pairCount =
+          countQuery(
+              """
+              WITH outgoing AS (
+                 SELECT DISTINCT b.owner_uuid AS player_uuid
+                 FROM build_likes bl
+                 JOIN builds b ON b.id = bl.build_id
+                 WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+               ), incoming AS (
+                 SELECT DISTINCT bl.player_uuid
+                 FROM builds b
+                 JOIN build_likes bl ON bl.build_id = b.id
+                 WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
+              )
+              SELECT COUNT(*) AS count
+              FROM outgoing o
+              JOIN incoming i ON i.player_uuid = o.player_uuid
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, playerUuid)
+            statement.setString(3, playerUuid)
+            statement.setString(4, playerUuid)
+          }
+      val pairs = mutableListOf<MutualLikePair>()
+      rawConnection()
+          ?.prepareStatement(
+              """
+              WITH outgoing AS (
+                 SELECT b.owner_uuid AS player_uuid, COUNT(bl.build_id) AS likes_given
+                 FROM build_likes bl
+                 JOIN builds b ON b.id = bl.build_id
+                 WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+                 GROUP BY b.owner_uuid
+               ), incoming AS (
+                 SELECT bl.player_uuid, COUNT(bl.build_id) AS likes_received
+                 FROM builds b
+                 JOIN build_likes bl ON bl.build_id = b.id
+                 WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
+                GROUP BY bl.player_uuid
+              )
+              SELECT o.player_uuid, o.likes_given, i.likes_received
+              FROM outgoing o
+              JOIN incoming i ON i.player_uuid = o.player_uuid
+              ORDER BY (o.likes_given + i.likes_received) DESC, o.player_uuid ASC
+              LIMIT ?
+              """
+                  .trimIndent()
+          )
+          ?.use { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, playerUuid)
+            statement.setString(3, playerUuid)
+            statement.setString(4, playerUuid)
+            statement.setInt(5, normalizedLimit)
+            statement.executeQuery().use { results ->
+              while (results.next()) {
+                pairs +=
+                    MutualLikePair(
+                        results.getString("player_uuid"),
+                        results.getInt("likes_given"),
+                        results.getInt("likes_received"),
+                    )
+              }
+            }
+          }
+      MutualLikeStats(pairCount, likedOwnerCount, likerCount, pairs)
+    } ?: MutualLikeStats(0, 0, 0, emptyList())
+  }
+
+  fun loadSocialOverviewBlocking(playerUuid: String): SocialOverview {
+    return submitBlocking("loadSocialOverview") {
+      val supportedOwnerCount =
+          countQuery(
+              """
+              SELECT COUNT(DISTINCT b.owner_uuid) AS count
+              FROM build_likes bl
+              JOIN builds b ON b.id = bl.build_id
+              WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, playerUuid)
+          }
+      val supporterCount =
+          countQuery(
+              """
+              SELECT COUNT(DISTINCT bl.player_uuid) AS count
+              FROM builds b
+              JOIN build_likes bl ON bl.build_id = b.id
+              WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, playerUuid)
+          }
+      SocialOverview(supportedOwnerCount, supporterCount)
+    } ?: SocialOverview(0, 0)
+  }
+
+  fun loadFavoriteBuilderCaptureBlocking(playerUuid: String): FavoriteBuilderCapture? {
+    return submitBlocking("loadFavoriteBuilderCapture") {
+      rawConnection()
+          ?.prepareStatement(
+              """
+              WITH favorite_owner AS (
+                 SELECT b.owner_uuid, COUNT(bl.build_id) AS liked_build_count
+                 FROM build_likes bl
+                 JOIN builds b ON b.id = bl.build_id
+                 WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+                GROUP BY b.owner_uuid
+                ORDER BY liked_build_count DESC, b.owner_uuid ASC
+                LIMIT 1
+              )
+              SELECT
+                f.owner_uuid,
+                COUNT(DISTINCT b.id) AS total_build_count,
+                f.liked_build_count
+              FROM favorite_owner f
+              JOIN builds b ON b.owner_uuid = f.owner_uuid
+              GROUP BY f.owner_uuid, f.liked_build_count
+              """
+                  .trimIndent()
+          )
+          ?.use { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, playerUuid)
+            statement.executeQuery().use { results ->
+              if (!results.next()) return@submitBlocking null
+              FavoriteBuilderCapture(
+                  results.getString("owner_uuid"),
+                  results.getInt("total_build_count"),
+                  results.getInt("liked_build_count"),
+              )
+            }
+          }
+    }
+  }
+
+  fun loadFirstEncounterLikesBlocking(
+      playerUuid: String,
+      sinceMillis: Long,
+      limit: Int = 5,
+  ): List<FirstEncounterLike> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadFirstEncounterLikes") {
+          val encounters = mutableListOf<FirstEncounterLike>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT b.owner_uuid, MIN(bl.liked_at) AS first_liked_at
+                  FROM build_likes bl
+                  JOIN builds b ON b.id = bl.build_id
+                  WHERE bl.player_uuid = ? AND b.owner_uuid <> ? AND bl.liked_at IS NOT NULL
+                  GROUP BY b.owner_uuid
+                  HAVING first_liked_at >= ?
+                  ORDER BY first_liked_at DESC, b.owner_uuid ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, playerUuid)
+                statement.setString(2, playerUuid)
+                statement.setLong(3, sinceMillis)
+                statement.setInt(4, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    encounters +=
+                        FirstEncounterLike(
+                            results.getString("owner_uuid"),
+                            results.getLong("first_liked_at"),
+                        )
+                  }
+                }
+              }
+          encounters
+        }
+        .orEmpty()
+  }
+
+  fun loadSimilarTastePlayersBlocking(playerUuid: String, limit: Int = 5): List<PlayerLikeSummary> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadSimilarTastePlayers") {
+          val summaries = mutableListOf<PlayerLikeSummary>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  WITH liked_owners AS (
+                     SELECT DISTINCT b.owner_uuid
+                     FROM build_likes bl
+                     JOIN builds b ON b.id = bl.build_id
+                     WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+                   )
+                   SELECT bl.player_uuid, COUNT(DISTINCT b.owner_uuid) AS shared_owner_count
+                   FROM builds b
+                   JOIN build_likes bl ON bl.build_id = b.id
+                   WHERE b.owner_uuid IN (SELECT owner_uuid FROM liked_owners)
+                     AND bl.player_uuid <> ?
+                   GROUP BY bl.player_uuid
+                  ORDER BY shared_owner_count DESC, bl.player_uuid ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, playerUuid)
+                statement.setString(2, playerUuid)
+                statement.setString(3, playerUuid)
+                statement.setInt(4, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        PlayerLikeSummary(
+                            results.getString("player_uuid"),
+                            results.getInt("shared_owner_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  fun loadRegularSupportersBlocking(
+      ownerUuid: String,
+      limit: Int = 5,
+  ): List<RegularSupporterSummary> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadRegularSupporters") {
+          val summaries = mutableListOf<RegularSupporterSummary>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                   SELECT
+                     bl.player_uuid,
+                     COUNT(bl.build_id) AS like_count,
+                     COUNT(DISTINCT CASE WHEN bl.liked_at IS NOT NULL
+                                         THEN strftime('%Y-%W', bl.liked_at / 1000, 'unixepoch')
+                                    END) AS active_week_count
+                   FROM builds b
+                   JOIN build_likes bl ON bl.build_id = b.id
+                   WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
+                  GROUP BY bl.player_uuid
+                  ORDER BY like_count DESC, active_week_count DESC, bl.player_uuid ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, ownerUuid)
+                statement.setString(2, ownerUuid)
+                statement.setInt(3, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        RegularSupporterSummary(
+                            results.getString("player_uuid"),
+                            results.getInt("like_count"),
+                            results.getInt("active_week_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  fun loadRepeaterRateBlocking(ownerUuid: String): RepeaterRate {
+    return submitBlocking("loadRepeaterRate") {
+      val uniqueLikerCount =
+          countQuery(
+              """
+              SELECT COUNT(DISTINCT bl.player_uuid) AS count
+              FROM builds b
+              JOIN build_likes bl ON bl.build_id = b.id
+              WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, ownerUuid)
+            statement.setString(2, ownerUuid)
+          }
+      val repeaterCount =
+          countQuery(
+              """
+              SELECT COUNT(*) AS count
+              FROM (
+                 SELECT bl.player_uuid
+                 FROM builds b
+                 JOIN build_likes bl ON bl.build_id = b.id
+                 WHERE b.owner_uuid = ? AND bl.player_uuid <> ?
+                GROUP BY bl.player_uuid
+                HAVING COUNT(DISTINCT bl.build_id) >= 2
+              )
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, ownerUuid)
+            statement.setString(2, ownerUuid)
+          }
+      RepeaterRate(repeaterCount, uniqueLikerCount)
+    } ?: RepeaterRate(0, 0)
+  }
+
+  fun loadFastestSupportersBlocking(
+      ownerUuid: String,
+      createdSince: LocalDateTime? = null,
+      limit: Int = 5,
+  ): List<FastestSupporterSummary> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadFastestSupporters") {
+          val summaries = mutableListOf<FastestSupporterSummary>()
+          val createdSinceClause = if (createdSince == null) "" else "AND b.created_at >= ?"
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  WITH first_likes AS (
+                    SELECT b.id AS build_id, MIN(bl.liked_at) AS first_liked_at
+                    FROM builds b
+                    JOIN (
+                      SELECT b2.id
+                      FROM builds b2
+                      JOIN build_likes bl2 ON bl2.build_id = b2.id
+                      GROUP BY b2.id
+                      HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                    ) complete_builds ON complete_builds.id = b.id
+                    JOIN build_likes bl ON bl.build_id = b.id
+                    WHERE b.owner_uuid = ?
+                      AND bl.player_uuid <> ?
+                      $createdSinceClause
+                      AND bl.liked_at IS NOT NULL
+                      AND bl.liked_at >= CAST(strftime('%s', b.created_at) AS INTEGER) * 1000
+                    GROUP BY b.id
+                  )
+                  SELECT bl.player_uuid, COUNT(DISTINCT first_likes.build_id) AS first_support_count
+                  FROM first_likes
+                  JOIN build_likes bl
+                    ON bl.build_id = first_likes.build_id AND bl.liked_at = first_likes.first_liked_at
+                  WHERE bl.player_uuid <> ?
+                  GROUP BY bl.player_uuid
+                  ORDER BY first_support_count DESC, bl.player_uuid DESC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, ownerUuid)
+                statement.setString(2, ownerUuid)
+                var parameterIndex = 3
+                if (createdSince != null) {
+                  statement.setString(parameterIndex, createdSince.toString())
+                  parameterIndex++
+                }
+                statement.setString(parameterIndex, ownerUuid)
+                parameterIndex++
+                statement.setInt(parameterIndex, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        FastestSupporterSummary(
+                            results.getString("player_uuid"),
+                            results.getInt("first_support_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  fun loadLikeTimestampsSinceBlocking(sinceMillis: Long): List<Long> {
+    return submitBlocking("loadLikeTimestampsSince") {
+          val timestamps = mutableListOf<Long>()
+          rawConnection()
+              ?.prepareStatement(
+                  "SELECT liked_at FROM build_likes WHERE liked_at IS NOT NULL AND liked_at >= ?"
+              )
+              ?.use { statement ->
+                statement.setLong(1, sinceMillis)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    timestamps += results.getLong("liked_at")
+                  }
+                }
+              }
+          timestamps
+        }
+        .orEmpty()
+  }
+
+  fun loadBuildLikeGrowthBlocking(
+      currentStartMillis: Long,
+      previousStartMillis: Long,
+      limit: Int = 5,
+  ): List<BuildLikeSummary> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadBuildLikeGrowth") {
+          val summaries = mutableListOf<BuildLikeSummary>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT
+                    b.id,
+                    b.title,
+                    b.owner_uuid,
+                    SUM(CASE WHEN bl.liked_at >= ? THEN 1 ELSE 0 END) AS current_count,
+                    SUM(CASE WHEN bl.liked_at >= ? AND bl.liked_at < ? THEN 1 ELSE 0 END) AS previous_count
+                  FROM build_likes bl
+                  JOIN builds b ON b.id = bl.build_id
+                  WHERE bl.liked_at IS NOT NULL AND bl.liked_at >= ?
+                  GROUP BY b.id, b.title, b.owner_uuid
+                  HAVING current_count > 0 OR previous_count > 0
+                  ORDER BY (current_count - previous_count) DESC, current_count DESC, b.id ASC
+                  LIMIT ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setLong(1, currentStartMillis)
+                statement.setLong(2, previousStartMillis)
+                statement.setLong(3, currentStartMillis)
+                statement.setLong(4, previousStartMillis)
+                statement.setInt(5, normalizedLimit)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    summaries +=
+                        BuildLikeSummary(
+                            results.getInt("id"),
+                            results.getString("title"),
+                            results.getString("owner_uuid"),
+                            results.getInt("current_count"),
+                            results.getInt("previous_count"),
+                        )
+                  }
+                }
+              }
+          summaries
+        }
+        .orEmpty()
+  }
+
+  fun loadFirstLikeCountBlocking(
+      playerUuid: String?,
+      limit: Int = 5,
+  ): List<FirstLikeCount> {
+    val normalizedLimit = normalizedStatsLimit(limit)
+    return submitBlocking("loadFirstLikeCount") {
+          if (playerUuid != null) {
+            val count =
+                countQuery(
+                    """
+                    WITH first_likes AS (
+                    SELECT
+                      bl.build_id,
+                      bl.player_uuid,
+                      ROW_NUMBER() OVER (
+                          PARTITION BY bl.build_id
+                          ORDER BY bl.liked_at ASC, bl.player_uuid ASC
+                      ) AS row_number
+                      FROM build_likes bl
+                      JOIN builds b ON b.id = bl.build_id
+                      JOIN (
+                        SELECT b2.id
+                        FROM builds b2
+                        JOIN build_likes bl2 ON bl2.build_id = b2.id
+                        GROUP BY b2.id
+                        HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                      ) complete_builds ON complete_builds.id = b.id
+                      WHERE bl.liked_at IS NOT NULL
+                        AND bl.player_uuid <> b.owner_uuid
+                    )
+                    SELECT COUNT(build_id) AS count
+                    FROM first_likes
+                    WHERE row_number = 1 AND player_uuid = ?
+                    """
+                        .trimIndent()
+                ) { statement ->
+                  statement.setString(1, playerUuid)
+                }
+            listOf(FirstLikeCount(playerUuid, count))
+          } else {
+            val summaries = mutableListOf<FirstLikeCount>()
+            rawConnection()
+                ?.prepareStatement(
+                    """
+                    WITH first_likes AS (
+                      SELECT
+                        bl.build_id,
+                        bl.player_uuid,
+                        ROW_NUMBER() OVER (
+                          PARTITION BY bl.build_id
+                          ORDER BY bl.liked_at ASC, bl.player_uuid ASC
+                      ) AS row_number
+                      FROM build_likes bl
+                      JOIN builds b ON b.id = bl.build_id
+                      JOIN (
+                        SELECT b2.id
+                        FROM builds b2
+                        JOIN build_likes bl2 ON bl2.build_id = b2.id
+                        GROUP BY b2.id
+                        HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                      ) complete_builds ON complete_builds.id = b.id
+                      WHERE bl.liked_at IS NOT NULL
+                        AND bl.player_uuid <> b.owner_uuid
+                    )
+                    SELECT player_uuid, COUNT(build_id) AS first_like_count
+                    FROM first_likes
+                    WHERE row_number = 1
+                    GROUP BY player_uuid
+                    ORDER BY first_like_count DESC, player_uuid ASC
+                    LIMIT ?
+                    """
+                        .trimIndent()
+                )
+                ?.use { statement ->
+                  statement.setInt(1, normalizedLimit)
+                  statement.executeQuery().use { results ->
+                    while (results.next()) {
+                      summaries +=
+                          FirstLikeCount(
+                              results.getString("player_uuid"),
+                              results.getInt("first_like_count"),
+                          )
+                    }
+                  }
+                }
+            summaries
+          }
+        }
+        .orEmpty()
+  }
+
+  fun loadPeakLikeDayBlocking(sinceMillis: Long): PeakLikeDay? {
+    val zoneId = ZoneId.of("UTC")
+    return submitBlocking("loadPeakLikeDay") {
+      val dailyCounts = mutableMapOf<LocalDate, Int>()
+      rawConnection()
+          ?.prepareStatement(
+              "SELECT liked_at FROM build_likes WHERE liked_at IS NOT NULL AND liked_at >= ?"
+          )
+          ?.use { statement ->
+            statement.setLong(1, sinceMillis)
+            statement.executeQuery().use { results ->
+              while (results.next()) {
+                val date =
+                    Instant.ofEpochMilli(results.getLong("liked_at")).atZone(zoneId).toLocalDate()
+                dailyCounts[date] = (dailyCounts[date] ?: 0) + 1
+              }
+            }
+          }
+
+      val peak =
+          dailyCounts.entries
+              .sortedWith(
+                  compareByDescending<Map.Entry<LocalDate, Int>> { it.value }.thenBy { it.key }
+              )
+              .firstOrNull() ?: return@submitBlocking null
+      val sinceDate = Instant.ofEpochMilli(sinceMillis).atZone(zoneId).toLocalDate()
+      val today = LocalDate.now(zoneId)
+      val days = ChronoUnit.DAYS.between(sinceDate, today).toInt().coerceAtLeast(0) + 1
+      val averageCount = dailyCounts.values.sum().toDouble() / days.toDouble()
+
+      PeakLikeDay(peak.key, peak.value, averageCount)
+    }
+  }
+
+  fun loadBuildHistoryTimelineBlocking(ownerUuid: String): List<BuildHistoryEntry> {
+    return submitBlocking("loadBuildHistoryTimeline") {
+          val entries = mutableListOf<BuildHistoryEntry>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                   SELECT b.id, b.title, b.created_at, COUNT(bl.player_uuid) AS likes_received
+                   FROM builds b
+                   LEFT JOIN build_likes bl ON bl.build_id = b.id
+                   WHERE b.owner_uuid = ?
+                   GROUP BY b.id, b.title, b.created_at
+                  ORDER BY b.created_at ASC, b.id ASC
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, ownerUuid)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    entries +=
+                        BuildHistoryEntry(
+                            results.getInt("id"),
+                            results.getString("title"),
+                            LocalDateTime.parse(results.getString("created_at")),
+                            results.getInt("likes_received"),
+                        )
+                  }
+                }
+              }
+          entries
+        }
+        .orEmpty()
+  }
+
+  /**
+   * Loads both sides of a player's world-level activity in one GROUP BY query. Counts are kept raw
+   * here so the presentation layer can intentionally show shares and average deltas instead of
+   * another misleading world-size ranking.
+   */
+  fun loadWorldReactionSummariesBlocking(playerUuid: String): List<WorldReactionSummary> {
+    return submitBlocking("loadWorldReactionSummaries") {
+          val rows = mutableListOf<WorldReactionSummary>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                   SELECT b.world_name,
+                          COUNT(DISTINCT CASE WHEN b.owner_uuid = ? THEN b.id END) AS own_build_count,
+                          COUNT(DISTINCT CASE WHEN b.owner_uuid = ?
+                                              THEN bl.player_uuid || ':' || b.id END) AS own_received_likes,
+                          COUNT(DISTINCT b.id) AS global_build_count,
+                          COUNT(DISTINCT bl.player_uuid || ':' || b.id) AS global_received_likes,
+                          COUNT(DISTINCT CASE WHEN bl.player_uuid = ?
+                                              THEN b.id END) AS given_likes
+                  FROM builds b
+                  LEFT JOIN build_likes bl ON bl.build_id = b.id
+                  GROUP BY b.world_name
+                  ORDER BY b.world_name COLLATE NOCASE ASC
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, playerUuid)
+                statement.setString(2, playerUuid)
+                statement.setString(3, playerUuid)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    rows +=
+                        WorldReactionSummary(
+                            worldName = results.getString("world_name"),
+                            ownBuildCount = results.getInt("own_build_count"),
+                            ownReceivedLikes = results.getInt("own_received_likes"),
+                            globalBuildCount = results.getInt("global_build_count"),
+                            globalReceivedLikes = results.getInt("global_received_likes"),
+                            givenLikes = results.getInt("given_likes"),
+                        )
+                  }
+                }
+              }
+          rows
+        }
+        .orEmpty()
+  }
+
+  /** The most established own chunk: build count first, then received likes as a tie-breaker. */
+  fun loadHomeGroundBlocking(playerUuid: String): HomeGround? {
+    return submitBlocking("loadHomeGround") {
+      rawConnection()
+          ?.prepareStatement(
+              """
+              SELECT b.world_name, b.chunk_x, b.chunk_z,
+                     COUNT(DISTINCT b.id) AS build_count,
+                     COUNT(bl.player_uuid) AS received_likes
+              FROM builds b
+              LEFT JOIN build_likes bl ON bl.build_id = b.id
+              WHERE b.owner_uuid = ?
+              GROUP BY b.world_name, b.chunk_x, b.chunk_z
+              ORDER BY build_count DESC, received_likes DESC, b.world_name ASC, b.chunk_x ASC, b.chunk_z ASC
+              LIMIT 1
+              """
+                  .trimIndent()
+          )
+          ?.use { statement ->
+            statement.setString(1, playerUuid)
+            statement.executeQuery().use { results ->
+              if (!results.next()) return@submitBlocking null
+              HomeGround(
+                  worldName = results.getString("world_name"),
+                  chunkX = results.getInt("chunk_x"),
+                  chunkZ = results.getInt("chunk_z"),
+                  buildCount = results.getInt("build_count"),
+                  receivedLikes = results.getInt("received_likes"),
+              )
+            }
+          }
+    }
+  }
+
+  fun loadHomeGroundPointsBlocking(playerUuid: String, worldName: String): List<HomeGroundPoint> {
+    return submitBlocking("loadHomeGroundPoints") {
+          val points = mutableListOf<HomeGroundPoint>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT b.chunk_x, b.chunk_z, COUNT(DISTINCT b.id) AS build_count,
+                         COUNT(bl.player_uuid) AS received_likes
+                  FROM builds b
+                  LEFT JOIN build_likes bl ON bl.build_id = b.id
+                  WHERE b.owner_uuid = ? AND b.world_name = ?
+                  GROUP BY b.chunk_x, b.chunk_z
+                  ORDER BY build_count DESC, received_likes DESC, b.chunk_x ASC, b.chunk_z ASC
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, playerUuid)
+                statement.setString(2, worldName)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    points +=
+                        HomeGroundPoint(
+                            chunkX = results.getInt("chunk_x"),
+                            chunkZ = results.getInt("chunk_z"),
+                            buildCount = results.getInt("build_count"),
+                            receivedLikes = results.getInt("received_likes"),
+                        )
+                  }
+                }
+              }
+          points
+        }
+        .orEmpty()
+  }
+
+  /**
+   * One unliked build owned by somebody else. SQLite RANDOM keeps repeat picks pleasantly varied.
+   */
+  fun loadLuckyUnlikedBuildBlocking(playerUuid: String): LuckyBuild? {
+    return submitBlocking("loadLuckyUnlikedBuild") {
+      rawConnection()
+          ?.prepareStatement(
+              """
+              SELECT b.id, b.title, b.owner_uuid, b.world_name, b.loc_x, b.loc_y, b.loc_z
+              FROM builds b
+              LEFT JOIN build_likes mine ON mine.build_id = b.id AND mine.player_uuid = ?
+              WHERE b.owner_uuid <> ? AND mine.build_id IS NULL
+              ORDER BY RANDOM()
+              LIMIT 1
+              """
+                  .trimIndent()
+          )
+          ?.use { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, playerUuid)
+            statement.executeQuery().use { results ->
+              if (!results.next()) return@submitBlocking null
+              LuckyBuild(
+                  id = results.getInt("id"),
+                  title = results.getString("title"),
+                  ownerUuid = results.getString("owner_uuid"),
+                  worldName = results.getString("world_name"),
+                  x = results.getDouble("loc_x"),
+                  y = results.getDouble("loc_y"),
+                  z = results.getDouble("loc_z"),
+              )
+            }
+          }
+    }
+  }
+
+  /** Like totals for all works, one's own works, and works the player has liked. */
+  fun loadBuildLikeCountsBlocking(
+      ownerUuid: String? = null,
+      onlyWithLikes: Boolean = false,
+  ): List<Int> {
+    return submitBlocking("loadBuildLikeCounts") {
+          val counts = mutableListOf<Int>()
+          val sql =
+              if (ownerUuid == null) {
+                """
+                SELECT b.id, COUNT(bl.player_uuid) AS like_count
+                FROM builds b LEFT JOIN build_likes bl ON bl.build_id = b.id
+                GROUP BY b.id
+                ${if (onlyWithLikes) "HAVING like_count > 0" else ""}
+                """
+                    .trimIndent()
+              } else {
+                """
+                SELECT b.id, COUNT(bl.player_uuid) AS like_count
+                FROM builds b LEFT JOIN build_likes bl ON bl.build_id = b.id
+                WHERE b.owner_uuid = ?
+                GROUP BY b.id
+                ${if (onlyWithLikes) "HAVING like_count > 0" else ""}
+                """
+                    .trimIndent()
+              }
+          rawConnection()?.prepareStatement(sql)?.use { statement ->
+            ownerUuid?.let { statement.setString(1, it) }
+            statement.executeQuery().use { results ->
+              while (results.next()) counts += results.getInt("like_count")
+            }
+          }
+          counts
+        }
+        .orEmpty()
+  }
+
+  fun loadLikedBuildLikeCountsBlocking(playerUuid: String): List<Int> {
+    return submitBlocking("loadLikedBuildLikeCounts") {
+          val counts = mutableListOf<Int>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT b.id, COUNT(all_likes.player_uuid) AS like_count
+                  FROM build_likes mine
+                  JOIN builds b ON b.id = mine.build_id
+                  LEFT JOIN build_likes all_likes
+                    ON all_likes.build_id = b.id
+                  WHERE mine.player_uuid = ?
+                  GROUP BY b.id
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, playerUuid)
+                statement.executeQuery().use { results ->
+                  while (results.next()) counts += results.getInt("like_count")
+                }
+              }
+          counts
+        }
+        .orEmpty()
+  }
+
+  fun loadGivenLikeDimensionsBlocking(playerUuid: String): List<BuildLikeDimension> {
+    return submitBlocking("loadGivenLikeDimensions") {
+          val dimensions = mutableListOf<BuildLikeDimension>()
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT b.owner_uuid, b.world_name, b.chunk_x, b.chunk_z
+                  FROM build_likes bl
+                  JOIN builds b ON b.id = bl.build_id
+                  WHERE bl.player_uuid = ? AND b.owner_uuid <> ?
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                statement.setString(1, playerUuid)
+                statement.setString(2, playerUuid)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    dimensions +=
+                        BuildLikeDimension(
+                            ownerUuid = results.getString("owner_uuid"),
+                            worldName = results.getString("world_name"),
+                            chunkX = results.getInt("chunk_x"),
+                            chunkZ = results.getInt("chunk_z"),
+                        )
+                  }
+                }
+              }
+          dimensions
+        }
+        .orEmpty()
+  }
+
+  /**
+   * Loads repost events and evaluates each event against the preceding and following 24-hour
+   * windows. The comparison is intentionally event-based: it does not mistake a build's lifetime
+   * total for the effect of a repost.
+   */
+  fun loadPublicityReactionsBlocking(ownerUuid: String? = null): List<PublicityEventReaction> {
+    val zoneId = ZoneId.of("Asia/Tokyo")
+    return submitBlocking("loadPublicityReactions") {
+          data class RawEvent(
+              val buildId: Int,
+              val title: String,
+              val ownerUuid: String,
+              val promotedAt: Long,
+              val likedAt: Long?,
+          )
+          val rows = mutableListOf<RawEvent>()
+          val ownerClause = if (ownerUuid == null) "" else "AND b.owner_uuid = ?"
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT ph.id AS publicity_id, ph.sl_id, ph.timestamp, b.title, b.owner_uuid, bl.liked_at
+                  FROM publicity_history ph
+                  JOIN builds b ON b.id = ph.sl_id
+                  JOIN (
+                    SELECT b2.id
+                    FROM builds b2
+                    JOIN build_likes bl2 ON bl2.build_id = b2.id
+                    GROUP BY b2.id
+                    HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                  ) complete_builds ON complete_builds.id = b.id
+                  LEFT JOIN build_likes bl
+                    ON bl.build_id = b.id
+                   AND bl.liked_at IS NOT NULL
+                   AND bl.player_uuid <> b.owner_uuid
+                  WHERE 1 = 1 $ownerClause
+                  ORDER BY ph.sl_id ASC, ph.timestamp ASC, bl.liked_at ASC
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                if (ownerUuid != null) statement.setString(1, ownerUuid)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    val promotedAt =
+                        try {
+                          LocalDateTime.parse(results.getString("timestamp"))
+                              .atZone(zoneId)
+                              .toInstant()
+                              .toEpochMilli()
+                        } catch (_: Exception) {
+                          continue
+                        }
+                    val likedAt =
+                        results.getLong("liked_at").let { if (results.wasNull()) null else it }
+                    rows +=
+                        RawEvent(
+                            results.getInt("sl_id"),
+                            results.getString("title"),
+                            results.getString("owner_uuid"),
+                            promotedAt,
+                            likedAt,
+                        )
+                  }
+                }
+              }
+
+          rows
+              .groupBy { listOf(it.buildId, it.promotedAt) }
+              .values
+              .map { sameEvent ->
+                val event = sameEvent.first()
+                event to sameEvent.mapNotNull { it.likedAt }
+              }
+              .groupBy { it.first.buildId }
+              .values
+              .flatMap { buildEvents ->
+                buildEvents
+                    .sortedBy { it.first.promotedAt }
+                    .mapIndexed { index, (event, likes) ->
+                      val start = event.promotedAt
+                      val before = likes.count { it >= start - 86_400_000L && it < start }
+                      val after = likes.count { it >= start && it < start + 86_400_000L }
+                      val previousAt =
+                          buildEvents
+                              .sortedBy { it.first.promotedAt }
+                              .getOrNull(index - 1)
+                              ?.first
+                              ?.promotedAt
+                      PublicityEventReaction(
+                          event.buildId,
+                          event.title,
+                          event.ownerUuid,
+                          start,
+                          before,
+                          after,
+                          previousAt?.let { (start - it) / 3_600_000L },
+                      )
+                    }
+              }
+              .sortedWith(
+                  compareByDescending<PublicityEventReaction> { it.promotedAt }
+                      .thenBy { it.buildId }
+              )
+        }
+        .orEmpty()
+  }
+
+  fun loadPeriodSummaryBlocking(
+      playerUuid: String,
+      sinceMillis: Long,
+      untilMillis: Long,
+  ): PeriodSummary {
+    val zoneId = ZoneId.of("UTC")
+    val sinceTimestamp =
+        Instant.ofEpochMilli(sinceMillis).atZone(zoneId).toLocalDateTime().toString()
+    val untilTimestamp =
+        Instant.ofEpochMilli(untilMillis).atZone(zoneId).toLocalDateTime().toString()
+
+    return submitBlocking("loadPeriodSummary") {
+      val buildsCreated =
+          countQuery(
+              """
+              SELECT COUNT(id) AS count
+              FROM builds
+              WHERE owner_uuid = ? AND created_at >= ? AND created_at < ?
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, sinceTimestamp)
+            statement.setString(3, untilTimestamp)
+          }
+      val likesGiven =
+          countQuery(
+              """
+              SELECT COUNT(build_id) AS count
+              FROM build_likes
+              WHERE player_uuid = ? AND liked_at IS NOT NULL AND liked_at >= ? AND liked_at < ?
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, playerUuid)
+            statement.setLong(2, sinceMillis)
+            statement.setLong(3, untilMillis)
+          }
+      val likesReceived =
+          countQuery(
+              """
+              SELECT COUNT(bl.build_id) AS count
+              FROM build_likes bl
+              JOIN builds b ON b.id = bl.build_id
+              WHERE b.owner_uuid = ?
+                AND bl.liked_at IS NOT NULL
+                AND bl.liked_at >= ?
+                AND bl.liked_at < ?
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, playerUuid)
+            statement.setLong(2, sinceMillis)
+            statement.setLong(3, untilMillis)
+          }
+      val publicityCount =
+          countQuery(
+              """
+              SELECT COUNT(id) AS count
+              FROM publicity_history
+              WHERE user_uuid = ? AND timestamp >= ? AND timestamp < ?
+              """
+                  .trimIndent()
+          ) { statement ->
+            statement.setString(1, playerUuid)
+            statement.setString(2, sinceTimestamp)
+            statement.setString(3, untilTimestamp)
+          }
+
+      PeriodSummary(buildsCreated, likesGiven, likesReceived, publicityCount)
+    } ?: PeriodSummary(buildsCreated = 0, likesGiven = 0, likesReceived = 0, publicityCount = 0)
+  }
+
+  private fun normalizedStatsLimit(limit: Int): Int = limit.coerceIn(1, 20)
+
+  private fun loadLikeEventsBlocking(
+      taskName: String,
+      filterSql: String,
+      uuid: String,
+      reliablePublishedSince: LocalDateTime?,
+  ): List<BuildLikeEvent> {
+    return submitBlocking(taskName) {
+          val events = mutableListOf<BuildLikeEvent>()
+          val reliableBuildJoin =
+              reliablePublishedSince?.let {
+                """
+                JOIN (
+                  SELECT b2.id
+                  FROM builds b2
+                  JOIN build_likes bl2 ON bl2.build_id = b2.id
+                  WHERE b2.created_at >= ?
+                  GROUP BY b2.id
+                  HAVING COUNT(bl2.player_uuid) = COUNT(bl2.liked_at)
+                ) reliable_builds ON reliable_builds.id = b.id
+                """
+                    .trimIndent()
+              } ?: ""
+          rawConnection()
+              ?.prepareStatement(
+                  """
+                  SELECT b.id, b.title, bl.player_uuid, b.owner_uuid, b.world_name, b.chunk_x, b.chunk_z, b.created_at, bl.liked_at
+                  FROM build_likes bl
+                  JOIN builds b ON b.id = bl.build_id
+                  $reliableBuildJoin
+                  WHERE $filterSql AND bl.liked_at IS NOT NULL
+                  ORDER BY bl.liked_at ASC, b.id ASC
+                  """
+                      .trimIndent()
+              )
+              ?.use { statement ->
+                var parameterIndex = 1
+                if (reliablePublishedSince != null) {
+                  statement.setString(parameterIndex, reliablePublishedSince.toString())
+                  parameterIndex++
+                }
+                statement.setString(parameterIndex, uuid)
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    events +=
+                        BuildLikeEvent(
+                            buildId = results.getInt("id"),
+                            title = results.getString("title"),
+                            playerUuid = results.getString("player_uuid"),
+                            ownerUuid = results.getString("owner_uuid"),
+                            worldName = results.getString("world_name"),
+                            chunkX = results.getInt("chunk_x"),
+                            chunkZ = results.getInt("chunk_z"),
+                            createdAt = LocalDateTime.parse(results.getString("created_at")),
+                            likedAt = results.getLong("liked_at"),
+                        )
+                  }
+                }
+              }
+          events
+        }
+        .orEmpty()
+  }
+
   private fun submit(taskName: String, block: () -> Unit) {
     val service =
         executor
@@ -297,6 +2153,81 @@ object SLDatabase {
       null
     }
   }
+
+  private fun rawConnection(): Connection? =
+      TransactionManager.current().connection.connection as? Connection
+
+  private fun countQuery(sql: String, bind: (java.sql.PreparedStatement) -> Unit = {}): Int {
+    val db = rawConnection() ?: return 0
+    return db.prepareStatement(sql).use { statement ->
+      bind(statement)
+      statement.executeQuery().use { results -> if (results.next()) results.getInt("count") else 0 }
+    }
+  }
+
+  private fun loadWeeklyLikeCountsDirect(
+      db: Connection?,
+      weeks: Int,
+      zoneId: ZoneId,
+      firstWeekStart: LocalDate,
+      firstWeekStartMillis: Long,
+  ): List<WeeklyLikeCount> {
+    val counts = mutableMapOf<LocalDate, Int>()
+
+    db?.prepareStatement(
+            "SELECT liked_at FROM build_likes WHERE liked_at IS NOT NULL AND liked_at >= ?"
+        )
+        ?.use { statement ->
+          statement.setLong(1, firstWeekStartMillis)
+          statement.executeQuery().use { results ->
+            while (results.next()) {
+              val weekStart =
+                  Instant.ofEpochMilli(results.getLong("liked_at"))
+                      .atZone(zoneId)
+                      .toLocalDate()
+                      .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+              counts[weekStart] = (counts[weekStart] ?: 0) + 1
+            }
+          }
+        }
+
+    return (0 until weeks).map { offset ->
+      val weekStart = firstWeekStart.plusWeeks(offset.toLong())
+      WeeklyLikeCount(weekStart, counts[weekStart] ?: 0)
+    }
+  }
+
+  private fun logStartupSummary(plugin: JavaPlugin, db: Connection) {
+    try {
+      val zoneId = ZoneId.of("UTC")
+      val currentWeekStart =
+          LocalDate.now(zoneId).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+      val firstWeekStart = currentWeekStart.minusWeeks(8)
+      val weekly =
+          loadWeeklyLikeCountsDirect(
+              db,
+              9,
+              zoneId,
+              firstWeekStart,
+              firstWeekStart.atStartOfDay(zoneId).toInstant().toEpochMilli(),
+          )
+      val buildCount = countRows(db, "builds")
+      val likeCount = countRows(db, "build_likes")
+      plugin.logger.info(
+          "[SL3] SQLite shadow ready: builds=$buildCount likes=$likeCount recent9WeeklyLikes=" +
+              weekly.joinToString(", ") { it.count.toString() }
+      )
+    } catch (e: Exception) {
+      loggerWarning("startupSummary", e)
+    }
+  }
+
+  private fun countRows(db: Connection, tableName: String): Int =
+      db.createStatement().use { statement ->
+        statement.executeQuery("SELECT COUNT(*) AS count FROM $tableName").use { results ->
+          if (results.next()) results.getInt("count") else 0
+        }
+      }
 
   private fun upsertBuild(snapshot: BuildSnapshot) {
     Builds.upsert {
