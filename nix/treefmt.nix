@@ -22,7 +22,10 @@
       settings = {
         wrap = 80;
       };
-      excludes = [ "plugins/* " ];
+      excludes = [
+        "plugins/*"
+        "docs/*"
+      ];
     };
     nixfmt = {
       enable = true;

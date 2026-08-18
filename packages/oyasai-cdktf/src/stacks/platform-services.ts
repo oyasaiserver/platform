@@ -228,7 +228,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       }),
       env: envs({
         VELOCITY_FORWARDING_SECRET: randoms.velocityForwardingSecret.result,
-        MEMORY: "512M",
+        MEMORY: "2G",
       }),
       volumes: [
         {
