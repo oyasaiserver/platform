@@ -50,6 +50,10 @@ class SocialLikes : JavaPlugin() {
     server.getPluginCommand("sldatafont")?.setExecutor(SLDataFont)
     server.getPluginCommand("sldata")?.setExecutor(SLData)
     server.getPluginCommand("sldata")?.tabCompleter = SLData
+    server.getPluginCommand("sldataop")?.setExecutor(SLDataOp)
+    server.getPluginCommand("sldataop")?.tabCompleter = SLDataOp
+    server.getPluginCommand("sllucky")?.setExecutor(SLLucky)
+    server.getPluginCommand("sllucky")?.tabCompleter = SLLucky
     server.getPluginCommand("sldatapack")?.setExecutor(SLDataPack)
 
     if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {

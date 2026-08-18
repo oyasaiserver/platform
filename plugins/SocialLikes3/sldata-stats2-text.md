@@ -1,94 +1,83 @@
-# /sldata dialog stats2 文言定義
+# /sldata dialog stats2 文言・表示定義
 
-編集後、ゲーム内で `/sldata dialog reload` すれば反映される。再ビルド不要。 `{...}` は Kotlin
-側で実データに置き換わるプレースホルダ。数値・順位・棒・目盛りはここに書かない。 各ブロック内の
-`title`、`subtitle`、`desc`、`note`、`empty`、`label`、`value`、`hover`、`tooltip`
-等を編集する。 形式が壊れた行は warning を出し、その項目だけ既定値を使う。
+編集後、ゲーム内で `/sldataop reload` または `/sldata` 画面内の `[再読込 ⟳]` ボタンを押せば反映される。再ビルド不要。
+`{...}` は Kotlin 側で実データに置き換わるプレースホルダ。数値・順位・棒・目盛りはここに書かない。
 
-## Section.stats2.window
+---
+
+## 1. Section.stats2.window (ウィンドウタイトル)
 
 ```
 title: SocialLikes 詳細統計: {target_name} / {category_label}
 ```
 
-## Section.stats2.actions
+---
+
+## 2. Section.stats2.actions (アクションボタン)
 
 ```
-details_label: 詳細統計
-details_tooltip: 交流・応援・一番乗りの詳細を表示
-reload_label: 再読込
+overview_label: 概要
+overview_tooltip: 主要指標の比較表と基本サマリー
+
+personal_label: あなたのデータ
+personal_tooltip: メモリアル、いいね獲得分布、建築Top5、初速、活動リズム
+
+social_label: 交流と宣伝
+social_tooltip: 相互、常連、最速サポーター、好みの一致、宣伝効果
+
+server_label: サーバー全体
+server_tooltip: ワールド別比率、全体推移、一番乗りランキング
+
+period_label: 期間: {period_name} ▾
+period_tooltip: 集計期間を切り替えます（今週 / 今月 / 全期間）
+
+settings_label: 設定・出力... ▾
+settings_tooltip: フィルター設定や別形式での出力を選択
+
+reload_label: 再読込 ⟳
 reload_tooltip: 詳細統計を再表示
-world_exclude_label: ライフ除外
-world_include_label: ライフ含む
+
+ranking_label: 制作者ランキング ⇗
+ranking_tooltip: 制作者別いいね数ランキング
+
+world_exclude_label: ライフ: 除外 ▾
+world_include_label: ライフ: 含む ▾
 world_filter_tooltip: ワールド別反応のライフワールド表示を切替
-graph_label: 通常グラフ
+
+graph_label: 通常グラフ ⇗
 graph_tooltip: 週次グラフへ戻る
-top5_label: Top5
-top5_tooltip: 制作者別いいね数ランキング
-other_formats_label: 他の形式で見る
-other_formats_tooltip: Map、Slots、Displayを選択
+
 close_label: 閉じる
 close_tooltip: 閉じます
 ```
 
-## Section.stats2.category.overview
+---
+
+## 3. Section.stats2.category.overview (概要タブ)
+
+### 基本サマリー
 
 ```
-label: 概要
-tooltip: 比較表を見る
+summary_title: ◆ あなたの基本サマリー
+summary_line1: 建築: {total_builds}件 | 獲得: {received_likes} | 送信: {given_likes}
+summary_line2: 直近7日: 獲得 +{week_received} (送った +{week_given}) ｜ 直近30日: 獲得 +{month_received}
+summary_hover: 【累計基本データ】\n建築総数: {total_builds}件\n累計獲得いいね: {received_likes}\n累計送信いいね: {given_likes}
 ```
 
-## Section.stats2.category.builds
+表示イメージ:
 
-```
-label: あなたの建築
-tooltip: 建築Top5、経過日数、初速
-```
-
-## Section.stats2.category.given
-
-```
-label: あなたのいいね
-tooltip: 活動リズム、自己ベスト、継続日数
+```text
+§d◆ あなたの基本サマリー
+§f建築: §e1,108件 §7| 獲得: §e42,642 §7| 送信: §e5,608
+§7直近7日: 獲得 §e+105 §7(送った §e+9§7) ｜ 直近30日: 獲得 §e+1,038
 ```
 
-## Section.stats2.category.social
+### 比較ブロック (上下対比バー表示)
 
-```
-label: 人とのつながり
-tooltip: 相互、リピーター、最速サポーター
-```
+上段に自分（あなた）、下段に全体（平均/中央値）のバーが縦に並び、直感的に進捗と長さを比較できる。
+各行にマウスを合わせると、ホバーツールチップで指標の詳細説明が表示される。
 
-## Section.stats2.category.publicity
-
-```
-label: 宣伝
-tooltip: 宣伝効果と宣伝回数
-```
-
-## Section.stats2.category.server
-
-```
-label: サーバー全体
-tooltip: 全体ランキング、ワールド別、週次
-```
-
-## Section.stats2.overview.comparison
-
-```
-title: 比較表
-population: 母集団：あなたの建築　{own_build_count}件　／　あなたが押した作品　{given_build_count}件　／　全体の建築　{global_build_count}件
-desc_line: 説明:{description}
-empty: 比較できる建築データはまだありません。
-```
-
-表示イメージ（例。実データではない）:
-
-```
-母集団：あなたの建築　１，１０８件　／　あなたが押した作品　５，６０８件　／　全体の建築　２２，５９０件
-```
-
-### row.avg_per_build
+#### row.avg_per_build
 
 ```
 label: 1作品あたりのいいね（平均）
@@ -98,14 +87,15 @@ global_label: 全体平均
 unit: いいね/作品
 ```
 
-表示イメージ（例。実データではない）:
+表示イメージ:
 
-```
-あなた▁▁▁▁▁▁▁▁▁▁▁▁▁▁████████████▁１００％▁３８．５いいね／作品
-全体平均▁▁▁▁▁▁▁▁▁▁▁▁████████████▁５６％▁２１．７いいね／作品
+```text
+§d◆ 1作品あたりのいいね（平均）
+§fあなた　　　　　　 §a████████████████████§8 §7100% §8= §e38.5いいね/作品
+§7全体平均　　　　　 §a███████████§8█████████ §7 56% §8= §721.7いいね/作品
 ```
 
-### row.median_per_build
+#### row.median_per_build
 
 ```
 label: 1作品あたりのいいね（中央値）
@@ -115,14 +105,15 @@ global_label: 全体中央値
 unit: いいね/作品
 ```
 
-表示イメージ（例。実データではない）:
+表示イメージ:
 
-```
-あなた▁▁▁▁▁▁▁▁▁▁▁▁▁▁████████████▁１００％▁２６．５いいね／作品
-全体中央値▁▁▁▁▁▁▁▁▁▁████████████▁６４％▁１７．０いいね／作品
+```text
+§d◆ 1作品あたりのいいね（中央値）
+§fあなた　　　　　　 §a████████████████████§8 §7100% §8= §e26.5いいね/作品
+§7全体中央値　　　　 §a████████████§8████████ §7 64% §8= §717.0いいね/作品
 ```
 
-### row.given_build_popularity
+#### row.given_build_popularity
 
 ```
 label: 押した作品の人気
@@ -132,418 +123,367 @@ global_label: 全体平均
 unit: いいね/作品
 ```
 
-表示イメージ（例。実データではない）:
+表示イメージ:
 
-```
-あなたが押した作品▁▁▁████████████▁１００％▁３３．１いいね／作品
-全体平均▁▁▁▁▁▁▁▁▁▁▁▁████████████▁６５％▁２１．７いいね／作品
+```text
+§d◆ 押した作品の人気
+§fあなたが押した作品 §a████████████████████§8 §7100% §8= §e33.1いいね/作品
+§7全体平均　　　　　 §a█████████████§8███████ §7 65% §8= §721.7いいね/作品
 ```
 
-### row.give_receive
+#### row.give_receive
 
 ```
 label: 送ったいいねと受けたいいね
 desc: 応援する側か、される側か
 received_label: 受けた
-received_sample: 自分の建築へ
 given_label: 送った
-given_sample: 相手の建築へ
 unit: いいね
 ```
 
-表示イメージ（例。実データではない）:
+表示イメージ:
 
-```
-受けた▁▁▁▁▁▁▁▁▁▁▁▁▁▁████████████▁１００％▁４２，６４２いいね▁自分の建築へ
-送った▁▁▁▁▁▁▁▁▁▁▁▁▁▁████████████▁１３％▁５，６０８いいね▁相手の建築へ
+```text
+§d◆ 送ったいいねと受けたいいね
+§f受けた　　　　　　 §a████████████████████§8 §7100% §8= §e42,642いいね
+§7送った　　　　　　 §a██§8██████████████████ §7 13% §8= §7 5,608いいね
 ```
 
-### row.mutual_rate
+#### row.mutual_rate
 
 ```
 label: 相互になっている割合
 desc: 片思いか、応え合えているか
-supporting_label: 応援している側
-supporting_sample: {supporting_count}人中{mutual_count}人
 supported_label: されている側
-supported_sample: {supported_count}人中{mutual_count}人
+supporter_label: 応援している側
 unit: %
 ```
 
-表示イメージ（例。実データではない）:
+表示イメージ:
 
-```
-応援している側▁▁▁▁▁▁▁████████████▁１００％▁７４．２％▁562人中417人
-されている側▁▁▁▁▁▁▁▁▁████████████▁２５％▁１８．７％▁2,228人中417人
-```
-
-### row.likes_per_day
-
-```
-label: 1日あたりのいいね
-desc: 公開期間で正規化した反応ペース
-latest_label: 最新の{latest_count}作品
-latest_sample: 公開日で後半
-past_label: 過去の{past_count}作品
-past_sample: 公開日で前半
-unit: いいね/日
+```text
+§d◆ 相互になっている割合
+§7されている側　　　 §a████████████████████§8 §7100% §8= §732.4% §7(90/278人)
+§f応援している側　　 §a█████████§8███████████ §7 49% §8= §e16.0% §7(90/563人)
 ```
 
-表示イメージ（例。実データではない）:
+#### row.server_publicity
 
 ```
-最新の554作品▁▁▁▁▁▁▁████████████▁１００％▁０．１５４いいね／日▁公開日で後半
-過去の554作品▁▁▁▁▁▁▁████████████▁２２％▁０．０３４いいね／日▁公開日で前半
-```
-
-### row.server_publicity
-
-```
-label: サーバー全体の宣伝・前後24時間
-desc: サーバー全体の宣伝機能にどれだけ効果があるか
-after_label: サーバー全体・宣伝後
-after_sample: {repost_count}回の平均
-before_label: サーバー全体・宣伝前
-before_sample: {repost_count}回の平均
+label: 宣伝の伸び幅：サーバー全体 vs あなた
+desc: 宣伝前後24時間の平均いいね差(伸び幅)を、サーバー全体と比べてどうか
+own_label: あなたの伸び
+server_label: サーバー全体の伸び
 unit: いいね/回
 ```
 
-表示イメージ（例。実データではない）:
+表示イメージ:
 
+```text
+§d◆ 宣伝の伸び幅：サーバー全体 vs あなた
+§fあなたの伸び　　　 §a████████████████████§8 §7100% §8= §e0.5いいね/回 §7(1,401回)
+§7サーバー全体の伸び §a§8████████████████████ §7  0% §8= §70.0いいね/回 §7(    0回)
 ```
-サーバー全体・宣伝後▁████████████▁１００％▁９．２いいね／回▁729回の平均
-サーバー全体・宣伝前▁████████████▁３６％▁３．４いいね／回▁729回の平均
-```
 
-## Section.stats2.builds.top_builds
+---
 
-```
-title: 建築Top5
-value: {like_count}いいね
-empty: {target_name} の建築Top5はまだありません。
-```
+## 4. Section.stats2.category.personal (あなたのデータタブ)
 
-表示イメージ（例。実データではない）:
+### メモリアル（原点の足跡）
 
 ```
-１位　四代目スポーン地点▁▁▁▁▁▁████████████████████████　９０６いいね
-２位　看板を右クリック▁▁▁▁▁▁▁▁████████████████████████　６１２いいね
+memorial_title: ◆ 原点の足跡・メモリアル
+memorial_first_build: 第1号建築: #{build_id} 『{title}』 ({created_date})
+memorial_first_fan: 最初のファン: {fan_name} (初いいね)
+memorial_first_partner: 最初の盟友: {partner_name} (初相互)
+memorial_long_tail: ロングセラー殿堂: #{build_id} 『{title}』 (築{days}日後) (直近30日にも反応)
+memorial_hover: 【原点の足跡】\nあなたの最古の建築や、初めていいねを交わした記念すべき記録です。
 ```
 
-## Section.stats2.builds.age
+表示イメージ:
 
+```text
+§d◆ 原点の足跡・メモリアル
+§7第1号建築: §f#-11258 『tesuto』 (2023-06-02)
+§7最初のファン: §eFawnr §7(初いいね)
+§7最初の盟友: §eCornNagi §7(初相互)
+§7ロングセラー殿堂: §a#11553 『西村証券』 (築25日後) §7(直近30日にも反応)
 ```
-title: 公開からの経過日数 ⏱
-subtitle: 対象: 2026/7/2以降に公開した建築 {age_target_count}件{age_missing_suffix}
-note: 受けたいいねが付くまでの日数。
-same_day_label: 当日
-within_7_days_label: 7日以内
-within_30_days_label: 30日以内
-over_30_days_label: 30日超
-```
+
+### 作品ごとのいいね獲得分布 ⏱
 
-表示イメージ（例。実データではない）:
+獲得いいね数の階級（0-30個、31-100個、101-300個、301-600個、601個+ 等）ごとの作品数を縦棒グラフで表示。
+X軸の階級レンジおよびY軸の目盛り上限は、プレイヤーの最大獲得いいね数に応じてダイナミックに自動最適化される。
 
 ```
-▁▁▁▁██▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　１６０
-▁▁▁当日▁▁▁▁▁７日以内▁▁３０日以内▁▁３０日超▁▁▁▁　　　
+distribution_title: 作品ごとのいいね獲得分布 ⏱
+distribution_scope: 対象: あなたの全建築 {total_builds}件（獲得いいね数ごとの作品数）
 ```
 
-## Section.stats2.builds.initial_speed
+表示イメージ:
 
+```text
+[作品ごとのいいね獲得分布 ⏱]
+対象: あなたの全建築 1,108件（獲得いいね数ごとの作品数）
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁７００
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁５６０
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁４２０
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁２８０
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁１４０
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▇▇▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　０
+(#68707c)    0-30      31-100    101-300   301-600     601+  　　　
 ```
-title: 初速（初いいねまで）⏱
-subtitle: 期間: 2026/7/2以降に公開した建築のみ
-desc: 本人いいねは除外。作成時刻といいね時刻を同じ基準で計算。
-range: 最短 {minimum_duration} / 中央値 {median_duration} / 最長 {maximum_duration} / 平均 {average_duration}
-coverage: 対象 {target_build_count}作品 / 計測 {measured_build_count}作品
-seconds_duration: {seconds}秒
-minutes_duration: {minutes}分
-hours_duration: {hours}時間{minutes}分
-days_duration: {days}日{hours}時間
-empty: {target_name} の作品で、2026/7/2以降に本人以外の初いいね時刻を持つデータはまだありません。
-```
 
-## Section.stats2.given.activity_rhythm
+### 建築Top5
 
 ```
-title: 活動リズム（JST）⏱
-subtitle: 対象: いいね時刻がある送ったいいね {timestamped_given_count}件
-legend: 凡例:▁0件/░少/▒中/▓多/█最多
-hour_axis_label: 時
-monday_label: 月
-tuesday_label: 火
-wednesday_label: 水
-thursday_label: 木
-friday_label: 金
-saturday_label: 土
-sunday_label: 日
-night_type: あなたは夜型です
-morning_type: あなたは朝型です
-weekend_type: 週末型です
-weekday_type: 平日型です
-diagnosis: {rhythm_type} / {day_type}。反応する時間帯がこの範囲に寄っています。
-empty: いいねした時刻のデータはまだありません。
+top_builds_title: 建築Top5
+top_builds_value: {like_count}いいね
+top_builds_empty: {target_name} の建築Top5はまだありません。
 ```
 
-表示イメージ（例。実データではない）:
+### いいねが付くまでの日数 ⏱
 
 ```
-時▁00▁03▁06▁09▁12▁15▁18▁21
-月▁▁▁▁▁▁▁▁▁▁░░▁░░▁░░▁░░▁▒▒
-土▁▒▒▁▁▁▁▁▁▁░░▁▁▁▁▁▁▁▒▒▁▓▓
-日▁░░▁▁▁▁▁▁▁░░▁▁▁▁▒▒▁░░▁██
+age_title: いいねが付くまでの日数 ⏱
+age_note: 建築の公開時刻から、本人以外が初めていいねした時刻までの日数。「公開から今日まで」の経過日数ではありません。
 ```
 
-## Section.stats2.given.monthly_pace
+表示イメージ:
 
-```
-title: 月別ペース変化（送ったいいね）⏱
-note: 縞の棒＝集計途中の当月。完了月との比較には使いません。
+```text
+[いいねが付くまでの日数 ⏱]
+対象: 2026/7/2以降に公開したあなたの建築が受けたいいね 995件
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁６００
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁４８０
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁３６０
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁▄▄▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁２４０
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁１２０
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁　　０
+(#68707c)    当日     ７日以内  ３０日以内 ６０日以内  ６０日超 　　　
 ```
 
-表示イメージ（例。実データではない）:
+### 初速（初いいねまで）⏱
 
 ```
-▁▁▁▁██▁▁▁▁▁▁▁▁▄▄▁▁▁▁▁▁▁▁▂▂▁▁▁▁▁▁▁▁▃▃▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁░░▁▁▁▁▁▁▁　４０
-２月▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁５月▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁８月▁▁▁　　　　
+initial_speed_title: 初速（初いいねまで）⏱
+initial_speed_range: 最短 {minimum_duration} / 中央値 {median_duration} / 最長 {maximum_duration} / 平均 {average_duration}
+initial_speed_coverage: 対象 {target_build_count}作品 / 計測 {measured_build_count}作品。本人いいねは除外。
 ```
 
-## Section.stats2.given.personal_best
+### 活動リズム（JST）⏱
 
 ```
-title: 自己ベスト更新履歴（送ったいいね）⏱
-subtitle: 対象: いいね時刻がある送ったいいね {timestamped_given_count}件
-daily_row: 日別: {best_history}
-weekly_row: 週別: {best_history}
-monthly_row: 月別: {best_history}
-record: {period_label} {like_count}件
-no_record: なし
-empty: 日・週・月の自己ベスト更新はまだありません。
+activity_rhythm_title: 活動リズム（JST）⏱
+activity_rhythm_empty: {target_name} の活動リズムデータはまだありません。
+activity_rhythm_rhythm: 行動リズム：{rhythm_diagnosis}
+activity_rhythm_day_type: 曜日タイプ：{day_type_diagnosis}
+activity_rhythm_note: 送ったいいねを押した時間帯と曜日の分布（セルにカーソルを合わせると件数を表示）
 ```
 
-## Section.stats2.given.streak
+### 月別いいねペース ⏱
 
 ```
-title: 送ったいいね継続日数⏱
-subtitle: 対象: いいね時刻がある送ったいいね {timestamped_given_count}件
-summary: 現在 {current_days}日連続 / 最長 {longest_days}日 — {streak_title}
-legendary_title: 称号: 伝説の継続者
-habit_keeper_title: 称号: 習慣の守り手
-weekly_supporter_title: 称号: 週刊サポーター
-sprout_title: 称号: 継続の芽
-first_step_title: 称号: はじめの一歩
-future_title: 称号: これから
-empty: 日次いいねデータはまだありません。
+monthly_pace_title: 月別いいねペース ⏱
+monthly_pace_note: 色が違う棒＝集計途中の当月。完了月との比較には使いません。（セルにカーソルを合わせると件数を表示）
 ```
 
-## Section.stats2.social.give_receive
+表示イメージ:
 
+```text
+[月別ペース変化（送ったいいね）⏱]
+色が違う棒＝集計途中の当月。完了月との比較には使いません。（セルにカーソルを合わせると件数を表示）
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁１６０
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▇▇▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁１２８
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁　９６
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁　６４
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▅▅▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁　３２
+(#68707c) ▁▁▁▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁▁▁██▁▁▁▁▁▁▁▁▁▁　　　
+(#68707c) ▁▁▁██▁▁▁▁▁▄▄▁▁▁▁▁▂▂▁▁▁▁▁▃▃▁▁▁▁▁██▁▁▁▁▁██▁▁▁▁▁▅▅▁▁▁　　０
+(#68707c) ２月                       ５月                     ８月　　　
 ```
-title: もらった数と返した数
-desc: 全期間。受取寄り（受÷送 {receive_per_given}）。
-received_label: 受けた
-received_value: {received_count}いいね
-received_hover: {target_name} の建築が受けたいいね
-given_label: 送った
-given_value: {given_count}いいね
-given_hover: {target_name} が相手の建築へ送ったいいね
-empty: いいねの送受信データはまだありません。
-```
 
-表示イメージ（例。実データではない）:
+### 自己ベスト（送ったいいね）⏱
 
 ```
-受けた▁████████████████████████　４２，６４２いいね
-送った▁████████████████████████　５，６０８いいね
+personal_best_title: 自己ベスト（送ったいいね）⏱
+personal_best_empty: 日・週・月の自己ベスト更新はまだありません。
+personal_best_day: 1日ベスト: {count}いいね ({date})
+personal_best_week: 1週間ベスト: {count}いいね ({date})
+personal_best_month: 1か月ベスト: {count}いいね ({date})
 ```
 
-## Section.stats2.social.mutual
+### 送ったいいね継続日数 ⏱
 
 ```
-title: 押した順の往復
-desc: 棒＝あなたが押したいいね / 数字＝相手から返ったいいね
-value: 返{received_count}
-hover: あなたが送ったいいね
-empty: まだ相互いいねペアはありません。
+streak_title: 送ったいいね継続日数 ⏱
+streak_empty: 送ったいいねの継続記録はまだありません。
+streak_current: 現在の連続日数: {current_days}日
+streak_longest: 最長連続日数: {longest_days}日
 ```
 
-表示イメージ（例。実データではない）:
+---
 
-```
-１位　CORNNAG1▁▁████████████████████████　返８７６
-２位　SUBERRYMOU████████████████████████　返６５５
-```
+## 5. Section.stats2.category.social (交流と宣伝タブ)
 
-## Section.stats2.social.regular_supporters
+### もらった数と返した数
 
 ```
-title: 常連サポーター
-desc: あなたの建築へ複数回いいねした人。
-value: {like_count}いいね
-hover: あなたの建築へ送ったいいね
-empty: {target_name} の建築への常連サポーターはまだいません。
+give_receive_title: もらった数と返した数
+give_receive_balance: バランス傾向: {balance_diagnosis}
+give_receive_received: もらったいいね: {received_count}
+give_receive_given: 送ったいいね: {given_count}
 ```
 
-表示イメージ（例。実データではない）:
+### 相互いいね（相互にいいねし合っている相手）
 
 ```
-１位　CORNNAG1▁▁████████████████████████　８７６いいね
-２位　FURRYFALL▁████████████████████████　７９２いいね
+mutual_title: 相互いいね
+mutual_desc: 相手の作品にもいいねし、相手もあなたの作品にいいねしてくれた関係
+mutual_empty: 相互いいねの相手はまだいません。
 ```
 
-## Section.stats2.social.repeater
+### 常連サポーター詳細（あなたの作品を多くいいねした人）
 
 ```
-title: リピーター率
-repeater_label: リピーター
-first_only_label: 初回のみ
-note: {repeater_rate} が2作品以上にいいね。
+regular_supporters_title: 常連サポーター詳細
+regular_supporters_empty: あなたの作品を複数回いいねした人はいません。
 ```
 
-表示イメージ（例。実データではない）:
+### リピーター率
 
 ```
-▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁　　８００
-リピータ月▁▁▁▁▁▁▁▁▁▁▁初回のみ月▁▁▁▁▁▁▁▁　　　　　
+repeater_rate_title: リピーター率
+repeater_rate_desc: あなたの作品を2回以上いいねしてくれたファンの割合
 ```
 
-## Section.stats2.social.fastest_supporters
+### 最速サポーター（一番乗りでいいねしてくれた人）
 
 ```
-title: 新作最速サポーター ⏱
-subtitle: 対象: いいね時刻が揃った自作品 {fastest_supporter_build_count}作品
-value: {fastest_count}回
-hover: 最速でいいねした作品数
-empty: {target_name} の新作への最速サポーターデータはまだありません。
+fastest_supporters_title: 最速サポーター
+fastest_supporters_desc: あなたの作品に誰よりも早くいいねを押してくれた人
+fastest_supporters_empty: 一番乗りのサポーターデータはまだありません。
 ```
 
-表示イメージ（例。実データではない）:
+### 好みの似たプレイヤー
 
 ```
-１位　FAWNR▁▁▁▁▁████████████████████████　５回
-２位　KUMASAAN▁▁████████████████████████　４回
+similar_taste_title: 好みの似たプレイヤー
+similar_taste_desc: あなたと同じ作品・制作者にいいねしている人
+similar_taste_empty: 好みの似たプレイヤーデータはまだありません。
 ```
 
-## Section.stats2.publicity.effect
+### 一番好きな作者の作品コンプリート率
 
 ```
-title: 宣伝効果（前後24時間）⏱
-desc: あなたの建築のリポスト {total_reposts}回。前後24時間平均（差 {reaction_delta}件）。\n宣伝＝10ポイント（P）を消費して建築を再表示する機能。他人のリポスト分も含みます。
-after_label: 宣伝後
-after_value: {after_average}いいね/回
-after_hover: リポスト後24時間の平均
-before_label: 宣伝前
-before_value: {before_average}いいね/回
-before_hover: リポスト前24時間の平均
-empty: このプレイヤーの建築には、まだ宣伝履歴がありません。
+favorite_builder_title: 一番好きな作者の作品コンプリート率
+favorite_builder_empty: まだ特定の作者の作品を多くいいねしていません。
 ```
 
-表示イメージ（例。実データではない）:
+### 初めていいねした日（最初に出会った作品）
 
 ```
-宣伝後▁████████████████████████　９．２いいね／回
-宣伝前▁████████████████████████　７．３いいね／回
+first_encounters_title: 初めていいねした日
+first_encounters_empty: 出会いログデータはまだありません。
 ```
 
-## Section.stats2.publicity.recurring
+### 宣伝効果（リポスト前後の変化）
 
 ```
-title: 複数回宣伝の反応変化（イベント分析）⏱
-desc: 反応増加の大きい順。各作品のリポスト前後24時間平均。
-before_label: {build_title} 前
-before_value: 前{before_average}
-after_label: {build_title} 後
-after_value: 後{after_average}
-empty: 複数回宣伝された建築はまだありません。
+publicity_title: 宣伝効果
+publicity_desc: 宣伝後24時間に伸びたいいね数の実績
+publicity_empty: 宣伝履歴データはまだありません。
 ```
 
-表示イメージ（例。実データではない）:
+---
 
-```
-PARIS M… 前▁▁▁████████████████████████　前０．５
-PARIS M… 後▁▁▁████████████████████████　後１３．５
-```
+## 6. Section.stats2.category.server (サーバー全体タブ)
 
-## Section.stats2.publicity.top_builds
+### ワールド別いいね比率
 
 ```
-title: 宣伝回数ランキング Top5
-desc: 宣伝回数の多い順。あなたの建築のリポスト履歴。
-value: {publicity_count}回
-empty: まだ宣伝された建築はありません。
+world_reactions_title: ワールド別いいね比率
+world_reactions_empty: ワールド別データはまだありません。
 ```
 
-表示イメージ（例。実データではない）:
+### 全体の一番乗りランキング
 
 ```
-イベント会場▁▁▁▁████████████████████████　１８回
-1kx1k建築大会…▁████████████████████████　１０回
+global_first_likers_title: 全体の一番乗りランキング
+global_first_likers_desc: サーバー全体で新作への初いいねが最も早かった人Top5
+global_first_likers_empty: 一番乗りランキングデータはまだありません。
 ```
 
-## Section.stats2.server.first_likers
+### 今週いいねした制作者
 
 ```
-title: 全体の一番乗りランキング（押した人）⏱
-subtitle: 対象: いいね時刻が揃った建築 {complete_liked_build_count}件
-value: {first_like_count}回
-hover: 一番乗り回数
-empty: まだ一番乗りデータはありません。
+weekly_liked_owners_title: 今週いいねした制作者
+weekly_liked_owners_empty: 今週いいねした制作者はいません。
 ```
 
-表示イメージ（例。実データではない）:
+### 週次いいね推移（サーバー全体）
 
 ```
-１位　KUMASAAN▁▁████████████████████████　１４５回
-２位　OMURAX1SU▁████████████████████████　９３回
+server_weekly_title: 週次いいね（サーバー全体）
+server_weekly_note: サーバー全体で1週間に押されたいいね数の推移
 ```
 
-## Section.stats2.server.world_ratio
+### 全体の宣伝効果
 
 ```
-title: ワールド別のいいねレシオ{life_world_suffix}
-life_included_suffix: （ライフ含む）
-life_excluded_suffix: （ライフ除外）
-desc: ライフ＝生活ワールド（lifeworld）。受÷押の高い順・上位10ワールド。
-value: 受÷押 {like_ratio}
-hover: いいねレシオ
-empty: 押したいいねを持つワールドはまだありません。
+server_publicity_title: 全体の宣伝効果
+server_publicity_desc: サーバー全体での宣伝後24時間の伸び幅実績
 ```
 
-表示イメージ（例。実データではない）:
+---
 
-```
-１位　TUTO▁▁▁▁▁▁████████████████████████　受÷押　５１．７９
-２位　HEAVYFLAT▁████████████████████████　受÷押　３７．９３
-```
+## 7. アーカイブ済み（過去の定義・廃止項目）
+
+以下は、Apple風シンプル化や認知負荷軽減に伴い画面上から削除・退避された過去の定義・項目である。 将来の参照や実験的復元のために保管されている。
 
-## Section.stats2.server.weekly_owners
+### 旧：基本サマリーの「打率（1いいね以上の建築割合）」
 
 ```
-title: 今週いいねした制作者 ⏱
-desc: 今週、あなたがいいねした建築の制作者。送ったいいね数の多い順。
-value: {like_count}いいね
-hover: 今週送ったいいね
-empty: 今週いいねした制作者データはありません。
+# 廃止理由: ユーザーフィードバックにより不要と判断され削除
+summary_hit_rate: 打率: {hit_rate}%
+summary_hit_rate_hover: 1いいね以上の建築割合: {hit_rate}%
 ```
 
-表示イメージ（例。実データではない）:
+### 旧：概要比較表の冗長な説明行
 
 ```
-１位　ASANOOOOO8████████████████████████　１いいね
-２位　TERRACAT20████████████████████████　１いいね
+# 廃止理由: 画面上の文字ノイズを減らすため、ホバーツールチップに集約
+desc_line: 説明:{description}
+population: 母集団：あなたの建築 {own_build_count}件 ／ あなたが押した作品 {given_build_count}件 ／ 全体の建築 {global_build_count}件
 ```
 
-## Section.stats2.server.weekly_likes
+### 旧：概要の旧スタイル表記（横並びのサンプル表示等）
 
 ```
-title: 週次いいね（サーバー全体）
-desc: 直近{weekly_bucket_count}週。
+# 廃止理由: 等幅アライメントおよび上下2行対比バーへの刷新に伴い廃止
+row_sample_format: {label} ████████████ {percent}％ = {value}
 ```
 
-表示イメージ（例。実データではない）:
+### 旧：旧アクションボタン名
 
 ```
-▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁▁██▁▁▁▁▁▁▁１，６００
-６月１５日▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁７月１３日▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁８月１０日▁▁▁▁
+# 廃止理由: アクション列の整理に伴い名称変更
+details_label: 詳細統計
+details_tooltip: 交流・応援・一番乗りの詳細を表示
+other_formats_label: 他の形式で見る
+other_formats_tooltip: 別形式での出力を選択
 ```

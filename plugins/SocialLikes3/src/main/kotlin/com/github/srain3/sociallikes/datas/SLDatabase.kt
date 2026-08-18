@@ -458,6 +458,8 @@ object SLDatabase {
     }
   }
 
+  private val playerNameCache = java.util.concurrent.ConcurrentHashMap<String, String>()
+
   /**
    * Resolves the supplied UUIDs with one query. This is intentionally limited to the /sldata
    * statistics cache; it does not fall back to Bukkit's offline-player lookup.
@@ -466,26 +468,55 @@ object SLDatabase {
     val normalizedUuids = uuids.filter { it.isNotBlank() }.distinct()
     if (normalizedUuids.isEmpty()) return emptyMap()
 
-    return submitBlocking("loadPlayerNames") {
-          val names = mutableMapOf<String, String>()
-          normalizedUuids.chunked(900).forEach { chunk ->
-            val placeholders = chunk.joinToString(",") { "?" }
-            rawConnection()
-                ?.prepareStatement(
-                    "SELECT uuid, last_known_name FROM players WHERE uuid IN ($placeholders)"
-                )
-                ?.use { statement ->
-                  chunk.forEachIndexed { index, uuid -> statement.setString(index + 1, uuid) }
-                  statement.executeQuery().use { results ->
-                    while (results.next()) {
-                      names[results.getString("uuid")] = results.getString("last_known_name")
+    val uncached = normalizedUuids.filter { !playerNameCache.containsKey(it) }
+    if (uncached.isNotEmpty()) {
+      submitBlocking("loadPlayerNames") {
+        uncached.chunked(900).forEach { chunk ->
+          val placeholders = chunk.joinToString(",") { "?" }
+          rawConnection()
+              ?.prepareStatement(
+                  "SELECT uuid, last_known_name FROM players WHERE uuid IN ($placeholders)"
+              )
+              ?.use { statement ->
+                chunk.forEachIndexed { index, uuid -> statement.setString(index + 1, uuid) }
+                statement.executeQuery().use { results ->
+                  while (results.next()) {
+                    val u = results.getString("uuid")
+                    val n = results.getString("last_known_name")
+                    if (u != null && n != null) {
+                      playerNameCache[u] = n
                     }
                   }
                 }
-          }
-          names
+              }
         }
-        .orEmpty()
+      }
+    }
+    return normalizedUuids.mapNotNull { u -> playerNameCache[u]?.let { n -> u to n } }.toMap()
+  }
+
+  fun findUuidByNameBlocking(name: String): UUID? {
+    var resultUuid: UUID? = null
+    submitBlocking("findUuidByName") {
+      rawConnection()
+          ?.prepareStatement(
+              "SELECT uuid FROM players WHERE LOWER(last_known_name) = LOWER(?) LIMIT 1"
+          )
+          ?.use { stmt ->
+            stmt.setString(1, name)
+            stmt.executeQuery().use { rs ->
+              if (rs.next()) {
+                val uStr = rs.getString("uuid")
+                if (uStr != null) {
+                  try {
+                    resultUuid = UUID.fromString(uStr)
+                  } catch (e: Exception) {}
+                }
+              }
+            }
+          }
+    }
+    return resultUuid
   }
 
   /** Returns timestamped likes made by one player with their build dimensions. */

@@ -1,5 +1,10 @@
 package com.github.srain3.sociallikes.stats
 
+import com.github.srain3.sociallikes.Tools
+import com.github.srain3.sociallikes.datas.Data
+import com.github.srain3.sociallikes.datas.PublicityData
+import com.github.srain3.sociallikes.datas.PublicityHistory
+import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
 import java.time.DayOfWeek
 import java.time.Duration
@@ -10,6 +15,7 @@ import java.time.YearMonth
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalAdjusters
+import java.util.UUID
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.max
@@ -153,6 +159,7 @@ object SLDataStatsService {
   data class ExtendedStats(
       val weekly: LikeSeries,
       val playerWeek: PeriodSummaryStats,
+      val globalTopCreators: List<OwnerCountRow>,
       val globalFirstLikers: List<PlayerCountRow>,
       val ownFirstLikers: List<PlayerCountRow>,
       val benefactors: List<PlayerCountRow>,
@@ -192,7 +199,35 @@ object SLDataStatsService {
       val serverPublicity: PublicityStats,
       val likeTimestampCoverage: SLDatabase.LikeTimestampCoverage,
       val reliableTimestampPopulation: SLDatabase.ReliableTimestampPopulation,
+      val summary: SummaryStats,
+      val memorial: MemorialStats,
       val playerNames: Map<String, String>,
+  )
+
+  data class SummaryStats(
+      val totalOwnBuilds: Int,
+      val totalReceivedLikes: Int,
+      val totalGivenLikes: Int,
+      val buildHitRate: Double,
+      val weekReceivedLikes: Int,
+      val weekGivenLikes: Int,
+      val monthReceivedLikes: Int,
+      val monthGivenLikes: Int,
+      val serverWeekAvgLikes: Double,
+      val serverMonthAvgLikes: Double,
+  )
+
+  data class MemorialStats(
+      val firstBuildTitle: String?,
+      val firstBuildId: Int?,
+      val firstBuildCreated: String?,
+      val firstLikerUuid: String?,
+      val firstGivenBuildTitle: String?,
+      val firstGivenBuildId: Int?,
+      val firstMutualPlayerUuid: String?,
+      val longTailBuildTitle: String?,
+      val longTailBuildId: Int?,
+      val longTailDays: Long,
   )
 
   data class InitialLikeSpeedStats(
@@ -203,6 +238,7 @@ object SLDataStatsService {
       val medianMillis: Long,
       val maximumMillis: Long,
       val averageMillis: Long,
+      val speedBuckets: List<AgeBucket> = emptyList(),
   )
 
   data class ActivityRhythmStats(
@@ -277,7 +313,12 @@ object SLDataStatsService {
         }
   }
 
-  data class LikeDistributionStats(val average: Double, val median: Double, val maximum: Int)
+  data class LikeDistributionStats(
+      val average: Double,
+      val median: Double,
+      val maximum: Int,
+      val buckets: List<AgeBucket> = emptyList(),
+  )
 
   data class RecentBuildComparison(
       val olderCount: Int,
@@ -290,7 +331,10 @@ object SLDataStatsService {
       val reposts: Int,
       val beforeAverage: Double,
       val afterAverage: Double,
-  )
+  ) {
+    val reactionDelta: Double
+      get() = afterAverage - beforeAverage
+  }
 
   data class LikeConcentration(
       val topCount: Int,
@@ -326,13 +370,34 @@ object SLDataStatsService {
 
   data class LikeDnaDiagnosis(val label: String, val insights: List<String>)
 
-  fun loadWeeklySeries(buckets: Int = DEFAULT_BUCKETS): LikeSeries =
-      LikeSeries(
-          Period.WEEK,
-          SLDatabase.loadWeeklyLikeCountsBlocking(buckets.coerceIn(1, 52)).map {
-            LikeBucket(formatWeekLabel(it.weekStart), it.weekStart, it.count)
-          },
-      )
+  fun loadWeeklySeries(buckets: Int = DEFAULT_BUCKETS): LikeSeries {
+    val allBuilds = Data.getSLDataAll()
+    val allTimestamps = allBuilds.flatMap { it.likesWithTimestamp.values }
+    return loadWeeklySeriesFromTimestamps(allTimestamps, buckets)
+  }
+
+  private fun loadWeeklySeriesFromTimestamps(timestamps: List<Long>, buckets: Int): LikeSeries {
+    val normalizedBuckets = buckets.coerceIn(1, 52)
+    val today = LocalDate.now(zoneId)
+    val currentWeekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+    val firstStart = currentWeekStart.minusWeeks((normalizedBuckets - 1).toLong())
+    val counts = mutableMapOf<LocalDate, Int>()
+
+    timestamps.forEach { millis ->
+      val date = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDate()
+      val weekStart = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+      if (!weekStart.isBefore(firstStart)) {
+        counts[weekStart] = (counts[weekStart] ?: 0) + 1
+      }
+    }
+
+    val bucketsList =
+        (0 until normalizedBuckets).map { offset ->
+          val date = firstStart.plusWeeks(offset.toLong())
+          LikeBucket(formatWeekLabel(date), date, counts[date] ?: 0)
+        }
+    return LikeSeries(Period.WEEK, bucketsList)
+  }
 
   fun loadSeries(period: Period, buckets: Int = DEFAULT_BUCKETS): LikeSeries {
     val normalizedBuckets = buckets.coerceIn(1, 12)
@@ -346,18 +411,23 @@ object SLDataStatsService {
           Period.YEAR -> LocalDate.of(today.year - normalizedBuckets + 1, 1, 1)
           Period.WEEK -> today
         }
-    val timestamps = SLDatabase.loadLikeTimestampsSinceBlocking(toMillis(firstStart))
+    val allBuilds = Data.getSLDataAll()
+    val firstStartMillis = toMillis(firstStart)
     val counts = mutableMapOf<LocalDate, Int>()
 
-    timestamps.forEach { millis ->
-      val date = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDate()
-      val key =
-          when (period) {
-            Period.MONTH -> YearMonth.from(date).atDay(1)
-            Period.YEAR -> LocalDate.of(date.year, 1, 1)
-            Period.WEEK -> date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-          }
-      counts[key] = (counts[key] ?: 0) + 1
+    allBuilds.forEach { build ->
+      build.likesWithTimestamp.values.forEach { millis ->
+        if (millis >= firstStartMillis) {
+          val date = Instant.ofEpochMilli(millis).atZone(zoneId).toLocalDate()
+          val key =
+              when (period) {
+                Period.MONTH -> YearMonth.from(date).atDay(1)
+                Period.YEAR -> LocalDate.of(date.year, 1, 1)
+                Period.WEEK -> date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+              }
+          counts[key] = (counts[key] ?: 0) + 1
+        }
+      }
     }
 
     val bucketsList =
@@ -377,17 +447,63 @@ object SLDataStatsService {
   fun loadBoardStats(): BoardStats {
     val currentWeekStart = currentWeekStart()
     val previousWeekStart = currentWeekStart.minusWeeks(1)
+    val currentWeekMillis = toMillis(currentWeekStart)
+    val previousWeekMillis = toMillis(previousWeekStart)
+    val allBuilds = Data.getSLDataAll()
+
+    val weeklyMvp =
+        allBuilds
+            .map { build ->
+              val recentCount = build.likesWithTimestamp.values.count { it >= currentWeekMillis }
+              SLDatabase.BuildLikeSummary(
+                  build.id,
+                  build.title,
+                  build.owner.toString(),
+                  recentCount,
+              )
+            }
+            .filter { it.currentCount > 0 }
+            .sortedByDescending { it.currentCount }
+            .take(5)
+
+    val weeklyOwnerMvp =
+        allBuilds
+            .groupBy { it.owner.toString() }
+            .map { (owner, builds) ->
+              val count =
+                  builds.sumOf { b ->
+                    b.likesWithTimestamp.values.count { it >= currentWeekMillis }
+                  }
+              SLDatabase.OwnerLikeSummary(owner, count)
+            }
+            .filter { it.currentCount > 0 }
+            .sortedByDescending { it.currentCount }
+            .take(5)
+
+    val growingBuilds =
+        allBuilds
+            .map { build ->
+              val currentCount = build.likesWithTimestamp.values.count { it >= currentWeekMillis }
+              val previousCount =
+                  build.likesWithTimestamp.values.count {
+                    it in previousWeekMillis until currentWeekMillis
+                  }
+              SLDatabase.BuildLikeSummary(
+                  build.id,
+                  build.title,
+                  build.owner.toString(),
+                  currentCount - previousCount,
+              )
+            }
+            .filter { it.currentCount > 0 }
+            .sortedByDescending { it.currentCount }
+            .take(5)
+
     return BoardStats(
         weekly = loadWeeklySeries(DEFAULT_BUCKETS),
-        weeklyMvp = SLDatabase.loadBuildLikeLeadersSinceBlocking(toMillis(currentWeekStart), 5),
-        weeklyOwnerMvp =
-            SLDatabase.loadOwnerLikeLeadersSinceBlocking(toMillis(currentWeekStart), 5),
-        growingBuilds =
-            SLDatabase.loadBuildLikeGrowthBlocking(
-                toMillis(currentWeekStart),
-                toMillis(previousWeekStart),
-                5,
-            ),
+        weeklyMvp = weeklyMvp,
+        weeklyOwnerMvp = weeklyOwnerMvp,
+        growingBuilds = growingBuilds,
     )
   }
 
@@ -397,18 +513,45 @@ object SLDataStatsService {
    * without liked_at because a calendar boundary was not requested.
    */
   fun loadOwnerLikeRanking(period: RankingPeriod, limit: Int = 5): OwnerLikeRanking {
+    val allBuilds = Data.getSLDataAll()
     val startDate = rankingPeriodStart(period)
     val sinceMillis = startDate?.let(::toMillis)
+
+    val leaders =
+        if (sinceMillis == null) {
+          allBuilds
+              .groupBy { it.owner.toString() }
+              .map { (owner, builds) ->
+                SLDatabase.OwnerLikeSummary(owner, builds.sumOf { it.likes.size })
+              }
+              .sortedByDescending { it.currentCount }
+              .take(limit)
+        } else {
+          allBuilds
+              .flatMap { build ->
+                build.likesWithTimestamp.entries
+                    .filter { it.value >= sinceMillis }
+                    .map { build.owner.toString() }
+              }
+              .groupingBy { it }
+              .eachCount()
+              .map { SLDatabase.OwnerLikeSummary(it.key, it.value) }
+              .sortedByDescending { it.currentCount }
+              .take(limit)
+        }
+
+    val total =
+        if (sinceMillis == null) {
+          allBuilds.sumOf { it.likes.size }
+        } else {
+          allBuilds.sumOf { build -> build.likesWithTimestamp.values.count { it >= sinceMillis } }
+        }
+
     return OwnerLikeRanking(
         period = period,
         startDate = startDate,
-        total = SLDatabase.loadLikeCountSinceBlocking(sinceMillis),
-        leaders =
-            SLDatabase.loadOwnerLikeLeadersSinceBlocking(
-                sinceMillis,
-                limit,
-                excludeOwnerSelfLikes = false,
-            ),
+        total = total,
+        leaders = leaders,
     )
   }
 
@@ -416,125 +559,430 @@ object SLDataStatsService {
       playerUuid: String,
       limit: Int = 5,
       includeLifeWorld: Boolean = false,
+      period: RankingPeriod = RankingPeriod.ALL,
   ): ExtendedStats {
+    val t0 = System.currentTimeMillis()
     val normalizedLimit = limit.coerceIn(1, 10)
     val currentWeekStart = currentWeekStart()
     val nextWeekStart = currentWeekStart.plusWeeks(1)
     val twelveWeeksStart = currentWeekStart.minusWeeks(11)
     val weeklyStartMillis = toMillis(currentWeekStart)
+    val nextWeekStartMillis = toMillis(nextWeekStart)
+    val twelveWeeksStartMillis = toMillis(twelveWeeksStart)
+    val nowLocalDate = LocalDate.now(analysisZoneId)
+    val periodStartMillis =
+        when (period) {
+          RankingPeriod.WEEK -> weeklyStartMillis
+          RankingPeriod.MONTH -> toMillis(nowLocalDate.withDayOfMonth(1))
+          RankingPeriod.YEAR -> toMillis(nowLocalDate.withDayOfYear(1))
+          RankingPeriod.ALL -> 0L
+        }
+    val targetUuid =
+        try {
+          UUID.fromString(playerUuid)
+        } catch (e: Exception) {
+          null
+        }
+
+    val allBuilds = Data.getSLDataAll()
+
+    // 1パス集約用変数
+    var totalLikesCount = 0
+    var timestampedLikesCount = 0
+    var postCutoffBuildCount = 0
+    var postCutoffCompleteBuildCount = 0
+    var completeLikedBuildCount = 0
+
+    var playerWeekCreated = 0
+    var playerWeekGiven = 0
+    var playerWeekReceived = 0
+
+    val creatorLikeCounts = mutableMapOf<String, Int>()
+    val globalFirstLikerCounts = mutableMapOf<String, Int>()
+    val ownFirstLikerCounts = mutableMapOf<String, Int>()
+    val receivedCountsByLiker = mutableMapOf<String, Int>()
+    val givenCountsByOwner = mutableMapOf<String, Int>()
+    val ownerTotalBuildCounts = mutableMapOf<String, Int>()
+    val worldReceivedMap = mutableMapOf<String, Int>()
+    val worldGivenMap = mutableMapOf<String, Int>()
+    val weeklyLikedOwnersMap = mutableMapOf<String, Int>()
+
+    val allTimestamps = ArrayList<Long>()
+    val allGivenTimestamps = ArrayList<Long>()
+    val allReceivedTimestamps = ArrayList<Long>()
+
+    val givenLikeEvents = ArrayList<SLDatabase.BuildLikeEvent>()
+    val allGivenLikeEvents = ArrayList<SLDatabase.BuildLikeEvent>()
+    val receivedLikeEvents = ArrayList<SLDatabase.BuildLikeEvent>()
+    val allReceivedLikeEvents = ArrayList<SLDatabase.BuildLikeEvent>()
+
+    val ownBuildLikeCounts = ArrayList<Int>()
+    val globalBuildLikeCounts = ArrayList<Int>()
+    val likedBuildLikeCounts = ArrayList<Int>()
+    val ownBuildsList = ArrayList<SLData>()
+    val myDimensions = ArrayList<SLDatabase.BuildLikeDimension>()
+
+    val encounterThreshold = toMillis(LocalDate.of(2026, 1, 14))
+    val ownerFirstLikesMap = mutableMapOf<String, Long>()
+
+    for (build in allBuilds) {
+      val ownerUuid = build.owner
+      val ownerUuidStr = ownerUuid.toString()
+      val isOwn = (targetUuid != null && ownerUuid == targetUuid)
+      val timestampedLikes = build.likesWithTimestamp
+      val timestampedSize = timestampedLikes.size
+      val periodLikes =
+          if (periodStartMillis <= 0L) build.likes.size
+          else timestampedLikes.count { (_, ts) -> ts >= periodStartMillis }
+      val isLiked =
+          if (targetUuid == null) false
+          else if (periodStartMillis <= 0L) build.likes.contains(targetUuid)
+          else
+              timestampedLikes.any { (liker, ts) -> liker == targetUuid && ts >= periodStartMillis }
+
+      totalLikesCount += build.likes.size
+      timestampedLikesCount += timestampedSize
+      ownerTotalBuildCounts[ownerUuidStr] = (ownerTotalBuildCounts[ownerUuidStr] ?: 0) + 1
+      creatorLikeCounts[ownerUuidStr] = (creatorLikeCounts[ownerUuidStr] ?: 0) + periodLikes
+
+      if (periodLikes > 0) {
+        globalBuildLikeCounts.add(periodLikes)
+      }
+
+      val isPostCutoff = build.time >= reliableInitialLikeBuildCreatedSince
+      if (isPostCutoff) {
+        postCutoffBuildCount++
+        if (build.likes.size == timestampedSize) {
+          postCutoffCompleteBuildCount++
+          if (build.likes.size > 0) completeLikedBuildCount++
+        }
+      }
+
+      if (isOwn) {
+        ownBuildsList.add(build)
+        ownBuildLikeCounts.add(periodLikes)
+        worldReceivedMap[build.worldName] = (worldReceivedMap[build.worldName] ?: 0) + periodLikes
+        if (build.time >= currentWeekStart.atStartOfDay()) {
+          playerWeekCreated++
+        }
+      }
+
+      if (isLiked) {
+        likedBuildLikeCounts.add(periodLikes)
+        givenCountsByOwner[ownerUuidStr] = (givenCountsByOwner[ownerUuidStr] ?: 0) + 1
+        worldGivenMap[build.worldName] = (worldGivenMap[build.worldName] ?: 0) + 1
+        myDimensions.add(
+            SLDatabase.BuildLikeDimension(
+                ownerUuidStr,
+                build.worldName,
+                build.loc.blockX shr 4,
+                build.loc.blockZ shr 4,
+            )
+        )
+      }
+
+      // 一番乗り判定（中間コレクション生成ゼロ）
+      if (isPostCutoff && timestampedSize > 0) {
+        var minLikedAt = Long.MAX_VALUE
+        var firstLiker: UUID? = null
+        for ((liker, ts) in timestampedLikes) {
+          if (liker != ownerUuid && ts < minLikedAt) {
+            minLikedAt = ts
+            firstLiker = liker
+          }
+        }
+        if (firstLiker != null) {
+          val firstLikerStr = firstLiker.toString()
+          globalFirstLikerCounts[firstLikerStr] = (globalFirstLikerCounts[firstLikerStr] ?: 0) + 1
+          if (isOwn) {
+            ownFirstLikerCounts[firstLikerStr] = (ownFirstLikerCounts[firstLikerStr] ?: 0) + 1
+          }
+        }
+      }
+
+      // 必要なイベントのみ抽出
+      for ((likerUuid, likedAt) in timestampedLikes) {
+        allTimestamps.add(likedAt)
+
+        if (targetUuid != null && likerUuid == targetUuid) {
+          allGivenTimestamps.add(likedAt)
+          val ev =
+              SLDatabase.BuildLikeEvent(
+                  buildId = build.id,
+                  title = build.title,
+                  ownerUuid = ownerUuidStr,
+                  playerUuid = playerUuid,
+                  worldName = build.worldName,
+                  chunkX = build.loc.blockX shr 4,
+                  chunkZ = build.loc.blockZ shr 4,
+                  createdAt = build.time,
+                  likedAt = likedAt,
+              )
+          allGivenLikeEvents.add(ev)
+          if (isPostCutoff) {
+            givenLikeEvents.add(ev)
+          }
+          if (likedAt in weeklyStartMillis until nextWeekStartMillis) {
+            playerWeekGiven++
+            weeklyLikedOwnersMap[ownerUuidStr] = (weeklyLikedOwnersMap[ownerUuidStr] ?: 0) + 1
+          }
+          if (ownerUuidStr != playerUuid) {
+            val prevMin = ownerFirstLikesMap[ownerUuidStr]
+            if (prevMin == null || likedAt < prevMin) {
+              ownerFirstLikesMap[ownerUuidStr] = likedAt
+            }
+          }
+        }
+
+        if (isOwn) {
+          val likerStr = likerUuid.toString()
+          if (likerStr != playerUuid) {
+            receivedCountsByLiker[likerStr] = (receivedCountsByLiker[likerStr] ?: 0) + 1
+          }
+          allReceivedTimestamps.add(likedAt)
+          val ev =
+              SLDatabase.BuildLikeEvent(
+                  buildId = build.id,
+                  title = build.title,
+                  ownerUuid = playerUuid,
+                  playerUuid = likerStr,
+                  worldName = build.worldName,
+                  chunkX = build.loc.blockX shr 4,
+                  chunkZ = build.loc.blockZ shr 4,
+                  createdAt = build.time,
+                  likedAt = likedAt,
+              )
+          allReceivedLikeEvents.add(ev)
+          if (isPostCutoff) {
+            receivedLikeEvents.add(ev)
+          }
+          if (likedAt in weeklyStartMillis until nextWeekStartMillis) {
+            playerWeekReceived++
+          }
+        }
+      }
+    }
+
+    // 1. Weekly series
+    val weekly = loadWeeklySeriesFromTimestamps(allTimestamps, DEFAULT_BUCKETS)
+
+    // 2. Player Week
+    val allPublicity = PublicityHistory.getData().values
+    val playerWeekPublicity =
+        allPublicity.count {
+          it.user.toString() == playerUuid && it.timeStamp >= currentWeekStart.atStartOfDay()
+        }
     val playerWeek =
-        SLDatabase.loadPeriodSummaryBlocking(
-            playerUuid,
-            weeklyStartMillis,
-            toMillis(nextWeekStart),
+        PeriodSummaryStats(
+            label = formatWeekLabel(currentWeekStart),
+            buildsCreated = playerWeekCreated,
+            likesGiven = playerWeekGiven,
+            likesReceived = playerWeekReceived,
+            publicityCount = playerWeekPublicity,
         )
-    val ownFirstLikeCount =
-        SLDatabase.loadFirstLikeCountBlocking(playerUuid, 1).firstOrNull()?.count ?: 0
+
+    // 3. Global Top Creators (全期間)
+    val globalTopCreators =
+        creatorLikeCounts.entries
+            .sortedByDescending { it.value }
+            .take(normalizedLimit)
+            .map { OwnerCountRow(it.key, it.value) }
+
+    // 4. Global First Likers (全体の一番乗り)
     val globalFirstLikers =
-        SLDatabase.loadFirstLikerRankingBlocking(null, normalizedLimit).map {
-          PlayerCountRow(it.playerUuid, it.count)
-        }
+        globalFirstLikerCounts.entries
+            .sortedByDescending { it.value }
+            .take(normalizedLimit)
+            .map { PlayerCountRow(it.key, it.value) }
+
+    // 5. Own First Likers (自作品の一番乗り)
     val ownFirstLikers =
-        SLDatabase.loadFirstLikerRankingBlocking(playerUuid, normalizedLimit).map {
-          PlayerCountRow(it.playerUuid, it.count)
-        }
+        ownFirstLikerCounts.entries
+            .sortedByDescending { it.value }
+            .take(normalizedLimit)
+            .map { PlayerCountRow(it.key, it.value) }
+
+    val ownFirstLikeCount = ownFirstLikers.sumOf { it.count }
+
+    // 6. Benefactors (常連サポーター)
     val benefactors =
-        SLDatabase.loadTopLikersForOwnerBlocking(playerUuid, normalizedLimit).map {
-          PlayerCountRow(it.playerUuid, it.count)
-        }
+        receivedCountsByLiker.entries
+            .sortedByDescending { it.value }
+            .take(normalizedLimit)
+            .map { PlayerCountRow(it.key, it.value) }
+
+    // 7. Weekly Liked Owners (今週いいねした制作者)
     val weeklyLikedOwners =
-        SLDatabase.loadWeeklyLikedOwnersBlocking(playerUuid, weeklyStartMillis, normalizedLimit)
-            .map { OwnerCountRow(it.ownerUuid, it.currentCount) }
+        weeklyLikedOwnersMap.entries
+            .sortedByDescending { it.value }
+            .take(normalizedLimit)
+            .map { OwnerCountRow(it.key, it.value) }
+
+    // 8. Own Builds Top5
+    val ownBuilds =
+        ownBuildsList
+            .map { build ->
+              val count =
+                  if (periodStartMillis <= 0L) build.likes.size
+                  else build.likesWithTimestamp.count { (_, ts) -> ts >= periodStartMillis }
+              OwnBuildRow(build.id, build.title, count)
+            }
+            .sortedByDescending { it.likeCount }
+            .take(normalizedLimit)
+
+    // 9. Peak Like Day (直近12週で最もいいねが多かった日)
+    val recentEvents = allReceivedLikeEvents.filter { it.likedAt >= twelveWeeksStartMillis }
+    val dayGroups =
+        recentEvents.groupBy {
+          Instant.ofEpochMilli(it.likedAt).atZone(analysisZoneId).toLocalDate()
+        }
+    val peakLikeDay =
+        if (dayGroups.isEmpty()) null
+        else {
+          val maxEntry = dayGroups.maxByOrNull { it.value.size }
+          if (maxEntry != null) {
+            val daysCount =
+                ChronoUnit.DAYS.between(twelveWeeksStart, LocalDate.now(analysisZoneId))
+                    .coerceAtLeast(1L)
+            val avg = recentEvents.size.toDouble() / daysCount.toDouble()
+            PeakLikeDayStats(formatDateLabel(maxEntry.key), maxEntry.value.size, avg)
+          } else null
+        }
+
+    // 10. Recent Build History
+    val recentBuildHistory =
+        ownBuildsList
+            .sortedBy { it.id }
+            .takeLast(normalizedLimit)
+            .map {
+              BuildHistoryRow(
+                  it.id,
+                  it.title,
+                  formatDateLabel(it.time.toLocalDate()),
+                  it.likes.size,
+              )
+            }
+
+    // 11. Mutual Likes
+    val givenOwners = givenCountsByOwner.keys
+    val likers = receivedCountsByLiker.keys
+    val mutualUuids = givenOwners.intersect(likers).filter { it != playerUuid }
+    val mutualPairs =
+        mutualUuids
+            .map { otherUuid ->
+              MutualLikePairRow(
+                  otherUuid,
+                  givenCountsByOwner[otherUuid] ?: 0,
+                  receivedCountsByLiker[otherUuid] ?: 0,
+              )
+            }
+            .sortedByDescending { it.likesGiven }
     val mutualLikes =
-        SLDatabase.loadMutualLikeStatsBlocking(playerUuid, normalizedLimit).let { stats ->
-          MutualLikeStats(
-              stats.pairCount,
-              stats.likedOwnerCount,
-              stats.likerCount,
-              stats.pairs.map { MutualLikePairRow(it.playerUuid, it.likesGiven, it.likesReceived) },
-          )
-        }
-    val socialOverview =
-        SLDatabase.loadSocialOverviewBlocking(playerUuid).let {
-          SocialOverviewStats(it.supportedOwnerCount, it.supporterCount)
-        }
+        MutualLikeStats(
+            mutualPairs.size,
+            givenOwners.size,
+            likers.size,
+            mutualPairs.take(normalizedLimit),
+        )
+
+    val socialOverview = SocialOverviewStats(givenOwners.size, likers.size)
+
+    // 12. Favorite Builder Capture
+    val favoriteOwnerEntry =
+        givenCountsByOwner.filterKeys { it != playerUuid }.maxByOrNull { it.value }
     val favoriteBuilderCapture =
-        SLDatabase.loadFavoriteBuilderCaptureBlocking(playerUuid)?.let {
-          FavoriteBuilderCaptureRow(it.ownerUuid, it.totalBuildCount, it.likedBuildCount)
+        favoriteOwnerEntry?.let { (favOwner, likedCount) ->
+          val totalCount =
+              ownerTotalBuildCounts[favOwner] ?: allBuilds.count { it.owner.toString() == favOwner }
+          FavoriteBuilderCaptureRow(favOwner, totalCount, likedCount)
         }
+
+    // 13. First Encounters (2026/1/14以降に初めていいねした相手)
     val firstEncounters =
-        SLDatabase.loadFirstEncounterLikesBlocking(
-                playerUuid,
-                toMillis(LocalDate.of(2026, 1, 14)),
-                normalizedLimit,
-            )
-            .map { FirstEncounterRow(it.ownerUuid, it.firstLikedAt) }
+        ownerFirstLikesMap.entries
+            .filter { it.value >= encounterThreshold }
+            .sortedBy { it.value }
+            .take(normalizedLimit)
+            .map { FirstEncounterRow(it.key, it.value) }
+
+    // 14. Similar Taste Players
+    val myLikedOwners = givenOwners.toSet()
+    val similarTasteCounts = mutableMapOf<String, Int>()
+    for (build in allBuilds) {
+      val bOwnerStr = build.owner.toString()
+      if (bOwnerStr in myLikedOwners) {
+        for (liker in build.likes) {
+          val likerStr = liker.toString()
+          if (likerStr != playerUuid) {
+            similarTasteCounts[likerStr] = (similarTasteCounts[likerStr] ?: 0) + 1
+          }
+        }
+      }
+    }
     val similarTastePlayers =
-        SLDatabase.loadSimilarTastePlayersBlocking(playerUuid, normalizedLimit).map {
-          PlayerCountRow(it.playerUuid, it.count)
-        }
+        similarTasteCounts.entries
+            .sortedByDescending { it.value }
+            .take(normalizedLimit)
+            .map { PlayerCountRow(it.key, it.value) }
+
+    // 15. Regular Supporters (常連サポーター詳細)
     val regularSupporters =
-        SLDatabase.loadRegularSupportersBlocking(playerUuid, normalizedLimit).map {
-          RegularSupporterRow(it.playerUuid, it.likeCount, it.activeWeekCount)
-        }
-    val repeaterRate =
-        SLDatabase.loadRepeaterRateBlocking(playerUuid).let {
-          RepeaterRateStats(it.repeaterCount, it.uniqueLikerCount)
-        }
-    val fastestSupporters =
-        SLDatabase.loadFastestSupportersBlocking(
-                playerUuid,
-                reliableInitialLikeBuildCreatedSince,
-                normalizedLimit,
-            )
-            .map { PlayerCountRow(it.playerUuid, it.firstSupportCount) }
+        receivedCountsByLiker.entries
+            .sortedByDescending { it.value }
+            .take(normalizedLimit)
+            .map { RegularSupporterRow(it.key, it.value, 1) }
+
+    // 16. Repeater Rate
+    val uniqueLikerCount = receivedCountsByLiker.size
+    val repeaterCount = receivedCountsByLiker.values.count { it >= 2 }
+    val repeaterRate = RepeaterRateStats(repeaterCount, uniqueLikerCount)
+
+    // 17. Fastest Supporters (自作品の一番乗りを再利用)
+    val fastestSupporters = ownFirstLikers
     val fastestSupporterBuildCount =
-        SLDatabase.loadOwnerBuildCountCreatedSinceBlocking(
-            playerUuid,
-            reliableInitialLikeBuildCreatedSince,
-        )
-    val givenLikeEvents =
-        SLDatabase.loadGivenLikeEventsBlocking(playerUuid, reliableInitialLikeBuildCreatedSince)
-    val allGivenLikeEvents = SLDatabase.loadGivenLikeEventsBlocking(playerUuid)
-    val receivedLikeEvents =
-        SLDatabase.loadReceivedLikeEventsBlocking(playerUuid, reliableInitialLikeBuildCreatedSince)
-    val likeTimestampCoverage = SLDatabase.loadLikeTimestampCoverageBlocking()
-    val reliableTimestampPopulation =
-        SLDatabase.loadReliableTimestampPopulationBlocking(reliableInitialLikeBuildCreatedSince)
-    val initialLikeEvents = receivedLikeEvents
+        ownBuildsList.count { it.time >= reliableInitialLikeBuildCreatedSince }
+
+    // 18. Initial Like Speed & Events
     val initialLikeSpeed =
-        calculateInitialLikeSpeed(
-            initialLikeEvents,
-            playerUuid,
-            SLDatabase.loadOwnerBuildCountCreatedSinceBlocking(
-                playerUuid,
-                reliableInitialLikeBuildCreatedSince,
-            ),
-        )
+        calculateInitialLikeSpeed(receivedLikeEvents, playerUuid, fastestSupporterBuildCount)
     val activityRhythm = calculateActivityRhythm(allGivenLikeEvents)
     val monthlyGiven = calculateMonthlyGivenSeries(allGivenLikeEvents)
     val ageDistribution =
         AgeDistributionStats(
             given = calculateAgeBuckets(givenLikeEvents),
             received =
-                calculateAgeBuckets(
-                    receivedLikeEvents.filter { it.playerUuid != playerUuid },
-                ),
+                calculateAgeBuckets(receivedLikeEvents.filter { it.playerUuid != playerUuid }),
         )
-    val givenStreak = calculateStreak(allGivenLikeEvents.map { it.likedAt })
-    val receivedStreak = calculateStreak(receivedLikeEvents.map { it.likedAt })
+    val givenStreak = calculateStreak(allGivenTimestamps)
+    val receivedStreak = calculateStreak(allReceivedTimestamps)
     val givenLongTail = calculateLongTail(givenLikeEvents)
     val receivedLongTail = calculateLongTail(receivedLikeEvents)
     val personalBestHistory = calculatePersonalBestHistory(allGivenLikeEvents)
-    val likeDiversity =
-        calculateLikeDiversity(SLDatabase.loadGivenLikeDimensionsBlocking(playerUuid))
-    val ownBuildLikeCounts = SLDatabase.loadBuildLikeCountsBlocking(playerUuid)
-    val globalBuildLikeCounts = SLDatabase.loadBuildLikeCountsBlocking(onlyWithLikes = true)
-    val likedBuildLikeCounts = SLDatabase.loadLikedBuildLikeCountsBlocking(playerUuid)
+
+    val likeDiversity = calculateLikeDiversity(myDimensions)
+
+    val allWorlds = (worldReceivedMap.keys + worldGivenMap.keys).distinct()
     val worldReactions =
-        SLDatabase.loadWorldReactionSummariesBlocking(playerUuid)
+        allWorlds
+            .mapNotNull { world ->
+              val ownReceived = worldReceivedMap[world] ?: 0
+              val givenInWorld = worldGivenMap[world] ?: 0
+              if (givenInWorld == 0 && ownReceived == 0) null
+              else {
+                WorldReactionRow(
+                    worldName = world,
+                    receivedLikes = ownReceived,
+                    givenLikes = givenInWorld,
+                )
+              }
+            }
+            .filter { it.givenLikes > 0 }
             .filter { includeLifeWorld || !isLifeWorld(it.worldName) }
-            .let(::calculateWorldReactions)
+            .sortedWith(
+                compareByDescending<WorldReactionRow> { it.likeRatio ?: Double.NEGATIVE_INFINITY }
+                    .thenBy { it.worldName }
+            )
+
     val comparison =
         ComparisonStats(
             ownAverage = average(ownBuildLikeCounts),
@@ -547,25 +995,109 @@ object SLDataStatsService {
             givenTargetBuildCount = likedBuildLikeCounts.size,
         )
     val balance = GiveReceiveBalance(likedBuildLikeCounts.size, ownBuildLikeCounts.sum())
+    val distributionBuckets = calculateDynamicLikeDistribution(ownBuildLikeCounts)
     val distribution =
         LikeDistributionStats(
             average = average(ownBuildLikeCounts),
             median = median(ownBuildLikeCounts),
             maximum = ownBuildLikeCounts.maxOrNull() ?: 0,
+            buckets = distributionBuckets,
         )
-    val recentComparison =
-        calculateRecentBuildComparison(SLDatabase.loadBuildHistoryTimelineBlocking(playerUuid))
+
+    val recentComparison = calculateRecentBuildComparisonFromMemory(ownBuildsList)
     val concentration = calculateLikeConcentration(ownBuildLikeCounts)
-    val publicity =
-        calculatePublicityStats(
-            SLDatabase.loadPublicityReactionsBlocking(playerUuid),
-            normalizedLimit,
+
+    val ownPublicityReactions =
+        calculatePublicityReactionsFromMemory(
+            allPublicity,
+            allReceivedLikeEvents + allGivenLikeEvents,
+            playerUuid,
         )
-    val serverPublicity = loadServerPublicityStats(normalizedLimit)
+    val globalPublicityReactions =
+        calculatePublicityReactionsFromMemory(allPublicity, emptyList(), null)
+    val publicity = calculatePublicityStats(ownPublicityReactions, normalizedLimit)
+    val serverPublicity = calculatePublicityStats(globalPublicityReactions, normalizedLimit)
     val likeDna = calculateLikeDna(activityRhythm, likeDiversity)
+
+    val likeTimestampCoverage =
+        SLDatabase.LikeTimestampCoverage(totalLikesCount, timestampedLikesCount)
+    val reliableTimestampPopulation =
+        SLDatabase.ReliableTimestampPopulation(
+            postCutoffBuildCount = postCutoffBuildCount,
+            postCutoffCompleteBuildCount = postCutoffCompleteBuildCount,
+            completeLikedBuildCount = completeLikedBuildCount,
+        )
+
+    // 累計サマリー・期間増分の集計
+    val sevenDaysAgoMillis = System.currentTimeMillis() - 7L * 86400000L
+    val thirtyDaysAgoMillis = System.currentTimeMillis() - 30L * 86400000L
+
+    val weekReceived =
+        allReceivedLikeEvents.count {
+          it.playerUuid != playerUuid && it.likedAt >= sevenDaysAgoMillis
+        }
+    val monthReceived =
+        allReceivedLikeEvents.count {
+          it.playerUuid != playerUuid && it.likedAt >= thirtyDaysAgoMillis
+        }
+    val weekGiven = allGivenLikeEvents.count { it.likedAt >= sevenDaysAgoMillis }
+    val monthGiven = allGivenLikeEvents.count { it.likedAt >= thirtyDaysAgoMillis }
+
+    val hitCount = ownBuildsList.count { it.likes.size > 0 }
+    val hitRate = if (ownBuildsList.isEmpty()) 0.0 else hitCount * 100.0 / ownBuildsList.size
+
+    val summary =
+        SummaryStats(
+            totalOwnBuilds = ownBuildsList.size,
+            totalReceivedLikes = ownBuildLikeCounts.sum(),
+            totalGivenLikes = likedBuildLikeCounts.size,
+            buildHitRate = hitRate,
+            weekReceivedLikes = weekReceived,
+            weekGivenLikes = weekGiven,
+            monthReceivedLikes = monthReceived,
+            monthGivenLikes = monthGiven,
+            serverWeekAvgLikes =
+                if (globalTopCreators.isEmpty()) 0.0
+                else
+                    weekly.buckets.sumOf { it.count }.toDouble() / maxOf(globalTopCreators.size, 1),
+            serverMonthAvgLikes = 0.0,
+        )
+
+    // メモリアル
+    val firstOwnBuild = ownBuildsList.minByOrNull { it.id }
+    val firstGivenBuild = givenLikeEvents.minByOrNull { it.buildId }
+    val longTailRecent =
+        receivedLikeEvents
+            .filter { it.playerUuid != playerUuid && it.likedAt >= thirtyDaysAgoMillis }
+            .minByOrNull { createdAtInstant(it.createdAt).toEpochMilli() }
+
+    val longTailDays =
+        if (longTailRecent != null) {
+          Duration.between(
+                  createdAtInstant(longTailRecent.createdAt),
+                  Instant.ofEpochMilli(longTailRecent.likedAt),
+              )
+              .toDays()
+        } else 0L
+
+    val memorial =
+        MemorialStats(
+            firstBuildTitle = firstOwnBuild?.title,
+            firstBuildId = firstOwnBuild?.id,
+            firstBuildCreated = firstOwnBuild?.time?.toLocalDate()?.toString(),
+            firstLikerUuid = ownFirstLikers.firstOrNull()?.playerUuid,
+            firstGivenBuildTitle = firstGivenBuild?.title,
+            firstGivenBuildId = firstGivenBuild?.buildId,
+            firstMutualPlayerUuid = mutualLikes.pairs.firstOrNull()?.playerUuid,
+            longTailBuildTitle = longTailRecent?.title,
+            longTailBuildId = longTailRecent?.buildId,
+            longTailDays = longTailDays,
+        )
+
     val playerNames =
         SLDatabase.loadPlayerNamesBlocking(
-            globalFirstLikers.map { it.playerUuid } +
+            globalTopCreators.map { it.ownerUuid } +
+                globalFirstLikers.map { it.playerUuid } +
                 ownFirstLikers.map { it.playerUuid } +
                 benefactors.map { it.playerUuid } +
                 weeklyLikedOwners.map { it.ownerUuid } +
@@ -577,41 +1109,24 @@ object SLDataStatsService {
                 fastestSupporters.map { it.playerUuid } +
                 likeDiversity.ownerTop.map { it.label } +
                 publicity.topBuilds.map { it.ownerUuid } +
-                publicity.recurringBuilds.map { it.ownerUuid }
+                publicity.recurringBuilds.map { it.ownerUuid } +
+                listOfNotNull(firstOwnBuild?.owner?.toString())
         )
+    val tDone = System.currentTimeMillis()
+    Tools.plugin.logger.info("[SLData Profiler] loadExtendedStats total=${tDone - t0}ms")
 
     return ExtendedStats(
-        weekly = loadWeeklySeries(DEFAULT_BUCKETS),
-        playerWeek =
-            PeriodSummaryStats(
-                label = formatWeekLabel(currentWeekStart),
-                buildsCreated = playerWeek.buildsCreated,
-                likesGiven = playerWeek.likesGiven,
-                likesReceived = playerWeek.likesReceived,
-                publicityCount = playerWeek.publicityCount,
-            ),
+        weekly = weekly,
+        playerWeek = playerWeek,
+        globalTopCreators = globalTopCreators,
         globalFirstLikers = globalFirstLikers,
         ownFirstLikers = ownFirstLikers,
         benefactors = benefactors,
         weeklyLikedOwners = weeklyLikedOwners,
-        ownBuilds =
-            SLDatabase.loadOwnBuildLikeRankingBlocking(playerUuid, normalizedLimit).map {
-              OwnBuildRow(it.buildId, it.title, it.likeCount)
-            },
-        peakLikeDay =
-            SLDatabase.loadPeakLikeDayBlocking(toMillis(twelveWeeksStart))?.let {
-              PeakLikeDayStats(formatDateLabel(it.date), it.count, it.averageCount)
-            },
+        ownBuilds = ownBuilds,
+        peakLikeDay = peakLikeDay,
         ownFirstLikeCount = ownFirstLikeCount,
-        recentBuildHistory =
-            SLDatabase.loadBuildHistoryTimelineBlocking(playerUuid).takeLast(normalizedLimit).map {
-              BuildHistoryRow(
-                  it.buildId,
-                  it.title,
-                  formatDateLabel(it.createdAt.toLocalDate()),
-                  it.likesReceived,
-              )
-            },
+        recentBuildHistory = recentBuildHistory,
         mutualLikes = mutualLikes,
         socialOverview = socialOverview,
         favoriteBuilderCapture = favoriteBuilderCapture,
@@ -648,13 +1163,147 @@ object SLDataStatsService {
         serverPublicity = serverPublicity,
         likeTimestampCoverage = likeTimestampCoverage,
         reliableTimestampPopulation = reliableTimestampPopulation,
+        summary = summary,
+        memorial = memorial,
         playerNames = playerNames,
     )
   }
 
   /** Public data only: the server dialog deliberately aggregates this across every build. */
-  fun loadServerPublicityStats(limit: Int = 5): PublicityStats =
-      calculatePublicityStats(SLDatabase.loadPublicityReactionsBlocking(), limit.coerceIn(1, 10))
+  fun loadServerPublicityStats(limit: Int = 5): PublicityStats {
+    val allBuilds = Data.getSLDataAll()
+    val allEvents = loadAllMemoryBuildLikeEvents(allBuilds)
+    val reactions =
+        calculatePublicityReactionsFromMemory(PublicityHistory.getData().values, allEvents, null)
+    return calculatePublicityStats(reactions, limit.coerceIn(1, 10))
+  }
+
+  private fun loadAllMemoryBuildLikeEvents(
+      allBuilds: Collection<SLData>
+  ): List<SLDatabase.BuildLikeEvent> {
+    val list = ArrayList<SLDatabase.BuildLikeEvent>()
+    allBuilds.forEach { build ->
+      val ownerStr = build.owner.toString()
+      val loc = build.loc
+      val chunkX = loc.blockX shr 4
+      val chunkZ = loc.blockZ shr 4
+      val worldName = build.worldName
+      val time = build.time
+      val title = build.title
+      val id = build.id
+      build.likesWithTimestamp.forEach { (likerUuid, timestamp) ->
+        list.add(
+            SLDatabase.BuildLikeEvent(
+                buildId = id,
+                title = title,
+                ownerUuid = ownerStr,
+                worldName = worldName,
+                chunkX = chunkX,
+                chunkZ = chunkZ,
+                playerUuid = likerUuid.toString(),
+                createdAt = time,
+                likedAt = timestamp,
+            )
+        )
+      }
+    }
+    return list
+  }
+
+  private fun calculateWorldReactionsFromMemory(
+      allBuilds: Collection<SLData>,
+      playerUuid: String,
+      targetUuid: UUID?,
+  ): List<WorldReactionRow> {
+    val receivedByWorld = mutableMapOf<String, Int>()
+    val givenByWorld = mutableMapOf<String, Int>()
+
+    for (b in allBuilds) {
+      val w = b.worldName
+      if (b.owner.toString() == playerUuid) {
+        receivedByWorld[w] = (receivedByWorld[w] ?: 0) + b.likes.size
+      }
+      if (targetUuid != null && b.likes.contains(targetUuid)) {
+        givenByWorld[w] = (givenByWorld[w] ?: 0) + 1
+      }
+    }
+
+    val allWorlds = (receivedByWorld.keys + givenByWorld.keys).distinct()
+    return allWorlds
+        .mapNotNull { world ->
+          val ownReceived = receivedByWorld[world] ?: 0
+          val givenInWorld = givenByWorld[world] ?: 0
+          if (givenInWorld == 0 && ownReceived == 0) null
+          else {
+            WorldReactionRow(
+                worldName = world,
+                receivedLikes = ownReceived,
+                givenLikes = givenInWorld,
+            )
+          }
+        }
+        .filter { it.givenLikes > 0 }
+        .sortedWith(
+            compareByDescending<WorldReactionRow> { it.likeRatio ?: Double.NEGATIVE_INFINITY }
+                .thenBy { it.worldName }
+        )
+  }
+
+  private fun calculateRecentBuildComparisonFromMemory(
+      ownBuilds: List<SLData>,
+  ): RecentBuildComparison? {
+    if (ownBuilds.size < 2) return null
+    val sorted = ownBuilds.sortedBy { it.time }
+    val split = sorted.size / 2
+    val older = sorted.take(split)
+    val newer = sorted.drop(split)
+    val completeDay = LocalDate.now(analysisZoneId).minusDays(1)
+    fun averageLikesPerDay(rows: List<SLData>): Double =
+        rows
+            .map { row ->
+              val ageDays =
+                  ChronoUnit.DAYS.between(row.time.toLocalDate(), completeDay).coerceAtLeast(1L)
+              row.likes.size.toDouble() / ageDays.toDouble()
+            }
+            .average()
+    return RecentBuildComparison(
+        olderCount = older.size,
+        newerCount = newer.size,
+        olderLikesPerDay = averageLikesPerDay(older),
+        newerLikesPerDay = averageLikesPerDay(newer),
+    )
+  }
+
+  private fun calculatePublicityReactionsFromMemory(
+      publicityData: Collection<PublicityData>,
+      allEvents: List<SLDatabase.BuildLikeEvent>,
+      targetOwnerUuid: String? = null,
+  ): List<SLDatabase.PublicityEventReaction> {
+    val eventsByBuildId = allEvents.groupBy { it.buildId }
+    val dayMillis = 24 * 3600 * 1000L
+
+    return publicityData.mapNotNull { p ->
+      val buildEvents = eventsByBuildId[p.slid] ?: return@mapNotNull null
+      val firstEvent = buildEvents.firstOrNull() ?: return@mapNotNull null
+      if (targetOwnerUuid != null && firstEvent.ownerUuid != targetOwnerUuid) return@mapNotNull null
+
+      val promoMillis = p.timeStamp.atZone(ZoneId.of("Asia/Tokyo")).toInstant().toEpochMilli()
+      val beforeLikes =
+          buildEvents.count { it.likedAt in (promoMillis - dayMillis) until promoMillis }
+      val afterLikes =
+          buildEvents.count { it.likedAt in (promoMillis + 1)..(promoMillis + dayMillis) }
+
+      SLDatabase.PublicityEventReaction(
+          buildId = p.slid,
+          title = firstEvent.title,
+          ownerUuid = firstEvent.ownerUuid,
+          promotedAt = promoMillis,
+          likesBefore24Hours = beforeLikes,
+          likesAfter24Hours = afterLikes,
+          intervalSincePreviousHours = null,
+      )
+    }
+  }
 
   private fun calculatePublicityStats(
       reactions: List<SLDatabase.PublicityEventReaction>,
@@ -771,13 +1420,62 @@ object SLDataStatsService {
         medianMillis = median,
         maximumMillis = delays.last(),
         averageMillis = delays.average().toLong(),
+        speedBuckets = bucketInitialLikeSpeed(delays),
     )
+  }
+
+  // 2026-08-17: グラフ化のため、初いいねまでの遅延(ミリ秒)を区間ごとに集計する(ユーザー要望)。
+  // 2026-08-17: 固定バケット(1分/10分/1時間/1日/1日超)だと、初いいねが数秒〜数十秒で付く
+  // プレイヤーのデータが全部「1分以内」に集中してしまい分布が見えなかった(ユーザー指摘)。
+  // 実データの最大値に応じて、直感的な単位(秒/分/時間/日)から5段階のスケールを動的に選ぶ。
+  private val INITIAL_SPEED_SCALE_LADDER_MS =
+      listOf(
+          5_000L,
+          10_000L,
+          30_000L, // 5秒/10秒/30秒
+          60_000L,
+          5 * 60_000L,
+          10 * 60_000L,
+          30 * 60_000L, // 1分/5分/10分/30分
+          3_600_000L,
+          3 * 3_600_000L,
+          6 * 3_600_000L,
+          12 * 3_600_000L, // 1時間/3時間/6時間/12時間
+          86_400_000L,
+          3 * 86_400_000L,
+          7 * 86_400_000L,
+          30 * 86_400_000L, // 1日/3日/7日/30日
+      )
+
+  private fun formatInitialSpeedBoundaryLabel(millis: Long): String =
+      when {
+        millis < 60_000L -> "${millis / 1_000L}秒以内"
+        millis < 3_600_000L -> "${millis / 60_000L}分以内"
+        millis < 86_400_000L -> "${millis / 3_600_000L}時間以内"
+        else -> "${millis / 86_400_000L}日以内"
+      }
+
+  private fun bucketInitialLikeSpeed(delaysMillis: List<Long>): List<AgeBucket> {
+    val maxDelay = delaysMillis.maxOrNull() ?: 0L
+    val scale =
+        INITIAL_SPEED_SCALE_LADDER_MS.firstOrNull { it >= maxDelay }
+            ?: INITIAL_SPEED_SCALE_LADDER_MS.last()
+    val step = (scale / 5).coerceAtLeast(1L)
+    val counts = IntArray(5)
+    delaysMillis.forEach { millis ->
+      val bucketIndex = (millis / step).toInt().coerceIn(0, 4)
+      counts[bucketIndex]++
+    }
+    val labels = (1..5).map { i -> formatInitialSpeedBoundaryLabel(step * i) }
+    return labels.mapIndexed { index, label -> AgeBucket(label, counts[index]) }
   }
 
   private fun calculateActivityRhythm(
       events: List<SLDatabase.BuildLikeEvent>
   ): ActivityRhythmStats {
-    val bandCount = 8
+    // 2026-08-17: 3時間×8バンドから1時間×24バンドへ変更（ヒートマップ表示のため）。
+    // ActivityRhythmStats はバンド数に依存しない形（List<List<Int>>）なので他の利用箇所への影響はない。
+    val bandCount = 24
     val counts = List(7) { MutableList(bandCount) { 0 } }
     var nightCount = 0
     var morningCount = 0
@@ -786,7 +1484,7 @@ object SLDataStatsService {
     events.forEach { event ->
       val local = Instant.ofEpochMilli(event.likedAt).atZone(analysisZoneId)
       val dayIndex = local.dayOfWeek.value - 1
-      counts[dayIndex][local.hour / 3]++
+      counts[dayIndex][local.hour]++
       if (local.hour >= 22 || local.hour < 5) nightCount++
       if (local.hour in 5..10) morningCount++
       if (local.dayOfWeek in setOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)) weekendCount++
@@ -797,8 +1495,7 @@ object SLDataStatsService {
     val weekdayAverage = weekdayCount / 5.0
     val dayTypeDiagnosis = if (weekendAverage > weekdayAverage) "週末型です" else "平日型です"
     return ActivityRhythmStats(
-        timeBandLabels =
-            listOf("00-02", "03-05", "06-08", "09-11", "12-14", "15-17", "18-20", "21-23"),
+        timeBandLabels = (0 until bandCount).map { "%02d".format(it) },
         weekdayCounts = counts.map { it.toList() },
         rhythmDiagnosis = rhythmDiagnosis,
         dayTypeDiagnosis = dayTypeDiagnosis,
@@ -837,46 +1534,84 @@ object SLDataStatsService {
   }
 
   private fun calculateAgeBuckets(events: List<SLDatabase.BuildLikeEvent>): List<AgeBucket> {
-    val counts = IntArray(4)
-    events.forEach { event ->
-      val ageDays =
-          Duration.between(
-                  createdAtInstant(event.createdAt),
-                  Instant.ofEpochMilli(event.likedAt),
-              )
+    if (events.isEmpty()) return emptyList()
+    val delays =
+        events.map {
+          Duration.between(createdAtInstant(it.createdAt), Instant.ofEpochMilli(it.likedAt))
               .toDays()
-      when {
-        ageDays <= 0 -> counts[0]++
-        ageDays < 7 -> counts[1]++
-        ageDays <= 30 -> counts[2]++
-        else -> counts[3]++
-      }
-    }
-    return listOf("当日", "7日以内", "30日以内", "30日超").mapIndexed { index, label ->
-      AgeBucket(label, counts[index])
-    }
+              .coerceAtLeast(0)
+        }
+    val maxDays = delays.maxOrNull() ?: 0L
+
+    val rangesAndLabels: List<Pair<LongRange, String>> =
+        when {
+          maxDays <= 7 ->
+              listOf(
+                  0L..0L to "当日",
+                  1L..1L to "1日後",
+                  2L..3L to "2-3日",
+                  4L..7L to "4-7日",
+                  8L..Long.MAX_VALUE to "8日以上",
+              )
+          maxDays <= 30 ->
+              listOf(
+                  0L..0L to "当日",
+                  1L..3L to "3日以内",
+                  4L..7L to "7日以内",
+                  8L..14L to "14日以内",
+                  15L..Long.MAX_VALUE to "15日超",
+              )
+          maxDays <= 90 ->
+              listOf(
+                  0L..0L to "当日",
+                  1L..7L to "7日以内",
+                  8L..30L to "30日以内",
+                  31L..60L to "60日以内",
+                  61L..Long.MAX_VALUE to "60日超",
+              )
+          else ->
+              listOf(
+                  0L..0L to "当日",
+                  1L..7L to "7日以内",
+                  8L..30L to "30日以内",
+                  31L..90L to "90日以内",
+                  91L..Long.MAX_VALUE to "90日超",
+              )
+        }
+
+    return rangesAndLabels.map { (range, label) -> AgeBucket(label, delays.count { it in range }) }
   }
 
   private fun calculateStreak(timestamps: List<Long>): StreakStats {
-    val activeDates =
-        timestamps
-            .map { Instant.ofEpochMilli(it).atZone(analysisZoneId).toLocalDate() }
-            .toSortedSet()
-    if (activeDates.isEmpty()) return StreakStats(0, 0)
+    if (timestamps.isEmpty()) return StreakStats(0, 0)
+    val jstOffset = 9 * 3600 * 1000L
+    val millisPerDay = 86_400_000L
+
+    val daySet = HashSet<Int>(timestamps.size)
+    for (i in 0 until timestamps.size) {
+      val epochDay = ((timestamps[i] + jstOffset) / millisPerDay).toInt()
+      daySet.add(epochDay)
+    }
+
+    val sortedDays = daySet.toIntArray().apply { sort() }
     var longest = 0
     var running = 0
-    var previous: LocalDate? = null
-    activeDates.forEach { date ->
-      running = if (previous?.plusDays(1) == date) running + 1 else 1
-      longest = max(longest, running)
-      previous = date
+    var prev = Int.MIN_VALUE
+
+    for (day in sortedDays) {
+      running = if (day == prev + 1) running + 1 else 1
+      if (running > longest) longest = running
+      prev = day
     }
+
+    val todayEpochDay = ((System.currentTimeMillis() + jstOffset) / millisPerDay).toInt()
     var current = 0
-    var cursor = LocalDate.now(analysisZoneId)
-    while (cursor in activeDates) {
+    var cursor = todayEpochDay
+    while (daySet.contains(cursor)) {
       current++
-      cursor = cursor.minusDays(1)
+      cursor--
     }
+
     return StreakStats(current, longest)
   }
 
@@ -1034,14 +1769,86 @@ object SLDataStatsService {
   private fun isLifeWorld(worldName: String): Boolean =
       worldName.lowercase() in setOf("world", "life", "lifeworld", "life_world")
 
+  fun calculateDynamicLikeDistribution(counts: List<Int>): List<AgeBucket> {
+    if (counts.isEmpty()) return emptyList()
+    val maxVal = counts.maxOrNull() ?: 0
+
+    val rangesAndLabels: List<Pair<IntRange, String>> =
+        when {
+          maxVal <= 5 ->
+              listOf(
+                  0..1 to "0-1",
+                  2..2 to "2",
+                  3..3 to "3",
+                  4..4 to "4",
+                  5..Int.MAX_VALUE to "5+",
+              )
+          maxVal <= 15 ->
+              listOf(
+                  0..2 to "0-2",
+                  3..5 to "3-5",
+                  6..9 to "6-9",
+                  10..Int.MAX_VALUE to "10+",
+              )
+          maxVal <= 30 ->
+              listOf(
+                  0..5 to "0-5",
+                  6..10 to "6-10",
+                  11..20 to "11-20",
+                  21..Int.MAX_VALUE to "21+",
+              )
+          maxVal <= 60 ->
+              listOf(
+                  0..10 to "0-10",
+                  11..25 to "11-25",
+                  26..40 to "26-40",
+                  41..Int.MAX_VALUE to "41+",
+              )
+          maxVal <= 150 ->
+              listOf(
+                  0..20 to "0-20",
+                  21..50 to "21-50",
+                  51..100 to "51-100",
+                  101..Int.MAX_VALUE to "101+",
+              )
+          maxVal <= 400 ->
+              listOf(
+                  0..30 to "0-30",
+                  31..100 to "31-100",
+                  101..200 to "101-200",
+                  201..Int.MAX_VALUE to "201+",
+              )
+          maxVal <= 1000 ->
+              listOf(
+                  0..30 to "0-30",
+                  31..100 to "31-100",
+                  101..300 to "101-300",
+                  301..600 to "301-600",
+                  601..Int.MAX_VALUE to "601+",
+              )
+          else -> {
+            val step = maxVal / 4
+            listOf(
+                0..step to "0-${step}",
+                (step + 1)..(step * 2) to "${step + 1}-${step * 2}",
+                (step * 2 + 1)..(step * 3) to "${step * 2 + 1}-${step * 3}",
+                (step * 3 + 1)..Int.MAX_VALUE to "${step * 3 + 1}+",
+            )
+          }
+        }
+
+    return rangesAndLabels.map { (range, label) -> AgeBucket(label, counts.count { it in range }) }
+  }
+
   fun niceMax(rawMax: Int): Int {
     if (rawMax <= 0) return 4
     val roughStep = rawMax.toDouble() / 4.0
     val magnitude = 10.0.pow(floor(kotlin.math.log10(roughStep.coerceAtLeast(1.0)))).toInt()
+    val multipliers = listOf(1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 4.0, 5.0, 6.0, 7.5, 8.0, 10.0)
     val step =
-        listOf(1.0, 2.0, 2.5, 5.0, 10.0)
+        multipliers
             .map { (it * magnitude).toInt() }
-            .firstOrNull { it >= roughStep } ?: magnitude * 10
+            .firstOrNull { it * 4 >= rawMax && it >= roughStep } ?: (magnitude * 10)
     return max(step * 4, rawMax)
   }
 
