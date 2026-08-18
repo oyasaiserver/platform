@@ -369,31 +369,14 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun sendModeList(player: Player) {
-    player.sendMessage(Tools.socialLikesLOGO + " &f/sldata 表示方式一覧".color())
-    player.sendMessage("&7/sldata font &f- チェストGUI+カスタムフォント（Java向け、統合版は不可見込み）".color())
-    player.sendMessage("&7/sldata slots &f- バニラ素材スロット棒グラフ（統合版でも見える見込み）".color())
-    player.sendMessage(
-        "&7/sldata display [week|month|year] &f- Display Entityのワールド内UI（Geyser統合版は不可見込み）".color()
-    )
-    player.sendMessage("&7/sldata map &f- 手持ちマップの128pxグラフ（統合版でも見える見込み）".color())
-    player.sendMessage("&7/sldata map home &f- 自作品が最も集まるチャンクを手持ちマップにドット表示".color())
-    player.sendMessage("&7/sldata map wall &f- 2x3マップ壁掛け版を向いている壁へ設置".color())
-    player.sendMessage("&7/sldata map remove &f- 近くの2x3マップ壁掛け版を撤去".color())
-    player.sendMessage("&7/sldata board place &f- 2x2マップ公共ボードを向いている壁へ設置（統合版でも見える見込み）".color())
-    player.sendMessage("&7/sldata board remove &f- 近くの実験ボードを撤去".color())
-    player.sendMessage(
-        "&7/sldata dialog [week|month|year] &f- Paper Dialog API（グラフは2倍サイズ・低ブロック軸で固定。Java 1.21.6+向け、統合版は不可見込み）"
-            .color()
-    )
-    player.sendMessage("&7/sldata dialog ranking &f- 今週の制作者別いいね数Top5をヘッド付き横棒で表示".color())
-    player.sendMessage(
-        "&7/sldata dialog stats2 [プレイヤー名] &f- 交流・応援・一番乗りの詳細統計を表示（他人の統計はOP限定）".color()
-    )
+    player.sendMessage(Tools.socialLikesLOGO + " &f/sldata コマンド一覧".color())
+    player.sendMessage("&7/sldata &f- あなたの総合統計ダイアログを開く".color())
+    player.sendMessage("&7/sldata ranking &f- 今週の制作者別いいね数Top5を表示".color())
     player.sendMessage("&7/sldata server &f- 全員に公開する宣伝効果・掲載回数のサーバー集計を表示".color())
     player.sendMessage("&7/sldata lucky &f- 未いいねの他者建築をランダムに1件案内".color())
-    player.sendMessage(
-        "&7/sldata dialog reload &f- plugins/SocialLikes3/$DIALOG_CONFIG_FILE_NAME を再読込".color()
-    )
+    if (player.isOp || player.hasPermission("sociallikes.admin")) {
+      player.sendMessage("&e/sldataop &7- 管理者用コマンド（マップ・ボード・他プレイヤー統計等）".color())
+    }
   }
 
   private fun handleDialog(player: Player, args: List<String>) {
@@ -1235,9 +1218,14 @@ object SLData : CommandExecutor, TabCompleter, Listener {
         else -> value.replace(' ', DIALOG_NBSP)
       }
 
-  private fun loadWeekly(): LikeSeries = SLDataStatsService.loadWeeklySeries(GRAPH_COLUMNS)
+  private fun loadWeekly(): SLDataStatsService.LikeSeries =
+      SLDataStatsService.loadWeeklySeries(GRAPH_COLUMNS)
 
   internal fun openSlots(player: Player) {
+    if (!player.isOp && !player.hasPermission("sociallikes.admin")) {
+      player.sendMessage(Tools.socialLikesLOGO + " &cスロット表示は管理者専用です。/sldata をご利用ください。".color())
+      return
+    }
     val series = loadWeekly()
     val holder = SlotsInventoryHolder()
     val inventory =
@@ -1315,6 +1303,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   internal fun openDisplay(player: Player, period: Period = Period.WEEK) {
+    if (!player.isOp && !player.hasPermission("sociallikes.admin")) {
+      player.sendMessage(Tools.socialLikesLOGO + " &cディスプレイ表示は管理者専用です。/sldata をご利用ください。".color())
+      return
+    }
     val eye = player.eyeLocation
     val forward =
         eye.direction.clone().setY(0).let {
@@ -1578,6 +1570,10 @@ object SLData : CommandExecutor, TabCompleter, Listener {
   }
 
   private fun giveMap(player: Player) {
+    if (!player.isOp && !player.hasPermission("sociallikes.admin")) {
+      player.sendMessage(Tools.socialLikesLOGO + " &cマップ表示は管理者専用です。/sldata をご利用ください。".color())
+      return
+    }
     val series = loadWeekly()
     GraphImageRenderer.logTextFit("handheld", series, "SL Weekly - ${player.name}", 128, 128)
     val item = findReusableMap(player) ?: ItemStack(Material.FILLED_MAP)
@@ -2026,16 +2022,18 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       dialogExperimentalPalettes[player.uniqueId] ?: DialogTextPalette.DEFAULT
 
   private fun openDialogOtherFormats(player: Player) {
-    val actions =
-        listOf(
-            dialogButton("ランキング", "制作者別いいね数 Top5", dialogRankingKey),
-            dialogButton("Mapで見る", "/sldata map を実行", dialogMapKey),
-            dialogButton("Slotsで見る", "/sldata slots を実行", dialogSlotsKey),
-            dialogButton("Displayで見る", "/sldata display を実行", dialogDisplayKey),
-            // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
-            dialogButton("実験: 文字色", "UIチューニング用。採用未定", dialogExperimentalColorPickerKey),
-            dialogButton("グラフへ戻る", "通常のグラフへ戻る", dialogOtherFormatsBackKey),
-        )
+    val isOp = player.isOp || player.hasPermission("sociallikes.admin")
+    val actions = buildList {
+      add(dialogButton("ランキング", "制作者別いいね数 Top5", dialogRankingKey))
+      if (isOp) {
+        add(dialogButton("Mapで見る", "/sldataop map を実行", dialogMapKey))
+        add(dialogButton("Slotsで見る", "/sldataop slots を実行", dialogSlotsKey))
+        add(dialogButton("Displayで見る", "/sldataop display を実行", dialogDisplayKey))
+        // EXPERIMENTAL: color picker for UI tuning (2026-08-13), adoption undecided.
+        add(dialogButton("実験: 文字色", "UIチューニング用。採用未定", dialogExperimentalColorPickerKey))
+      }
+      add(dialogButton("グラフへ戻る", "通常のグラフへ戻る", dialogOtherFormatsBackKey))
+    }
     player.showDialog(
         Dialog.create { builder ->
           builder
@@ -2529,39 +2527,51 @@ object SLData : CommandExecutor, TabCompleter, Listener {
 
   private fun openDialogStatsSettings(player: Player) {
     val includeLifeWorld = dialogStatsIncludeLifeWorld[player.uniqueId] == true
-    val actions =
-        listOf(
-            dialogButton(
-                if (includeLifeWorld)
-                    stats2Text("Section.stats2.actions.world_exclude_label", "ライフ: 除外 ▾")
-                else stats2Text("Section.stats2.actions.world_include_label", "ライフ: 含む ▾"),
-                stats2Text(
-                    "Section.stats2.actions.world_filter_tooltip",
-                    "ワールド別反応のライフワールド表示を切替",
-                ),
-                dialogStatsWorldFilterKey,
-            ),
+    val isOp = player.isOp || player.hasPermission("sociallikes.admin")
+    val actions = buildList {
+      add(
+          dialogButton(
+              if (includeLifeWorld)
+                  stats2Text("Section.stats2.actions.world_exclude_label", "ライフ: 除外 ▾")
+              else stats2Text("Section.stats2.actions.world_include_label", "ライフ: 含む ▾"),
+              stats2Text(
+                  "Section.stats2.actions.world_filter_tooltip",
+                  "ワールド別反応のライフワールド表示を切替",
+              ),
+              dialogStatsWorldFilterKey,
+          )
+      )
+      if (isOp) {
+        add(
             dialogButton(
                 "Mapで見る",
-                "/sldata map を実行",
+                "/sldataop map を実行",
                 dialogMapKey,
-            ),
+            )
+        )
+        add(
             dialogButton(
                 "Slotsで見る",
-                "/sldata slots を実行",
+                "/sldataop slots を実行",
                 dialogSlotsKey,
-            ),
+            )
+        )
+        add(
             dialogButton(
                 "Displayで見る",
-                "/sldata display を実行",
+                "/sldataop display を実行",
                 dialogDisplayKey,
-            ),
-            dialogButton(
-                "戻る ↩",
-                "詳細統計へ戻る",
-                dialogStatsSettingsBackKey,
-            ),
+            )
         )
+      }
+      add(
+          dialogButton(
+              "戻る ↩",
+              "詳細統計へ戻る",
+              dialogStatsSettingsBackKey,
+          )
+      )
+    }
     val dialog =
         Dialog.create { builder ->
           builder
