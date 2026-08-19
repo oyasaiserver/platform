@@ -118,6 +118,13 @@ object MileageTracker {
 
             for ((mainArmorStand, data) in activeVehicles) {
               if (mainArmorStand.isDead) {
+                data.seats.forEach { (_, seatArmorStand) ->
+                  val pair =
+                      mileagePercentMap.keys.firstOrNull {
+                        it.first.uniqueId == seatArmorStand.uniqueId
+                      }
+                  pair?.second?.let { player -> vehicleExitTask(player, pair) }
+                }
                 deadVehicles.add(mainArmorStand)
                 continue
               }
