@@ -2,6 +2,7 @@ package com.github.srain3.sociallikes
 
 import com.github.srain3.sociallikes.command.*
 import com.github.srain3.sociallikes.datas.Data
+import com.github.srain3.sociallikes.datas.DirtyBuildManager
 import com.github.srain3.sociallikes.datas.PlaceHolder
 import com.github.srain3.sociallikes.datas.PublicityHistory
 import com.github.srain3.sociallikes.datas.SLDatabase
@@ -61,6 +62,9 @@ class SocialLikes : JavaPlugin() {
       PlaceHolder(this).register()
     }
 
+    DirtyBuildManager.loadFromDisk()
+    DirtyBuildManager.startPeriodicReconciliation(this)
+
     Data.loadFileToDataCache()
     SLtp.userLastSLTPTimeLoad()
     Events.offlineLikePointLoad()
@@ -74,6 +78,7 @@ class SocialLikes : JavaPlugin() {
   }
 
   override fun onDisable() {
+    DirtyBuildManager.stopPeriodicReconciliation()
     SLDiscord.disable()
 
     if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {

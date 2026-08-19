@@ -2,3 +2,6 @@
 # yaml keeps the existing startup behavior and also syncs YAML data into SQLite.
 # sqlite loads the cache from SocialLikesShadow.db and skips startup SQLite sync.
 readSource: sqlite
+
+# Interval in minutes for periodic dirty build reconciliation (SQLite retry).
+reconcileIntervalMinutes: 10

@@ -486,7 +486,13 @@ object SLDatabase {
 
   fun saveBuild(data: SLData, onFinalFailure: ((Exception) -> Unit)? = null) {
     val snapshot = data.toBuildSnapshot()
-    submitWrite("saveBuild[${snapshot.id}]", onFinalFailure) { upsertBuild(snapshot) }
+    submitWrite(
+        "saveBuild[${snapshot.id}]",
+        onFinalFailure = onFinalFailure,
+        onSuccess = { DirtyBuildManager.markClean(snapshot.id) },
+    ) {
+      upsertBuild(snapshot)
+    }
   }
 
   fun softDeleteBuild(
@@ -497,7 +503,11 @@ object SLDatabase {
   ) {
     val deletedAtStr = deletedAt.toString()
     val deletedByStr = deletedBy?.toString()
-    submitWrite("softDeleteBuild[$id]", onFinalFailure) {
+    submitWrite(
+        "softDeleteBuild[$id]",
+        onFinalFailure = onFinalFailure,
+        onSuccess = { DirtyBuildManager.markClean(id) },
+    ) {
       Builds.update({ Builds.id eq id }) {
         it[Builds.deletedAt] = deletedAtStr
         it[Builds.deletedBy] = deletedByStr
@@ -2452,6 +2462,7 @@ object SLDatabase {
   fun submitWrite(
       taskName: String,
       onFinalFailure: ((Exception) -> Unit)? = null,
+      onSuccess: (() -> Unit)? = null,
       block: () -> Unit,
   ) {
     val service =
@@ -2495,6 +2506,15 @@ object SLDatabase {
           val db = database ?: throw IllegalStateException("database is not connected")
 
           transaction(db) { block() }
+          try {
+            onSuccess?.invoke()
+          } catch (scEx: Exception) {
+            Tools.plugin.logger.log(
+                Level.WARNING,
+                "[SL3] SQLite write $taskName onSuccess callback threw exception",
+                scEx,
+            )
+          }
           return@submit
         } catch (e: Exception) {
           if (attempt == MAX_WRITE_RETRIES) {

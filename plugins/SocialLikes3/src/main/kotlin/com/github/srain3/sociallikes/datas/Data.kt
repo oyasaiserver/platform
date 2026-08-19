@@ -21,6 +21,7 @@ import org.bukkit.Material
 import org.bukkit.block.Biome
 import org.bukkit.block.BlockFace
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -39,7 +40,10 @@ object Data {
     }
 
     // 2. SQLite へ非同期保存 (スナップショットをキューに積む)
-    SLDatabase.saveBuild(data) { notifyPlayerFailure(actorUuid, "データの保存に失敗しました。") }
+    SLDatabase.saveBuild(data) {
+      DirtyBuildManager.markDirty(data.id)
+      notifyPlayerFailure(actorUuid, "データの保存に失敗しました。")
+    }
 
     // 3. YAML へ非同期・ベストエフォート保存
     saveYamlAsync(data)
@@ -51,6 +55,28 @@ object Data {
     val dirName = getDirName(resolvedId)
     val list = dataMap[dirName] ?: return null
     return list.firstOrNull { it.id == resolvedId && it.deletedAt == null }
+  }
+
+  /** IDからキャッシュ上の[SLData]を取得する (削除済みフラグにかかわらず取得、負IDは解決) */
+  fun getSLDataDirect(id: Int): SLData? {
+    val resolvedId = if (id < 0) SLDatabase.resolveMigratedId(id) else id
+    val dirName = getDirName(resolvedId)
+    return dataMap[dirName]?.firstOrNull { it.id == resolvedId }
+  }
+
+  /** YAMLファイルから指定IDの[SLData]を読み込む */
+  fun loadSLDataFromYaml(id: Int): SLData? {
+    val resolvedId = if (id < 0) SLDatabase.resolveMigratedId(id) else id
+    val dirName = getDirName(resolvedId)
+    val file = File(Tools.plugin.dataFolder, "data/$dirName/$resolvedId.yml")
+    if (!file.exists() || !file.isFile) return null
+    val yml = CustomYamlFile(file)
+    return parseSLDataFromYaml(yml, resolvedId)
+  }
+
+  /** 最新の[SLData]を取得する (メモリ上のキャッシュ、なければYAMLファイルから読み込む) */
+  fun getLatestSLData(id: Int): SLData? {
+    return getSLDataDirect(id) ?: loadSLDataFromYaml(id)
   }
 
   /** [SLData]を元にデータをソフトデリートする */
@@ -82,6 +108,7 @@ object Data {
 
     // 2. SQLite 側を非同期ソフトデリート
     SLDatabase.softDeleteBuild(slData.id, deletedBy, now) {
+      DirtyBuildManager.markDirty(slData.id)
       notifyPlayerFailure(deletedBy, "データの削除に失敗しました。")
     }
 
@@ -187,84 +214,14 @@ object Data {
                     files.forEach file@{ file ->
                       // ID.ymlを読み込む
                       val yml = CustomYamlFile(file)
-                      // ファイルから値を取り出す
-                      val id = yml.getInt("id", -1)
-                      val worldStr = yml.getString("loc.world") ?: return@file
-                      val x = yml.getDouble("loc.x")
-                      val y = yml.getDouble("loc.y")
-                      val z = yml.getDouble("loc.z")
-                      val time = LocalDateTime.parse(yml.getString("time"))
-                      val owner = UUID.fromString(yml.getString("owner"))
-                      val title = yml.getString("title") ?: return@file
-                      val likesStr = yml.getStringList("likes")
-                      val check = yml.getBoolean("check", false)
-                      val comment = yml.getString("comment") ?: "No comment"
-                      val textID = yml.getLong("DiscordTextID", 0)
+                      val slData = parseSLDataFromYaml(yml) ?: return@file
 
-                      val deleted = yml.getBoolean("deleted", false)
-                      val deletedAtStr = yml.getString("deleted_at")
-                      val deletedAt =
-                          deletedAtStr?.let { s ->
-                            try {
-                              LocalDateTime.parse(s)
-                            } catch (_: Exception) {
-                              null
-                            }
-                          } ?: if (deleted) time else null
-                      val deletedByStr = yml.getString("deleted_by")
-                      val deletedBy =
-                          deletedByStr?.let { s ->
-                            try {
-                              UUID.fromString(s)
-                            } catch (_: Exception) {
-                              null
-                            }
-                          }
-                      val signMaterial = yml.getString("sign_material")
-
-                      if (id > 0) {
-                        lastID = max(lastID, id)
-                        ids.add(id)
+                      if (slData.id > 0) {
+                        lastID = max(lastID, slData.id)
+                        ids.add(slData.id)
                       }
 
-                      // locationへ変換
-                      val world =
-                          Bukkit.getServer().getWorld(worldStr)
-                              ?: run {
-                                Tools.plugin.logger.warning(
-                                    "ID:$id world $worldStr does not exist!"
-                                )
-                                null
-                              }
-                      val loc = Location(world, x, y, z)
-
-                      // likesのStringListからUUIDListへ変換
-                      val likes: MutableList<UUID> = mutableListOf()
-                      likesStr.forEach { uuidStr -> likes.add(UUID.fromString(uuidStr)) }
-
-                      // likesWithTimestampのロード
-                      val likesWithTimestamp = loadLikesWithTimestamp(yml)
-
-                      addToCache(
-                          SLData(
-                              id = id,
-                              loc = loc,
-                              time = time,
-                              owner = owner,
-                              title = title,
-                              likes = likes,
-                              likesWithTimestamp = likesWithTimestamp,
-                              check = check,
-                              comment = comment,
-                              worldName = worldStr,
-                              discordTextID = textID,
-                              deletedAt = deletedAt,
-                              deletedBy = deletedBy,
-                              signMaterial = signMaterial,
-                          ),
-                          it.name,
-                          ids,
-                      )
+                      addToCache(slData, it.name, ids)
                     }
                   }
                 }
@@ -304,6 +261,14 @@ object Data {
                 } catch (e: Exception) {
                   Tools.plugin.logger.warning("[SL3] SQLite shadow syncBuilds failed: ${e.message}")
                 }
+              }
+
+              try {
+                DirtyBuildManager.reconcile()
+              } catch (e: Exception) {
+                Tools.plugin.logger.warning(
+                    "[SL3] Startup dirty builds reconciliation failed: ${e.message}"
+                )
               }
 
               loading = true
@@ -404,7 +369,7 @@ object Data {
         }
   }
 
-  private fun getDirName(id: Int): String {
+  fun getDirName(id: Int): String {
     val fPage = (id / 50.0).toInt()
     return if (id in -49..-1) {
       "-1--49"
@@ -413,6 +378,89 @@ object Data {
     } else {
       "${fPage*50}-${(fPage+1)*50-1}"
     }
+  }
+
+  /** YAMLConfigurationから[SLData]をパースする */
+  fun parseSLDataFromYaml(yml: YamlConfiguration, fileId: Int? = null): SLData? {
+    val id = if (fileId != null && fileId > 0) fileId else yml.getInt("id", -1)
+    val worldStr = yml.getString("loc.world") ?: return null
+    val x = yml.getDouble("loc.x")
+    val y = yml.getDouble("loc.y")
+    val z = yml.getDouble("loc.z")
+    val timeStr = yml.getString("time") ?: return null
+    val time =
+        try {
+          LocalDateTime.parse(timeStr)
+        } catch (_: Exception) {
+          return null
+        }
+    val ownerStr = yml.getString("owner") ?: return null
+    val owner =
+        try {
+          UUID.fromString(ownerStr)
+        } catch (_: Exception) {
+          return null
+        }
+    val title = yml.getString("title") ?: return null
+    val likesStr = yml.getStringList("likes")
+    val check = yml.getBoolean("check", false)
+    val comment = yml.getString("comment") ?: "No comment"
+    val textID = yml.getLong("DiscordTextID", 0)
+
+    val deleted = yml.getBoolean("deleted", false)
+    val deletedAtStr = yml.getString("deleted_at")
+    val deletedAt =
+        deletedAtStr?.let { s ->
+          try {
+            LocalDateTime.parse(s)
+          } catch (_: Exception) {
+            null
+          }
+        } ?: if (deleted) time else null
+    val deletedByStr = yml.getString("deleted_by")
+    val deletedBy =
+        deletedByStr?.let { s ->
+          try {
+            UUID.fromString(s)
+          } catch (_: Exception) {
+            null
+          }
+        }
+    val signMaterial = yml.getString("sign_material")
+
+    val world =
+        Bukkit.getServer().getWorld(worldStr)
+            ?: run {
+              Tools.plugin.logger.warning("ID:$id world $worldStr does not exist!")
+              null
+            }
+    val loc = Location(world, x, y, z)
+
+    val likes: MutableList<UUID> = mutableListOf()
+    likesStr.forEach { uuidStr ->
+      try {
+        likes.add(UUID.fromString(uuidStr))
+      } catch (_: Exception) {}
+    }
+
+    val likesWithTimestamp = loadLikesWithTimestamp(yml)
+
+    return SLData(
+        id = id,
+        loc = loc,
+        time = time,
+        owner = owner,
+        title = title,
+        likes = likes,
+        likesWithTimestamp = likesWithTimestamp,
+        check = check,
+        comment = comment,
+        worldName = worldStr,
+        discordTextID = textID,
+        deletedAt = deletedAt,
+        deletedBy = deletedBy,
+        signMaterial = signMaterial,
+    )
   }
 
   private fun addToCache(slData: SLData, dirName: String, ids: MutableSet<Int>) {
@@ -428,7 +476,7 @@ object Data {
     }
   }
 
-  private fun loadLikesWithTimestamp(yml: CustomYamlFile): MutableMap<UUID, Long> {
+  private fun loadLikesWithTimestamp(yml: YamlConfiguration): MutableMap<UUID, Long> {
     val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf()
     val section = yml.getConfigurationSection("likesWithTimestamp")
 
