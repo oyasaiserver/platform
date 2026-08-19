@@ -74,9 +74,66 @@ object Data {
     return parseSLDataFromYaml(yml, resolvedId)
   }
 
-  /** 最新の[SLData]を取得する (メモリ上のキャッシュ、なければYAMLファイルから読み込む) */
-  fun getLatestSLData(id: Int): SLData? {
-    return getSLDataDirect(id) ?: loadSLDataFromYaml(id)
+  /** 最新の[SLData]を取得する (preferYamlがtrueならYAML優先、falseならメモリ優先) */
+  fun getLatestSLData(id: Int, preferYaml: Boolean = false): SLData? {
+    return if (preferYaml) {
+      loadSLDataFromYaml(id) ?: getSLDataDirect(id)
+    } else {
+      getSLDataDirect(id) ?: loadSLDataFromYaml(id)
+    }
+  }
+
+  /** リコンシリエーションで取得・復元した[SLData]をメモリキャッシュに反映する (メインスレッド専用) */
+  fun applyReconciledData(data: SLData) {
+    val dirName = getDirName(data.id)
+    val oldData = dataMap[dirName]?.firstOrNull { it.id == data.id }
+
+    if (data.deletedAt != null) {
+      removeFromCache(data)
+      try {
+        AllBuild.deleteSLSignData(data)
+        UserBuild.deleteSLSignData(data)
+      } catch (e: Exception) {
+        Tools.plugin.logger.warning(
+            "[SL3] Failed to delete sign GUI items during reconciliation: ${e.message}"
+        )
+      }
+      if (oldData != null && oldData.deletedAt == null) {
+        changeUserLikesInt(data.owner, -oldData.likes.size)
+        try {
+          SLRankUp.minusBuildTask(data.owner)
+        } catch (e: Exception) {
+          Tools.plugin.logger.warning(
+              "[SL3] Failed to update SLRankUp minus during reconciliation: ${e.message}"
+          )
+        }
+      }
+    } else {
+      addToCacheInMemory(data)
+      lastID = max(lastID, data.id)
+      val oldLikes = if (oldData != null && oldData.deletedAt == null) oldData.likes.size else 0
+      val diff = data.likes.size - oldLikes
+      if (diff != 0) {
+        changeUserLikesInt(data.owner, diff)
+      }
+      if (oldData == null || oldData.deletedAt != null) {
+        try {
+          SLRankUp.plusBuildTask(data.owner)
+        } catch (e: Exception) {
+          Tools.plugin.logger.warning(
+              "[SL3] Failed to update SLRankUp plus during reconciliation: ${e.message}"
+          )
+        }
+      }
+      try {
+        AllBuild.updateSLSignData(data)
+        UserBuild.updateSLSignData(data)
+      } catch (e: Exception) {
+        Tools.plugin.logger.warning(
+            "[SL3] Failed to update sign GUI items during reconciliation: ${e.message}"
+        )
+      }
+    }
   }
 
   /** [SLData]を元にデータをソフトデリートする */
@@ -264,7 +321,7 @@ object Data {
               }
 
               try {
-                DirtyBuildManager.reconcile()
+                DirtyBuildManager.reconcile(preferYaml = true)
               } catch (e: Exception) {
                 Tools.plugin.logger.warning(
                     "[SL3] Startup dirty builds reconciliation failed: ${e.message}"
