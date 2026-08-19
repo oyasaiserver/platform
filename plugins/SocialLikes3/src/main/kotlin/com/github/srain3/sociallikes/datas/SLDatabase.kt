@@ -17,6 +17,8 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
+import java.util.logging.Level
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin
@@ -37,8 +39,13 @@ import org.jetbrains.exposed.v1.jdbc.update
 import org.jetbrains.exposed.v1.jdbc.upsert
 
 object SLDatabase {
+  private const val MAX_WRITE_RETRIES = 5
+  private const val INITIAL_BACKOFF_MS = 100L
+  private const val BLOCKING_TIMEOUT_SECONDS = 30L
+
   private var database: Database? = null
-  private var executor: ExecutorService? = null
+  private var writeExecutor: ExecutorService? = null
+  private var readExecutor: ExecutorService? = null
   private lateinit var dbFile: File
   private lateinit var plugin: JavaPlugin
 
@@ -312,12 +319,17 @@ object SLDatabase {
     dbFile = File(plugin.dataFolder, "SocialLikesShadow.db")
     plugin.dataFolder.mkdirs()
 
-    executor =
+    writeExecutor =
         Executors.newSingleThreadExecutor { runnable ->
-          Thread(runnable, "SL3-SQLite-Shadow").apply { isDaemon = true }
+          Thread(runnable, "SL3-SQLite-Write").apply { isDaemon = true }
         }
 
-    executor?.submit {
+    readExecutor =
+        Executors.newSingleThreadExecutor { runnable ->
+          Thread(runnable, "SL3-SQLite-Read").apply { isDaemon = true }
+        }
+
+    writeExecutor?.submit {
       try {
         val dbUrl =
             "jdbc:sqlite:${dbFile.absolutePath}" +
@@ -412,24 +424,27 @@ object SLDatabase {
   }
 
   fun close() {
-    val service = executor ?: return
+    val wService = writeExecutor
+    val rService = readExecutor
     val db = database
 
     try {
-      service
-          .submit {
+      wService
+          ?.submit {
             try {
               db?.let { TransactionManager.closeAndUnregister(it) }
             } catch (e: Exception) {
               loggerWarning("close", e)
             }
           }
-          .get(10, TimeUnit.SECONDS)
+          ?.get(10, TimeUnit.SECONDS)
     } catch (e: Exception) {
       loggerWarning("close", e)
     } finally {
-      service.shutdown()
-      executor = null
+      wService?.shutdown()
+      rService?.shutdown()
+      writeExecutor = null
+      readExecutor = null
       database = null
     }
   }
@@ -2387,7 +2402,7 @@ object SLDatabase {
 
   private fun submit(taskName: String, block: () -> Unit) {
     val service =
-        executor
+        readExecutor
             ?: run {
               Tools.plugin.logger.warning(
                   "[SL3] SQLite shadow $taskName skipped: database is not initialized"
@@ -2413,9 +2428,87 @@ object SLDatabase {
     }
   }
 
+  fun submitWrite(
+      taskName: String,
+      onFinalFailure: ((Exception) -> Unit)? = null,
+      block: () -> Unit,
+  ) {
+    val service =
+        writeExecutor
+            ?: run {
+              val ex = IllegalStateException("database is not initialized")
+              Tools.plugin.logger.severe(
+                  "[SL3] SQLite write $taskName skipped: database is not initialized"
+              )
+              try {
+                onFinalFailure?.invoke(ex)
+              } catch (cbEx: Exception) {
+                Tools.plugin.logger.log(
+                    Level.SEVERE,
+                    "[SL3] SQLite write $taskName onFinalFailure callback threw exception",
+                    cbEx,
+                )
+              }
+              return
+            }
+
+    service.submit {
+      for (attempt in 1..MAX_WRITE_RETRIES) {
+        try {
+          val db = database ?: throw IllegalStateException("database is not connected")
+
+          transaction(db) { block() }
+          return@submit
+        } catch (e: Exception) {
+          if (attempt == MAX_WRITE_RETRIES) {
+            val message = e.message ?: e.javaClass.simpleName
+            Tools.plugin.logger.log(
+                Level.SEVERE,
+                "[SL3] SQLite write $taskName failed permanently after $MAX_WRITE_RETRIES attempts: $message",
+                e,
+            )
+            try {
+              onFinalFailure?.invoke(e)
+            } catch (cbEx: Exception) {
+              Tools.plugin.logger.log(
+                  Level.SEVERE,
+                  "[SL3] SQLite write $taskName onFinalFailure callback threw exception",
+                  cbEx,
+              )
+            }
+          } else {
+            val backoffMs = attempt * INITIAL_BACKOFF_MS
+            val message = e.message ?: e.javaClass.simpleName
+            Tools.plugin.logger.warning(
+                "[SL3] SQLite write $taskName failed (attempt $attempt/$MAX_WRITE_RETRIES), retrying in ${backoffMs}ms: $message"
+            )
+            try {
+              Thread.sleep(backoffMs)
+            } catch (ie: InterruptedException) {
+              Thread.currentThread().interrupt()
+              Tools.plugin.logger.warning(
+                  "[SL3] SQLite write $taskName interrupted during retry backoff"
+              )
+              try {
+                onFinalFailure?.invoke(ie)
+              } catch (cbEx: Exception) {
+                Tools.plugin.logger.log(
+                    Level.SEVERE,
+                    "[SL3] SQLite write $taskName onFinalFailure callback threw exception",
+                    cbEx,
+                )
+              }
+              return@submit
+            }
+          }
+        }
+      }
+    }
+  }
+
   private fun <T> submitBlocking(taskName: String, block: () -> T): T? {
     val service =
-        executor
+        readExecutor
             ?: run {
               Tools.plugin.logger.warning(
                   "[SL3] SQLite shadow $taskName skipped: database is not initialized"
@@ -2445,7 +2538,13 @@ object SLDatabase {
         )
 
     return try {
-      future.get()
+      future.get(BLOCKING_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+    } catch (e: TimeoutException) {
+      Tools.plugin.logger.warning(
+          "[SL3] SQLite shadow $taskName timed out after ${BLOCKING_TIMEOUT_SECONDS}s"
+      )
+      future.cancel(true)
+      null
     } catch (e: Exception) {
       loggerWarning(taskName, e)
       null
