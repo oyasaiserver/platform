@@ -52,12 +52,10 @@ object SLA : CommandExecutor {
 
     val signEvents =
         buildList {
-          Data.getSLDataAll().forEach { add(SignEvent(it.time, it.id)) }
-          PublicityHistory.getData().values.forEach { add(SignEvent(it.timeStamp, it.slid)) }
-        }
-            .mapNotNull { event ->
-              Data.getSLData(event.signId)?.let { event }
+              Data.getSLDataAll().forEach { add(SignEvent(it.time, it.id)) }
+              PublicityHistory.getData().values.forEach { add(SignEvent(it.timeStamp, it.slid)) }
             }
+            .mapNotNull { event -> Data.getSLData(event.signId)?.let { event } }
             .sortedByDescending { it.time }
             .take(MAX_HISTORY)
 
