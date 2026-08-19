@@ -4564,11 +4564,19 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       )
 
   private fun dialogPlayerName(uuidText: String, playerNames: Map<String, String>): String {
-    val onlineName = parseUuid(uuidText)?.let { Bukkit.getPlayer(it)?.name }
-    return compactDialogText(
-        (onlineName ?: playerNames[uuidText] ?: uuidText.take(8)).removePrefix("."),
-        18,
-    )
+    val uuid = parseUuid(uuidText)
+    val resolvedName =
+        uuid?.let { Bukkit.getPlayer(it)?.name }
+            ?: playerNames[uuidText]
+            ?: uuid?.let {
+              try {
+                Bukkit.getOfflinePlayer(it).name
+              } catch (e: Exception) {
+                null
+              }
+            }
+            ?: uuidText.take(8)
+    return compactDialogText(resolvedName.removePrefix("."), 18)
   }
 
   // 2026-08-17: 省略記号`…`を付けず、そのまま切り詰めるだけに変更(ユーザー判断)。

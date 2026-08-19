@@ -461,8 +461,8 @@ object SLDatabase {
   private val playerNameCache = java.util.concurrent.ConcurrentHashMap<String, String>()
 
   /**
-   * Resolves the supplied UUIDs with one query. This is intentionally limited to the /sldata
-   * statistics cache; it does not fall back to Bukkit's offline-player lookup.
+   * Resolves the supplied UUIDs with one query, falling back to Bukkit offline-player cache when
+   * not found in the database.
    */
   fun loadPlayerNamesBlocking(uuids: List<String>): Map<String, String> {
     val normalizedUuids = uuids.filter { it.isNotBlank() }.distinct()
@@ -470,6 +470,7 @@ object SLDatabase {
 
     val uncached = normalizedUuids.filter { !playerNameCache.containsKey(it) }
     if (uncached.isNotEmpty()) {
+      // 1. DBから一括クエリ
       submitBlocking("loadPlayerNames") {
         uncached.chunked(900).forEach { chunk ->
           val placeholders = chunk.joinToString(",") { "?" }
@@ -483,12 +484,55 @@ object SLDatabase {
                   while (results.next()) {
                     val u = results.getString("uuid")
                     val n = results.getString("last_known_name")
-                    if (u != null && n != null) {
+                    if (u != null && !n.isNullOrBlank()) {
                       playerNameCache[u] = n
                     }
                   }
                 }
               }
+        }
+      }
+
+      // 2. DBで見つからなかったUUIDを Bukkit.getOfflinePlayer でフォールバック解決
+      val stillUncached = uncached.filter { !playerNameCache.containsKey(it) }
+      if (stillUncached.isNotEmpty()) {
+        val newlyResolved = mutableListOf<Pair<String, String>>()
+        for (uStr in stillUncached) {
+          try {
+            val u = UUID.fromString(uStr)
+            val name = Bukkit.getPlayer(u)?.name ?: Bukkit.getOfflinePlayer(u).name
+            if (!name.isNullOrBlank()) {
+              playerNameCache[uStr] = name
+              newlyResolved.add(uStr to name)
+            }
+          } catch (e: Exception) {}
+        }
+        // 3. 解決できた名前をDBに非同期保存（次回から即座にDBで解決できるようにする）
+        if (newlyResolved.isNotEmpty()) {
+          submit("backfillPlayerNames") {
+            try {
+              rawConnection()?.let { conn ->
+                conn
+                    .prepareStatement(
+                        "INSERT OR REPLACE INTO players (uuid, last_known_name, updated_at) VALUES (?, ?, ?)"
+                    )
+                    .use { ps ->
+                      val now = System.currentTimeMillis()
+                      for ((u, n) in newlyResolved) {
+                        ps.setString(1, u)
+                        ps.setString(2, n)
+                        ps.setLong(3, now)
+                        ps.addBatch()
+                      }
+                      ps.executeBatch()
+                    }
+              }
+            } catch (e: Exception) {
+              Tools.plugin.logger.warning(
+                  "[SLDatabase] Failed to backfill resolved player names: ${e.message}"
+              )
+            }
+          }
         }
       }
     }
