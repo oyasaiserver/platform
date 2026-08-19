@@ -6,6 +6,7 @@ import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.discord.SLDiscord
 import java.io.File
+import java.util.UUID
 import kotlin.collections.set
 import me.realized.tokenmanager.api.TokenManager
 import net.luckperms.api.LuckPermsProvider
@@ -149,7 +150,7 @@ object Tools {
     return oldSlSignRegex.containsMatchIn(unColorFrontL0)
   }
 
-  fun updateSLSign(currentSLData: SLData, block: BlockState): Boolean {
+  fun updateSLSign(currentSLData: SLData, block: BlockState, actorUuid: UUID? = null) {
     val beforeJson =
         com.google.gson
             .Gson()
@@ -164,19 +165,11 @@ object Tools {
             )
 
     val oldLoc = currentSLData.loc
-    val oldWorld = currentSLData.worldName
-    val oldSignMaterial = currentSLData.signMaterial
-
     currentSLData.loc = block.location
     currentSLData.worldName = block.world.name
     currentSLData.signMaterial = block.type.name
 
-    if (!Data.save(currentSLData)) {
-      currentSLData.loc = oldLoc
-      currentSLData.worldName = oldWorld
-      currentSLData.signMaterial = oldSignMaterial
-      return false
-    }
+    Data.save(currentSLData, actorUuid)
 
     val afterJson =
         com.google.gson
@@ -190,7 +183,7 @@ object Tools {
                     "sign_material" to block.type.name,
                 )
             )
-    SLDatabase.recordEvent(currentSLData.id, "moved", null, beforeJson, afterJson)
+    SLDatabase.recordEvent(currentSLData.id, "moved", actorUuid, beforeJson, afterJson)
 
     if (oldLoc.world != null) {
       val state = oldLoc.block.state
@@ -201,11 +194,10 @@ object Tools {
     }
     // Discordへ反映
     SLDiscord.changeSLDataToMsg(currentSLData)
-    return true
   }
 
-  fun updateLegacySLSign(currentSLData: SLData, block: BlockState): Boolean {
-    if (block !is Sign) return false
+  fun updateLegacySLSign(currentSLData: SLData, block: BlockState, actorUuid: UUID? = null) {
+    if (block !is Sign) return
     var id =
         block
             .getSide(Side.FRONT)
@@ -214,7 +206,7 @@ object Tools {
             .color()
             ?.asHexString()
             ?.substring(1)
-            ?.toIntOrNull(16) ?: return false
+            ?.toIntOrNull(16) ?: return
     id = -id
     val resolvedId = SLDatabase.resolveMigratedId(id)
 
@@ -232,19 +224,11 @@ object Tools {
             )
 
     val oldLoc = currentSLData.loc
-    val oldWorld = currentSLData.worldName
-    val oldSignMaterial = currentSLData.signMaterial
-
     currentSLData.loc = block.location
     currentSLData.worldName = block.world.name
     currentSLData.signMaterial = block.type.name
 
-    if (!Data.save(currentSLData)) {
-      currentSLData.loc = oldLoc
-      currentSLData.worldName = oldWorld
-      currentSLData.signMaterial = oldSignMaterial
-      return false
-    }
+    Data.save(currentSLData, actorUuid)
 
     val afterJson =
         com.google.gson
@@ -258,7 +242,7 @@ object Tools {
                     "sign_material" to block.type.name,
                 )
             )
-    SLDatabase.recordEvent(currentSLData.id, "moved", null, beforeJson, afterJson)
+    SLDatabase.recordEvent(currentSLData.id, "moved", actorUuid, beforeJson, afterJson)
 
     if (oldLoc.world != null) {
       val state = oldLoc.block.state
@@ -281,7 +265,6 @@ object Tools {
     block.isWaxed = true
     block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, resolvedId)
     block.update()
-    return true
   }
 
   fun displaySocialLikeToast(player: Player, icon: ItemStack, text: String): Boolean {

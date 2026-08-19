@@ -428,11 +428,7 @@ object SLSignLikes {
         text ->
       val beforeComment = slData.comment
       slData.comment = text
-      if (!Data.save(slData)) {
-        slData.comment = beforeComment
-        p.sendMessage(Tools.socialLikesLOGO + " &cデータの保存に失敗しました。".color())
-        return@open
-      }
+      Data.save(slData, p.uniqueId)
 
       val beforeJson = com.google.gson.Gson().toJson(mapOf("comment" to beforeComment))
       val afterJson = com.google.gson.Gson().toJson(mapOf("comment" to text))

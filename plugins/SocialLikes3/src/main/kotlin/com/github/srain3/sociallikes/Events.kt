@@ -107,11 +107,7 @@ object Events : Listener {
             signMaterial = signMaterial,
         )
 
-    if (!Data.save(data)) {
-      e.isCancelled = true
-      e.player.sendMessage(Tools.socialLikesLOGO + " &cデータの保存に失敗しました。".color())
-      return
-    }
+    Data.save(data, e.player.uniqueId)
 
     // 看板の装飾
     e.setLine(0, Tools.socialLikesLOGO)
@@ -226,11 +222,8 @@ object Events : Listener {
       // SLUpdateモードなら処理を行う、それ以外はreturn
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
-          if (updateSLSign(data, block)) {
-            e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
-          } else {
-            e.player.sendMessage(Tools.socialLikesLOGO + " &cデータの保存に失敗しました。".color())
-          }
+          updateSLSign(data, block, e.player.uniqueId)
+          e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
           SLUpdate.switch[e.player.uniqueId] = false
         }
         return
@@ -248,12 +241,7 @@ object Events : Listener {
         // データに記録・保存する
         data.likes.add(e.player.uniqueId)
         data.likesWithTimestamp[e.player.uniqueId] = System.currentTimeMillis()
-        if (!Data.save(data)) {
-          data.likes.remove(e.player.uniqueId)
-          data.likesWithTimestamp.remove(e.player.uniqueId)
-          e.player.sendMessage(Tools.socialLikesLOGO + " &cデータの保存に失敗しました。".color())
-          return
-        }
+        Data.save(data, e.player.uniqueId)
         SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
         Data.changeUserLikesInt(data.owner, 1)
 
@@ -310,41 +298,30 @@ object Events : Listener {
           if (!data.check) {
             val beforeCheck = data.check
             data.check = true
-            if (Data.save(data)) {
-              SLDatabase.recordEvent(
-                  data.id,
-                  "checked_changed",
-                  e.player.uniqueId,
-                  com.google.gson.Gson().toJson(mapOf("checked" to beforeCheck)),
-                  com.google.gson.Gson().toJson(mapOf("checked" to true)),
-              )
-            } else {
-              data.check = beforeCheck
-              e.player.sendMessage(Tools.socialLikesLOGO + " &cデータの保存に失敗しました。".color())
-            }
+            Data.save(data, e.player.uniqueId)
+            SLDatabase.recordEvent(
+                data.id,
+                "checked_changed",
+                e.player.uniqueId,
+                com.google.gson.Gson().toJson(mapOf("checked" to beforeCheck)),
+                com.google.gson.Gson().toJson(mapOf("checked" to true)),
+            )
           }
         }
       } else {
         if (e.player.isOp) {
+          block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
           if (!data.check) {
             val beforeCheck = data.check
             data.check = true
-            if (Data.save(data)) {
-              SLDatabase.recordEvent(
-                  data.id,
-                  "checked_changed",
-                  e.player.uniqueId,
-                  com.google.gson.Gson().toJson(mapOf("checked" to beforeCheck)),
-                  com.google.gson.Gson().toJson(mapOf("checked" to true)),
-              )
-              block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
-            } else {
-              data.check = beforeCheck
-              e.player.sendMessage(Tools.socialLikesLOGO + " &cデータの保存に失敗しました。".color())
-              block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()}".color())
-            }
-          } else {
-            block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
+            Data.save(data, e.player.uniqueId)
+            SLDatabase.recordEvent(
+                data.id,
+                "checked_changed",
+                e.player.uniqueId,
+                com.google.gson.Gson().toJson(mapOf("checked" to beforeCheck)),
+                com.google.gson.Gson().toJson(mapOf("checked" to true)),
+            )
           }
         } else {
           block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()}".color())
@@ -378,11 +355,8 @@ object Events : Listener {
       // SLUpdateモードなら処理を行う、それ以外はreturn
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
-          if (updateLegacySLSign(data, block)) {
-            e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
-          } else {
-            e.player.sendMessage(Tools.socialLikesLOGO + " &cデータの保存に失敗しました。".color())
-          }
+          updateLegacySLSign(data, block, e.player.uniqueId)
+          e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
           SLUpdate.switch[e.player.uniqueId] = false
         } else {
           e.player.sendMessage(

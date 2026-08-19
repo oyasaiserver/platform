@@ -484,33 +484,29 @@ object SLDatabase {
     }
   }
 
-  fun saveBuild(data: SLData) {
+  fun saveBuild(data: SLData, onFinalFailure: ((Exception) -> Unit)? = null) {
     val snapshot = data.toBuildSnapshot()
-    submit("saveBuild") { upsertBuild(snapshot) }
+    submitWrite("saveBuild[${snapshot.id}]", onFinalFailure) { upsertBuild(snapshot) }
   }
 
-  fun saveBuildBlocking(data: SLData): Boolean {
-    val snapshot = data.toBuildSnapshot()
-    return submitWriteBlocking("saveBuildBlocking") {
-      upsertBuild(snapshot)
-      true
-    } ?: false
-  }
-
-  fun softDeleteBuildBlocking(id: Int, deletedBy: UUID?, deletedAt: LocalDateTime): Boolean {
+  fun softDeleteBuild(
+      id: Int,
+      deletedBy: UUID?,
+      deletedAt: LocalDateTime,
+      onFinalFailure: ((Exception) -> Unit)? = null,
+  ) {
     val deletedAtStr = deletedAt.toString()
     val deletedByStr = deletedBy?.toString()
-    return submitWriteBlocking("softDeleteBuild") {
+    submitWrite("softDeleteBuild[$id]", onFinalFailure) {
       Builds.update({ Builds.id eq id }) {
         it[Builds.deletedAt] = deletedAtStr
         it[Builds.deletedBy] = deletedByStr
       }
-      true
-    } ?: false
+    }
   }
 
   fun deleteBuild(id: Int) {
-    softDeleteBuildBlocking(id, null, LocalDateTime.now())
+    softDeleteBuild(id, null, LocalDateTime.now())
   }
 
   fun syncBuilds(dataList: Collection<SLData>) {

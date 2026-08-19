@@ -291,13 +291,6 @@ object SLSignSetting {
         }
 
     val beforeMaterial = slData.signMaterial ?: sign.type.name
-    slData.signMaterial = newMaterial.name
-    if (!Data.save(slData)) {
-      slData.signMaterial = beforeMaterial
-      player.sendMessage(Tools.socialLikesLOGO + " &cデータの保存に失敗しました。".color())
-      return
-    }
-
     sign.type = newMaterial
     sign.update(true)
 
@@ -318,6 +311,9 @@ object SLSignSetting {
     sign.isWaxed = true
     sign.persistentDataContainer.set(Events.idKey, PersistentDataType.INTEGER, slData.id)
     sign.update(true)
+
+    slData.signMaterial = newMaterial.name
+    Data.save(slData, player.uniqueId)
 
     val beforeJson = com.google.gson.Gson().toJson(mapOf("sign_material" to beforeMaterial))
     val afterJson = com.google.gson.Gson().toJson(mapOf("sign_material" to newMaterial.name))
@@ -344,15 +340,10 @@ object SLSignSetting {
         item,
     ) { p, text ->
       val beforeTitle = slData.title
-      slData.title = text
-      if (!Data.save(slData)) {
-        slData.title = beforeTitle
-        p.sendMessage(Tools.socialLikesLOGO + " &cデータの保存に失敗しました。".color())
-        return@open
-      }
-
       sign.getSide(Side.FRONT).setLine(1, "&a${text}".color())
       sign.update()
+      slData.title = text
+      Data.save(slData, p.uniqueId)
 
       val beforeJson = com.google.gson.Gson().toJson(mapOf("title" to beforeTitle))
       val afterJson = com.google.gson.Gson().toJson(mapOf("title" to text))

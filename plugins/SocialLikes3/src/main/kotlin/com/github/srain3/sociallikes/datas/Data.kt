@@ -12,6 +12,7 @@ import java.io.File
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
+import java.util.logging.Level
 import kotlin.math.floor
 import kotlin.math.max
 import org.bukkit.Bukkit
@@ -27,29 +28,21 @@ object Data {
 
   private val gson = Gson()
 
-  /** [SLData]をSQLite(正データ)へ保存し、Yamlへ非同期バックアップを行いつつCacheに反映する */
-  fun save(data: SLData): Boolean {
-    // 1. SQLite へ同期保存 (正データ)
-    val saved = SLDatabase.saveBuildBlocking(data)
-    if (!saved) {
-      Tools.plugin.logger.severe("[SL3] Failed to save build ID:${data.id} to SQLite DB!")
-      return false
-    }
-
-    // 2. YAML へ非同期・ベストエフォート保存
-    saveYamlAsync(data)
-
-    // 3. ソフトデリート済みの場合は現役キャッシュから除外
+  /** [SLData]をメモリ(キャッシュ)へ反映し、SQLite(正データ)への非同期保存とYamlへのバックアップを行う */
+  fun save(data: SLData, actorUuid: UUID? = null) {
+    // 1. メモリ (キャッシュ) を先行更新
     if (data.deletedAt != null) {
       removeFromCache(data)
-      return true
+    } else {
+      addToCacheInMemory(data)
+      SLRankUp.plusBuildTask(data.owner)
     }
 
-    // 4. Cacheへ保存する
-    addToCacheInMemory(data)
+    // 2. SQLite へ非同期保存 (スナップショットをキューに積む)
+    SLDatabase.saveBuild(data) { notifyPlayerFailure(actorUuid, "データの保存に失敗しました。") }
 
-    SLRankUp.plusBuildTask(data.owner)
-    return true
+    // 3. YAML へ非同期・ベストエフォート保存
+    saveYamlAsync(data)
   }
 
   /** IDから[SLData]を取得する、ない場合nullを返す (負IDはマイグレーションマップ経由で解決) */
@@ -61,15 +54,8 @@ object Data {
   }
 
   /** [SLData]を元にデータをソフトデリートする */
-  fun delID(slData: SLData, deletedBy: UUID? = null): Boolean {
+  fun delID(slData: SLData, deletedBy: UUID? = null) {
     val now = LocalDateTime.now()
-
-    // 1. SQLite側をソフトデリート (正データ)
-    val deleted = SLDatabase.softDeleteBuildBlocking(slData.id, deletedBy, now)
-    if (!deleted) {
-      Tools.plugin.logger.severe("[SL3] Failed to soft-delete build ID:${slData.id} in SQLite DB!")
-      return false
-    }
 
     val beforeJson =
         gson.toJson(
@@ -83,6 +69,7 @@ object Data {
             )
         )
 
+    // 1. メモリ (キャッシュ) を先行更新
     slData.deletedAt = now
     slData.deletedBy = deletedBy
 
@@ -90,6 +77,13 @@ object Data {
     UserBuild.deleteSLSignData(slData)
 
     removeFromCache(slData)
+
+    SLRankUp.minusBuildTask(slData.owner)
+
+    // 2. SQLite 側を非同期ソフトデリート
+    SLDatabase.softDeleteBuild(slData.id, deletedBy, now) {
+      notifyPlayerFailure(deletedBy, "データの削除に失敗しました。")
+    }
 
     // イベントログを記録
     val afterJson =
@@ -101,11 +95,28 @@ object Data {
         )
     SLDatabase.recordEvent(slData.id, "deleted", deletedBy, beforeJson, afterJson, now)
 
-    // YAMLへ非同期反映 (削除フラグを立てて保存)
+    // 3. YAML へ非同期反映 (削除フラグを立てて保存)
     saveYamlAsync(slData)
+  }
 
-    SLRankUp.minusBuildTask(slData.owner)
-    return true
+  private fun notifyPlayerFailure(playerUuid: UUID?, message: String) {
+    if (playerUuid == null) return
+    try {
+      Bukkit.getScheduler()
+          .runTask(
+              Tools.plugin,
+              Runnable {
+                val player = Bukkit.getPlayer(playerUuid) ?: return@Runnable
+                player.sendMessage(Tools.socialLikesLOGO + " &c$message".color())
+              },
+          )
+    } catch (e: Exception) {
+      Tools.plugin.logger.log(
+          Level.WARNING,
+          "[SL3] Failed to schedule failure notification to $playerUuid",
+          e,
+      )
+    }
   }
 
   /** [SLData]を50区切り別のフォルダ名と紐付けて保存しているCache */
