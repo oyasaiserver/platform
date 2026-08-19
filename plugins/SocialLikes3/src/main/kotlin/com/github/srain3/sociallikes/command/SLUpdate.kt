@@ -78,7 +78,9 @@ object SLUpdate : CommandExecutor {
       var susp = false
       if (isSLSign(block)) {
         val data = Data.getSLData(id)
-        if (data != null) updateSLSign(data, block) else susp = true
+        if (data != null) {
+          if (!updateSLSign(data, block)) susp = true
+        } else susp = true
       } else if (isLegacySLSign(block)) {
         id =
             block
@@ -91,7 +93,9 @@ object SLUpdate : CommandExecutor {
                 ?.toIntOrNull(16) ?: Integer.MIN_VALUE
         id = -id
         val data = Data.getSLData(id)
-        if (data != null) updateLegacySLSign(data, block) else susp = true
+        if (data != null) {
+          if (!updateLegacySLSign(data, block)) susp = true
+        } else susp = true
       } else return@forEach
       val result =
           if (!susp) Component.text("アップデートしました！ ").color(TextColor.color(0x55FF55))

@@ -46,8 +46,13 @@ object SLSignDel {
         )
 
     buttonY.setAction {
+      val deleted = Data.delID(slData, it.whoClicked.uniqueId)
+      if (!deleted) {
+        it.whoClicked.sendMessage(Tools.socialLikesLOGO + " &cデータの削除に失敗しました。".color())
+        it.whoClicked.closeInventory()
+        return@setAction
+      }
       Data.changeUserLikesInt(slData.owner, -slData.likes.count())
-      Data.delID(slData, it.whoClicked.uniqueId)
       sign.block.blockData = Material.AIR.createBlockData()
       sign.update()
       SLDiscord.deleteSLToMsg(slData)

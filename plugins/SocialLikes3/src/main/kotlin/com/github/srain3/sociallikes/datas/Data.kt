@@ -28,11 +28,12 @@ object Data {
   private val gson = Gson()
 
   /** [SLData]をSQLite(正データ)へ保存し、Yamlへ非同期バックアップを行いつつCacheに反映する */
-  fun save(data: SLData) {
+  fun save(data: SLData): Boolean {
     // 1. SQLite へ同期保存 (正データ)
     val saved = SLDatabase.saveBuildBlocking(data)
     if (!saved) {
-      Tools.plugin.logger.severe("[SL3] Failed to save build ID:${data.id} to SQLite shadow DB!")
+      Tools.plugin.logger.severe("[SL3] Failed to save build ID:${data.id} to SQLite DB!")
+      return false
     }
 
     // 2. YAML へ非同期・ベストエフォート保存
@@ -41,13 +42,14 @@ object Data {
     // 3. ソフトデリート済みの場合は現役キャッシュから除外
     if (data.deletedAt != null) {
       removeFromCache(data)
-      return
+      return true
     }
 
     // 4. Cacheへ保存する
     addToCacheInMemory(data)
 
     SLRankUp.plusBuildTask(data.owner)
+    return true
   }
 
   /** IDから[SLData]を取得する、ない場合nullを返す (負IDはマイグレーションマップ経由で解決) */
@@ -59,7 +61,16 @@ object Data {
   }
 
   /** [SLData]を元にデータをソフトデリートする */
-  fun delID(slData: SLData, deletedBy: UUID? = null) {
+  fun delID(slData: SLData, deletedBy: UUID? = null): Boolean {
+    val now = LocalDateTime.now()
+
+    // 1. SQLite側をソフトデリート (正データ)
+    val deleted = SLDatabase.softDeleteBuildBlocking(slData.id, deletedBy, now)
+    if (!deleted) {
+      Tools.plugin.logger.severe("[SL3] Failed to soft-delete build ID:${slData.id} in SQLite DB!")
+      return false
+    }
+
     val beforeJson =
         gson.toJson(
             mapOf(
@@ -72,7 +83,6 @@ object Data {
             )
         )
 
-    val now = LocalDateTime.now()
     slData.deletedAt = now
     slData.deletedBy = deletedBy
 
@@ -80,9 +90,6 @@ object Data {
     UserBuild.deleteSLSignData(slData)
 
     removeFromCache(slData)
-
-    // SQLite側をソフトデリート
-    SLDatabase.softDeleteBuildBlocking(slData.id, deletedBy, now)
 
     // イベントログを記録
     val afterJson =
@@ -98,6 +105,7 @@ object Data {
     saveYamlAsync(slData)
 
     SLRankUp.minusBuildTask(slData.owner)
+    return true
   }
 
   /** [SLData]を50区切り別のフォルダ名と紐付けて保存しているCache */
@@ -377,11 +385,11 @@ object Data {
   }
 
   private fun getReadSource(): ReadSource {
-    val value = Tools.plugin.config.getString("readSource", ReadSource.YAML.configValue)
+    val value = Tools.plugin.config.getString("readSource", ReadSource.SQLITE.configValue)
     return ReadSource.values().firstOrNull { it.configValue == value?.lowercase(Locale.ROOT) }
         ?: run {
-          Tools.plugin.logger.warning("[SL3] Unknown readSource '$value'. Falling back to yaml.")
-          ReadSource.YAML
+          Tools.plugin.logger.warning("[SL3] Unknown readSource '$value'. Falling back to sqlite.")
+          ReadSource.SQLITE
         }
   }
 
