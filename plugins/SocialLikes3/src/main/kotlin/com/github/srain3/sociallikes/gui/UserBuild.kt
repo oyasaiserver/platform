@@ -147,7 +147,9 @@ object UserBuild {
     userBuildItem.clear()
     Thread(
             {
-              dataMap.values.forEach { list -> list.forEach { slData -> createSignItem(slData) } }
+              dataMap.values.forEach { list ->
+                list.filter { it.deletedAt == null }.forEach { slData -> createSignItem(slData) }
+              }
               userBuildItem.toSortedMap()
             },
             "SL3-UserBuildGUIItem",

@@ -55,7 +55,7 @@ object Data {
     val resolvedId = if (id < 0) SLDatabase.resolveMigratedId(id) else id
     val dirName = getDirName(resolvedId)
     val list = dataMap[dirName] ?: return null
-    return list.firstOrNull { it.id == resolvedId }
+    return list.firstOrNull { it.id == resolvedId && it.deletedAt == null }
   }
 
   /** [SLData]を元にデータをソフトデリートする */
@@ -107,6 +107,13 @@ object Data {
   fun getSLDataAll(): MutableSet<SLData> {
     val set = mutableSetOf<SLData>()
     dataMap.forEach { (_, list) -> set.addAll(list.filter { it.deletedAt == null }) }
+    return set
+  }
+
+  /** SLDataをすべて返す (ソフトデリート済みを含む) */
+  fun getSLDataAllIncludingDeleted(): MutableSet<SLData> {
+    val set = mutableSetOf<SLData>()
+    dataMap.forEach { (_, list) -> set.addAll(list) }
     return set
   }
 
@@ -184,7 +191,7 @@ object Data {
                             } catch (_: Exception) {
                               null
                             }
-                          }
+                          } ?: if (deleted) time else null
                       val deletedByStr = yml.getString("deleted_by")
                       val deletedBy =
                           deletedByStr?.let { s ->
@@ -199,11 +206,6 @@ object Data {
                       if (id > 0) {
                         lastID = max(lastID, id)
                         ids.add(id)
-                      }
-
-                      // ソフトデリート済みの場合は現役キャッシュに追加しない
-                      if (deleted || deletedAt != null) {
-                        return@file
                       }
 
                       // locationへ変換
@@ -278,7 +280,7 @@ object Data {
 
               if (readSource == ReadSource.YAML) {
                 try {
-                  SLDatabase.syncBuilds(getSLDataAll())
+                  SLDatabase.syncBuilds(getSLDataAllIncludingDeleted())
                 } catch (e: Exception) {
                   Tools.plugin.logger.warning("[SL3] SQLite shadow syncBuilds failed: ${e.message}")
                 }
@@ -401,7 +403,9 @@ object Data {
     list.add(slData)
     dataMap[dirName] = list
 
-    userLikesInt[slData.owner] = (userLikesInt[slData.owner] ?: 0) + slData.likes.count()
+    if (slData.deletedAt == null) {
+      userLikesInt[slData.owner] = (userLikesInt[slData.owner] ?: 0) + slData.likes.count()
+    }
   }
 
   private fun loadLikesWithTimestamp(yml: CustomYamlFile): MutableMap<UUID, Long> {
