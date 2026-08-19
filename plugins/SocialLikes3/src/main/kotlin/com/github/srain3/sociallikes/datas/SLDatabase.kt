@@ -14,6 +14,7 @@ import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.Callable
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -43,7 +44,8 @@ object SLDatabase {
   private const val INITIAL_BACKOFF_MS = 100L
   private const val BLOCKING_TIMEOUT_SECONDS = 30L
 
-  private var database: Database? = null
+  @Volatile private var database: Database? = null
+  private var initLatch = CountDownLatch(1)
   private var writeExecutor: ExecutorService? = null
   private var readExecutor: ExecutorService? = null
   private lateinit var dbFile: File
@@ -319,6 +321,8 @@ object SLDatabase {
     dbFile = File(plugin.dataFolder, "SocialLikesShadow.db")
     plugin.dataFolder.mkdirs()
 
+    initLatch = CountDownLatch(1)
+
     writeExecutor =
         Executors.newSingleThreadExecutor { runnable ->
           Thread(runnable, "SL3-SQLite-Write").apply { isDaemon = true }
@@ -353,11 +357,13 @@ object SLDatabase {
             migrateBuildsColumns(conn)
             createIndexesAndViews(conn)
             logStartupSummary(plugin, conn)
+            loadIdMigrationMapDirect(conn)
           }
         }
-        loadIdMigrationMapBlocking()
       } catch (e: Exception) {
         loggerWarning("init", e)
+      } finally {
+        initLatch.countDown()
       }
     }
   }
@@ -424,6 +430,7 @@ object SLDatabase {
   }
 
   fun close() {
+    initLatch.countDown()
     val wService = writeExecutor
     val rService = readExecutor
     val db = database
@@ -587,21 +594,24 @@ object SLDatabase {
     }
   }
 
+  private fun loadIdMigrationMapDirect(conn: Connection): Map<Int, Int> {
+    val map = mutableMapOf<Int, Int>()
+    conn.prepareStatement("SELECT old_negative_id, new_positive_id FROM id_migration_map").use {
+        stmt ->
+      stmt.executeQuery().use { rs ->
+        while (rs.next()) {
+          map[rs.getInt("old_negative_id")] = rs.getInt("new_positive_id")
+        }
+      }
+    }
+    idMigrationCache.putAll(map)
+    return map
+  }
+
   fun loadIdMigrationMapBlocking(): Map<Int, Int> {
     return submitBlocking("loadIdMigrationMap") {
-          val map = mutableMapOf<Int, Int>()
-          rawConnection()
-              ?.prepareStatement("SELECT old_negative_id, new_positive_id FROM id_migration_map")
-              ?.use { stmt ->
-                stmt.executeQuery().use { rs ->
-                  while (rs.next()) {
-                    map[rs.getInt("old_negative_id")] = rs.getInt("new_positive_id")
-                  }
-                }
-              }
-          map
-        }
-        ?.also { idMigrationCache.putAll(it) } ?: emptyMap()
+      rawConnection()?.let { loadIdMigrationMapDirect(it) } ?: emptyMap()
+    } ?: emptyMap()
   }
 
   fun resolveMigratedId(id: Int): Int {
@@ -2400,6 +2410,15 @@ object SLDatabase {
         .orEmpty()
   }
 
+  private fun awaitInit(timeoutSeconds: Long = BLOCKING_TIMEOUT_SECONDS): Boolean {
+    return try {
+      initLatch.await(timeoutSeconds, TimeUnit.SECONDS)
+    } catch (e: InterruptedException) {
+      Thread.currentThread().interrupt()
+      false
+    }
+  }
+
   private fun submit(taskName: String, block: () -> Unit) {
     val service =
         readExecutor
@@ -2411,6 +2430,12 @@ object SLDatabase {
             }
 
     service.submit {
+      if (!awaitInit()) {
+        Tools.plugin.logger.warning(
+            "[SL3] SQLite shadow $taskName skipped: database initialization timed out"
+        )
+        return@submit
+      }
       try {
         val db =
             database
@@ -2453,6 +2478,22 @@ object SLDatabase {
             }
 
     service.submit {
+      if (!awaitInit()) {
+        val ex = TimeoutException("database initialization timed out")
+        Tools.plugin.logger.severe(
+            "[SL3] SQLite write $taskName skipped: database initialization timed out"
+        )
+        try {
+          onFinalFailure?.invoke(ex)
+        } catch (cbEx: Exception) {
+          Tools.plugin.logger.log(
+              Level.SEVERE,
+              "[SL3] SQLite write $taskName onFinalFailure callback threw exception",
+              cbEx,
+          )
+        }
+        return@submit
+      }
       for (attempt in 1..MAX_WRITE_RETRIES) {
         try {
           val db = database ?: throw IllegalStateException("database is not connected")
@@ -2519,6 +2560,12 @@ object SLDatabase {
     val future =
         service.submit(
             Callable<T?> {
+              if (!awaitInit()) {
+                Tools.plugin.logger.warning(
+                    "[SL3] SQLite shadow $taskName skipped: database initialization timed out"
+                )
+                return@Callable null
+              }
               try {
                 val db =
                     database
