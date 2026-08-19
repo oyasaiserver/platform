@@ -1021,7 +1021,7 @@ object SLDataStatsService {
             completeBuildIds,
         )
     val publicity = calculatePublicityStats(ownPublicityReactions, normalizedLimit)
-    val serverPublicity = getServerPublicityStats(normalizedLimit)
+    val serverPublicity = getServerPublicityStats(allBuilds, normalizedLimit)
     val likeDna = calculateLikeDna(activityRhythm, likeDiversity)
 
     val likeTimestampCoverage =
@@ -1314,13 +1314,45 @@ object SLDataStatsService {
 
   @Volatile private var cachedServerPublicity: Pair<Long, PublicityStats>? = null
 
-  fun getServerPublicityStats(limit: Int): PublicityStats {
+  fun getServerPublicityStats(allBuilds: Collection<SLData>, limit: Int): PublicityStats {
     val cached = cachedServerPublicity
     val now = System.currentTimeMillis()
     if (cached != null && (now - cached.first) < 5 * 60 * 1000L) {
       return cached.second
     }
-    val reactions = SLDatabase.loadPublicityReactionsBlocking(null)
+    val allPublicity = PublicityHistory.getData().values
+    val buildsMap = allBuilds.associateBy { it.id }
+    val dayMillis = 24 * 3600 * 1000L
+    val zoneId = ZoneId.of("Asia/Tokyo")
+
+    val reactions =
+        allPublicity.mapNotNull { p ->
+          val build = buildsMap[p.slid] ?: return@mapNotNull null
+          if (build.likes.size != build.likesWithTimestamp.size) return@mapNotNull null
+          val ownerStr = build.owner.toString()
+
+          val promoMillis = p.timeStamp.atZone(zoneId).toInstant().toEpochMilli()
+          var beforeLikes = 0
+          var afterLikes = 0
+          for ((likerUuid, likedAt) in build.likesWithTimestamp) {
+            if (likerUuid.toString() == ownerStr) continue
+            if (likedAt in (promoMillis - dayMillis) until promoMillis) {
+              beforeLikes++
+            } else if (likedAt in (promoMillis + 1)..(promoMillis + dayMillis)) {
+              afterLikes++
+            }
+          }
+
+          SLDatabase.PublicityEventReaction(
+              buildId = p.slid,
+              title = build.title,
+              ownerUuid = ownerStr,
+              promotedAt = promoMillis,
+              likesBefore24Hours = beforeLikes,
+              likesAfter24Hours = afterLikes,
+              intervalSincePreviousHours = null,
+          )
+        }
     val stats = calculatePublicityStats(reactions, limit)
     cachedServerPublicity = now to stats
     return stats
