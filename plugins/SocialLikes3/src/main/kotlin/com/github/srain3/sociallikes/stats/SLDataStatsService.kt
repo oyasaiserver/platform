@@ -1013,10 +1013,8 @@ object SLDataStatsService {
             allReceivedLikeEvents + allGivenLikeEvents,
             playerUuid,
         )
-    val globalPublicityReactions =
-        calculatePublicityReactionsFromMemory(allPublicity, emptyList(), null)
     val publicity = calculatePublicityStats(ownPublicityReactions, normalizedLimit)
-    val serverPublicity = calculatePublicityStats(globalPublicityReactions, normalizedLimit)
+    val serverPublicity = getServerPublicityStats(normalizedLimit)
     val likeDna = calculateLikeDna(activityRhythm, likeDiversity)
 
     val likeTimestampCoverage =
@@ -1303,6 +1301,20 @@ object SLDataStatsService {
           intervalSincePreviousHours = null,
       )
     }
+  }
+
+  @Volatile private var cachedServerPublicity: Pair<Long, PublicityStats>? = null
+
+  fun getServerPublicityStats(limit: Int): PublicityStats {
+    val cached = cachedServerPublicity
+    val now = System.currentTimeMillis()
+    if (cached != null && (now - cached.first) < 5 * 60 * 1000L) {
+      return cached.second
+    }
+    val reactions = SLDatabase.loadPublicityReactionsBlocking(null)
+    val stats = calculatePublicityStats(reactions, limit)
+    cachedServerPublicity = now to stats
+    return stats
   }
 
   private fun calculatePublicityStats(
