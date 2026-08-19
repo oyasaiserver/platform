@@ -491,7 +491,7 @@ object SLDatabase {
 
   fun saveBuildBlocking(data: SLData): Boolean {
     val snapshot = data.toBuildSnapshot()
-    return submitBlocking("saveBuildBlocking") {
+    return submitWriteBlocking("saveBuildBlocking") {
       upsertBuild(snapshot)
       true
     } ?: false
@@ -500,7 +500,7 @@ object SLDatabase {
   fun softDeleteBuildBlocking(id: Int, deletedBy: UUID?, deletedAt: LocalDateTime): Boolean {
     val deletedAtStr = deletedAt.toString()
     val deletedByStr = deletedBy?.toString()
-    return submitBlocking("softDeleteBuild") {
+    return submitWriteBlocking("softDeleteBuild") {
       Builds.update({ Builds.id eq id }) {
         it[Builds.deletedAt] = deletedAtStr
         it[Builds.deletedBy] = deletedByStr
@@ -640,8 +640,8 @@ object SLDatabase {
   }
 
   fun migrateNegativeIds(dryRun: Boolean = false): MigrationResult {
-    return submitBlocking("migrateNegativeIds") {
-      val conn = rawConnection() ?: return@submitBlocking MigrationResult(0, emptyMap())
+    return submitWriteBlocking("migrateNegativeIds") {
+      val conn = rawConnection() ?: return@submitWriteBlocking MigrationResult(0, emptyMap())
       var maxPositiveId = 0
       conn.prepareStatement("SELECT MAX(id) AS max_id FROM builds WHERE id > 0").use { stmt ->
         stmt.executeQuery().use { rs -> if (rs.next()) maxPositiveId = rs.getInt("max_id") }
@@ -651,7 +651,7 @@ object SLDatabase {
         stmt.executeQuery().use { rs -> while (rs.next()) negativeIds += rs.getInt("id") }
       }
 
-      if (negativeIds.isEmpty()) return@submitBlocking MigrationResult(0, emptyMap())
+      if (negativeIds.isEmpty()) return@submitWriteBlocking MigrationResult(0, emptyMap())
 
       val existingMap = mutableMapOf<Int, Int>()
       conn.prepareStatement("SELECT old_negative_id, new_positive_id FROM id_migration_map").use {
@@ -754,7 +754,7 @@ object SLDatabase {
 
   fun savePublicityHistoryBlocking(data: PublicityData): Boolean {
     val snapshot = data.toPublicityHistorySnapshot()
-    return submitBlocking("savePublicityHistory") {
+    return submitWriteBlocking("savePublicityHistory") {
       upsertPublicityHistory(snapshot)
       true
     } ?: false
@@ -2421,7 +2421,7 @@ object SLDatabase {
 
   private fun submit(taskName: String, block: () -> Unit) {
     val service =
-        readExecutor
+        writeExecutor
             ?: run {
               Tools.plugin.logger.warning(
                   "[SL3] SQLite shadow $taskName skipped: database is not initialized"
@@ -2547,15 +2547,23 @@ object SLDatabase {
     }
   }
 
-  private fun <T> submitBlocking(taskName: String, block: () -> T): T? {
-    val service =
-        readExecutor
-            ?: run {
-              Tools.plugin.logger.warning(
-                  "[SL3] SQLite shadow $taskName skipped: database is not initialized"
-              )
-              return null
-            }
+  private fun <T> submitBlocking(taskName: String, block: () -> T): T? =
+      executeBlocking(readExecutor, taskName, block)
+
+  private fun <T> submitWriteBlocking(taskName: String, block: () -> T): T? =
+      executeBlocking(writeExecutor, taskName, block)
+
+  private fun <T> executeBlocking(
+      service: ExecutorService?,
+      taskName: String,
+      block: () -> T,
+  ): T? {
+    if (service == null) {
+      Tools.plugin.logger.warning(
+          "[SL3] SQLite shadow $taskName skipped: database is not initialized"
+      )
+      return null
+    }
 
     val future =
         service.submit(
