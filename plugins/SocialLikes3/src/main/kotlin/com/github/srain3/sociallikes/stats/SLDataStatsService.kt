@@ -621,6 +621,7 @@ object SLDataStatsService {
     val likedBuildLikeCounts = ArrayList<Int>()
     val ownBuildsList = ArrayList<SLData>()
     val myDimensions = ArrayList<SLDatabase.BuildLikeDimension>()
+    val completeBuildIds = HashSet<Int>()
 
     val encounterThreshold = toMillis(LocalDate.of(2026, 1, 14))
     val ownerFirstLikesMap = mutableMapOf<String, Long>()
@@ -649,10 +650,15 @@ object SLDataStatsService {
         globalBuildLikeCounts.add(periodLikes)
       }
 
+      val isCompleteBuild = build.likes.size == timestampedSize
+      if (isCompleteBuild) {
+        completeBuildIds.add(build.id)
+      }
+
       val isPostCutoff = build.time >= reliableInitialLikeBuildCreatedSince
       if (isPostCutoff) {
         postCutoffBuildCount++
-        if (build.likes.size == timestampedSize) {
+        if (isCompleteBuild) {
           postCutoffCompleteBuildCount++
           if (build.likes.size > 0) completeLikedBuildCount++
         }
@@ -1012,6 +1018,7 @@ object SLDataStatsService {
             allPublicity,
             allReceivedLikeEvents + allGivenLikeEvents,
             playerUuid,
+            completeBuildIds,
         )
     val publicity = calculatePublicityStats(ownPublicityReactions, normalizedLimit)
     val serverPublicity = getServerPublicityStats(normalizedLimit)
@@ -1276,11 +1283,13 @@ object SLDataStatsService {
       publicityData: Collection<PublicityData>,
       allEvents: List<SLDatabase.BuildLikeEvent>,
       targetOwnerUuid: String? = null,
+      completeBuildIds: Set<Int>? = null,
   ): List<SLDatabase.PublicityEventReaction> {
     val eventsByBuildId = allEvents.groupBy { it.buildId }
     val dayMillis = 24 * 3600 * 1000L
 
     return publicityData.mapNotNull { p ->
+      if (completeBuildIds != null && p.slid !in completeBuildIds) return@mapNotNull null
       val buildEvents = eventsByBuildId[p.slid] ?: return@mapNotNull null
       val firstEvent = buildEvents.firstOrNull() ?: return@mapNotNull null
       if (targetOwnerUuid != null && firstEvent.ownerUuid != targetOwnerUuid) return@mapNotNull null
