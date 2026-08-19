@@ -707,6 +707,21 @@ object SLDatabase {
     } ?: MigrationResult(0, emptyMap())
   }
 
+  fun getMaxBuildIdBlocking(): Int? {
+    return submitBlocking("getMaxBuildId") {
+      rawConnection()?.prepareStatement("SELECT MAX(id) AS max_id FROM builds")?.use { statement ->
+        statement.executeQuery().use { results ->
+          if (results.next()) {
+            val maxId = results.getInt("max_id")
+            if (results.wasNull()) null else maxId
+          } else {
+            null
+          }
+        }
+      }
+    }
+  }
+
   fun savePublicityHistory(data: PublicityData) {
     val snapshot = data.toPublicityHistorySnapshot()
     submit("savePublicityHistory") { upsertPublicityHistory(snapshot) }

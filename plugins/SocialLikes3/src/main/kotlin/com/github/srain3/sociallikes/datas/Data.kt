@@ -253,6 +253,7 @@ object Data {
                   SLDatabase.loadBuildsBlocking().forEach { slData ->
                     addToCache(slData, getDirName(slData.id), ids)
                   }
+                  SLDatabase.getMaxBuildIdBlocking()?.let { maxId -> lastID = max(lastID, maxId) }
                 }
               }
 
