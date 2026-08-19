@@ -3,6 +3,7 @@ package com.github.srain3.sociallikes
 import com.github.srain3.sociallikes.Events.idKey
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
+import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.discord.SLDiscord
 import java.io.File
 import kotlin.collections.set
@@ -149,31 +150,49 @@ object Tools {
   }
 
   fun updateSLSign(currentSLData: SLData, block: BlockState) {
-    val newData =
-        SLData(
-            currentSLData.id,
-            block.location,
-            currentSLData.time,
-            currentSLData.owner,
-            currentSLData.title,
-            currentSLData.likes,
-            currentSLData.likesWithTimestamp,
-            currentSLData.check,
-            currentSLData.comment,
-            block.world.name,
-            currentSLData.discordTextID,
-        )
-    Data.delID(currentSLData, true)
-    Data.save(newData)
-    if (currentSLData.loc.world != null) {
-      val state = currentSLData.loc.block.state
+    val beforeJson =
+        com.google.gson
+            .Gson()
+            .toJson(
+                mapOf(
+                    "world" to currentSLData.worldName,
+                    "x" to currentSLData.loc.x,
+                    "y" to currentSLData.loc.y,
+                    "z" to currentSLData.loc.z,
+                    "sign_material" to currentSLData.signMaterial,
+                )
+            )
+
+    val oldLoc = currentSLData.loc
+    currentSLData.loc = block.location
+    currentSLData.worldName = block.world.name
+    currentSLData.signMaterial = block.type.name
+
+    Data.save(currentSLData)
+
+    val afterJson =
+        com.google.gson
+            .Gson()
+            .toJson(
+                mapOf(
+                    "world" to block.world.name,
+                    "x" to block.location.x,
+                    "y" to block.location.y,
+                    "z" to block.location.z,
+                    "sign_material" to block.type.name,
+                )
+            )
+    SLDatabase.recordEvent(currentSLData.id, "moved", null, beforeJson, afterJson)
+
+    if (oldLoc.world != null) {
+      val state = oldLoc.block.state
       if (state is Sign && state.location != block.location) {
         state.block.blockData = Material.AIR.createBlockData()
         state.update()
       }
     }
     // Discordへ反映
-    SLDiscord.changeSLDataToMsg(newData)
+    SLDiscord.changeSLDataToMsg(currentSLData)
   }
 
   fun updateLegacySLSign(currentSLData: SLData, block: BlockState) {
@@ -188,22 +207,50 @@ object Tools {
             ?.substring(1)
             ?.toIntOrNull(16) ?: return
     id = -id
-    val newData =
-        SLData(
-            currentSLData.id,
-            block.location,
-            currentSLData.time,
-            currentSLData.owner,
-            currentSLData.title,
-            currentSLData.likes,
-            currentSLData.likesWithTimestamp,
-            currentSLData.check,
-            currentSLData.comment,
-            block.world.name,
-            currentSLData.discordTextID,
-        )
-    Data.delID(currentSLData, true)
-    Data.save(newData)
+    val resolvedId = SLDatabase.resolveMigratedId(id)
+
+    val beforeJson =
+        com.google.gson
+            .Gson()
+            .toJson(
+                mapOf(
+                    "world" to currentSLData.worldName,
+                    "x" to currentSLData.loc.x,
+                    "y" to currentSLData.loc.y,
+                    "z" to currentSLData.loc.z,
+                    "sign_material" to currentSLData.signMaterial,
+                )
+            )
+
+    val oldLoc = currentSLData.loc
+    currentSLData.loc = block.location
+    currentSLData.worldName = block.world.name
+    currentSLData.signMaterial = block.type.name
+
+    Data.save(currentSLData)
+
+    val afterJson =
+        com.google.gson
+            .Gson()
+            .toJson(
+                mapOf(
+                    "world" to block.world.name,
+                    "x" to block.location.x,
+                    "y" to block.location.y,
+                    "z" to block.location.z,
+                    "sign_material" to block.type.name,
+                )
+            )
+    SLDatabase.recordEvent(currentSLData.id, "moved", null, beforeJson, afterJson)
+
+    if (oldLoc.world != null) {
+      val state = oldLoc.block.state
+      if (state is Sign && state.location != block.location) {
+        state.block.blockData = Material.AIR.createBlockData()
+        state.update()
+      }
+    }
+
     // 看板の装飾
     block.setLine(0, Tools.socialLikesLOGO)
     block.setLine(1, "&a".color() + currentSLData.title)
@@ -215,7 +262,7 @@ object Tools {
     )
 
     block.isWaxed = true
-    block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
+    block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, resolvedId)
     block.update()
   }
 

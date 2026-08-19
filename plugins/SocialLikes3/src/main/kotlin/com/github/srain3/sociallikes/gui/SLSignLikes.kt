@@ -384,6 +384,19 @@ object SLSignLikes {
 
           PublicityHistory.addData(event.whoClicked.uniqueId, slData.id)
 
+          // イベントログを記録
+          val afterJson =
+              com.google.gson
+                  .Gson()
+                  .toJson(mapOf("promoter" to event.whoClicked.uniqueId.toString()))
+          com.github.srain3.sociallikes.datas.SLDatabase.recordEvent(
+              slData.id,
+              "publicized",
+              event.whoClicked.uniqueId,
+              null,
+              afterJson,
+          )
+
           // 通知音
           Bukkit.getOnlinePlayers().forEach {
             it.playSound(it, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 2F, 1.15F)
@@ -413,8 +426,20 @@ object SLSignLikes {
     SocialLikesAnvilInput.open(player, Tools.socialLikesLOGOShort + "&0コメント編集".color(), item) {
         p,
         text ->
+      val beforeComment = slData.comment
       slData.comment = text
       Data.save(slData)
+
+      val beforeJson = com.google.gson.Gson().toJson(mapOf("comment" to beforeComment))
+      val afterJson = com.google.gson.Gson().toJson(mapOf("comment" to text))
+      com.github.srain3.sociallikes.datas.SLDatabase.recordEvent(
+          slData.id,
+          "comment_changed",
+          p.uniqueId,
+          beforeJson,
+          afterJson,
+      )
+
       p.playSound(player, Sound.UI_BUTTON_CLICK, 1F, 1F)
     }
   }

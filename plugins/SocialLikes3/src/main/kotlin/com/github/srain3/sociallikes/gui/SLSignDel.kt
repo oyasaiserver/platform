@@ -5,7 +5,6 @@ import com.github.srain3.sociallikes.Tools.addText
 import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.datas.Data
-import com.github.srain3.sociallikes.datas.PublicityHistory
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.discord.SLDiscord
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
@@ -48,10 +47,9 @@ object SLSignDel {
 
     buttonY.setAction {
       Data.changeUserLikesInt(slData.owner, -slData.likes.count())
-      Data.delID(slData)
+      Data.delID(slData, it.whoClicked.uniqueId)
       sign.block.blockData = Material.AIR.createBlockData()
       sign.update()
-      PublicityHistory.delSLID(slData.id)
       SLDiscord.deleteSLToMsg(slData)
       it.whoClicked.closeInventory()
       it.whoClicked.sendMessage(

@@ -83,14 +83,28 @@ object SLDiscord {
   fun deleteSLToMsg(slData: SLData) {
     if (slData.discordTextID == 0L) return
     Thread {
-          val textChannel = textChID?.let { discordApi?.getTextChannelById(it)?.get() }
-          if (textChannel == null) {
-            Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
-            return@Thread
+          try {
+            val textChannel = textChID?.let { discordApi?.getTextChannelById(it)?.get() }
+            if (textChannel == null) {
+              Bukkit.getLogger().warning("[SL3] sendSLEmbedMsgのtextChannelがnullです")
+              return@Thread
+            }
+            val embed =
+                EmbedBuilder()
+                    .setTitle("【削除済み】【SocialLikes】" + slData.title)
+                    .setDescription("ID:${slData.id} (この看板は削除されました)")
+                    .addField(
+                        "Author: " +
+                            (Bukkit.getOfflinePlayer(slData.owner).name ?: "Unknown") +
+                            " | ${slData.time.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"))}",
+                        "Status: 削除済み",
+                    )
+                    .setColor(Color.GRAY)
+            val message = textChannel.getMessageById(slData.discordTextID)
+            message.join().edit(embed).join()
+          } catch (e: Exception) {
+            Tools.plugin.logger.warning("[SL3] Discord deleteSLToMsg edit failed: ${e.message}")
           }
-          val message = textChannel.getMessageById(slData.discordTextID).get()
-          message.delete("Server内で看板取り消しが行われた為").join()
-          return@Thread
         }
         .start()
   }

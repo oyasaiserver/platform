@@ -78,6 +78,11 @@ object SLSignGet : CommandExecutor {
   }
 
   private fun sourceSignMaterial(slData: SLData): Material? {
+    slData.signMaterial
+        ?.let { Material.matchMaterial(it) }
+        ?.let {
+          return it
+        }
     slData.loc.world ?: return null
     val sourceState = slData.loc.block.state
     return if (sourceState is Sign) sourceState.type else null
