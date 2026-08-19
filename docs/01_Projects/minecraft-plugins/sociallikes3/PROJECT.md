@@ -24,6 +24,6 @@ agent_task: null
 | 実装の正本 | `plugins/SocialLikes3/src/main/kotlin/com/github/srain3/sociallikes/` |
 | 主要コード | `SocialLikes.kt`（メイン）、`datas/SLDatabase.kt`（SQLite）、`command/`、`gui/`、`discord/SLDiscord.kt` |
 | 設計資料 | `docs/01_Projects/minecraft-plugins/sqlite-migration-design.md`（SQLite移行設計） |
-| コマンド | `/sltp`, `/slbuild`, `/sluser`, `/slupdate`, `/slsignget`, `/slmenu`, `/slnear`, `/vacanttp`（`vtp`）, `/slrankup`, `/slsignbreak` |
+| コマンド | `/sltp`, `/sla`, `/slbuild`, `/sluser`, `/slupdate`, `/slsignget`, `/slmenu`, `/slnear`, `/vacanttp`（`vtp`）, `/slrankup`, `/slsignbreak` |
 | ビルド確認 | `/nix/var/nix/profiles/default/bin/nix develop --command gradle :plugins:SocialLikes3:compileKotlin` |
 | 非公開メモ | 個人用の試作・退避・未整理ログは `archive/` または `local/` に置く |
