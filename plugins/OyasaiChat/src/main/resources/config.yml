@@ -1,0 +1,95 @@
+network:
+  backend-id: main
+  # 別バックエンドで表示するときだけ付けるMiniMessage形式の識別子。
+  # 空欄で識別子なし。
+  remote-message-suffix: ""
+  groups:
+    gameplay:
+      - main
+      - axiom
+    all:
+      - main
+      - axiom
+      - lobby
+
+channels:
+  global:
+    display-name: Global
+    aliases: [g]
+    # 任意のスラッシュコマンド。/gで参加・選択。/g <message>で選択状態を変えずに一度だけ送信。
+    shortcut-commands: []
+    prefix: Global
+    auto-join: true
+    default: true
+    permission: null
+    network-group: gameplay
+  "2":
+    display-name: "2"
+    aliases: []
+    shortcut-commands: []
+    prefix: "2"
+    auto-join: false
+    default: false
+    permission: null
+    network-group: null
+  "3":
+    display-name: "3"
+    aliases: []
+    shortcut-commands: []
+    prefix: "3"
+    auto-join: false
+    default: false
+    permission: null
+    network-group: null
+  staff:
+    display-name: Staff
+    aliases: []
+    shortcut-commands: []
+    prefix: Staff
+    auto-join: false
+    default: false
+    permission: venturechat.staffchannel
+    network-group: null
+
+formatting:
+  chat: "<dark_gray>[<channel>]</dark_gray> <vault_prefix><name><vault_suffix><dark_gray>: </dark_gray><message>"
+  private-message-send: "<gray>[<light_purple>PM</light_purple>] <gray>to <name>: <white><message>"
+  private-message-receive: "<gray>[<light_purple>PM</light_purple>] <gray>from <name>: <white><message>"
+  # AsyncChatEventから始まるPMモード用。Paper標準のコンソールチャット経路を維持するため、受信者ごとに一度描画。
+  private-message-chat: "<gray>[<light_purple>PM</light_purple>]</gray> <white><sender></white> <dark_gray>-></dark_gray> <white><target></white><dark_gray>: </dark_gray><message>"
+  player-name-hover: "<gray>Player: <white><name>"
+  player-name-click-command: "/msg <name> "
+
+private-messages:
+  enabled-by-default: true
+  receive-sound:
+    enabled: true
+    sound: "minecraft:entity.experience_orb.pickup"
+    volume: 1.0
+    pitch: 1.0
+
+discord:
+  enabled: true
+  mappings:
+    global:
+      discord-channel-id: ""
+      inbound-backend: main
+    "2":
+      discord-channel-id: ""
+      inbound-backend: main
+    "3":
+      discord-channel-id: ""
+      inbound-backend: main
+    staff:
+      discord-channel-id: ""
+      inbound-backend: main
+
+# 同じJarをVelocity側に配置した場合、Velocity側のエントリポイントだけが読み込む設定。
+# 上記バックエンドIDはルーティング用。表示名ではない。
+login-messages:
+  backend-display-names:
+    main: "Main"
+    axiom: "Axiom"
+    lobby: "Lobby"
+  from-suffix-format: " <gray>from <white><backend></white></gray>"
+  to-suffix-format: " <gray>to <white><backend></white></gray>"

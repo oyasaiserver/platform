@@ -1,0 +1,32 @@
+network:
+  groups:
+    gameplay:
+      - main
+      - axiom
+    all:
+      - main
+      - axiom
+      - lobby
+
+channels:
+  global:
+    network-group: gameplay
+  "2":
+    network-group: null
+  "3":
+    network-group: null
+  staff:
+    network-group: null
+
+# ネットワークのログイン・ログアウト・バックエンド移動通知の正規処理。
+# バックエンドIDはルーティング用。表示名は別設定。
+login-messages:
+  backend-display-names:
+    main: "Main"
+    axiom: "Axiom"
+    lobby: "Lobby"
+  # Vanillaクライアントのローカライズ済み参加・退出文を使用。
+  # 変更対象は正常なバックエンド移動時の接尾辞のみ。
+  # 空欄で該当方向の接尾辞なし。
+  from-suffix-format: " <gray>from <white><backend></white></gray>"
+  to-suffix-format: " <gray>to <white><backend></white></gray>"
