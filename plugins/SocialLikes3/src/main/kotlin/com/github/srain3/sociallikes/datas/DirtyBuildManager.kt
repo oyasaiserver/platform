@@ -76,6 +76,34 @@ object DirtyBuildManager {
 
   fun getDirtyCount(): Int = dirtyBuildIds.size
 
+  /** 負IDマイグレーション時に、ダーティ集合内のIDを新IDへマッピングして永続化する */
+  fun remapMigratedIds(idMap: Map<Int, Int>) {
+    val file = getFile()
+    if (!file.exists()) return
+
+    synchronized(fileLock) {
+      try {
+        val yml = CustomYamlFile(file)
+        val list = yml.getIntegerList(KEY_DIRTY_IDS)
+        if (list.isEmpty()) return
+
+        val remapped = list.map { idMap[it] ?: it }.distinct()
+        if (remapped != list) {
+          dirtyBuildIds.clear()
+          dirtyBuildIds.addAll(remapped)
+          persistDirtyIds()
+          Tools.plugin.logger.info("[SL3] Remapped dirty build IDs with migration map: $remapped")
+        }
+      } catch (e: Exception) {
+        Tools.plugin.logger.log(
+            Level.WARNING,
+            "[SL3] Failed to remap dirty build IDs: ${e.message}",
+            e,
+        )
+      }
+    }
+  }
+
   /** ダーティ集合をファイルに永続化する。 集合が空になった場合はファイルを削除する。 */
   private fun persistDirtyIds() {
     synchronized(fileLock) {

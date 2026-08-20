@@ -812,7 +812,9 @@ object SLDatabase {
         }
       }
 
-      idMigrationCache.putAll(mapToApply)
+      if (!dryRun) {
+        idMigrationCache.putAll(mapToApply)
+      }
       MigrationResult(mapToApply.size, mapToApply)
     } ?: MigrationResult(0, emptyMap())
   }

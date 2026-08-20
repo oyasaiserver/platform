@@ -5,3 +5,10 @@ readSource: sqlite
 
 # Interval in minutes for periodic dirty build reconciliation (SQLite retry).
 reconcileIntervalMinutes: 10
+
+# Negative build ID migration settings (one-shot migration from negative to positive IDs).
+# Set migrateNegativeIdsOnStartup to true to run the migration on server startup.
+# Set migrateNegativeIdsDryRun to true to preview the migration without modifying files or database.
+# After migration is complete, set migrateNegativeIdsOnStartup back to false.
+migrateNegativeIdsOnStartup: false
+migrateNegativeIdsDryRun: false
