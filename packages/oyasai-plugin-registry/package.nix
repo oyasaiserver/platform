@@ -30,7 +30,7 @@ let
             lib.filterAttrs (_: p: p ? velocity) lock
           );
         in
-        fromLock // staticFrom (./static + "/velocity")
+        fromLock // staticFrom (./static + "/velocity") // oyasai-plugins
       else
         version:
         let
