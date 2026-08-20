@@ -13,7 +13,7 @@ oyasaiVelocity {
     # keep-sorted start
     floodgate
     geyser
-    venturechat
+    oyasaichat
     # keep-sorted end
   ];
 

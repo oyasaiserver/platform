@@ -51,7 +51,6 @@ oyasaiPurpur rec {
     dynamicprofile
     entitypose
     essentialsx
-    essentialsx-chat
     essentialsx-spawn
     ezedits
     fastasyncvoxelsniper
@@ -73,6 +72,7 @@ oyasaiPurpur rec {
     nuvotifier
     openinv
     oyasaiadmintools
+    oyasaichat
     oyasaimenu
     oyasaimusic
     oyasaipets
@@ -99,7 +99,6 @@ oyasaiPurpur rec {
     tpswitch
     vault
     veinminer
-    venturechat
     vertex
     viaversion
     worldborder
