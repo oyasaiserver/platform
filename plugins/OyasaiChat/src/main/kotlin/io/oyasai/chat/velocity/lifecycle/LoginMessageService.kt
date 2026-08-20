@@ -92,7 +92,13 @@ class LoginMessageService(
     if (previousBackend == currentBackend) return emptyList()
     if (previousBackend == null) {
       return if (currentBackend in managedBackends) {
-        listOf(LoginMessageDelivery(LoginMessageKind.JOIN, managedBackends))
+        listOf(
+            LoginMessageDelivery(
+                LoginMessageKind.JOIN,
+                managedBackends,
+                BackendSuffix(BackendSuffixKind.TO, currentBackend),
+            )
+        )
       } else {
         emptyList()
       }
