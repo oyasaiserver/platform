@@ -258,11 +258,15 @@ object EnvelopeCodec {
   }
 
   private fun requireUuidOrString(json: JsonObject, uuidName: String, stringName: String) {
-    require(json.has(uuidName) || json.has(stringName)) {
+    val uuid = json.get(uuidName)
+    val string = json.get(stringName)
+    val hasUuid = uuid != null && !uuid.isJsonNull
+    val hasString = string != null && !string.isJsonNull
+    require(hasUuid || hasString) {
       "Envelope requires '$uuidName' or '$stringName'."
     }
-    if (json.has(uuidName)) validateOptionalUuid(json, uuidName)
-    if (json.has(stringName)) requiredString(json, stringName)
+    if (hasUuid) validateOptionalUuid(json, uuidName)
+    if (hasString) requiredString(json, stringName)
   }
 }
 
