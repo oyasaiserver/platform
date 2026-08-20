@@ -58,6 +58,7 @@ object PaperConfigLoader {
         NetworkSettings(
             backendId = backendId,
             groups = groups,
+            remoteMessagePrefix = config.getString("network.remote-message-prefix", "") ?: "",
             remoteMessageSuffix = config.getString("network.remote-message-suffix", "") ?: "",
         )
     val registry = ChannelRegistry(channels)

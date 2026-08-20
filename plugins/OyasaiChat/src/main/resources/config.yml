@@ -1,7 +1,8 @@
 network:
   backend-id: main
-  # 別バックエンドで表示するときだけ付けるMiniMessage形式の識別子。
+  # 別バックエンドのメッセージ前後に付けるMiniMessage形式の識別子。
   # 空欄で識別子なし。
+  remote-message-prefix: ""
   remote-message-suffix: ""
   groups:
     gameplay:

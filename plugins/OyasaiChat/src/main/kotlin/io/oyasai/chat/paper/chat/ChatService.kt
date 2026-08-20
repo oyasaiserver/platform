@@ -144,6 +144,8 @@ class ChatService(
                   backendId = config.network.backendId,
                   channelId = channel.id,
                   networkGroup = group,
+                  originBackendPrefix =
+                      config.network.remoteMessagePrefix.takeIf { it.isNotBlank() },
                   originBackendSuffix =
                       config.network.remoteMessageSuffix.takeIf { it.isNotBlank() },
                   originPlayerId = player.uniqueId,
@@ -189,6 +191,8 @@ class ChatService(
                     backendId = config.network.backendId,
                     channelId = channel.id,
                     networkGroup = channel.networkGroup,
+                    originBackendPrefix =
+                        config.network.remoteMessagePrefix.takeIf { it.isNotBlank() },
                     originBackendSuffix =
                         config.network.remoteMessageSuffix.takeIf { it.isNotBlank() },
                     senderName = senderName,
@@ -208,13 +212,17 @@ class ChatService(
       senderName: String,
       senderId: UUID?,
       message: String,
+      originBackendPrefix: String? = null,
       originBackendSuffix: String? = null,
   ) {
+    val prefix =
+        originBackendPrefix?.takeIf { it.isNotBlank() }?.let(formatter::parse) ?: Component.empty()
     val suffix =
         originBackendSuffix?.takeIf { it.isNotBlank() }?.let(formatter::parse) ?: Component.empty()
+    val prefixText = formatter.plain(prefix)
     val suffixText = formatter.plain(suffix)
     plugin.logger.info(
-        "[${channel.displayName}] <$senderName> ${consoleSafe(message)}${consoleSafe(suffixText)}"
+        "${consoleSafe(prefixText)}[${channel.displayName}] <$senderName> ${consoleSafe(message)}${consoleSafe(suffixText)}"
     )
     plugin.server.onlinePlayers
         .filter { recipient ->
@@ -230,7 +238,7 @@ class ChatService(
                   formatter.parse(
                       "<dark_gray>[${channel.prefix}]</dark_gray> <white>${escape(senderName)}</white><dark_gray>: </dark_gray>${escape(message)}"
                   )
-          recipient.sendMessage(component.append(suffix))
+          recipient.sendMessage(prefix.append(component).append(suffix))
         }
   }
 

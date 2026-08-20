@@ -6,6 +6,8 @@ object ConfigValidator {
   fun validate(network: NetworkSettings, registry: ChannelRegistry): List<String> {
     val errors = mutableListOf<String>()
     if (network.backendId.isBlank()) errors += "network.backend-id must not be blank"
+    if (network.remoteMessagePrefix.length > 256)
+        errors += "network.remote-message-prefix exceeds 256 characters"
     if (network.remoteMessageSuffix.length > 256)
         errors += "network.remote-message-suffix exceeds 256 characters"
     if (network.groups.keys.any { it.isBlank() })

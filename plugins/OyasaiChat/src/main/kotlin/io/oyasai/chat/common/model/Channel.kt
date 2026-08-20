@@ -39,6 +39,7 @@ class ChannelRegistry(definitions: Collection<ChannelDefinition>) {
 data class NetworkSettings(
     val backendId: String,
     val groups: Map<String, Set<String>>,
+    val remoteMessagePrefix: String = "",
     val remoteMessageSuffix: String = "",
 ) {
   fun resolve(group: String?): Set<String>? = group?.let { groups[it] }
