@@ -13,6 +13,7 @@ Project index for `docs/01_Projects/`.
 | [gakubuchi-locker](minecraft-plugins/gakubuchi-locker/PROJECT.md) | Item frame lock protection |
 | [headhunt](minecraft-plugins/headhunt/PROJECT.md) | Player-head treasure hunt minigame |
 | [oyasai-admin-tools](minecraft-plugins/oyasai-admin-tools/PROJECT.md) | Admin announcements, surveys, and player management |
+| [oyasai-chat](minecraft-plugins/oyasai-chat/PROJECT.md) | Cross-backend chat synchronization through Velocity |
 | [oyasai-menu](minecraft-plugins/oyasai-menu/PROJECT.md) | GUI menu system |
 | [oyasai-pets](minecraft-plugins/oyasai-pets/PROJECT.md) | Pet system |
 | [oyasai-utilities](minecraft-plugins/oyasai-utilities/PROJECT.md) | Bundled small utility features |
