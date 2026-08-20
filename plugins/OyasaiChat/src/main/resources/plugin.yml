@@ -8,6 +8,9 @@ softdepend:
   - Vault
   - PlaceholderAPI
   - DiscordSRV
+loadbefore:
+  - Essentials
+  - LunaChat
 commands:
   ch:
     description: Select a chat channel
