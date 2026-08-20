@@ -15,10 +15,14 @@ import org.slf4j.Logger
 class NetworkMessageRouter(
     private val proxy: ProxyServer,
     private val logger: Logger,
-    private val config: VelocityRoutingConfig,
+    @Volatile private var config: VelocityRoutingConfig,
     private val state: ProxyState,
     private val identifier: MinecraftChannelIdentifier,
 ) {
+  fun reload(config: VelocityRoutingConfig) {
+    this.config = config
+  }
+
   fun route(source: ServerConnection, envelope: NetworkEnvelope) {
     val sourceBackend = source.serverInfo.name
     when (envelope.type) {

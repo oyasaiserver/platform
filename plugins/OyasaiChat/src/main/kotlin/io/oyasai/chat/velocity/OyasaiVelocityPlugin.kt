@@ -1,6 +1,7 @@
 package io.oyasai.chat.velocity
 
 import com.google.inject.Inject
+import com.velocitypowered.api.command.CommandSource
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.PluginMessageEvent
 import com.velocitypowered.api.event.connection.PluginMessageEvent.ForwardResult
@@ -14,6 +15,7 @@ import io.oyasai.chat.common.protocol.EnvelopeCodec
 import io.oyasai.chat.common.protocol.MessageDeduplicator
 import io.oyasai.chat.common.protocol.MessageOrigin
 import io.oyasai.chat.velocity.config.VelocityConfigLoader
+import io.oyasai.chat.velocity.config.VelocityRoutingConfig
 import io.oyasai.chat.velocity.lifecycle.LoginMessageService
 import io.oyasai.chat.velocity.routing.NetworkMessageRouter
 import io.oyasai.chat.velocity.state.ProxyState
@@ -39,24 +41,19 @@ constructor(
   private val deduplicator = MessageDeduplicator()
   private val identifier = MinecraftChannelIdentifier.from("oyasaichat:main")
   private lateinit var router: NetworkMessageRouter
+  private lateinit var loginMessages: LoginMessageService
+  private lateinit var configPath: Path
 
   @Subscribe
   fun onProxyInitialization(event: ProxyInitializeEvent) {
-    val path = dataDirectory.resolve("config.yml")
-    if (!Files.exists(path)) {
+    configPath = dataDirectory.resolve("config.yml")
+    if (!Files.exists(configPath)) {
       Files.createDirectories(dataDirectory)
       javaClass.classLoader.getResourceAsStream("velocity-config.yml")!!.use {
-        Files.copy(it, path)
+        Files.copy(it, configPath)
       }
     }
-    val config =
-        runCatching {
-              VelocityConfigLoader.load(path, proxy.allServers.map { it.serverInfo.name }.toSet())
-            }
-            .getOrElse {
-              logger.error("Invalid OyasaiChat Velocity configuration: {}", it.message)
-              throw it
-            }
+    val config = loadConfiguration()
     val state = ProxyState()
     router =
         NetworkMessageRouter(
@@ -68,8 +65,27 @@ constructor(
         )
     proxy.channelRegistrar.register(identifier)
     proxy.eventManager.register(this, state)
-    proxy.eventManager.register(this, LoginMessageService(proxy, config, logger))
+    loginMessages = LoginMessageService(proxy, config, logger)
+    proxy.eventManager.register(this, loginMessages)
+    proxy.commandManager.register(
+        proxy.commandManager.metaBuilder("oyasaichat").plugin(this).build(),
+        OyasaiVelocityCommand(this),
+    )
     logger.info("OyasaiChat Velocity bridge enabled with {} network groups.", config.groups.size)
+  }
+
+  internal fun reloadConfiguration(source: CommandSource) {
+    val config =
+        runCatching { loadConfiguration() }
+            .getOrElse {
+              logger.warn("OyasaiChat Velocity reload rejected: {}", it.message)
+              source.sendPlainMessage("OyasaiChat reload failed: ${it.message}")
+              return
+            }
+    router.reload(config)
+    loginMessages.reload(config)
+    logger.info("OyasaiChat Velocity configuration reloaded.")
+    source.sendPlainMessage("OyasaiChat configuration reloaded.")
   }
 
   @Subscribe
@@ -108,4 +124,16 @@ constructor(
     }
     if (deduplicator.firstSeen(envelope.messageId)) router.route(source, envelope)
   }
+
+  private fun loadConfiguration(): VelocityRoutingConfig =
+      runCatching {
+            VelocityConfigLoader.load(
+                configPath,
+                proxy.allServers.map { it.serverInfo.name }.toSet(),
+            )
+          }
+          .getOrElse {
+            logger.error("Invalid OyasaiChat Velocity configuration: {}", it.message)
+            throw it
+          }
 }

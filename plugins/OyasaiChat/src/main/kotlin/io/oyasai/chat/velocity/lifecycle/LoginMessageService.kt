@@ -38,11 +38,15 @@ private data class ActiveConnection(val player: Player, val backendId: String)
 
 class LoginMessageService(
     private val proxy: ProxyServer,
-    private val config: VelocityRoutingConfig,
+    @Volatile private var config: VelocityRoutingConfig,
     private val logger: Logger,
 ) {
   private val mini = MiniMessage.builder().strict(true).build()
   private val activeConnections = ConcurrentHashMap<UUID, ActiveConnection>()
+
+  fun reload(config: VelocityRoutingConfig) {
+    this.config = config
+  }
 
   @Subscribe(order = PostOrder.LAST)
   fun onServerConnect(event: ServerPostConnectEvent) {
