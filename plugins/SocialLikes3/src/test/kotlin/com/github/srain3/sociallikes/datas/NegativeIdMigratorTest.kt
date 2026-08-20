@@ -39,6 +39,8 @@ class NegativeIdMigratorTest {
     assertEquals("0-49", Data.getDirName(49))
     assertEquals("50-99", Data.getDirName(50))
     assertEquals("500-549", Data.getDirName(500))
+    assertEquals("10000-10049", Data.getDirName(10000))
+    assertEquals("22500-22549", Data.getDirName(22519))
   }
 
   @Test
@@ -46,7 +48,7 @@ class NegativeIdMigratorTest {
     val dataDir = File(tempDir, "data")
     dataDir.mkdirs()
 
-    // 負ID -1 と -50 の YAML ファイルを作成
+    // 負ID -1, -50 と 正ID 10 の YAML ファイルを作成
     val oldDir1 = File(dataDir, "-1--49").apply { mkdirs() }
     val oldFile1 = File(oldDir1, "-1.yml")
     val yml1 = YamlConfiguration()
@@ -63,7 +65,74 @@ class NegativeIdMigratorTest {
     yml2.set("owner", "00000000-0000-0000-0000-000000000002")
     yml2.save(oldFile2)
 
-    val idMap = mapOf(-1 to 101, -50 to 102)
+    val oldDir3 = File(dataDir, "0-49").apply { mkdirs() }
+    val oldFile3 = File(oldDir3, "10.yml")
+    val yml3 = YamlConfiguration()
+    yml3.set("id", 10)
+    yml3.set("title", "Test Build 10")
+    yml3.set("owner", "00000000-0000-0000-0000-000000000003")
+    yml3.save(oldFile3)
+
+    // 2ブロック方式: -1 -> 1, -50 -> 50, 10 -> 10010
+    val idMap = mapOf(-1 to 1, -50 to 50, 10 to 10010)
+
+    val (migratedCount, missingCount, failedIds) =
+        NegativeIdMigrator.migrateYamlFiles(dataDir, idMap, dryRun = false, logger = logger)
+
+    assertEquals(3, migratedCount)
+    assertEquals(0, missingCount)
+    assertTrue(failedIds.isEmpty())
+
+    // 旧ファイルが削除されていることを確認
+    assertFalse(oldFile1.exists())
+    assertFalse(oldFile2.exists())
+    assertFalse(oldFile3.exists())
+
+    // 新ファイルが作成され、idが更新されていることを確認
+    val newFile1 = File(dataDir, "0-49/1.yml")
+    val newFile2 = File(dataDir, "50-99/50.yml")
+    val newFile3 = File(dataDir, "10000-10049/10010.yml")
+    assertTrue(newFile1.exists())
+    assertTrue(newFile2.exists())
+    assertTrue(newFile3.exists())
+
+    val loadedYml1 = YamlConfiguration.loadConfiguration(newFile1)
+    assertEquals(1, loadedYml1.getInt("id"))
+    assertEquals("Test Build -1", loadedYml1.getString("title"))
+
+    val loadedYml2 = YamlConfiguration.loadConfiguration(newFile2)
+    assertEquals(50, loadedYml2.getInt("id"))
+    assertEquals("Test Build -50", loadedYml2.getString("title"))
+
+    val loadedYml3 = YamlConfiguration.loadConfiguration(newFile3)
+    assertEquals(10010, loadedYml3.getInt("id"))
+    assertEquals("Test Build 10", loadedYml3.getString("title"))
+  }
+
+  @Test
+  fun testMigrateYamlFilesAvoidsCollisionWithStaging() {
+    val dataDir = File(tempDir, "data")
+    dataDir.mkdirs()
+
+    // 衝突シナリオ:
+    // 看板A: 旧ID 1001 -> 新ID 11001 (data/11000-11049/11001.yml)
+    // 看板B: 旧ID 11001 -> 新ID 21001 (data/21000-21049/21001.yml)
+    // 移動先 (11001.yml) に既存の看板Bが存在しているケース
+    val dirA = File(dataDir, "1000-1049").apply { mkdirs() }
+    val fileA = File(dirA, "1001.yml")
+    val ymlA = YamlConfiguration()
+    ymlA.set("id", 1001)
+    ymlA.set("title", "Build Original 1001")
+    ymlA.save(fileA)
+
+    val dirB = File(dataDir, "11000-11049").apply { mkdirs() }
+    val fileB = File(dirB, "11001.yml")
+    val ymlB = YamlConfiguration()
+    ymlB.set("id", 11001)
+    ymlB.set("title", "Build Original 11001")
+    ymlB.save(fileB)
+
+    val idMap = mapOf(1001 to 11001, 11001 to 21001)
 
     val (migratedCount, missingCount, failedIds) =
         NegativeIdMigrator.migrateYamlFiles(dataDir, idMap, dryRun = false, logger = logger)
@@ -72,23 +141,19 @@ class NegativeIdMigratorTest {
     assertEquals(0, missingCount)
     assertTrue(failedIds.isEmpty())
 
-    // 旧ファイルが削除されていることを確認
-    assertFalse(oldFile1.exists())
-    assertFalse(oldFile2.exists())
+    // 最終的に両方のファイルが正しく新IDの内容で保存されていることを検証
+    val finalFileA = File(dataDir, "11000-11049/11001.yml")
+    val finalFileB = File(dataDir, "21000-21049/21001.yml")
+    assertTrue(finalFileA.exists())
+    assertTrue(finalFileB.exists())
 
-    // 新ファイルが作成され、idが更新されていることを確認
-    val newFile1 = File(dataDir, "100-149/101.yml")
-    val newFile2 = File(dataDir, "100-149/102.yml")
-    assertTrue(newFile1.exists())
-    assertTrue(newFile2.exists())
+    val loadedA = YamlConfiguration.loadConfiguration(finalFileA)
+    assertEquals(11001, loadedA.getInt("id"))
+    assertEquals("Build Original 1001", loadedA.getString("title"))
 
-    val loadedYml1 = YamlConfiguration.loadConfiguration(newFile1)
-    assertEquals(101, loadedYml1.getInt("id"))
-    assertEquals("Test Build -1", loadedYml1.getString("title"))
-
-    val loadedYml2 = YamlConfiguration.loadConfiguration(newFile2)
-    assertEquals(102, loadedYml2.getInt("id"))
-    assertEquals("Test Build -50", loadedYml2.getString("title"))
+    val loadedB = YamlConfiguration.loadConfiguration(finalFileB)
+    assertEquals(21001, loadedB.getInt("id"))
+    assertEquals("Build Original 11001", loadedB.getString("title"))
   }
 
   @Test
@@ -103,7 +168,7 @@ class NegativeIdMigratorTest {
     yml.set("title", "DryRun Build")
     yml.save(oldFile)
 
-    val idMap = mapOf(-1 to 200)
+    val idMap = mapOf(-1 to 1)
 
     val (migratedCount, missingCount, failedIds) =
         NegativeIdMigrator.migrateYamlFiles(dataDir, idMap, dryRun = true, logger = logger)
@@ -114,7 +179,7 @@ class NegativeIdMigratorTest {
 
     // dryRun では旧ファイルがそのまま残り、新ファイルは作成されない
     assertTrue(oldFile.exists())
-    val newFile = File(dataDir, "200-249/200.yml")
+    val newFile = File(dataDir, "0-49/1.yml")
     assertFalse(newFile.exists())
 
     val reloadedOld = YamlConfiguration.loadConfiguration(oldFile)
@@ -134,7 +199,7 @@ class NegativeIdMigratorTest {
     yml.set("title", "Existing Build")
     yml.save(oldFile)
 
-    val idMap = mapOf(-1 to 301, -2 to 302)
+    val idMap = mapOf(-1 to 1, -2 to 2)
 
     val (migratedCount, missingCount, failedIds) =
         NegativeIdMigrator.migrateYamlFiles(dataDir, idMap, dryRun = false, logger = logger)
@@ -143,7 +208,7 @@ class NegativeIdMigratorTest {
     assertEquals(1, missingCount)
     assertTrue(failedIds.isEmpty())
 
-    assertTrue(File(dataDir, "300-349/301.yml").exists())
+    assertTrue(File(dataDir, "0-49/1.yml").exists())
     assertFalse(oldFile.exists())
   }
 
@@ -157,7 +222,7 @@ class NegativeIdMigratorTest {
 
     pubYml.set("2.TimeStamp", "2024-01-02T12:00:00")
     pubYml.set("2.User", "00000000-0000-0000-0000-000000000002")
-    pubYml.set("2.SLID", 50) // 正IDはそのまま
+    pubYml.set("2.SLID", 50)
 
     pubYml.set("3.TimeStamp", "2024-01-03T12:00:00")
     pubYml.set("3.User", "00000000-0000-0000-0000-000000000003")
@@ -165,12 +230,13 @@ class NegativeIdMigratorTest {
 
     pubYml.save(pubFile)
 
-    val idMap = mapOf(-1 to 501, -50 to 502)
+    // -1 -> 1, 50 -> 10050, -50 -> 50
+    val idMap = mapOf(-1 to 1, 50 to 10050, -50 to 50)
 
     // dryRun テスト
     val dryRunUpdated =
         NegativeIdMigrator.migratePublicityHistory(pubFile, idMap, dryRun = true, logger = logger)
-    assertEquals(2, dryRunUpdated)
+    assertEquals(3, dryRunUpdated)
 
     val reloadedDryRun = YamlConfiguration.loadConfiguration(pubFile)
     assertEquals(-1, reloadedDryRun.getInt("1.SLID"))
@@ -180,12 +246,12 @@ class NegativeIdMigratorTest {
     // 実際の置換テスト
     val actualUpdated =
         NegativeIdMigrator.migratePublicityHistory(pubFile, idMap, dryRun = false, logger = logger)
-    assertEquals(2, actualUpdated)
+    assertEquals(3, actualUpdated)
 
     val reloadedActual = YamlConfiguration.loadConfiguration(pubFile)
-    assertEquals(501, reloadedActual.getInt("1.SLID"))
-    assertEquals(50, reloadedActual.getInt("2.SLID"))
-    assertEquals(502, reloadedActual.getInt("3.SLID"))
+    assertEquals(1, reloadedActual.getInt("1.SLID"))
+    assertEquals(10050, reloadedActual.getInt("2.SLID"))
+    assertEquals(50, reloadedActual.getInt("3.SLID"))
   }
 
   @Test
@@ -212,7 +278,7 @@ class NegativeIdMigratorTest {
     yml3.set("title", "Valid Build -3")
     yml3.save(oldFile3)
 
-    val idMap = mapOf(-1 to 101, -2 to 102, -3 to 103)
+    val idMap = mapOf(-1 to 1, -2 to 2, -3 to 3)
 
     val (migratedCount, missingCount, failedIds) =
         NegativeIdMigrator.migrateYamlFiles(dataDir, idMap, dryRun = false, logger = logger)
@@ -222,8 +288,8 @@ class NegativeIdMigratorTest {
     assertEquals(listOf(-2), failedIds)
 
     // -1 と -3 は移行されていること
-    assertTrue(File(dataDir, "100-149/101.yml").exists())
-    assertTrue(File(dataDir, "100-149/103.yml").exists())
+    assertTrue(File(dataDir, "0-49/1.yml").exists())
+    assertTrue(File(dataDir, "0-49/3.yml").exists())
     assertFalse(oldFile1.exists())
     assertFalse(oldFile3.exists())
 
@@ -298,8 +364,8 @@ class NegativeIdMigratorTest {
       stmt.execute(
           """
           CREATE TABLE id_migration_map (
-              old_negative_id INTEGER PRIMARY KEY,
-              new_positive_id INTEGER UNIQUE
+              old_id INTEGER PRIMARY KEY,
+              new_id INTEGER UNIQUE
           );
           """
               .trimIndent()
@@ -354,6 +420,11 @@ class NegativeIdMigratorTest {
           stmt.setLong(3, 2000L)
           stmt.addBatch()
 
+          stmt.setInt(1, 10)
+          stmt.setString(2, "00000000-0000-0000-0000-000000000012")
+          stmt.setLong(3, 3000L)
+          stmt.addBatch()
+
           stmt.executeBatch()
         }
 
@@ -396,7 +467,7 @@ class NegativeIdMigratorTest {
 
       val ex =
           assertThrows<SQLException> {
-            conn.prepareStatement("UPDATE builds SET id = 11 WHERE id = -50").use {
+            conn.prepareStatement("UPDATE builds SET id = 50 WHERE id = -50").use {
               it.executeUpdate()
             }
           }
@@ -409,16 +480,16 @@ class NegativeIdMigratorTest {
   }
 
   @Test
-  fun testMigrateNegativeIdsDirectSuccessWithFk() {
+  fun testMigrateNegativeIdsDirectSuccessWithTwoBlockScheme() {
     val dbFile = File(tempDir, "migration_success.db")
     createTestDatabase(dbFile).use { conn ->
       seedTestData(conn)
 
       val result = SLDatabase.migrateNegativeIdsDirect(conn, dryRun = false)
       assertIs<SLDatabase.MigrationResult.Success>(result)
-      assertEquals(2, result.migratedCount)
-      // maxPositiveId is 10, negativeIds in ASC order: -50 -> 11, -1 -> 12
-      assertEquals(mapOf(-50 to 11, -1 to 12), result.idMap)
+      assertEquals(3, result.migratedCount)
+      // 2ブロック方式: 10 -> 10010, -50 -> 50, -1 -> 1
+      assertEquals(mapOf(10 to 10010, -50 to 50, -1 to 1), result.idMap)
 
       // builds の確認
       val builds = mutableMapOf<Int, String>()
@@ -429,7 +500,7 @@ class NegativeIdMigratorTest {
           }
         }
       }
-      assertEquals(mapOf(10 to "Build 10", 11 to "Build -50", 12 to "Build -1"), builds)
+      assertEquals(mapOf(1 to "Build -1", 50 to "Build -50", 10010 to "Build 10"), builds)
 
       // build_likes の確認（FK制約が保たれつつ更新されていること）
       val likes = mutableMapOf<Int, String>()
@@ -444,8 +515,9 @@ class NegativeIdMigratorTest {
       }
       assertEquals(
           mapOf(
-              11 to "00000000-0000-0000-0000-000000000010",
-              12 to "00000000-0000-0000-0000-000000000011",
+              1 to "00000000-0000-0000-0000-000000000011",
+              50 to "00000000-0000-0000-0000-000000000010",
+              10010 to "00000000-0000-0000-0000-000000000012",
           ),
           likes,
       )
@@ -454,7 +526,7 @@ class NegativeIdMigratorTest {
       conn.createStatement().use { stmt ->
         stmt.executeQuery("SELECT sl_id FROM publicity_history").use { rs ->
           assertTrue(rs.next())
-          assertEquals(11, rs.getInt("sl_id"))
+          assertEquals(50, rs.getInt("sl_id"))
         }
       }
 
@@ -462,21 +534,20 @@ class NegativeIdMigratorTest {
       conn.createStatement().use { stmt ->
         stmt.executeQuery("SELECT build_id FROM sl_event_log").use { rs ->
           assertTrue(rs.next())
-          assertEquals(12, rs.getInt("build_id"))
+          assertEquals(1, rs.getInt("build_id"))
         }
       }
 
       // id_migration_map の確認
       val mapRows = mutableMapOf<Int, Int>()
       conn.createStatement().use { stmt ->
-        stmt.executeQuery("SELECT old_negative_id, new_positive_id FROM id_migration_map").use { rs
-          ->
+        stmt.executeQuery("SELECT old_id, new_id FROM id_migration_map").use { rs ->
           while (rs.next()) {
-            mapRows[rs.getInt("old_negative_id")] = rs.getInt("new_positive_id")
+            mapRows[rs.getInt("old_id")] = rs.getInt("new_id")
           }
         }
       }
-      assertEquals(mapOf(-50 to 11, -1 to 12), mapRows)
+      assertEquals(mapOf(10 to 10010, -50 to 50, -1 to 1), mapRows)
 
       // 終了時に foreign_keys が ON に戻っていることを確認
       conn.createStatement().use { stmt ->
@@ -489,17 +560,206 @@ class NegativeIdMigratorTest {
   }
 
   @Test
-  fun testMigrateNegativeIdsDirectDryRunDoesNotMutate() {
+  fun testPositiveIdsUpdatedDescendingAvoidsPkCollision() {
+    val dbFile = File(tempDir, "pk_collision_test.db")
+    createTestDatabase(dbFile).use { conn ->
+      // 正IDとして 1 と 10001 の両方が存在する場合
+      // 1 -> 10001, 10001 -> 20001
+      // 昇順に処理すると 1 -> 10001 で既存の 10001 と PK衝突するが、
+      // 降順（10001 -> 20001 が先、その後に 1 -> 10001）なら衝突せず成功する
+      conn
+          .prepareStatement(
+              "INSERT INTO builds (id, world_name, loc_x, loc_y, loc_z, chunk_x, chunk_z, created_at, owner_uuid, title, checked, comment, discord_text_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+          )
+          .use { stmt ->
+            for (id in listOf(-1, 1, 10001)) {
+              stmt.setInt(1, id)
+              stmt.setString(2, "world")
+              stmt.setDouble(3, 0.0)
+              stmt.setDouble(4, 64.0)
+              stmt.setDouble(5, 0.0)
+              stmt.setInt(6, 0)
+              stmt.setInt(7, 0)
+              stmt.setString(8, "2024-01-01T00:00:00")
+              stmt.setString(9, "00000000-0000-0000-0000-000000000001")
+              stmt.setString(10, "Build $id")
+              stmt.setBoolean(11, true)
+              stmt.setString(12, "")
+              stmt.setLong(13, 0L)
+              stmt.addBatch()
+            }
+            stmt.executeBatch()
+          }
+
+      // FK参照テーブルにもデータを挿入
+      conn
+          .prepareStatement(
+              "INSERT INTO build_likes (build_id, player_uuid, liked_at) VALUES (?, ?, ?)"
+          )
+          .use { stmt ->
+            stmt.setInt(1, 1)
+            stmt.setString(2, "00000000-0000-0000-0000-000000000001")
+            stmt.setLong(3, 100L)
+            stmt.addBatch()
+
+            stmt.setInt(1, 10001)
+            stmt.setString(2, "00000000-0000-0000-0000-000000000002")
+            stmt.setLong(3, 200L)
+            stmt.addBatch()
+
+            stmt.executeBatch()
+          }
+
+      val result = SLDatabase.migrateNegativeIdsDirect(conn, dryRun = false)
+      assertIs<SLDatabase.MigrationResult.Success>(result)
+      assertEquals(3, result.migratedCount)
+      assertEquals(mapOf(10001 to 20001, 1 to 10001, -1 to 1), result.idMap)
+
+      val buildIds = mutableListOf<Int>()
+      conn.createStatement().use { stmt ->
+        stmt.executeQuery("SELECT id FROM builds ORDER BY id ASC").use { rs ->
+          while (rs.next()) buildIds.add(rs.getInt("id"))
+        }
+      }
+      assertEquals(listOf(1, 10001, 20001), buildIds)
+
+      val likeBuildIds = mutableListOf<Int>()
+      conn.createStatement().use { stmt ->
+        stmt.executeQuery("SELECT build_id FROM build_likes ORDER BY build_id ASC").use { rs ->
+          while (rs.next()) likeBuildIds.add(rs.getInt("build_id"))
+        }
+      }
+      assertEquals(listOf(10001, 20001), likeBuildIds)
+    }
+  }
+
+  @Test
+  fun testOverflowNegativeIdsAssignedToVacantSlotsDeterministically() {
+    val dbFile = File(tempDir, "overflow_slots.db")
+    createTestDatabase(dbFile).use { conn ->
+      // 負ID: -10005 (abs >= 10000), -10001 (abs >= 10000), -3 (abs < 10000)
+      // 正ID: 5
+      // 1..9999 のうち usedSlots = {3}
+      // availableSlots = 1, 2, 4, 6, 7, ...
+      // overflowNegativeIds = [-10001, -10005] (絶対値昇順)
+      // マッピング:
+      // -10001 -> 1
+      // -10005 -> 2
+      // -3 -> 3
+      // 5 -> 10005
+      conn
+          .prepareStatement(
+              "INSERT INTO builds (id, world_name, loc_x, loc_y, loc_z, chunk_x, chunk_z, created_at, owner_uuid, title, checked, comment, discord_text_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+          )
+          .use { stmt ->
+            for (id in listOf(-10005, -10001, -3, 5)) {
+              stmt.setInt(1, id)
+              stmt.setString(2, "world")
+              stmt.setDouble(3, 0.0)
+              stmt.setDouble(4, 64.0)
+              stmt.setDouble(5, 0.0)
+              stmt.setInt(6, 0)
+              stmt.setInt(7, 0)
+              stmt.setString(8, "2024-01-01T00:00:00")
+              stmt.setString(9, "00000000-0000-0000-0000-000000000001")
+              stmt.setString(10, "Build $id")
+              stmt.setBoolean(11, true)
+              stmt.setString(12, "")
+              stmt.setLong(13, 0L)
+              stmt.addBatch()
+            }
+            stmt.executeBatch()
+          }
+
+      val result = SLDatabase.migrateNegativeIdsDirect(conn, dryRun = false)
+      assertIs<SLDatabase.MigrationResult.Success>(result)
+      assertEquals(4, result.migratedCount)
+      assertEquals(mapOf(5 to 10005, -3 to 3, -10001 to 1, -10005 to 2), result.idMap)
+
+      val buildIds = mutableListOf<Int>()
+      conn.createStatement().use { stmt ->
+        stmt.executeQuery("SELECT id FROM builds ORDER BY id ASC").use { rs ->
+          while (rs.next()) buildIds.add(rs.getInt("id"))
+        }
+      }
+      assertEquals(listOf(1, 2, 3, 10005), buildIds)
+    }
+  }
+
+  @Test
+  fun testInsufficientSlotsAbortsMigration() {
+    val dbFile = File(tempDir, "insufficient_slots.db")
+    createTestDatabase(dbFile).use { conn ->
+      // 1〜9999 をすべて埋める負ID (-1 〜 -9999) を用意し、さらに -10001 を追加する
+      // 空きスロットが 0 個になり、-10001 を収容できず中止される
+      conn
+          .prepareStatement(
+              "INSERT INTO builds (id, world_name, loc_x, loc_y, loc_z, chunk_x, chunk_z, created_at, owner_uuid, title, checked, comment, discord_text_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+          )
+          .use { stmt ->
+            for (i in 1..9999) {
+              stmt.setInt(1, -i)
+              stmt.setString(2, "world")
+              stmt.setDouble(3, 0.0)
+              stmt.setDouble(4, 64.0)
+              stmt.setDouble(5, 0.0)
+              stmt.setInt(6, 0)
+              stmt.setInt(7, 0)
+              stmt.setString(8, "2024-01-01T00:00:00")
+              stmt.setString(9, "00000000-0000-0000-0000-000000000001")
+              stmt.setString(10, "Build -$i")
+              stmt.setBoolean(11, true)
+              stmt.setString(12, "")
+              stmt.setLong(13, 0L)
+              stmt.addBatch()
+            }
+            stmt.setInt(1, -10001)
+            stmt.setString(2, "world")
+            stmt.setDouble(3, 0.0)
+            stmt.setDouble(4, 64.0)
+            stmt.setDouble(5, 0.0)
+            stmt.setInt(6, 0)
+            stmt.setInt(7, 0)
+            stmt.setString(8, "2024-01-01T00:00:00")
+            stmt.setString(9, "00000000-0000-0000-0000-000000000001")
+            stmt.setString(10, "Build -10001")
+            stmt.setBoolean(11, true)
+            stmt.setString(12, "")
+            stmt.setLong(13, 0L)
+            stmt.addBatch()
+
+            stmt.executeBatch()
+          }
+
+      val result = SLDatabase.migrateNegativeIdsDirect(conn, dryRun = false)
+      assertIs<SLDatabase.MigrationResult.Failure>(result)
+      assertTrue(
+          result.cause.message?.contains("Insufficient vacant slots") == true,
+          "Expected insufficient vacant slots error, got: ${result.cause.message}",
+      )
+
+      // DB は変更されていないこと
+      conn.createStatement().use { stmt ->
+        stmt.executeQuery("SELECT COUNT(*) FROM id_migration_map").use { rs ->
+          assertTrue(rs.next())
+          assertEquals(0, rs.getInt(1))
+        }
+      }
+    }
+  }
+
+  @Test
+  fun testMigrateNegativeIdsDirectDryRunDoesNotMutateAndValidates() {
     val dbFile = File(tempDir, "migration_dry_run.db")
     createTestDatabase(dbFile).use { conn ->
       seedTestData(conn)
 
       val result = SLDatabase.migrateNegativeIdsDirect(conn, dryRun = true)
       assertIs<SLDatabase.MigrationResult.Success>(result)
-      assertEquals(2, result.migratedCount)
-      assertEquals(mapOf(-50 to 11, -1 to 12), result.idMap)
+      assertEquals(3, result.migratedCount)
+      assertEquals(mapOf(10 to 10010, -50 to 50, -1 to 1), result.idMap)
 
-      // DB内のデータは負IDのまま変更されていないことを確認
+      // DB内のデータは変更されていないことを確認
       val buildIds = mutableListOf<Int>()
       conn.createStatement().use { stmt ->
         stmt.executeQuery("SELECT id FROM builds ORDER BY id ASC").use { rs ->
@@ -530,7 +790,7 @@ class NegativeIdMigratorTest {
   fun testMigrateNegativeIdsDirectNoTarget() {
     val dbFile = File(tempDir, "migration_no_target.db")
     createTestDatabase(dbFile).use { conn ->
-      // 正IDのみ挿入
+      // 正IDのみ挿入（負IDが存在しない）
       conn
           .prepareStatement(
               "INSERT INTO builds (id, world_name, loc_x, loc_y, loc_z, chunk_x, chunk_z, created_at, owner_uuid, title, checked, comment, discord_text_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -609,22 +869,25 @@ class NegativeIdMigratorTest {
     createTestDatabase(dbFile).use { conn ->
       seedTestData(conn)
 
-      // 既存マッピング: -50 -> 999 をあらかじめ登録
-      conn
-          .prepareStatement(
-              "INSERT INTO id_migration_map (old_negative_id, new_positive_id) VALUES (?, ?)"
-          )
-          .use { stmt ->
-            stmt.setInt(1, -50)
-            stmt.setInt(2, 999)
-            stmt.executeUpdate()
-          }
+      // 既存マッピング: -50 -> 999, 10 -> 20010 をあらかじめ登録
+      conn.prepareStatement("INSERT INTO id_migration_map (old_id, new_id) VALUES (?, ?)").use {
+          stmt ->
+        stmt.setInt(1, -50)
+        stmt.setInt(2, 999)
+        stmt.addBatch()
+
+        stmt.setInt(1, 10)
+        stmt.setInt(2, 20010)
+        stmt.addBatch()
+
+        stmt.executeBatch()
+      }
 
       val result = SLDatabase.migrateNegativeIdsDirect(conn, dryRun = false)
       assertIs<SLDatabase.MigrationResult.Success>(result)
-      assertEquals(2, result.migratedCount)
-      // -50 は既存の 999、-1 は maxPositiveId(10) + 1 = 11
-      assertEquals(mapOf(-50 to 999, -1 to 11), result.idMap)
+      assertEquals(3, result.migratedCount)
+      // -50 は既存の 999, 10 は既存の 20010, -1 は abs(-1) = 1
+      assertEquals(mapOf(10 to 20010, -50 to 999, -1 to 1), result.idMap)
 
       val buildIds = mutableListOf<Int>()
       conn.createStatement().use { stmt ->
@@ -632,7 +895,7 @@ class NegativeIdMigratorTest {
           while (rs.next()) buildIds.add(rs.getInt("id"))
         }
       }
-      assertEquals(listOf(10, 11, 999), buildIds)
+      assertEquals(listOf(1, 999, 20010), buildIds)
     }
   }
 
@@ -650,14 +913,14 @@ class NegativeIdMigratorTest {
       }
 
       // UPDATE builds 実行時にトリガーで SQLException が発生する
-      val ex =
-          assertThrows<SQLException> { SLDatabase.migrateNegativeIdsDirect(conn, dryRun = false) }
+      val result = SLDatabase.migrateNegativeIdsDirect(conn, dryRun = false)
+      assertIs<SLDatabase.MigrationResult.Failure>(result)
       assertTrue(
-          ex.message?.contains("simulated migration failure") == true,
-          "Expected simulated failure, got: ${ex.message}",
+          result.cause.message?.contains("simulated migration failure") == true,
+          "Expected simulated failure, got: ${result.cause.message}",
       )
 
-      // ロールバックされて builds テーブルのデータが負IDのままであることを確認
+      // ロールバックされて builds テーブルのデータが元のままであることを確認
       val buildIds = mutableListOf<Int>()
       conn.createStatement().use { stmt ->
         stmt.executeQuery("SELECT id FROM builds ORDER BY id ASC").use { rs ->
@@ -673,6 +936,39 @@ class NegativeIdMigratorTest {
           assertEquals(1, rs.getInt(1), "PRAGMA foreign_keys must be ON even after failure")
         }
       }
+    }
+  }
+
+  @Test
+  fun testResolveMigratedIdHandlesBothPositiveAndNegative() {
+    val dbFile = File(tempDir, "resolve_id_test.db")
+    createTestDatabase(dbFile).use { conn ->
+      conn.prepareStatement("INSERT INTO id_migration_map (old_id, new_id) VALUES (?, ?)").use {
+          stmt ->
+        stmt.setInt(1, -50)
+        stmt.setInt(2, 50)
+        stmt.addBatch()
+
+        stmt.setInt(1, 100)
+        stmt.setInt(2, 10100)
+        stmt.addBatch()
+
+        stmt.executeBatch()
+      }
+
+      // loadIdMigrationMapDirect でメモリ上にロード
+      val map = mutableMapOf<Int, Int>()
+      conn.prepareStatement("SELECT old_id, new_id FROM id_migration_map").use { stmt ->
+        stmt.executeQuery().use { rs ->
+          while (rs.next()) {
+            map[rs.getInt("old_id")] = rs.getInt("new_id")
+          }
+        }
+      }
+      assertEquals(50, map[-50])
+      assertEquals(10100, map[100])
+      // マップにないIDはそのまま
+      assertNull(map[99999])
     }
   }
 }

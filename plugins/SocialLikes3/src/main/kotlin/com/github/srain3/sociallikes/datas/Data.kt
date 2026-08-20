@@ -49,24 +49,24 @@ object Data {
     saveYamlAsync(data)
   }
 
-  /** IDから[SLData]を取得する、ない場合nullを返す (負IDはマイグレーションマップ経由で解決) */
+  /** IDから[SLData]を取得する、ない場合nullを返す (マイグレーションマップ経由で解決) */
   fun getSLData(id: Int): SLData? {
-    val resolvedId = if (id < 0) SLDatabase.resolveMigratedId(id) else id
+    val resolvedId = SLDatabase.resolveMigratedId(id)
     val dirName = getDirName(resolvedId)
     val list = dataMap[dirName] ?: return null
     return list.firstOrNull { it.id == resolvedId && it.deletedAt == null }
   }
 
-  /** IDからキャッシュ上の[SLData]を取得する (削除済みフラグにかかわらず取得、負IDは解決) */
+  /** IDからキャッシュ上の[SLData]を取得する (削除済みフラグにかかわらず取得、旧IDは解決) */
   fun getSLDataDirect(id: Int): SLData? {
-    val resolvedId = if (id < 0) SLDatabase.resolveMigratedId(id) else id
+    val resolvedId = SLDatabase.resolveMigratedId(id)
     val dirName = getDirName(resolvedId)
     return dataMap[dirName]?.firstOrNull { it.id == resolvedId }
   }
 
   /** YAMLファイルから指定IDの[SLData]を読み込む */
   fun loadSLDataFromYaml(id: Int): SLData? {
-    val resolvedId = if (id < 0) SLDatabase.resolveMigratedId(id) else id
+    val resolvedId = SLDatabase.resolveMigratedId(id)
     val dirName = getDirName(resolvedId)
     val file = File(Tools.plugin.dataFolder, "data/$dirName/$resolvedId.yml")
     if (!file.exists() || !file.isFile) return null
