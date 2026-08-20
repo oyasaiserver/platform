@@ -17,34 +17,48 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
 // Paperのチャット・プレイヤーイベント処理。
+private data class ChatCommitSnapshot(
+    val playerId: UUID,
+    val plan: LocalChatPlan,
+    val text: String,
+    val accepted: Boolean,
+)
+
 class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+  @EventHandler(priority = EventPriority.MONITOR)
   fun onChat(event: AsyncChatEvent) {
     val playerId = event.player.uniqueId
     val text = PlainTextComponentSerializer.plainText().serialize(event.message())
+    val cancelled = event.isCancelled
     val reserved =
-        synchronized(plugin.chatLifecycleLock) {
-          if (plugin.reloadInProgress) false
-          else {
-            plugin.pendingChatCommits++
-            true
+        if (cancelled) false
+        else {
+          synchronized(plugin.chatLifecycleLock) {
+            if (plugin.reloadInProgress) false
+            else {
+              plugin.pendingChatCommits++
+              true
+            }
           }
         }
     val service = plugin.runtime.chat
     val plan =
-        if (!reserved) {
+        if (cancelled) {
+          LocalChatPlan.Rejected("Chat event was cancelled.")
+        } else if (!reserved) {
           LocalChatPlan.Rejected("Chat configuration is reloading; please resend your message.")
         } else if (text.length > MAX_PAYLOAD_LENGTH) {
           LocalChatPlan.Rejected("Message is too long.")
         } else {
           planChatOnServerThread(playerId)
         }
-    configureVanillaDelivery(event, plan)
+    if (!cancelled) configureVanillaDelivery(event, plan)
+    val commit = ChatCommitSnapshot(playerId, plan, text, !cancelled)
     plugin.server.scheduler.runTask(
         plugin,
         Runnable {
           try {
-            if (!event.isCancelled) service.commitLocalChat(playerId, plan, text)
+            if (commit.accepted) service.commitLocalChat(commit.playerId, commit.plan, commit.text)
           } finally {
             if (reserved) synchronized(plugin.chatLifecycleLock) { plugin.pendingChatCommits-- }
           }
@@ -60,8 +74,6 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
     val label =
         (if (separator < 0) commandLine else commandLine.substring(0, separator)).lowercase()
     val channel = plugin.runtime.config.channels.findShortcut(label) ?: return
-
-    if (plugin.server.commandMap.getCommand(label) != null) return
 
     event.isCancelled = true
     if (plugin.reloadInProgress) {

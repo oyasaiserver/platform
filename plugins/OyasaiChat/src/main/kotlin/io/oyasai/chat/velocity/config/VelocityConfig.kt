@@ -1,6 +1,8 @@
 package io.oyasai.chat.velocity.config
 
 import java.nio.file.Path
+import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.spongepowered.configurate.ConfigurationNode
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader
 
@@ -25,7 +27,9 @@ data class LoginMessageConfig(
 }
 
 object VelocityConfigLoader {
-  fun load(path: Path): VelocityRoutingConfig {
+  private val mini = MiniMessage.builder().strict(true).build()
+
+  fun load(path: Path, registeredBackends: Set<String>): VelocityRoutingConfig {
     val root = YamlConfigurationLoader.builder().path(path).build().load()
     val groups =
         root
@@ -40,6 +44,10 @@ object VelocityConfigLoader {
               key to backends.toSet()
             }
             .toMap()
+    val configuredBackends = groups.values.flatten().toSet()
+    require(configuredBackends.all { it in registeredBackends }) {
+      "Network groups reference an unregistered Velocity backend."
+    }
     val channels =
         root
             .node("channels")
@@ -70,6 +78,9 @@ object VelocityConfigLoader {
               }
               displayName
             }
+    require(configuredDisplayNames.keys.all { it in registeredBackends }) {
+      "login-messages.backend-display-names references an unregistered Velocity backend."
+    }
     val messageConfig =
         LoginMessageConfig(
             backendDisplayNames = configuredDisplayNames,
@@ -88,6 +99,15 @@ object VelocityConfigLoader {
           require(value.length <= 1024 && value.none(Char::isISOControl)) {
             "login-messages.$name must be at most 1024 characters without control characters"
           }
+          runCatching {
+                mini.deserialize(
+                    value,
+                    Placeholder.unparsed("backend", "backend"),
+                )
+              }
+              .getOrElse {
+                throw IllegalArgumentException("login-messages.$name is not valid MiniMessage.", it)
+              }
         }
     return VelocityRoutingConfig(groups, channels, messageConfig)
   }

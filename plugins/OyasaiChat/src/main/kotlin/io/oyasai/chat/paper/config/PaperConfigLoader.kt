@@ -41,8 +41,13 @@ object PaperConfigLoader {
               autoJoin = config.getBoolean("$path.auto-join"),
               defaultChannel = config.getBoolean("$path.default"),
               networkGroup =
-                  config.getString("$path.network-group")?.takeIf {
-                    backendId in groups[it].orEmpty()
+                  config.getString("$path.network-group")?.trim()?.takeIf(String::isNotEmpty)?.let {
+                    group ->
+                    when {
+                      group !in groups -> group
+                      backendId in groups.getValue(group) -> group
+                      else -> null
+                    }
                   },
           )
         } ?: emptyList()

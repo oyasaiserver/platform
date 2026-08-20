@@ -44,13 +44,6 @@ object ConfigValidator {
         errors +=
             "channel '${channel.id}' references missing network group '${channel.networkGroup}'"
       }
-      if (
-          channel.networkGroup != null &&
-              network.backendId !in (network.groups[channel.networkGroup] ?: emptySet())
-      ) {
-        errors +=
-            "backend '${network.backendId}' is not a member of network group '${channel.networkGroup}' used by channel '${channel.id}'"
-      }
     }
     return errors.distinct()
   }

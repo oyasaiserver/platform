@@ -50,7 +50,9 @@ constructor(
       }
     }
     val config =
-        runCatching { VelocityConfigLoader.load(path) }
+        runCatching {
+          VelocityConfigLoader.load(path, proxy.allServers.map { it.serverInfo.name }.toSet())
+        }
             .getOrElse {
               logger.error("Invalid OyasaiChat Velocity configuration: {}", it.message)
               throw it

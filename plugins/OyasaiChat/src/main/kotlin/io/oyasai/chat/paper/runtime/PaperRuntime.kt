@@ -27,6 +27,7 @@ internal data class PaperRuntime(
 
 internal object PaperRuntimeFactory {
   fun create(plugin: OyasaiChatPlugin, model: ChatConfig): PaperRuntime {
+    validateShortcutCommands(plugin, model)
     val states = PlayerStateStore(plugin, model)
     val formatter = ChatFormatter(plugin, model)
     val chat = ChatService(plugin, model, states, formatter)
@@ -66,4 +67,16 @@ internal object PaperRuntimeFactory {
                   NoopDiscordBridge(plugin)
                 }
       }
+
+  // Validation処理はAI生成
+  private fun validateShortcutCommands(plugin: OyasaiChatPlugin, model: ChatConfig) {
+    val conflicts =
+        model.channels.channels
+            .flatMap { it.shortcutCommands }
+            .distinct()
+            .filter { plugin.server.commandMap.getCommand(it) != null }
+    require(conflicts.isEmpty()) {
+      "Channel shortcut commands are already registered: ${conflicts.joinToString(", ")}"
+    }
+  }
 }
