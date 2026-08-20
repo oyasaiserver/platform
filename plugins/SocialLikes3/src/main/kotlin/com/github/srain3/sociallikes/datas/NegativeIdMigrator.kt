@@ -18,6 +18,8 @@ object NegativeIdMigrator {
       val failedYamlIds: List<Int>,
       val publicityHistoryUpdatedCount: Int,
       val isDryRun: Boolean,
+      val isSuccess: Boolean = true,
+      val errorMessage: String? = null,
   )
 
   /**
@@ -39,28 +41,60 @@ object NegativeIdMigrator {
     logger.info("================================================================================")
     logger.info("[SL3] Starting negative ID migration $tag...")
 
-    // 1. SQLite側の移行処理を実行（スキーマ初期化完了を待機してトランザクション実行）
+    // 1. SQLite側の移行処理を実行
     val sqliteResult = SLDatabase.migrateNegativeIds(dryRun)
-    val idMap = sqliteResult.idMap
-
-    if (idMap.isEmpty()) {
-      logger.info("[SL3] Negative ID Migration: No negative IDs found in database (count: 0).")
-      logger.info("[SL3] Please set 'migrateNegativeIdsOnStartup: false' in config.yml.")
-      logger.info(
-          "================================================================================"
-      )
-      return MigrationResultSummary(
-          targetNegativeCount = 0,
-          newIdStart = null,
-          newIdEnd = null,
-          sqliteMigratedCount = 0,
-          yamlMigratedCount = 0,
-          yamlMissingCount = 0,
-          failedYamlIds = emptyList(),
-          publicityHistoryUpdatedCount = 0,
-          isDryRun = dryRun,
-      )
-    }
+    val idMap =
+        when (sqliteResult) {
+          is SLDatabase.MigrationResult.NoTarget -> {
+            logger.info(
+                "[SL3] Negative ID Migration: No negative IDs found in database (count: 0)."
+            )
+            logger.info("[SL3] Please set 'migrateNegativeIdsOnStartup: false' in config.yml.")
+            logger.info(
+                "================================================================================"
+            )
+            return MigrationResultSummary(
+                targetNegativeCount = 0,
+                newIdStart = null,
+                newIdEnd = null,
+                sqliteMigratedCount = 0,
+                yamlMigratedCount = 0,
+                yamlMissingCount = 0,
+                failedYamlIds = emptyList(),
+                publicityHistoryUpdatedCount = 0,
+                isDryRun = dryRun,
+                isSuccess = true,
+            )
+          }
+          is SLDatabase.MigrationResult.Failure -> {
+            val message = sqliteResult.cause.message ?: sqliteResult.cause.javaClass.simpleName
+            logger.log(
+                Level.SEVERE,
+                "[SL3] Negative ID Migration FAILED during SQLite migration: $message",
+                sqliteResult.cause,
+            )
+            logger.severe(
+                "[SL3] SQLite migration aborted and rolled back. YAML migration will NOT be executed."
+            )
+            logger.info(
+                "================================================================================"
+            )
+            return MigrationResultSummary(
+                targetNegativeCount = 0,
+                newIdStart = null,
+                newIdEnd = null,
+                sqliteMigratedCount = 0,
+                yamlMigratedCount = 0,
+                yamlMissingCount = 0,
+                failedYamlIds = emptyList(),
+                publicityHistoryUpdatedCount = 0,
+                isDryRun = dryRun,
+                isSuccess = false,
+                errorMessage = message,
+            )
+          }
+          is SLDatabase.MigrationResult.Success -> sqliteResult.idMap
+        }
 
     val newIds = idMap.values.sorted()
     val startId = newIds.firstOrNull()
@@ -90,7 +124,7 @@ object NegativeIdMigrator {
       logger.info("[SL3] Negative ID Migration: DRY-RUN PREVIEW SUMMARY")
       logger.info("[SL3] - Target negative IDs found: ${idMap.size}")
       logger.info("[SL3] - Proposed new positive ID range: $idRangeStr")
-      logger.info("[SL3] - SQLite entries that would be migrated: ${sqliteResult.migratedCount}")
+      logger.info("[SL3] - SQLite entries that would be migrated: ${idMap.size}")
       logger.info(
           "[SL3] - YAML files that would be migrated: $yamlMigratedCount (missing: $yamlMissingCount)"
       )
@@ -103,7 +137,7 @@ object NegativeIdMigrator {
       logger.info("[SL3] Negative ID Migration: EXECUTION SUMMARY")
       logger.info("[SL3] - Target negative IDs found: ${idMap.size}")
       logger.info("[SL3] - New positive ID range: $idRangeStr")
-      logger.info("[SL3] - SQLite migrated count: ${sqliteResult.migratedCount}")
+      logger.info("[SL3] - SQLite migrated count: ${idMap.size}")
       logger.info(
           "[SL3] - YAML files migrated count: $yamlMigratedCount (missing: $yamlMissingCount)"
       )
@@ -129,12 +163,13 @@ object NegativeIdMigrator {
         targetNegativeCount = idMap.size,
         newIdStart = startId,
         newIdEnd = endId,
-        sqliteMigratedCount = sqliteResult.migratedCount,
+        sqliteMigratedCount = idMap.size,
         yamlMigratedCount = yamlMigratedCount,
         yamlMissingCount = yamlMissingCount,
         failedYamlIds = failedYamlIds,
         publicityHistoryUpdatedCount = pubUpdatedCount,
         isDryRun = dryRun,
+        isSuccess = failedYamlIds.isEmpty(),
     )
   }
 

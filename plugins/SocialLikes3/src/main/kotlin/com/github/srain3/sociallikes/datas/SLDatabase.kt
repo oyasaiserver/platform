@@ -314,7 +314,13 @@ object SLDatabase {
       val slId: Int,
   )
 
-  data class MigrationResult(val migratedCount: Int, val idMap: Map<Int, Int>)
+  sealed interface MigrationResult {
+    data class Success(val migratedCount: Int, val idMap: Map<Int, Int>) : MigrationResult
+
+    data object NoTarget : MigrationResult
+
+    data class Failure(val cause: Throwable) : MigrationResult
+  }
 
   fun init(plugin: JavaPlugin) {
     this.plugin = plugin
@@ -725,8 +731,85 @@ object SLDatabase {
   }
 
   fun migrateNegativeIds(dryRun: Boolean = false): MigrationResult {
-    return submitWriteBlocking("migrateNegativeIds") {
-      val conn = rawConnection() ?: return@submitWriteBlocking MigrationResult(0, emptyMap())
+    val service = writeExecutor
+    if (service == null) {
+      val err = IllegalStateException("Database write executor is not initialized")
+      Tools.plugin.logger.log(
+          Level.SEVERE,
+          "[SL3] SQLite shadow migrateNegativeIds failed: database not initialized",
+          err,
+      )
+      return MigrationResult.Failure(err)
+    }
+
+    val future =
+        service.submit(
+            Callable<MigrationResult> {
+              if (!awaitInit()) {
+                val err = TimeoutException("Database initialization timed out")
+                Tools.plugin.logger.log(
+                    Level.SEVERE,
+                    "[SL3] SQLite shadow migrateNegativeIds failed: initialization timeout",
+                    err,
+                )
+                return@Callable MigrationResult.Failure(err)
+              }
+
+              try {
+                if (!::dbFile.isInitialized || !dbFile.exists()) {
+                  val err =
+                      IllegalStateException(
+                          "Database file does not exist: ${if (::dbFile.isInitialized) dbFile.absolutePath else "uninitialized"}"
+                      )
+                  return@Callable MigrationResult.Failure(err)
+                }
+
+                val dbUrl = "jdbc:sqlite:${dbFile.absolutePath}?busy_timeout=10000"
+                java.sql.DriverManager.getConnection(dbUrl).use { conn ->
+                  val result = migrateNegativeIdsDirect(conn, dryRun)
+                  if (result is MigrationResult.Success && !dryRun) {
+                    idMigrationCache.putAll(result.idMap)
+                  }
+                  result
+                }
+              } catch (e: Exception) {
+                Tools.plugin.logger.log(
+                    Level.SEVERE,
+                    "[SL3] SQLite shadow migrateNegativeIds failed: ${e.message ?: e.javaClass.simpleName}",
+                    e,
+                )
+                MigrationResult.Failure(e)
+              }
+            }
+        )
+
+    return try {
+      future.get(BLOCKING_TIMEOUT_SECONDS * 4, TimeUnit.SECONDS)
+    } catch (e: TimeoutException) {
+      val err =
+          TimeoutException(
+              "SQLite shadow migrateNegativeIds timed out after ${BLOCKING_TIMEOUT_SECONDS * 4}s"
+          )
+      Tools.plugin.logger.log(Level.SEVERE, "[SL3] SQLite shadow migrateNegativeIds timed out", err)
+      future.cancel(true)
+      MigrationResult.Failure(err)
+    } catch (e: Exception) {
+      Tools.plugin.logger.log(
+          Level.SEVERE,
+          "[SL3] SQLite shadow migrateNegativeIds execution failed: ${e.message ?: e.javaClass.simpleName}",
+          e,
+      )
+      MigrationResult.Failure(e)
+    }
+  }
+
+  fun migrateNegativeIdsDirect(conn: Connection, dryRun: Boolean = false): MigrationResult {
+    // 外部キー制約を確実に無効化するため、トランザクション開始前（autoCommit = true）に PRAGMA を実行
+    // SQLite仕様: PRAGMA foreign_keys はトランザクション内（BEGIN下）では no-op のため
+    conn.autoCommit = true
+    conn.createStatement().use { it.execute("PRAGMA foreign_keys = OFF;") }
+
+    try {
       var maxPositiveId = 0
       conn.prepareStatement("SELECT MAX(id) AS max_id FROM builds WHERE id > 0").use { stmt ->
         stmt.executeQuery().use { rs -> if (rs.next()) maxPositiveId = rs.getInt("max_id") }
@@ -736,7 +819,9 @@ object SLDatabase {
         stmt.executeQuery().use { rs -> while (rs.next()) negativeIds += rs.getInt("id") }
       }
 
-      if (negativeIds.isEmpty()) return@submitWriteBlocking MigrationResult(0, emptyMap())
+      if (negativeIds.isEmpty()) {
+        return MigrationResult.NoTarget
+      }
 
       val existingMap = mutableMapOf<Int, Int>()
       conn.prepareStatement("SELECT old_negative_id, new_positive_id FROM id_migration_map").use {
@@ -763,8 +848,6 @@ object SLDatabase {
       if (!dryRun) {
         conn.autoCommit = false
         try {
-          conn.createStatement().use { it.execute("PRAGMA foreign_keys = OFF;") }
-
           conn
               .prepareStatement(
                   "INSERT OR REPLACE INTO id_migration_map (old_negative_id, new_positive_id) VALUES (?, ?)"
@@ -778,45 +861,64 @@ object SLDatabase {
                 stmt.executeBatch()
               }
 
-          for ((oldId, newId) in mapToApply) {
-            conn.prepareStatement("UPDATE builds SET id = ? WHERE id = ?").use {
-              it.setInt(1, newId)
-              it.setInt(2, oldId)
-              it.executeUpdate()
+          conn.prepareStatement("UPDATE builds SET id = ? WHERE id = ?").use { stmt ->
+            for ((oldId, newId) in mapToApply) {
+              stmt.setInt(1, newId)
+              stmt.setInt(2, oldId)
+              stmt.addBatch()
             }
-            conn.prepareStatement("UPDATE build_likes SET build_id = ? WHERE build_id = ?").use {
-              it.setInt(1, newId)
-              it.setInt(2, oldId)
-              it.executeUpdate()
-            }
-            conn.prepareStatement("UPDATE publicity_history SET sl_id = ? WHERE sl_id = ?").use {
-              it.setInt(1, newId)
-              it.setInt(2, oldId)
-              it.executeUpdate()
-            }
-            conn.prepareStatement("UPDATE sl_event_log SET build_id = ? WHERE build_id = ?").use {
-              it.setInt(1, newId)
-              it.setInt(2, oldId)
-              it.executeUpdate()
-            }
+            stmt.executeBatch()
           }
 
-          conn.createStatement().use { it.execute("PRAGMA foreign_keys = ON;") }
+          conn.prepareStatement("UPDATE build_likes SET build_id = ? WHERE build_id = ?").use { stmt
+            ->
+            for ((oldId, newId) in mapToApply) {
+              stmt.setInt(1, newId)
+              stmt.setInt(2, oldId)
+              stmt.addBatch()
+            }
+            stmt.executeBatch()
+          }
+
+          conn.prepareStatement("UPDATE publicity_history SET sl_id = ? WHERE sl_id = ?").use { stmt
+            ->
+            for ((oldId, newId) in mapToApply) {
+              stmt.setInt(1, newId)
+              stmt.setInt(2, oldId)
+              stmt.addBatch()
+            }
+            stmt.executeBatch()
+          }
+
+          conn.prepareStatement("UPDATE sl_event_log SET build_id = ? WHERE build_id = ?").use {
+              stmt ->
+            for ((oldId, newId) in mapToApply) {
+              stmt.setInt(1, newId)
+              stmt.setInt(2, oldId)
+              stmt.addBatch()
+            }
+            stmt.executeBatch()
+          }
+
           conn.commit()
         } catch (e: Exception) {
-          conn.rollback()
-          conn.createStatement().use { it.execute("PRAGMA foreign_keys = ON;") }
+          try {
+            conn.rollback()
+          } catch (rbEx: Exception) {
+            // ロールバック失敗時の例外
+          }
           throw e
-        } finally {
-          conn.autoCommit = true
         }
       }
 
-      if (!dryRun) {
-        idMigrationCache.putAll(mapToApply)
-      }
-      MigrationResult(mapToApply.size, mapToApply)
-    } ?: MigrationResult(0, emptyMap())
+      return MigrationResult.Success(mapToApply.size, mapToApply)
+    } finally {
+      // 処理の成否にかかわらず、確実に foreign_keys を ON に戻す
+      try {
+        conn.autoCommit = true
+        conn.createStatement().use { it.execute("PRAGMA foreign_keys = ON;") }
+      } catch (ignored: Exception) {}
+    }
   }
 
   fun getMaxBuildIdBlocking(): Int? {
