@@ -10,8 +10,6 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.ServerConnection
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier
-import java.nio.file.Files
-import java.nio.file.Path
 import io.oyasai.chat.common.protocol.EnvelopeCodec
 import io.oyasai.chat.common.protocol.MessageDeduplicator
 import io.oyasai.chat.common.protocol.MessageOrigin
@@ -19,6 +17,8 @@ import io.oyasai.chat.velocity.config.VelocityConfigLoader
 import io.oyasai.chat.velocity.lifecycle.LoginMessageService
 import io.oyasai.chat.velocity.routing.NetworkMessageRouter
 import io.oyasai.chat.velocity.state.ProxyState
+import java.nio.file.Files
+import java.nio.file.Path
 import org.slf4j.Logger
 
 // Velocity側プラグインの起動と受信メッセージ入口。
@@ -51,8 +51,8 @@ constructor(
     }
     val config =
         runCatching {
-          VelocityConfigLoader.load(path, proxy.allServers.map { it.serverInfo.name }.toSet())
-        }
+              VelocityConfigLoader.load(path, proxy.allServers.map { it.serverInfo.name }.toSet())
+            }
             .getOrElse {
               logger.error("Invalid OyasaiChat Velocity configuration: {}", it.message)
               throw it
@@ -108,5 +108,4 @@ constructor(
     }
     if (deduplicator.firstSeen(envelope.messageId)) router.route(source, envelope)
   }
-
 }

@@ -6,13 +6,13 @@ import com.velocitypowered.api.event.connection.DisconnectEvent
 import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
+import io.oyasai.chat.velocity.config.VelocityRoutingConfig
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
-import io.oyasai.chat.velocity.config.VelocityRoutingConfig
 import org.slf4j.Logger
 
 // プレイヤーの接続・切断通知の各バックエンド配信。
@@ -53,9 +53,7 @@ class LoginMessageService(
     if (replacingConnection) return
 
     val previous = event.previousServer?.serverInfo?.name ?: existing?.backendId
-    planConnected(previous, destination).forEach {
-      deliver(event.player.username, it)
-    }
+    planConnected(previous, destination).forEach { deliver(event.player.username, it) }
   }
 
   @Subscribe(order = PostOrder.LAST)
@@ -63,9 +61,7 @@ class LoginMessageService(
     val active = activeConnections[event.player.uniqueId] ?: return
     if (active.player !== event.player) return
     activeConnections.remove(event.player.uniqueId, active)
-    planDisconnected(active.backendId).forEach {
-      deliver(event.player.username, it)
-    }
+    planDisconnected(active.backendId).forEach { deliver(event.player.username, it) }
   }
 
   private fun deliver(playerName: String, delivery: LoginMessageDelivery) {
@@ -152,5 +148,4 @@ class LoginMessageService(
         )
     )
   }
-
 }

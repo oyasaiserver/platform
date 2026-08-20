@@ -1,13 +1,12 @@
 package io.oyasai.chat.paper.pm
 
-import java.util.UUID
 import io.oyasai.chat.common.protocol.MAX_MESSAGE_AGE_MILLIS
-import io.oyasai.chat.common.protocol.MessageOrigin
 import io.oyasai.chat.common.protocol.MessageType
 import io.oyasai.chat.common.protocol.NetworkEnvelope
 import io.oyasai.chat.paper.OyasaiChatPlugin
 import io.oyasai.chat.paper.chat.ChatService
 import io.oyasai.chat.paper.chat.state
+import java.util.UUID
 import org.bukkit.SoundCategory
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -120,10 +119,7 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
     return sent
   }
 
-  /**
-   * AsyncChatEventがローカルの受信者へ配信した後の、会話モードPMの確定。
-   * プレイヤーへの再表示は行わず、状態変更とネットワーク・外部連携だけを処理。
-   */
+  /** AsyncChatEventがローカルの受信者へ配信した後の、会話モードPMの確定。 プレイヤーへの再表示は行わず、状態変更とネットワーク・外部連携だけを処理。 */
   fun commitConversationMessage(
       source: Player,
       message: String,

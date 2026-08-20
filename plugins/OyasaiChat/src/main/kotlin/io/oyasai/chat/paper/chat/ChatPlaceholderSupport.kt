@@ -1,7 +1,7 @@
 package io.oyasai.chat.paper.chat
 
-import net.kyori.adventure.text.Component
 import io.oyasai.chat.paper.OyasaiChatPlugin
+import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 
 // PlaceholderAPIとVaultの表示情報取得。
@@ -22,7 +22,8 @@ internal class ChatPlaceholderSupport(private val plugin: OyasaiChatPlugin) {
         null
       }
 
-  fun expand(player: Player, format: String): String = placeholderApi?.expand(player, format) ?: format
+  fun expand(player: Player, format: String): String =
+      placeholderApi?.expand(player, format) ?: format
 
   fun prefix(player: Player?): Component = vault?.prefix(player) ?: Component.empty()
 

@@ -188,12 +188,14 @@ object EnvelopeCodec {
 
   private fun requiredInt(json: JsonObject, name: String): Int {
     val value = requiredNumber(json, name)
-    return value.toIntOrNull() ?: throw IllegalArgumentException("Envelope field '$name' must be an integer.")
+    return value.toIntOrNull()
+        ?: throw IllegalArgumentException("Envelope field '$name' must be an integer.")
   }
 
   private fun requiredLong(json: JsonObject, name: String): Long {
     val value = requiredNumber(json, name)
-    return value.toLongOrNull() ?: throw IllegalArgumentException("Envelope field '$name' must be an integer.")
+    return value.toLongOrNull()
+        ?: throw IllegalArgumentException("Envelope field '$name' must be an integer.")
   }
 
   private fun requiredNumber(json: JsonObject, name: String): String {
@@ -284,11 +286,7 @@ object PresenceSnapshotCodec {
   }
 
   fun decode(content: String): Set<String> =
-      content
-          .lineSequence()
-          .map(String::trim)
-          .filter(String::isNotEmpty)
-          .toSet()
+      content.lineSequence().map(String::trim).filter(String::isNotEmpty).toSet()
 }
 
 class MessageDeduplicator(

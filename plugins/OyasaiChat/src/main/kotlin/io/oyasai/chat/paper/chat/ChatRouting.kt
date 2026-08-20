@@ -1,7 +1,7 @@
 package io.oyasai.chat.paper.chat
 
-import java.util.UUID
 import io.oyasai.chat.common.model.ChannelDefinition
+import java.util.UUID
 
 // Paper内チャットの配信先計画。
 sealed interface LocalChatPlan {

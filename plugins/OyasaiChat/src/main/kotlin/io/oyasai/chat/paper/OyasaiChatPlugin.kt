@@ -1,12 +1,12 @@
 package io.oyasai.chat.paper
 
-import java.util.UUID
 import io.oyasai.chat.paper.chat.initialize
 import io.oyasai.chat.paper.command.OyasaiCommandExecutor
 import io.oyasai.chat.paper.config.PaperConfigLoader
 import io.oyasai.chat.paper.network.NETWORK_CHANNEL
 import io.oyasai.chat.paper.runtime.PaperRuntime
 import io.oyasai.chat.paper.runtime.PaperRuntimeFactory
+import java.util.UUID
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -118,7 +118,7 @@ class OyasaiChatPlugin : JavaPlugin() {
       bindCommands()
 
       logger.info(
-        "OyasaiChat reloaded for backend ${candidate.config.network.backendId} with ${candidate.config.channels.channels.size} channels and ${server.onlinePlayers.size} online player states."
+          "OyasaiChat reloaded for backend ${candidate.config.network.backendId} with ${candidate.config.channels.channels.size} channels and ${server.onlinePlayers.size} online player states."
       )
       sender.sendMessage(
           candidate.formatter.info("OyasaiChat configuration and online player states reloaded.")

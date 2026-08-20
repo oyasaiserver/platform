@@ -1,7 +1,5 @@
 package io.oyasai.chat.paper.chat
 
-import java.util.UUID
-import net.kyori.adventure.text.Component
 import io.oyasai.chat.common.model.ChannelDefinition
 import io.oyasai.chat.common.model.ChatConfig
 import io.oyasai.chat.common.protocol.MAX_PAYLOAD_LENGTH
@@ -11,6 +9,8 @@ import io.oyasai.chat.paper.OyasaiChatPlugin
 import io.oyasai.chat.paper.network.PaperNetworkBridge
 import io.oyasai.chat.paper.pm.PrivateMessageService
 import io.oyasai.chat.paper.state.PlayerStateStore
+import java.util.UUID
+import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 
 // チャットの計画・表示・ネットワーク送信管理。
@@ -23,10 +23,7 @@ class ChatService(
   lateinit var bridge: PaperNetworkBridge
   lateinit var privateMessages: PrivateMessageService
 
-  /**
-   * サーバースレッド上でチャットの配信計画を作成。
-   * 不変データだけを返し、Paperの非同期イベント処理から安全に利用。
-   */
+  /** サーバースレッド上でチャットの配信計画を作成。 不変データだけを返し、Paperの非同期イベント処理から安全に利用。 */
   fun planLocalChat(playerId: UUID): LocalChatPlan {
     val player =
         plugin.server.getPlayer(playerId)
@@ -127,8 +124,8 @@ class ChatService(
     plugin.server.onlinePlayers
         .asSequence()
         .filter { recipient ->
-            val recipientState = state(recipient)
-            channel.id in recipientState.joinedChannels && canUse(recipient, channel)
+          val recipientState = state(recipient)
+          channel.id in recipientState.joinedChannels && canUse(recipient, channel)
         }
         .forEach { it.sendMessage(component) }
     plugin.server.consoleSender.sendMessage(component)

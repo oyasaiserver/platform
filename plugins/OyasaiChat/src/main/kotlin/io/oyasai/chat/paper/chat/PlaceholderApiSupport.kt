@@ -1,7 +1,7 @@
 package io.oyasai.chat.paper.chat
 
-import me.clip.placeholderapi.PlaceholderAPI
 import io.oyasai.chat.paper.OyasaiChatPlugin
+import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.entity.Player
 
 // PlaceholderAPIによるプレースホルダー展開。

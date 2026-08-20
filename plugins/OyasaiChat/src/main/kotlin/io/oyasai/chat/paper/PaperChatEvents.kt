@@ -1,13 +1,13 @@
 package io.oyasai.chat.paper
 
-import io.papermc.paper.event.player.AsyncChatEvent
-import java.util.UUID
-import java.util.concurrent.TimeUnit
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import io.oyasai.chat.common.protocol.MAX_PAYLOAD_LENGTH
 import io.oyasai.chat.paper.chat.LocalChatPlan
 import io.oyasai.chat.paper.chat.initialize
 import io.oyasai.chat.paper.chat.join
+import io.papermc.paper.event.player.AsyncChatEvent
+import java.util.UUID
+import java.util.concurrent.TimeUnit
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -77,7 +77,9 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
 
     event.isCancelled = true
     if (plugin.reloadInProgress) {
-      event.player.sendMessage(plugin.runtime.formatter.error("Chat configuration is reloading; please try again."))
+      event.player.sendMessage(
+          plugin.runtime.formatter.error("Chat configuration is reloading; please try again.")
+      )
       return
     }
 

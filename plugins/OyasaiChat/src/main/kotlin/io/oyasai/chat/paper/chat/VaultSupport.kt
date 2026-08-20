@@ -1,13 +1,14 @@
 package io.oyasai.chat.paper.chat
 
+import io.oyasai.chat.paper.OyasaiChatPlugin
 import net.kyori.adventure.text.Component
 import net.milkbowl.vault.chat.Chat
-import io.oyasai.chat.paper.OyasaiChatPlugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 // Vault Chat APIによるプレフィックス・サフィックス取得。
-internal class VaultSupport private constructor(
+internal class VaultSupport
+private constructor(
     private val plugin: OyasaiChatPlugin,
     private val chat: Chat,
 ) {

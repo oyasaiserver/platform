@@ -30,8 +30,7 @@ class OyasaiCommandExecutor(
       "ch",
       "join" -> {
         val player = requirePlayer(sender) ?: return true
-        if (args.isEmpty()) chat.list(sender, player)
-        else chat.join(sender, player, args[0])
+        if (args.isEmpty()) chat.list(sender, player) else chat.join(sender, player, args[0])
         true
       }
       "leave" -> {
@@ -141,7 +140,8 @@ class OyasaiCommandExecutor(
         "pm" ->
             if (args.size == 1) {
               val partial = args[0]
-              (Bukkit.getOnlinePlayers().map(Player::getName) + plugin.runtime.presence.names(partial))
+              (Bukkit.getOnlinePlayers().map(Player::getName) +
+                      plugin.runtime.presence.names(partial))
                   .distinct()
                   .filter { it.lowercase().startsWith(partial.lowercase()) }
                   .sorted()

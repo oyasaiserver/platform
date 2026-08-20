@@ -1,5 +1,8 @@
 package io.oyasai.chat.paper.chat
 
+import io.oyasai.chat.common.model.ChannelDefinition
+import io.oyasai.chat.common.model.ChatConfig
+import io.oyasai.chat.paper.OyasaiChatPlugin
 import io.papermc.paper.chat.ChatRenderer
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -8,9 +11,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import io.oyasai.chat.common.model.ChannelDefinition
-import io.oyasai.chat.common.model.ChatConfig
-import io.oyasai.chat.paper.OyasaiChatPlugin
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
@@ -89,8 +89,7 @@ class ChatFormatter(
    * AsyncChatEventから届いたPMモード入力用のRenderer。
    *
    * Paperはプレイヤーとコンソールに同じComponentを使うため、閲覧者を区別しない。
-   * 閲覧者ごとに変えるRendererでは、受信者によってメッセージが変わり、Paper標準のサーバーログに
-   * 正しく反映されない可能性あり。
+   * 閲覧者ごとに変えるRendererでは、受信者によってメッセージが変わり、Paper標準のサーバーログに 正しく反映されない可能性あり。
    */
   fun privateRenderer(
       senderName: String,
@@ -179,5 +178,4 @@ class ChatFormatter(
   fun error(value: String): Component = Component.text(value)
 
   fun plain(component: Component): String = plain.serialize(component)
-
 }

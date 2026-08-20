@@ -11,8 +11,7 @@ import io.oyasai.chat.paper.chat.ChatService
 private const val PRESENCE_CACHE_TTL_MILLIS = 10_000L
 
 /**
- * コマンド補完だけに使う、短時間有効なProxy全体のオンライン名キャッシュ。
- * PM送信時はVelocity側でUUIDと現在のサーバーを正式確認するため、古い候補が表示されても
+ * コマンド補完だけに使う、短時間有効なProxy全体のオンライン名キャッシュ。 PM送信時はVelocity側でUUIDと現在のサーバーを正式確認するため、古い候補が表示されても
  * オフラインの相手へPMは送信されない。
  */
 class PlayerPresenceCache(

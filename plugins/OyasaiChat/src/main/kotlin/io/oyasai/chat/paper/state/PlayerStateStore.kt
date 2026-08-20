@@ -1,11 +1,11 @@
 package io.oyasai.chat.paper.state
 
+import io.oyasai.chat.common.model.ChatConfig
+import io.oyasai.chat.paper.OyasaiChatPlugin
 import java.io.File
 import java.util.UUID
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import io.oyasai.chat.common.model.ChatConfig
-import io.oyasai.chat.paper.OyasaiChatPlugin
 import org.bukkit.entity.Player
 
 // プレイヤー状態のメモリ・ファイル管理。

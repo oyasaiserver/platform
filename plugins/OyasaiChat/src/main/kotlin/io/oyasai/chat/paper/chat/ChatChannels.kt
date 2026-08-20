@@ -60,12 +60,16 @@ fun ChatService.list(sender: CommandSender, player: Player?) {
 fun ChatService.who(sender: CommandSender, player: Player?, input: String): Boolean {
   val channel = resolveChannel(sender, input) ?: return false
   if (player != null && !canUse(player, channel)) {
-    sender.sendMessage(formatter.error("You do not have permission to view ${channel.displayName}."))
+    sender.sendMessage(
+        formatter.error("You do not have permission to view ${channel.displayName}.")
+    )
     return false
   }
   val members =
       plugin.server.onlinePlayers
-          .filter { online -> canUse(online, channel) && channel.id in state(online).joinedChannels }
+          .filter { online ->
+            canUse(online, channel) && channel.id in state(online).joinedChannels
+          }
           .map { it.name }
           .sorted()
   sender.sendMessage(
