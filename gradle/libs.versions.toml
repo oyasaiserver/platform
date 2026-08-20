@@ -21,6 +21,7 @@ tokenmanager = {module = "com.github.Realizedd:TokenManager", version.ref = "tok
 vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
 worldborder = {module = "com.github.PryPurity:WorldBorder", version.ref = "worldborder"}
 fawe-bukkit = {module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe"}
+velocity-api = {module = "com.velocitypowered:velocity-api", version.ref = "velocity-api"}
 
 [plugins]
 paperweight-userdev = {id = "io.papermc.paperweight.userdev", version.ref = "paperweight"}
@@ -46,3 +47,4 @@ tokenmanager = "3.2.4"
 vault = "1.7.1"
 worldborder = "2.1.4"
 fawe = "2.15.3"
+velocity-api = "4.1.0-SNAPSHOT"

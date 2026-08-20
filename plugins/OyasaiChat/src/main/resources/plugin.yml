@@ -1,0 +1,51 @@
+name: OyasaiChat
+version: "0.1.0-SNAPSHOT"
+main: io.oyasai.chat.paper.OyasaiChatPlugin
+api-version: "1.21.11"
+description: バックエンド間チャット同期
+author: takucan
+softdepend:
+  - Vault
+  - PlaceholderAPI
+  - DiscordSRV
+loadbefore:
+  - Essentials
+  - LunaChat
+commands:
+  ch:
+    description: Select a chat channel
+    usage: /ch <channel>
+    aliases: [channel]
+  join:
+    description: Join and select a chat channel
+    usage: /join <channel>
+  leave:
+    description: Leave a chat channel
+    usage: /leave <channel>
+  chwho:
+    description: List channel members on this backend
+    usage: /chwho <channel>
+  chlist:
+    description: List available chat channels
+    usage: /chlist
+  setchannel:
+    description: Set another player's active channel
+    usage: /setchannel <player> <channel>
+    permission: oyasaichat.admin.setchannel
+  msg:
+    description: Send a private message
+    usage: /msg <player> <message>
+    aliases: [tell, message, pm]
+  r:
+    description: Reply to the last private message
+    usage: /r <message>
+  oyasaichat:
+    description: OyasaiChat administrative commands
+    usage: /oyasaichat reload
+permissions:
+  oyasaichat.admin.setchannel:
+    description: Change another player's active channel
+    default: op
+  oyasaichat.admin.reload:
+    description: Reload OyasaiChat configuration and player state
+    default: op

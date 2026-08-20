@@ -1,0 +1,8 @@
+{
+  "authors": ["takucan"],
+  "description": "バックエンド間チャット同期",
+  "id": "oyasaichat",
+  "main": "io.oyasai.chat.velocity.OyasaiVelocityPlugin",
+  "name": "OyasaiChat",
+  "version": "0.1.0-SNAPSHOT"
+}
