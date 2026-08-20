@@ -353,15 +353,35 @@ object SLDatabase {
               SlEventLog,
               IdMigrationMap,
           )
+        }
+
+        transaction(database) {
           rawConnection()?.let { conn ->
             migrateBuildsColumns(conn)
-            createIndexesAndViews(conn)
+            createViews(conn)
+          }
+        }
+
+        transaction(database) {
+          rawConnection()?.let { conn ->
+            createPerformanceIndexes(conn)
+            createUniqueLocationIndex(conn)
+          }
+        }
+
+        transaction(database) {
+          rawConnection()?.let { conn ->
             logStartupSummary(plugin, conn)
             loadIdMigrationMapDirect(conn)
           }
         }
       } catch (e: Exception) {
-        loggerWarning("init", e)
+        val message = e.message ?: e.javaClass.simpleName
+        Tools.plugin.logger.log(
+            Level.SEVERE,
+            "[SL3] SQLite shadow database initialization failed permanently: $message",
+            e,
+        )
       } finally {
         initLatch.countDown()
       }
@@ -394,37 +414,96 @@ object SLDatabase {
     }
   }
 
-  private fun createIndexesAndViews(conn: Connection) {
+  private fun createViews(conn: Connection) {
     conn.createStatement().use { statement ->
-      statement.execute(
-          "CREATE INDEX IF NOT EXISTS idx_build_likes_player_liked_at ON build_likes(player_uuid, liked_at)"
-      )
-      statement.execute(
-          "CREATE INDEX IF NOT EXISTS idx_build_likes_liked_at ON build_likes(liked_at)"
-      )
-      statement.execute(
-          "CREATE INDEX IF NOT EXISTS idx_builds_owner_created_at ON builds(owner_uuid, created_at)"
-      )
-      statement.execute(
-          "CREATE INDEX IF NOT EXISTS idx_publicity_history_sl_id_timestamp ON publicity_history(sl_id, timestamp)"
-      )
-      statement.execute(
-          "CREATE INDEX IF NOT EXISTS idx_sl_event_log_build_id ON sl_event_log(build_id)"
-      )
-      statement.execute(
-          "CREATE INDEX IF NOT EXISTS idx_sl_event_log_event_type ON sl_event_log(event_type)"
-      )
-      statement.execute("CREATE INDEX IF NOT EXISTS idx_builds_deleted_at ON builds(deleted_at)")
-
-      // active_builds VIEW
       statement.execute("DROP VIEW IF EXISTS active_builds")
       statement.execute(
           "CREATE VIEW active_builds AS SELECT * FROM builds WHERE deleted_at IS NULL"
       )
+    }
+  }
 
-      // 部分UNIQUEインデックス
-      statement.execute(
-          "CREATE UNIQUE INDEX IF NOT EXISTS uq_builds_active_loc ON builds(world_name, loc_x, loc_y, loc_z) WHERE deleted_at IS NULL"
+  private fun createPerformanceIndexes(conn: Connection) {
+    val indexes =
+        listOf(
+            "idx_build_likes_player_liked_at" to
+                "CREATE INDEX IF NOT EXISTS idx_build_likes_player_liked_at ON build_likes(player_uuid, liked_at)",
+            "idx_build_likes_liked_at" to
+                "CREATE INDEX IF NOT EXISTS idx_build_likes_liked_at ON build_likes(liked_at)",
+            "idx_builds_owner_created_at" to
+                "CREATE INDEX IF NOT EXISTS idx_builds_owner_created_at ON builds(owner_uuid, created_at)",
+            "idx_publicity_history_sl_id_timestamp" to
+                "CREATE INDEX IF NOT EXISTS idx_publicity_history_sl_id_timestamp ON publicity_history(sl_id, timestamp)",
+            "idx_sl_event_log_build_id" to
+                "CREATE INDEX IF NOT EXISTS idx_sl_event_log_build_id ON sl_event_log(build_id)",
+            "idx_sl_event_log_event_type" to
+                "CREATE INDEX IF NOT EXISTS idx_sl_event_log_event_type ON sl_event_log(event_type)",
+            "idx_builds_deleted_at" to
+                "CREATE INDEX IF NOT EXISTS idx_builds_deleted_at ON builds(deleted_at)",
+        )
+
+    for ((indexName, sql) in indexes) {
+      try {
+        conn.createStatement().use { it.execute(sql) }
+      } catch (e: Exception) {
+        Tools.plugin.logger.warning(
+            "[SL3] Failed to create index '$indexName': ${e.message ?: e.javaClass.simpleName}"
+        )
+      }
+    }
+  }
+
+  private fun createUniqueLocationIndex(conn: Connection) {
+    try {
+      conn.createStatement().use { statement ->
+        statement.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS uq_builds_active_loc ON builds(world_name, loc_x, loc_y, loc_z) WHERE deleted_at IS NULL"
+        )
+      }
+    } catch (e: Exception) {
+      Tools.plugin.logger.warning(
+          "[SL3] Failed to create partial unique index 'uq_builds_active_loc' on active builds: ${e.message ?: e.javaClass.simpleName}"
+      )
+      logDuplicateActiveBuildLocations(conn)
+    }
+  }
+
+  private fun logDuplicateActiveBuildLocations(conn: Connection) {
+    try {
+      val query =
+          """
+          SELECT world_name, loc_x, loc_y, loc_z, COUNT(*) AS c, GROUP_CONCAT(id) AS ids
+          FROM builds
+          WHERE deleted_at IS NULL
+          GROUP BY world_name, loc_x, loc_y, loc_z
+          HAVING c > 1
+          """
+              .trimIndent()
+      conn.prepareStatement(query).use { stmt ->
+        stmt.executeQuery().use { rs ->
+          var duplicateCount = 0
+          while (rs.next()) {
+            duplicateCount++
+            val world = rs.getString("world_name")
+            val x = rs.getDouble("loc_x")
+            val y = rs.getDouble("loc_y")
+            val z = rs.getDouble("loc_z")
+            val count = rs.getInt("c")
+            val ids = rs.getString("ids")
+            Tools.plugin.logger.warning(
+                "[SL3] Duplicate active build location found: world=$world, loc=($x, $y, $z), count=$count, ids=[$ids]"
+            )
+          }
+          if (duplicateCount > 0) {
+            Tools.plugin.logger.warning(
+                "[SL3] Total duplicate active build location groups: $duplicateCount. Unique index 'uq_builds_active_loc' was skipped."
+            )
+          }
+        }
+      }
+    } catch (e: Exception) {
+      Tools.plugin.logger.warning(
+          "[SL3] Failed to query duplicate active build locations: ${e.message ?: e.javaClass.simpleName}"
       )
     }
   }
