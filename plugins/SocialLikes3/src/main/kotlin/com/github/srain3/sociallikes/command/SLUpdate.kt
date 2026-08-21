@@ -1,6 +1,6 @@
 package com.github.srain3.sociallikes.command
 
-import com.github.srain3.sociallikes.Events.idKey
+import com.github.srain3.sociallikes.Events
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.Tools.isLegacySLSign
@@ -8,6 +8,7 @@ import com.github.srain3.sociallikes.Tools.isSLSign
 import com.github.srain3.sociallikes.Tools.updateLegacySLSign
 import com.github.srain3.sociallikes.Tools.updateSLSign
 import com.github.srain3.sociallikes.datas.Data
+import com.github.srain3.sociallikes.datas.SLDatabase
 import com.sk89q.worldedit.WorldEdit
 import com.sk89q.worldedit.bukkit.BukkitAdapter
 import com.sk89q.worldedit.session.SessionOwner
@@ -21,7 +22,6 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 
 object SLUpdate : CommandExecutor {
@@ -73,8 +73,7 @@ object SLUpdate : CommandExecutor {
           player.world.getBlockAt(blockVector3.x(), blockVector3.y(), blockVector3.z()).state
       if (block !is Sign) return@forEach
 
-      var id =
-          block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: Integer.MIN_VALUE
+      var id = Events.readSignId(block) ?: Integer.MIN_VALUE
       var susp = false
       if (isSLSign(block)) {
         val data = Data.getSLData(id)
@@ -89,7 +88,7 @@ object SLUpdate : CommandExecutor {
                 ?.asHexString()
                 ?.substring(1)
                 ?.toIntOrNull(16) ?: Integer.MIN_VALUE
-        id = -id
+        id = SLDatabase.resolveMigratedId(-id)
         val data = Data.getSLData(id)
         if (data != null) updateLegacySLSign(data, block, player.uniqueId) else susp = true
       } else return@forEach

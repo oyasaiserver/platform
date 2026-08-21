@@ -1,6 +1,5 @@
 package com.github.srain3.sociallikes
 
-import com.github.srain3.sociallikes.Events.idKey
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
@@ -19,7 +18,6 @@ import org.bukkit.block.sign.Side
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
 
 object Tools {
@@ -263,8 +261,7 @@ object Tools {
     )
 
     block.isWaxed = true
-    block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, resolvedId)
-    block.update()
+    Events.markSignIdGeneration2(block, resolvedId)
   }
 
   fun displaySocialLikeToast(player: Player, icon: ItemStack, text: String): Boolean {

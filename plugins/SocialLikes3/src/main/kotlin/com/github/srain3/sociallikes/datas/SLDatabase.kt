@@ -20,6 +20,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import java.util.logging.Level
+import kotlin.math.floor
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.plugin.java.JavaPlugin
@@ -218,6 +219,22 @@ object SLDatabase {
       val x: Double,
       val y: Double,
       val z: Double,
+  )
+
+  /** One active build location used to migrate only chunks that can contain an SL sign. */
+  data class SignPdcTarget(
+      val id: Int,
+      val worldName: String,
+      val blockX: Int,
+      val blockY: Int,
+      val blockZ: Int,
+      val chunkX: Int,
+      val chunkZ: Int,
+  )
+
+  data class SignPdcMigrationInput(
+      val targets: List<SignPdcTarget>,
+      val idMigrationMap: Map<Int, Int>,
   )
 
   private object Builds : Table("builds") {
@@ -725,6 +742,68 @@ object SLDatabase {
     return submitBlocking("loadIdMigrationMap") {
       rawConnection()?.let { loadIdMigrationMapDirect(it) } ?: emptyMap()
     } ?: emptyMap()
+  }
+
+  /**
+   * Reads active sign locations and the ID migration map on the SQLite read executor. The callback
+   * is deliberately invoked off the main thread; callers must schedule Bukkit work.
+   */
+  fun loadSignPdcMigrationInputAsync(
+      onSuccess: (SignPdcMigrationInput) -> Unit,
+      onFailure: (Exception) -> Unit,
+  ) {
+    val service =
+        readExecutor
+            ?: run {
+              onFailure(IllegalStateException("database is not initialized"))
+              return
+            }
+
+    service.submit {
+      if (!awaitInit()) {
+        onFailure(TimeoutException("database initialization timed out"))
+        return@submit
+      }
+      try {
+        val db = database ?: throw IllegalStateException("database is not connected")
+        val input =
+            transaction(db) {
+              val map = rawConnection()?.let { loadIdMigrationMapDirect(it) }.orEmpty()
+              val targets = mutableListOf<SignPdcTarget>()
+              rawConnection()
+                  ?.prepareStatement(
+                      """
+                      SELECT id, world_name, loc_x, loc_y, loc_z, chunk_x, chunk_z
+                      FROM builds
+                      WHERE deleted_at IS NULL
+                      ORDER BY world_name, chunk_x, chunk_z, id
+                      """
+                          .trimIndent()
+                  )
+                  ?.use { statement ->
+                    statement.executeQuery().use { results ->
+                      while (results.next()) {
+                        targets +=
+                            SignPdcTarget(
+                                id = results.getInt("id"),
+                                worldName = results.getString("world_name"),
+                                blockX = floor(results.getDouble("loc_x")).toInt(),
+                                blockY = floor(results.getDouble("loc_y")).toInt(),
+                                blockZ = floor(results.getDouble("loc_z")).toInt(),
+                                chunkX = results.getInt("chunk_x"),
+                                chunkZ = results.getInt("chunk_z"),
+                            )
+                      }
+                    }
+                  }
+              SignPdcMigrationInput(targets, map)
+            }
+        onSuccess(input)
+      } catch (e: Exception) {
+        loggerWarning("loadSignPdcMigrationInput", e)
+        onFailure(e)
+      }
+    }
   }
 
   fun resolveMigratedId(id: Int): Int {

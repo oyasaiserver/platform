@@ -119,8 +119,7 @@ object Events : Listener {
     val block = e.block.state
     if (block is Sign) {
       block.isWaxed = true
-      block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
-      block.update()
+      markSignIdGeneration2(block, id)
     }
 
     SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
@@ -190,6 +189,28 @@ object Events : Listener {
   /** 再取得したSL看板アイテムの復元用データKey */
   val slSignItemIdKey = NamespacedKey(plugin, "sociallikes_id")
 
+  /** ID移行後に新IDを持つことを明示する世代マーカー。 */
+  val idGenerationKey = NamespacedKey(plugin, "id_generation")
+  const val CURRENT_ID_GENERATION = 2
+
+  /** 世代2ならIDをそのまま返し、旧世代だけを移行表で一度だけ解決する。 */
+  fun readSignId(sign: Sign): Int? {
+    val rawId = sign.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: return null
+    val generation = sign.persistentDataContainer.get(idGenerationKey, PersistentDataType.INTEGER)
+    return if (generation == CURRENT_ID_GENERATION) rawId else SLDatabase.resolveMigratedId(rawId)
+  }
+
+  /** 看板のIDと世代マーカーを同時に更新する。 */
+  fun markSignIdGeneration2(sign: Sign, id: Int) {
+    sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
+    sign.persistentDataContainer.set(
+        idGenerationKey,
+        PersistentDataType.INTEGER,
+        CURRENT_ID_GENERATION,
+    )
+    sign.update(true)
+  }
+
   /** 運営チェックマーク */
   val checkMarkRegex = Regex("""✓""")
 
@@ -211,11 +232,13 @@ object Events : Listener {
         return
       }
       val rawId = block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: return
-      val id = SLDatabase.resolveMigratedId(rawId)
-      if (id != rawId) {
-        block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
-        block.update()
-      }
+      val id = readSignId(block) ?: return
+      if (
+          id != rawId ||
+              block.persistentDataContainer.get(idGenerationKey, PersistentDataType.INTEGER) !=
+                  CURRENT_ID_GENERATION
+      )
+          markSignIdGeneration2(block, id)
       val data = Data.getSLData(id) ?: return
 
       // クリックされた看板の持っているIDのlocデータと一致しない場合
@@ -380,8 +403,7 @@ object Events : Listener {
       )
 
       block.isWaxed = true
-      block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, resolvedId)
-      block.update()
+      markSignIdGeneration2(block, resolvedId)
 
       e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
     }
@@ -476,7 +498,7 @@ object Events : Listener {
         e.isCancelled = true
         return
       }
-      val id = block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: return
+      val id = readSignId(block) ?: return
       val data = Data.getSLData(id) ?: return
 
       // クリックされた看板の持っているIDのlocデータと一致しない場合return
@@ -507,7 +529,11 @@ object Events : Listener {
             ?: meta.persistentDataContainer.get(slSignItemIdKey, PersistentDataType.INTEGER)
             ?: legacySLSignItemId(meta.asString)
             ?: return
-    val id = SLDatabase.resolveMigratedId(rawId)
+    val itemGeneration =
+        sourceSign?.persistentDataContainer?.get(idGenerationKey, PersistentDataType.INTEGER)
+            ?: meta.persistentDataContainer.get(idGenerationKey, PersistentDataType.INTEGER)
+    val id =
+        if (itemGeneration == CURRENT_ID_GENERATION) rawId else SLDatabase.resolveMigratedId(rawId)
     val slData = Data.getSLData(id) ?: return
     val sourceSignForRestore = sourceSign.takeIf { sourceSignId != null }
 
@@ -546,9 +572,8 @@ object Events : Listener {
     }
 
     val id = slData.id
-    sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
     sign.persistentDataContainer.set(slSignItemIdKey, PersistentDataType.INTEGER, id)
-    sign.update(true)
+    markSignIdGeneration2(sign, id)
   }
 
   private fun copySignSide(sourceSign: Sign, targetSign: Sign, side: Side) {

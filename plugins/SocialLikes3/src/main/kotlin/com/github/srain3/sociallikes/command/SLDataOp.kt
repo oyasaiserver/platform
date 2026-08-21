@@ -2,6 +2,7 @@ package com.github.srain3.sociallikes.command
 
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
+import com.github.srain3.sociallikes.datas.SignPdcMigration
 import com.github.srain3.sociallikes.stats.SLDataLogger
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
@@ -58,6 +59,17 @@ object SLDataOp : CommandExecutor, TabCompleter {
             System.currentTimeMillis() - t0,
             true,
             "reload",
+        )
+      }
+      "rewrite-sign-pdc" -> {
+        SignPdcMigration.start(sender)
+        SLDataLogger.log(
+            sender,
+            label,
+            args.toList(),
+            System.currentTimeMillis() - t0,
+            true,
+            "rewrite-sign-pdc started",
         )
       }
       "stats",
@@ -253,6 +265,7 @@ object SLDataOp : CommandExecutor, TabCompleter {
                   "font",
                   "slots",
                   "display",
+                  "rewrite-sign-pdc",
               )
               .filter { it.startsWith(args[0], ignoreCase = true) }
               .toMutableList()
@@ -292,6 +305,7 @@ object SLDataOp : CommandExecutor, TabCompleter {
     sender.sendMessage("&7/sldataop stats <プレイヤー> &f- 他プレイヤーの統計ダイアログを開く".color())
     sender.sendMessage("&7/sldataop dump <プレイヤー> &f- 統計集計データをテキストダンプ出力".color())
     sender.sendMessage("&7/sldataop reload &f- dialog.yml 等の設定を再読込".color())
+    sender.sendMessage("&7/sldataop rewrite-sign-pdc &f- 登録済み看板のPDCを新ID・世代2へ一括書換".color())
     sender.sendMessage("&7/sldataop preview &f- YAML定義ダイアログをプレビュー".color())
     sender.sendMessage("&7/sldataop map [wall|remove|home] &f- 2x3壁掛けマップ設置/撤去".color())
     sender.sendMessage("&7/sldataop board [place|remove] &f- 2x2公共ボード設置/撤去".color())

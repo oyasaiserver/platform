@@ -60,8 +60,18 @@ object SLSignGet : CommandExecutor {
         PersistentDataType.INTEGER,
         slData.id,
     )
+    signState.persistentDataContainer.set(
+        Events.idGenerationKey,
+        PersistentDataType.INTEGER,
+        Events.CURRENT_ID_GENERATION,
+    )
     meta.blockState = signState
     meta.persistentDataContainer.set(Events.slSignItemIdKey, PersistentDataType.INTEGER, slData.id)
+    meta.persistentDataContainer.set(
+        Events.idGenerationKey,
+        PersistentDataType.INTEGER,
+        Events.CURRENT_ID_GENERATION,
+    )
     meta.setDisplayName("&a${slData.title}".color())
     meta.lore = listOf("&7設置後に&e/slupdate".color())
     item.itemMeta = meta
