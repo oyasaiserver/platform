@@ -3,11 +3,15 @@ package io.oyasai.chat.paper
 import io.oyasai.chat.paper.chat.initialize
 import io.oyasai.chat.paper.command.OyasaiCommandExecutor
 import io.oyasai.chat.paper.config.PaperConfigLoader
+import io.oyasai.chat.paper.integration.NoopDiscordBridge
 import io.oyasai.chat.paper.network.NETWORK_CHANNEL
 import io.oyasai.chat.paper.runtime.PaperRuntime
 import io.oyasai.chat.paper.runtime.PaperRuntimeFactory
 import java.util.UUID
 import org.bukkit.command.CommandSender
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.server.PluginEnableEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 // Paper側プラグインの起動・再読み込み・終了管理。
@@ -17,7 +21,7 @@ private data class LivePlayerChatState(
     val privateMessageModeName: String?,
 )
 
-class OyasaiChatPlugin : JavaPlugin() {
+class OyasaiChatPlugin : JavaPlugin(), Listener {
   internal lateinit var runtime: PaperRuntime
 
   internal val chatLifecycleLock = Any()
@@ -36,6 +40,7 @@ class OyasaiChatPlugin : JavaPlugin() {
     this.runtime = runtime
     runtime.discord.enable()
 
+    server.pluginManager.registerEvents(this, this)
     server.messenger.registerOutgoingPluginChannel(this, NETWORK_CHANNEL)
     server.messenger.registerIncomingPluginChannel(this, NETWORK_CHANNEL, runtime.bridge)
     server.pluginManager.registerEvents(PaperChatEvents(this), this)
@@ -135,6 +140,17 @@ class OyasaiChatPlugin : JavaPlugin() {
     runtime.states.flushAndShutdown()
     server.messenger.unregisterIncomingPluginChannel(this, NETWORK_CHANNEL)
     server.messenger.unregisterOutgoingPluginChannel(this, NETWORK_CHANNEL)
+  }
+
+  // DiscordSRVが後から有効化された場合の遅延連携。
+  @EventHandler
+  fun onPluginEnable(event: PluginEnableEvent) {
+    if (event.plugin.name != "DiscordSRV" || !::runtime.isInitialized) return
+    val bridge = PaperRuntimeFactory.createDiscordBridge(this, runtime.config)
+    if (bridge is NoopDiscordBridge) return
+    runtime.discord.disable()
+    runtime.discord = bridge
+    bridge.enable()
   }
 
   private fun bindCommands() {

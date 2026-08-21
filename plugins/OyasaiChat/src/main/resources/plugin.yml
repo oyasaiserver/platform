@@ -7,7 +7,6 @@ author: takucan
 softdepend:
   - Vault
   - PlaceholderAPI
-  - DiscordSRV
 loadbefore:
   - Essentials
   - LunaChat

@@ -21,7 +21,7 @@ internal data class PaperRuntime(
     val chat: ChatService,
     val bridge: PaperNetworkBridge,
     val presence: PlayerPresenceCache,
-    val discord: DiscordBridge,
+    var discord: DiscordBridge,
     val privateMessages: PrivateMessageService,
 )
 
@@ -48,7 +48,7 @@ internal object PaperRuntimeFactory {
     )
   }
 
-  private fun createDiscordBridge(plugin: OyasaiChatPlugin, model: ChatConfig): DiscordBridge =
+  internal fun createDiscordBridge(plugin: OyasaiChatPlugin, model: ChatConfig): DiscordBridge =
       when {
         !model.discord.enabled -> {
           plugin.logger.info("Discord integration is disabled by configuration.")
