@@ -216,7 +216,7 @@ CREATE TABLE meta (
 
 ```kotlin
 dependencies {
-    paperweightDevelopmentBundle(libs.paper.dev.bundle)
+    paperweightDevelopmentBundle(libs.purpur.dev.bundle)
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)

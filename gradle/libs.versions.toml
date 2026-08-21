@@ -16,7 +16,7 @@ placeholderapi = {module = "me.clip:placeholderapi", version.ref = "placeholdera
 purpur-api = {module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-api"}
 shadow-plugin = {module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow"}
 spotless-plugin = {module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless"}
-paper-dev-bundle = {module = "io.papermc.paper:dev-bundle", version.ref = "purpur-api"}
+purpur-dev-bundle = {module = "org.purpurmc.purpur:dev-bundle", version.ref = "purpur-api"}
 tokenmanager = {module = "com.github.Realizedd:TokenManager", version.ref = "tokenmanager"}
 vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
 worldborder = {module = "com.github.PryPurity:WorldBorder", version.ref = "worldborder"}

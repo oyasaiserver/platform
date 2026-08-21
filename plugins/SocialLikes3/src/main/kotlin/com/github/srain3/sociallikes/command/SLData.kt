@@ -6562,6 +6562,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       val image = GraphImageRenderer.render(series, title, width, height)
       canvas.drawImage(0, 0, image.getSubimage(offsetX, offsetY, 128, 128))
     }
+
+    override fun isExplorerMap(): Boolean = false
   }
 
   /** A compact coordinate plot using the same per-map MapRenderer pattern as the weekly graph. */
@@ -6572,6 +6574,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     override fun render(map: MapView, canvas: MapCanvas, player: Player) {
       canvas.drawImage(0, 0, HomeGroundMapImageRenderer.render(home, points))
     }
+
+    override fun isExplorerMap(): Boolean = false
   }
 
   private object HomeGroundMapImageRenderer {
@@ -6642,6 +6646,8 @@ object SLData : CommandExecutor, TabCompleter, Listener {
     override fun render(map: MapView, canvas: MapCanvas, player: Player) {
       canvas.drawImage(0, 0, image.getSubimage(offsetX, offsetY, 128, 128))
     }
+
+    override fun isExplorerMap(): Boolean = false
   }
 
   private object GraphImageRenderer {

@@ -7,7 +7,7 @@ plugins { alias(libs.plugins.paperweight.userdev) }
 tasks.processResources { from("sldata-stats2-text.md") }
 
 dependencies {
-  paperweightDevelopmentBundle(libs.paper.dev.bundle)
+  paperweightDevelopmentBundle(libs.purpur.dev.bundle)
   compileOnly(libs.placeholderapi)
   compileOnly(libs.discordsrv)
   compileOnly(libs.luckperms.api)

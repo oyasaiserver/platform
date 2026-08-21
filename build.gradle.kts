@@ -40,9 +40,10 @@ allprojects {
     maven(rootDir.resolve("packages/gradle-plugins/gen/ktfmt").toURI())
     mavenCentral()
     maven("https://nexus.frengor.com/repository/public/")
-    maven("https://repo.purpurmc.org/snapshots")
+    maven("https://repo.purpurmc.org/snapshots") { content { excludeGroupByRegex("io.papermc.*") } }
     maven("https://nexus.scarsz.me/content/groups/public/")
     maven("https://maven.enginehub.org/repo/")
+    maven("https://repo.papermc.io/repository/maven-public/")
   }
 }
 
