@@ -3,10 +3,12 @@ package io.oyasai.chat.paper.integration
 import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.api.Subscribe
 import github.scarsz.discordsrv.api.events.DiscordGuildMessagePreProcessEvent
-import github.scarsz.discordsrv.util.DiscordUtil
+import github.scarsz.discordsrv.api.events.GameChatMessagePreProcessEvent
 import io.oyasai.chat.common.model.ChatConfig
 import io.oyasai.chat.common.protocol.MAX_PAYLOAD_LENGTH
 import io.oyasai.chat.paper.OyasaiChatPlugin
+import io.papermc.paper.event.player.AsyncChatEvent
+import org.bukkit.entity.Player
 
 // DiscordSRVとのチャット連携実装。
 class DiscordIntegration(
@@ -28,7 +30,7 @@ class DiscordIntegration(
     runCatching {
           DiscordSRV.api.subscribe(listener)
           subscribed = true
-          plugin.logger.info("DiscordSRV API listener registered for OyasaiChat mappings.")
+          plugin.logger.info("DiscordSRV API listener registered for OyasaiChat channels.")
         }
         .onFailure {
           plugin.logger.severe(
@@ -46,18 +48,15 @@ class DiscordIntegration(
     subscribed = false
   }
 
-  override fun onMinecraftMessage(channelId: String, senderName: String, message: String) {
-    val mapping = config.discord.channelMappings[channelId.lowercase()] ?: return
+  override fun onMinecraftMessage(channelName: String, sender: Player, message: String) {
     runCatching {
-          val channel =
-              DiscordUtil.getTextChannelById(mapping.discordChannelId)
-                  ?: error("Discord channel ${mapping.discordChannelId} is unavailable")
-          val payload = "<$senderName> $message"
-          channel.sendMessage(payload.take(2000)).queue()
+          val component =
+              github.scarsz.discordsrv.dependencies.kyori.adventure.text.Component.text(message)
+          DiscordSRV.getPlugin().processChatMessage(sender, component, channelName, false, null)
         }
         .onFailure {
           plugin.logger.warning(
-              "DiscordSRV outbound bridge failed for '${mapping.minecraftChannel}': ${it.message}"
+              "DiscordSRV outbound bridge failed for '$channelName': ${it.message}"
           )
         }
   }
@@ -66,30 +65,36 @@ class DiscordIntegration(
 
   inner class ApiListener {
     @Subscribe
+    fun onGameChatMessage(event: GameChatMessagePreProcessEvent) {
+      // DiscordSRVの汎用Paperリスナーは全メッセージをglobalとして処理するため、
+      // OyasaiChatがチャンネル名付きで渡す処理との二重送信を抑止する。
+      if (event.triggeringBukkitEvent is AsyncChatEvent) event.isCancelled = true
+    }
+
+    @Subscribe
     fun onDiscordMessage(event: DiscordGuildMessagePreProcessEvent) {
-      val mapping =
-          config.discord.channelMappings.values.firstOrNull {
-            it.discordChannelId == event.channel.id
+      val channelName =
+          DiscordSRV.getPlugin().getDestinationGameChannelNameForTextChannel(event.channel)
+              ?: return
+      val channel =
+          config.channels.channels.firstOrNull {
+            it.id.equals(channelName, ignoreCase = true) ||
+                it.displayName.equals(channelName, ignoreCase = true)
           } ?: return
 
       event.isCancelled = true
       if (event.author.isBot) return
-      if (mapping.inboundBackend != config.network.backendId) return
 
       val text = event.message.contentDisplay.trim()
       if (text.isBlank()) return
       if (text.length > MAX_PAYLOAD_LENGTH) {
-        plugin.logger.warning(
-            "Rejected oversized Discord message for '${mapping.minecraftChannel}'."
-        )
+        plugin.logger.warning("Rejected oversized Discord message for '${channel.displayName}'.")
         return
       }
       val name = event.author.name
       plugin.server.scheduler.runTask(
           plugin,
-          Runnable {
-            plugin.runtime.chat.handleExternalChat(mapping.minecraftChannel, "Discord:$name", text)
-          },
+          Runnable { plugin.runtime.chat.handleExternalChat(channel.id, "Discord:$name", text) },
       )
     }
   }
