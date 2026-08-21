@@ -17,7 +17,6 @@ import org.bukkit.entity.Player
 // チャットやPMの表示用Component変換。
 data class ChatPresentationSnapshot(
     val playerName: String,
-    val playerDisplayName: Component,
     val chatFormat: String,
     val vaultPrefix: Component,
     val vaultSuffix: Component,
@@ -35,7 +34,6 @@ class ChatFormatter(
   fun snapshot(player: Player): ChatPresentationSnapshot =
       ChatPresentationSnapshot(
           playerName = player.name,
-          playerDisplayName = player.displayName(),
           chatFormat = placeholderSupport.expand(player, config.chatFormat),
           vaultPrefix = placeholderSupport.prefix(player),
           vaultSuffix = placeholderSupport.suffix(player),
@@ -52,21 +50,16 @@ class ChatFormatter(
   ): Component {
     val prefix = Component.text(channel.prefix).clickEvent(ClickEvent.runCommand("/chlist"))
     val name =
-        snapshot.playerDisplayName.let { component ->
+        Component.text(snapshot.playerName).let { component ->
           val withHover =
               if (config.playerNameHover.isBlank()) component
               else
                   component.hoverEvent(
                       HoverEvent.showText(
                           mini.deserialize(
-                              config.playerNameHover.withPlayerNamePlaceholder(),
+                              config.playerNameHover,
                               TagResolver.resolver(
-                                  Placeholder.component("name", snapshot.playerDisplayName),
-                                  Placeholder.component("displayname", snapshot.playerDisplayName),
-                                  Placeholder.component(
-                                      "player_name",
-                                      Component.text(snapshot.playerName),
-                                  ),
+                                  Placeholder.component("name", Component.text(snapshot.playerName))
                               ),
                           )
                       )
@@ -75,9 +68,7 @@ class ChatFormatter(
           else
               withHover.clickEvent(
                   ClickEvent.suggestCommand(
-                      config.playerNameClickCommand
-                          .replace("<name>", snapshot.playerName)
-                          .replace("\$name", snapshot.playerName)
+                      config.playerNameClickCommand.replace("<name>", snapshot.playerName)
                   )
               )
         }
@@ -88,7 +79,6 @@ class ChatFormatter(
         snapshot.vaultPrefix,
         snapshot.vaultSuffix,
         message,
-        snapshot.playerName,
     )
   }
 
@@ -122,15 +112,12 @@ class ChatFormatter(
       vaultPrefix: Component,
       vaultSuffix: Component,
       message: Component,
-      playerName: String? = null,
   ): Component =
       mini.deserialize(
-          format.withPlayerNamePlaceholder(),
+          format,
           TagResolver.resolver(
               Placeholder.component("channel", prefix),
               Placeholder.component("name", name),
-              Placeholder.component("displayname", name),
-              Placeholder.component("player_name", Component.text(playerName.orEmpty())),
               Placeholder.component("vault_prefix", vaultPrefix),
               Placeholder.component("vault_suffix", vaultSuffix),
               Placeholder.component("message", message),
@@ -152,7 +139,6 @@ class ChatFormatter(
         vaultPrefix = snapshot?.vaultPrefix ?: Component.empty(),
         vaultSuffix = snapshot?.vaultSuffix ?: Component.empty(),
         message = Component.text(message),
-        playerName = snapshot?.playerName,
     )
   }
 
@@ -164,8 +150,7 @@ class ChatFormatter(
   ): Component {
     val format = if (outgoing) config.privateMessageFormat else config.privateMessageReceiveFormat
     val fake = Bukkit.getPlayerExact(sender)
-    val displayPlayer = Bukkit.getPlayerExact(if (outgoing) target else sender)
-    val name = displayPlayer?.displayName() ?: Component.text(if (outgoing) target else sender)
+    val name = Component.text(if (outgoing) target else sender)
     return render(format, fake, Component.text("PM"), name, message)
   }
 
@@ -176,12 +161,10 @@ class ChatFormatter(
       presentation: ChatPresentationSnapshot,
   ): Component =
       mini.deserialize(
-          config.privateMessageChatFormat.withPlayerNamePlaceholder(),
+          config.privateMessageChatFormat,
           TagResolver.resolver(
-              Placeholder.component("sender", presentation.playerDisplayName),
-              Placeholder.component("sender_name", Component.text(sender)),
+              Placeholder.component("sender", Component.text(sender)),
               Placeholder.component("target", Component.text(target)),
-              Placeholder.component("player_name", Component.text(presentation.playerName)),
               Placeholder.component("vault_prefix", presentation.vaultPrefix),
               Placeholder.component("vault_suffix", presentation.vaultSuffix),
               Placeholder.component("message", message),
@@ -195,6 +178,4 @@ class ChatFormatter(
   fun error(value: String): Component = Component.text(value)
 
   fun plain(component: Component): String = plain.serialize(component)
-
-  private fun String.withPlayerNamePlaceholder(): String = replace("\$name", "<player_name>")
 }
