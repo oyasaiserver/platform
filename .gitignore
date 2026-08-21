@@ -439,3 +439,6 @@ data
 CLAUDE.md
 GEMINI.md
 AGENTS.md
+
+# Docs
+docs/*Outputs/**
