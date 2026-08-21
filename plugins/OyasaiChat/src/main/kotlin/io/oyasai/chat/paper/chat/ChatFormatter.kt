@@ -204,9 +204,8 @@ class ChatFormatter(
 
   private fun String.hasClickAroundPlayerName(): Boolean {
     val playerNameIndex =
-        sequenceOf(indexOf("<name>"), indexOf("<displayname>"))
-            .filter { it >= 0 }
-            .minOrNull() ?: return false
+        sequenceOf(indexOf("<name>"), indexOf("<displayname>")).filter { it >= 0 }.minOrNull()
+            ?: return false
     var clickStart = indexOf("<click:")
     while (clickStart >= 0 && clickStart < playerNameIndex) {
       if (indexOf("</click>", clickStart) > playerNameIndex) return true
