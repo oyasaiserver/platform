@@ -71,7 +71,11 @@ class ChatFormatter(
                           )
                       )
                   )
-          if (config.playerNameClickCommand.isBlank()) withHover
+          if (
+              config.playerNameClickCommand.isBlank() ||
+                  snapshot.chatFormat.hasClickAroundPlayerName()
+          )
+              withHover
           else
               withHover.clickEvent(
                   ClickEvent.suggestCommand(
@@ -197,4 +201,17 @@ class ChatFormatter(
   fun plain(component: Component): String = plain.serialize(component)
 
   private fun String.withPlayerName(playerName: String): String = replace("\$name", playerName)
+
+  private fun String.hasClickAroundPlayerName(): Boolean {
+    val playerNameIndex =
+        sequenceOf(indexOf("<name>"), indexOf("<displayname>"))
+            .filter { it >= 0 }
+            .minOrNull() ?: return false
+    var clickStart = indexOf("<click:")
+    while (clickStart >= 0 && clickStart < playerNameIndex) {
+      if (indexOf("</click>", clickStart) > playerNameIndex) return true
+      clickStart = indexOf("<click:", clickStart + 1)
+    }
+    return false
+  }
 }

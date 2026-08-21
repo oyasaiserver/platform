@@ -55,6 +55,7 @@ channels:
 formatting:
   # <name>/<displayname> はプレイヤーの装飾済み表示名。$name は装飾なしのアカウント名。
   # run_commandのコマンドに空白がある場合は、<click:run_command:'/command $name'> のように値をクォートする。
+  # フォーマット内で<name>/<displayname>を<click:...>...</click>で囲んだ場合は、player-name-click-commandよりそちらを優先する。
   chat: "<dark_gray>[<channel>]</dark_gray> <vault_prefix><name><vault_suffix><dark_gray>: </dark_gray><message>"
   private-message-send: "<gray>[<light_purple>PM</light_purple>] <gray>to <name>: <white><message>"
   private-message-receive: "<gray>[<light_purple>PM</light_purple>] <gray>from <name>: <white><message>"
