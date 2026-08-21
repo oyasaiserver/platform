@@ -49,15 +49,15 @@
   },
   "ca.spottedleaf:concurrentutil:0.0.8": {
     "concurrentutil-0.0.8.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/ca/spottedleaf/concurrentutil/0.0.8/concurrentutil-0.0.8.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/ca/spottedleaf/concurrentutil/0.0.8/concurrentutil-0.0.8.jar",
       "hash": "sha256-VfKe6pXDUFg2CgSAdst7KjaTfPpJdp723hdCTd2RW50="
     },
     "concurrentutil-0.0.8.module": {
-      "url": "https://repo.purpurmc.org/snapshots/ca/spottedleaf/concurrentutil/0.0.8/concurrentutil-0.0.8.module",
+      "url": "https://repo.papermc.io/repository/maven-public/ca/spottedleaf/concurrentutil/0.0.8/concurrentutil-0.0.8.module",
       "hash": "sha256-Ve3btcwd9DbX07tzNC6dnq/OVjXv1sy6+5gd52AOd8Y="
     },
     "concurrentutil-0.0.8.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/ca/spottedleaf/concurrentutil/0.0.8/concurrentutil-0.0.8.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/ca/spottedleaf/concurrentutil/0.0.8/concurrentutil-0.0.8.pom",
       "hash": "sha256-fuO3+bSz+PG4YGVIkJSyRhbKagjOUbUOoEwIckBn4C8="
     }
   },
@@ -969,67 +969,67 @@
   },
   "com.mojang:authlib:7.0.61": {
     "authlib-7.0.61.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/authlib/7.0.61/authlib-7.0.61.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/authlib/7.0.61/authlib-7.0.61.jar",
       "hash": "sha256-CaFSYXvSPIa/Wdsfm6gu3iPsj2kagk1sXexPAXX4KqQ="
     },
     "authlib-7.0.61.module": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/authlib/7.0.61/authlib-7.0.61.module",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/authlib/7.0.61/authlib-7.0.61.module",
       "hash": "sha256-Ts9BQCSSIMtXT/fOobjjKAOjzUUEqAkgj/hMdyNQnFQ="
     },
     "authlib-7.0.61.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/authlib/7.0.61/authlib-7.0.61.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/authlib/7.0.61/authlib-7.0.61.pom",
       "hash": "sha256-Q8KYSEF+oKVJj35jl2qRAXFl5TjjIlLtuk5J6rv57Po="
     }
   },
   "com.mojang:brigadier:1.3.10": {
     "brigadier-1.3.10.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar",
       "hash": "sha256-yO5BNuR0rHcjyitDLsjRoryI730exXwxS6njPNyD3XU="
     },
     "brigadier-1.3.10.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/brigadier/1.3.10/brigadier-1.3.10.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/brigadier/1.3.10/brigadier-1.3.10.pom",
       "hash": "sha256-Ob8r99J4mH+qQvaYuiL3rmWhLHf6Qoyl0jzMd3lWP50="
     }
   },
   "com.mojang:datafixerupper:9.0.19": {
     "datafixerupper-9.0.19.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/datafixerupper/9.0.19/datafixerupper-9.0.19.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/datafixerupper/9.0.19/datafixerupper-9.0.19.jar",
       "hash": "sha256-llOjnPXEhTzJhijZAtyyP/6ydVEi7MVjveOMj2DAth4="
     },
     "datafixerupper-9.0.19.module": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/datafixerupper/9.0.19/datafixerupper-9.0.19.module",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/datafixerupper/9.0.19/datafixerupper-9.0.19.module",
       "hash": "sha256-n+lQsqari8gwFz90b7r1d3d7szcY7/pjuxIci/jNGhU="
     },
     "datafixerupper-9.0.19.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/datafixerupper/9.0.19/datafixerupper-9.0.19.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/datafixerupper/9.0.19/datafixerupper-9.0.19.pom",
       "hash": "sha256-cHLbz+GvUqMov8US21mL2D5FItiVlxTz06a8q6fNLi8="
     }
   },
   "com.mojang:jtracy:1.0.37": {
     "jtracy-1.0.37.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/jtracy/1.0.37/jtracy-1.0.37.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/jtracy/1.0.37/jtracy-1.0.37.jar",
       "hash": "sha256-i7aNC2Xo7OuS3ivR2eFEOoyandG1gYpeVIcLD4JTZyo="
     },
     "jtracy-1.0.37.module": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/jtracy/1.0.37/jtracy-1.0.37.module",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/jtracy/1.0.37/jtracy-1.0.37.module",
       "hash": "sha256-eIzZzjVDTqenLYh0WJWX7LysvR3XZEmkDS/vNW7KSc4="
     },
     "jtracy-1.0.37.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/jtracy/1.0.37/jtracy-1.0.37.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/jtracy/1.0.37/jtracy-1.0.37.pom",
       "hash": "sha256-ALaII6s8GKAY+cXxEM7BYDu0e1SY4ed2PDuoI7WY2fE="
     }
   },
   "com.mojang:logging:1.6.11": {
     "logging-1.6.11.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/logging/1.6.11/logging-1.6.11.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/logging/1.6.11/logging-1.6.11.jar",
       "hash": "sha256-XYA+tzSKJ0aMYXLa7y8NdyYN1jzeN36/pz42eJro/O4="
     },
     "logging-1.6.11.module": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/logging/1.6.11/logging-1.6.11.module",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/logging/1.6.11/logging-1.6.11.module",
       "hash": "sha256-AL7j1P6vJvrs7Brnl04Rno4Gp70/WTt1tSoerKf1DjI="
     },
     "logging-1.6.11.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/mojang/logging/1.6.11/logging-1.6.11.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/com/mojang/logging/1.6.11/logging-1.6.11.pom",
       "hash": "sha256-IyeWYQvCrbY4COGBnHVNEFO+L8ZP64pfefYbMTn1ho0="
     }
   },
@@ -1183,39 +1183,39 @@
   },
   "com.velocitypowered:velocity-api:4.1.0-SNAPSHOT": {
     "velocity-api-4.1.0-SNAPSHOT.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-api/4.1.0-SNAPSHOT/velocity-api-4.1.0-20260814.105711-13.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/com/velocitypowered/velocity-api/4.1.0-SNAPSHOT/velocity-api-4.1.0-20260814.105711-13.jar",
       "hash": "sha256-9YNaSmGR+QkAW2lczAe5Feja3v9KtpyCp8rByeTI5s4="
     },
     "velocity-api-4.1.0-SNAPSHOT.module": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-api/4.1.0-SNAPSHOT/velocity-api-4.1.0-20260814.105711-13.module",
+      "url": "https://repo.papermc.io/repository/maven-public/com/velocitypowered/velocity-api/4.1.0-SNAPSHOT/velocity-api-4.1.0-20260814.105711-13.module",
       "hash": "sha256-WUCMDZhtXF6mA3leqccdSm18u9E6l0TuISOxO/hIXbc="
     },
     "velocity-api-4.1.0-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-api/4.1.0-SNAPSHOT/velocity-api-4.1.0-20260814.105711-13.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/com/velocitypowered/velocity-api/4.1.0-SNAPSHOT/velocity-api-4.1.0-20260814.105711-13.pom",
       "hash": "sha256-LwN8RLCdaUcS7YOATSSOTzzJ+W7bOT/XWHWf6XIGkvs="
     }
   },
   "com.velocitypowered:velocity-brigadier:1.0.0-SNAPSHOT": {
     "velocity-brigadier-1.0.0-SNAPSHOT.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/velocity-brigadier-1.0.0-20210613.082804-10.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/com/velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/velocity-brigadier-1.0.0-20210613.082804-10.jar",
       "hash": "sha256-LWZG7UbYBS/J8NUEMJoClNCKfHXVNP2E8R2whQzv3LI="
     },
     "velocity-brigadier-1.0.0-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/velocity-brigadier-1.0.0-20210613.082804-10.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/com/velocitypowered/velocity-brigadier/1.0.0-SNAPSHOT/velocity-brigadier-1.0.0-20210613.082804-10.pom",
       "hash": "sha256-BVrnovDZ13pawpqN9FM3RyX2Z0yx2FkwjNbaxVI3mQM="
     }
   },
   "com.velocitypowered:velocity-native:3.4.0-SNAPSHOT": {
     "velocity-native-3.4.0-SNAPSHOT.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.jar",
       "hash": "sha256-rN8CW1eC0lKoJwjZmPeFaxv522eodX8ubsXL97A3NjY="
     },
     "velocity-native-3.4.0-SNAPSHOT.module": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.module",
+      "url": "https://repo.papermc.io/repository/maven-public/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.module",
       "hash": "sha256-cmT9vwlhnjmg8KfOK5Hp5HoMVZ2bqcqC7FVu5AyzalA="
     },
     "velocity-native-3.4.0-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.pom",
       "hash": "sha256-LxSyizRhTF4tYhqIyd0oyZ/BGQPQEyfCFzAN0J2Zgwc="
     }
   },
@@ -1469,113 +1469,113 @@
   },
   "io.papermc:asm-utils:0.0.3": {
     "asm-utils-0.0.3.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/asm-utils/0.0.3/asm-utils-0.0.3.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/asm-utils/0.0.3/asm-utils-0.0.3.jar",
       "hash": "sha256-DgubUZ7zb4a0QGfqHtVZdRsYu3te6IRLwkM3WWFyjxE="
     },
     "asm-utils-0.0.3.module": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/asm-utils/0.0.3/asm-utils-0.0.3.module",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/asm-utils/0.0.3/asm-utils-0.0.3.module",
       "hash": "sha256-MOBZIZ+gADFiCY0dZ9cbMrGZTBSG8kIo6e2jHH3iofM="
     },
     "asm-utils-0.0.3.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/asm-utils/0.0.3/asm-utils-0.0.3.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/asm-utils/0.0.3/asm-utils-0.0.3.pom",
       "hash": "sha256-qETGMRNBsmXrqvp3lHeBtx/ZFfeY1oP6VBT839jl5qo="
     }
   },
   "io.papermc:mache:1.21.11+build.1": {
     "mache-1.21.11+build.1.module": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/mache/1.21.11+build.1/mache-1.21.11+build.1.module",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/mache/1.21.11+build.1/mache-1.21.11+build.1.module",
       "hash": "sha256-Qscuv2STyMCj97FiOZ7JLHMFszm649jiNM0zui5G1ys="
     },
     "mache-1.21.11+build.1.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/mache/1.21.11+build.1/mache-1.21.11+build.1.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/mache/1.21.11+build.1/mache-1.21.11+build.1.pom",
       "hash": "sha256-bW4zLyApo6Bk7VNalNv2xs3FfpcI/a03o9o1uLjhAbo="
     },
     "mache-1.21.11+build.1.zip": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/mache/1.21.11+build.1/mache-1.21.11+build.1.zip",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/mache/1.21.11+build.1/mache-1.21.11+build.1.zip",
       "hash": "sha256-DipYlOx8CEYe1Q8k2jJE8g7FL3XFN3Mf4rfhCvePvL4="
     }
   },
   "io.papermc:reflection-rewriter:0.0.3": {
     "reflection-rewriter-0.0.3.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/reflection-rewriter/0.0.3/reflection-rewriter-0.0.3.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/reflection-rewriter/0.0.3/reflection-rewriter-0.0.3.jar",
       "hash": "sha256-3H3KSZ60hdR6vheRdtY+/HEh1ySdPZYl+L0uehZCpNk="
     },
     "reflection-rewriter-0.0.3.module": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/reflection-rewriter/0.0.3/reflection-rewriter-0.0.3.module",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/reflection-rewriter/0.0.3/reflection-rewriter-0.0.3.module",
       "hash": "sha256-4Q7/WY1IGJaFz5XPXXIchfEzDRweNVn+iMW9/FXy63A="
     },
     "reflection-rewriter-0.0.3.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/reflection-rewriter/0.0.3/reflection-rewriter-0.0.3.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/reflection-rewriter/0.0.3/reflection-rewriter-0.0.3.pom",
       "hash": "sha256-FiWSCxYiCmR2DoKx2MFukKJcQYwXs9klO+FopWAaa44="
     }
   },
   "io.papermc:reflection-rewriter-proxy-generator:0.0.3": {
     "reflection-rewriter-proxy-generator-0.0.3.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/reflection-rewriter-proxy-generator/0.0.3/reflection-rewriter-proxy-generator-0.0.3.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/reflection-rewriter-proxy-generator/0.0.3/reflection-rewriter-proxy-generator-0.0.3.jar",
       "hash": "sha256-yXK6GuBmlwK1eV+0vHmsh0FwKzFcHCAKtUbkcJc6lpA="
     },
     "reflection-rewriter-proxy-generator-0.0.3.module": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/reflection-rewriter-proxy-generator/0.0.3/reflection-rewriter-proxy-generator-0.0.3.module",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/reflection-rewriter-proxy-generator/0.0.3/reflection-rewriter-proxy-generator-0.0.3.module",
       "hash": "sha256-PIINGASoyJN/6PVvQE1DoG4lJzLdkQwx5zPZ3dmP36U="
     },
     "reflection-rewriter-proxy-generator-0.0.3.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/reflection-rewriter-proxy-generator/0.0.3/reflection-rewriter-proxy-generator-0.0.3.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/reflection-rewriter-proxy-generator/0.0.3/reflection-rewriter-proxy-generator-0.0.3.pom",
       "hash": "sha256-+k995V3uXh7hEEO6RQojRaJUA24f7kdZU52cydhLAB0="
     }
   },
   "io.papermc:reflection-rewriter-runtime:0.0.3": {
     "reflection-rewriter-runtime-0.0.3.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/reflection-rewriter-runtime/0.0.3/reflection-rewriter-runtime-0.0.3.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/reflection-rewriter-runtime/0.0.3/reflection-rewriter-runtime-0.0.3.jar",
       "hash": "sha256-YeBmw+tvFk72WnOvTc2V06DK7v6iYWBr5vkDSnFe6OU="
     },
     "reflection-rewriter-runtime-0.0.3.module": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/reflection-rewriter-runtime/0.0.3/reflection-rewriter-runtime-0.0.3.module",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/reflection-rewriter-runtime/0.0.3/reflection-rewriter-runtime-0.0.3.module",
       "hash": "sha256-NBmn9AqjqgfAcRE9tDZvfn4KEoc+eL5Ei1fWzPZD5oI="
     },
     "reflection-rewriter-runtime-0.0.3.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/reflection-rewriter-runtime/0.0.3/reflection-rewriter-runtime-0.0.3.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/reflection-rewriter-runtime/0.0.3/reflection-rewriter-runtime-0.0.3.pom",
       "hash": "sha256-CBW/gcla8l4BklZw46DQKskaBVh405TVfgYLTH7sb2w="
     }
   },
   "io.papermc.codebook:codebook-cli:1.0.18": {
     "codebook-cli-1.0.18-all.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/codebook/codebook-cli/1.0.18/codebook-cli-1.0.18-all.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/codebook/codebook-cli/1.0.18/codebook-cli-1.0.18-all.jar",
       "hash": "sha256-yw1KpVlF1S6n0luHXVh3Lhdzt1WCqSIlNfjyovoZjvg="
     },
     "codebook-cli-1.0.18.module": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/codebook/codebook-cli/1.0.18/codebook-cli-1.0.18.module",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/codebook/codebook-cli/1.0.18/codebook-cli-1.0.18.module",
       "hash": "sha256-DSLmnMxPGyl5FuvJUyhfaCFr9IwSfKBe9is3GMKpocQ="
     },
     "codebook-cli-1.0.18.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/codebook/codebook-cli/1.0.18/codebook-cli-1.0.18.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/codebook/codebook-cli/1.0.18/codebook-cli-1.0.18.pom",
       "hash": "sha256-QDtMqANe9HKKzPikgc5wiEH0EkcUfwfi7wgrFEzObFQ="
     }
   },
   "io.papermc.paper:dev-bundle:1.21.11-R0.1-SNAPSHOT": {
     "dev-bundle-1.21.11-R0.1-SNAPSHOT.module": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/paper/dev-bundle/1.21.11-R0.1-SNAPSHOT/dev-bundle-1.21.11-R0.1-20260511.115010-91.module",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/paper/dev-bundle/1.21.11-R0.1-SNAPSHOT/dev-bundle-1.21.11-R0.1-20260511.115010-91.module",
       "hash": "sha256-8fke3wUMINhoJ5Rva2NAHbs3Br2zz90sjg/dCcCkv4E="
     },
     "dev-bundle-1.21.11-R0.1-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/paper/dev-bundle/1.21.11-R0.1-SNAPSHOT/dev-bundle-1.21.11-R0.1-20260511.115010-91.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/paper/dev-bundle/1.21.11-R0.1-SNAPSHOT/dev-bundle-1.21.11-R0.1-20260511.115010-91.pom",
       "hash": "sha256-wyarnTNWWemiBHLANH1/+mqj//81hWIo4qgVeIDE7C4="
     },
     "dev-bundle-1.21.11-R0.1-SNAPSHOT.zip": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/paper/dev-bundle/1.21.11-R0.1-SNAPSHOT/dev-bundle-1.21.11-R0.1-20260511.115010-91.zip",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/paper/dev-bundle/1.21.11-R0.1-SNAPSHOT/dev-bundle-1.21.11-R0.1-20260511.115010-91.zip",
       "hash": "sha256-yaU/Aaz7ZcSh3Cp4AMXIKwb9i8pIk4P/RcqavXgIODo="
     }
   },
   "io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT": {
     "paper-api-1.21.11-R0.1-SNAPSHOT.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/paper/paper-api/1.21.11-R0.1-SNAPSHOT/paper-api-1.21.11-R0.1-20260511.115010-91.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/paper/paper-api/1.21.11-R0.1-SNAPSHOT/paper-api-1.21.11-R0.1-20260511.115010-91.jar",
       "hash": "sha256-xXexgcEahnQxDlbJKpHjHAELfwTJvRC5HDvhg3RAEHA="
     },
     "paper-api-1.21.11-R0.1-SNAPSHOT.module": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/paper/paper-api/1.21.11-R0.1-SNAPSHOT/paper-api-1.21.11-R0.1-20260511.115010-91.module",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/paper/paper-api/1.21.11-R0.1-SNAPSHOT/paper-api-1.21.11-R0.1-20260511.115010-91.module",
       "hash": "sha256-kLr8iD9b5Q8OVEZhDcPWzu/UO2oFnesE+24cPKYKOW4="
     },
     "paper-api-1.21.11-R0.1-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/paper/paper-api/1.21.11-R0.1-SNAPSHOT/paper-api-1.21.11-R0.1-20260511.115010-91.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/paper/paper-api/1.21.11-R0.1-SNAPSHOT/paper-api-1.21.11-R0.1-20260511.115010-91.pom",
       "hash": "sha256-zG+GyFDlGZ3srBNk/GEQ8yxP598xpocAQ47qqhkLOK4="
     }
   },
@@ -1601,11 +1601,11 @@
   },
   "io.papermc.parchment.data:parchment:1.21.11-pre3+build.2": {
     "parchment-1.21.11-pre3+build.2.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/parchment/data/parchment/1.21.11-pre3+build.2/parchment-1.21.11-pre3+build.2.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/parchment/data/parchment/1.21.11-pre3+build.2/parchment-1.21.11-pre3+build.2.pom",
       "hash": "sha256-LatYEtUR7N61zT7Eay9DXhX2CakORmstdmDXcL7VzT0="
     },
     "parchment-1.21.11-pre3+build.2.zip": {
-      "url": "https://repo.purpurmc.org/snapshots/io/papermc/parchment/data/parchment/1.21.11-pre3+build.2/parchment-1.21.11-pre3+build.2.zip",
+      "url": "https://repo.papermc.io/repository/maven-public/io/papermc/parchment/data/parchment/1.21.11-pre3+build.2/parchment-1.21.11-pre3+build.2.zip",
       "hash": "sha256-4gWUge68apm3kNDLh/oDNUjuISUlDBiSyDGTCT6OjR8="
     }
   },
@@ -1703,43 +1703,43 @@
   },
   "me.lucko:spark-api:0.1-20240720.200737-2": {
     "spark-api-0.1-20240720.200737-2.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/me/lucko/spark-api/0.1-SNAPSHOT/spark-api-0.1-20240720.200737-2.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/me/lucko/spark-api/0.1-SNAPSHOT/spark-api-0.1-20240720.200737-2.jar",
       "hash": "sha256-+Zo7oM098a7nuPKF/nlnoo2cDOo3+mYhtkPakZ3PuBk="
     },
     "spark-api-0.1-20240720.200737-2.module": {
-      "url": "https://repo.purpurmc.org/snapshots/me/lucko/spark-api/0.1-SNAPSHOT/spark-api-0.1-20240720.200737-2.module",
+      "url": "https://repo.papermc.io/repository/maven-public/me/lucko/spark-api/0.1-SNAPSHOT/spark-api-0.1-20240720.200737-2.module",
       "hash": "sha256-KDPslyWrMPD/kkunlo80ymCU/z4ALjmai5Igl1qrki0="
     },
     "spark-api-0.1-20240720.200737-2.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/me/lucko/spark-api/0.1-SNAPSHOT/spark-api-0.1-20240720.200737-2.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/me/lucko/spark-api/0.1-SNAPSHOT/spark-api-0.1-20240720.200737-2.pom",
       "hash": "sha256-u/rrg8lGI2+Id4rDXLzZ1zgj/MM4wwRG0pwwBKgp7uA="
     }
   },
   "me.lucko:spark-paper:1.10.152": {
     "spark-paper-1.10.152.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/me/lucko/spark-paper/1.10.152/spark-paper-1.10.152.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/me/lucko/spark-paper/1.10.152/spark-paper-1.10.152.jar",
       "hash": "sha256-5EDp11+lD0VuEJWfnrwJYrO/XanvEPeEpMo/mGErAYs="
     },
     "spark-paper-1.10.152.module": {
-      "url": "https://repo.purpurmc.org/snapshots/me/lucko/spark-paper/1.10.152/spark-paper-1.10.152.module",
+      "url": "https://repo.papermc.io/repository/maven-public/me/lucko/spark-paper/1.10.152/spark-paper-1.10.152.module",
       "hash": "sha256-fWHK2acYHlrpUqFDOSiTrkTpSUSO42pgH8Tl9wMYbr8="
     },
     "spark-paper-1.10.152.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/me/lucko/spark-paper/1.10.152/spark-paper-1.10.152.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/me/lucko/spark-paper/1.10.152/spark-paper-1.10.152.pom",
       "hash": "sha256-w9q2vSuCTxk/1S90s3irnramgHJJX3o5bRmKUce65tE="
     }
   },
   "net.fabricmc:tiny-remapper:0.12.0": {
     "tiny-remapper-0.12.0-fat.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/net/fabricmc/tiny-remapper/0.12.0/tiny-remapper-0.12.0-fat.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/net/fabricmc/tiny-remapper/0.12.0/tiny-remapper-0.12.0-fat.jar",
       "hash": "sha256-Mv3vP5fR+sFvzauB+WXi/QiG590Ud7/V20c30+yFuzQ="
     },
     "tiny-remapper-0.12.0.module": {
-      "url": "https://repo.purpurmc.org/snapshots/net/fabricmc/tiny-remapper/0.12.0/tiny-remapper-0.12.0.module",
+      "url": "https://repo.papermc.io/repository/maven-public/net/fabricmc/tiny-remapper/0.12.0/tiny-remapper-0.12.0.module",
       "hash": "sha256-uFWHbJ1RUg+UPnneRS1aIROneJCpR1ODxLAumAaYgRI="
     },
     "tiny-remapper-0.12.0.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/net/fabricmc/tiny-remapper/0.12.0/tiny-remapper-0.12.0.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/net/fabricmc/tiny-remapper/0.12.0/tiny-remapper-0.12.0.pom",
       "hash": "sha256-kfO9CuYwsAkCNEEBakxvcJkl0H++muKa3TROXSQIhGA="
     }
   },
@@ -2121,15 +2121,15 @@
   },
   "net.md-5:bungeecord-chat:1.21-R0.2-deprecated+build.21": {
     "bungeecord-chat-1.21-R0.2-deprecated+build.21.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/net/md-5/bungeecord-chat/1.21-R0.2-deprecated+build.21/bungeecord-chat-1.21-R0.2-deprecated+build.21.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/net/md-5/bungeecord-chat/1.21-R0.2-deprecated+build.21/bungeecord-chat-1.21-R0.2-deprecated+build.21.jar",
       "hash": "sha256-zpMLPuBIUgoKtTjrjRYnswE2f8GzAINyNTh63tbYm6E="
     },
     "bungeecord-chat-1.21-R0.2-deprecated+build.21.module": {
-      "url": "https://repo.purpurmc.org/snapshots/net/md-5/bungeecord-chat/1.21-R0.2-deprecated+build.21/bungeecord-chat-1.21-R0.2-deprecated+build.21.module",
+      "url": "https://repo.papermc.io/repository/maven-public/net/md-5/bungeecord-chat/1.21-R0.2-deprecated+build.21/bungeecord-chat-1.21-R0.2-deprecated+build.21.module",
       "hash": "sha256-cqmHEJ0eH68Dng1M7L/zaanqX6h7PR3xmuaScGEBxkk="
     },
     "bungeecord-chat-1.21-R0.2-deprecated+build.21.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/net/md-5/bungeecord-chat/1.21-R0.2-deprecated+build.21/bungeecord-chat-1.21-R0.2-deprecated+build.21.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/net/md-5/bungeecord-chat/1.21-R0.2-deprecated+build.21/bungeecord-chat-1.21-R0.2-deprecated+build.21.pom",
       "hash": "sha256-85FlCTFDYWAP9FEgIFWqgdl6oSUolkgf5oIePPJHQyI="
     }
   },
@@ -2253,17 +2253,17 @@
   },
   "net.wesjd:anvilgui:1.10.11-SNAPSHOT": {
     "anvilgui-1.10.11-SNAPSHOT.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/net/wesjd/anvilgui/1.10.11-SNAPSHOT/anvilgui-1.10.11-20251225.041809-6.jar",
+      "url": "https://repo.papermc.io/repository/maven-public/net/wesjd/anvilgui/1.10.11-SNAPSHOT/anvilgui-1.10.11-20251225.041809-6.jar",
       "hash": "sha256-eTGVrYq2i+XNzUWrjOS6YUpbmxEL2blOORumIKoWXjA="
     },
     "anvilgui-1.10.11-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/net/wesjd/anvilgui/1.10.11-SNAPSHOT/anvilgui-1.10.11-20251225.041809-6.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/net/wesjd/anvilgui/1.10.11-SNAPSHOT/anvilgui-1.10.11-20251225.041809-6.pom",
       "hash": "sha256-dvNmzNkeS67MTpjva20wbMqxPkQNRUHlG4oTq8AYXfY="
     }
   },
   "net.wesjd:anvilgui-parent:1.10.11-SNAPSHOT": {
     "anvilgui-parent-1.10.11-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/net/wesjd/anvilgui-parent/1.10.11-SNAPSHOT/anvilgui-parent-1.10.11-20251225.032422-3.pom",
+      "url": "https://repo.papermc.io/repository/maven-public/net/wesjd/anvilgui-parent/1.10.11-SNAPSHOT/anvilgui-parent-1.10.11-20251225.032422-3.pom",
       "hash": "sha256-vezsYmWKERssqs1TBq3omWWl8H/DfhRPWxKgLrus7oM="
     }
   },
