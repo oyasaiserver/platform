@@ -160,7 +160,7 @@ class ChatService(
               )
           )
     }
-    plugin.runtime.discord.onMinecraftMessage(channel.id, player.name, message)
+    plugin.runtime.discord.onMinecraftMessage(channel.displayName, player, message)
   }
 
   /** サーバースレッド上で動く呼び出し元向けの互換入口。 */

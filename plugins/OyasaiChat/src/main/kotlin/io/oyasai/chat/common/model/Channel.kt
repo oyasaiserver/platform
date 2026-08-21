@@ -70,11 +70,4 @@ data class PrivateMessageSoundSettings(
 
 data class DiscordSettings(
     val enabled: Boolean,
-    val channelMappings: Map<String, DiscordChannelMapping>,
-)
-
-data class DiscordChannelMapping(
-    val minecraftChannel: String,
-    val discordChannelId: String,
-    val inboundBackend: String? = null,
 )

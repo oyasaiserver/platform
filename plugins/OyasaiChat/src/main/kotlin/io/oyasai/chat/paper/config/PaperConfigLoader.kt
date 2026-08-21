@@ -4,7 +4,6 @@ import io.oyasai.chat.common.model.ChannelDefinition
 import io.oyasai.chat.common.model.ChannelRegistry
 import io.oyasai.chat.common.model.ChatConfig
 import io.oyasai.chat.common.model.ConfigValidator
-import io.oyasai.chat.common.model.DiscordChannelMapping
 import io.oyasai.chat.common.model.DiscordSettings
 import io.oyasai.chat.common.model.NetworkSettings
 import io.oyasai.chat.common.model.PrivateMessageSoundSettings
@@ -65,39 +64,6 @@ object PaperConfigLoader {
     val errors = ConfigValidator.validate(network, registry)
     require(errors.isEmpty()) { errors.joinToString("; ") }
 
-    val mappings =
-        config
-            .getConfigurationSection("discord.mappings")
-            ?.getKeys(false)
-            ?.mapNotNull { id ->
-              val discordId = config.getString("discord.mappings.$id.discord-channel-id", "") ?: ""
-              if (discordId.isBlank()) return@mapNotNull null
-              val channel =
-                  registry.find(id)
-                      ?: throw IllegalArgumentException(
-                          "Discord mapping '$id' references an unknown Minecraft channel"
-                      )
-              require(discordId.all(Char::isDigit)) {
-                "Discord mapping '$id' must use a numeric Discord channel ID"
-              }
-              val inboundBackend = config.getString("discord.mappings.$id.inbound-backend")?.trim()
-              require(!inboundBackend.isNullOrBlank()) {
-                "Discord mapping '$id' must define inbound-backend"
-              }
-              require(inboundBackend in network.knownBackends()) {
-                "Discord mapping '$id' references unknown inbound backend '$inboundBackend'"
-              }
-              if (channel.networkGroup != null) {
-                require(inboundBackend in (network.groups[channel.networkGroup] ?: emptySet())) {
-                  "Discord mapping '$id' inbound-backend '$inboundBackend' is outside channel network group '${channel.networkGroup}'"
-                }
-              }
-              id.lowercase() to DiscordChannelMapping(channel.id, discordId, inboundBackend)
-            }
-            ?.toMap() ?: emptyMap()
-    require(mappings.values.groupBy { it.discordChannelId }.values.all { it.size == 1 }) {
-      "A Discord channel ID may be mapped to only one Minecraft channel"
-    }
     val receiveSound =
         PrivateMessageSoundSettings(
             enabled = config.getBoolean("private-messages.receive-sound.enabled", true),
@@ -137,7 +103,7 @@ object PaperConfigLoader {
             config.getString("formatting.player-name-click-command") ?: "/msg <name> ",
         pmEnabledByDefault = config.getBoolean("private-messages.enabled-by-default", true),
         privateMessageReceiveSound = receiveSound,
-        discord = DiscordSettings(config.getBoolean("discord.enabled", true), mappings),
+        discord = DiscordSettings(config.getBoolean("discord.enabled", true)),
     )
   }
 }
