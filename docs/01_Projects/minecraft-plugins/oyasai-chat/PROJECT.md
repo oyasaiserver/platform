@@ -12,7 +12,7 @@ related_paths:
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
-last_validated: "2026-08-21"
+last_validated: "2026-08-22"
 agent_task: null
 ---
 
@@ -67,8 +67,8 @@ Paperのbackend IDは`network.backend-id`を基本値とし、`OYASAI_SERVER_ID`
 |---|---|
 | `id` | チャンネル識別子 |
 | `display-name` | 表示名 |
-| `aliases` | チャンネル選択時の別名 |
-| `shortcut-commands` | 一度だけ送信、またはチャンネル選択に使うコマンド |
+| `aliases` | チャンネル選択時の別名。省略コマンドとしても登録 |
+| `shortcut-commands` | aliases以外に追加する、一度だけ送信またはチャンネル選択用のコマンド |
 | `prefix` | チャット表示のチャンネル識別子 |
 | `permission` | 利用可能なプレイヤーを制限。未設定で制限なし |
 | `auto-join` | ログイン時の自動参加 |
@@ -96,8 +96,11 @@ Staffは特別なチャンネル種別ではなく、通常のpermission付き�
 | `/msg`、`/tell`、`/message`、`/pm` | PM送信 |
 | `/r <message>` | 最後のPM相手へ返信 |
 | `/oyasaichat reload` | 設定reload。`oyasaichat.admin.reload`が必要 |
+| `/oyasaichatvelocity reload` | Velocity設定reload。`oyasaichat.admin.reload`が必要 |
 
-各チャンネルの`shortcut-commands`は、設定したラベルと同じコマンド名の既存登録と衝突する場合、起動・reloadを拒否。
+各チャンネルの`shortcut-commands`は動的コマンドとして登録し、コマンド入力時の候補に表示する。引数なしでチャンネルを選択し、メッセージ付きでは選択状態を変えず一度だけ送信する。
+OyasaiChatのコマンドはLunaChatや標準コマンドと競合しても、名前空間なしのラベルをOyasaiChatへ割り当てる。競合元のコマンド登録は削除せず、名前空間付きで実行可能。
+`/ch <channel>`や引数なしの省略コマンドでチャンネルを選択すると、PM会話モードを解除する。
 
 ## Globalチャット同期
 
@@ -150,7 +153,7 @@ PaperとVelocity間のPlugin Messageは、Gson JSONのEnvelopeで交換。
 
 ## 設定reload
 
-Paper・Velocityの両方で`/oyasaichat reload`を提供。
+`/oyasaichat reload`は接続中のPaper backendで実行する。Velocityは同名コマンドを登録せず、コマンドとtab補完をPaperへ転送する。Velocity設定は`/oyasaichatvelocity reload`で再読み込みする。
 
 - 不正な設定。新設定を適用せず、現在のruntimeを維持。
 - Paper。チャンネル、チャット、PM、連携を新設定で再構成。保存済みプレイヤー状態を引き継ぐ。

@@ -16,8 +16,9 @@ network:
 channels:
   global:
     display-name: Global
+    # aliasesもスラッシュコマンドとして登録。/gで参加・選択、/g <message>で一度だけ送信。
     aliases: [g]
-    # 任意のスラッシュコマンド。/gで参加・選択。/g <message>で選択状態を変えずに一度だけ送信。
+    # aliases以外に追加する任意のスラッシュコマンド。
     shortcut-commands: []
     prefix: Global
     auto-join: true

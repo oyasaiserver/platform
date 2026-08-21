@@ -70,13 +70,18 @@ internal object PaperRuntimeFactory {
 
   // Validation処理はAI生成
   private fun validateShortcutCommands(plugin: OyasaiChatPlugin, model: ChatConfig) {
+    val pluginLabels =
+        listOf("ch", "join", "leave", "chwho", "chlist", "setchannel", "msg", "r", "oyasaichat")
+            .flatMap {
+              plugin.getCommand(it)?.let { command -> listOf(command.name) + command.aliases }
+                  ?: emptyList()
+            }
+            .map(String::lowercase)
+            .toSet()
     val conflicts =
-        model.channels.channels
-            .flatMap { it.shortcutCommands }
-            .distinct()
-            .filter { plugin.server.commandMap.getCommand(it) != null }
+        model.channels.channels.flatMap { it.shortcutCommands }.filter { it in pluginLabels }
     require(conflicts.isEmpty()) {
-      "Channel shortcut commands are already registered: ${conflicts.joinToString(", ")}"
+      "Channel shortcut commands conflict with OyasaiChat commands: ${conflicts.joinToString(", ")}"
     }
   }
 }

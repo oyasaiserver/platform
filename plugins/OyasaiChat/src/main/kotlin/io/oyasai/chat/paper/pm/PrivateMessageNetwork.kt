@@ -21,7 +21,7 @@ internal fun PrivateMessageService.receiveTargetResult(envelope: NetworkEnvelope
             pendingConversationTargets.remove(requesterId)
             return
           }
-  pendingConversationTargets.remove(requesterId)
+  if (pendingConversationTargets.remove(requesterId) == null) return
   val targetId = envelope.originPlayerId
   if (envelope.content != "AVAILABLE" || targetId == null) {
     requester.sendMessage(chat.formatter.error("That player is offline."))

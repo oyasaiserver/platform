@@ -26,15 +26,14 @@ object PaperConfigLoader {
     val channels =
         config.getConfigurationSection("channels")?.getKeys(false)?.map { id ->
           val path = "channels.$id"
+          val aliases = config.getStringList("$path.aliases").map(String::lowercase).toSet()
+          val shortcutCommands =
+              config.getStringList("$path.shortcut-commands").map { it.trim().lowercase() }.toSet()
           ChannelDefinition(
               id = id,
               displayName = config.getString("$path.display-name", id) ?: id,
-              aliases = config.getStringList("$path.aliases").map(String::lowercase).toSet(),
-              shortcutCommands =
-                  config
-                      .getStringList("$path.shortcut-commands")
-                      .map { it.trim().lowercase() }
-                      .toSet(),
+              aliases = aliases,
+              shortcutCommands = aliases + shortcutCommands,
               prefix = config.getString("$path.prefix", id) ?: id,
               permission = config.getString("$path.permission"),
               autoJoin = config.getBoolean("$path.auto-join"),

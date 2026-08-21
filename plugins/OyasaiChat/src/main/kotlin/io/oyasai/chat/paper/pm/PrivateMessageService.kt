@@ -154,12 +154,12 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
   }
 
   fun stopConversation(player: Player) {
-    pendingConversationTargets.remove(player.uniqueId)
+    val wasPending = pendingConversationTargets.remove(player.uniqueId) != null
     val state = chat.state(player)
     val wasActive = state.privateMessageModePeer != null || state.privateMessageModeName != null
     state.privateMessageModePeer = null
     state.privateMessageModeName = null
-    if (wasActive) {
+    if (wasActive || wasPending) {
       chat.bridge.send(
           player,
           NetworkEnvelope.backend(

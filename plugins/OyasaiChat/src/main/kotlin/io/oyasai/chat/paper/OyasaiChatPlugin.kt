@@ -1,6 +1,7 @@
 package io.oyasai.chat.paper
 
 import io.oyasai.chat.paper.chat.initialize
+import io.oyasai.chat.paper.chat.join
 import io.oyasai.chat.paper.command.OyasaiCommandExecutor
 import io.oyasai.chat.paper.config.PaperConfigLoader
 import io.oyasai.chat.paper.integration.NoopDiscordBridge
@@ -8,10 +9,15 @@ import io.oyasai.chat.paper.network.NETWORK_CHANNEL
 import io.oyasai.chat.paper.runtime.PaperRuntime
 import io.oyasai.chat.paper.runtime.PaperRuntimeFactory
 import java.util.UUID
+import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
+import org.bukkit.command.PluginCommand
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.server.PluginEnableEvent
+import org.bukkit.event.server.ServerLoadEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 // Paper側プラグインの起動・再読み込み・終了管理。
@@ -22,6 +28,11 @@ private data class LivePlayerChatState(
 )
 
 class OyasaiChatPlugin : JavaPlugin(), Listener {
+  private val primaryCommandNames =
+      listOf("ch", "join", "leave", "chwho", "chlist", "setchannel", "msg", "r", "oyasaichat")
+  private val shortcutCommands = mutableMapOf<String, Command>()
+  private val displacedCommands = mutableMapOf<String, Command>()
+
   internal lateinit var runtime: PaperRuntime
 
   internal val chatLifecycleLock = Any()
@@ -136,6 +147,8 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
 
   override fun onDisable() {
     if (!::runtime.isInitialized) return
+    unregisterShortcutCommands()
+    releaseClaimedCommands()
     runtime.discord.disable()
     runtime.states.flushAndShutdown()
     server.messenger.unregisterIncomingPluginChannel(this, NETWORK_CHANNEL)
@@ -145,22 +158,113 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   // DiscordSRVが後から有効化された場合の遅延連携。
   @EventHandler
   fun onPluginEnable(event: PluginEnableEvent) {
-    if (event.plugin.name != "DiscordSRV" || !::runtime.isInitialized) return
-    val bridge = PaperRuntimeFactory.createDiscordBridge(this, runtime.config)
-    if (bridge is NoopDiscordBridge) return
-    runtime.discord.disable()
-    runtime.discord = bridge
-    bridge.enable()
+    if (!::runtime.isInitialized) return
+    if (event.plugin.name == "DiscordSRV") {
+      val bridge = PaperRuntimeFactory.createDiscordBridge(this, runtime.config)
+      if (bridge !is NoopDiscordBridge) {
+        runtime.discord.disable()
+        runtime.discord = bridge
+        bridge.enable()
+      }
+    }
+    claimCommandLabels()
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR)
+  fun onServerLoad(event: ServerLoadEvent) {
+    claimCommandLabels()
   }
 
   private fun bindCommands() {
     val executor = OyasaiCommandExecutor(this, runtime.chat, runtime.privateMessages)
-    listOf("ch", "join", "leave", "chwho", "chlist", "setchannel", "msg", "r", "oyasaichat")
-        .forEach { name ->
-          getCommand(name)?.apply {
-            setExecutor(executor)
-            tabCompleter = executor
-          }
+    primaryCommandNames.forEach { name ->
+      getCommand(name)?.apply {
+        setExecutor(executor)
+        tabCompleter = executor
+      }
+    }
+    registerShortcutCommands()
+    claimCommandLabels()
+  }
+
+  private fun registerShortcutCommands() {
+    unregisterShortcutCommands()
+    val commandMap = server.commandMap
+    runtime.config.channels.channels
+        .flatMap { it.shortcutCommands }
+        .distinct()
+        .forEach { label ->
+          val command = ChannelShortcutCommand(label)
+          commandMap.register(label, "oyasaichat", command)
+          shortcutCommands[label] = command
         }
+  }
+
+  private fun unregisterShortcutCommands() {
+    val commandMap = server.commandMap
+    shortcutCommands.forEach { (label, command) ->
+      commandMap.knownCommands.entries.removeIf { it.value === command }
+      command.unregister(commandMap)
+      displacedCommands.remove(label)?.let { commandMap.knownCommands[label] = it }
+    }
+    shortcutCommands.clear()
+  }
+
+  private fun claimCommandLabels() {
+    val knownCommands = server.commandMap.knownCommands
+    val commands =
+        buildMap<String, Command> {
+          primaryCommandNames.forEach { name ->
+            val command: PluginCommand = getCommand(name) ?: return@forEach
+            put(command.name.lowercase(), command)
+            command.aliases.forEach { put(it.lowercase(), command) }
+          }
+          putAll(shortcutCommands)
+        }
+    commands.forEach { (label, command) ->
+      val previous = knownCommands.put(label, command)
+      if (previous != null && previous !== command) {
+        displacedCommands[label] = previous
+        logger.info("Claimed /$label from ${previous.name} for OyasaiChat.")
+      }
+    }
+    server.onlinePlayers.forEach { it.updateCommands() }
+  }
+
+  private fun releaseClaimedCommands() {
+    val knownCommands = server.commandMap.knownCommands
+    displacedCommands.forEach { (label, command) -> knownCommands[label] = command }
+    displacedCommands.clear()
+  }
+
+  private inner class ChannelShortcutCommand(label: String) : Command(label) {
+    init {
+      description = "Send to or select the OyasaiChat channel for /$label"
+      usageMessage = "/$label [message]"
+    }
+
+    override fun execute(
+        sender: CommandSender,
+        commandLabel: String,
+        args: Array<out String>,
+    ): Boolean {
+      val player =
+          sender as? Player
+              ?: run {
+                sender.sendMessage(runtime.formatter.error("This command requires a player."))
+                return true
+              }
+      if (reloadInProgress) {
+        player.sendMessage(
+            runtime.formatter.error("Chat configuration is reloading; please try again.")
+        )
+        return true
+      }
+      val channel = runtime.config.channels.findShortcut(name) ?: return false
+      val message = args.joinToString(" ").trim()
+      if (message.isEmpty()) runtime.chat.join(player, player, channel.id)
+      else runtime.chat.sendOneShotChannel(player, channel, message)
+      return true
+    }
   }
 }
