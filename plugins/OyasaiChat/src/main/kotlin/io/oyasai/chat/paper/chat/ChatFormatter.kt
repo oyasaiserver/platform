@@ -59,7 +59,7 @@ class ChatFormatter(
                   component.hoverEvent(
                       HoverEvent.showText(
                           mini.deserialize(
-                              config.playerNameHover.withPlayerNamePlaceholder(),
+                              config.playerNameHover.withPlayerName(snapshot.playerName),
                               TagResolver.resolver(
                                   Placeholder.component("name", snapshot.playerDisplayName),
                                   Placeholder.component("displayname", snapshot.playerDisplayName),
@@ -125,7 +125,7 @@ class ChatFormatter(
       playerName: String? = null,
   ): Component =
       mini.deserialize(
-          format.withPlayerNamePlaceholder(),
+          format.withPlayerName(playerName.orEmpty()),
           TagResolver.resolver(
               Placeholder.component("channel", prefix),
               Placeholder.component("name", name),
@@ -176,7 +176,7 @@ class ChatFormatter(
       presentation: ChatPresentationSnapshot,
   ): Component =
       mini.deserialize(
-          config.privateMessageChatFormat.withPlayerNamePlaceholder(),
+          config.privateMessageChatFormat.withPlayerName(presentation.playerName),
           TagResolver.resolver(
               Placeholder.component("sender", presentation.playerDisplayName),
               Placeholder.component("sender_name", Component.text(sender)),
@@ -196,5 +196,5 @@ class ChatFormatter(
 
   fun plain(component: Component): String = plain.serialize(component)
 
-  private fun String.withPlayerNamePlaceholder(): String = replace("\$name", "<player_name>")
+  private fun String.withPlayerName(playerName: String): String = replace("\$name", playerName)
 }
