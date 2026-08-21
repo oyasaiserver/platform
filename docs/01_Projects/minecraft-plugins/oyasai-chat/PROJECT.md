@@ -37,7 +37,6 @@ Paper用とVelocity用の実装を同一JARに同梱し、各実行環境が対�
 | CDKTF | `packages/oyasai-cdktf/src/stacks/platform-services.ts` |
 | ビルド確認 | `./gradlew :plugins:OyasaiChat:build` |
 | Velocity評価 | `nix derivation show .#oyasai-velocity` |
-| レビュー判断 | [`review-handoff.md`](review-handoff.md) |
 | 非公開メモ | 個人用の試作・退避・未整理ログは`archive/`または`local/`に置く |
 
 ## 目的と範囲
@@ -166,5 +165,3 @@ Paper・Velocityの両方で`/oyasaichat reload`を提供。
 | DiscordSRV | MinecraftチャンネルとDiscordチャンネルの相互連携。設定でmappingを定義 |
 
 外部APIはcompileOnly依存。対象プラグインが未導入でもOyasaiChat全体は停止しない。Discordからの受信は`inbound-backend`に一致するbackendだけがMinecraftへ取り込む。
-
-
