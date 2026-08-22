@@ -7,6 +7,7 @@ import github.scarsz.discordsrv.api.events.GameChatMessagePreProcessEvent
 import io.oyasai.chat.common.model.ChatConfig
 import io.oyasai.chat.common.protocol.MAX_PAYLOAD_LENGTH
 import io.oyasai.chat.paper.OyasaiChatPlugin
+import io.oyasai.chat.paper.chat.ExternalSender
 import io.papermc.paper.event.player.AsyncChatEvent
 import org.bukkit.entity.Player
 
