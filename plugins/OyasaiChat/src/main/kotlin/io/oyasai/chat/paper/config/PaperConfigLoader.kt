@@ -92,6 +92,9 @@ object PaperConfigLoader {
         privateMessageFormat =
             config.getString("formatting.private-message-chat")
                 ?: "<gray>[<light_purple>PM</light_purple>]</gray> <white><sender></white> <dark_gray>-></dark_gray> <white><target></white><dark_gray>: </dark_gray><message>",
+        externalChatFormat =
+            config.getString("formatting.external-chat")
+                ?: "<channel><white><name></white><dark_gray>: </dark_gray><message>",
         playerNameHover =
             config.getString("formatting.player-name-hover") ?: "<gray>Player: <white><name>",
         playerNameClickCommand =

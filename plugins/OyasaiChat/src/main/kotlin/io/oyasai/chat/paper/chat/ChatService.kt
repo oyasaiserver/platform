@@ -169,13 +169,18 @@ class ChatService(
     commitLocalChat(player.uniqueId, plan, message)
   }
 
-  fun handleExternalChat(channelId: String, senderName: String, message: String) {
+  fun handleExternalChat(
+      channelId: String,
+      senderName: String,
+      message: String,
+      sender: ExternalSender? = null,
+  ) {
     if (senderName.isBlank() || message.isBlank() || message.length > MAX_PAYLOAD_LENGTH) {
       plugin.logger.warning("Rejected invalid external chat message for '$channelId'.")
       return
     }
     val channel = config.channels.find(channelId) ?: return
-    deliverLocal(channel, senderName, null, message)
+    deliverLocal(channel, senderName, null, message, externalSender = sender)
     if (channel.networkGroup != null) {
       val transport = plugin.server.onlinePlayers.firstOrNull()
       if (transport == null) {
@@ -214,6 +219,7 @@ class ChatService(
       message: String,
       originBackendPrefix: String? = null,
       originBackendSuffix: String? = null,
+      externalSender: ExternalSender? = null,
   ) {
     val prefix =
         originBackendPrefix?.takeIf { it.isNotBlank() }?.let(formatter::parse) ?: Component.empty()
@@ -234,15 +240,10 @@ class ChatService(
               senderId?.let(plugin.server::getPlayer) ?: plugin.server.getPlayerExact(senderName)
           val component =
               if (sender != null) formatter.chat(channel, sender, message)
-              else
-                  formatter.parse(
-                      "${channel.prefix}<white>${escape(senderName)}</white><dark_gray>: </dark_gray>${escape(message)}"
-                  )
+              else formatter.externalChat(channel, senderName, message, externalSender)
           recipient.sendMessage(prefix.append(component).append(suffix))
         }
   }
-
-  private fun escape(value: String): String = value.replace("<", "&lt;").replace(">", "&gt;")
 
   private fun consoleSafe(value: String): String = value.replace('\r', ' ').replace('\n', ' ')
 }

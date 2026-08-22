@@ -7,6 +7,7 @@ import github.scarsz.discordsrv.api.events.GameChatMessagePreProcessEvent
 import io.oyasai.chat.common.model.ChatConfig
 import io.oyasai.chat.common.protocol.MAX_PAYLOAD_LENGTH
 import io.oyasai.chat.paper.OyasaiChatPlugin
+import io.oyasai.chat.paper.chat.ExternalSender
 import io.papermc.paper.event.player.AsyncChatEvent
 import org.bukkit.entity.Player
 
@@ -92,9 +93,24 @@ class DiscordIntegration(
         return
       }
       val name = event.author.name
+      val sender =
+          ExternalSender(
+              id = event.author.id,
+              username = name,
+              nickname = event.member?.effectiveName,
+              roleColorHex =
+                  event.member
+                      ?.roles
+                      ?.filter { it.color != null }
+                      ?.maxByOrNull { it.position }
+                      ?.color
+                      ?.let { String.format("#%02x%02x%02x", it.red, it.green, it.blue) },
+          )
       plugin.server.scheduler.runTask(
           plugin,
-          Runnable { plugin.runtime.chat.handleExternalChat(channel.id, "Discord:$name", text) },
+          Runnable {
+            plugin.runtime.chat.handleExternalChat(channel.id, "Discord:$name", text, sender)
+          },
       )
     }
   }
