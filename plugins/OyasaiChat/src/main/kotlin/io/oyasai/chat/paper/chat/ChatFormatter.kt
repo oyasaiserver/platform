@@ -50,7 +50,7 @@ class ChatFormatter(
       snapshot: ChatPresentationSnapshot,
       message: Component,
   ): Component {
-    val prefix = Component.text(channel.prefix).clickEvent(ClickEvent.runCommand("/chlist"))
+    val prefix = mini.deserialize(channel.prefix).clickEvent(ClickEvent.runCommand("/chlist"))
     val name =
         snapshot.playerDisplayName.let { component ->
           val withHover =
