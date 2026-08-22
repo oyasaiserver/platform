@@ -12,6 +12,7 @@ import java.util.UUID
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.PluginCommand
+import org.bukkit.command.SimpleCommandMap
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -200,18 +201,38 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
         }
   }
 
+  // Paper 1.21+ の CommandMap#getKnownCommands は Brigadier へのブリッジマップ
+  // (BukkitBrigForwardingMap) を返す。entrySet の removeIf は不可のため、
+  // 必ずキー指定の remove / put で操作する。
+  private val knownCommandsField: java.lang.reflect.Field? =
+      runCatching {
+            SimpleCommandMap::class.java.getDeclaredField("knownCommands").apply { isAccessible = true }
+          }
+          .getOrNull()
+
+  @Suppress("UNCHECKED_CAST")
+  private fun knownCommandsMutable(): MutableMap<String, Command>? =
+      knownCommandsField?.get(server.commandMap) as? MutableMap<String, Command>
+
+  private fun MutableMap<String, Command>.claimIfOwner(label: String, command: Command) {
+    if (server.commandMap.getCommand(label.lowercase()) === command) remove(label)
+  }
+
   private fun unregisterShortcutCommands() {
     val commandMap = server.commandMap
+    val known = knownCommandsMutable()
     shortcutCommands.forEach { (label, command) ->
-      commandMap.knownCommands.entries.removeIf { it.value === command }
+      known?.claimIfOwner(label, command)
+      known?.claimIfOwner("oyasaichat:$label", command)
       command.unregister(commandMap)
-      displacedCommands.remove(label)?.let { commandMap.knownCommands[label] = it }
+      displacedCommands.remove(label)?.let { known?.put(label, it) }
     }
     shortcutCommands.clear()
   }
 
   private fun claimCommandLabels() {
-    val knownCommands = server.commandMap.knownCommands
+    val knownCommands =
+        knownCommandsMutable() ?: return
     val commands =
         buildMap<String, Command> {
           primaryCommandNames.forEach { name ->
@@ -232,7 +253,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   }
 
   private fun releaseClaimedCommands() {
-    val knownCommands = server.commandMap.knownCommands
+    val knownCommands = knownCommandsMutable() ?: return
     displacedCommands.forEach { (label, command) -> knownCommands[label] = command }
     displacedCommands.clear()
   }
