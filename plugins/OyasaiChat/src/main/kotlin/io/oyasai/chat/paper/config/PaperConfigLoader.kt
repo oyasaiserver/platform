@@ -97,8 +97,7 @@ object PaperConfigLoader {
                 ?: "<channel><white><name></white><dark_gray>: </dark_gray><message>",
         linkDomains =
             if (config.contains("discord.links.allowed-domains"))
-                config.getStringList("discord.links.allowed-domains")
-                    .map { it.trim().lowercase() }
+                config.getStringList("discord.links.allowed-domains").map { it.trim().lowercase() }
             else listOf("media.discordapp.net", "cdn.discordapp.com"),
         playerNameHover =
             config.getString("formatting.player-name-hover") ?: "<gray>Player: <white><name>",

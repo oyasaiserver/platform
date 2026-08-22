@@ -95,9 +95,10 @@ class DiscordIntegration(
             if (url.isNullOrBlank()) return@mapNotNull null
             ExternalAttachment(label = shortenAttachmentUrl(url), url = url)
           }
-      val text = (listOf(content) + attachments.map { it.label })
-          .filter { it.isNotBlank() }
-          .joinToString(" ")
+      val text =
+          (listOf(content) + attachments.map { it.label })
+              .filter { it.isNotBlank() }
+              .joinToString(" ")
       if (text.isBlank()) return
       if (text.length > MAX_PAYLOAD_LENGTH) {
         plugin.logger.warning("Rejected oversized Discord message for '${channel.displayName}'.")
@@ -120,7 +121,13 @@ class DiscordIntegration(
       plugin.server.scheduler.runTask(
           plugin,
           Runnable {
-            plugin.runtime.chat.handleExternalChat(channel.id, "Discord:$name", text, sender, attachments)
+            plugin.runtime.chat.handleExternalChat(
+                channel.id,
+                "Discord:$name",
+                text,
+                sender,
+                attachments,
+            )
           },
       )
     }

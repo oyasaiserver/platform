@@ -181,7 +181,14 @@ class ChatService(
       return
     }
     val channel = config.channels.find(channelId) ?: return
-    deliverLocal(channel, senderName, null, message, externalSender = sender, externalAttachments = attachments)
+    deliverLocal(
+        channel,
+        senderName,
+        null,
+        message,
+        externalSender = sender,
+        externalAttachments = attachments,
+    )
     if (channel.networkGroup != null) {
       val transport = plugin.server.onlinePlayers.firstOrNull()
       if (transport == null) {
