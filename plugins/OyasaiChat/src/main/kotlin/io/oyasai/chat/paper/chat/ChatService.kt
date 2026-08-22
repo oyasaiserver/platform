@@ -236,7 +236,7 @@ class ChatService(
               if (sender != null) formatter.chat(channel, sender, message)
               else
                   formatter.parse(
-                      "<dark_gray>[${channel.prefix}]</dark_gray> <white>${escape(senderName)}</white><dark_gray>: </dark_gray>${escape(message)}"
+                      "${channel.prefix}<white>${escape(senderName)}</white><dark_gray>: </dark_gray>${escape(message)}"
                   )
           recipient.sendMessage(prefix.append(component).append(suffix))
         }

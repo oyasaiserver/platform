@@ -68,7 +68,7 @@ constructor(
     loginMessages = LoginMessageService(proxy, config, logger)
     proxy.eventManager.register(this, loginMessages)
     proxy.commandManager.register(
-        proxy.commandManager.metaBuilder("oyasaichat").plugin(this).build(),
+        proxy.commandManager.metaBuilder("oyasaichatvelocity").plugin(this).build(),
         OyasaiVelocityCommand(this),
     )
     logger.info("OyasaiChat Velocity bridge enabled with {} network groups.", config.groups.size)

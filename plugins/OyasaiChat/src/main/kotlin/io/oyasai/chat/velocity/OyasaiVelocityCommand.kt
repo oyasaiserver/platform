@@ -9,7 +9,7 @@ internal class OyasaiVelocityCommand(
   override fun execute(invocation: SimpleCommand.Invocation) {
     val args = invocation.arguments()
     if (args.size != 1 || !args[0].equals("reload", ignoreCase = true)) {
-      invocation.source().sendPlainMessage("Usage: /oyasaichat reload")
+      invocation.source().sendPlainMessage("Usage: /oyasaichatvelocity reload")
       return
     }
     plugin.reloadConfiguration(invocation.source())

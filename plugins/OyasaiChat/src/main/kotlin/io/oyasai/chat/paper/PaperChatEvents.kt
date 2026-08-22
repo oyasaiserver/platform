@@ -3,7 +3,6 @@ package io.oyasai.chat.paper
 import io.oyasai.chat.common.protocol.MAX_PAYLOAD_LENGTH
 import io.oyasai.chat.paper.chat.LocalChatPlan
 import io.oyasai.chat.paper.chat.initialize
-import io.oyasai.chat.paper.chat.join
 import io.papermc.paper.event.player.AsyncChatEvent
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -12,7 +11,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
@@ -64,28 +62,6 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
           }
         },
     )
-  }
-
-  // `/<チャンネル名>` という形のコマンドを作る。
-  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-  fun onChannelShortcut(event: PlayerCommandPreprocessEvent) {
-    val commandLine = event.message.removePrefix("/")
-    val separator = commandLine.indexOfFirst(Char::isWhitespace)
-    val label =
-        (if (separator < 0) commandLine else commandLine.substring(0, separator)).lowercase()
-    val channel = plugin.runtime.config.channels.findShortcut(label) ?: return
-
-    event.isCancelled = true
-    if (plugin.reloadInProgress) {
-      event.player.sendMessage(
-          plugin.runtime.formatter.error("Chat configuration is reloading; please try again.")
-      )
-      return
-    }
-
-    val message = if (separator < 0) "" else commandLine.substring(separator + 1).trim()
-    if (message.isEmpty()) plugin.runtime.chat.join(event.player, event.player, channel.id)
-    else plugin.runtime.chat.sendOneShotChannel(event.player, channel, message)
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)

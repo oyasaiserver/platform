@@ -17,6 +17,7 @@ fun ChatService.join(sender: CommandSender, player: Player, input: String): Bool
   val state = states.initialize(player)
   state.joinedChannels += channel.id
   state.activeChannel = channel.id
+  privateMessages.stopConversation(player)
   states.save(player)
   sender.sendMessage(formatter.info("Joined ${channel.displayName}."))
   return true
