@@ -90,10 +90,6 @@ object PaperConfigLoader {
         channels = registry,
         chatFormat = config.getString("formatting.chat") ?: "<channel> <name>: <message>",
         privateMessageFormat =
-            config.getString("formatting.private-message-send") ?: "[PM to <name>] <message>",
-        privateMessageReceiveFormat =
-            config.getString("formatting.private-message-receive") ?: "[PM from <name>] <message>",
-        privateMessageChatFormat =
             config.getString("formatting.private-message-chat")
                 ?: "<gray>[<light_purple>PM</light_purple>]</gray> <white><sender></white> <dark_gray>-></dark_gray> <white><target></white><dark_gray>: </dark_gray><message>",
         playerNameHover =

@@ -100,7 +100,12 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
               plugin.runtime.formatter.renderer(plan.channel, plan.presentation),
           )
       is LocalChatPlan.Private ->
-          if (plan.pending) event.viewers().clear()
+          if (plan.pending)
+              configureChatDelivery(
+                  event,
+                  plan.recipientIds,
+                  null,
+              )
           else
               configureChatDelivery(
                   event,
@@ -111,22 +116,21 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
                       senderPresentation = plan.senderPresentation,
                   ),
               )
-      is LocalChatPlan.Rejected -> event.viewers().clear()
+      is LocalChatPlan.Rejected -> configureChatDelivery(event, emptySet(), null)
     }
   }
 
   private fun configureChatDelivery(
       event: AsyncChatEvent,
       recipientIds: Set<UUID>,
-      renderer: io.papermc.paper.chat.ChatRenderer,
+      renderer: io.papermc.paper.chat.ChatRenderer?,
   ) {
-    val existingViewers = event.viewers().toList()
-    event.viewers().clear()
-    existingViewers.filterTo(event.viewers()) { audience ->
-      audience is Player && audience.uniqueId in recipientIds
-    }
-    if (event.player.uniqueId in recipientIds) event.viewers().add(event.player)
-    event.viewers().add(plugin.server.consoleSender)
-    event.renderer(renderer)
+    val viewers = event.viewers()
+    viewers
+        .toList()
+        .filterIsInstance<Player>()
+        .filter { it.uniqueId !in recipientIds }
+        .forEach(viewers::remove)
+    renderer?.let { event.renderer(it) }
   }
 }

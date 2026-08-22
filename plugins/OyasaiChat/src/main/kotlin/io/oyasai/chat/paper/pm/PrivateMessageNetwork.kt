@@ -4,6 +4,7 @@ import io.oyasai.chat.common.protocol.MessageOrigin
 import io.oyasai.chat.common.protocol.MessageType
 import io.oyasai.chat.common.protocol.NetworkEnvelope
 import io.oyasai.chat.paper.chat.state
+import net.kyori.adventure.text.Component
 
 // Velocityから届いたPM関連メッセージ処理。
 internal fun PrivateMessageService.receiveTargetResult(envelope: NetworkEnvelope) {
@@ -80,14 +81,14 @@ internal fun PrivateMessageService.receivePrivateResult(envelope: NetworkEnvelop
       chat.states.save(sender)
       if (pending != null && pending.sourceId == sender.uniqueId) {
         val targetName = envelope.senderName.takeIf { it.isNotBlank() } ?: pending.targetName
-        sender.sendMessage(
+        val component =
             chat.formatter.privateMessage(
-                sender.name,
-                targetName,
-                pending.message,
-                outgoing = true,
+                senderName = sender.name,
+                targetName = targetName,
+                message = Component.text(pending.message),
+                presentation = chat.formatter.snapshot(sender),
             )
-        )
+        sender.sendMessage(component)
       }
     }
     "DISABLED" -> {
