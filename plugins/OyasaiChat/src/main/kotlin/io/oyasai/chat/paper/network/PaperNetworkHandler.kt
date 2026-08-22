@@ -55,6 +55,7 @@ class PaperNetworkHandler(
         envelope.content,
         envelope.originBackendPrefix,
         envelope.originBackendSuffix,
+        externalAuthorized = envelope.senderCanSendLinks,
     )
   }
 

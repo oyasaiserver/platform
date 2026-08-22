@@ -6,6 +6,7 @@ import io.oyasai.chat.paper.OyasaiChatPlugin
 import io.papermc.paper.chat.ChatRenderer
 import java.net.URI
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
@@ -23,6 +24,7 @@ data class ChatPresentationSnapshot(
     val chatFormat: String,
     val vaultPrefix: Component,
     val vaultSuffix: Component,
+    val canSendLinks: Boolean = false,
 )
 
 /** Discordなどの外部送信者のメタデータ。 */
@@ -33,9 +35,8 @@ data class ExternalSender(
     val roleColorHex: String?,
 )
 
-/** 外部発メッセージの添付リンク。表示用ラベルとクリック先URL。 */
+/** 外部発メッセージの添付リンク。 */
 data class ExternalAttachment(
-    val label: String,
     val url: String,
 )
 
@@ -55,6 +56,7 @@ class ChatFormatter(
           chatFormat = placeholderSupport.expand(player, config.chatFormat),
           vaultPrefix = placeholderSupport.prefix(player),
           vaultSuffix = placeholderSupport.suffix(player),
+          canSendLinks = player.hasPermission("oyasaichat.links.send"),
       )
 
   fun chat(channel: ChannelDefinition, sender: Player, message: String): Component {
@@ -101,13 +103,22 @@ class ChatFormatter(
                   )
               )
         }
+    val plainMessage = plain.serialize(message)
+    val renderedMessage =
+        if (urlRegex.containsMatchIn(plainMessage))
+            transformLinks(
+                message,
+                config.linkDomainFilter,
+                snapshot.canSendLinks || !config.linkDomainFilter,
+            )
+        else message
     return render(
         snapshot.chatFormat,
         prefix,
         name,
         snapshot.vaultPrefix,
         snapshot.vaultSuffix,
-        message,
+        renderedMessage,
         snapshot.playerName,
     )
   }
@@ -193,6 +204,7 @@ class ChatFormatter(
       message: String,
       sender: ExternalSender?,
       attachments: List<ExternalAttachment> = emptyList(),
+      authorized: Boolean = true,
   ): Component {
     val resolved =
         sender
@@ -211,33 +223,95 @@ class ChatFormatter(
             Placeholder.unparsed("username", resolved.username),
             Placeholder.unparsed("displayname", displayName),
             Placeholder.unparsed("user_id", resolved.id),
-            Placeholder.component("message", externalMessage(message, attachments)),
+            Placeholder.component(
+                "message",
+                linkAwareMessage(message, attachments, config.linkDomainFilter, authorized),
+            ),
         ),
     )
   }
 
   private val urlRegex = Regex("https?://\\S+")
 
-  private fun externalMessage(message: String, attachments: List<ExternalAttachment>): Component {
-    val builder = Component.text()
+  /** テキストノード内のURLだけリンク表示へ差し替え、それ以外のスタイルを保持する。 */
+  private fun transformLinks(
+      component: Component,
+      domainFilterEnabled: Boolean,
+      authorized: Boolean,
+  ): Component {
+    val children =
+        component.children().map { transformLinks(it, domainFilterEnabled, authorized) }
+    val self = component.children(emptyList())
+    if (self !is TextComponent) return self.children(children)
+    val content = self.content()
+    if (!urlRegex.containsMatchIn(content)) return self.children(children)
+    val builder = Component.text().style(self.style())
     var cursor = 0
-    urlRegex.findAll(message).forEach { match ->
-      if (match.range.first > cursor)
-          builder.append(Component.text(message.substring(cursor, match.range.first)))
-      builder.append(linkComponent(match.value))
+    urlRegex.findAll(content).forEach { match ->
+      if (match.range.first > cursor) {
+        builder.append(
+            Component.text(content.substring(cursor, match.range.first)).style(self.style())
+        )
+      }
+      builder.append(linkComponent(match.value, match.value, domainFilterEnabled, authorized))
       cursor = match.range.last + 1
     }
-    if (cursor < message.length) builder.append(Component.text(message.substring(cursor)))
+    if (cursor < content.length)
+        builder.append(Component.text(content.substring(cursor)).style(self.style()))
+    children.forEach { builder.append(it) }
+    return builder.build()
+  }
+
+  private fun linkAwareMessage(
+      text: String,
+      attachments: List<ExternalAttachment>,
+      domainFilterEnabled: Boolean,
+      authorized: Boolean,
+  ): Component {
+    val builder = Component.text()
+    var cursor = 0
+    urlRegex.findAll(text).forEach { match ->
+      if (match.range.first > cursor)
+          builder.append(Component.text(text.substring(cursor, match.range.first)))
+      builder.append(linkComponent(match.value, match.value, domainFilterEnabled, authorized))
+      cursor = match.range.last + 1
+    }
+    if (cursor < text.length) builder.append(Component.text(text.substring(cursor)))
     attachments.forEach { attachment ->
-      builder.append(Component.text(" ")).append(linkComponent(attachment.label, attachment.url))
+      builder
+          .append(Component.text(" "))
+          .append(linkComponent(shortenUrlLabel(attachment.url), attachment.url, domainFilterEnabled, true))
     }
     return builder.build()
   }
 
-  private fun linkComponent(label: String, target: String = label): Component {
+  /** 添付URLの表示ラベル。scheme://host/.../ファイル名 に短縮する。 */
+  private fun shortenUrlLabel(url: String): String =
+      runCatching {
+            val uri = URI(url)
+            val host = uri.host ?: return@runCatching url
+            val file = uri.path?.substringAfterLast('/')?.takeIf { it.isNotEmpty() }
+            if (file != null) "${uri.scheme}://$host/.../$file" else "${uri.scheme}://$host/..."
+          }
+          .getOrDefault(url)
+
+  private fun linkComponent(
+      label: String,
+      target: String,
+      domainFilterEnabled: Boolean,
+      authorized: Boolean,
+  ): Component {
+    if (!authorized) {
+      val host = runCatching { URI(target).host }.getOrNull() ?: target
+      return Component.text("[URL: $host]")
+    }
     var component = Component.text(label, NamedTextColor.GRAY)
     val host = runCatching { URI(target).host?.lowercase() }.getOrNull()
-    if (host != null && config.linkDomains.any { host == it || host.endsWith(".$it") })
+    if (
+        host != null &&
+            (!domainFilterEnabled ||
+                config.linkDomains.any { host == it || host.endsWith(".$it") })
+    )
         component = component.clickEvent(ClickEvent.openUrl(target))
     return component
   }

@@ -149,6 +149,8 @@ class ChatService(
                   originBackendSuffix =
                       config.network.remoteMessageSuffix.takeIf { it.isNotBlank() },
                   originPlayerId = player.uniqueId,
+                  senderCanSendLinks =
+                      player.hasPermission("oyasaichat.links.send") || !config.linkDomainFilter,
                   senderName = player.name,
                   content = message,
               ),
@@ -176,7 +178,10 @@ class ChatService(
       sender: ExternalSender? = null,
       attachments: List<ExternalAttachment> = emptyList(),
   ) {
-    if (senderName.isBlank() || message.isBlank() || message.length > MAX_PAYLOAD_LENGTH) {
+    if (senderName.isBlank() ||
+            (message.isBlank() && attachments.isEmpty()) ||
+            message.length > MAX_PAYLOAD_LENGTH
+    ) {
       plugin.logger.warning("Rejected invalid external chat message for '$channelId'.")
       return
     }
@@ -229,6 +234,7 @@ class ChatService(
       originBackendSuffix: String? = null,
       externalSender: ExternalSender? = null,
       externalAttachments: List<ExternalAttachment> = emptyList(),
+      externalAuthorized: Boolean = true,
   ) {
     val prefix =
         originBackendPrefix?.takeIf { it.isNotBlank() }?.let(formatter::parse) ?: Component.empty()
@@ -256,6 +262,7 @@ class ChatService(
                       message,
                       externalSender,
                       externalAttachments,
+                      externalAuthorized,
                   )
           recipient.sendMessage(prefix.append(component).append(suffix))
         }

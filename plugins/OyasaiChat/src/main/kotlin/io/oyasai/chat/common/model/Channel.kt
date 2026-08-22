@@ -54,6 +54,7 @@ data class ChatConfig(
     val privateMessageFormat: String,
     val externalChatFormat: String,
     val linkDomains: List<String>,
+    val linkDomainFilter: Boolean,
     val playerNameHover: String,
     val playerNameClickCommand: String,
     val pmEnabledByDefault: Boolean,
