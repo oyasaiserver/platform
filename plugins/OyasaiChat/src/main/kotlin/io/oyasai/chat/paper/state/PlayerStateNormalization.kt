@@ -37,6 +37,7 @@ object PlayerStateNormalization {
             .map { it.id }
             .toSet()
             .toMutableSet()
+    config.channels.autoJoinChannels().filter { canUse(it.permission) }.forEach { joined += it.id }
     val default = config.channels.defaultChannel()?.takeIf { canUse(it.permission) }
     if (joined.isEmpty() && default != null) joined += default.id
     val active =
