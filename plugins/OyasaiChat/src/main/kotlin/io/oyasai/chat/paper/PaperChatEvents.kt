@@ -126,7 +126,8 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
       renderer: io.papermc.paper.chat.ChatRenderer?,
   ) {
     val viewers = event.viewers()
-    viewers.toList()
+    viewers
+        .toList()
         .filterIsInstance<Player>()
         .filter { it.uniqueId !in recipientIds }
         .forEach(viewers::remove)
