@@ -98,7 +98,8 @@ class DiscordIntegration(
               username = name,
               nickname = event.member?.effectiveName,
               roleColorHex =
-                  event.member?.roles
+                  event.member
+                      ?.roles
                       ?.filter { it.color != null }
                       ?.maxByOrNull { it.position }
                       ?.color

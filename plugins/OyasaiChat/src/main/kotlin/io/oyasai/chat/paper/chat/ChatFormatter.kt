@@ -190,10 +190,9 @@ class ChatFormatter(
             ?: ExternalSender(id = "", username = senderName, nickname = null, roleColorHex = null)
     val displayName = resolved.nickname ?: resolved.username
     val displayComponent =
-        resolved.roleColorHex
-            ?.let(TextColor::fromHexString)
-            ?.let { color -> Component.text(displayName, color) }
-            ?: Component.text(displayName)
+        resolved.roleColorHex?.let(TextColor::fromHexString)?.let { color ->
+          Component.text(displayName, color)
+        } ?: Component.text(displayName)
     return mini.deserialize(
         config.externalChatFormat,
         TagResolver.resolver(
