@@ -178,7 +178,8 @@ class ChatService(
       sender: ExternalSender? = null,
       attachments: List<ExternalAttachment> = emptyList(),
   ) {
-    if (senderName.isBlank() ||
+    if (
+        senderName.isBlank() ||
             (message.isBlank() && attachments.isEmpty()) ||
             message.length > MAX_PAYLOAD_LENGTH
     ) {

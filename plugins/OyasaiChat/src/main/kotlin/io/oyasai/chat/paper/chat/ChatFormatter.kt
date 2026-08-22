@@ -239,8 +239,7 @@ class ChatFormatter(
       domainFilterEnabled: Boolean,
       authorized: Boolean,
   ): Component {
-    val children =
-        component.children().map { transformLinks(it, domainFilterEnabled, authorized) }
+    val children = component.children().map { transformLinks(it, domainFilterEnabled, authorized) }
     val self = component.children(emptyList())
     if (self !is TextComponent) return self.children(children)
     val content = self.content()
@@ -280,7 +279,14 @@ class ChatFormatter(
     attachments.forEach { attachment ->
       builder
           .append(Component.text(" "))
-          .append(linkComponent(shortenUrlLabel(attachment.url), attachment.url, domainFilterEnabled, true))
+          .append(
+              linkComponent(
+                  shortenUrlLabel(attachment.url),
+                  attachment.url,
+                  domainFilterEnabled,
+                  true,
+              )
+          )
     }
     return builder.build()
   }
@@ -309,8 +315,7 @@ class ChatFormatter(
     val host = runCatching { URI(target).host?.lowercase() }.getOrNull()
     if (
         host != null &&
-            (!domainFilterEnabled ||
-                config.linkDomains.any { host == it || host.endsWith(".$it") })
+            (!domainFilterEnabled || config.linkDomains.any { host == it || host.endsWith(".$it") })
     )
         component = component.clickEvent(ClickEvent.openUrl(target))
     return component
