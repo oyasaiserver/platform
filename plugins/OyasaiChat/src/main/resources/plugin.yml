@@ -42,6 +42,9 @@ commands:
     description: OyasaiChat administrative commands
     usage: /oyasaichat reload
 permissions:
+  oyasaichat.links.send:
+    description: Post links in chat as clickable URLs
+    default: true
   oyasaichat.admin.setchannel:
     description: Change another player's active channel
     default: op

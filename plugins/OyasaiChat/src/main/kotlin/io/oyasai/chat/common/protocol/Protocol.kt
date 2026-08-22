@@ -49,6 +49,7 @@ data class NetworkEnvelope(
     val originPlayerId: UUID? = null,
     val targetPlayerId: UUID? = null,
     val targetPlayerName: String? = null,
+    val senderCanSendLinks: Boolean = false,
     val senderName: String,
     val content: String,
 ) {
@@ -69,6 +70,7 @@ data class NetworkEnvelope(
         originPlayerId: UUID? = null,
         targetPlayerId: UUID? = null,
         targetPlayerName: String? = null,
+        senderCanSendLinks: Boolean = false,
         timestamp: Long = System.currentTimeMillis(),
     ): NetworkEnvelope =
         NetworkEnvelope(
@@ -83,6 +85,7 @@ data class NetworkEnvelope(
             originPlayerId = originPlayerId,
             targetPlayerId = targetPlayerId,
             targetPlayerName = targetPlayerName,
+            senderCanSendLinks = senderCanSendLinks,
             senderName = senderName,
             content = content,
         )

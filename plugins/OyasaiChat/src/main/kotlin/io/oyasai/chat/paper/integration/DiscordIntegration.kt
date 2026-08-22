@@ -10,7 +10,6 @@ import io.oyasai.chat.paper.OyasaiChatPlugin
 import io.oyasai.chat.paper.chat.ExternalAttachment
 import io.oyasai.chat.paper.chat.ExternalSender
 import io.papermc.paper.event.player.AsyncChatEvent
-import java.net.URI
 import org.bukkit.entity.Player
 
 // DiscordSRVとのチャット連携実装。
@@ -88,18 +87,12 @@ class DiscordIntegration(
       event.isCancelled = true
       if (event.author.isBot) return
 
-      val content = event.message.contentDisplay.trim()
+      val text = event.message.contentDisplay.trim()
       val attachments =
           event.message.attachments.mapNotNull { attachment ->
-            val url = attachment.url
-            if (url.isNullOrBlank()) return@mapNotNull null
-            ExternalAttachment(label = shortenAttachmentUrl(url), url = url)
+            attachment.url?.takeIf(String::isNotBlank)?.let(::ExternalAttachment)
           }
-      val text =
-          (listOf(content) + attachments.map { it.label })
-              .filter { it.isNotBlank() }
-              .joinToString(" ")
-      if (text.isBlank()) return
+      if (text.isBlank() && attachments.isEmpty()) return
       if (text.length > MAX_PAYLOAD_LENGTH) {
         plugin.logger.warning("Rejected oversized Discord message for '${channel.displayName}'.")
         return
@@ -131,17 +124,5 @@ class DiscordIntegration(
           },
       )
     }
-  }
-
-  companion object {
-    /** 添付URLの表示ラベル。scheme://host/.../ファイル名 に短縮する。 */
-    private fun shortenAttachmentUrl(url: String): String =
-        runCatching {
-              val uri = URI(url)
-              val host = uri.host ?: return@runCatching url
-              val file = uri.path?.substringAfterLast('/')?.takeIf { it.isNotEmpty() }
-              if (file != null) "${uri.scheme}://$host/.../$file" else "${uri.scheme}://$host/..."
-            }
-            .getOrDefault(url)
   }
 }
