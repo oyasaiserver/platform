@@ -4,9 +4,11 @@ import io.oyasai.chat.common.model.ChannelDefinition
 import io.oyasai.chat.common.model.ChatConfig
 import io.oyasai.chat.paper.OyasaiChatPlugin
 import io.papermc.paper.chat.ChatRenderer
+import java.net.URI
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
@@ -29,6 +31,12 @@ data class ExternalSender(
     val username: String,
     val nickname: String?,
     val roleColorHex: String?,
+)
+
+/** 外部発メッセージの添付リンク。表示用ラベルとクリック先URL。 */
+data class ExternalAttachment(
+    val label: String,
+    val url: String,
 )
 
 class ChatFormatter(
@@ -184,6 +192,7 @@ class ChatFormatter(
       senderName: String,
       message: String,
       sender: ExternalSender?,
+      attachments: List<ExternalAttachment> = emptyList(),
   ): Component {
     val resolved =
         sender
@@ -202,9 +211,35 @@ class ChatFormatter(
             Placeholder.unparsed("username", resolved.username),
             Placeholder.unparsed("displayname", displayName),
             Placeholder.unparsed("user_id", resolved.id),
-            Placeholder.unparsed("message", message),
+            Placeholder.component("message", externalMessage(message, attachments)),
         ),
     )
+  }
+
+  private val urlRegex = Regex("https?://\\S+")
+
+  private fun externalMessage(message: String, attachments: List<ExternalAttachment>): Component {
+    val builder = Component.text()
+    var cursor = 0
+    urlRegex.findAll(message).forEach { match ->
+      if (match.range.first > cursor)
+          builder.append(Component.text(message.substring(cursor, match.range.first)))
+      builder.append(linkComponent(match.value))
+      cursor = match.range.last + 1
+    }
+    if (cursor < message.length) builder.append(Component.text(message.substring(cursor)))
+    attachments.forEach { attachment ->
+      builder.append(Component.text(" ")).append(linkComponent(attachment.label, attachment.url))
+    }
+    return builder.build()
+  }
+
+  private fun linkComponent(label: String, target: String = label): Component {
+    var component = Component.text(label, NamedTextColor.GRAY)
+    val host = runCatching { URI(target).host?.lowercase() }.getOrNull()
+    if (host != null && config.linkDomains.any { host == it || host.endsWith(".$it") })
+        component = component.clickEvent(ClickEvent.openUrl(target))
+    return component
   }
 
   fun parse(value: String): Component = mini.deserialize(value)
