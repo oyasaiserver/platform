@@ -10,6 +10,7 @@ import io.oyasai.chat.paper.pm.receiveModeState
 import io.oyasai.chat.paper.pm.receivePrivateResult
 import io.oyasai.chat.paper.pm.receiveReplyState
 import io.oyasai.chat.paper.pm.receiveTargetResult
+import net.kyori.adventure.text.Component
 
 // Velocityから届いたメッセージのPaper側反映。
 /** 読み込み済みProxyメッセージのPaper側チャット・プレイヤー状態への反映。 */
@@ -69,14 +70,14 @@ class PaperNetworkHandler(
     if (accepted) {
       targetState.lastPrivateMessagePeer = senderId
       chat.states.save(target)
-      target.sendMessage(
+      val component =
           chat.formatter.privateMessage(
-              envelope.senderName,
-              target.name,
-              envelope.content,
-              outgoing = false,
+              senderName = envelope.senderName,
+              targetName = target.name,
+              message = Component.text(envelope.content),
+              presentation = null,
           )
-      )
+      target.sendMessage(component)
       chat.privateMessages.playReceiveSound(target)
     }
     chat.bridge.send(

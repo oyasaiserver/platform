@@ -7,6 +7,7 @@ import io.oyasai.chat.paper.OyasaiChatPlugin
 import io.oyasai.chat.paper.chat.ChatService
 import io.oyasai.chat.paper.chat.state
 import java.util.UUID
+import net.kyori.adventure.text.Component
 import org.bukkit.SoundCategory
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -232,12 +233,15 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       chat.states.save(source)
       chat.states.save(local)
       if (deliverLocal) {
-        source.sendMessage(
-            chat.formatter.privateMessage(source.name, local.name, message, outgoing = true)
-        )
-        local.sendMessage(
-            chat.formatter.privateMessage(source.name, local.name, message, outgoing = false)
-        )
+        val component =
+            chat.formatter.privateMessage(
+                senderName = source.name,
+                targetName = local.name,
+                message = Component.text(message),
+                presentation = chat.formatter.snapshot(source),
+            )
+        source.sendMessage(component)
+        local.sendMessage(component)
       }
       playReceiveSound(local)
       chat.bridge.send(

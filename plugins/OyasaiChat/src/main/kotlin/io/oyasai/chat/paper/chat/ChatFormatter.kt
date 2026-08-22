@@ -11,7 +11,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
 // チャットやPMの表示用Component変換。
@@ -102,8 +101,7 @@ class ChatFormatter(
   /**
    * AsyncChatEventから届いたPMモード入力用のRenderer。
    *
-   * Paperはプレイヤーとコンソールに同じComponentを使うため、閲覧者を区別しない。
-   * 閲覧者ごとに変えるRendererでは、受信者によってメッセージが変わり、Paper標準のサーバーログに 正しく反映されない可能性あり。
+   * Paperは全閲覧者に同じComponentを配信する。
    */
   fun privateRenderer(
       senderName: String,
@@ -111,9 +109,9 @@ class ChatFormatter(
       senderPresentation: ChatPresentationSnapshot,
   ): ChatRenderer =
       ChatRenderer.viewerUnaware { _, _, message ->
-        privateChatComponent(
-            sender = senderName,
-            target = targetName ?: "(unresolved)",
+        privateMessage(
+            senderName = senderName,
+            targetName = targetName ?: "(unresolved)",
             message = message,
             presentation = senderPresentation,
         )
@@ -141,56 +139,35 @@ class ChatFormatter(
           ),
       )
 
-  private fun render(
-      format: String,
-      player: Player?,
-      prefix: Component,
-      name: Component,
-      message: String,
+  /** PMの表示。チャット入力・コマンド・ネットワーク経由のすべてで同じフォーマットを使う。 */
+  fun privateMessage(
+      senderName: String,
+      targetName: String,
+      message: Component,
+      presentation: ChatPresentationSnapshot?,
   ): Component {
-    val snapshot = player?.let(::snapshot)
-    return render(
-        format = if (player != null) placeholderSupport.expand(player, format) else format,
-        prefix = prefix,
-        name = name,
-        vaultPrefix = snapshot?.vaultPrefix ?: Component.empty(),
-        vaultSuffix = snapshot?.vaultSuffix ?: Component.empty(),
-        message = Component.text(message),
-        playerName = snapshot?.playerName,
+    val resolved =
+        presentation
+            ?: ChatPresentationSnapshot(
+                playerName = senderName,
+                playerDisplayName = Component.text(senderName),
+                chatFormat = config.chatFormat,
+                vaultPrefix = Component.empty(),
+                vaultSuffix = Component.empty(),
+            )
+    return mini.deserialize(
+        config.privateMessageFormat.withPlayerName(resolved.playerName),
+        TagResolver.resolver(
+            Placeholder.component("sender", resolved.playerDisplayName),
+            Placeholder.component("sender_name", Component.text(senderName)),
+            Placeholder.component("target", Component.text(targetName)),
+            Placeholder.component("player_name", Component.text(resolved.playerName)),
+            Placeholder.component("vault_prefix", resolved.vaultPrefix),
+            Placeholder.component("vault_suffix", resolved.vaultSuffix),
+            Placeholder.component("message", message),
+        ),
     )
   }
-
-  fun privateMessage(
-      sender: String,
-      target: String,
-      message: String,
-      outgoing: Boolean,
-  ): Component {
-    val format = if (outgoing) config.privateMessageFormat else config.privateMessageReceiveFormat
-    val fake = Bukkit.getPlayerExact(sender)
-    val displayPlayer = Bukkit.getPlayerExact(if (outgoing) target else sender)
-    val name = displayPlayer?.displayName() ?: Component.text(if (outgoing) target else sender)
-    return render(format, fake, Component.text("PM"), name, message)
-  }
-
-  private fun privateChatComponent(
-      sender: String,
-      target: String,
-      message: Component,
-      presentation: ChatPresentationSnapshot,
-  ): Component =
-      mini.deserialize(
-          config.privateMessageChatFormat.withPlayerName(presentation.playerName),
-          TagResolver.resolver(
-              Placeholder.component("sender", presentation.playerDisplayName),
-              Placeholder.component("sender_name", Component.text(sender)),
-              Placeholder.component("target", Component.text(target)),
-              Placeholder.component("player_name", Component.text(presentation.playerName)),
-              Placeholder.component("vault_prefix", presentation.vaultPrefix),
-              Placeholder.component("vault_suffix", presentation.vaultSuffix),
-              Placeholder.component("message", message),
-          ),
-      )
 
   fun parse(value: String): Component = mini.deserialize(value)
 
