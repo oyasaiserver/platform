@@ -206,7 +206,9 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   // 必ずキー指定の remove / put で操作する。
   private val knownCommandsField: java.lang.reflect.Field? =
       runCatching {
-            SimpleCommandMap::class.java.getDeclaredField("knownCommands").apply { isAccessible = true }
+            SimpleCommandMap::class.java.getDeclaredField("knownCommands").apply {
+              isAccessible = true
+            }
           }
           .getOrNull()
 
@@ -231,8 +233,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   }
 
   private fun claimCommandLabels() {
-    val knownCommands =
-        knownCommandsMutable() ?: return
+    val knownCommands = knownCommandsMutable() ?: return
     val commands =
         buildMap<String, Command> {
           primaryCommandNames.forEach { name ->
