@@ -92,9 +92,23 @@ class DiscordIntegration(
         return
       }
       val name = event.author.name
+      val sender =
+          ExternalSender(
+              id = event.author.id,
+              username = name,
+              nickname = event.member?.effectiveName,
+              roleColorHex =
+                  event.member?.roles
+                      ?.filter { it.color != null }
+                      ?.maxByOrNull { it.position }
+                      ?.color
+                      ?.let { String.format("#%02x%02x%02x", it.red, it.green, it.blue) },
+          )
       plugin.server.scheduler.runTask(
           plugin,
-          Runnable { plugin.runtime.chat.handleExternalChat(channel.id, "Discord:$name", text) },
+          Runnable {
+            plugin.runtime.chat.handleExternalChat(channel.id, "Discord:$name", text, sender)
+          },
       )
     }
   }

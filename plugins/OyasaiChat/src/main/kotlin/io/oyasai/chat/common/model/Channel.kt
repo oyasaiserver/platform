@@ -52,6 +52,7 @@ data class ChatConfig(
     val channels: ChannelRegistry,
     val chatFormat: String,
     val privateMessageFormat: String,
+    val externalChatFormat: String,
     val playerNameHover: String,
     val playerNameClickCommand: String,
     val pmEnabledByDefault: Boolean,

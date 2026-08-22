@@ -7,6 +7,7 @@ import io.papermc.paper.chat.ChatRenderer
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
@@ -20,6 +21,14 @@ data class ChatPresentationSnapshot(
     val chatFormat: String,
     val vaultPrefix: Component,
     val vaultSuffix: Component,
+)
+
+/** Discordなどの外部送信者のメタデータ。 */
+data class ExternalSender(
+    val id: String,
+    val username: String,
+    val nickname: String?,
+    val roleColorHex: String?,
 )
 
 class ChatFormatter(
@@ -165,6 +174,36 @@ class ChatFormatter(
             Placeholder.component("vault_prefix", resolved.vaultPrefix),
             Placeholder.component("vault_suffix", resolved.vaultSuffix),
             Placeholder.component("message", message),
+        ),
+    )
+  }
+
+  /** Discordなどの外部発メッセージの表示。 */
+  fun externalChat(
+      channel: ChannelDefinition,
+      senderName: String,
+      message: String,
+      sender: ExternalSender?,
+  ): Component {
+    val resolved =
+        sender
+            ?: ExternalSender(id = "", username = senderName, nickname = null, roleColorHex = null)
+    val displayName = resolved.nickname ?: resolved.username
+    val displayComponent =
+        resolved.roleColorHex
+            ?.let(TextColor::fromHexString)
+            ?.let { color -> Component.text(displayName, color) }
+            ?: Component.text(displayName)
+    return mini.deserialize(
+        config.externalChatFormat,
+        TagResolver.resolver(
+            Placeholder.component("channel", mini.deserialize(channel.prefix)),
+            Placeholder.component("displayname_colored", displayComponent),
+            Placeholder.unparsed("name", senderName),
+            Placeholder.unparsed("username", resolved.username),
+            Placeholder.unparsed("displayname", displayName),
+            Placeholder.unparsed("user_id", resolved.id),
+            Placeholder.unparsed("message", message),
         ),
     )
   }

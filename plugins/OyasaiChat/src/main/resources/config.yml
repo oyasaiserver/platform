@@ -59,6 +59,10 @@ formatting:
   # フォーマット内で<name>/<displayname>を<click:...>...</click>で囲んだ場合は、player-name-click-commandよりそちらを優先する。
   chat: "<dark_gray>[<channel>]</dark_gray> <vault_prefix><name><vault_suffix><dark_gray>: </dark_gray><message>"
   private-message-chat: "<gray>[<light_purple>PM</light_purple>]</gray> <white><sender></white> <dark_gray>-></dark_gray> <white><target></white><dark_gray>: </dark_gray><message>"
+  # Discordなどの外部発メッセージのフォーマット。
+  # <channel>/<name>/<username>/<displayname>/<displayname_colored>/<user_id>/<message>が使用可能。
+  # <displayname_colored>は最上位の色付きロールで装飾した表示名(色付きロールが無ければ色設定なし)。
+  external-chat: "<dark_purple>💬</dark_purple> <white><displayname_colored></white><dark_gray>: </dark_gray><message>"
   player-name-hover: "<gray>Player: <white><name>"
   player-name-click-command: "/msg <name> "
 
