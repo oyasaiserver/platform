@@ -174,13 +174,14 @@ class ChatService(
       senderName: String,
       message: String,
       sender: ExternalSender? = null,
+      attachments: List<ExternalAttachment> = emptyList(),
   ) {
     if (senderName.isBlank() || message.isBlank() || message.length > MAX_PAYLOAD_LENGTH) {
       plugin.logger.warning("Rejected invalid external chat message for '$channelId'.")
       return
     }
     val channel = config.channels.find(channelId) ?: return
-    deliverLocal(channel, senderName, null, message, externalSender = sender)
+    deliverLocal(channel, senderName, null, message, externalSender = sender, externalAttachments = attachments)
     if (channel.networkGroup != null) {
       val transport = plugin.server.onlinePlayers.firstOrNull()
       if (transport == null) {
@@ -220,6 +221,7 @@ class ChatService(
       originBackendPrefix: String? = null,
       originBackendSuffix: String? = null,
       externalSender: ExternalSender? = null,
+      externalAttachments: List<ExternalAttachment> = emptyList(),
   ) {
     val prefix =
         originBackendPrefix?.takeIf { it.isNotBlank() }?.let(formatter::parse) ?: Component.empty()
@@ -240,7 +242,14 @@ class ChatService(
               senderId?.let(plugin.server::getPlayer) ?: plugin.server.getPlayerExact(senderName)
           val component =
               if (sender != null) formatter.chat(channel, sender, message)
-              else formatter.externalChat(channel, senderName, message, externalSender)
+              else
+                  formatter.externalChat(
+                      channel,
+                      senderName,
+                      message,
+                      externalSender,
+                      externalAttachments,
+                  )
           recipient.sendMessage(prefix.append(component).append(suffix))
         }
   }

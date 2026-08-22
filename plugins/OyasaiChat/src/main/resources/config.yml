@@ -78,6 +78,10 @@ discord:
   enabled: true
   # DiscordSRVのChannels設定で、上記channelsのdisplay-nameとDiscordチャンネルIDを対応付ける。
   # 例: Channels: {"Global": "1234567890", "2": "2345678901", "Staff": "3456789012"}
+  links:
+    allowed-domains:
+      - media.discordapp.net
+      - cdn.discordapp.com
 
 # 同じJarをVelocity側に配置した場合、Velocity側のエントリポイントだけが読み込む設定。
 # 上記バックエンドIDはルーティング用。表示名ではない。
