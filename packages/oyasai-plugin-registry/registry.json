@@ -134,7 +134,6 @@
   },
   "lwc": {
     "paper": {
-      "skipVersionCheck": true,
       "slug": "lwc",
       "type": "modrinth"
     }
