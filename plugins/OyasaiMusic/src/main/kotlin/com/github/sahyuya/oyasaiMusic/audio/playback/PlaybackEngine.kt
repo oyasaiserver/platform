@@ -1,5 +1,7 @@
 package com.github.sahyuya.oyasaiMusic.audio
 
+import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.interop.PlaybackBuffer
 import com.github.sahyuya.oyasaiMusic.model.NoteEvent
 import com.github.sahyuya.oyasaiMusic.model.Song
 import com.github.sahyuya.oyasaiMusic.util.BedrockUtil
@@ -63,6 +65,7 @@ class PlaybackEngine(
   )
 
   private val contexts = ConcurrentHashMap<UUID, PlaybackContext>()
+  private val liveSessions = ConcurrentHashMap<UUID, PlaybackSession>()
 
   /**
    * 楽曲を指定リスナー群に対して再生する。
@@ -84,11 +87,13 @@ class PlaybackEngine(
       onCompletion: ((PlaybackSession) -> Unit)? = null,
       mode: PlaybackMode = defaultMode,
       modeResolver: ((Player) -> PlaybackMode?)? = null,
+      prepared: PlaybackBuffer.Prepared? = null,
   ): PlaybackSession {
     val session = PlaybackSession(song = song, initialRecipients = recipients)
     if (notes.isEmpty() || recipients.isEmpty()) {
       return session
     }
+    liveSessions[session.sessionId] = session
 
     val scale = if (playbackBpm > 0) song.bpm.toDouble() / playbackBpm else 1.0
     val scaledNotes: List<Pair<Int, NoteEvent>> =
@@ -97,6 +102,26 @@ class PlaybackEngine(
         }
     val bedrockSurvivingIndices = computeBedrockSurvivingIndices(scaledNotes)
     val totalDurationMs = scaledNotes.maxOfOrNull { (_, n) -> n.timeMs } ?: 0
+
+    // Buffered playback is deliberately an exclusive DEFAULT-mode route. Positional playback,
+    // Bedrock clients, custom SoundEvents, or per-recipient mode resolution keep the formal
+    // server's vanilla path (including its small look-ahead compensation).
+    val buffered =
+        if (prepared != null && mode == PlaybackMode.DEFAULT && modeResolver == null && plugin is OyasaiMusic) {
+          recipients.filter { player ->
+            !BedrockUtil.isBedrock(player, bedrockPrefix) && plugin.oyasaiClientCommand.isCapable(player.uniqueId)
+          }
+        } else {
+          emptyList()
+        }
+    if (buffered.isNotEmpty()) {
+      session.bufferCandidates += buffered.map { it.uniqueId }
+      val transferLeadMs = ((prepared!!.chunks.size + 1L) / 2L) * 50L + 500L
+      // Resolve local/vanilla routing before vanilla's pre-play moment. This prevents the first
+      // chord from being sent early and then repeated by an already-started client buffer.
+      session.startAfter(transferLeadMs, lookaheadMs + 100L)
+      queueBuffered(session, buffered, prepared)
+    }
 
     contexts[session.sessionId] =
         PlaybackContext(
@@ -120,21 +145,48 @@ class PlaybackEngine(
     session.markPaused()
     session.scheduledTasks.forEach { it.cancel(false) }
     session.scheduledTasks.clear()
+    if (session.outboundTasks.isNotEmpty()) {
+      sendControl(session, PlaybackBuffer.TYPE_STOP)
+      session.outboundTasks.forEach { it.cancel() }
+      session.outboundTasks.clear()
+      session.bufferedRecipients.clear()
+      session.bufferCandidates.clear()
+      (plugin as? OyasaiMusic)?.oyasaiClientCommand?.removeExpected(session.sessionId)
+    } else {
+      sendControl(session, PlaybackBuffer.TYPE_PAUSE) {
+        writeInt(session.elapsedPlaybackMs().coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
+      }
+    }
   }
 
   /** 再開: 一時停止した時点の経過時間から、残りの音符・コールバックを再スケジュールする。 */
   fun resume(session: PlaybackSession) {
     if (session.isCancelled || !session.isPaused) return
     session.markResumed()
+    sendControl(session, PlaybackBuffer.TYPE_RESUME) {
+      writeInt(500)
+      writeInt(session.elapsedPlaybackMs().coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
+    }
     scheduleFrom(session, fromElapsedMs = session.elapsedPlaybackMs())
   }
 
   fun stop(session: PlaybackSession) {
     contexts.remove(session.sessionId)
+    liveSessions.remove(session.sessionId)
+    sendControl(session, PlaybackBuffer.TYPE_STOP)
+    (plugin as? OyasaiMusic)?.oyasaiClientCommand?.removeExpected(session.sessionId)
     session.cancel()
   }
 
   fun shutdown() {
+    // STOP is sent before OyasaiClientCommand unregisters the outgoing channel.
+    liveSessions.values.forEach { session ->
+      sendControl(session, PlaybackBuffer.TYPE_STOP)
+      (plugin as? OyasaiMusic)?.oyasaiClientCommand?.removeExpected(session.sessionId)
+      session.cancel()
+    }
+    liveSessions.clear()
+    contexts.clear()
     executor.shutdownNow()
   }
 
@@ -152,10 +204,10 @@ class PlaybackEngine(
             .groupBy { (_, note) -> note.timeMs }
 
     for ((timeMs, group) in groupedByTime) {
-      val delay = (timeMs - fromElapsedMs).coerceAtLeast(0)
+      val playbackDelay = (timeMs - fromElapsedMs).coerceAtLeast(0) + if (fromElapsedMs == 0L) session.initialDelayMs else 0L
       // 音の送信自体はメインスレッド必須で、クライアントへ未来時刻を指定するAPIはない。
-      // そこで負荷を増やさず、Bukkitタスクキューへ最大1tick弱だけ早く渡して混雑分を吸収する。
-      val schedulingDelay = (delay - lookaheadMs).coerceAtLeast(0)
+      // MODバッファ受信者はdispatchで除外されるため、この先読みはvanilla経路だけに届く。
+      val schedulingDelay = (playbackDelay - lookaheadMs).coerceAtLeast(0)
       val future =
           executor.schedule(
               Runnable {
@@ -185,7 +237,7 @@ class PlaybackEngine(
     if (ctx.onListenThresholdReached != null) {
       val thresholdMs = (ctx.totalDurationMs * 0.8).toLong()
       if (thresholdMs >= fromElapsedMs) {
-        val delay = thresholdMs - fromElapsedMs
+        val delay = thresholdMs - fromElapsedMs + if (fromElapsedMs == 0L) session.initialDelayMs else 0L
         val future =
             executor.schedule(
                 Runnable {
@@ -211,12 +263,13 @@ class PlaybackEngine(
 
     // onCompletion が無い再生でも文脈を必ず解放する。解放しないと単発再生のたびに
     // contexts が残り続け、長時間稼働時にメモリリークとなる。
-    val delay = (ctx.totalDurationMs.toLong() + 50L - fromElapsedMs).coerceAtLeast(0)
+    val delay = (ctx.totalDurationMs.toLong() + 50L - fromElapsedMs).coerceAtLeast(0) + if (fromElapsedMs == 0L) session.initialDelayMs else 0L
     val future =
         executor.schedule(
             Runnable {
               if (session.isCancelled || session.isPaused) return@Runnable
               contexts.remove(session.sessionId)
+              liveSessions.remove(session.sessionId)
               Bukkit.getScheduler().runTask(plugin, Runnable { ctx.onCompletion?.invoke(session) })
             },
             delay,
@@ -235,10 +288,112 @@ class PlaybackEngine(
     for (uuid in session.recipients) {
       val player = Bukkit.getPlayer(uuid) ?: continue
       if (!player.isOnline) continue
+      if (uuid in session.bufferedRecipients) {
+        val stillCapable = (plugin as? OyasaiMusic)?.oyasaiClientCommand?.isCapable(uuid) == true
+        if (stillCapable) continue
+        session.bufferedRecipients.remove(uuid)
+      }
       val isBedrockPlayer = BedrockUtil.isBedrock(player, bedrockPrefix)
       if (isBedrockPlayer && !bedrock) continue // 和音間引きでこのプレイヤー種別からは間引かれた音
       val mode = modeResolver?.invoke(player) ?: fallbackMode
       SoundDispatcher.play(player, note, mode, isBedrock = isBedrockPlayer)
+    }
+  }
+
+  private fun queueBuffered(
+      session: PlaybackSession,
+      recipients: List<Player>,
+      prepared: PlaybackBuffer.Prepared,
+  ) {
+    fun send(player: Player, bytes: ByteArray) {
+      if (player.isOnline && player.uniqueId in session.bufferCandidates) {
+        player.sendPluginMessage(plugin, PlaybackBuffer.CHANNEL, bytes)
+      }
+    }
+    val begin = PlaybackBuffer.envelope(PlaybackBuffer.TYPE_BEGIN, session.sessionId) {
+      writeShort(prepared.chunks.size)
+      writeInt(prepared.compressed.size)
+      write(prepared.hash)
+      writeInt(prepared.durationMs)
+      writeByte(0)
+      writeInt(session.initialDelayMs.coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
+    }
+    val server = plugin as? OyasaiMusic
+    recipients.forEach { player ->
+      server?.oyasaiClientCommand?.expectReady(
+          player.uniqueId,
+          session.sessionId,
+          prepared.hash,
+          session.routeDecisionDeadlineMillis,
+      )
+      send(player, begin)
+    }
+    var next = 0
+    lateinit var task: org.bukkit.scheduler.BukkitTask
+    task = Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
+      if (session.isCancelled) {
+        task.cancel()
+        session.outboundTasks.remove(task)
+        return@Runnable
+      }
+      repeat(2) {
+        if (next < prepared.chunks.size) {
+          val sequence = next++
+          val chunk = prepared.chunks[sequence]
+          val packet = PlaybackBuffer.envelope(PlaybackBuffer.TYPE_CHUNK, session.sessionId) {
+            writeShort(sequence)
+            writeShort(prepared.chunks.size)
+            writeShort(chunk.size)
+            write(chunk)
+          }
+          recipients.forEach { send(it, packet) }
+        }
+      }
+      if (next >= prepared.chunks.size) {
+        val startDelay = (session.startDeadlineMillis - System.currentTimeMillis()).coerceIn(0L, 30_000L)
+        recipients.forEach { player ->
+          val playerId = player.uniqueId
+          if (
+              playerId in session.bufferCandidates &&
+                  server != null &&
+                  server.oyasaiClientCommand.isReady(playerId, session.sessionId, prepared.hash)
+          ) {
+            send(player, PlaybackBuffer.envelope(PlaybackBuffer.TYPE_START, session.sessionId) {
+              writeInt(startDelay.toInt())
+              writeInt(0)
+            })
+            session.bufferedRecipients += playerId
+            session.bufferCandidates.remove(playerId)
+            server.oyasaiClientCommand.removeExpected(playerId, session.sessionId)
+          }
+        }
+        // Unanswered candidates become vanilla before the server look-ahead dispatch can run.
+        if (System.currentTimeMillis() >= session.routeDecisionDeadlineMillis || session.bufferCandidates.isEmpty()) {
+          session.bufferCandidates.forEach { playerId ->
+            server?.oyasaiClientCommand?.removeExpected(playerId, session.sessionId)
+          }
+          session.bufferCandidates.clear()
+          task.cancel()
+          session.outboundTasks.remove(task)
+        }
+      }
+    }, 1L, 1L)
+    session.outboundTasks += task
+  }
+
+  private fun sendControl(
+      session: PlaybackSession,
+      type: Int,
+      body: java.io.DataOutputStream.() -> Unit = {},
+  ) {
+    if (session.bufferedRecipients.isEmpty()) return
+    val packet = PlaybackBuffer.envelope(type, session.sessionId) {
+      body()
+      if (type == PlaybackBuffer.TYPE_STOP) writeByte(0)
+    }
+    session.bufferedRecipients.forEach { playerId ->
+      Bukkit.getPlayer(playerId)?.takeIf { it.isOnline }
+          ?.sendPluginMessage(plugin, PlaybackBuffer.CHANNEL, packet)
     }
   }
 

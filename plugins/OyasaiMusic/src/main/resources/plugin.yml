@@ -38,6 +38,12 @@ commands:
     description: バニラSoundEventの指定パターンを自分だけに試聴する
     usage: /demosound <SoundEvent> <パターン> [ピッチ(0-24)]
     permission: oyasaimusic.demosound
+  ommtupload:
+    description: OMMTの分割アップロードを受信する内部コマンド
+    usage: /ommtupload
+  ommtclient:
+    description: OMMTクライアントの初回再生能力確認用内部コマンド
+    usage: /ommtclient
 
 permissions:
   oyasaimusic.admin:
@@ -51,6 +57,9 @@ permissions:
     default: false
   oyasaimusic.demosound:
     description: 看板用バニラ音源を試聴する
+    default: false
+  oyasaimusic.import:
+    description: OMMTから非公開下書きをインポートする
     default: false
   oyasaimusic.newsong.notify:
     description: 新曲公開のチャット通知と効果音を受け取る
