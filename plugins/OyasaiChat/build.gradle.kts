@@ -5,8 +5,6 @@ dependencies {
   compileOnly(libs.purpur.api)
   compileOnly(libs.discordsrv)
   compileOnly(libs.placeholderapi)
-  compileOnly(libs.velocity.api) {
-    exclude(group = "net.kyori")
-  }
+  compileOnly(libs.velocity.api) { exclude(group = "net.kyori") }
   compileOnly(libs.vault.api)
 }
