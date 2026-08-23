@@ -913,18 +913,18 @@
       "hash": "sha256-Zl9jWQ3vtj1irdIdNSU2LPk3z2ocBeSwFFuujailf4M="
     }
   },
-  "com.gradleup.shadow:shadow-gradle-plugin:9.5.1": {
-    "shadow-gradle-plugin-9.5.1.jar": {
-      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.5.1/shadow-gradle-plugin-9.5.1.jar",
-      "hash": "sha256-6Qv/4KUXI4nhG/Js1Zy1AFyBGJIo9QA5UL/jQ0VPMmE="
+  "com.gradleup.shadow:shadow-gradle-plugin:9.6.1": {
+    "shadow-gradle-plugin-9.6.1.jar": {
+      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.6.1/shadow-gradle-plugin-9.6.1.jar",
+      "hash": "sha256-cFO8Q2bPgHmPIF439PZJzeUWCB5eZTo8SepnALIEexE="
     },
-    "shadow-gradle-plugin-9.5.1.module": {
-      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.5.1/shadow-gradle-plugin-9.5.1.module",
-      "hash": "sha256-64DurOvM0TfqSwoYSZB/rmDtt6rkAuZ2pN0zynsIbJk="
+    "shadow-gradle-plugin-9.6.1.module": {
+      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.6.1/shadow-gradle-plugin-9.6.1.module",
+      "hash": "sha256-2r7oRq2BjQEs6wAtYfrDT7STf3Tu60yWRRkxiiomDSU="
     },
-    "shadow-gradle-plugin-9.5.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.5.1/shadow-gradle-plugin-9.5.1.pom",
-      "hash": "sha256-/t6danx5fZsl5xwVwj0DkDVrUwlqMM1CclE0MHs6LWM="
+    "shadow-gradle-plugin-9.6.1.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/gradleup/shadow/shadow-gradle-plugin/9.6.1/shadow-gradle-plugin-9.6.1.pom",
+      "hash": "sha256-TyBfM3n3wluZqUwe6OgKqiEdORMFKYBbWLId9N7y0Qc="
     }
   },
   "com.ibm.icu:icu4j:72.1": {
@@ -3183,32 +3183,32 @@
       "hash": "sha256-llrrK+3/NpgZvd4b96CzuJuCR91pyIuGN112Fju4w5c="
     }
   },
-  "org.jetbrains.exposed:exposed-core:1.3.1": {
-    "exposed-core-1.3.1.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.3.1/exposed-core-1.3.1.jar",
-      "hash": "sha256-/RWJ6CIQueFqdsvgnAkW7bNzbebh/v6UV49YhPtXydI="
+  "org.jetbrains.exposed:exposed-core:1.4.0": {
+    "exposed-core-1.4.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.4.0/exposed-core-1.4.0.jar",
+      "hash": "sha256-QCrhMLABtfkMaE61ccGQw9NJEnbTuKTt3B364C5xthg="
     },
-    "exposed-core-1.3.1.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.3.1/exposed-core-1.3.1.module",
-      "hash": "sha256-PvjqWtnD5CE7GHHB/xeAgpIf+RyenjKiQRaMz/EcGpw="
+    "exposed-core-1.4.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.4.0/exposed-core-1.4.0.module",
+      "hash": "sha256-EUcqAz2RYvBxVgecoOuQWtCyUNYg5GEKmbZzn912FRM="
     },
-    "exposed-core-1.3.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.3.1/exposed-core-1.3.1.pom",
-      "hash": "sha256-onuXKFRNrmJJPkWmL1M7dppWpVyidFTMsXctNgD4I6Y="
+    "exposed-core-1.4.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-core/1.4.0/exposed-core-1.4.0.pom",
+      "hash": "sha256-1h78LKGGqFNmnzxoroEciKxR8sVFDT8CAwSRhBXa6Kc="
     }
   },
-  "org.jetbrains.exposed:exposed-jdbc:1.3.1": {
-    "exposed-jdbc-1.3.1.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.3.1/exposed-jdbc-1.3.1.jar",
-      "hash": "sha256-bkaKqh3Rulaqq3BQJj7z3JRM8rojdWGfFZnSMZlTAvQ="
+  "org.jetbrains.exposed:exposed-jdbc:1.4.0": {
+    "exposed-jdbc-1.4.0.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.4.0/exposed-jdbc-1.4.0.jar",
+      "hash": "sha256-JRR1Q2HPfsycjTe6B6hdVF1HHI4zd8zwq2CReeqqzcI="
     },
-    "exposed-jdbc-1.3.1.module": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.3.1/exposed-jdbc-1.3.1.module",
-      "hash": "sha256-BzjX0s7GQyIgyL4s7aC5Gup+owpmHGHAKV0saNLHm0Y="
+    "exposed-jdbc-1.4.0.module": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.4.0/exposed-jdbc-1.4.0.module",
+      "hash": "sha256-CgmMsCrlZwmYf78j9SkRtV0vo7tVT5o9jNoeveF0TTw="
     },
-    "exposed-jdbc-1.3.1.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.3.1/exposed-jdbc-1.3.1.pom",
-      "hash": "sha256-eNzryaep6p50wTHRm2YRc6RjBjEIyBqlCjOGagzm9gY="
+    "exposed-jdbc-1.4.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/exposed/exposed-jdbc/1.4.0/exposed-jdbc-1.4.0.pom",
+      "hash": "sha256-G9NDiTMaSYg63fBJ/fLnY38WROdT8lAStk8K1Sp4lJ8="
     }
   },
   "org.jetbrains.kotlin:fus-statistics-gradle-plugin:2.4.10": {
@@ -3477,14 +3477,14 @@
       "hash": "sha256-vr3VthFajTd+3Y0A6MHUz8rL8rwL27ckjUPFx6Gbr6s="
     }
   },
-  "org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.0": {
-    "kotlin-metadata-jvm-2.4.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-metadata-jvm/2.4.0/kotlin-metadata-jvm-2.4.0.jar",
-      "hash": "sha256-mq3FHFiOdsjPPYPUCQ5GpLaH8u2qH99lqp/kQiMpSSc="
+  "org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.10": {
+    "kotlin-metadata-jvm-2.4.10.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-metadata-jvm/2.4.10/kotlin-metadata-jvm-2.4.10.jar",
+      "hash": "sha256-IzqqhMomjibW06mc4wQB5twRGnrhDgoLR5TOY1HXrcQ="
     },
-    "kotlin-metadata-jvm-2.4.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-metadata-jvm/2.4.0/kotlin-metadata-jvm-2.4.0.pom",
-      "hash": "sha256-chmTkfj8cneq1l3owN3xiekzupPXw21DBBuEVqPITCk="
+    "kotlin-metadata-jvm-2.4.10.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-metadata-jvm/2.4.10/kotlin-metadata-jvm-2.4.10.pom",
+      "hash": "sha256-aUkVuGhi29YGDGkjlpBZTx9S3yVDuxEKARZmJCpBBgs="
     }
   },
   "org.jetbrains.kotlin:kotlin-native-utils:2.4.10": {
@@ -4541,14 +4541,14 @@
       "hash": "sha256-0SxrTyItymKZ60KOn+ajJmwBIw0MThs2x9MCwpKn8LE="
     }
   },
-  "org.xerial:sqlite-jdbc:3.53.2.0": {
-    "sqlite-jdbc-3.53.2.0.jar": {
-      "url": "https://repo.maven.apache.org/maven2/org/xerial/sqlite-jdbc/3.53.2.0/sqlite-jdbc-3.53.2.0.jar",
-      "hash": "sha256-3DIOQQKITBNczDDDxvw/sZC3UOFYahAOOro754PPM6k="
+  "org.xerial:sqlite-jdbc:3.53.2.1": {
+    "sqlite-jdbc-3.53.2.1.jar": {
+      "url": "https://repo.maven.apache.org/maven2/org/xerial/sqlite-jdbc/3.53.2.1/sqlite-jdbc-3.53.2.1.jar",
+      "hash": "sha256-9V5AXtltX/5ingW3tRsFnhx9ZFJ8DMkKly+6wGcwzME="
     },
-    "sqlite-jdbc-3.53.2.0.pom": {
-      "url": "https://repo.maven.apache.org/maven2/org/xerial/sqlite-jdbc/3.53.2.0/sqlite-jdbc-3.53.2.0.pom",
-      "hash": "sha256-Y4WPO7nJFhzEH4SLnfWaWNWBG0oTsGY0cLeq5lVGbF4="
+    "sqlite-jdbc-3.53.2.1.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/xerial/sqlite-jdbc/3.53.2.1/sqlite-jdbc-3.53.2.1.pom",
+      "hash": "sha256-J9BAzxQg523Fss4Pizg7rinjpObwMjROnrBtcxtBJ44="
     }
   },
   "org.xerial:sqlite-jdbc:3.49.1.0": {
