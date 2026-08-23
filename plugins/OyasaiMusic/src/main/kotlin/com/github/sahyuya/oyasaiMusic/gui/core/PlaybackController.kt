@@ -1,7 +1,9 @@
 package com.github.sahyuya.oyasaiMusic.gui
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.audio.PlaybackMode
 import com.github.sahyuya.oyasaiMusic.audio.SongAudioFile
+import com.github.sahyuya.oyasaiMusic.interop.PlaybackBuffer
 import com.github.sahyuya.oyasaiMusic.model.Song
 import java.io.File
 import java.util.UUID
@@ -12,6 +14,10 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitTask
 
 /**
@@ -20,7 +26,8 @@ import org.bukkit.scheduler.BukkitTask
  * 再生に関する操作は必ずこのクラスを経由し、状態変更後は [MenuManager.refreshCurrent]で開いている画面を更新する。再生状態とGUI表示を同じ
  * データ源に揃えることで、曲名・再生中表示・ボスバーの不整合を防ぐ。
  */
-class PlaybackController(private val plugin: OyasaiMusic, private val menuManager: MenuManager) {
+class PlaybackController(private val plugin: OyasaiMusic, private val menuManager: MenuManager) :
+    Listener {
 
   companion object {
     private const val TRACK_TRANSITION_TICKS = 15L // 0.75秒
@@ -28,6 +35,8 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
 
   private val nowPlayingBars = ConcurrentHashMap<UUID, BossBar>()
   private val bossBarTasks = ConcurrentHashMap<UUID, BukkitTask>()
+  /** Kept while a personal playback session survives a disconnect, so its bar can be reattached. */
+  private val nowPlayingDurations = ConcurrentHashMap<UUID, Int>()
 
   /**
    * Minecraft のボスバー色はクライアント仕様により7色の列挙値だけであり、任意の RGB 値には できない。そのため文字色は指定 RGB
@@ -78,50 +87,60 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                     .runTask(plugin, Runnable { viewer.sendMessage("§7この楽曲には再生できる音符がありません。") })
                 return@Runnable
               }
+              val prepared = PlaybackBuffer.prepare(audio.notes)
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
                       Runnable {
-                        val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
-                        // 既に再生中のセッションがあれば止める（多重再生防止）。
-                        state.activeSession?.let { plugin.playbackEngine.stop(it) }
-                        hideNowPlayingBar(viewer)
-
                         val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
-                        val session =
-                            plugin.playbackEngine.play(
-                                song = song,
-                                notes = audio.notes,
-                                recipients = listOf(viewer),
-                                mode = mode,
-                                onListenThresholdReached = { player, s ->
-                                  plugin.viewCountService.registerView(
-                                      player,
-                                      s,
-                                      isAmbientPlayback = false,
-                                  ) {
-                                    // 視聴回数がDBへ実際に記録できた時点でGUIを再描画し、
-                                    // 一覧等の「再生数」表示が最新化されるようにする。
-                                    menuManager.refreshCurrent(player.uniqueId)
-                                  }
-                                },
-                                onCompletion = { finishedSession ->
-                                  val s2 = plugin.controllerStateService.stateFor(viewer.uniqueId)
-                                  if (s2.activeSession?.sessionId == finishedSession.sessionId) {
-                                    s2.isPlaying = false
-                                    s2.activeSession = null
-                                    hideNowPlayingBar(viewer)
-                                    menuManager.refreshCurrent(viewer.uniqueId)
-                                    onCompletion?.invoke()
-                                  }
-                                },
-                            )
-                        state.isPlaying = true
-                        state.nowPlayingSong = song
-                        state.activeSession = session
-                        showNowPlayingBar(viewer, song, session, audio.totalDurationMs)
-                        if (rememberInHistory) rememberSong(state, song)
-                        menuManager.refreshCurrent(viewer.uniqueId)
+                        val startPlayback: (Boolean) -> Unit = startPlayback@{ useBufferedRoute ->
+                          if (!viewer.isOnline) return@startPlayback
+                          val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
+                          // 既に再生中のセッションがあれば止める（多重再生防止）。
+                          state.activeSession?.let { plugin.playbackEngine.stop(it) }
+                          hideNowPlayingBar(viewer)
+                          val session =
+                              plugin.playbackEngine.play(
+                                  song = song,
+                                  notes = audio.notes,
+                                  recipients = listOf(viewer),
+                                  mode = mode,
+                                  prepared = prepared.takeIf { useBufferedRoute },
+                                  onListenThresholdReached = { player, s ->
+                                    plugin.viewCountService.registerView(
+                                        player,
+                                        s,
+                                        isAmbientPlayback = false,
+                                    ) {
+                                      // 視聴回数がDBへ実際に記録できた時点でGUIを再描画し、
+                                      // 一覧等の「再生数」表示が最新化されるようにする。
+                                      menuManager.refreshCurrent(player.uniqueId)
+                                    }
+                                  },
+                                  onCompletion = { finishedSession ->
+                                    val s2 = plugin.controllerStateService.stateFor(viewer.uniqueId)
+                                    if (s2.activeSession?.sessionId == finishedSession.sessionId) {
+                                      s2.isPlaying = false
+                                      s2.activeSession = null
+                                      nowPlayingDurations.remove(viewer.uniqueId)
+                                      hideNowPlayingBar(viewer)
+                                      menuManager.refreshCurrent(viewer.uniqueId)
+                                      onCompletion?.invoke()
+                                    }
+                                  },
+                              )
+                          state.isPlaying = true
+                          state.nowPlayingSong = song
+                          state.activeSession = session
+                          showNowPlayingBar(viewer, song, session, audio.totalDurationMs)
+                          if (rememberInHistory) rememberSong(state, song)
+                          menuManager.refreshCurrent(viewer.uniqueId)
+                        }
+                        if (mode == PlaybackMode.DEFAULT) {
+                          plugin.oyasaiClientCommand.resolveForPlayback(viewer, startPlayback)
+                        } else {
+                          startPlayback(false)
+                        }
                       },
                   )
             },
@@ -259,6 +278,9 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       session: com.github.sahyuya.oyasaiMusic.audio.PlaybackSession,
       durationMs: Int,
   ) {
+    bossBarTasks.remove(viewer.uniqueId)?.cancel()
+    nowPlayingBars.remove(viewer.uniqueId)?.let { viewer.hideBossBar(it) }
+    nowPlayingDurations[viewer.uniqueId] = durationMs.coerceAtLeast(1)
     val style = bossBarStyle(song.recordMaterial)
     val authorName = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
     val bar =
@@ -271,7 +293,6 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     nowPlayingBars[viewer.uniqueId] = bar
     viewer.showBossBar(bar)
     val safeDuration = durationMs.coerceAtLeast(1).toLong()
-    bossBarTasks.remove(viewer.uniqueId)?.cancel()
     bossBarTasks[viewer.uniqueId] =
         Bukkit.getScheduler()
             .runTaskTimer(
@@ -302,6 +323,42 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   private fun hideNowPlayingBar(viewer: Player) {
     bossBarTasks.remove(viewer.uniqueId)?.cancel()
     nowPlayingBars.remove(viewer.uniqueId)?.let { viewer.hideBossBar(it) }
+  }
+
+  /**
+   * Personal playback state intentionally survives a short disconnect. Adventure boss bars do not,
+   * so a returning player must receive a fresh bar bound to the still-current session.
+   */
+  @EventHandler
+  fun onPlayerJoin(event: PlayerJoinEvent) {
+    val viewer = event.player
+    Bukkit.getScheduler()
+        .runTaskLater(
+            plugin,
+            Runnable {
+              if (!viewer.isOnline) return@Runnable
+              val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
+              val session = state.activeSession ?: return@Runnable
+              val song = state.nowPlayingSong ?: session.song
+              val duration = nowPlayingDurations[viewer.uniqueId] ?: return@Runnable
+              if (session.isCancelled || session.elapsedPlaybackMs() >= duration) return@Runnable
+              showNowPlayingBar(viewer, song, session, duration)
+              menuManager.refreshCurrent(viewer.uniqueId)
+            },
+            1L,
+        )
+  }
+
+  @EventHandler
+  fun onPlayerQuit(event: PlayerQuitEvent) {
+    val session =
+        plugin.controllerStateService.stateFor(event.player.uniqueId).activeSession ?: return
+    // A reconnect creates a new client process/network generation with no buffered payload. Route
+    // the remainder through vanilla if the player returns before this server session finishes.
+    session.bufferedRecipients.remove(event.player.uniqueId)
+    session.bufferCandidates.remove(event.player.uniqueId)
+    plugin.oyasaiClientCommand.removeExpected(event.player.uniqueId, session.sessionId)
+    hideNowPlayingBar(event.player)
   }
 
   private fun nowPlayingName(

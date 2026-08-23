@@ -42,7 +42,7 @@ class UserRepository(private val db: DatabaseManager) {
         }
   }
 
-  /** いいね送信報酬・視聴ポイント等、未受取残高への加算。金額とポイントは同時または個別に指定可能。 */
+  /** 障害時に退避するお金・視聴ポイント等、未受取残高への加算。金額とポイントは同時または個別に指定可能。 */
   fun addPending(uuid: UUID, money: Long = 0, points: Long = 0) =
       db.transaction { conn ->
         ensureRow(conn, uuid)

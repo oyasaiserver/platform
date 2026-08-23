@@ -12,6 +12,7 @@ enum class PluginSoundEffect(val fileName: String) {
   NEW_SONG("publish_newsong.bin"),
   REWARD_CLAIM("get_reward.bin"),
   LIKE_RECEIVED("receive_likes.bin"),
+  LIKE_SENT("send_likes.bin"),
 }
 
 /**

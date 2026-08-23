@@ -12,12 +12,11 @@ class SocialRepository(private val db: DatabaseManager) {
 
   // ---------- いいね ----------
 
-  /** いいね登録・曲の統計・双方の報酬残高を一括で更新する。 UNIQUE制約により重複いいねの場合は、以降の更新を一切行わない。 */
-  fun registerLikeWithRewards(
+  /** いいね登録・曲の統計・作者のポイント報酬を一括で更新する。 UNIQUE制約により重複いいねの場合は、以降の更新を一切行わない。 */
+  fun registerLikeWithAuthorReward(
       likerUuid: UUID,
       authorUuid: UUID,
       songId: Long,
-      likerMoneyReward: Long,
       authorPointReward: Long,
   ): Boolean =
       db.transaction { conn ->
@@ -41,13 +40,6 @@ class SocialRepository(private val db: DatabaseManager) {
         }
         ensureUser(conn, likerUuid)
         ensureUser(conn, authorUuid)
-        conn
-            .prepareStatement("UPDATE users SET pending_money = pending_money + ? WHERE uuid = ?")
-            .use { ps ->
-              ps.setLong(1, likerMoneyReward)
-              ps.setBytes(2, UuidUtil.toBytes(likerUuid))
-              ps.executeUpdate()
-            }
         conn
             .prepareStatement("UPDATE users SET pending_points = pending_points + ? WHERE uuid = ?")
             .use { ps ->

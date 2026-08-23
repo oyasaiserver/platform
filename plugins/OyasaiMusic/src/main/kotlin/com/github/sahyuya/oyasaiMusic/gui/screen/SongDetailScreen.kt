@@ -431,6 +431,7 @@ class SongDetailScreen(
                           hasLiked = true
                           if (refreshed != null) song = refreshed
                           GuiFeedback.info(viewer, "いいねしました: ${song.title}", NamedTextColor.GREEN)
+                          plugin.deliverLikeSenderReward(viewer)
                           Bukkit.getPlayer(song.authorUuid)?.let { author ->
                             plugin.toastNotificationService.showLikeReceived(
                                 author,
