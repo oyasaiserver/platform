@@ -11,6 +11,8 @@ let
 
     version = "0.0.0";
 
+    __darwinAllowLocalNetworking = true;
+
     src = lib.fileset.toSource {
       root = ../.;
       fileset = lib.fileset.unions [
@@ -30,7 +32,7 @@ let
       "--no-daemon"
     ];
 
-    _JAVA_OPTIONS = "-Xmx8g -Xms1g -XX:MaxMetaspaceSize=512m";
+    _JAVA_OPTIONS = "-Xmx8g -Xms1g -XX:MaxMetaspaceSize=512m -Djava.net.preferIPv4Stack=true";
 
     installPhase = ''
       runHook preInstall
