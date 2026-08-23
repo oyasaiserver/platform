@@ -69,6 +69,7 @@ let
       jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
       jre = pkgs.javaPackages.compiler.temurin-bin.jre-25;
       gradle = pkgs.gradle_9.override { java = scopeSelf.jdk; };
+      maven = pkgs.maven.override { jdk_headless = scopeSelf.jdk; };
 
       package-lock2nix = callPackage inputs.package-lock2nix.lib.package-lock2nix {
         overrideScope = pl2nixOverlay;

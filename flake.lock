@@ -46,6 +46,22 @@
         "type": "github"
       }
     },
+    "coreprotect": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787263106,
+        "narHash": "sha256-VSwXAByxeFeEirdczr7GyNvTXwZUc97tQRm51MU+d5Q=",
+        "owner": "playpro",
+        "repo": "coreprotect",
+        "rev": "b1edbbbf02a7fce0acd3de3ec048f18a85186f6a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "playpro",
+        "repo": "coreprotect",
+        "type": "github"
+      }
+    },
     "devshell": {
       "inputs": {
         "nixpkgs": [
@@ -63,6 +79,22 @@
       "original": {
         "owner": "numtide",
         "repo": "devshell",
+        "type": "github"
+      }
+    },
+    "essentials": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787431836,
+        "narHash": "sha256-BhD0HgpyGibNecD8ApoCZvzlCdHoSKkH6IQjCnodbPM=",
+        "owner": "essentialsx",
+        "repo": "essentials",
+        "rev": "8013feb70c4f6442c2cc16f29fef91a75f7912b5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "essentialsx",
+        "repo": "essentials",
         "type": "github"
       }
     },
@@ -285,7 +317,9 @@
     "root": {
       "inputs": {
         "codegen": "codegen",
+        "coreprotect": "coreprotect",
         "devshell": "devshell",
+        "essentials": "essentials",
         "flake-parts": "flake-parts",
         "gradle2nix": "gradle2nix",
         "mc-monitor": "mc-monitor",
