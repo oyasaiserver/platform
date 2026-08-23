@@ -6,8 +6,7 @@ import java.util.UUID
 /**
  * いいね登録と作者ポイント報酬を担当するサービス。
  *
- * 送信者のお金は通常時に未受取残高へ加算せず、いいね成立後にGUI層からVaultへ即時入金する。
- * 呼び出しは非同期スレッドから行うこと（内部のDBアクセスが同期的なため）。
+ * 送信者のお金は通常時に未受取残高へ加算せず、いいね成立後にGUI層からVaultへ即時入金する。 呼び出しは非同期スレッドから行うこと（内部のDBアクセスが同期的なため）。
  */
 class LikeService(
     private val socialRepository: SocialRepository,

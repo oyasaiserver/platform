@@ -80,8 +80,9 @@ class OyasaiImportService(private val plugin: OyasaiMusic) {
               fileName = relativeAudioName,
               supportsPositional = imported.notes.any { it.pan != 0 },
           )
-      val savedSong = plugin.songRepository.findById(songId)
-          ?: throw IllegalStateException("保存した楽曲を再取得できませんでした。")
+      val savedSong =
+          plugin.songRepository.findById(songId)
+              ?: throw IllegalStateException("保存した楽曲を再取得できませんでした。")
       return ImportResult(savedSong, imported.notes.size, null)
     } catch (error: Exception) {
       if (songId != null) plugin.songRepository.delete(songId)
@@ -108,7 +109,10 @@ class OyasaiImportService(private val plugin: OyasaiMusic) {
       try {
         val destination =
             generateSequence(File(processedDirectory, source.name)) { candidate ->
-                  File(processedDirectory, "${candidate.nameWithoutExtension}-${System.currentTimeMillis()}.oyasai")
+                  File(
+                      processedDirectory,
+                      "${candidate.nameWithoutExtension}-${System.currentTimeMillis()}.oyasai",
+                  )
                 }
                 .first { !it.exists() }
         try {
@@ -122,4 +126,3 @@ class OyasaiImportService(private val plugin: OyasaiMusic) {
         false
       }
 }
-

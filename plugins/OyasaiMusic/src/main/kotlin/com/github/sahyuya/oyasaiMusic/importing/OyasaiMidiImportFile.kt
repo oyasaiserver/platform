@@ -1,9 +1,9 @@
 package com.github.sahyuya.oyasaiMusic.importing
 
-import com.google.gson.JsonParser
 import com.github.sahyuya.oyasaiMusic.audio.InstrumentMapper
 import com.github.sahyuya.oyasaiMusic.audio.VanillaSoundCatalog
 import com.github.sahyuya.oyasaiMusic.model.NoteEvent
+import com.google.gson.JsonParser
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
@@ -75,9 +75,7 @@ object OyasaiMidiImportFile {
       require(metadataRoot.get("format")?.asString == "oyasai-midi-import") {
         "インポート形式の識別情報がありません。"
       }
-      require(metadataRoot.get("version")?.asInt == version) {
-        "メタデータのバージョンがヘッダーと一致しません。"
-      }
+      require(metadataRoot.get("version")?.asInt == version) { "メタデータのバージョンがヘッダーと一致しません。" }
       val customSounds = readCustomSounds(metadataRoot, version, noteCount.toInt(), soundResolver)
       val songMetadata = metadataRoot.getAsJsonObject("song")
       val title =
@@ -88,9 +86,7 @@ object OyasaiMidiImportFile {
               .orEmpty()
               .ifBlank { "無題の楽曲" }
       val bpm =
-          runCatching { songMetadata?.get("displayBpm")?.asInt }
-              .getOrNull()
-              ?.coerceIn(1, 60_000)
+          runCatching { songMetadata?.get("displayBpm")?.asInt }.getOrNull()?.coerceIn(1, 60_000)
               ?: 120
 
       val notes = ArrayList<NoteEvent>(noteCount.toInt())
@@ -124,8 +120,8 @@ object OyasaiMidiImportFile {
 
   /**
    * OYMI v2/v3 keep the canonical eight-byte note body unchanged and add only a sparse,
-   * note-indexed sound map. v2 strings are retained as a compatibility input and mean pattern 1;
-   * v3 requires an explicit one-based pattern. The formal server catalog remains authoritative.
+   * note-indexed sound map. v2 strings are retained as a compatibility input and mean pattern 1; v3
+   * requires an explicit one-based pattern. The formal server catalog remains authoritative.
    */
   private fun readCustomSounds(
       metadataRoot: com.google.gson.JsonObject,
@@ -161,19 +157,19 @@ object OyasaiMidiImportFile {
         require(objectValue.size() == 2 && objectValue.has("event") && objectValue.has("pattern")) {
           "OYMI v3 customSoundsにはeventとpatternだけを指定してください。"
         }
-        rawSound = runCatching { objectValue.get("event").asString.lowercase() }
-            .getOrElse { throw IllegalArgumentException("customSoundsのeventが不正です。") }
-        pattern = runCatching { objectValue.get("pattern").asInt }
-            .getOrElse { throw IllegalArgumentException("customSoundsのpatternが不正です。") }
+        rawSound =
+            runCatching { objectValue.get("event").asString.lowercase() }
+                .getOrElse { throw IllegalArgumentException("customSoundsのeventが不正です。") }
+        pattern =
+            runCatching { objectValue.get("pattern").asInt }
+                .getOrElse { throw IllegalArgumentException("customSoundsのpatternが不正です。") }
         require(pattern in 1..65_535) { "customSoundsのpatternが範囲外です。" }
       }
       require(rawSound.matches(Regex("minecraft:[a-z0-9_./-]{1,246}"))) {
         "customSoundsのサウンドID形式が不正です。"
       }
       val resolvedSound = soundResolver(rawSound, pattern)
-      require(resolvedSound != null) {
-        "この1.21.11サーバーでは未対応のサウンドまたはパターンです: $rawSound #$pattern"
-      }
+      require(resolvedSound != null) { "この1.21.11サーバーでは未対応のサウンドまたはパターンです: $rawSound #$pattern" }
       result[index] = resolvedSound
       previousIndex = index
     }
@@ -188,7 +184,12 @@ object OyasaiMidiImportFile {
       noteCount: Int,
       soundResolver: (String, Int) -> ResolvedSound?,
   ): Map<Int, ResolvedSound> =
-      readCustomSounds(JsonParser.parseString(metadata).asJsonObject, version, noteCount, soundResolver)
+      readCustomSounds(
+          JsonParser.parseString(metadata).asJsonObject,
+          version,
+          noteCount,
+          soundResolver,
+      )
 
   private fun resolveCatalogSound(rawSound: String, pattern: Int): ResolvedSound? =
       VanillaSoundCatalog.find(rawSound)?.selectionForPattern(pattern)?.let {
@@ -215,5 +216,4 @@ object OyasaiMidiImportFile {
         15 -> Instrument.PLING
         else -> throw IllegalArgumentException("未対応の安定楽器IDです: $id")
       }
-
 }

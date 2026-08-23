@@ -9,10 +9,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 
-/**
- * DBで新規いいねが確定した後にだけ呼ぶ、送信者側の効果音と即時報酬。
- * 通常時は未受取残高を経由せずオンラインのPlayerへ直接入金し、Vault障害時だけ退避する。
- */
+/** DBで新規いいねが確定した後にだけ呼ぶ、送信者側の効果音と即時報酬。 通常時は未受取残高を経由せずオンラインのPlayerへ直接入金し、Vault障害時だけ退避する。 */
 internal fun OyasaiMusic.deliverLikeSenderReward(player: Player) {
   soundEffectService.play(PluginSoundEffect.LIKE_SENT, listOf(player))
   val amount = likeService.likerMoneyReward

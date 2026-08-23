@@ -26,7 +26,8 @@ import org.bukkit.scheduler.BukkitTask
  * 再生に関する操作は必ずこのクラスを経由し、状態変更後は [MenuManager.refreshCurrent]で開いている画面を更新する。再生状態とGUI表示を同じ
  * データ源に揃えることで、曲名・再生中表示・ボスバーの不整合を防ぐ。
  */
-class PlaybackController(private val plugin: OyasaiMusic, private val menuManager: MenuManager) : Listener {
+class PlaybackController(private val plugin: OyasaiMusic, private val menuManager: MenuManager) :
+    Listener {
 
   companion object {
     private const val TRACK_TRANSITION_TICKS = 15L // 0.75秒
@@ -92,7 +93,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                       plugin,
                       Runnable {
                         val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
-                        val startPlayback: (Boolean) -> Unit = startPlayback@ { useBufferedRoute ->
+                        val startPlayback: (Boolean) -> Unit = startPlayback@{ useBufferedRoute ->
                           if (!viewer.isOnline) return@startPlayback
                           val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
                           // 既に再生中のセッションがあれば止める（多重再生防止）。
@@ -325,31 +326,33 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   }
 
   /**
-   * Personal playback state intentionally survives a short disconnect. Adventure boss bars do
-   * not, so a returning player must receive a fresh bar bound to the still-current session.
+   * Personal playback state intentionally survives a short disconnect. Adventure boss bars do not,
+   * so a returning player must receive a fresh bar bound to the still-current session.
    */
   @EventHandler
   fun onPlayerJoin(event: PlayerJoinEvent) {
     val viewer = event.player
-    Bukkit.getScheduler().runTaskLater(
-        plugin,
-        Runnable {
-          if (!viewer.isOnline) return@Runnable
-          val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
-          val session = state.activeSession ?: return@Runnable
-          val song = state.nowPlayingSong ?: session.song
-          val duration = nowPlayingDurations[viewer.uniqueId] ?: return@Runnable
-          if (session.isCancelled || session.elapsedPlaybackMs() >= duration) return@Runnable
-          showNowPlayingBar(viewer, song, session, duration)
-          menuManager.refreshCurrent(viewer.uniqueId)
-        },
-        1L,
-    )
+    Bukkit.getScheduler()
+        .runTaskLater(
+            plugin,
+            Runnable {
+              if (!viewer.isOnline) return@Runnable
+              val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
+              val session = state.activeSession ?: return@Runnable
+              val song = state.nowPlayingSong ?: session.song
+              val duration = nowPlayingDurations[viewer.uniqueId] ?: return@Runnable
+              if (session.isCancelled || session.elapsedPlaybackMs() >= duration) return@Runnable
+              showNowPlayingBar(viewer, song, session, duration)
+              menuManager.refreshCurrent(viewer.uniqueId)
+            },
+            1L,
+        )
   }
 
   @EventHandler
   fun onPlayerQuit(event: PlayerQuitEvent) {
-    val session = plugin.controllerStateService.stateFor(event.player.uniqueId).activeSession ?: return
+    val session =
+        plugin.controllerStateService.stateFor(event.player.uniqueId).activeSession ?: return
     // A reconnect creates a new client process/network generation with no buffered payload. Route
     // the remainder through vanilla if the player returns before this server session finishes.
     session.bufferedRecipients.remove(event.player.uniqueId)

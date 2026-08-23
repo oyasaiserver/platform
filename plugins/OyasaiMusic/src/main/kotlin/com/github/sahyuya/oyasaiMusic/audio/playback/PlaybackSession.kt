@@ -41,16 +41,21 @@ class PlaybackSession(
   internal var initialDelayMs: Long = 0
   internal var startDeadlineMillis: Long = System.currentTimeMillis()
   internal var routeDecisionDeadlineMillis: Long = System.currentTimeMillis()
+
   internal fun startAfter(delayMs: Long, routeDecisionLeadMs: Long) {
     initialDelayMs = delayMs.coerceAtLeast(0)
     startDeadlineMillis = System.currentTimeMillis() + initialDelayMs
-    routeDecisionDeadlineMillis = (startDeadlineMillis - routeDecisionLeadMs.coerceAtLeast(0)).coerceAtLeast(System.currentTimeMillis())
+    routeDecisionDeadlineMillis =
+        (startDeadlineMillis - routeDecisionLeadMs.coerceAtLeast(0)).coerceAtLeast(
+            System.currentTimeMillis()
+        )
     segmentStartMillis = startDeadlineMillis
   }
 
   /** 現在の再生位置（ミリ秒）。一時停止中はその時点の値のまま変化しない。 */
   fun elapsedPlaybackMs(): Long =
-      (accumulatedPlayMs + if (!isPaused) (System.currentTimeMillis() - segmentStartMillis) else 0).coerceAtLeast(0)
+      (accumulatedPlayMs + if (!isPaused) (System.currentTimeMillis() - segmentStartMillis) else 0)
+          .coerceAtLeast(0)
 
   internal fun markPaused() {
     if (isPaused) return

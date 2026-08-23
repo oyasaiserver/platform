@@ -12,8 +12,8 @@ import com.github.sahyuya.oyasaiMusic.audio.VanillaSoundCatalog
 import com.github.sahyuya.oyasaiMusic.command.DemoSoundCommand
 import com.github.sahyuya.oyasaiMusic.command.GetMusicPlayerCommand
 import com.github.sahyuya.oyasaiMusic.command.MusicMenuCommand
-import com.github.sahyuya.oyasaiMusic.command.OyasaiMusicCommand
 import com.github.sahyuya.oyasaiMusic.command.OyasaiClientCommand
+import com.github.sahyuya.oyasaiMusic.command.OyasaiMusicCommand
 import com.github.sahyuya.oyasaiMusic.command.OyasaiUploadCommand
 import com.github.sahyuya.oyasaiMusic.command.RecordCommand
 import com.github.sahyuya.oyasaiMusic.db.DatabaseManager
@@ -32,9 +32,9 @@ import com.github.sahyuya.oyasaiMusic.gui.MenuManager
 import com.github.sahyuya.oyasaiMusic.gui.PlaybackController
 import com.github.sahyuya.oyasaiMusic.gui.PlayerControllerStateService
 import com.github.sahyuya.oyasaiMusic.gui.ToastNotificationService
+import com.github.sahyuya.oyasaiMusic.importing.OyasaiImportService
 import com.github.sahyuya.oyasaiMusic.item.PhysicalMusicPlayerItem
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordListener
-import com.github.sahyuya.oyasaiMusic.importing.OyasaiImportService
 import com.github.sahyuya.oyasaiMusic.model.Song
 import java.io.File
 import org.bukkit.Bukkit
@@ -159,12 +159,13 @@ class OyasaiMusic : JavaPlugin() {
     oyasaiClientCommand = OyasaiClientCommand(this)
     server.pluginManager.registerEvents(oyasaiUploadCommand, this)
     server.pluginManager.registerEvents(oyasaiClientCommand, this)
-    Bukkit.getScheduler().runTaskTimer(
-        this,
-        Runnable { oyasaiUploadCommand.expire() },
-        20L * 15,
-        20L * 15,
-    )
+    Bukkit.getScheduler()
+        .runTaskTimer(
+            this,
+            Runnable { oyasaiUploadCommand.expire() },
+            20L * 15,
+            20L * 15,
+        )
 
     // --- サービス層 ---
     configureRuntimeServices()
