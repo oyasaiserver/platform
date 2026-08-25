@@ -27,7 +27,7 @@ import org.bukkit.scheduler.BukkitTask
  * データ源に揃えることで、曲名・再生中表示・ボスバーの不整合を防ぐ。
  */
 class PlaybackController(private val plugin: OyasaiMusic, private val menuManager: MenuManager) :
-    Listener {
+  Listener {
 
   companion object {
     private const val TRACK_TRANSITION_TICKS = 15L // 0.75秒
@@ -50,10 +50,10 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
    * @param onCompletion 再生完了時に追加で呼びたい処理（プレイリストの連続再生等）。 状態のリセット・GUI再描画は本メソッドが自動的に行うため、ここには含めなくてよい。
    */
   fun play(
-      viewer: Player,
-      song: Song,
-      onCompletion: (() -> Unit)? = null,
-      rememberInHistory: Boolean = true,
+    viewer: Player,
+    song: Song,
+    onCompletion: (() -> Unit)? = null,
+    rememberInHistory: Boolean = true,
   ) {
     val songId = song.id
     if (songId == null) {
@@ -61,90 +61,90 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       return
     }
     Bukkit.getScheduler()
-        .runTaskAsynchronously(
-            plugin,
-            Runnable {
-              val file = File(plugin.audioDirectory, song.fileName)
-              if (!file.exists()) {
-                Bukkit.getScheduler()
-                    .runTask(plugin, Runnable { viewer.sendMessage("§c音源ファイルが見つかりません。") })
-                return@Runnable
-              }
-              val audio =
-                  try {
-                    SongAudioFile.read(file)
-                  } catch (e: Exception) {
-                    plugin.logger.warning("音源ファイルの読み込みに失敗しました (${file.name}): ${e.message}")
-                    Bukkit.getScheduler()
-                        .runTask(
-                            plugin,
-                            Runnable { viewer.sendMessage("§c音源ファイルが壊れているか、未対応の形式です。") },
-                        )
-                    return@Runnable
-                  }
-              if (audio.notes.isEmpty()) {
-                Bukkit.getScheduler()
-                    .runTask(plugin, Runnable { viewer.sendMessage("§7この楽曲には再生できる音符がありません。") })
-                return@Runnable
-              }
-              val prepared = PlaybackBuffer.prepare(audio.notes)
+      .runTaskAsynchronously(
+        plugin,
+        Runnable {
+          val file = File(plugin.audioDirectory, song.fileName)
+          if (!file.exists()) {
+            Bukkit.getScheduler()
+              .runTask(plugin, Runnable { viewer.sendMessage("§c音源ファイルが見つかりません。") })
+            return@Runnable
+          }
+          val audio =
+            try {
+              SongAudioFile.read(file)
+            } catch (e: Exception) {
+              plugin.logger.warning("音源ファイルの読み込みに失敗しました (${file.name}): ${e.message}")
               Bukkit.getScheduler()
-                  .runTask(
-                      plugin,
-                      Runnable {
-                        val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
-                        val startPlayback: (Boolean) -> Unit = startPlayback@{ useBufferedRoute ->
-                          if (!viewer.isOnline) return@startPlayback
-                          val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
-                          // 既に再生中のセッションがあれば止める（多重再生防止）。
-                          state.activeSession?.let { plugin.playbackEngine.stop(it) }
-                          hideNowPlayingBar(viewer)
-                          val session =
-                              plugin.playbackEngine.play(
-                                  song = song,
-                                  notes = audio.notes,
-                                  recipients = listOf(viewer),
-                                  mode = mode,
-                                  prepared = prepared.takeIf { useBufferedRoute },
-                                  onListenThresholdReached = { player, s ->
-                                    plugin.viewCountService.registerView(
-                                        player,
-                                        s,
-                                        isAmbientPlayback = false,
-                                    ) {
-                                      // 視聴回数がDBへ実際に記録できた時点でGUIを再描画し、
-                                      // 一覧等の「再生数」表示が最新化されるようにする。
-                                      menuManager.refreshCurrent(player.uniqueId)
-                                    }
-                                  },
-                                  onCompletion = { finishedSession ->
-                                    val s2 = plugin.controllerStateService.stateFor(viewer.uniqueId)
-                                    if (s2.activeSession?.sessionId == finishedSession.sessionId) {
-                                      s2.isPlaying = false
-                                      s2.activeSession = null
-                                      nowPlayingDurations.remove(viewer.uniqueId)
-                                      hideNowPlayingBar(viewer)
-                                      menuManager.refreshCurrent(viewer.uniqueId)
-                                      onCompletion?.invoke()
-                                    }
-                                  },
-                              )
-                          state.isPlaying = true
-                          state.nowPlayingSong = song
-                          state.activeSession = session
-                          showNowPlayingBar(viewer, song, session, audio.totalDurationMs)
-                          if (rememberInHistory) rememberSong(state, song)
-                          menuManager.refreshCurrent(viewer.uniqueId)
-                        }
-                        if (mode == PlaybackMode.DEFAULT) {
-                          plugin.oyasaiClientCommand.resolveForPlayback(viewer, startPlayback)
-                        } else {
-                          startPlayback(false)
+                .runTask(
+                  plugin,
+                  Runnable { viewer.sendMessage("§c音源ファイルが壊れているか、未対応の形式です。") },
+                )
+              return@Runnable
+            }
+          if (audio.notes.isEmpty()) {
+            Bukkit.getScheduler()
+              .runTask(plugin, Runnable { viewer.sendMessage("§7この楽曲には再生できる音符がありません。") })
+            return@Runnable
+          }
+          val prepared = PlaybackBuffer.prepare(audio.notes)
+          Bukkit.getScheduler()
+            .runTask(
+              plugin,
+              Runnable {
+                val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
+                val startPlayback: (Boolean) -> Unit = startPlayback@{ useBufferedRoute ->
+                  if (!viewer.isOnline) return@startPlayback
+                  val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
+                  // 既に再生中のセッションがあれば止める（多重再生防止）。
+                  state.activeSession?.let { plugin.playbackEngine.stop(it) }
+                  hideNowPlayingBar(viewer)
+                  val session =
+                    plugin.playbackEngine.play(
+                      song = song,
+                      notes = audio.notes,
+                      recipients = listOf(viewer),
+                      mode = mode,
+                      prepared = prepared.takeIf { useBufferedRoute },
+                      onListenThresholdReached = { player, s ->
+                        plugin.viewCountService.registerView(
+                          player,
+                          s,
+                          isAmbientPlayback = false,
+                        ) {
+                          // 視聴回数がDBへ実際に記録できた時点でGUIを再描画し、
+                          // 一覧等の「再生数」表示が最新化されるようにする。
+                          menuManager.refreshCurrent(player.uniqueId)
                         }
                       },
-                  )
-            },
-        )
+                      onCompletion = { finishedSession ->
+                        val s2 = plugin.controllerStateService.stateFor(viewer.uniqueId)
+                        if (s2.activeSession?.sessionId == finishedSession.sessionId) {
+                          s2.isPlaying = false
+                          s2.activeSession = null
+                          nowPlayingDurations.remove(viewer.uniqueId)
+                          hideNowPlayingBar(viewer)
+                          menuManager.refreshCurrent(viewer.uniqueId)
+                          onCompletion?.invoke()
+                        }
+                      },
+                    )
+                  state.isPlaying = true
+                  state.nowPlayingSong = song
+                  state.activeSession = session
+                  showNowPlayingBar(viewer, song, session, audio.totalDurationMs)
+                  if (rememberInHistory) rememberSong(state, song)
+                  menuManager.refreshCurrent(viewer.uniqueId)
+                }
+                if (mode == PlaybackMode.DEFAULT) {
+                  plugin.ommtPlaybackClientRegistry.resolveForPlayback(viewer, startPlayback)
+                } else {
+                  startPlayback(false)
+                }
+              },
+            )
+        },
+      )
   }
 
   /**
@@ -188,11 +188,11 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   fun toggleLoop(viewer: Player) {
     val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
     state.loopMode =
-        when (state.loopMode) {
-          LoopMode.OFF -> LoopMode.LIST
-          LoopMode.LIST -> LoopMode.SINGLE
-          LoopMode.SINGLE -> LoopMode.OFF
-        }
+      when (state.loopMode) {
+        LoopMode.OFF -> LoopMode.LIST
+        LoopMode.LIST -> LoopMode.SINGLE
+        LoopMode.SINGLE -> LoopMode.OFF
+      }
     menuManager.refreshCurrent(viewer.uniqueId)
   }
 
@@ -205,7 +205,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   /** 曲間の統一クールタイム（0.75秒）後に、ループ/シャッフル状態を再評価して遷移する。 */
   fun scheduleTrackTransition(viewer: Player, action: () -> Unit) {
     Bukkit.getScheduler()
-        .runTaskLater(plugin, Runnable { if (viewer.isOnline) action() }, TRACK_TRANSITION_TICKS)
+      .runTaskLater(plugin, Runnable { if (viewer.isOnline) action() }, TRACK_TRANSITION_TICKS)
   }
 
   /** 設定変更直後に、再生中表示とボスバーを最新の題名・作者・レコード種別へ差し替える。 */
@@ -246,8 +246,8 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     if (state.listeningHistory.getOrNull(state.listeningHistoryIndex)?.id == song.id) return
     if (state.listeningHistoryIndex < state.listeningHistory.lastIndex) {
       state.listeningHistory
-          .subList(state.listeningHistoryIndex + 1, state.listeningHistory.size)
-          .clear()
+        .subList(state.listeningHistoryIndex + 1, state.listeningHistory.size)
+        .clear()
     }
     state.listeningHistory += song
     state.listeningHistoryIndex = state.listeningHistory.lastIndex
@@ -273,10 +273,10 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   }
 
   private fun showNowPlayingBar(
-      viewer: Player,
-      song: Song,
-      session: com.github.sahyuya.oyasaiMusic.audio.PlaybackSession,
-      durationMs: Int,
+    viewer: Player,
+    song: Song,
+    session: com.github.sahyuya.oyasaiMusic.audio.PlaybackSession,
+    durationMs: Int,
   ) {
     bossBarTasks.remove(viewer.uniqueId)?.cancel()
     nowPlayingBars.remove(viewer.uniqueId)?.let { viewer.hideBossBar(it) }
@@ -284,40 +284,40 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     val style = bossBarStyle(song.recordMaterial)
     val authorName = Bukkit.getOfflinePlayer(song.authorUuid).name ?: "不明"
     val bar =
-        BossBar.bossBar(
-            nowPlayingName(song.title, authorName, style.textColor),
-            0f,
-            style.barColor,
-            BossBar.Overlay.PROGRESS,
-        )
+      BossBar.bossBar(
+        nowPlayingName(song.title, authorName, style.textColor),
+        0f,
+        style.barColor,
+        BossBar.Overlay.PROGRESS,
+      )
     nowPlayingBars[viewer.uniqueId] = bar
     viewer.showBossBar(bar)
     val safeDuration = durationMs.coerceAtLeast(1).toLong()
     bossBarTasks[viewer.uniqueId] =
-        Bukkit.getScheduler()
-            .runTaskTimer(
-                plugin,
-                Runnable {
-                  if (
-                      !viewer.isOnline ||
-                          session.isCancelled ||
-                          plugin.controllerStateService
-                              .stateFor(viewer.uniqueId)
-                              .activeSession
-                              ?.sessionId != session.sessionId
-                  ) {
-                    hideNowPlayingBar(viewer)
-                    return@Runnable
-                  }
-                  bar.progress(
-                      (session.elapsedPlaybackMs().toDouble() / safeDuration)
-                          .coerceIn(0.0, 1.0)
-                          .toFloat()
-                  )
-                },
-                0L,
-                2L,
+      Bukkit.getScheduler()
+        .runTaskTimer(
+          plugin,
+          Runnable {
+            if (
+              !viewer.isOnline ||
+              session.isCancelled ||
+              plugin.controllerStateService
+                .stateFor(viewer.uniqueId)
+                .activeSession
+                ?.sessionId != session.sessionId
+            ) {
+              hideNowPlayingBar(viewer)
+              return@Runnable
+            }
+            bar.progress(
+              (session.elapsedPlaybackMs().toDouble() / safeDuration)
+                .coerceIn(0.0, 1.0)
+                .toFloat()
             )
+          },
+          0L,
+          2L,
+        )
   }
 
   private fun hideNowPlayingBar(viewer: Player) {
@@ -333,69 +333,69 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
   fun onPlayerJoin(event: PlayerJoinEvent) {
     val viewer = event.player
     Bukkit.getScheduler()
-        .runTaskLater(
-            plugin,
-            Runnable {
-              if (!viewer.isOnline) return@Runnable
-              val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
-              val session = state.activeSession ?: return@Runnable
-              val song = state.nowPlayingSong ?: session.song
-              val duration = nowPlayingDurations[viewer.uniqueId] ?: return@Runnable
-              if (session.isCancelled || session.elapsedPlaybackMs() >= duration) return@Runnable
-              showNowPlayingBar(viewer, song, session, duration)
-              menuManager.refreshCurrent(viewer.uniqueId)
-            },
-            1L,
-        )
+      .runTaskLater(
+        plugin,
+        Runnable {
+          if (!viewer.isOnline) return@Runnable
+          val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
+          val session = state.activeSession ?: return@Runnable
+          val song = state.nowPlayingSong ?: session.song
+          val duration = nowPlayingDurations[viewer.uniqueId] ?: return@Runnable
+          if (session.isCancelled || session.elapsedPlaybackMs() >= duration) return@Runnable
+          showNowPlayingBar(viewer, song, session, duration)
+          menuManager.refreshCurrent(viewer.uniqueId)
+        },
+        1L,
+      )
   }
 
   @EventHandler
   fun onPlayerQuit(event: PlayerQuitEvent) {
     val session =
-        plugin.controllerStateService.stateFor(event.player.uniqueId).activeSession ?: return
+      plugin.controllerStateService.stateFor(event.player.uniqueId).activeSession ?: return
     // A reconnect creates a new client process/network generation with no buffered payload. Route
     // the remainder through vanilla if the player returns before this server session finishes.
     session.bufferedRecipients.remove(event.player.uniqueId)
     session.bufferCandidates.remove(event.player.uniqueId)
-    plugin.oyasaiClientCommand.removeExpected(event.player.uniqueId, session.sessionId)
+    plugin.ommtPlaybackClientRegistry.removeExpected(event.player.uniqueId, session.sessionId)
     hideNowPlayingBar(event.player)
   }
 
   private fun nowPlayingName(
-      title: String,
-      authorName: String,
-      defaultColor: TextColor,
+    title: String,
+    authorName: String,
+    defaultColor: TextColor,
   ): Component =
-      Component.text("♪ ", defaultColor)
-          .append(formattedLegacyText(title, defaultColor))
-          .append(Component.text(" - $authorName", defaultColor))
+    Component.text("♪ ", defaultColor)
+      .append(formattedLegacyText(title, defaultColor))
+      .append(Component.text(" - $authorName", defaultColor))
 
   private fun bossBarStyle(recordMaterial: String): RecordBossBarStyle =
-      when (recordMaterial.uppercase()) {
-        "MUSIC_DISC_13" -> recordBossBarStyle("FCFCFC", BossBar.Color.YELLOW)
-        "MUSIC_DISC_CAT" -> recordBossBarStyle("4BFC00", BossBar.Color.GREEN)
-        "MUSIC_DISC_BLOCKS" -> recordBossBarStyle("DF533A", BossBar.Color.RED)
-        "MUSIC_DISC_CHIRP" -> recordBossBarStyle("D80003", BossBar.Color.RED)
-        "MUSIC_DISC_FAR" -> recordBossBarStyle("71CA32", BossBar.Color.GREEN)
-        "MUSIC_DISC_MALL" -> recordBossBarStyle("8268CA", BossBar.Color.PURPLE)
-        "MUSIC_DISC_MELLOHI" -> recordBossBarStyle("FCFCFC", BossBar.Color.PURPLE)
-        "MUSIC_DISC_STAL" -> recordBossBarStyle("484848", BossBar.Color.PURPLE)
-        "MUSIC_DISC_STRAD" -> recordBossBarStyle("FCFCFC", BossBar.Color.WHITE)
-        "MUSIC_DISC_WARD" -> recordBossBarStyle("8CC400", BossBar.Color.GREEN)
-        "MUSIC_DISC_11" -> recordBossBarStyle("252525", BossBar.Color.PURPLE)
-        "MUSIC_DISC_WAIT" -> recordBossBarStyle("6D89B1", BossBar.Color.BLUE)
-        "MUSIC_DISC_PIGSTEP" -> recordBossBarStyle("F4D049", BossBar.Color.RED)
-        "MUSIC_DISC_OTHERSIDE" -> recordBossBarStyle("3989C2", BossBar.Color.GREEN)
-        "MUSIC_DISC_5" -> recordBossBarStyle("0F8484", BossBar.Color.BLUE)
-        "MUSIC_DISC_RELIC" -> recordBossBarStyle("42A3E2", BossBar.Color.RED)
-        "MUSIC_DISC_CREATOR" -> recordBossBarStyle("F6CC78", BossBar.Color.GREEN)
-        "MUSIC_DISC_CREATOR_MUSIC_BOX" -> recordBossBarStyle("F6CC78", BossBar.Color.YELLOW)
-        "MUSIC_DISC_PRECIPICE" -> recordBossBarStyle("DE8368", BossBar.Color.GREEN)
-        "MUSIC_DISC_TEARS" -> recordBossBarStyle("9DC1C1", BossBar.Color.WHITE)
-        "MUSIC_DISC_LAVA_CHICKEN" -> recordBossBarStyle("FCFCF6", BossBar.Color.RED)
-        else -> recordBossBarStyle("FCFCFC", BossBar.Color.YELLOW)
-      }
+    when (recordMaterial.uppercase()) {
+      "MUSIC_DISC_13" -> recordBossBarStyle("FCFCFC", BossBar.Color.YELLOW)
+      "MUSIC_DISC_CAT" -> recordBossBarStyle("4BFC00", BossBar.Color.GREEN)
+      "MUSIC_DISC_BLOCKS" -> recordBossBarStyle("DF533A", BossBar.Color.RED)
+      "MUSIC_DISC_CHIRP" -> recordBossBarStyle("D80003", BossBar.Color.RED)
+      "MUSIC_DISC_FAR" -> recordBossBarStyle("71CA32", BossBar.Color.GREEN)
+      "MUSIC_DISC_MALL" -> recordBossBarStyle("8268CA", BossBar.Color.PURPLE)
+      "MUSIC_DISC_MELLOHI" -> recordBossBarStyle("FCFCFC", BossBar.Color.PURPLE)
+      "MUSIC_DISC_STAL" -> recordBossBarStyle("484848", BossBar.Color.PURPLE)
+      "MUSIC_DISC_STRAD" -> recordBossBarStyle("FCFCFC", BossBar.Color.WHITE)
+      "MUSIC_DISC_WARD" -> recordBossBarStyle("8CC400", BossBar.Color.GREEN)
+      "MUSIC_DISC_11" -> recordBossBarStyle("252525", BossBar.Color.PURPLE)
+      "MUSIC_DISC_WAIT" -> recordBossBarStyle("6D89B1", BossBar.Color.BLUE)
+      "MUSIC_DISC_PIGSTEP" -> recordBossBarStyle("F4D049", BossBar.Color.RED)
+      "MUSIC_DISC_OTHERSIDE" -> recordBossBarStyle("3989C2", BossBar.Color.GREEN)
+      "MUSIC_DISC_5" -> recordBossBarStyle("0F8484", BossBar.Color.BLUE)
+      "MUSIC_DISC_RELIC" -> recordBossBarStyle("42A3E2", BossBar.Color.RED)
+      "MUSIC_DISC_CREATOR" -> recordBossBarStyle("F6CC78", BossBar.Color.GREEN)
+      "MUSIC_DISC_CREATOR_MUSIC_BOX" -> recordBossBarStyle("F6CC78", BossBar.Color.YELLOW)
+      "MUSIC_DISC_PRECIPICE" -> recordBossBarStyle("DE8368", BossBar.Color.GREEN)
+      "MUSIC_DISC_TEARS" -> recordBossBarStyle("9DC1C1", BossBar.Color.WHITE)
+      "MUSIC_DISC_LAVA_CHICKEN" -> recordBossBarStyle("FCFCF6", BossBar.Color.RED)
+      else -> recordBossBarStyle("FCFCFC", BossBar.Color.YELLOW)
+    }
 
   private fun recordBossBarStyle(textHex: String, barColor: BossBar.Color): RecordBossBarStyle =
-      RecordBossBarStyle(TextColor.color(textHex.toInt(16)), barColor)
+    RecordBossBarStyle(TextColor.color(textHex.toInt(16)), barColor)
 }

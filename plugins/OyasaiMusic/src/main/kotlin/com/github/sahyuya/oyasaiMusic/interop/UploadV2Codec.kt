@@ -12,9 +12,9 @@ object UploadV2Codec {
 
   fun unicode15Decode(text: String, byteCount: Int): ByteArray {
     require(
-        byteCount in 0..MAX_BYTES &&
-            text.length == (byteCount * 8 + 14) / 15 &&
-            text.length * 3 <= 765 * 400
+      byteCount in 0..MAX_BYTES &&
+        text.length == (byteCount * 8 + 14) / 15 &&
+        text.length * 3 <= 765 * 400
     )
     val out = ByteArrayOutputStream(byteCount)
     var bits = 0
@@ -34,14 +34,15 @@ object UploadV2Codec {
   }
 
   private fun value(char: Char): Int =
-      when (char.code) {
-        in 0x3400..0x4dbf -> char.code - 0x3400
-        in 0x4e00..0x9fff -> char.code - 0x4e00 + 6592
-        in 0xe000..0xf43f -> char.code - 0xe000 + 27584
-        else -> throw IllegalArgumentException("invalid Unicode15 alphabet")
-      }
+    when (char.code) {
+      in 0x3400..0x4dbf -> char.code - 0x3400
+      in 0x4e00..0x9fff -> char.code - 0x4e00 + 6592
+      in 0xe000..0xf43f -> char.code - 0xe000 + 27584
+      else -> throw IllegalArgumentException("invalid Unicode15 alphabet")
+    }
 
   fun reconstructOymi(compact: ByteArray): ByteArray {
+    require(compact.size in 1..MAX_BYTES) { "OYMC size is out of bounds" }
     val input = DataInputStream(ByteArrayInputStream(compact))
     require(input.readInt() == 0x4f594d43)
     val oymiVersion = input.readUnsignedByte()
@@ -49,7 +50,10 @@ object UploadV2Codec {
     val metaLen = readVar(input)
     val notes = readVar(input)
     val duration = readVar(input)
-    require(metaLen in 0..MAX_BYTES && notes in 1..MAX_NOTES && duration >= 0)
+    require(metaLen in 2..MAX_BYTES && notes in 1..MAX_NOTES && duration >= 0)
+    require(9L + metaLen.toLong() + notes.toLong() * 3L <= compact.size.toLong()) {
+      "OYMC record length is out of bounds"
+    }
     val metadata = ByteArray(metaLen)
     input.readFully(metadata)
     val entries = ArrayList<IntArray>(notes)
@@ -63,16 +67,18 @@ object UploadV2Codec {
       val pitch = ((b0 and 15) shl 1) or (b1 ushr 7)
       val volume = b1 and 127
       require(
-          time <= duration &&
-              instrument in 0..15 &&
-              pitch in 0..24 &&
-              volume in 0..100 &&
-              pan <= 200
+        time <= duration &&
+          instrument in 0..15 &&
+          pitch in 0..24 &&
+          volume in 0..100 &&
+          pan <= 200
       )
       entries += intArrayOf(time, instrument, pitch, volume, pan - 100)
     }
     require(input.available() == 0)
-    return ByteArrayOutputStream().use { bytes ->
+    val resultSize = 20L + metaLen.toLong() + notes.toLong() * 8L
+    require(resultSize <= MAX_BYTES) { "reconstructed OYMI is too large" }
+    return ByteArrayOutputStream(resultSize.toInt()).use { bytes ->
       DataOutputStream(bytes).use { out ->
         out.writeInt(0x4f594d49)
         out.writeShort(oymiVersion)
