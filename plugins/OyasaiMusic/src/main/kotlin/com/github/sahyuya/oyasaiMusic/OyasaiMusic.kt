@@ -31,9 +31,9 @@ import com.github.sahyuya.oyasaiMusic.gui.PlaybackController
 import com.github.sahyuya.oyasaiMusic.gui.PlayerControllerStateService
 import com.github.sahyuya.oyasaiMusic.gui.ToastNotificationService
 import com.github.sahyuya.oyasaiMusic.importing.OyasaiImportService
-import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.interop.OmmtPlaybackClientRegistry
 import com.github.sahyuya.oyasaiMusic.interop.OmmtUploadService
+import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.item.PhysicalMusicPlayerItem
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordListener
 import com.github.sahyuya.oyasaiMusic.model.Song
@@ -138,17 +138,17 @@ class OyasaiMusic : JavaPlugin() {
     reloadConfig()
 
     audioDirectory =
-      File(dataFolder, config.getString("storage.audio-directory", "audio") ?: "audio")
+        File(dataFolder, config.getString("storage.audio-directory", "audio") ?: "audio")
     audioDirectory.mkdirs()
     val soundCatalogCount = VanillaSoundCatalog.initialize(this)
     logger.info("サウンドカタログを読み込みました: $soundCatalogCount SoundEvent")
 
     // --- DB初期化 ---
     databaseManager =
-      DatabaseManager(
-        this,
-        config.getString("storage.database-file", "database.db") ?: "database.db",
-      )
+        DatabaseManager(
+            this,
+            config.getString("storage.database-file", "database.db") ?: "database.db",
+        )
     databaseManager.connect()
     songRepository = SongRepository(databaseManager)
     userRepository = UserRepository(databaseManager)
@@ -166,12 +166,12 @@ class OyasaiMusic : JavaPlugin() {
     server.pluginManager.registerEvents(ommtUploadService, this)
     server.pluginManager.registerEvents(ommtPlaybackClientRegistry, this)
     Bukkit.getScheduler()
-      .runTaskTimer(
-        this,
-        Runnable { ommtUploadService.expire() },
-        20L * 15,
-        20L * 15,
-      )
+        .runTaskTimer(
+            this,
+            Runnable { ommtUploadService.expire() },
+            20L * 15,
+            20L * 15,
+        )
 
     // --- サービス層 ---
     configureRuntimeServices()
@@ -190,25 +190,25 @@ class OyasaiMusic : JavaPlugin() {
     // --- 録音システム ---
     recordingSessionManager = RecordingSessionManager()
     server.pluginManager.registerEvents(
-      NotePlayListener(
-        sessionManager = recordingSessionManager,
-      ),
-      this,
+        NotePlayListener(
+            sessionManager = recordingSessionManager,
+        ),
+        this,
     )
 
     getCommand("record")?.let { cmd ->
       val executor =
-        RecordCommand(
-          plugin = this,
-          songRepository = songRepository,
-          sessionManager = recordingSessionManager,
-          audioDirectory = audioDirectory,
-          defaultRecordMaterial =
-            config.getString("recording.default-record-material", "MUSIC_DISC_13")
-              ?: "MUSIC_DISC_13",
-          defaultPrice = config.getInt("recording.default-price", 1000),
-          menuManager = menuManager,
-        )
+          RecordCommand(
+              plugin = this,
+              songRepository = songRepository,
+              sessionManager = recordingSessionManager,
+              audioDirectory = audioDirectory,
+              defaultRecordMaterial =
+                  config.getString("recording.default-record-material", "MUSIC_DISC_13")
+                      ?: "MUSIC_DISC_13",
+              defaultPrice = config.getInt("recording.default-price", 1000),
+              menuManager = menuManager,
+          )
       cmd.setExecutor(executor)
       cmd.tabCompleter = executor
     } ?: logger.warning("recordコマンドの登録に失敗しました（plugin.ymlを確認してください）。")
@@ -278,7 +278,8 @@ class OyasaiMusic : JavaPlugin() {
       val previous = playbackEngine
       playbackEngine = createPlaybackEngine()
       previous.shutdown()
-      if (::ommtPlaybackClientRegistry.isInitialized) ommtPlaybackClientRegistry.invalidateCapabilities()
+      if (::ommtPlaybackClientRegistry.isInitialized)
+          ommtPlaybackClientRegistry.invalidateCapabilities()
     }
   }
 
@@ -290,39 +291,39 @@ class OyasaiMusic : JavaPlugin() {
 
   private fun configureRuntimeServices() {
     likeService =
-      LikeService(
-        socialRepository = socialRepository,
-        likeRewardMoney = config.getLong("economy.like-reward-money", 1000),
-        likeRewardPoints = config.getLong("economy.like-reward-points", 2),
-      )
+        LikeService(
+            socialRepository = socialRepository,
+            likeRewardMoney = config.getLong("economy.like-reward-money", 1000),
+            likeRewardPoints = config.getLong("economy.like-reward-points", 2),
+        )
     viewCountService =
-      ViewCountService(
-        plugin = this,
-        socialRepository = socialRepository,
-        hourLimit = config.getInt("playback.view-limit-per-hour", 3),
-        dayLimit = config.getInt("playback.view-limit-per-day", 10),
-        viewsPerPoint = config.getInt("playback.views-per-point", 10),
-      )
+        ViewCountService(
+            plugin = this,
+            socialRepository = socialRepository,
+            hourLimit = config.getInt("playback.view-limit-per-hour", 3),
+            dayLimit = config.getInt("playback.view-limit-per-day", 10),
+            viewsPerPoint = config.getInt("playback.views-per-point", 10),
+        )
     // 既存のconfig.ymlが空欄のままでも、標準のTokenManagerコマンドでポイントを付与する。
     val pointCommand =
-      config.getString("economy.points-command", "").orEmpty().ifBlank {
-        "tokenmanager add %player% %points%"
-      }
+        config.getString("economy.points-command", "").orEmpty().ifBlank {
+          "tokenmanager add %player% %points%"
+        }
     economyService = EconomyService(this, pointCommand)
   }
 
   private fun createPlaybackEngine(): PlaybackEngine {
     val defaultMode =
-      when (config.getString("playback.default-mode", "default")?.lowercase()) {
-        "positional" -> PlaybackMode.POSITIONAL
-        else -> PlaybackMode.DEFAULT
-      }
+        when (config.getString("playback.default-mode", "default")?.lowercase()) {
+          "positional" -> PlaybackMode.POSITIONAL
+          else -> PlaybackMode.DEFAULT
+        }
     return PlaybackEngine(
-      plugin = this,
-      bedrockPrefix = config.getString("bedrock.name-prefix", ".") ?: ".",
-      chordLimit = config.getInt("bedrock.chord-limit", 3),
-      lookaheadMs = config.getLong("playback.lookahead-ms", 35L).coerceIn(0L, 50L),
-      defaultMode = defaultMode,
+        plugin = this,
+        bedrockPrefix = config.getString("bedrock.name-prefix", ".") ?: ".",
+        chordLimit = config.getInt("bedrock.chord-limit", 3),
+        lookaheadMs = config.getLong("playback.lookahead-ms", 35L).coerceIn(0L, 50L),
+        defaultMode = defaultMode,
     )
   }
 }

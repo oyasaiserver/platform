@@ -19,25 +19,25 @@ import org.slf4j.Logger
  * by default and forwarded only between a player and that player's current `main` connection.
  */
 @Plugin(
-  id = "oyasaimusic",
-  name = "OyasaiMusic",
-  version = "1.0.0",
-  description = "OyasaiMusic OMMT relay for main",
-  authors = ["sahyuya"],
+    id = "oyasaimusic",
+    name = "OyasaiMusic",
+    version = "1.0.0",
+    description = "OyasaiMusic OMMT relay for main",
+    authors = ["sahyuya"],
 )
 class OyasaiMusicVelocity
 @Inject
 constructor(
-  private val proxy: ProxyServer,
-  private val logger: Logger,
+    private val proxy: ProxyServer,
+    private val logger: Logger,
 ) {
   companion object {
     private const val MAIN_SERVER = "main"
     private val CHANNELS =
-      setOf(
-        MinecraftChannelIdentifier.from("oyasaimusic:upload_v1"),
-        MinecraftChannelIdentifier.from("oyasaimusic:playback_v1"),
-      )
+        setOf(
+            MinecraftChannelIdentifier.from("oyasaimusic:upload_v1"),
+            MinecraftChannelIdentifier.from("oyasaimusic:playback_v1"),
+        )
   }
 
   @Subscribe
@@ -55,19 +55,19 @@ constructor(
     // message allowance from becoming an allocation/amplification path to backend main.
     if (!PluginMessageBounds.accepts(event.data.size)) return
     val allowed =
-      when {
-        event.source is ServerConnection && event.target is Player ->
-          isCurrentMain(event.target as Player, event.source as ServerConnection)
-        event.source is Player && event.target is ServerConnection ->
-          isCurrentMain(event.source as Player, event.target as ServerConnection)
-        else -> false
-      }
+        when {
+          event.source is ServerConnection && event.target is Player ->
+              isCurrentMain(event.target as Player, event.source as ServerConnection)
+          event.source is Player && event.target is ServerConnection ->
+              isCurrentMain(event.source as Player, event.target as ServerConnection)
+          else -> false
+        }
     if (allowed) event.result = PluginMessageEvent.ForwardResult.forward()
   }
 
   private fun isCurrentMain(player: Player, connection: ServerConnection): Boolean =
-    connection.serverInfo.name == MAIN_SERVER &&
-      player.currentServer
-        .map { current -> current.serverInfo == connection.serverInfo }
-        .orElse(false)
+      connection.serverInfo.name == MAIN_SERVER &&
+          player.currentServer
+              .map { current -> current.serverInfo == connection.serverInfo }
+              .orElse(false)
 }

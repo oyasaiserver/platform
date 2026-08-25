@@ -33,35 +33,35 @@ import org.bukkit.plugin.Plugin
  * で例外になることを確認しているため、 メインスレッドへのホップ自体は省略できない。
  */
 class PlaybackEngine(
-  private val plugin: Plugin,
-  private val bedrockPrefix: String,
-  private val chordLimit: Int,
-  /** メインスレッドへの引き渡し遅延を吸収する、最大1tick未満の先読み時間。 */
-  private val lookaheadMs: Long = 35L,
-  private val defaultMode: PlaybackMode = PlaybackMode.DEFAULT,
+    private val plugin: Plugin,
+    private val bedrockPrefix: String,
+    private val chordLimit: Int,
+    /** メインスレッドへの引き渡し遅延を吸収する、最大1tick未満の先読み時間。 */
+    private val lookaheadMs: Long = 35L,
+    private val defaultMode: PlaybackMode = PlaybackMode.DEFAULT,
 ) {
 
   private val threadCounter = AtomicInteger(1)
   private val executor: ScheduledExecutorService =
-    Executors.newScheduledThreadPool(
-      4,
-      ThreadFactory { r ->
-        Thread(r, "OyasaiMusic-Playback-${threadCounter.getAndIncrement()}").apply {
-          isDaemon = true
-        }
-      },
-    )
+      Executors.newScheduledThreadPool(
+          4,
+          ThreadFactory { r ->
+            Thread(r, "OyasaiMusic-Playback-${threadCounter.getAndIncrement()}").apply {
+              isDaemon = true
+            }
+          },
+      )
 
   /** [pause]/[resume] による再スケジュールに必要な、セッションごとの再生文脈。 */
   private data class PlaybackContext(
-    val song: Song,
-    val scaledNotes: List<Pair<Int, NoteEvent>>,
-    val bedrockSurvivingIndices: Set<Int>,
-    val totalDurationMs: Int,
-    val mode: PlaybackMode,
-    val modeResolver: ((Player) -> PlaybackMode?)?,
-    val onListenThresholdReached: ((Player, Song) -> Unit)?,
-    val onCompletion: ((PlaybackSession) -> Unit)?,
+      val song: Song,
+      val scaledNotes: List<Pair<Int, NoteEvent>>,
+      val bedrockSurvivingIndices: Set<Int>,
+      val totalDurationMs: Int,
+      val mode: PlaybackMode,
+      val modeResolver: ((Player) -> PlaybackMode?)?,
+      val onListenThresholdReached: ((Player, Song) -> Unit)?,
+      val onCompletion: ((PlaybackSession) -> Unit)?,
   )
 
   private val contexts = ConcurrentHashMap<UUID, PlaybackContext>()
@@ -79,15 +79,15 @@ class PlaybackEngine(
    * @param modeResolver リスナーごとの再生方式を解決する関数（楽曲詳細GUIでの個人設定を反映する想定）。 nullを返した場合は [mode] にフォールバックする。
    */
   fun play(
-    song: Song,
-    notes: List<NoteEvent>,
-    recipients: Collection<Player>,
-    playbackBpm: Int = song.bpm,
-    onListenThresholdReached: ((Player, Song) -> Unit)? = null,
-    onCompletion: ((PlaybackSession) -> Unit)? = null,
-    mode: PlaybackMode = defaultMode,
-    modeResolver: ((Player) -> PlaybackMode?)? = null,
-    prepared: PlaybackBuffer.Prepared? = null,
+      song: Song,
+      notes: List<NoteEvent>,
+      recipients: Collection<Player>,
+      playbackBpm: Int = song.bpm,
+      onListenThresholdReached: ((Player, Song) -> Unit)? = null,
+      onCompletion: ((PlaybackSession) -> Unit)? = null,
+      mode: PlaybackMode = defaultMode,
+      modeResolver: ((Player) -> PlaybackMode?)? = null,
+      prepared: PlaybackBuffer.Prepared? = null,
   ): PlaybackSession {
     val session = PlaybackSession(song = song, initialRecipients = recipients)
     if (notes.isEmpty() || recipients.isEmpty()) {
@@ -97,9 +97,9 @@ class PlaybackEngine(
 
     val scale = if (playbackBpm > 0) song.bpm.toDouble() / playbackBpm else 1.0
     val scaledNotes: List<Pair<Int, NoteEvent>> =
-      notes.mapIndexed { index, note ->
-        index to note.copy(timeMs = (note.timeMs * scale).toInt())
-      }
+        notes.mapIndexed { index, note ->
+          index to note.copy(timeMs = (note.timeMs * scale).toInt())
+        }
     val bedrockSurvivingIndices = computeBedrockSurvivingIndices(scaledNotes)
     val totalDurationMs = scaledNotes.maxOfOrNull { (_, n) -> n.timeMs } ?: 0
 
@@ -107,19 +107,19 @@ class PlaybackEngine(
     // Bedrock clients, custom SoundEvents, or per-recipient mode resolution keep the formal
     // server's vanilla path (including its small look-ahead compensation).
     val buffered =
-      if (
-        prepared != null &&
-        mode == PlaybackMode.DEFAULT &&
-        modeResolver == null &&
-        plugin is OyasaiMusic
-      ) {
-        recipients.filter { player ->
-          !BedrockUtil.isBedrock(player, bedrockPrefix) &&
-            plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId)
+        if (
+            prepared != null &&
+                mode == PlaybackMode.DEFAULT &&
+                modeResolver == null &&
+                plugin is OyasaiMusic
+        ) {
+          recipients.filter { player ->
+            !BedrockUtil.isBedrock(player, bedrockPrefix) &&
+                plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId)
+          }
+        } else {
+          emptyList()
         }
-      } else {
-        emptyList()
-      }
     if (buffered.isNotEmpty()) {
       session.bufferCandidates += buffered.map { it.uniqueId }
       val transferLeadMs = ((prepared!!.chunks.size + 1L) / 2L) * 50L + 500L
@@ -130,16 +130,16 @@ class PlaybackEngine(
     }
 
     contexts[session.sessionId] =
-      PlaybackContext(
-        song = song,
-        scaledNotes = scaledNotes,
-        bedrockSurvivingIndices = bedrockSurvivingIndices,
-        totalDurationMs = totalDurationMs,
-        mode = mode,
-        modeResolver = modeResolver,
-        onListenThresholdReached = onListenThresholdReached,
-        onCompletion = onCompletion,
-      )
+        PlaybackContext(
+            song = song,
+            scaledNotes = scaledNotes,
+            bedrockSurvivingIndices = bedrockSurvivingIndices,
+            totalDurationMs = totalDurationMs,
+            mode = mode,
+            modeResolver = modeResolver,
+            onListenThresholdReached = onListenThresholdReached,
+            onCompletion = onCompletion,
+        )
 
     scheduleFrom(session, fromElapsedMs = 0)
     return session
@@ -205,40 +205,40 @@ class PlaybackEngine(
     val ctx = contexts[session.sessionId] ?: return
 
     val groupedByTime: Map<Int, List<Pair<Int, NoteEvent>>> =
-      ctx.scaledNotes
-        .filter { (_, note) -> note.timeMs >= fromElapsedMs }
-        .groupBy { (_, note) -> note.timeMs }
+        ctx.scaledNotes
+            .filter { (_, note) -> note.timeMs >= fromElapsedMs }
+            .groupBy { (_, note) -> note.timeMs }
 
     for ((timeMs, group) in groupedByTime) {
       val playbackDelay =
-        (timeMs - fromElapsedMs).coerceAtLeast(0) +
-          if (fromElapsedMs == 0L) session.initialDelayMs else 0L
+          (timeMs - fromElapsedMs).coerceAtLeast(0) +
+              if (fromElapsedMs == 0L) session.initialDelayMs else 0L
       // 音の送信自体はメインスレッド必須で、クライアントへ未来時刻を指定するAPIはない。
       // MODバッファ受信者はdispatchで除外されるため、この先読みはvanilla経路だけに届く。
       val schedulingDelay = (playbackDelay - lookaheadMs).coerceAtLeast(0)
       val future =
-        executor.schedule(
-          Runnable {
-            if (session.isCancelled || session.isPaused) return@Runnable
-            Bukkit.getScheduler()
-              .runTask(
-                plugin,
-                Runnable {
-                  for ((index, note) in group) {
-                    dispatch(
-                      note,
-                      index in ctx.bedrockSurvivingIndices,
-                      session,
-                      ctx.mode,
-                      ctx.modeResolver,
+          executor.schedule(
+              Runnable {
+                if (session.isCancelled || session.isPaused) return@Runnable
+                Bukkit.getScheduler()
+                    .runTask(
+                        plugin,
+                        Runnable {
+                          for ((index, note) in group) {
+                            dispatch(
+                                note,
+                                index in ctx.bedrockSurvivingIndices,
+                                session,
+                                ctx.mode,
+                                ctx.modeResolver,
+                            )
+                          }
+                        },
                     )
-                  }
-                },
-              )
-          },
-          schedulingDelay,
-          TimeUnit.MILLISECONDS,
-        )
+              },
+              schedulingDelay,
+              TimeUnit.MILLISECONDS,
+          )
       session.scheduledTasks.add(future)
     }
 
@@ -246,26 +246,26 @@ class PlaybackEngine(
       val thresholdMs = (ctx.totalDurationMs * 0.8).toLong()
       if (thresholdMs >= fromElapsedMs) {
         val delay =
-          thresholdMs - fromElapsedMs + if (fromElapsedMs == 0L) session.initialDelayMs else 0L
+            thresholdMs - fromElapsedMs + if (fromElapsedMs == 0L) session.initialDelayMs else 0L
         val future =
-          executor.schedule(
-            Runnable {
-              if (session.isCancelled || session.isPaused) return@Runnable
-              Bukkit.getScheduler()
-                .runTask(
-                  plugin,
-                  Runnable {
-                    for (uuid in session.recipients) {
-                      val player = Bukkit.getPlayer(uuid) ?: continue
-                      if (player.isOnline)
-                        ctx.onListenThresholdReached.invoke(player, ctx.song)
-                    }
-                  },
-                )
-            },
-            delay,
-            TimeUnit.MILLISECONDS,
-          )
+            executor.schedule(
+                Runnable {
+                  if (session.isCancelled || session.isPaused) return@Runnable
+                  Bukkit.getScheduler()
+                      .runTask(
+                          plugin,
+                          Runnable {
+                            for (uuid in session.recipients) {
+                              val player = Bukkit.getPlayer(uuid) ?: continue
+                              if (player.isOnline)
+                                  ctx.onListenThresholdReached.invoke(player, ctx.song)
+                            }
+                          },
+                      )
+                },
+                delay,
+                TimeUnit.MILLISECONDS,
+            )
         session.scheduledTasks.add(future)
       }
     }
@@ -273,34 +273,35 @@ class PlaybackEngine(
     // onCompletion が無い再生でも文脈を必ず解放する。解放しないと単発再生のたびに
     // contexts が残り続け、長時間稼働時にメモリリークとなる。
     val delay =
-      (ctx.totalDurationMs.toLong() + 50L - fromElapsedMs).coerceAtLeast(0) +
-        if (fromElapsedMs == 0L) session.initialDelayMs else 0L
+        (ctx.totalDurationMs.toLong() + 50L - fromElapsedMs).coerceAtLeast(0) +
+            if (fromElapsedMs == 0L) session.initialDelayMs else 0L
     val future =
-      executor.schedule(
-        Runnable {
-          if (session.isCancelled || session.isPaused) return@Runnable
-          contexts.remove(session.sessionId)
-          liveSessions.remove(session.sessionId)
-          Bukkit.getScheduler().runTask(plugin, Runnable { ctx.onCompletion?.invoke(session) })
-        },
-        delay,
-        TimeUnit.MILLISECONDS,
-      )
+        executor.schedule(
+            Runnable {
+              if (session.isCancelled || session.isPaused) return@Runnable
+              contexts.remove(session.sessionId)
+              liveSessions.remove(session.sessionId)
+              Bukkit.getScheduler().runTask(plugin, Runnable { ctx.onCompletion?.invoke(session) })
+            },
+            delay,
+            TimeUnit.MILLISECONDS,
+        )
     session.scheduledTasks.add(future)
   }
 
   private fun dispatch(
-    note: NoteEvent,
-    bedrock: Boolean,
-    session: PlaybackSession,
-    fallbackMode: PlaybackMode,
-    modeResolver: ((Player) -> PlaybackMode?)?,
+      note: NoteEvent,
+      bedrock: Boolean,
+      session: PlaybackSession,
+      fallbackMode: PlaybackMode,
+      modeResolver: ((Player) -> PlaybackMode?)?,
   ) {
     for (uuid in session.recipients) {
       val player = Bukkit.getPlayer(uuid) ?: continue
       if (!player.isOnline) continue
       if (uuid in session.bufferedRecipients) {
-        val stillCapable = (plugin as? OyasaiMusic)?.ommtPlaybackClientRegistry?.isCapable(uuid) == true
+        val stillCapable =
+            (plugin as? OyasaiMusic)?.ommtPlaybackClientRegistry?.isCapable(uuid) == true
         if (stillCapable) continue
         session.bufferedRecipients.remove(uuid)
       }
@@ -312,9 +313,9 @@ class PlaybackEngine(
   }
 
   private fun queueBuffered(
-    session: PlaybackSession,
-    recipients: List<Player>,
-    prepared: PlaybackBuffer.Prepared,
+      session: PlaybackSession,
+      recipients: List<Player>,
+      prepared: PlaybackBuffer.Prepared,
   ) {
     fun send(player: Player, bytes: ByteArray) {
       if (player.isOnline && player.uniqueId in session.bufferCandidates) {
@@ -322,117 +323,122 @@ class PlaybackEngine(
       }
     }
     val begin =
-      PlaybackBuffer.envelope(PlaybackBuffer.TYPE_BEGIN, session.sessionId) {
-        writeShort(prepared.chunks.size)
-        writeInt(prepared.compressed.size)
-        write(prepared.hash)
-        writeInt(prepared.durationMs)
-        writeByte(0)
-        writeInt(session.initialDelayMs.coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
-      }
+        PlaybackBuffer.envelope(PlaybackBuffer.TYPE_BEGIN, session.sessionId) {
+          writeShort(prepared.chunks.size)
+          writeInt(prepared.compressed.size)
+          write(prepared.hash)
+          writeInt(prepared.durationMs)
+          writeByte(0)
+          writeInt(session.initialDelayMs.coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
+        }
     val server = plugin as? OyasaiMusic
     recipients.forEach { player ->
       server
-        ?.ommtPlaybackClientRegistry
-        ?.expectReady(
-          player.uniqueId,
-          session.sessionId,
-          prepared.hash,
-          session.routeDecisionDeadlineMillis,
-        )
+          ?.ommtPlaybackClientRegistry
+          ?.expectReady(
+              player.uniqueId,
+              session.sessionId,
+              prepared.hash,
+              session.routeDecisionDeadlineMillis,
+          )
       send(player, begin)
     }
     var next = 0
     lateinit var task: org.bukkit.scheduler.BukkitTask
     task =
-      Bukkit.getScheduler()
-        .runTaskTimer(
-          plugin,
-          Runnable {
-            if (session.isCancelled) {
-              task.cancel()
-              session.outboundTasks.remove(task)
-              return@Runnable
-            }
-            repeat(2) {
-              if (next < prepared.chunks.size) {
-                val sequence = next++
-                val chunk = prepared.chunks[sequence]
-                val packet =
-                  PlaybackBuffer.envelope(PlaybackBuffer.TYPE_CHUNK, session.sessionId) {
-                    writeShort(sequence)
-                    writeShort(prepared.chunks.size)
-                    writeShort(chunk.size)
-                    write(chunk)
+        Bukkit.getScheduler()
+            .runTaskTimer(
+                plugin,
+                Runnable {
+                  if (session.isCancelled) {
+                    task.cancel()
+                    session.outboundTasks.remove(task)
+                    return@Runnable
                   }
-                recipients.forEach { send(it, packet) }
-              }
-            }
-            if (next >= prepared.chunks.size) {
-              val startDelay =
-                (session.startDeadlineMillis - System.currentTimeMillis()).coerceIn(
-                  0L,
-                  30_000L,
-                )
-              recipients.forEach { player ->
-                val playerId = player.uniqueId
-                if (
-                  playerId in session.bufferCandidates &&
-                  server != null &&
-                  server.ommtPlaybackClientRegistry.isReady(
-                    playerId,
-                    session.sessionId,
-                    prepared.hash,
-                  )
-                ) {
-                  send(
-                    player,
-                    PlaybackBuffer.envelope(PlaybackBuffer.TYPE_START, session.sessionId) {
-                      writeInt(startDelay.toInt())
-                      writeInt(0)
-                    },
-                  )
-                  session.bufferedRecipients += playerId
-                  session.bufferCandidates.remove(playerId)
-                  server.ommtPlaybackClientRegistry.removeExpected(playerId, session.sessionId)
-                }
-              }
-              // Unanswered candidates become vanilla before the server look-ahead dispatch
-              // can run.
-              if (
-                System.currentTimeMillis() >= session.routeDecisionDeadlineMillis ||
-                session.bufferCandidates.isEmpty()
-              ) {
-                session.bufferCandidates.forEach { playerId ->
-                  server?.ommtPlaybackClientRegistry?.removeExpected(playerId, session.sessionId)
-                }
-                session.bufferCandidates.clear()
-                task.cancel()
-                session.outboundTasks.remove(task)
-              }
-            }
-          },
-          1L,
-          1L,
-        )
+                  repeat(2) {
+                    if (next < prepared.chunks.size) {
+                      val sequence = next++
+                      val chunk = prepared.chunks[sequence]
+                      val packet =
+                          PlaybackBuffer.envelope(PlaybackBuffer.TYPE_CHUNK, session.sessionId) {
+                            writeShort(sequence)
+                            writeShort(prepared.chunks.size)
+                            writeShort(chunk.size)
+                            write(chunk)
+                          }
+                      recipients.forEach { send(it, packet) }
+                    }
+                  }
+                  if (next >= prepared.chunks.size) {
+                    val startDelay =
+                        (session.startDeadlineMillis - System.currentTimeMillis()).coerceIn(
+                            0L,
+                            30_000L,
+                        )
+                    recipients.forEach { player ->
+                      val playerId = player.uniqueId
+                      if (
+                          playerId in session.bufferCandidates &&
+                              server != null &&
+                              server.ommtPlaybackClientRegistry.isReady(
+                                  playerId,
+                                  session.sessionId,
+                                  prepared.hash,
+                              )
+                      ) {
+                        send(
+                            player,
+                            PlaybackBuffer.envelope(PlaybackBuffer.TYPE_START, session.sessionId) {
+                              writeInt(startDelay.toInt())
+                              writeInt(0)
+                            },
+                        )
+                        session.bufferedRecipients += playerId
+                        session.bufferCandidates.remove(playerId)
+                        server.ommtPlaybackClientRegistry.removeExpected(
+                            playerId,
+                            session.sessionId,
+                        )
+                      }
+                    }
+                    // Unanswered candidates become vanilla before the server look-ahead dispatch
+                    // can run.
+                    if (
+                        System.currentTimeMillis() >= session.routeDecisionDeadlineMillis ||
+                            session.bufferCandidates.isEmpty()
+                    ) {
+                      session.bufferCandidates.forEach { playerId ->
+                        server
+                            ?.ommtPlaybackClientRegistry
+                            ?.removeExpected(playerId, session.sessionId)
+                      }
+                      session.bufferCandidates.clear()
+                      task.cancel()
+                      session.outboundTasks.remove(task)
+                    }
+                  }
+                },
+                1L,
+                1L,
+            )
     session.outboundTasks += task
   }
 
   private fun sendControl(
-    session: PlaybackSession,
-    type: Int,
-    body: java.io.DataOutputStream.() -> Unit = {},
+      session: PlaybackSession,
+      type: Int,
+      body: java.io.DataOutputStream.() -> Unit = {},
   ) {
     if (session.bufferedRecipients.isEmpty()) return
     val packet =
-      PlaybackBuffer.envelope(type, session.sessionId) {
-        body()
-        if (type == PlaybackBuffer.TYPE_STOP) writeByte(0)
-      }
+        PlaybackBuffer.envelope(type, session.sessionId) {
+          body()
+          if (type == PlaybackBuffer.TYPE_STOP) writeByte(0)
+        }
     session.bufferedRecipients.forEach { playerId ->
       Bukkit.getPlayer(playerId)
-        ?.takeIf { it.isOnline }
-        ?.sendPluginMessage(plugin, PlaybackBuffer.CHANNEL, packet)
+          ?.takeIf { it.isOnline }
+          ?.sendPluginMessage(plugin, PlaybackBuffer.CHANNEL, packet)
     }
   }
 
