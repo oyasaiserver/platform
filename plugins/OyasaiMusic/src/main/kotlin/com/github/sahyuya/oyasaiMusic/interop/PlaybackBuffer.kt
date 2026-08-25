@@ -23,6 +23,8 @@ object PlaybackBuffer {
   const val TYPE_PAUSE = 5
   const val TYPE_RESUME = 6
   const val TYPE_STOP = 7
+  const val TYPE_PROBE_RESPONSE = 8
+  const val TYPE_READY = 9
 
   data class Prepared(
       val compressed: ByteArray,

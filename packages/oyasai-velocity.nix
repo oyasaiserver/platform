@@ -14,6 +14,7 @@ oyasaiVelocity {
     floodgate
     geyser
     oyasaichat
+    oyasaimusic
     # keep-sorted end
   ];
 

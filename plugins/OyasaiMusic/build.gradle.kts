@@ -9,6 +9,7 @@ dependencies {
   compileOnly(libs.placeholderapi)
   compileOnly(libs.vault.api)
   compileOnly(libs.fawe.bukkit)
+  compileOnly(libs.velocity.api) { exclude(group = "net.kyori") }
 }
 
 tasks {

@@ -137,7 +137,10 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                           menuManager.refreshCurrent(viewer.uniqueId)
                         }
                         if (mode == PlaybackMode.DEFAULT) {
-                          plugin.oyasaiClientCommand.resolveForPlayback(viewer, startPlayback)
+                          plugin.ommtPlaybackClientRegistry.resolveForPlayback(
+                              viewer,
+                              startPlayback,
+                          )
                         } else {
                           startPlayback(false)
                         }
@@ -357,7 +360,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     // the remainder through vanilla if the player returns before this server session finishes.
     session.bufferedRecipients.remove(event.player.uniqueId)
     session.bufferCandidates.remove(event.player.uniqueId)
-    plugin.oyasaiClientCommand.removeExpected(event.player.uniqueId, session.sessionId)
+    plugin.ommtPlaybackClientRegistry.removeExpected(event.player.uniqueId, session.sessionId)
     hideNowPlayingBar(event.player)
   }
 

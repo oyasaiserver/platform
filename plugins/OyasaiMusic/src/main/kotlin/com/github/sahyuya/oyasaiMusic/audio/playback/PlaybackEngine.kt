@@ -115,7 +115,7 @@ class PlaybackEngine(
         ) {
           recipients.filter { player ->
             !BedrockUtil.isBedrock(player, bedrockPrefix) &&
-                plugin.oyasaiClientCommand.isCapable(player.uniqueId)
+                plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId)
           }
         } else {
           emptyList()
@@ -157,7 +157,7 @@ class PlaybackEngine(
       session.outboundTasks.clear()
       session.bufferedRecipients.clear()
       session.bufferCandidates.clear()
-      (plugin as? OyasaiMusic)?.oyasaiClientCommand?.removeExpected(session.sessionId)
+      (plugin as? OyasaiMusic)?.ommtPlaybackClientRegistry?.removeExpected(session.sessionId)
     } else {
       sendControl(session, PlaybackBuffer.TYPE_PAUSE) {
         writeInt(session.elapsedPlaybackMs().coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
@@ -180,15 +180,15 @@ class PlaybackEngine(
     contexts.remove(session.sessionId)
     liveSessions.remove(session.sessionId)
     sendControl(session, PlaybackBuffer.TYPE_STOP)
-    (plugin as? OyasaiMusic)?.oyasaiClientCommand?.removeExpected(session.sessionId)
+    (plugin as? OyasaiMusic)?.ommtPlaybackClientRegistry?.removeExpected(session.sessionId)
     session.cancel()
   }
 
   fun shutdown() {
-    // STOP is sent before OyasaiClientCommand unregisters the outgoing channel.
+    // STOP is sent before the packet channel is unregistered.
     liveSessions.values.forEach { session ->
       sendControl(session, PlaybackBuffer.TYPE_STOP)
-      (plugin as? OyasaiMusic)?.oyasaiClientCommand?.removeExpected(session.sessionId)
+      (plugin as? OyasaiMusic)?.ommtPlaybackClientRegistry?.removeExpected(session.sessionId)
       session.cancel()
     }
     liveSessions.clear()
@@ -300,7 +300,8 @@ class PlaybackEngine(
       val player = Bukkit.getPlayer(uuid) ?: continue
       if (!player.isOnline) continue
       if (uuid in session.bufferedRecipients) {
-        val stillCapable = (plugin as? OyasaiMusic)?.oyasaiClientCommand?.isCapable(uuid) == true
+        val stillCapable =
+            (plugin as? OyasaiMusic)?.ommtPlaybackClientRegistry?.isCapable(uuid) == true
         if (stillCapable) continue
         session.bufferedRecipients.remove(uuid)
       }
@@ -333,7 +334,7 @@ class PlaybackEngine(
     val server = plugin as? OyasaiMusic
     recipients.forEach { player ->
       server
-          ?.oyasaiClientCommand
+          ?.ommtPlaybackClientRegistry
           ?.expectReady(
               player.uniqueId,
               session.sessionId,
@@ -379,7 +380,7 @@ class PlaybackEngine(
                       if (
                           playerId in session.bufferCandidates &&
                               server != null &&
-                              server.oyasaiClientCommand.isReady(
+                              server.ommtPlaybackClientRegistry.isReady(
                                   playerId,
                                   session.sessionId,
                                   prepared.hash,
@@ -394,7 +395,10 @@ class PlaybackEngine(
                         )
                         session.bufferedRecipients += playerId
                         session.bufferCandidates.remove(playerId)
-                        server.oyasaiClientCommand.removeExpected(playerId, session.sessionId)
+                        server.ommtPlaybackClientRegistry.removeExpected(
+                            playerId,
+                            session.sessionId,
+                        )
                       }
                     }
                     // Unanswered candidates become vanilla before the server look-ahead dispatch
@@ -404,7 +408,9 @@ class PlaybackEngine(
                             session.bufferCandidates.isEmpty()
                     ) {
                       session.bufferCandidates.forEach { playerId ->
-                        server?.oyasaiClientCommand?.removeExpected(playerId, session.sessionId)
+                        server
+                            ?.ommtPlaybackClientRegistry
+                            ?.removeExpected(playerId, session.sessionId)
                       }
                       session.bufferCandidates.clear()
                       task.cancel()

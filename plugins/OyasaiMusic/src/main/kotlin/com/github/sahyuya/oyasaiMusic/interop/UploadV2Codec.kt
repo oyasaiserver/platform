@@ -42,6 +42,7 @@ object UploadV2Codec {
       }
 
   fun reconstructOymi(compact: ByteArray): ByteArray {
+    require(compact.size in 1..MAX_BYTES) { "OYMC size is out of bounds" }
     val input = DataInputStream(ByteArrayInputStream(compact))
     require(input.readInt() == 0x4f594d43)
     val oymiVersion = input.readUnsignedByte()
@@ -49,7 +50,10 @@ object UploadV2Codec {
     val metaLen = readVar(input)
     val notes = readVar(input)
     val duration = readVar(input)
-    require(metaLen in 0..MAX_BYTES && notes in 1..MAX_NOTES && duration >= 0)
+    require(metaLen in 2..MAX_BYTES && notes in 1..MAX_NOTES && duration >= 0)
+    require(9L + metaLen.toLong() + notes.toLong() * 3L <= compact.size.toLong()) {
+      "OYMC record length is out of bounds"
+    }
     val metadata = ByteArray(metaLen)
     input.readFully(metadata)
     val entries = ArrayList<IntArray>(notes)
@@ -72,7 +76,9 @@ object UploadV2Codec {
       entries += intArrayOf(time, instrument, pitch, volume, pan - 100)
     }
     require(input.available() == 0)
-    return ByteArrayOutputStream().use { bytes ->
+    val resultSize = 20L + metaLen.toLong() + notes.toLong() * 8L
+    require(resultSize <= MAX_BYTES) { "reconstructed OYMI is too large" }
+    return ByteArrayOutputStream(resultSize.toInt()).use { bytes ->
       DataOutputStream(bytes).use { out ->
         out.writeInt(0x4f594d49)
         out.writeShort(oymiVersion)

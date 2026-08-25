@@ -1,0 +1,6 @@
+{
+  "description": "OyasaiMusic OMMT relay for main",
+  "id": "oyasaimusic",
+  "main": "com.github.sahyuya.oyasaiMusic.velocity.OyasaiMusicVelocity",
+  "name": "OyasaiMusic"
+}

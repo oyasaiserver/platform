@@ -12,9 +12,7 @@ import com.github.sahyuya.oyasaiMusic.audio.VanillaSoundCatalog
 import com.github.sahyuya.oyasaiMusic.command.DemoSoundCommand
 import com.github.sahyuya.oyasaiMusic.command.GetMusicPlayerCommand
 import com.github.sahyuya.oyasaiMusic.command.MusicMenuCommand
-import com.github.sahyuya.oyasaiMusic.command.OyasaiClientCommand
 import com.github.sahyuya.oyasaiMusic.command.OyasaiMusicCommand
-import com.github.sahyuya.oyasaiMusic.command.OyasaiUploadCommand
 import com.github.sahyuya.oyasaiMusic.command.RecordCommand
 import com.github.sahyuya.oyasaiMusic.db.DatabaseManager
 import com.github.sahyuya.oyasaiMusic.db.LikeService
@@ -33,6 +31,9 @@ import com.github.sahyuya.oyasaiMusic.gui.PlaybackController
 import com.github.sahyuya.oyasaiMusic.gui.PlayerControllerStateService
 import com.github.sahyuya.oyasaiMusic.gui.ToastNotificationService
 import com.github.sahyuya.oyasaiMusic.importing.OyasaiImportService
+import com.github.sahyuya.oyasaiMusic.interop.OmmtPlaybackClientRegistry
+import com.github.sahyuya.oyasaiMusic.interop.OmmtUploadService
+import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.item.PhysicalMusicPlayerItem
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordListener
 import com.github.sahyuya.oyasaiMusic.model.Song
@@ -116,10 +117,13 @@ class OyasaiMusic : JavaPlugin() {
   lateinit var oyasaiImportService: OyasaiImportService
     private set
 
-  lateinit var oyasaiUploadCommand: OyasaiUploadCommand
+  lateinit var ommtUploadService: OmmtUploadService
     private set
 
-  lateinit var oyasaiClientCommand: OyasaiClientCommand
+  lateinit var ommtPlaybackClientRegistry: OmmtPlaybackClientRegistry
+    private set
+
+  lateinit var pluginMessaging: OyasaiPluginMessaging
     private set
 
   override fun onEnable() {
@@ -155,14 +159,16 @@ class OyasaiMusic : JavaPlugin() {
     rankingRepository = RankingRepository(databaseManager)
     recordSaleRepository = RecordSaleRepository(databaseManager)
     oyasaiImportService = OyasaiImportService(this)
-    oyasaiUploadCommand = OyasaiUploadCommand(this)
-    oyasaiClientCommand = OyasaiClientCommand(this)
-    server.pluginManager.registerEvents(oyasaiUploadCommand, this)
-    server.pluginManager.registerEvents(oyasaiClientCommand, this)
+    ommtUploadService = OmmtUploadService(this)
+    ommtPlaybackClientRegistry = OmmtPlaybackClientRegistry(this)
+    pluginMessaging = OyasaiPluginMessaging(this, ommtUploadService, ommtPlaybackClientRegistry)
+    pluginMessaging.enable()
+    server.pluginManager.registerEvents(ommtUploadService, this)
+    server.pluginManager.registerEvents(ommtPlaybackClientRegistry, this)
     Bukkit.getScheduler()
         .runTaskTimer(
             this,
-            Runnable { oyasaiUploadCommand.expire() },
+            Runnable { ommtUploadService.expire() },
             20L * 15,
             20L * 15,
         )
@@ -236,11 +242,6 @@ class OyasaiMusic : JavaPlugin() {
       cmd.tabCompleter = executor
     } ?: logger.warning("demosoundコマンドの登録に失敗しました（plugin.ymlを確認してください）。")
 
-    getCommand("ommtupload")?.setExecutor(oyasaiUploadCommand)
-        ?: logger.warning("ommtuploadコマンドの登録に失敗しました（plugin.ymlを確認してください）。")
-    getCommand("ommtclient")?.setExecutor(oyasaiClientCommand)
-        ?: logger.warning("ommtclientコマンドの登録に失敗しました（plugin.ymlを確認してください）。")
-
     // 環境BGMレコードのトリガー監視。
     ambientPlaybackRegistry = AmbientPlaybackRegistry(this)
     server.pluginManager.registerEvents(PhysicalRecordListener(this), this)
@@ -253,11 +254,12 @@ class OyasaiMusic : JavaPlugin() {
 
   override fun onDisable() {
     // Import jobs that already crossed the persistence boundary must drain before DB close.
-    val uploadsDrained = !::oyasaiUploadCommand.isInitialized || oyasaiUploadCommand.shutdown()
+    val uploadsDrained = !::ommtUploadService.isInitialized || ommtUploadService.shutdown()
     if (::ambientPlaybackRegistry.isInitialized) ambientPlaybackRegistry.stopAll()
     // Buffered sessions receive STOP while the outgoing channel is still registered.
     if (::playbackEngine.isInitialized) playbackEngine.shutdown()
-    if (::oyasaiClientCommand.isInitialized) oyasaiClientCommand.clear()
+    if (::ommtPlaybackClientRegistry.isInitialized) ommtPlaybackClientRegistry.clear()
+    if (::pluginMessaging.isInitialized) pluginMessaging.disable()
     if (::databaseManager.isInitialized) {
       if (uploadsDrained) databaseManager.close()
       else logger.severe("DB close skipped because an OMMT import is still running")
@@ -267,7 +269,7 @@ class OyasaiMusic : JavaPlugin() {
 
   /** `/oyasaimusic reload` 用。設定値を参照するサービスを現在のconfigで再構成する。 */
   fun reloadRuntimeConfiguration() {
-    if (::oyasaiUploadCommand.isInitialized) oyasaiUploadCommand.reloadReset()
+    if (::ommtUploadService.isInitialized) ommtUploadService.reloadReset()
     reloadConfig()
     val soundCatalogCount = VanillaSoundCatalog.reload(this)
     logger.info("サウンドカタログを再読み込みしました: $soundCatalogCount SoundEvent")
@@ -276,7 +278,8 @@ class OyasaiMusic : JavaPlugin() {
       val previous = playbackEngine
       playbackEngine = createPlaybackEngine()
       previous.shutdown()
-      if (::oyasaiClientCommand.isInitialized) oyasaiClientCommand.invalidateCapabilities()
+      if (::ommtPlaybackClientRegistry.isInitialized)
+          ommtPlaybackClientRegistry.invalidateCapabilities()
     }
   }
 
