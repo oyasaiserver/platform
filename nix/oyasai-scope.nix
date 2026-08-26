@@ -65,7 +65,7 @@ let
         ;
 
       terraform = pkgs.terraform.withPlugins (_: oyasaiTerraformProviders);
-      nodejs = pkgs.nodejs_24;
+      nodejs = pkgs.nodejs_26;
       jdk = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
       jre = pkgs.javaPackages.compiler.temurin-bin.jre-25;
       gradle = pkgs.gradle_9.override { java = scopeSelf.jdk; };
