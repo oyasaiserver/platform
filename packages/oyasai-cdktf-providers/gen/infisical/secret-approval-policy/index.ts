@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,61 +10,61 @@ export interface SecretApprovalPolicyConfig extends cdktf.TerraformMetaArguments
   /**
   * Whether to allow the  approvers to approve their own changes
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#allow_self_approval SecretApprovalPolicy#allow_self_approval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#allow_self_approval SecretApprovalPolicy#allow_self_approval}
   */
   readonly allowSelfApproval?: boolean | cdktf.IResolvable;
   /**
   * The required approvers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#approvers SecretApprovalPolicy#approvers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#approvers SecretApprovalPolicy#approvers}
   */
   readonly approvers: SecretApprovalPolicyApprovers[] | cdktf.IResolvable;
   /**
   * The bypassers who can bypass the approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#bypassers SecretApprovalPolicy#bypassers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#bypassers SecretApprovalPolicy#bypassers}
   */
   readonly bypassers?: SecretApprovalPolicyBypassers[] | cdktf.IResolvable;
   /**
   * The enforcement level of the policy. This can either be hard or soft
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#enforcement_level SecretApprovalPolicy#enforcement_level}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#enforcement_level SecretApprovalPolicy#enforcement_level}
   */
   readonly enforcementLevel?: string;
   /**
   *  (DEPRECATED, Use environment_slugs instead) The environment to apply the secret approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#environment_slug SecretApprovalPolicy#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#environment_slug SecretApprovalPolicy#environment_slug}
   */
   readonly environmentSlug?: string;
   /**
   * The environments to apply the secret approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#environment_slugs SecretApprovalPolicy#environment_slugs}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#environment_slugs SecretApprovalPolicy#environment_slugs}
   */
   readonly environmentSlugs?: string[];
   /**
   * The name of the secret approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#name SecretApprovalPolicy#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#name SecretApprovalPolicy#name}
   */
   readonly name?: string;
   /**
   * The ID of the project to add the secret approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#project_id SecretApprovalPolicy#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#project_id SecretApprovalPolicy#project_id}
   */
   readonly projectId: string;
   /**
   * The number of required approvers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#required_approvals SecretApprovalPolicy#required_approvals}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#required_approvals SecretApprovalPolicy#required_approvals}
   */
   readonly requiredApprovals: number;
   /**
   * The secret path to apply the secret approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#secret_path SecretApprovalPolicy#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#secret_path SecretApprovalPolicy#secret_path}
   */
   readonly secretPath: string;
 }
@@ -72,7 +72,7 @@ export interface SecretApprovalPolicyApprovers {
   /**
   * The ID of the approver
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#id SecretApprovalPolicy#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#id SecretApprovalPolicy#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -81,13 +81,13 @@ export interface SecretApprovalPolicyApprovers {
   /**
   * The type of approver. Either group or user
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#type SecretApprovalPolicy#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#type SecretApprovalPolicy#type}
   */
   readonly type: string;
   /**
   * The username of the approver. By default, this is the email
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#username SecretApprovalPolicy#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#username SecretApprovalPolicy#username}
   */
   readonly username?: string;
 }
@@ -260,7 +260,7 @@ export interface SecretApprovalPolicyBypassers {
   /**
   * The ID of the bypasser
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#id SecretApprovalPolicy#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#id SecretApprovalPolicy#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -269,13 +269,13 @@ export interface SecretApprovalPolicyBypassers {
   /**
   * The type of bypasser. Either group or user
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#type SecretApprovalPolicy#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#type SecretApprovalPolicy#type}
   */
   readonly type: string;
   /**
   * The username of the bypasser. By default, this is the email
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#username SecretApprovalPolicy#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#username SecretApprovalPolicy#username}
   */
   readonly username?: string;
 }
@@ -446,7 +446,7 @@ export class SecretApprovalPolicyBypassersList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy infisical_secret_approval_policy}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy infisical_secret_approval_policy}
 */
 export class SecretApprovalPolicy extends cdktf.TerraformResource {
 
@@ -462,7 +462,7 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretApprovalPolicy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretApprovalPolicy to import
-  * @param importFromId The id of the existing SecretApprovalPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretApprovalPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretApprovalPolicy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -474,7 +474,7 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_approval_policy infisical_secret_approval_policy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_approval_policy infisical_secret_approval_policy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -485,7 +485,7 @@ export class SecretApprovalPolicy extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_approval_policy',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

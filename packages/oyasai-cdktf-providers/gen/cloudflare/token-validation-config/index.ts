@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,84 +8,92 @@ import * as cdktf from 'cdktf';
 
 export interface TokenValidationConfigConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#credentials TokenValidationConfig#credentials}
+  * Request payload for create and PUT credentials operations. Provided keys define the complete stored key set. Key identities (`{alg,kid}`) must be unique.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#credentials TokenValidationConfig#credentials}
   */
   readonly credentials: TokenValidationConfigCredentials;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#description TokenValidationConfig#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#description TokenValidationConfig#description}
   */
   readonly description: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#title TokenValidationConfig#title}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#title TokenValidationConfig#title}
   */
   readonly title: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#token_sources TokenValidationConfig#token_sources}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#token_sources TokenValidationConfig#token_sources}
   */
   readonly tokenSources: string[];
   /**
   * Available values: "JWT".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#token_type TokenValidationConfig#token_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#token_type TokenValidationConfig#token_type}
   */
   readonly tokenType: string;
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#zone_id TokenValidationConfig#zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#zone_id TokenValidationConfig#zone_id}
   */
   readonly zoneId: string;
 }
 export interface TokenValidationConfigCredentialsKeys {
   /**
   * Algorithm
-  * Available values: "RS256", "RS384", "RS512", "PS256", "PS384", "PS512", "ES256", "ES384".
+  * Available values: "RS256", "RS384", "RS512", "PS256", "PS384", "PS512", "ES256", "ES384", "HS256", "HS384", "HS512".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#alg TokenValidationConfig#alg}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#alg TokenValidationConfig#alg}
   */
   readonly alg: string;
   /**
   * Curve
   * Available values: "P-256", "P-384".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#crv TokenValidationConfig#crv}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#crv TokenValidationConfig#crv}
   */
   readonly crv?: string;
   /**
   * RSA exponent
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#e TokenValidationConfig#e}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#e TokenValidationConfig#e}
   */
   readonly e?: string;
   /**
+  * Symmetric key material. Required for create and PUT update requests.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#k TokenValidationConfig#k}
+  */
+  readonly k?: string;
+  /**
   * Key ID
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#kid TokenValidationConfig#kid}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#kid TokenValidationConfig#kid}
   */
   readonly kid: string;
   /**
   * Key Type
-  * Available values: "RSA", "EC".
+  * Available values: "RSA", "EC", "oct".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#kty TokenValidationConfig#kty}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#kty TokenValidationConfig#kty}
   */
   readonly kty: string;
   /**
   * RSA modulus
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#n TokenValidationConfig#n}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#n TokenValidationConfig#n}
   */
   readonly n?: string;
   /**
   * X EC coordinate
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#x TokenValidationConfig#x}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#x TokenValidationConfig#x}
   */
   readonly x?: string;
   /**
   * Y EC coordinate
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#y TokenValidationConfig#y}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#y TokenValidationConfig#y}
   */
   readonly y?: string;
 }
@@ -99,6 +107,7 @@ export function tokenValidationConfigCredentialsKeysToTerraform(struct?: TokenVa
     alg: cdktf.stringToTerraform(struct!.alg),
     crv: cdktf.stringToTerraform(struct!.crv),
     e: cdktf.stringToTerraform(struct!.e),
+    k: cdktf.stringToTerraform(struct!.k),
     kid: cdktf.stringToTerraform(struct!.kid),
     kty: cdktf.stringToTerraform(struct!.kty),
     n: cdktf.stringToTerraform(struct!.n),
@@ -128,6 +137,12 @@ export function tokenValidationConfigCredentialsKeysToHclTerraform(struct?: Toke
     },
     e: {
       value: cdktf.stringToHclTerraform(struct!.e),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    k: {
+      value: cdktf.stringToHclTerraform(struct!.k),
       isBlock: false,
       type: "simple",
       storageClassType: "string",
@@ -200,6 +215,10 @@ export class TokenValidationConfigCredentialsKeysOutputReference extends cdktf.C
       hasAnyValues = true;
       internalValueResult.e = this._e;
     }
+    if (this._k !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.k = this._k;
+    }
     if (this._kid !== undefined) {
       hasAnyValues = true;
       internalValueResult.kid = this._kid;
@@ -230,6 +249,7 @@ export class TokenValidationConfigCredentialsKeysOutputReference extends cdktf.C
       this._alg = undefined;
       this._crv = undefined;
       this._e = undefined;
+      this._k = undefined;
       this._kid = undefined;
       this._kty = undefined;
       this._n = undefined;
@@ -246,6 +266,7 @@ export class TokenValidationConfigCredentialsKeysOutputReference extends cdktf.C
       this._alg = value.alg;
       this._crv = value.crv;
       this._e = value.e;
+      this._k = value.k;
       this._kid = value.kid;
       this._kty = value.kty;
       this._n = value.n;
@@ -297,6 +318,22 @@ export class TokenValidationConfigCredentialsKeysOutputReference extends cdktf.C
   // Temporarily expose input value. Use with caution.
   public get eInput() {
     return this._e;
+  }
+
+  // k - computed: false, optional: true, required: false
+  private _k?: string; 
+  public get k() {
+    return this.getStringAttribute('k');
+  }
+  public set k(value: string) {
+    this._k = value;
+  }
+  public resetK() {
+    this._k = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get kInput() {
+    return this._k;
   }
 
   // kid - computed: false, optional: false, required: true
@@ -395,7 +432,7 @@ export class TokenValidationConfigCredentialsKeysList extends cdktf.ComplexList 
 }
 export interface TokenValidationConfigCredentials {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#keys TokenValidationConfig#keys}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#keys TokenValidationConfig#keys}
   */
   readonly keys: TokenValidationConfigCredentialsKeys[] | cdktf.IResolvable;
 }
@@ -486,7 +523,7 @@ export class TokenValidationConfigCredentialsOutputReference extends cdktf.Compl
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config cloudflare_token_validation_config}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config cloudflare_token_validation_config}
 */
 export class TokenValidationConfig extends cdktf.TerraformResource {
 
@@ -502,7 +539,7 @@ export class TokenValidationConfig extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a TokenValidationConfig resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the TokenValidationConfig to import
-  * @param importFromId The id of the existing TokenValidationConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing TokenValidationConfig that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the TokenValidationConfig to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -514,7 +551,7 @@ export class TokenValidationConfig extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/token_validation_config cloudflare_token_validation_config} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/token_validation_config cloudflare_token_validation_config} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -525,7 +562,7 @@ export class TokenValidationConfig extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_token_validation_config',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

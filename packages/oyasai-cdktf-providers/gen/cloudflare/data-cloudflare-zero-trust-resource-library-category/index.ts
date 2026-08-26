@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_category
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_category
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,20 +8,20 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustResourceLibraryCategoryConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_category#account_id DataCloudflareZeroTrustResourceLibraryCategory#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_category#account_id DataCloudflareZeroTrustResourceLibraryCategory#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_category#id DataCloudflareZeroTrustResourceLibraryCategory#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_category#id DataCloudflareZeroTrustResourceLibraryCategory#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
   */
-  readonly id: string;
+  readonly id: number;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_category cloudflare_zero_trust_resource_library_category}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_category cloudflare_zero_trust_resource_library_category}
 */
 export class DataCloudflareZeroTrustResourceLibraryCategory extends cdktf.TerraformDataSource {
 
@@ -37,7 +37,7 @@ export class DataCloudflareZeroTrustResourceLibraryCategory extends cdktf.Terraf
   * Generates CDKTF code for importing a DataCloudflareZeroTrustResourceLibraryCategory resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustResourceLibraryCategory to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustResourceLibraryCategory that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_category#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustResourceLibraryCategory that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_category#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustResourceLibraryCategory to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -49,7 +49,7 @@ export class DataCloudflareZeroTrustResourceLibraryCategory extends cdktf.Terraf
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_category cloudflare_zero_trust_resource_library_category} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_category cloudflare_zero_trust_resource_library_category} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -60,7 +60,7 @@ export class DataCloudflareZeroTrustResourceLibraryCategory extends cdktf.Terraf
       terraformResourceType: 'cloudflare_zero_trust_resource_library_category',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -102,11 +102,11 @@ export class DataCloudflareZeroTrustResourceLibraryCategory extends cdktf.Terraf
   }
 
   // id - computed: false, optional: false, required: true
-  private _id?: string; 
+  private _id?: number; 
   public get id() {
-    return this.getStringAttribute('id');
+    return this.getNumberAttribute('id');
   }
-  public set id(value: string) {
+  public set id(value: number) {
     this._id = value;
   }
   // Temporarily expose input value. Use with caution.
@@ -126,7 +126,7 @@ export class DataCloudflareZeroTrustResourceLibraryCategory extends cdktf.Terraf
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
-      id: cdktf.stringToTerraform(this._id),
+      id: cdktf.numberToTerraform(this._id),
     };
   }
 
@@ -139,10 +139,10 @@ export class DataCloudflareZeroTrustResourceLibraryCategory extends cdktf.Terraf
         storageClassType: "string",
       },
       id: {
-        value: cdktf.stringToHclTerraform(this._id),
+        value: cdktf.numberToHclTerraform(this._id),
         isBlock: false,
         type: "simple",
-        storageClassType: "string",
+        storageClassType: "number",
       },
     };
 

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface MoqRelayConfig extends cdktf.TerraformMetaArguments {
   /**
   * Cloudflare account identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#account_id MoqRelay#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#account_id MoqRelay#account_id}
   */
   readonly accountId: string;
   /**
   * upstreams and lingering_subscribe are mutually exclusive.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#config MoqRelay#config}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#config MoqRelay#config}
   */
   readonly config?: MoqRelayConfigA;
   /**
   * Human-readable name for the relay.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#name MoqRelay#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#name MoqRelay#name}
   */
   readonly name: string;
 }
 export interface MoqRelayConfigLingeringSubscribe {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#enabled MoqRelay#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#enabled MoqRelay#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
   * Relay-level ceiling on lingering subscribe timeout (ms). Default 30000.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#max_timeout_ms MoqRelay#max_timeout_ms}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#max_timeout_ms MoqRelay#max_timeout_ms}
   */
   readonly maxTimeoutMs?: number;
 }
@@ -157,9 +157,11 @@ export class MoqRelayConfigLingeringSubscribeOutputReference extends cdktf.Compl
 }
 export interface MoqRelayConfigUpstreamsUpstreams {
   /**
-  * Upstream MOQT server publisher URL.
+  * Upstream MOQT server publisher URL. Must be an absolute URL with a
+  * host and a scheme the relay can dial: moqt:// (raw QUIC) or https://
+  * (WebTransport). Validated on update (PUT); rejected with 21013.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#url MoqRelay#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#url MoqRelay#url}
   */
   readonly url?: string;
 }
@@ -275,7 +277,7 @@ export class MoqRelayConfigUpstreamsUpstreamsList extends cdktf.ComplexList {
 }
 export interface MoqRelayConfigUpstreams {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#enabled MoqRelay#enabled}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#enabled MoqRelay#enabled}
   */
   readonly enabled?: boolean | cdktf.IResolvable;
   /**
@@ -283,7 +285,7 @@ export interface MoqRelayConfigUpstreams {
   * object (not a bare string) so per-upstream configuration can be
   * added in the future without another breaking change.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#upstreams MoqRelay#upstreams}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#upstreams MoqRelay#upstreams}
   */
   readonly upstreams?: MoqRelayConfigUpstreamsUpstreams[] | cdktf.IResolvable;
 }
@@ -406,14 +408,14 @@ export class MoqRelayConfigUpstreamsOutputReference extends cdktf.ComplexObject 
 }
 export interface MoqRelayConfigA {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#lingering_subscribe MoqRelay#lingering_subscribe}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#lingering_subscribe MoqRelay#lingering_subscribe}
   */
   readonly lingeringSubscribe?: MoqRelayConfigLingeringSubscribe;
   /**
   * Upstreams are external MOQT server publishers that a relay falls back
   * to when it has no local publisher for a requested namespace/track.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#upstreams MoqRelay#upstreams}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#upstreams MoqRelay#upstreams}
   */
   readonly upstreams?: MoqRelayConfigUpstreams;
 }
@@ -536,7 +538,7 @@ export class MoqRelayConfigAOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay cloudflare_moq_relay}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay cloudflare_moq_relay}
 */
 export class MoqRelay extends cdktf.TerraformResource {
 
@@ -552,7 +554,7 @@ export class MoqRelay extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a MoqRelay resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the MoqRelay to import
-  * @param importFromId The id of the existing MoqRelay that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing MoqRelay that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the MoqRelay to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -564,7 +566,7 @@ export class MoqRelay extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/moq_relay cloudflare_moq_relay} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/moq_relay cloudflare_moq_relay} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -575,7 +577,7 @@ export class MoqRelay extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_moq_relay',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

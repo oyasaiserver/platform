@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionBitbucketConfig extends cdktf.TerraformMetaArgumen
   /**
   * The credentials for the Bitbucket App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket#credentials AppConnectionBitbucket#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket#credentials AppConnectionBitbucket#credentials}
   */
   readonly credentials: AppConnectionBitbucketCredentials;
   /**
   * An optional description for the Bitbucket App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket#description AppConnectionBitbucket#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket#description AppConnectionBitbucket#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with Bitbucket. Possible values are: api-token
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket#method AppConnectionBitbucket#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket#method AppConnectionBitbucket#method}
   */
   readonly method: string;
   /**
   * The name of the Bitbucket App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket#name AppConnectionBitbucket#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket#name AppConnectionBitbucket#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket#project_id AppConnectionBitbucket#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket#project_id AppConnectionBitbucket#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,13 +42,13 @@ export interface AppConnectionBitbucketCredentials {
   /**
   * The Bitbucket API token for authentication.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket#api_token AppConnectionBitbucket#api_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket#api_token AppConnectionBitbucket#api_token}
   */
   readonly apiToken: string;
   /**
   * The email address associated with the Bitbucket API token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket#email AppConnectionBitbucket#email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket#email AppConnectionBitbucket#email}
   */
   readonly email: string;
 }
@@ -165,7 +165,7 @@ export class AppConnectionBitbucketCredentialsOutputReference extends cdktf.Comp
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket infisical_app_connection_bitbucket}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket infisical_app_connection_bitbucket}
 */
 export class AppConnectionBitbucket extends cdktf.TerraformResource {
 
@@ -181,7 +181,7 @@ export class AppConnectionBitbucket extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionBitbucket resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionBitbucket to import
-  * @param importFromId The id of the existing AppConnectionBitbucket that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionBitbucket that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionBitbucket to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -193,7 +193,7 @@ export class AppConnectionBitbucket extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_bitbucket infisical_app_connection_bitbucket} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_bitbucket infisical_app_connection_bitbucket} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -204,7 +204,7 @@ export class AppConnectionBitbucket extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_bitbucket',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

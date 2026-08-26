@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_tag
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_tag
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface SecretTagConfig extends cdktf.TerraformMetaArguments {
   /**
   * Color code for the tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_tag#color SecretTag#color}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_tag#color SecretTag#color}
   */
   readonly color: string;
   /**
   * The name for the new tag
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_tag#name SecretTag#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_tag#name SecretTag#name}
   */
   readonly name: string;
   /**
   * The project id associated with the secret tag
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_tag#project_id SecretTag#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_tag#project_id SecretTag#project_id}
   */
   readonly projectId: string;
   /**
   * The slug for the new tag
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_tag#slug SecretTag#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_tag#slug SecretTag#slug}
   */
   readonly slug: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_tag infisical_secret_tag}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_tag infisical_secret_tag}
 */
 export class SecretTag extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class SecretTag extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretTag resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretTag to import
-  * @param importFromId The id of the existing SecretTag that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_tag#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretTag that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_tag#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretTag to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class SecretTag extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/secret_tag infisical_secret_tag} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/secret_tag infisical_secret_tag} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class SecretTag extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_secret_tag',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

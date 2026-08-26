@@ -40,6 +40,7 @@ export * as cloudforceOneRequestPriority from './cloudforce-one-request-priority
 export * as connectivityDirectoryService from './connectivity-directory-service';
 export * as contentScanning from './content-scanning';
 export * as contentScanningExpression from './content-scanning-expression';
+export * as ctAlerting from './ct-alerting';
 export * as customCsr from './custom-csr';
 export * as customHostname from './custom-hostname';
 export * as customHostnameFallbackOrigin from './custom-hostname-fallback-origin';
@@ -116,6 +117,7 @@ export * as pagesProject from './pages-project';
 export * as pipeline from './pipeline';
 export * as pipelineSink from './pipeline-sink';
 export * as pipelineStream from './pipeline-stream';
+export * as precursor from './precursor';
 export * as queue from './queue';
 export * as queueConsumer from './queue-consumer';
 export * as r2Bucket from './r2-bucket';
@@ -327,6 +329,7 @@ export * as dataCloudflareConnectivityDirectoryService from './data-cloudflare-c
 export * as dataCloudflareConnectivityDirectoryServices from './data-cloudflare-connectivity-directory-services';
 export * as dataCloudflareContentScanning from './data-cloudflare-content-scanning';
 export * as dataCloudflareContentScanningExpressions from './data-cloudflare-content-scanning-expressions';
+export * as dataCloudflareCtAlerting from './data-cloudflare-ct-alerting';
 export * as dataCloudflareCustomCsr from './data-cloudflare-custom-csr';
 export * as dataCloudflareCustomCsrs from './data-cloudflare-custom-csrs';
 export * as dataCloudflareCustomHostname from './data-cloudflare-custom-hostname';
@@ -382,6 +385,7 @@ export * as dataCloudflareGoogleTagGateway from './data-cloudflare-google-tag-ga
 export * as dataCloudflareHealthcheck from './data-cloudflare-healthcheck';
 export * as dataCloudflareHealthchecks from './data-cloudflare-healthchecks';
 export * as dataCloudflareHostnameTlsSetting from './data-cloudflare-hostname-tls-setting';
+export * as dataCloudflareHostnameTlsSettings from './data-cloudflare-hostname-tls-settings';
 export * as dataCloudflareHyperdriveConfig from './data-cloudflare-hyperdrive-config';
 export * as dataCloudflareHyperdriveConfigs from './data-cloudflare-hyperdrive-configs';
 export * as dataCloudflareImage from './data-cloudflare-image';
@@ -468,6 +472,7 @@ export * as dataCloudflarePipelineSink from './data-cloudflare-pipeline-sink';
 export * as dataCloudflarePipelineSinks from './data-cloudflare-pipeline-sinks';
 export * as dataCloudflarePipelineStream from './data-cloudflare-pipeline-stream';
 export * as dataCloudflarePipelineStreams from './data-cloudflare-pipeline-streams';
+export * as dataCloudflarePrecursor from './data-cloudflare-precursor';
 export * as dataCloudflareQueue from './data-cloudflare-queue';
 export * as dataCloudflareQueueConsumer from './data-cloudflare-queue-consumer';
 export * as dataCloudflareQueueConsumers from './data-cloudflare-queue-consumers';
@@ -508,6 +513,7 @@ export * as dataCloudflareShareResources from './data-cloudflare-share-resources
 export * as dataCloudflareShares from './data-cloudflare-shares';
 export * as dataCloudflareSnippet from './data-cloudflare-snippet';
 export * as dataCloudflareSnippetList from './data-cloudflare-snippet-list';
+export * as dataCloudflareSnippetRules from './data-cloudflare-snippet-rules';
 export * as dataCloudflareSnippetRulesList from './data-cloudflare-snippet-rules-list';
 export * as dataCloudflareSnippets from './data-cloudflare-snippets';
 export * as dataCloudflareSnippetsList from './data-cloudflare-snippets-list';
@@ -628,6 +634,8 @@ export * as dataCloudflareZeroTrustDexTests from './data-cloudflare-zero-trust-d
 export * as dataCloudflareZeroTrustDlpCustomEntries from './data-cloudflare-zero-trust-dlp-custom-entries';
 export * as dataCloudflareZeroTrustDlpCustomEntry from './data-cloudflare-zero-trust-dlp-custom-entry';
 export * as dataCloudflareZeroTrustDlpCustomProfile from './data-cloudflare-zero-trust-dlp-custom-profile';
+export * as dataCloudflareZeroTrustDlpCustomPromptTopic from './data-cloudflare-zero-trust-dlp-custom-prompt-topic';
+export * as dataCloudflareZeroTrustDlpCustomPromptTopics from './data-cloudflare-zero-trust-dlp-custom-prompt-topics';
 export * as dataCloudflareZeroTrustDlpDataClass from './data-cloudflare-zero-trust-dlp-data-class';
 export * as dataCloudflareZeroTrustDlpDataClasses from './data-cloudflare-zero-trust-dlp-data-classes';
 export * as dataCloudflareZeroTrustDlpDataTag from './data-cloudflare-zero-trust-dlp-data-tag';

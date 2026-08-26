@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/r2_bucket_sippy
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/r2_bucket_sippy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataCloudflareR2BucketSippyConfig extends cdktf.TerraformMetaAr
   /**
   * Account ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/r2_bucket_sippy#account_id DataCloudflareR2BucketSippy#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/r2_bucket_sippy#account_id DataCloudflareR2BucketSippy#account_id}
   */
   readonly accountId: string;
   /**
   * Name of the bucket.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/r2_bucket_sippy#bucket_name DataCloudflareR2BucketSippy#bucket_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/r2_bucket_sippy#bucket_name DataCloudflareR2BucketSippy#bucket_name}
   */
   readonly bucketName: string;
 }
@@ -148,6 +148,11 @@ export class DataCloudflareR2BucketSippySourceOutputReference extends cdktf.Comp
     return this.getStringAttribute('bucket_url');
   }
 
+  // container - computed: true, optional: false, required: false
+  public get container() {
+    return this.getStringAttribute('container');
+  }
+
   // r2_bucket_sippy_provider - computed: true, optional: false, required: false
   public get r2BucketSippyProvider() {
     return this.getStringAttribute('r2_bucket_sippy_provider');
@@ -160,7 +165,7 @@ export class DataCloudflareR2BucketSippySourceOutputReference extends cdktf.Comp
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/r2_bucket_sippy cloudflare_r2_bucket_sippy}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/r2_bucket_sippy cloudflare_r2_bucket_sippy}
 */
 export class DataCloudflareR2BucketSippy extends cdktf.TerraformDataSource {
 
@@ -176,7 +181,7 @@ export class DataCloudflareR2BucketSippy extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareR2BucketSippy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareR2BucketSippy to import
-  * @param importFromId The id of the existing DataCloudflareR2BucketSippy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/r2_bucket_sippy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareR2BucketSippy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/r2_bucket_sippy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareR2BucketSippy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -188,7 +193,7 @@ export class DataCloudflareR2BucketSippy extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/r2_bucket_sippy cloudflare_r2_bucket_sippy} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/r2_bucket_sippy cloudflare_r2_bucket_sippy} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -199,7 +204,7 @@ export class DataCloudflareR2BucketSippy extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_r2_bucket_sippy',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,25 +10,25 @@ export interface ProjectIdentityConfig extends cdktf.TerraformMetaArguments {
   /**
   * When true, if the identity is already a member of the project (e.g. auto-added by Infisical when the project was created by this identity), the existing membership is adopted and its roles are updated to match the desired state instead of returning an error. Defaults to false.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#adopt_existing ProjectIdentity#adopt_existing}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#adopt_existing ProjectIdentity#adopt_existing}
   */
   readonly adoptExisting?: boolean | cdktf.IResolvable;
   /**
   * The id of the identity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#identity_id ProjectIdentity#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#identity_id ProjectIdentity#identity_id}
   */
   readonly identityId: string;
   /**
   * The id of the project
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#project_id ProjectIdentity#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#project_id ProjectIdentity#project_id}
   */
   readonly projectId: string;
   /**
   * The roles assigned to the project identity
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#roles ProjectIdentity#roles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#roles ProjectIdentity#roles}
   */
   readonly roles: ProjectIdentityRoles[] | cdktf.IResolvable;
 }
@@ -100,43 +100,43 @@ export interface ProjectIdentityRoles {
   /**
   * The id of the custom role slug
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#custom_role_id ProjectIdentity#custom_role_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#custom_role_id ProjectIdentity#custom_role_id}
   */
   readonly customRoleId?: string;
   /**
   * Flag to indicate the assigned role is temporary or not. When is_temporary is true fields temporary_mode, temporary_range and temporary_access_start_time is required.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#is_temporary ProjectIdentity#is_temporary}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#is_temporary ProjectIdentity#is_temporary}
   */
   readonly isTemporary?: boolean | cdktf.IResolvable;
   /**
   * The slug of the role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#role_slug ProjectIdentity#role_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#role_slug ProjectIdentity#role_slug}
   */
   readonly roleSlug: string;
   /**
   * ISO time for which temporary access will end. Computed based on temporary_range and temporary_access_start_time
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#temporary_access_end_time ProjectIdentity#temporary_access_end_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#temporary_access_end_time ProjectIdentity#temporary_access_end_time}
   */
   readonly temporaryAccessEndTime?: string;
   /**
   * ISO time for which temporary access should begin. The current time is used by default.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#temporary_access_start_time ProjectIdentity#temporary_access_start_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#temporary_access_start_time ProjectIdentity#temporary_access_start_time}
   */
   readonly temporaryAccessStartTime?: string;
   /**
   * Type of temporary access given. Types: relative. Default: relative
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#temporary_mode ProjectIdentity#temporary_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#temporary_mode ProjectIdentity#temporary_mode}
   */
   readonly temporaryMode?: string;
   /**
   * TTL for the temporary time. Eg: 1m, 1h, 1d. Default: 1h
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#temporary_range ProjectIdentity#temporary_range}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#temporary_range ProjectIdentity#temporary_range}
   */
   readonly temporaryRange?: string;
 }
@@ -428,7 +428,7 @@ export class ProjectIdentityRolesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity infisical_project_identity}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity infisical_project_identity}
 */
 export class ProjectIdentity extends cdktf.TerraformResource {
 
@@ -444,7 +444,7 @@ export class ProjectIdentity extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ProjectIdentity resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ProjectIdentity to import
-  * @param importFromId The id of the existing ProjectIdentity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ProjectIdentity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ProjectIdentity to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -456,7 +456,7 @@ export class ProjectIdentity extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_identity infisical_project_identity} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_identity infisical_project_identity} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -467,7 +467,7 @@ export class ProjectIdentity extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_project_identity',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

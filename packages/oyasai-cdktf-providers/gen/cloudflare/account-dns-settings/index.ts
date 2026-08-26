@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,17 +10,17 @@ export interface AccountDnsSettingsConfig extends cdktf.TerraformMetaArguments {
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#account_id AccountDnsSettings#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#account_id AccountDnsSettings#account_id}
   */
   readonly accountId: string;
   /**
   * When enabled, forces all proxied DNS records in the account to behave as DNS-only at the edge, regardless of each record's individual proxy setting. Note that this account-level override does not modify the records themselves; it only affects how they are served at the edge. See more on [Enforce DNS-only](https://developers.cloudflare.com/dns/proxy-status/enforce-dns-only).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#enforce_dns_only AccountDnsSettings#enforce_dns_only}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#enforce_dns_only AccountDnsSettings#enforce_dns_only}
   */
   readonly enforceDnsOnly?: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#zone_defaults AccountDnsSettings#zone_defaults}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#zone_defaults AccountDnsSettings#zone_defaults}
   */
   readonly zoneDefaults?: AccountDnsSettingsZoneDefaults;
 }
@@ -28,7 +28,7 @@ export interface AccountDnsSettingsZoneDefaultsInternalDns {
   /**
   * The ID of the zone to fallback to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#reference_zone_id AccountDnsSettings#reference_zone_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#reference_zone_id AccountDnsSettings#reference_zone_id}
   */
   readonly referenceZoneId?: string;
 }
@@ -104,7 +104,7 @@ export class AccountDnsSettingsZoneDefaultsInternalDnsOutputReference extends cd
     }
   }
 
-  // reference_zone_id - computed: false, optional: true, required: false
+  // reference_zone_id - computed: true, optional: true, required: false
   private _referenceZoneId?: string; 
   public get referenceZoneId() {
     return this.getStringAttribute('reference_zone_id');
@@ -125,7 +125,7 @@ export interface AccountDnsSettingsZoneDefaultsNameservers {
   * Nameserver type
   * Available values: "cloudflare.standard", "cloudflare.standard.random", "custom.account", "custom.tenant".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#type AccountDnsSettings#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#type AccountDnsSettings#type}
   */
   readonly type?: string;
 }
@@ -201,7 +201,7 @@ export class AccountDnsSettingsZoneDefaultsNameserversOutputReference extends cd
     }
   }
 
-  // type - computed: false, optional: true, required: false
+  // type - computed: true, optional: true, required: false
   private _type?: string; 
   public get type() {
     return this.getStringAttribute('type');
@@ -221,43 +221,43 @@ export interface AccountDnsSettingsZoneDefaultsSoa {
   /**
   * Time in seconds of being unable to query the primary server after which secondary servers should stop serving the zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#expire AccountDnsSettings#expire}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#expire AccountDnsSettings#expire}
   */
   readonly expire?: number;
   /**
   * The time to live (TTL) for negative caching of records within the zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#min_ttl AccountDnsSettings#min_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#min_ttl AccountDnsSettings#min_ttl}
   */
   readonly minTtl?: number;
   /**
   * The primary nameserver, which may be used for outbound zone transfers. If null, a Cloudflare-assigned value will be used.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#mname AccountDnsSettings#mname}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#mname AccountDnsSettings#mname}
   */
   readonly mname?: string;
   /**
   * Time in seconds after which secondary servers should re-check the SOA record to see if the zone has been updated.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#refresh AccountDnsSettings#refresh}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#refresh AccountDnsSettings#refresh}
   */
   readonly refresh?: number;
   /**
   * Time in seconds after which secondary servers should retry queries after the primary server was unresponsive.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#retry AccountDnsSettings#retry}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#retry AccountDnsSettings#retry}
   */
   readonly retry?: number;
   /**
   * The email address of the zone administrator, with the first label representing the local part of the email address.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#rname AccountDnsSettings#rname}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#rname AccountDnsSettings#rname}
   */
   readonly rname?: string;
   /**
   * The time to live (TTL) of the SOA record itself.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#ttl AccountDnsSettings#ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#ttl AccountDnsSettings#ttl}
   */
   readonly ttl?: number;
 }
@@ -411,7 +411,7 @@ export class AccountDnsSettingsZoneDefaultsSoaOutputReference extends cdktf.Comp
     }
   }
 
-  // expire - computed: false, optional: true, required: false
+  // expire - computed: true, optional: true, required: false
   private _expire?: number; 
   public get expire() {
     return this.getNumberAttribute('expire');
@@ -427,7 +427,7 @@ export class AccountDnsSettingsZoneDefaultsSoaOutputReference extends cdktf.Comp
     return this._expire;
   }
 
-  // min_ttl - computed: false, optional: true, required: false
+  // min_ttl - computed: true, optional: true, required: false
   private _minTtl?: number; 
   public get minTtl() {
     return this.getNumberAttribute('min_ttl');
@@ -443,7 +443,7 @@ export class AccountDnsSettingsZoneDefaultsSoaOutputReference extends cdktf.Comp
     return this._minTtl;
   }
 
-  // mname - computed: false, optional: true, required: false
+  // mname - computed: true, optional: true, required: false
   private _mname?: string; 
   public get mname() {
     return this.getStringAttribute('mname');
@@ -459,7 +459,7 @@ export class AccountDnsSettingsZoneDefaultsSoaOutputReference extends cdktf.Comp
     return this._mname;
   }
 
-  // refresh - computed: false, optional: true, required: false
+  // refresh - computed: true, optional: true, required: false
   private _refresh?: number; 
   public get refresh() {
     return this.getNumberAttribute('refresh');
@@ -475,7 +475,7 @@ export class AccountDnsSettingsZoneDefaultsSoaOutputReference extends cdktf.Comp
     return this._refresh;
   }
 
-  // retry - computed: false, optional: true, required: false
+  // retry - computed: true, optional: true, required: false
   private _retry?: number; 
   public get retry() {
     return this.getNumberAttribute('retry');
@@ -491,7 +491,7 @@ export class AccountDnsSettingsZoneDefaultsSoaOutputReference extends cdktf.Comp
     return this._retry;
   }
 
-  // rname - computed: false, optional: true, required: false
+  // rname - computed: true, optional: true, required: false
   private _rname?: string; 
   public get rname() {
     return this.getStringAttribute('rname');
@@ -507,7 +507,7 @@ export class AccountDnsSettingsZoneDefaultsSoaOutputReference extends cdktf.Comp
     return this._rname;
   }
 
-  // ttl - computed: false, optional: true, required: false
+  // ttl - computed: true, optional: true, required: false
   private _ttl?: number; 
   public get ttl() {
     return this.getNumberAttribute('ttl');
@@ -527,56 +527,56 @@ export interface AccountDnsSettingsZoneDefaults {
   /**
   * Whether to flatten all CNAME records in the zone. Note that, due to DNS limitations, a CNAME record at the zone apex will always be flattened.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#flatten_all_cnames AccountDnsSettings#flatten_all_cnames}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#flatten_all_cnames AccountDnsSettings#flatten_all_cnames}
   */
   readonly flattenAllCnames?: boolean | cdktf.IResolvable;
   /**
   * Whether to enable Foundation DNS Advanced Nameservers on the zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#foundation_dns AccountDnsSettings#foundation_dns}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#foundation_dns AccountDnsSettings#foundation_dns}
   */
   readonly foundationDns?: boolean | cdktf.IResolvable;
   /**
   * Settings for this internal zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#internal_dns AccountDnsSettings#internal_dns}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#internal_dns AccountDnsSettings#internal_dns}
   */
   readonly internalDns?: AccountDnsSettingsZoneDefaultsInternalDns;
   /**
   * Whether to enable multi-provider DNS, which causes Cloudflare to activate the zone even when non-Cloudflare NS records exist, and to respect NS records at the zone apex during outbound zone transfers.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#multi_provider AccountDnsSettings#multi_provider}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#multi_provider AccountDnsSettings#multi_provider}
   */
   readonly multiProvider?: boolean | cdktf.IResolvable;
   /**
   * Settings determining the nameservers through which the zone should be available.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#nameservers AccountDnsSettings#nameservers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#nameservers AccountDnsSettings#nameservers}
   */
   readonly nameservers?: AccountDnsSettingsZoneDefaultsNameservers;
   /**
   * The time to live (TTL) of the zone's nameserver (NS) records.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#ns_ttl AccountDnsSettings#ns_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#ns_ttl AccountDnsSettings#ns_ttl}
   */
   readonly nsTtl?: number;
   /**
   * Allows a Secondary DNS zone to use (proxied) override records and CNAME flattening at the zone apex.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#secondary_overrides AccountDnsSettings#secondary_overrides}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#secondary_overrides AccountDnsSettings#secondary_overrides}
   */
   readonly secondaryOverrides?: boolean | cdktf.IResolvable;
   /**
   * Components of the zone's SOA record.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#soa AccountDnsSettings#soa}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#soa AccountDnsSettings#soa}
   */
   readonly soa?: AccountDnsSettingsZoneDefaultsSoa;
   /**
   * Whether the zone mode is a regular or CDN/DNS only zone.
   * Available values: "standard", "cdn_only", "dns_only".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#zone_mode AccountDnsSettings#zone_mode}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#zone_mode AccountDnsSettings#zone_mode}
   */
   readonly zoneMode?: string;
 }
@@ -756,7 +756,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
     }
   }
 
-  // flatten_all_cnames - computed: false, optional: true, required: false
+  // flatten_all_cnames - computed: true, optional: true, required: false
   private _flattenAllCnames?: boolean | cdktf.IResolvable; 
   public get flattenAllCnames() {
     return this.getBooleanAttribute('flatten_all_cnames');
@@ -772,7 +772,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
     return this._flattenAllCnames;
   }
 
-  // foundation_dns - computed: false, optional: true, required: false
+  // foundation_dns - computed: true, optional: true, required: false
   private _foundationDns?: boolean | cdktf.IResolvable; 
   public get foundationDns() {
     return this.getBooleanAttribute('foundation_dns');
@@ -788,7 +788,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
     return this._foundationDns;
   }
 
-  // internal_dns - computed: false, optional: true, required: false
+  // internal_dns - computed: true, optional: true, required: false
   private _internalDns = new AccountDnsSettingsZoneDefaultsInternalDnsOutputReference(this, "internal_dns");
   public get internalDns() {
     return this._internalDns;
@@ -804,7 +804,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
     return this._internalDns.internalValue;
   }
 
-  // multi_provider - computed: false, optional: true, required: false
+  // multi_provider - computed: true, optional: true, required: false
   private _multiProvider?: boolean | cdktf.IResolvable; 
   public get multiProvider() {
     return this.getBooleanAttribute('multi_provider');
@@ -820,7 +820,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
     return this._multiProvider;
   }
 
-  // nameservers - computed: false, optional: true, required: false
+  // nameservers - computed: true, optional: true, required: false
   private _nameservers = new AccountDnsSettingsZoneDefaultsNameserversOutputReference(this, "nameservers");
   public get nameservers() {
     return this._nameservers;
@@ -836,7 +836,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
     return this._nameservers.internalValue;
   }
 
-  // ns_ttl - computed: false, optional: true, required: false
+  // ns_ttl - computed: true, optional: true, required: false
   private _nsTtl?: number; 
   public get nsTtl() {
     return this.getNumberAttribute('ns_ttl');
@@ -852,7 +852,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
     return this._nsTtl;
   }
 
-  // secondary_overrides - computed: false, optional: true, required: false
+  // secondary_overrides - computed: true, optional: true, required: false
   private _secondaryOverrides?: boolean | cdktf.IResolvable; 
   public get secondaryOverrides() {
     return this.getBooleanAttribute('secondary_overrides');
@@ -868,7 +868,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
     return this._secondaryOverrides;
   }
 
-  // soa - computed: false, optional: true, required: false
+  // soa - computed: true, optional: true, required: false
   private _soa = new AccountDnsSettingsZoneDefaultsSoaOutputReference(this, "soa");
   public get soa() {
     return this._soa;
@@ -884,7 +884,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
     return this._soa.internalValue;
   }
 
-  // zone_mode - computed: false, optional: true, required: false
+  // zone_mode - computed: true, optional: true, required: false
   private _zoneMode?: string; 
   public get zoneMode() {
     return this.getStringAttribute('zone_mode');
@@ -902,7 +902,7 @@ export class AccountDnsSettingsZoneDefaultsOutputReference extends cdktf.Complex
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings cloudflare_account_dns_settings}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings cloudflare_account_dns_settings}
 */
 export class AccountDnsSettings extends cdktf.TerraformResource {
 
@@ -918,7 +918,7 @@ export class AccountDnsSettings extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AccountDnsSettings resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AccountDnsSettings to import
-  * @param importFromId The id of the existing AccountDnsSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AccountDnsSettings that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AccountDnsSettings to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -930,7 +930,7 @@ export class AccountDnsSettings extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/account_dns_settings cloudflare_account_dns_settings} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/account_dns_settings cloudflare_account_dns_settings} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -941,7 +941,7 @@ export class AccountDnsSettings extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_account_dns_settings',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -989,7 +989,7 @@ export class AccountDnsSettings extends cdktf.TerraformResource {
     return this._enforceDnsOnly;
   }
 
-  // zone_defaults - computed: false, optional: true, required: false
+  // zone_defaults - computed: true, optional: true, required: false
   private _zoneDefaults = new AccountDnsSettingsZoneDefaultsOutputReference(this, "zone_defaults");
   public get zoneDefaults() {
     return this._zoneDefaults;

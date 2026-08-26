@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface R2BucketSippyConfig extends cdktf.TerraformMetaArguments {
   /**
   * Account ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#account_id R2BucketSippy#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#account_id R2BucketSippy#account_id}
   */
   readonly accountId: string;
   /**
   * Name of the bucket.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#bucket_name R2BucketSippy#bucket_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#bucket_name R2BucketSippy#bucket_name}
   */
   readonly bucketName: string;
   /**
   * R2 bucket to copy objects to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#destination R2BucketSippy#destination}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#destination R2BucketSippy#destination}
   */
   readonly destination?: R2BucketSippyDestination;
   /**
   * Jurisdiction of the bucket
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#jurisdiction R2BucketSippy#jurisdiction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#jurisdiction R2BucketSippy#jurisdiction}
   */
   readonly jurisdiction?: string;
   /**
   * AWS S3 bucket to copy objects from.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#source R2BucketSippy#source}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#source R2BucketSippy#source}
   */
   readonly source?: R2BucketSippySource;
 }
@@ -47,13 +47,13 @@ export interface R2BucketSippyDestination {
   * Sippy will use this token when writing objects to R2, so it is
   * best to scope this token to the bucket you're enabling Sippy for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#access_key_id R2BucketSippy#access_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#access_key_id R2BucketSippy#access_key_id}
   */
   readonly accessKeyId?: string;
   /**
   * Available values: "r2".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#cloud_provider R2BucketSippy#cloud_provider}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#cloud_provider R2BucketSippy#cloud_provider}
   */
   readonly cloudProvider?: string;
   /**
@@ -64,7 +64,7 @@ export interface R2BucketSippyDestination {
   * Sippy will use this token when writing objects to R2, so it is
   * best to scope this token to the bucket you're enabling Sippy for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#secret_access_key R2BucketSippy#secret_access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#secret_access_key R2BucketSippy#secret_access_key}
   */
   readonly secretAccessKey?: string;
 }
@@ -218,49 +218,73 @@ export interface R2BucketSippySource {
   /**
   * Access Key ID of an IAM credential (ideally scoped to a single S3 bucket).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#access_key_id R2BucketSippy#access_key_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#access_key_id R2BucketSippy#access_key_id}
   */
   readonly accessKeyId?: string;
   /**
+  * Access key for the Azure Storage account. Mutually exclusive with sasToken.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#account_key R2BucketSippy#account_key}
+  */
+  readonly accountKey?: string;
+  /**
+  * Name of the Azure Storage account.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#account_name R2BucketSippy#account_name}
+  */
+  readonly accountName?: string;
+  /**
   * Name of the AWS S3 bucket.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#bucket R2BucketSippy#bucket}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#bucket R2BucketSippy#bucket}
   */
   readonly bucket?: string;
   /**
   * URL to the S3-compatible API of the bucket.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#bucket_url R2BucketSippy#bucket_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#bucket_url R2BucketSippy#bucket_url}
   */
   readonly bucketUrl?: string;
   /**
   * Client email of an IAM credential (ideally scoped to a single GCS bucket).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#client_email R2BucketSippy#client_email}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#client_email R2BucketSippy#client_email}
   */
   readonly clientEmail?: string;
   /**
-  * Available values: "aws", "gcs", "s3".
+  * Available values: "aws", "gcs", "s3", "azure".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#cloud_provider R2BucketSippy#cloud_provider}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#cloud_provider R2BucketSippy#cloud_provider}
   */
   readonly cloudProvider?: string;
   /**
+  * Name of the Azure Blob Storage container.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#container R2BucketSippy#container}
+  */
+  readonly container?: string;
+  /**
   * Private Key of an IAM credential (ideally scoped to a single GCS bucket).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#private_key R2BucketSippy#private_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#private_key R2BucketSippy#private_key}
   */
   readonly privateKey?: string;
   /**
   * Name of the AWS availability zone.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#region R2BucketSippy#region}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#region R2BucketSippy#region}
   */
   readonly region?: string;
   /**
+  * Shared Access Signature token for the Azure Storage account. Mutually exclusive with accountKey.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#sas_token R2BucketSippy#sas_token}
+  */
+  readonly sasToken?: string;
+  /**
   * Secret Access Key of an IAM credential (ideally scoped to a single S3 bucket).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#secret_access_key R2BucketSippy#secret_access_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#secret_access_key R2BucketSippy#secret_access_key}
   */
   readonly secretAccessKey?: string;
 }
@@ -272,12 +296,16 @@ export function r2BucketSippySourceToTerraform(struct?: R2BucketSippySource | cd
   }
   return {
     access_key_id: cdktf.stringToTerraform(struct!.accessKeyId),
+    account_key: cdktf.stringToTerraform(struct!.accountKey),
+    account_name: cdktf.stringToTerraform(struct!.accountName),
     bucket: cdktf.stringToTerraform(struct!.bucket),
     bucket_url: cdktf.stringToTerraform(struct!.bucketUrl),
     client_email: cdktf.stringToTerraform(struct!.clientEmail),
     cloud_provider: cdktf.stringToTerraform(struct!.cloudProvider),
+    container: cdktf.stringToTerraform(struct!.container),
     private_key: cdktf.stringToTerraform(struct!.privateKey),
     region: cdktf.stringToTerraform(struct!.region),
+    sas_token: cdktf.stringToTerraform(struct!.sasToken),
     secret_access_key: cdktf.stringToTerraform(struct!.secretAccessKey),
   }
 }
@@ -291,6 +319,18 @@ export function r2BucketSippySourceToHclTerraform(struct?: R2BucketSippySource |
   const attrs = {
     access_key_id: {
       value: cdktf.stringToHclTerraform(struct!.accessKeyId),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    account_key: {
+      value: cdktf.stringToHclTerraform(struct!.accountKey),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    account_name: {
+      value: cdktf.stringToHclTerraform(struct!.accountName),
       isBlock: false,
       type: "simple",
       storageClassType: "string",
@@ -319,6 +359,12 @@ export function r2BucketSippySourceToHclTerraform(struct?: R2BucketSippySource |
       type: "simple",
       storageClassType: "string",
     },
+    container: {
+      value: cdktf.stringToHclTerraform(struct!.container),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
     private_key: {
       value: cdktf.stringToHclTerraform(struct!.privateKey),
       isBlock: false,
@@ -327,6 +373,12 @@ export function r2BucketSippySourceToHclTerraform(struct?: R2BucketSippySource |
     },
     region: {
       value: cdktf.stringToHclTerraform(struct!.region),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    sas_token: {
+      value: cdktf.stringToHclTerraform(struct!.sasToken),
       isBlock: false,
       type: "simple",
       storageClassType: "string",
@@ -365,6 +417,14 @@ export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
       hasAnyValues = true;
       internalValueResult.accessKeyId = this._accessKeyId;
     }
+    if (this._accountKey !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.accountKey = this._accountKey;
+    }
+    if (this._accountName !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.accountName = this._accountName;
+    }
     if (this._bucket !== undefined) {
       hasAnyValues = true;
       internalValueResult.bucket = this._bucket;
@@ -381,6 +441,10 @@ export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
       hasAnyValues = true;
       internalValueResult.cloudProvider = this._cloudProvider;
     }
+    if (this._container !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.container = this._container;
+    }
     if (this._privateKey !== undefined) {
       hasAnyValues = true;
       internalValueResult.privateKey = this._privateKey;
@@ -388,6 +452,10 @@ export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
     if (this._region !== undefined) {
       hasAnyValues = true;
       internalValueResult.region = this._region;
+    }
+    if (this._sasToken !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.sasToken = this._sasToken;
     }
     if (this._secretAccessKey !== undefined) {
       hasAnyValues = true;
@@ -401,12 +469,16 @@ export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._accessKeyId = undefined;
+      this._accountKey = undefined;
+      this._accountName = undefined;
       this._bucket = undefined;
       this._bucketUrl = undefined;
       this._clientEmail = undefined;
       this._cloudProvider = undefined;
+      this._container = undefined;
       this._privateKey = undefined;
       this._region = undefined;
+      this._sasToken = undefined;
       this._secretAccessKey = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
@@ -417,12 +489,16 @@ export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._accessKeyId = value.accessKeyId;
+      this._accountKey = value.accountKey;
+      this._accountName = value.accountName;
       this._bucket = value.bucket;
       this._bucketUrl = value.bucketUrl;
       this._clientEmail = value.clientEmail;
       this._cloudProvider = value.cloudProvider;
+      this._container = value.container;
       this._privateKey = value.privateKey;
       this._region = value.region;
+      this._sasToken = value.sasToken;
       this._secretAccessKey = value.secretAccessKey;
     }
   }
@@ -441,6 +517,38 @@ export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
   // Temporarily expose input value. Use with caution.
   public get accessKeyIdInput() {
     return this._accessKeyId;
+  }
+
+  // account_key - computed: false, optional: true, required: false
+  private _accountKey?: string; 
+  public get accountKey() {
+    return this.getStringAttribute('account_key');
+  }
+  public set accountKey(value: string) {
+    this._accountKey = value;
+  }
+  public resetAccountKey() {
+    this._accountKey = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get accountKeyInput() {
+    return this._accountKey;
+  }
+
+  // account_name - computed: false, optional: true, required: false
+  private _accountName?: string; 
+  public get accountName() {
+    return this.getStringAttribute('account_name');
+  }
+  public set accountName(value: string) {
+    this._accountName = value;
+  }
+  public resetAccountName() {
+    this._accountName = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get accountNameInput() {
+    return this._accountName;
   }
 
   // bucket - computed: false, optional: true, required: false
@@ -507,6 +615,22 @@ export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
     return this._cloudProvider;
   }
 
+  // container - computed: false, optional: true, required: false
+  private _container?: string; 
+  public get container() {
+    return this.getStringAttribute('container');
+  }
+  public set container(value: string) {
+    this._container = value;
+  }
+  public resetContainer() {
+    this._container = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get containerInput() {
+    return this._container;
+  }
+
   // private_key - computed: false, optional: true, required: false
   private _privateKey?: string; 
   public get privateKey() {
@@ -539,6 +663,22 @@ export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
     return this._region;
   }
 
+  // sas_token - computed: false, optional: true, required: false
+  private _sasToken?: string; 
+  public get sasToken() {
+    return this.getStringAttribute('sas_token');
+  }
+  public set sasToken(value: string) {
+    this._sasToken = value;
+  }
+  public resetSasToken() {
+    this._sasToken = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get sasTokenInput() {
+    return this._sasToken;
+  }
+
   // secret_access_key - computed: false, optional: true, required: false
   private _secretAccessKey?: string; 
   public get secretAccessKey() {
@@ -557,7 +697,7 @@ export class R2BucketSippySourceOutputReference extends cdktf.ComplexObject {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy cloudflare_r2_bucket_sippy}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy cloudflare_r2_bucket_sippy}
 */
 export class R2BucketSippy extends cdktf.TerraformResource {
 
@@ -573,7 +713,7 @@ export class R2BucketSippy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a R2BucketSippy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the R2BucketSippy to import
-  * @param importFromId The id of the existing R2BucketSippy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing R2BucketSippy that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the R2BucketSippy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -585,7 +725,7 @@ export class R2BucketSippy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/r2_bucket_sippy cloudflare_r2_bucket_sippy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/r2_bucket_sippy cloudflare_r2_bucket_sippy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -596,7 +736,7 @@ export class R2BucketSippy extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_r2_bucket_sippy',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

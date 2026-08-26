@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,14 +8,14 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareOrganizationsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#containing DataCloudflareOrganizations#containing}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#containing DataCloudflareOrganizations#containing}
   */
   readonly containing?: DataCloudflareOrganizationsContaining;
   /**
   * Only return organizations with the specified IDs (ex. id=foo&id=bar). Send multiple elements
   * by repeating the query value.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#id DataCloudflareOrganizations#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#id DataCloudflareOrganizations#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -24,17 +24,17 @@ export interface DataCloudflareOrganizationsConfig extends cdktf.TerraformMetaAr
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#max_items DataCloudflareOrganizations#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#max_items DataCloudflareOrganizations#max_items}
   */
   readonly maxItems?: number;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#name DataCloudflareOrganizations#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#name DataCloudflareOrganizations#name}
   */
   readonly name?: DataCloudflareOrganizationsName;
   /**
   * The amount of items to return. Defaults to 10.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#page_size DataCloudflareOrganizations#page_size}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#page_size DataCloudflareOrganizations#page_size}
   */
   readonly pageSize?: number;
   /**
@@ -44,11 +44,11 @@ export interface DataCloudflareOrganizationsConfig extends cdktf.TerraformMetaAr
   * Parameters used to filter the retrieved list must remain in subsequent
   * requests with a page token.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#page_token DataCloudflareOrganizations#page_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#page_token DataCloudflareOrganizations#page_token}
   */
   readonly pageToken?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#parent DataCloudflareOrganizations#parent}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#parent DataCloudflareOrganizations#parent}
   */
   readonly parent?: DataCloudflareOrganizationsParent;
 }
@@ -57,14 +57,14 @@ export interface DataCloudflareOrganizationsContaining {
   * Filter the list of organizations to the ones that contain this particular
   * account.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#account DataCloudflareOrganizations#account}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#account DataCloudflareOrganizations#account}
   */
   readonly account?: string;
   /**
   * Filter the list of organizations to the ones that contain this particular
   * organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#organization DataCloudflareOrganizations#organization}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#organization DataCloudflareOrganizations#organization}
   */
   readonly organization?: string;
   /**
@@ -76,7 +76,7 @@ export interface DataCloudflareOrganizationsContaining {
   * therein. An organization "containing" a user simply means the user is managed by
   * that organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#user DataCloudflareOrganizations#user}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#user DataCloudflareOrganizations#user}
   */
   readonly user?: string;
 }
@@ -231,21 +231,21 @@ export interface DataCloudflareOrganizationsName {
   * (case-insensitive) Filter the list of organizations to where the name contains a particular
   * string.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#contains DataCloudflareOrganizations#contains}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#contains DataCloudflareOrganizations#contains}
   */
   readonly contains?: string;
   /**
   * (case-insensitive) Filter the list of organizations to where the name ends with a particular
   * string.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#ends_with DataCloudflareOrganizations#ends_with}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#ends_with DataCloudflareOrganizations#ends_with}
   */
   readonly endsWith?: string;
   /**
   * (case-insensitive) Filter the list of organizations to where the name starts with a
   * particular string.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#starts_with DataCloudflareOrganizations#starts_with}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#starts_with DataCloudflareOrganizations#starts_with}
   */
   readonly startsWith?: string;
 }
@@ -459,10 +459,10 @@ export class DataCloudflareOrganizationsParentOutputReference extends cdktf.Comp
     return this.getStringAttribute('id');
   }
 }
-export interface DataCloudflareOrganizationsResultMetaFlags {
+export interface DataCloudflareOrganizationsResultMetaTenantFlags {
 }
 
-export function dataCloudflareOrganizationsResultMetaFlagsToTerraform(struct?: DataCloudflareOrganizationsResultMetaFlags): any {
+export function dataCloudflareOrganizationsResultMetaTenantFlagsToTerraform(struct?: DataCloudflareOrganizationsResultMetaTenantFlags): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
@@ -472,7 +472,7 @@ export function dataCloudflareOrganizationsResultMetaFlagsToTerraform(struct?: D
 }
 
 
-export function dataCloudflareOrganizationsResultMetaFlagsToHclTerraform(struct?: DataCloudflareOrganizationsResultMetaFlags): any {
+export function dataCloudflareOrganizationsResultMetaTenantFlagsToHclTerraform(struct?: DataCloudflareOrganizationsResultMetaTenantFlags): any {
   if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
   if (cdktf.isComplexElement(struct)) {
     throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
@@ -482,7 +482,7 @@ export function dataCloudflareOrganizationsResultMetaFlagsToHclTerraform(struct?
   return attrs;
 }
 
-export class DataCloudflareOrganizationsResultMetaFlagsOutputReference extends cdktf.ComplexObject {
+export class DataCloudflareOrganizationsResultMetaTenantFlagsOutputReference extends cdktf.ComplexObject {
   private isEmptyObject = false;
 
   /**
@@ -493,13 +493,13 @@ export class DataCloudflareOrganizationsResultMetaFlagsOutputReference extends c
     super(terraformResource, terraformAttribute, false);
   }
 
-  public get internalValue(): DataCloudflareOrganizationsResultMetaFlags | undefined {
+  public get internalValue(): DataCloudflareOrganizationsResultMetaTenantFlags | undefined {
     let hasAnyValues = this.isEmptyObject;
     const internalValueResult: any = {};
     return hasAnyValues ? internalValueResult : undefined;
   }
 
-  public set internalValue(value: DataCloudflareOrganizationsResultMetaFlags | undefined) {
+  public set internalValue(value: DataCloudflareOrganizationsResultMetaTenantFlags | undefined) {
     if (value === undefined) {
       this.isEmptyObject = false;
     }
@@ -526,6 +526,16 @@ export class DataCloudflareOrganizationsResultMetaFlagsOutputReference extends c
   // account_mobility - computed: true, optional: false, required: false
   public get accountMobility() {
     return this.getStringAttribute('account_mobility');
+  }
+
+  // enterprise_capability - computed: true, optional: false, required: false
+  public get enterpriseCapability() {
+    return this.getStringAttribute('enterprise_capability');
+  }
+
+  // member_management - computed: true, optional: false, required: false
+  public get memberManagement() {
+    return this.getStringAttribute('member_management');
   }
 
   // sub_org_creation - computed: true, optional: false, required: false
@@ -582,12 +592,6 @@ export class DataCloudflareOrganizationsResultMetaOutputReference extends cdktf.
     }
   }
 
-  // flags - computed: true, optional: false, required: false
-  private _flags = new DataCloudflareOrganizationsResultMetaFlagsOutputReference(this, "flags");
-  public get flags() {
-    return this._flags;
-  }
-
   // hierarchy_tags - computed: true, optional: false, required: false
   public get hierarchyTags() {
     return this.getListAttribute('hierarchy_tags');
@@ -596,6 +600,12 @@ export class DataCloudflareOrganizationsResultMetaOutputReference extends cdktf.
   // managed_by - computed: true, optional: false, required: false
   public get managedBy() {
     return this.getStringAttribute('managed_by');
+  }
+
+  // tenant_flags - computed: true, optional: false, required: false
+  private _tenantFlags = new DataCloudflareOrganizationsResultMetaTenantFlagsOutputReference(this, "tenant_flags");
+  public get tenantFlags() {
+    return this._tenantFlags;
   }
 }
 export interface DataCloudflareOrganizationsResultParent {
@@ -836,7 +846,7 @@ export class DataCloudflareOrganizationsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations cloudflare_organizations}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations cloudflare_organizations}
 */
 export class DataCloudflareOrganizations extends cdktf.TerraformDataSource {
 
@@ -852,7 +862,7 @@ export class DataCloudflareOrganizations extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareOrganizations resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareOrganizations to import
-  * @param importFromId The id of the existing DataCloudflareOrganizations that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareOrganizations that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareOrganizations to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -864,7 +874,7 @@ export class DataCloudflareOrganizations extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/organizations cloudflare_organizations} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/organizations cloudflare_organizations} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -875,7 +885,7 @@ export class DataCloudflareOrganizations extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_organizations',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

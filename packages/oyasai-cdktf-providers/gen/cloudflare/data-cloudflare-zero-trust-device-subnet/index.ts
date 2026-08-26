@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_subnet
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_device_subnet
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,78 @@ export interface DataCloudflareZeroTrustDeviceSubnetConfig extends cdktf.Terrafo
   /**
   * Cloudflare account ID
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_subnet#account_id DataCloudflareZeroTrustDeviceSubnet#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_device_subnet#account_id DataCloudflareZeroTrustDeviceSubnet#account_id}
   */
   readonly accountId?: string;
   /**
   * The UUID of the subnet.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_subnet#subnet_id DataCloudflareZeroTrustDeviceSubnet#subnet_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_device_subnet#subnet_id DataCloudflareZeroTrustDeviceSubnet#subnet_id}
   */
   readonly subnetId: string;
 }
+export interface DataCloudflareZeroTrustDeviceSubnetCapacity {
+}
+
+export function dataCloudflareZeroTrustDeviceSubnetCapacityToTerraform(struct?: DataCloudflareZeroTrustDeviceSubnetCapacity): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustDeviceSubnetCapacityToHclTerraform(struct?: DataCloudflareZeroTrustDeviceSubnetCapacity): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustDeviceSubnetCapacityOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustDeviceSubnetCapacity | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustDeviceSubnetCapacity | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // total - computed: true, optional: false, required: false
+  public get total() {
+    return this.getNumberAttribute('total');
+  }
+
+  // used - computed: true, optional: false, required: false
+  public get used() {
+    return this.getNumberAttribute('used');
+  }
+}
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_subnet cloudflare_zero_trust_device_subnet}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_device_subnet cloudflare_zero_trust_device_subnet}
 */
 export class DataCloudflareZeroTrustDeviceSubnet extends cdktf.TerraformDataSource {
 
@@ -38,7 +97,7 @@ export class DataCloudflareZeroTrustDeviceSubnet extends cdktf.TerraformDataSour
   * Generates CDKTF code for importing a DataCloudflareZeroTrustDeviceSubnet resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustDeviceSubnet to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceSubnet that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_subnet#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustDeviceSubnet that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_device_subnet#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustDeviceSubnet to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +109,7 @@ export class DataCloudflareZeroTrustDeviceSubnet extends cdktf.TerraformDataSour
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_device_subnet cloudflare_zero_trust_device_subnet} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_device_subnet cloudflare_zero_trust_device_subnet} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +120,7 @@ export class DataCloudflareZeroTrustDeviceSubnet extends cdktf.TerraformDataSour
       terraformResourceType: 'cloudflare_zero_trust_device_subnet',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -93,6 +152,12 @@ export class DataCloudflareZeroTrustDeviceSubnet extends cdktf.TerraformDataSour
   // Temporarily expose input value. Use with caution.
   public get accountIdInput() {
     return this._accountId;
+  }
+
+  // capacity - computed: true, optional: false, required: false
+  private _capacity = new DataCloudflareZeroTrustDeviceSubnetCapacityOutputReference(this, "capacity");
+  public get capacity() {
+    return this._capacity;
   }
 
   // comment - computed: true, optional: false, required: false

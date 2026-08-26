@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionDatadogConfig extends cdktf.TerraformMetaArguments
   /**
   * The credentials for the Datadog App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog#credentials AppConnectionDatadog#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog#credentials AppConnectionDatadog#credentials}
   */
   readonly credentials: AppConnectionDatadogCredentials;
   /**
   * An optional description for the Datadog App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog#description AppConnectionDatadog#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog#description AppConnectionDatadog#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with Datadog. Possible values are: api-key
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog#method AppConnectionDatadog#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog#method AppConnectionDatadog#method}
   */
   readonly method: string;
   /**
   * The name of the Datadog App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog#name AppConnectionDatadog#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog#name AppConnectionDatadog#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog#project_id AppConnectionDatadog#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog#project_id AppConnectionDatadog#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,19 +42,19 @@ export interface AppConnectionDatadogCredentials {
   /**
   * The Datadog API key used to authenticate requests. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/datadog
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog#api_key AppConnectionDatadog#api_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog#api_key AppConnectionDatadog#api_key}
   */
   readonly apiKey: string;
   /**
   * The Datadog application key used to authenticate requests. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/datadog
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog#application_key AppConnectionDatadog#application_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog#application_key AppConnectionDatadog#application_key}
   */
   readonly applicationKey: string;
   /**
   * The Datadog API URL for your site (e.g. https://api.datadoghq.com). For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/datadog
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog#url AppConnectionDatadog#url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog#url AppConnectionDatadog#url}
   */
   readonly url: string;
 }
@@ -197,7 +197,7 @@ export class AppConnectionDatadogCredentialsOutputReference extends cdktf.Comple
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog infisical_app_connection_datadog}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog infisical_app_connection_datadog}
 */
 export class AppConnectionDatadog extends cdktf.TerraformResource {
 
@@ -213,7 +213,7 @@ export class AppConnectionDatadog extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionDatadog resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionDatadog to import
-  * @param importFromId The id of the existing AppConnectionDatadog that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionDatadog that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionDatadog to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -225,7 +225,7 @@ export class AppConnectionDatadog extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_datadog infisical_app_connection_datadog} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_datadog infisical_app_connection_datadog} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -236,7 +236,7 @@ export class AppConnectionDatadog extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_datadog',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

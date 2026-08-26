@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,55 +10,55 @@ export interface DynamicSecretMongoAtlasConfig extends cdktf.TerraformMetaArgume
   /**
   * The configuration of the dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#configuration DynamicSecretMongoAtlas#configuration}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#configuration DynamicSecretMongoAtlas#configuration}
   */
   readonly configuration: DynamicSecretMongoAtlasConfiguration;
   /**
   * The default TTL that will be applied for all the leases.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#default_ttl DynamicSecretMongoAtlas#default_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#default_ttl DynamicSecretMongoAtlas#default_ttl}
   */
   readonly defaultTtl: string;
   /**
   * The slug of the environment to create the dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#environment_slug DynamicSecretMongoAtlas#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#environment_slug DynamicSecretMongoAtlas#environment_slug}
   */
   readonly environmentSlug: string;
   /**
   * The maximum limit a TTL can be leased or renewed for.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#max_ttl DynamicSecretMongoAtlas#max_ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#max_ttl DynamicSecretMongoAtlas#max_ttl}
   */
   readonly maxTtl?: string;
   /**
   * The metadata associated with this dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#metadata DynamicSecretMongoAtlas#metadata}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#metadata DynamicSecretMongoAtlas#metadata}
   */
   readonly metadata?: DynamicSecretMongoAtlasMetadata[] | cdktf.IResolvable;
   /**
   * The name of the dynamic secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#name DynamicSecretMongoAtlas#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#name DynamicSecretMongoAtlas#name}
   */
   readonly name: string;
   /**
   * The path to create the dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#path DynamicSecretMongoAtlas#path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#path DynamicSecretMongoAtlas#path}
   */
   readonly path: string;
   /**
   * The slug of the project to create dynamic secret in.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#project_slug DynamicSecretMongoAtlas#project_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#project_slug DynamicSecretMongoAtlas#project_slug}
   */
   readonly projectSlug: string;
   /**
   * The username template of the dynamic secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#username_template DynamicSecretMongoAtlas#username_template}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#username_template DynamicSecretMongoAtlas#username_template}
   */
   readonly usernameTemplate?: string;
 }
@@ -66,19 +66,19 @@ export interface DynamicSecretMongoAtlasConfigurationRoles {
   /**
   * Collection on which this role applies.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#collection_name DynamicSecretMongoAtlas#collection_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#collection_name DynamicSecretMongoAtlas#collection_name}
   */
   readonly collectionName?: string;
   /**
   * Database to which the user is granted access privileges.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#database_name DynamicSecretMongoAtlas#database_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#database_name DynamicSecretMongoAtlas#database_name}
   */
   readonly databaseName: string;
   /**
   * Human-readable label that identifies a group of privileges assigned to a database user. This value can either be a built-in role or a custom role.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#role_name DynamicSecretMongoAtlas#role_name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#role_name DynamicSecretMongoAtlas#role_name}
   */
   readonly roleName: string;
 }
@@ -248,13 +248,13 @@ export interface DynamicSecretMongoAtlasConfigurationScopes {
   /**
   * Human-readable label that identifies the cluster or MongoDB Atlas Data Lake that this database user can access.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#name DynamicSecretMongoAtlas#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#name DynamicSecretMongoAtlas#name}
   */
   readonly name: string;
   /**
   * Category of resource that this database user can access. Supported options: CLUSTER, DATA_LAKE, STREAM
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#type DynamicSecretMongoAtlas#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#type DynamicSecretMongoAtlas#type}
   */
   readonly type: string;
 }
@@ -393,29 +393,41 @@ export class DynamicSecretMongoAtlasConfigurationScopesList extends cdktf.Comple
 }
 export interface DynamicSecretMongoAtlasConfiguration {
   /**
-  * Admin user private API key
+  * Admin user private API key. This value is stored in the Terraform state; use admin_private_key_wo to keep it out of state. Exactly one of admin_private_key or admin_private_key_wo must be set.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#admin_private_key DynamicSecretMongoAtlas#admin_private_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#admin_private_key DynamicSecretMongoAtlas#admin_private_key}
   */
-  readonly adminPrivateKey: string;
+  readonly adminPrivateKey?: string;
+  /**
+  * Admin user private API key (write-only). This value is never stored in the Terraform state and can accept ephemeral values. Because it is not stored, changes to it are not detected; increment admin_private_key_wo_version to push a new value. Requires Terraform 1.11+.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#admin_private_key_wo DynamicSecretMongoAtlas#admin_private_key_wo}
+  */
+  readonly adminPrivateKeyWo?: string;
+  /**
+  * The version of the admin_private_key_wo value. Increment this to trigger an update of the private key.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#admin_private_key_wo_version DynamicSecretMongoAtlas#admin_private_key_wo_version}
+  */
+  readonly adminPrivateKeyWoVersion?: number;
   /**
   * Admin user public API key
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#admin_public_key DynamicSecretMongoAtlas#admin_public_key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#admin_public_key DynamicSecretMongoAtlas#admin_public_key}
   */
   readonly adminPublicKey: string;
   /**
   * Unique 24-hexadecimal digit string that identifies your project. This is the same as the project ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#group_id DynamicSecretMongoAtlas#group_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#group_id DynamicSecretMongoAtlas#group_id}
   */
   readonly groupId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#roles DynamicSecretMongoAtlas#roles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#roles DynamicSecretMongoAtlas#roles}
   */
   readonly roles: DynamicSecretMongoAtlasConfigurationRoles[] | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#scopes DynamicSecretMongoAtlas#scopes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#scopes DynamicSecretMongoAtlas#scopes}
   */
   readonly scopes?: DynamicSecretMongoAtlasConfigurationScopes[] | cdktf.IResolvable;
 }
@@ -427,6 +439,8 @@ export function dynamicSecretMongoAtlasConfigurationToTerraform(struct?: Dynamic
   }
   return {
     admin_private_key: cdktf.stringToTerraform(struct!.adminPrivateKey),
+    admin_private_key_wo: cdktf.stringToTerraform(struct!.adminPrivateKeyWo),
+    admin_private_key_wo_version: cdktf.numberToTerraform(struct!.adminPrivateKeyWoVersion),
     admin_public_key: cdktf.stringToTerraform(struct!.adminPublicKey),
     group_id: cdktf.stringToTerraform(struct!.groupId),
     roles: cdktf.listMapper(dynamicSecretMongoAtlasConfigurationRolesToTerraform, false)(struct!.roles),
@@ -446,6 +460,18 @@ export function dynamicSecretMongoAtlasConfigurationToHclTerraform(struct?: Dyna
       isBlock: false,
       type: "simple",
       storageClassType: "string",
+    },
+    admin_private_key_wo: {
+      value: cdktf.stringToHclTerraform(struct!.adminPrivateKeyWo),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    admin_private_key_wo_version: {
+      value: cdktf.numberToHclTerraform(struct!.adminPrivateKeyWoVersion),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "number",
     },
     admin_public_key: {
       value: cdktf.stringToHclTerraform(struct!.adminPublicKey),
@@ -499,6 +525,14 @@ export class DynamicSecretMongoAtlasConfigurationOutputReference extends cdktf.C
       hasAnyValues = true;
       internalValueResult.adminPrivateKey = this._adminPrivateKey;
     }
+    if (this._adminPrivateKeyWo !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.adminPrivateKeyWo = this._adminPrivateKeyWo;
+    }
+    if (this._adminPrivateKeyWoVersion !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.adminPrivateKeyWoVersion = this._adminPrivateKeyWoVersion;
+    }
     if (this._adminPublicKey !== undefined) {
       hasAnyValues = true;
       internalValueResult.adminPublicKey = this._adminPublicKey;
@@ -523,6 +557,8 @@ export class DynamicSecretMongoAtlasConfigurationOutputReference extends cdktf.C
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._adminPrivateKey = undefined;
+      this._adminPrivateKeyWo = undefined;
+      this._adminPrivateKeyWoVersion = undefined;
       this._adminPublicKey = undefined;
       this._groupId = undefined;
       this._roles.internalValue = undefined;
@@ -536,6 +572,8 @@ export class DynamicSecretMongoAtlasConfigurationOutputReference extends cdktf.C
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._adminPrivateKey = value.adminPrivateKey;
+      this._adminPrivateKeyWo = value.adminPrivateKeyWo;
+      this._adminPrivateKeyWoVersion = value.adminPrivateKeyWoVersion;
       this._adminPublicKey = value.adminPublicKey;
       this._groupId = value.groupId;
       this._roles.internalValue = value.roles;
@@ -543,7 +581,7 @@ export class DynamicSecretMongoAtlasConfigurationOutputReference extends cdktf.C
     }
   }
 
-  // admin_private_key - computed: false, optional: false, required: true
+  // admin_private_key - computed: false, optional: true, required: false
   private _adminPrivateKey?: string; 
   public get adminPrivateKey() {
     return this.getStringAttribute('admin_private_key');
@@ -551,9 +589,44 @@ export class DynamicSecretMongoAtlasConfigurationOutputReference extends cdktf.C
   public set adminPrivateKey(value: string) {
     this._adminPrivateKey = value;
   }
+  public resetAdminPrivateKey() {
+    this._adminPrivateKey = undefined;
+  }
   // Temporarily expose input value. Use with caution.
   public get adminPrivateKeyInput() {
     return this._adminPrivateKey;
+  }
+
+  // admin_private_key_wo - computed: false, optional: true, required: false
+  private _adminPrivateKeyWo?: string; 
+  public get adminPrivateKeyWo() {
+    return this.getStringAttribute('admin_private_key_wo');
+  }
+  public set adminPrivateKeyWo(value: string) {
+    this._adminPrivateKeyWo = value;
+  }
+  public resetAdminPrivateKeyWo() {
+    this._adminPrivateKeyWo = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get adminPrivateKeyWoInput() {
+    return this._adminPrivateKeyWo;
+  }
+
+  // admin_private_key_wo_version - computed: false, optional: true, required: false
+  private _adminPrivateKeyWoVersion?: number; 
+  public get adminPrivateKeyWoVersion() {
+    return this.getNumberAttribute('admin_private_key_wo_version');
+  }
+  public set adminPrivateKeyWoVersion(value: number) {
+    this._adminPrivateKeyWoVersion = value;
+  }
+  public resetAdminPrivateKeyWoVersion() {
+    this._adminPrivateKeyWoVersion = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get adminPrivateKeyWoVersionInput() {
+    return this._adminPrivateKeyWoVersion;
   }
 
   // admin_public_key - computed: false, optional: false, required: true
@@ -615,13 +688,13 @@ export interface DynamicSecretMongoAtlasMetadata {
   /**
   * The key of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#key DynamicSecretMongoAtlas#key}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#key DynamicSecretMongoAtlas#key}
   */
   readonly key: string;
   /**
   * The value of the metadata object
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#value DynamicSecretMongoAtlas#value}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#value DynamicSecretMongoAtlas#value}
   */
   readonly value: string;
 }
@@ -760,7 +833,7 @@ export class DynamicSecretMongoAtlasMetadataList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas infisical_dynamic_secret_mongo_atlas}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas infisical_dynamic_secret_mongo_atlas}
 */
 export class DynamicSecretMongoAtlas extends cdktf.TerraformResource {
 
@@ -776,7 +849,7 @@ export class DynamicSecretMongoAtlas extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a DynamicSecretMongoAtlas resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DynamicSecretMongoAtlas to import
-  * @param importFromId The id of the existing DynamicSecretMongoAtlas that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DynamicSecretMongoAtlas that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DynamicSecretMongoAtlas to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -788,7 +861,7 @@ export class DynamicSecretMongoAtlas extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/dynamic_secret_mongo_atlas infisical_dynamic_secret_mongo_atlas} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/dynamic_secret_mongo_atlas infisical_dynamic_secret_mongo_atlas} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -799,7 +872,7 @@ export class DynamicSecretMongoAtlas extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_dynamic_secret_mongo_atlas',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

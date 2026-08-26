@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_application
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/cert_manager_application
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface CertManagerApplicationConfig extends cdktf.TerraformMetaArgumen
   /**
   * The description of the Certificate Manager application
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_application#description CertManagerApplication#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/cert_manager_application#description CertManagerApplication#description}
   */
   readonly description?: string;
   /**
   * The name of the Certificate Manager application
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_application#name CertManagerApplication#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/cert_manager_application#name CertManagerApplication#name}
   */
   readonly name: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_application infisical_cert_manager_application}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/cert_manager_application infisical_cert_manager_application}
 */
 export class CertManagerApplication extends cdktf.TerraformResource {
 
@@ -38,7 +38,7 @@ export class CertManagerApplication extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a CertManagerApplication resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the CertManagerApplication to import
-  * @param importFromId The id of the existing CertManagerApplication that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_application#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing CertManagerApplication that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/cert_manager_application#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the CertManagerApplication to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class CertManagerApplication extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/cert_manager_application infisical_cert_manager_application} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/cert_manager_application infisical_cert_manager_application} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class CertManagerApplication extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_cert_manager_application',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

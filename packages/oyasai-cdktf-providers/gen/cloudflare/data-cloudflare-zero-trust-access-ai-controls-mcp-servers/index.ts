@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,21 +8,240 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustAccessAiControlsMcpServersConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers#account_id DataCloudflareZeroTrustAccessAiControlsMcpServers#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers#account_id DataCloudflareZeroTrustAccessAiControlsMcpServers#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers#max_items DataCloudflareZeroTrustAccessAiControlsMcpServers#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers#max_items DataCloudflareZeroTrustAccessAiControlsMcpServers#max_items}
   */
   readonly maxItems?: number;
   /**
   * Search by id, name
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers#search DataCloudflareZeroTrustAccessAiControlsMcpServers#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers#search DataCloudflareZeroTrustAccessAiControlsMcpServers#search}
   */
   readonly search?: string;
+}
+export interface DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryConfig {
+}
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryConfigToTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryConfig): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryConfigToHclTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryConfig): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryConfigOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryConfig | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryConfig | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // authorization_endpoint - computed: true, optional: false, required: false
+  public get authorizationEndpoint() {
+    return this.getStringAttribute('authorization_endpoint');
+  }
+
+  // issuer - computed: true, optional: false, required: false
+  public get issuer() {
+    return this.getStringAttribute('issuer');
+  }
+
+  // resource - computed: true, optional: false, required: false
+  public get resource() {
+    return this.getStringAttribute('resource');
+  }
+
+  // revocation_endpoint - computed: true, optional: false, required: false
+  public get revocationEndpoint() {
+    return this.getStringAttribute('revocation_endpoint');
+  }
+
+  // token_endpoint - computed: true, optional: false, required: false
+  public get tokenEndpoint() {
+    return this.getStringAttribute('token_endpoint');
+  }
+}
+export interface DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryRegistrationInfo {
+}
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryRegistrationInfoToTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryRegistrationInfo): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryRegistrationInfoToHclTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryRegistrationInfo): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryRegistrationInfoOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryRegistrationInfo | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryRegistrationInfo | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // client_id - computed: true, optional: false, required: false
+  public get clientId() {
+    return this.getStringAttribute('client_id');
+  }
+
+  // redirect_uris - computed: true, optional: false, required: false
+  public get redirectUris() {
+    return this.getListAttribute('redirect_uris');
+  }
+
+  // scope - computed: true, optional: false, required: false
+  public get scope() {
+    return this.getStringAttribute('scope');
+  }
+
+  // token_endpoint_auth_method - computed: true, optional: false, required: false
+  public get tokenEndpointAuthMethod() {
+    return this.getStringAttribute('token_endpoint_auth_method');
+  }
+}
+export interface DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummary {
+}
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryToTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummary): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryToHclTerraform(struct?: DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummary): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummary | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummary | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // auth_mode - computed: true, optional: false, required: false
+  public get authMode() {
+    return this.getStringAttribute('auth_mode');
+  }
+
+  // client_secret_version - computed: true, optional: false, required: false
+  public get clientSecretVersion() {
+    return this.getNumberAttribute('client_secret_version');
+  }
+
+  // config - computed: true, optional: false, required: false
+  private _config = new DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryConfigOutputReference(this, "config");
+  public get config() {
+    return this._config;
+  }
+
+  // has_client_secret - computed: true, optional: false, required: false
+  public get hasClientSecret() {
+    return this.getBooleanAttribute('has_client_secret');
+  }
+
+  // registration_info - computed: true, optional: false, required: false
+  private _registrationInfo = new DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryRegistrationInfoOutputReference(this, "registration_info");
+  public get registrationInfo() {
+    return this._registrationInfo;
+  }
 }
 export interface DataCloudflareZeroTrustAccessAiControlsMcpServersResultErrorDetails {
 }
@@ -329,9 +548,20 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpServersResultOutputRefere
     }
   }
 
+  // auth_config_summary - computed: true, optional: false, required: false
+  private _authConfigSummary = new DataCloudflareZeroTrustAccessAiControlsMcpServersResultAuthConfigSummaryOutputReference(this, "auth_config_summary");
+  public get authConfigSummary() {
+    return this._authConfigSummary;
+  }
+
   // auth_type - computed: true, optional: false, required: false
   public get authType() {
     return this.getStringAttribute('auth_type');
+  }
+
+  // authentication_status - computed: true, optional: false, required: false
+  public get authenticationStatus() {
+    return this.getStringAttribute('authentication_status');
   }
 
   // created_at - computed: true, optional: false, required: false
@@ -455,7 +685,7 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpServersResultList extends
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers cloudflare_zero_trust_access_ai_controls_mcp_servers}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers cloudflare_zero_trust_access_ai_controls_mcp_servers}
 */
 export class DataCloudflareZeroTrustAccessAiControlsMcpServers extends cdktf.TerraformDataSource {
 
@@ -471,7 +701,7 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpServers extends cdktf.Ter
   * Generates CDKTF code for importing a DataCloudflareZeroTrustAccessAiControlsMcpServers resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustAccessAiControlsMcpServers to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustAccessAiControlsMcpServers that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustAccessAiControlsMcpServers that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustAccessAiControlsMcpServers to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -483,7 +713,7 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpServers extends cdktf.Ter
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers cloudflare_zero_trust_access_ai_controls_mcp_servers} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_access_ai_controls_mcp_servers cloudflare_zero_trust_access_ai_controls_mcp_servers} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -494,7 +724,7 @@ export class DataCloudflareZeroTrustAccessAiControlsMcpServers extends cdktf.Ter
       terraformResourceType: 'cloudflare_zero_trust_access_ai_controls_mcp_servers',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,54 +8,53 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareZeroTrustResourceLibraryApplicationsConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications#account_id DataCloudflareZeroTrustResourceLibraryApplications#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications#account_id DataCloudflareZeroTrustResourceLibraryApplications#account_id}
   */
   readonly accountId: string;
   /**
   * Filter applications using key:value format. Supported filter keys:
   * - name: Filter by application name (e.g., name:HR)
-  * - id: Filter by application ID (e.g., id:0b63249c-95bf-4cc0-a7cc-d7faaaf1dac0)
+  * - id: Filter by application ID (e.g., id:498)
   * - human_id: Filter by human-readable ID (e.g., human_id:HR)
   * - hostname: Filter by hostname or support domain (e.g., hostname:portal.example.com)
   * - source: Filter by application source name (e.g., source:cloudflare)
   * - ip_subnet: Filter by IP subnet using CIDR containment — returns applications where any stored subnet contains the search value (e.g., ip_subnet:10.0.1.5/32 matches apps with 10.0.0.0/16)
-  * - intel_id: Filter by Intel API ID (e.g., intel_id:498). also supports multiple values (e.g., intel_id:498,1001)
-  * - category_id: Filter by category ID (e.g., category_id:37f8ec03-8766-49d4-9a15-369b044c842c).
+  * - category_id: Filter by category ID (e.g., category_id:12).
   * - category_name: Filter by category name (e.g., category_name:HR).
   * - supported: Filter by supported Cloudflare product (e.g., supported:ACCESS). Values: GATEWAY, ACCESS, CASB.
   * .
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications#filter DataCloudflareZeroTrustResourceLibraryApplications#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications#filter DataCloudflareZeroTrustResourceLibraryApplications#filter}
   */
   readonly filter?: string;
   /**
   * Limit of number of results to return (max 250).
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications#limit DataCloudflareZeroTrustResourceLibraryApplications#limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications#limit DataCloudflareZeroTrustResourceLibraryApplications#limit}
   */
   readonly limit?: number;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications#max_items DataCloudflareZeroTrustResourceLibraryApplications#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications#max_items DataCloudflareZeroTrustResourceLibraryApplications#max_items}
   */
   readonly maxItems?: number;
   /**
   * Offset of results to return.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications#offset DataCloudflareZeroTrustResourceLibraryApplications#offset}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications#offset DataCloudflareZeroTrustResourceLibraryApplications#offset}
   */
   readonly offset?: number;
   /**
   * Order results by field name and direction (e.g., name:asc). Ignored when search is provided; results are ranked by relevance instead.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications#order_by DataCloudflareZeroTrustResourceLibraryApplications#order_by}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications#order_by DataCloudflareZeroTrustResourceLibraryApplications#order_by}
   */
   readonly orderBy?: string;
   /**
   * Fuzzy search across application name and hostnames. Results are ranked by relevance. Must be between 2 and 200 characters. Can be combined with filter parameters.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications#search DataCloudflareZeroTrustResourceLibraryApplications#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications#search DataCloudflareZeroTrustResourceLibraryApplications#search}
   */
   readonly search?: string;
 }
@@ -135,6 +134,11 @@ export class DataCloudflareZeroTrustResourceLibraryApplicationsResultOutputRefer
     return this.getStringAttribute('application_type_description');
   }
 
+  // category_id - computed: true, optional: false, required: false
+  public get categoryId() {
+    return this.getNumberAttribute('category_id');
+  }
+
   // created_at - computed: true, optional: false, required: false
   public get createdAt() {
     return this.getStringAttribute('created_at');
@@ -147,7 +151,7 @@ export class DataCloudflareZeroTrustResourceLibraryApplicationsResultOutputRefer
 
   // hostnames - computed: true, optional: false, required: false
   public get hostnames() {
-    return this.getListAttribute('hostnames');
+    return cdktf.Fn.tolist(this.getListAttribute('hostnames'));
   }
 
   // human_id - computed: true, optional: false, required: false
@@ -157,17 +161,12 @@ export class DataCloudflareZeroTrustResourceLibraryApplicationsResultOutputRefer
 
   // id - computed: true, optional: false, required: false
   public get id() {
-    return this.getStringAttribute('id');
-  }
-
-  // intel_id - computed: true, optional: false, required: false
-  public get intelId() {
-    return this.getNumberAttribute('intel_id');
+    return this.getNumberAttribute('id');
   }
 
   // ip_subnets - computed: true, optional: false, required: false
   public get ipSubnets() {
-    return this.getListAttribute('ip_subnets');
+    return cdktf.Fn.tolist(this.getListAttribute('ip_subnets'));
   }
 
   // name - computed: true, optional: false, required: false
@@ -177,17 +176,17 @@ export class DataCloudflareZeroTrustResourceLibraryApplicationsResultOutputRefer
 
   // port_protocols - computed: true, optional: false, required: false
   public get portProtocols() {
-    return this.getListAttribute('port_protocols');
+    return cdktf.Fn.tolist(this.getListAttribute('port_protocols'));
   }
 
   // support_domains - computed: true, optional: false, required: false
   public get supportDomains() {
-    return this.getListAttribute('support_domains');
+    return cdktf.Fn.tolist(this.getListAttribute('support_domains'));
   }
 
   // supported - computed: true, optional: false, required: false
   public get supported() {
-    return this.getListAttribute('supported');
+    return cdktf.Fn.tolist(this.getListAttribute('supported'));
   }
 
   // updated_at - computed: true, optional: false, required: false
@@ -221,7 +220,7 @@ export class DataCloudflareZeroTrustResourceLibraryApplicationsResultList extend
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications cloudflare_zero_trust_resource_library_applications}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications cloudflare_zero_trust_resource_library_applications}
 */
 export class DataCloudflareZeroTrustResourceLibraryApplications extends cdktf.TerraformDataSource {
 
@@ -237,7 +236,7 @@ export class DataCloudflareZeroTrustResourceLibraryApplications extends cdktf.Te
   * Generates CDKTF code for importing a DataCloudflareZeroTrustResourceLibraryApplications resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareZeroTrustResourceLibraryApplications to import
-  * @param importFromId The id of the existing DataCloudflareZeroTrustResourceLibraryApplications that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareZeroTrustResourceLibraryApplications that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareZeroTrustResourceLibraryApplications to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -249,7 +248,7 @@ export class DataCloudflareZeroTrustResourceLibraryApplications extends cdktf.Te
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/zero_trust_resource_library_applications cloudflare_zero_trust_resource_library_applications} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/zero_trust_resource_library_applications cloudflare_zero_trust_resource_library_applications} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -260,7 +259,7 @@ export class DataCloudflareZeroTrustResourceLibraryApplications extends cdktf.Te
       terraformResourceType: 'cloudflare_zero_trust_resource_library_applications',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

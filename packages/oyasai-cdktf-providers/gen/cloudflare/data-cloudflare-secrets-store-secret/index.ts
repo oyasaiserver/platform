@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,51 +10,51 @@ export interface DataCloudflareSecretsStoreSecretConfig extends cdktf.TerraformM
   /**
   * Account Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret#account_id DataCloudflareSecretsStoreSecret#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret#account_id DataCloudflareSecretsStoreSecret#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret#filter DataCloudflareSecretsStoreSecret#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret#filter DataCloudflareSecretsStoreSecret#filter}
   */
   readonly filter?: DataCloudflareSecretsStoreSecretFilter;
   /**
   * Secret identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret#secret_id DataCloudflareSecretsStoreSecret#secret_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret#secret_id DataCloudflareSecretsStoreSecret#secret_id}
   */
   readonly secretId?: string;
   /**
   * Store Identifier
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret#store_id DataCloudflareSecretsStoreSecret#store_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret#store_id DataCloudflareSecretsStoreSecret#store_id}
   */
   readonly storeId: string;
 }
 export interface DataCloudflareSecretsStoreSecretFilter {
   /**
-  * Direction to sort objects
+  * Direction to sort objects.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret#direction DataCloudflareSecretsStoreSecret#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret#direction DataCloudflareSecretsStoreSecret#direction}
   */
   readonly direction?: string;
   /**
-  * Order secrets by values in the given field
+  * Order secrets by values in the given field.
   * Available values: "name", "comment", "created", "modified", "status".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret#order DataCloudflareSecretsStoreSecret#order}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret#order DataCloudflareSecretsStoreSecret#order}
   */
   readonly order?: string;
   /**
-  * Only secrets with the given scopes will be returned
+  * Only secrets with the given scopes will be returned.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret#scopes DataCloudflareSecretsStoreSecret#scopes}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret#scopes DataCloudflareSecretsStoreSecret#scopes}
   */
-  readonly scopes?: string[][] | cdktf.IResolvable;
+  readonly scopes?: string[];
   /**
-  * Search secrets using a filter string, filtering across name and comment
+  * Search secrets using a filter string, filtering across name and comment.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret#search DataCloudflareSecretsStoreSecret#search}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret#search DataCloudflareSecretsStoreSecret#search}
   */
   readonly search?: string;
 }
@@ -67,7 +67,7 @@ export function dataCloudflareSecretsStoreSecretFilterToTerraform(struct?: DataC
   return {
     direction: cdktf.stringToTerraform(struct!.direction),
     order: cdktf.stringToTerraform(struct!.order),
-    scopes: cdktf.listMapper(cdktf.listMapper(cdktf.stringToTerraform, false), false)(struct!.scopes),
+    scopes: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.scopes),
     search: cdktf.stringToTerraform(struct!.search),
   }
 }
@@ -92,10 +92,10 @@ export function dataCloudflareSecretsStoreSecretFilterToHclTerraform(struct?: Da
       storageClassType: "string",
     },
     scopes: {
-      value: cdktf.listMapperHcl(cdktf.listMapperHcl(cdktf.stringToHclTerraform, false), false)(struct!.scopes),
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.scopes),
       isBlock: false,
       type: "list",
-      storageClassType: "stringListList",
+      storageClassType: "stringList",
     },
     search: {
       value: cdktf.stringToHclTerraform(struct!.search),
@@ -202,11 +202,11 @@ export class DataCloudflareSecretsStoreSecretFilterOutputReference extends cdktf
   }
 
   // scopes - computed: false, optional: true, required: false
-  private _scopes?: string[][] | cdktf.IResolvable; 
+  private _scopes?: string[]; 
   public get scopes() {
-    return this.interpolationForAttribute('scopes');
+    return this.getListAttribute('scopes');
   }
-  public set scopes(value: string[][] | cdktf.IResolvable) {
+  public set scopes(value: string[]) {
     this._scopes = value;
   }
   public resetScopes() {
@@ -235,7 +235,7 @@ export class DataCloudflareSecretsStoreSecretFilterOutputReference extends cdktf
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret cloudflare_secrets_store_secret}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret cloudflare_secrets_store_secret}
 */
 export class DataCloudflareSecretsStoreSecret extends cdktf.TerraformDataSource {
 
@@ -251,7 +251,7 @@ export class DataCloudflareSecretsStoreSecret extends cdktf.TerraformDataSource 
   * Generates CDKTF code for importing a DataCloudflareSecretsStoreSecret resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareSecretsStoreSecret to import
-  * @param importFromId The id of the existing DataCloudflareSecretsStoreSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareSecretsStoreSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareSecretsStoreSecret to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -263,7 +263,7 @@ export class DataCloudflareSecretsStoreSecret extends cdktf.TerraformDataSource 
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/secrets_store_secret cloudflare_secrets_store_secret} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/secrets_store_secret cloudflare_secrets_store_secret} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -274,7 +274,7 @@ export class DataCloudflareSecretsStoreSecret extends cdktf.TerraformDataSource 
       terraformResourceType: 'cloudflare_secrets_store_secret',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

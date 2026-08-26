@@ -48,6 +48,7 @@
       inputs.flake-parts.follows = "flake-parts";
       inputs.treefmt-nix.follows = "treefmt-nix";
       inputs.systems.follows = "systems";
+      inputs.package-lock2nix.follows = "package-lock2nix";
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";

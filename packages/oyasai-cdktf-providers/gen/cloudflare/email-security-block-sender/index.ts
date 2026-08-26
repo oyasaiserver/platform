@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/email_security_block_sender
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/email_security_block_sender
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,33 +10,41 @@ export interface EmailSecurityBlockSenderConfig extends cdktf.TerraformMetaArgum
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/email_security_block_sender#account_id EmailSecurityBlockSender#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/email_security_block_sender#account_id EmailSecurityBlockSender#account_id}
   */
   readonly accountId: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/email_security_block_sender#comments EmailSecurityBlockSender#comments}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/email_security_block_sender#comments EmailSecurityBlockSender#comments}
   */
   readonly comments?: string;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/email_security_block_sender#is_regex EmailSecurityBlockSender#is_regex}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/email_security_block_sender#is_regex EmailSecurityBlockSender#is_regex}
   */
   readonly isRegex: boolean | cdktf.IResolvable;
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/email_security_block_sender#pattern EmailSecurityBlockSender#pattern}
+  * The pattern value to match against. Format depends on `pattern_type`:
+  * - EMAIL: a valid email address, e.g. `user@example.com`
+  * - DOMAIN: a valid domain name, e.g. `example.com`
+  * - IP: a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g. `1.2.3.0/24`). Only globally reachable addresses are accepted; private, loopback, link-local, and unspecified addresses are rejected.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/email_security_block_sender#pattern EmailSecurityBlockSender#pattern}
   */
   readonly pattern: string;
   /**
   * Type of pattern matching.
-  * Note: UNKNOWN is deprecated and cannot be used when creating or updating policies, but may be returned for existing entries.
+  * - EMAIL: matches a full email address (e.g. `user@example.com`)
+  * - DOMAIN: matches a domain name (e.g. `example.com`)
+  * - IP: matches a plain IPv4 address (e.g. `1.2.3.4`) or an IPv4 CIDR block (e.g. `1.2.3.0/24`). Only globally reachable addresses are accepted.
+  * - UNKNOWN: deprecated, cannot be used when creating or updating policies, but may be returned for existing entries.
   * Available values: "EMAIL", "DOMAIN", "IP", "UNKNOWN".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/email_security_block_sender#pattern_type EmailSecurityBlockSender#pattern_type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/email_security_block_sender#pattern_type EmailSecurityBlockSender#pattern_type}
   */
   readonly patternType: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/email_security_block_sender cloudflare_email_security_block_sender}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/email_security_block_sender cloudflare_email_security_block_sender}
 */
 export class EmailSecurityBlockSender extends cdktf.TerraformResource {
 
@@ -52,7 +60,7 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a EmailSecurityBlockSender resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the EmailSecurityBlockSender to import
-  * @param importFromId The id of the existing EmailSecurityBlockSender that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/email_security_block_sender#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing EmailSecurityBlockSender that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/email_security_block_sender#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the EmailSecurityBlockSender to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -64,7 +72,7 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/email_security_block_sender cloudflare_email_security_block_sender} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/email_security_block_sender cloudflare_email_security_block_sender} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -75,7 +83,7 @@ export class EmailSecurityBlockSender extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_email_security_block_sender',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

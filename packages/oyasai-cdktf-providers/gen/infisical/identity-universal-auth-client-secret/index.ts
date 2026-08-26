@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_universal_auth_client_secret
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_universal_auth_client_secret
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface IdentityUniversalAuthClientSecretConfig extends cdktf.Terraform
   /**
   * The description of the client secret.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_universal_auth_client_secret#description IdentityUniversalAuthClientSecret#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_universal_auth_client_secret#description IdentityUniversalAuthClientSecret#description}
   */
   readonly description?: string;
   /**
   * The ID of the identity to create a client secret for
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_universal_auth_client_secret#identity_id IdentityUniversalAuthClientSecret#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_universal_auth_client_secret#identity_id IdentityUniversalAuthClientSecret#identity_id}
   */
   readonly identityId: string;
   /**
   * The maximum number of times that the client secret can be used; a value of 0 implies infinite number of uses. Default: 0
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_universal_auth_client_secret#number_of_uses_limit IdentityUniversalAuthClientSecret#number_of_uses_limit}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_universal_auth_client_secret#number_of_uses_limit IdentityUniversalAuthClientSecret#number_of_uses_limit}
   */
   readonly numberOfUsesLimit?: number;
   /**
   * The lifetime for the client secret in seconds. Default: 0 - not expiring
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_universal_auth_client_secret#ttl IdentityUniversalAuthClientSecret#ttl}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_universal_auth_client_secret#ttl IdentityUniversalAuthClientSecret#ttl}
   */
   readonly ttl?: number;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_universal_auth_client_secret infisical_identity_universal_auth_client_secret}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_universal_auth_client_secret infisical_identity_universal_auth_client_secret}
 */
 export class IdentityUniversalAuthClientSecret extends cdktf.TerraformResource {
 
@@ -50,7 +50,7 @@ export class IdentityUniversalAuthClientSecret extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a IdentityUniversalAuthClientSecret resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the IdentityUniversalAuthClientSecret to import
-  * @param importFromId The id of the existing IdentityUniversalAuthClientSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_universal_auth_client_secret#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing IdentityUniversalAuthClientSecret that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_universal_auth_client_secret#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the IdentityUniversalAuthClientSecret to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -62,7 +62,7 @@ export class IdentityUniversalAuthClientSecret extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/identity_universal_auth_client_secret infisical_identity_universal_auth_client_secret} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/identity_universal_auth_client_secret infisical_identity_universal_auth_client_secret} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -73,7 +73,7 @@ export class IdentityUniversalAuthClientSecret extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_identity_universal_auth_client_secret',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
