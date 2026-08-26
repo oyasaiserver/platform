@@ -1,0 +1,10 @@
+[dependencies]
+reqwest = {version = "0.13", features = ["json"]}
+serde = {version = "1.0", features = ["derive"]}
+tokio = {version = "1", features = ["full"]}
+serde_json = "1.0"
+
+[package]
+name = "oyasai-cron"
+version = "0.1.0"
+edition = "2024"

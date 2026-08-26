@@ -1,6 +1,12 @@
 { ... }: {
   perSystem =
-    { pkgs, config, ... }:
+    {
+      pkgs,
+      lib,
+      config,
+      inputs',
+      ...
+    }:
     let
       oyasaiScope = config.oyasai.scope;
     in
@@ -12,8 +18,10 @@
           [
             # keep-sorted start
             awscli2
+            clang
             gradle
             infisical
+            inputs'.fenix.packages.stable.toolchain
             jdk
             just
             nixd
@@ -25,6 +33,16 @@
             typescript-language-server
             # keep-sorted end
           ];
+        env = lib.optionals pkgs.stdenv.isDarwin [
+          {
+            name = "SDKROOT";
+            value = pkgs.apple-sdk_26;
+          }
+          {
+            name = "LIBRARY_PATH";
+            value = "${pkgs.libiconv}/lib";
+          }
+        ];
       };
     };
 }
