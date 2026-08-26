@@ -627,6 +627,12 @@
       "hash": "sha256-MAe++K/zro6hLYHD/qy08Vl5ss9cPjj8kYmpjeoUEWc="
     }
   },
+  "com.google.errorprone:error_prone_annotations:2.36.0": {
+    "error_prone_annotations-2.36.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.36.0/error_prone_annotations-2.36.0.pom",
+      "hash": "sha256-15z9N8hfdta3VMdQHuHchEe3smQsI4LXeCUhZr0zHpw="
+    }
+  },
   "com.google.errorprone:error_prone_annotations:2.27.0": {
     "error_prone_annotations-2.27.0.jar": {
       "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.27.0/error_prone_annotations-2.27.0.jar",
@@ -659,6 +665,12 @@
     "error_prone_parent-2.38.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_parent/2.38.0/error_prone_parent-2.38.0.pom",
       "hash": "sha256-5iRYpqPmMIG8fFezwPrJ8E92zjL2BlMttp/is9R7k0w="
+    }
+  },
+  "com.google.errorprone:error_prone_parent:2.36.0": {
+    "error_prone_parent-2.36.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_parent/2.36.0/error_prone_parent-2.36.0.pom",
+      "hash": "sha256-Okz8imvtYetI6Wl5b8MeoNJwtj5nBZmUamGIOttwlNw="
     }
   },
   "com.google.errorprone:error_prone_parent:2.27.0": {
