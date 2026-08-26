@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/group_machine_identity
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/group_machine_identity
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface GroupMachineIdentityConfig extends cdktf.TerraformMetaArguments
   /**
   * The ID of the group.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/group_machine_identity#group_id GroupMachineIdentity#group_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/group_machine_identity#group_id GroupMachineIdentity#group_id}
   */
   readonly groupId: string;
   /**
   * The ID of the machine identity.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/group_machine_identity#identity_id GroupMachineIdentity#identity_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/group_machine_identity#identity_id GroupMachineIdentity#identity_id}
   */
   readonly identityId: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/group_machine_identity infisical_group_machine_identity}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/group_machine_identity infisical_group_machine_identity}
 */
 export class GroupMachineIdentity extends cdktf.TerraformResource {
 
@@ -38,7 +38,7 @@ export class GroupMachineIdentity extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a GroupMachineIdentity resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the GroupMachineIdentity to import
-  * @param importFromId The id of the existing GroupMachineIdentity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/group_machine_identity#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing GroupMachineIdentity that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/group_machine_identity#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the GroupMachineIdentity to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +50,7 @@ export class GroupMachineIdentity extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/group_machine_identity infisical_group_machine_identity} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/group_machine_identity infisical_group_machine_identity} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +61,7 @@ export class GroupMachineIdentity extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_group_machine_identity',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

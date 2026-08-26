@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/secrets_store
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,21 +8,19 @@ import * as cdktf from 'cdktf';
 
 export interface SecretsStoreConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Account Identifier
-  *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store#account_id SecretsStore#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/secrets_store#account_id SecretsStore#account_id}
   */
   readonly accountId: string;
   /**
-  * The name of the store
+  * The name of the store.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store#name SecretsStore#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/secrets_store#name SecretsStore#name}
   */
   readonly name: string;
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store cloudflare_secrets_store}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/secrets_store cloudflare_secrets_store}
 */
 export class SecretsStore extends cdktf.TerraformResource {
 
@@ -38,7 +36,7 @@ export class SecretsStore extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a SecretsStore resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the SecretsStore to import
-  * @param importFromId The id of the existing SecretsStore that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing SecretsStore that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/secrets_store#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the SecretsStore to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -50,7 +48,7 @@ export class SecretsStore extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/resources/secrets_store cloudflare_secrets_store} Resource
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/resources/secrets_store cloudflare_secrets_store} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -61,7 +59,7 @@ export class SecretsStore extends cdktf.TerraformResource {
       terraformResourceType: 'cloudflare_secrets_store',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

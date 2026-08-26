@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/workers_scripts
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/workers_scripts
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,19 +10,19 @@ export interface DataCloudflareWorkersScriptsConfig extends cdktf.TerraformMetaA
   /**
   * Identifier.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/workers_scripts#account_id DataCloudflareWorkersScripts#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/workers_scripts#account_id DataCloudflareWorkersScripts#account_id}
   */
   readonly accountId?: string;
   /**
   * Max items to fetch, default: 1000
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/workers_scripts#max_items DataCloudflareWorkersScripts#max_items}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/workers_scripts#max_items DataCloudflareWorkersScripts#max_items}
   */
   readonly maxItems?: number;
   /**
   * Filter scripts by tags. Format: comma-separated list of tag:allowed pairs where allowed is 'yes' or 'no'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/workers_scripts#tags DataCloudflareWorkersScripts#tags}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/workers_scripts#tags DataCloudflareWorkersScripts#tags}
   */
   readonly tags?: string;
 }
@@ -83,6 +83,164 @@ export class DataCloudflareWorkersScriptsResultCacheOptionsOutputReference exten
   // enabled - computed: true, optional: false, required: false
   public get enabled() {
     return this.getBooleanAttribute('enabled');
+  }
+}
+export interface DataCloudflareWorkersScriptsResultExportsCache {
+}
+
+export function dataCloudflareWorkersScriptsResultExportsCacheToTerraform(struct?: DataCloudflareWorkersScriptsResultExportsCache): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareWorkersScriptsResultExportsCacheToHclTerraform(struct?: DataCloudflareWorkersScriptsResultExportsCache): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareWorkersScriptsResultExportsCacheOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string) {
+    super(terraformResource, terraformAttribute, false);
+  }
+
+  public get internalValue(): DataCloudflareWorkersScriptsResultExportsCache | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareWorkersScriptsResultExportsCache | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // enabled - computed: true, optional: false, required: false
+  public get enabled() {
+    return this.getBooleanAttribute('enabled');
+  }
+}
+export interface DataCloudflareWorkersScriptsResultExports {
+}
+
+export function dataCloudflareWorkersScriptsResultExportsToTerraform(struct?: DataCloudflareWorkersScriptsResultExports): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+  }
+}
+
+
+export function dataCloudflareWorkersScriptsResultExportsToHclTerraform(struct?: DataCloudflareWorkersScriptsResultExports): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+  };
+  return attrs;
+}
+
+export class DataCloudflareWorkersScriptsResultExportsOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectKey the key of this item in the map
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectKey: string) {
+    super(terraformResource, terraformAttribute, false, complexObjectKey);
+  }
+
+  public get internalValue(): DataCloudflareWorkersScriptsResultExports | undefined {
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: DataCloudflareWorkersScriptsResultExports | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+    }
+  }
+
+  // cache - computed: true, optional: false, required: false
+  private _cache = new DataCloudflareWorkersScriptsResultExportsCacheOutputReference(this, "cache");
+  public get cache() {
+    return this._cache;
+  }
+
+  // renamed_to - computed: true, optional: false, required: false
+  public get renamedTo() {
+    return this.getStringAttribute('renamed_to');
+  }
+
+  // state - computed: true, optional: false, required: false
+  public get state() {
+    return this.getStringAttribute('state');
+  }
+
+  // storage - computed: true, optional: false, required: false
+  public get storage() {
+    return this.getStringAttribute('storage');
+  }
+
+  // transfer_from - computed: true, optional: false, required: false
+  public get transferFrom() {
+    return this.getStringAttribute('transfer_from');
+  }
+
+  // transferred_to - computed: true, optional: false, required: false
+  public get transferredTo() {
+    return this.getStringAttribute('transferred_to');
+  }
+
+  // type - computed: true, optional: false, required: false
+  public get type() {
+    return this.getStringAttribute('type');
+  }
+}
+
+export class DataCloudflareWorkersScriptsResultExportsMap extends cdktf.ComplexMap {
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string) {
+    super(terraformResource, terraformAttribute)
+  }
+
+  /**
+  * @param key the key of the item to return
+  */
+  public get(key: string): DataCloudflareWorkersScriptsResultExportsOutputReference {
+    return new DataCloudflareWorkersScriptsResultExportsOutputReference(this.terraformResource, this.terraformAttribute, key);
   }
 }
 export interface DataCloudflareWorkersScriptsResultNamedHandlers {
@@ -801,6 +959,12 @@ export class DataCloudflareWorkersScriptsResultOutputReference extends cdktf.Com
     return this.getStringAttribute('etag');
   }
 
+  // exports - computed: true, optional: false, required: false
+  private _exports = new DataCloudflareWorkersScriptsResultExportsMap(this, "exports");
+  public get exports() {
+    return this._exports;
+  }
+
   // handlers - computed: true, optional: false, required: false
   public get handlers() {
     return this.getListAttribute('handlers');
@@ -917,7 +1081,7 @@ export class DataCloudflareWorkersScriptsResultList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/workers_scripts cloudflare_workers_scripts}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/workers_scripts cloudflare_workers_scripts}
 */
 export class DataCloudflareWorkersScripts extends cdktf.TerraformDataSource {
 
@@ -933,7 +1097,7 @@ export class DataCloudflareWorkersScripts extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareWorkersScripts resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareWorkersScripts to import
-  * @param importFromId The id of the existing DataCloudflareWorkersScripts that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/workers_scripts#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareWorkersScripts that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/workers_scripts#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareWorkersScripts to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -945,7 +1109,7 @@ export class DataCloudflareWorkersScripts extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/workers_scripts cloudflare_workers_scripts} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/workers_scripts cloudflare_workers_scripts} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -956,7 +1120,7 @@ export class DataCloudflareWorkersScripts extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_workers_scripts',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

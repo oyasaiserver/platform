@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/account_subscription
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/account_subscription
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,11 +8,17 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareAccountSubscriptionConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Identifier
+  * The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/account_subscription#account_id DataCloudflareAccountSubscription#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/account_subscription#account_id DataCloudflareAccountSubscription#account_id}
   */
   readonly accountId?: string;
+  /**
+  * The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/account_subscription#zone_id DataCloudflareAccountSubscription#zone_id}
+  */
+  readonly zoneId?: string;
 }
 export interface DataCloudflareAccountSubscriptionRatePlan {
 }
@@ -100,7 +106,7 @@ export class DataCloudflareAccountSubscriptionRatePlanOutputReference extends cd
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/account_subscription cloudflare_account_subscription}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/account_subscription cloudflare_account_subscription}
 */
 export class DataCloudflareAccountSubscription extends cdktf.TerraformDataSource {
 
@@ -116,7 +122,7 @@ export class DataCloudflareAccountSubscription extends cdktf.TerraformDataSource
   * Generates CDKTF code for importing a DataCloudflareAccountSubscription resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareAccountSubscription to import
-  * @param importFromId The id of the existing DataCloudflareAccountSubscription that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/account_subscription#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareAccountSubscription that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/account_subscription#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareAccountSubscription to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -128,7 +134,7 @@ export class DataCloudflareAccountSubscription extends cdktf.TerraformDataSource
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/account_subscription cloudflare_account_subscription} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/account_subscription cloudflare_account_subscription} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -139,7 +145,7 @@ export class DataCloudflareAccountSubscription extends cdktf.TerraformDataSource
       terraformResourceType: 'cloudflare_account_subscription',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -150,6 +156,7 @@ export class DataCloudflareAccountSubscription extends cdktf.TerraformDataSource
       forEach: config.forEach
     });
     this._accountId = config.accountId;
+    this._zoneId = config.zoneId;
   }
 
   // ==========
@@ -213,6 +220,22 @@ export class DataCloudflareAccountSubscription extends cdktf.TerraformDataSource
     return this.getStringAttribute('state');
   }
 
+  // zone_id - computed: false, optional: true, required: false
+  private _zoneId?: string; 
+  public get zoneId() {
+    return this.getStringAttribute('zone_id');
+  }
+  public set zoneId(value: string) {
+    this._zoneId = value;
+  }
+  public resetZoneId() {
+    this._zoneId = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get zoneIdInput() {
+    return this._zoneId;
+  }
+
   // =========
   // SYNTHESIS
   // =========
@@ -220,6 +243,7 @@ export class DataCloudflareAccountSubscription extends cdktf.TerraformDataSource
   protected synthesizeAttributes(): { [name: string]: any } {
     return {
       account_id: cdktf.stringToTerraform(this._accountId),
+      zone_id: cdktf.stringToTerraform(this._zoneId),
     };
   }
 
@@ -227,6 +251,12 @@ export class DataCloudflareAccountSubscription extends cdktf.TerraformDataSource
     const attrs = {
       account_id: {
         value: cdktf.stringToHclTerraform(this._accountId),
+        isBlock: false,
+        type: "simple",
+        storageClassType: "string",
+      },
+      zone_id: {
+        value: cdktf.stringToHclTerraform(this._zoneId),
         isBlock: false,
         type: "simple",
         storageClassType: "string",

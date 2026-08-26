@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionCloudflareConfig extends cdktf.TerraformMetaArgume
   /**
   * The credentials for the Cloudflare App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare#credentials AppConnectionCloudflare#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare#credentials AppConnectionCloudflare#credentials}
   */
   readonly credentials: AppConnectionCloudflareCredentials;
   /**
   * An optional description for the Cloudflare App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare#description AppConnectionCloudflare#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare#description AppConnectionCloudflare#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with Cloudflare. Possible values are: api-token
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare#method AppConnectionCloudflare#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare#method AppConnectionCloudflare#method}
   */
   readonly method: string;
   /**
   * The name of the Cloudflare App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare#name AppConnectionCloudflare#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare#name AppConnectionCloudflare#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare#project_id AppConnectionCloudflare#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare#project_id AppConnectionCloudflare#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,13 +42,13 @@ export interface AppConnectionCloudflareCredentials {
   /**
   * The Cloudflare Account ID. This can be found in the sidebar of your Cloudflare dashboard.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare#account_id AppConnectionCloudflare#account_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare#account_id AppConnectionCloudflare#account_id}
   */
   readonly accountId: string;
   /**
   * The Cloudflare API token with the necessary permissions to manage Workers scripts. The token should have Zone:Zone:Read, Zone:Zone Settings:Read, and Zone:Zone:Edit permissions.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare#api_token AppConnectionCloudflare#api_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare#api_token AppConnectionCloudflare#api_token}
   */
   readonly apiToken: string;
 }
@@ -165,7 +165,7 @@ export class AppConnectionCloudflareCredentialsOutputReference extends cdktf.Com
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare infisical_app_connection_cloudflare}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare infisical_app_connection_cloudflare}
 */
 export class AppConnectionCloudflare extends cdktf.TerraformResource {
 
@@ -181,7 +181,7 @@ export class AppConnectionCloudflare extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionCloudflare resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionCloudflare to import
-  * @param importFromId The id of the existing AppConnectionCloudflare that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionCloudflare that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionCloudflare to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -193,7 +193,7 @@ export class AppConnectionCloudflare extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_cloudflare infisical_app_connection_cloudflare} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_cloudflare infisical_app_connection_cloudflare} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -204,7 +204,7 @@ export class AppConnectionCloudflare extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_cloudflare',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

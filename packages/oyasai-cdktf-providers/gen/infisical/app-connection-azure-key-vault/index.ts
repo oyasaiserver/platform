@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnectionAzureKeyVaultConfig extends cdktf.TerraformMetaArg
   /**
   * The credentials for the Azure Key Vault App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault#credentials AppConnectionAzureKeyVault#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault#credentials AppConnectionAzureKeyVault#credentials}
   */
   readonly credentials: AppConnectionAzureKeyVaultCredentials;
   /**
   * An optional description for the Azure Key Vault App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault#description AppConnectionAzureKeyVault#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault#description AppConnectionAzureKeyVault#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with Azure Key Vault. Possible values are: client-secret
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault#method AppConnectionAzureKeyVault#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault#method AppConnectionAzureKeyVault#method}
   */
   readonly method: string;
   /**
   * The name of the Azure Key Vault App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault#name AppConnectionAzureKeyVault#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault#name AppConnectionAzureKeyVault#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault#project_id AppConnectionAzureKeyVault#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault#project_id AppConnectionAzureKeyVault#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,19 +42,19 @@ export interface AppConnectionAzureKeyVaultCredentials {
   /**
   * The Azure application (client) ID. Required for key-vault method. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/azure-key-vault
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault#client_id AppConnectionAzureKeyVault#client_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault#client_id AppConnectionAzureKeyVault#client_id}
   */
   readonly clientId: string;
   /**
   * The Azure client secret. Required for key-vault method. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/azure-key-vault
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault#client_secret AppConnectionAzureKeyVault#client_secret}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault#client_secret AppConnectionAzureKeyVault#client_secret}
   */
   readonly clientSecret: string;
   /**
   * The Azure Active Directory (AAD) tenant ID. Required for key-vault method. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/azure-key-vault
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault#tenant_id AppConnectionAzureKeyVault#tenant_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault#tenant_id AppConnectionAzureKeyVault#tenant_id}
   */
   readonly tenantId: string;
 }
@@ -197,7 +197,7 @@ export class AppConnectionAzureKeyVaultCredentialsOutputReference extends cdktf.
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault infisical_app_connection_azure_key_vault}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault infisical_app_connection_azure_key_vault}
 */
 export class AppConnectionAzureKeyVault extends cdktf.TerraformResource {
 
@@ -213,7 +213,7 @@ export class AppConnectionAzureKeyVault extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnectionAzureKeyVault resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnectionAzureKeyVault to import
-  * @param importFromId The id of the existing AppConnectionAzureKeyVault that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnectionAzureKeyVault that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnectionAzureKeyVault to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -225,7 +225,7 @@ export class AppConnectionAzureKeyVault extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_azure_key_vault infisical_app_connection_azure_key_vault} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_azure_key_vault infisical_app_connection_azure_key_vault} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -236,7 +236,7 @@ export class AppConnectionAzureKeyVault extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_azure_key_vault',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

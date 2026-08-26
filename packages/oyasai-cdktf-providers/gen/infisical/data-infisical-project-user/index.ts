@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/project_user
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/project_user
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,13 +10,13 @@ export interface DataInfisicalProjectUserConfig extends cdktf.TerraformMetaArgum
   /**
   * The ID of the project
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/project_user#project_id DataInfisicalProjectUser#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/project_user#project_id DataInfisicalProjectUser#project_id}
   */
   readonly projectId: string;
   /**
   * The user's Infisical UUID
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/project_user#user_id DataInfisicalProjectUser#user_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/project_user#user_id DataInfisicalProjectUser#user_id}
   */
   readonly userId: string;
 }
@@ -201,7 +201,7 @@ export class DataInfisicalProjectUserUserOutputReference extends cdktf.ComplexOb
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/project_user infisical_project_user}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/project_user infisical_project_user}
 */
 export class DataInfisicalProjectUser extends cdktf.TerraformDataSource {
 
@@ -217,7 +217,7 @@ export class DataInfisicalProjectUser extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataInfisicalProjectUser resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataInfisicalProjectUser to import
-  * @param importFromId The id of the existing DataInfisicalProjectUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/project_user#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataInfisicalProjectUser that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/project_user#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataInfisicalProjectUser to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -229,7 +229,7 @@ export class DataInfisicalProjectUser extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/data-sources/project_user infisical_project_user} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/data-sources/project_user infisical_project_user} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -240,7 +240,7 @@ export class DataInfisicalProjectUser extends cdktf.TerraformDataSource {
       terraformResourceType: 'infisical_project_user',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,31 +10,31 @@ export interface AppConnection1PasswordConfig extends cdktf.TerraformMetaArgumen
   /**
   * The credentials for the 1Password App Connection
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password#credentials AppConnection1Password#credentials}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password#credentials AppConnection1Password#credentials}
   */
   readonly credentials: AppConnection1PasswordCredentials;
   /**
   * An optional description for the 1Password App Connection.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password#description AppConnection1Password#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password#description AppConnection1Password#description}
   */
   readonly description?: string;
   /**
   * The method used to authenticate with 1Password. Possible values are: api-token
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password#method AppConnection1Password#method}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password#method AppConnection1Password#method}
   */
   readonly method: string;
   /**
   * The name of the 1Password App Connection to create. Must be slug-friendly
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password#name AppConnection1Password#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password#name AppConnection1Password#name}
   */
   readonly name: string;
   /**
   * The ID of the project to scope the app connection to. If not provided, the app connection will be scoped to the organization.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password#project_id AppConnection1Password#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password#project_id AppConnection1Password#project_id}
   */
   readonly projectId?: string;
 }
@@ -42,13 +42,13 @@ export interface AppConnection1PasswordCredentials {
   /**
   * The API token to use for authentication. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/1password
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password#api_token AppConnection1Password#api_token}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password#api_token AppConnection1Password#api_token}
   */
   readonly apiToken: string;
   /**
   * The URL of the 1Password Connect instance to connect to. For more details, refer to the documentation here infisical.com/docs/integrations/app-connections/1password
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password#instance_url AppConnection1Password#instance_url}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password#instance_url AppConnection1Password#instance_url}
   */
   readonly instanceUrl: string;
 }
@@ -165,7 +165,7 @@ export class AppConnection1PasswordCredentialsOutputReference extends cdktf.Comp
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password infisical_app_connection_1password}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password infisical_app_connection_1password}
 */
 export class AppConnection1Password extends cdktf.TerraformResource {
 
@@ -181,7 +181,7 @@ export class AppConnection1Password extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AppConnection1Password resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AppConnection1Password to import
-  * @param importFromId The id of the existing AppConnection1Password that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AppConnection1Password that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AppConnection1Password to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -193,7 +193,7 @@ export class AppConnection1Password extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/app_connection_1password infisical_app_connection_1password} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/app_connection_1password infisical_app_connection_1password} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -204,7 +204,7 @@ export class AppConnection1Password extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_app_connection_1password',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

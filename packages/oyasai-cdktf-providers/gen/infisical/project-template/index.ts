@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,51 +10,69 @@ export interface ProjectTemplateConfig extends cdktf.TerraformMetaArguments {
   /**
   * The description of the project template
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#description ProjectTemplate#description}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#description ProjectTemplate#description}
   */
   readonly description?: string;
   /**
   * The environments for the project template
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#environments ProjectTemplate#environments}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#environments ProjectTemplate#environments}
   */
   readonly environments?: ProjectTemplateEnvironments[] | cdktf.IResolvable;
   /**
+  * The groups assigned to projects created from this template
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#groups ProjectTemplate#groups}
+  */
+  readonly groups?: ProjectTemplateGroups[] | cdktf.IResolvable;
+  /**
+  * The identities assigned to projects created from this template
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#identities ProjectTemplate#identities}
+  */
+  readonly identities?: ProjectTemplateIdentities[] | cdktf.IResolvable;
+  /**
   * The name of the project template
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#name ProjectTemplate#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#name ProjectTemplate#name}
   */
   readonly name: string;
   /**
   * The roles for the project template
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#roles ProjectTemplate#roles}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#roles ProjectTemplate#roles}
   */
   readonly roles?: ProjectTemplateRoles[] | cdktf.IResolvable;
   /**
   * The type of the project template. Refer to the documentation here https://infisical.com/docs/api-reference/endpoints/project-templates/create#body-type for the available options
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#type ProjectTemplate#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#type ProjectTemplate#type}
   */
   readonly type: string;
+  /**
+  * The users assigned to projects created from this template
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#users ProjectTemplate#users}
+  */
+  readonly users?: ProjectTemplateUsers[] | cdktf.IResolvable;
 }
 export interface ProjectTemplateEnvironments {
   /**
   * The name of the environment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#name ProjectTemplate#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#name ProjectTemplate#name}
   */
   readonly name: string;
   /**
   * The position of the environment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#position ProjectTemplate#position}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#position ProjectTemplate#position}
   */
   readonly position: number;
   /**
   * The slug of the environment
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#slug ProjectTemplate#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#slug ProjectTemplate#slug}
   */
   readonly slug: string;
 }
@@ -217,29 +235,323 @@ export class ProjectTemplateEnvironmentsList extends cdktf.ComplexList {
     return new ProjectTemplateEnvironmentsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
+export interface ProjectTemplateGroups {
+  /**
+  * The slug of the group
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#group_slug ProjectTemplate#group_slug}
+  */
+  readonly groupSlug: string;
+  /**
+  * The role slugs to assign to the group. Must reference roles defined in this template or predefined role slugs (admin, member, viewer, no-access).
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#roles ProjectTemplate#roles}
+  */
+  readonly roles: string[];
+}
+
+export function projectTemplateGroupsToTerraform(struct?: ProjectTemplateGroups | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    group_slug: cdktf.stringToTerraform(struct!.groupSlug),
+    roles: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.roles),
+  }
+}
+
+
+export function projectTemplateGroupsToHclTerraform(struct?: ProjectTemplateGroups | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    group_slug: {
+      value: cdktf.stringToHclTerraform(struct!.groupSlug),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    roles: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.roles),
+      isBlock: false,
+      type: "set",
+      storageClassType: "stringList",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class ProjectTemplateGroupsOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): ProjectTemplateGroups | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._groupSlug !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.groupSlug = this._groupSlug;
+    }
+    if (this._roles !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.roles = this._roles;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: ProjectTemplateGroups | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._groupSlug = undefined;
+      this._roles = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._groupSlug = value.groupSlug;
+      this._roles = value.roles;
+    }
+  }
+
+  // group_slug - computed: false, optional: false, required: true
+  private _groupSlug?: string; 
+  public get groupSlug() {
+    return this.getStringAttribute('group_slug');
+  }
+  public set groupSlug(value: string) {
+    this._groupSlug = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get groupSlugInput() {
+    return this._groupSlug;
+  }
+
+  // roles - computed: false, optional: false, required: true
+  private _roles?: string[]; 
+  public get roles() {
+    return cdktf.Fn.tolist(this.getListAttribute('roles'));
+  }
+  public set roles(value: string[]) {
+    this._roles = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get rolesInput() {
+    return this._roles;
+  }
+}
+
+export class ProjectTemplateGroupsList extends cdktf.ComplexList {
+  public internalValue? : ProjectTemplateGroups[] | cdktf.IResolvable
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): ProjectTemplateGroupsOutputReference {
+    return new ProjectTemplateGroupsOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
+export interface ProjectTemplateIdentities {
+  /**
+  * The ID of the identity
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#identity_id ProjectTemplate#identity_id}
+  */
+  readonly identityId: string;
+  /**
+  * The role slugs to assign to the identity. Must reference roles defined in this template or predefined role slugs (admin, member, viewer, no-access).
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#roles ProjectTemplate#roles}
+  */
+  readonly roles: string[];
+}
+
+export function projectTemplateIdentitiesToTerraform(struct?: ProjectTemplateIdentities | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    identity_id: cdktf.stringToTerraform(struct!.identityId),
+    roles: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.roles),
+  }
+}
+
+
+export function projectTemplateIdentitiesToHclTerraform(struct?: ProjectTemplateIdentities | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    identity_id: {
+      value: cdktf.stringToHclTerraform(struct!.identityId),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+    roles: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.roles),
+      isBlock: false,
+      type: "set",
+      storageClassType: "stringList",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class ProjectTemplateIdentitiesOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): ProjectTemplateIdentities | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._identityId !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.identityId = this._identityId;
+    }
+    if (this._roles !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.roles = this._roles;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: ProjectTemplateIdentities | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._identityId = undefined;
+      this._roles = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._identityId = value.identityId;
+      this._roles = value.roles;
+    }
+  }
+
+  // identity_id - computed: false, optional: false, required: true
+  private _identityId?: string; 
+  public get identityId() {
+    return this.getStringAttribute('identity_id');
+  }
+  public set identityId(value: string) {
+    this._identityId = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get identityIdInput() {
+    return this._identityId;
+  }
+
+  // roles - computed: false, optional: false, required: true
+  private _roles?: string[]; 
+  public get roles() {
+    return cdktf.Fn.tolist(this.getListAttribute('roles'));
+  }
+  public set roles(value: string[]) {
+    this._roles = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get rolesInput() {
+    return this._roles;
+  }
+}
+
+export class ProjectTemplateIdentitiesList extends cdktf.ComplexList {
+  public internalValue? : ProjectTemplateIdentities[] | cdktf.IResolvable
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): ProjectTemplateIdentitiesOutputReference {
+    return new ProjectTemplateIdentitiesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
 export interface ProjectTemplateRolesPermissions {
   /**
   * Describe what actions an entity can take.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#action ProjectTemplate#action}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#action ProjectTemplate#action}
   */
   readonly action: string[];
   /**
   * When specified, only matching conditions will be allowed to access given resource. Refer to the documentation in https://infisical.com/docs/internals/permissions#conditions for the complete list of supported properties and operators.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#conditions ProjectTemplate#conditions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#conditions ProjectTemplate#conditions}
   */
   readonly conditions?: string;
   /**
   * Whether rule forbids. Set this to true if permission forbids.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#inverted ProjectTemplate#inverted}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#inverted ProjectTemplate#inverted}
   */
   readonly inverted?: boolean | cdktf.IResolvable;
   /**
   * Describe the entity the permission pertains to.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#subject ProjectTemplate#subject}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#subject ProjectTemplate#subject}
   */
   readonly subject: string;
 }
@@ -438,19 +750,19 @@ export interface ProjectTemplateRoles {
   /**
   * The name of the role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#name ProjectTemplate#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#name ProjectTemplate#name}
   */
   readonly name: string;
   /**
   * The permissions assigned to the role. Refer to the documentation here https://infisical.com/docs/api-reference/endpoints/project-templates/create#body-roles-permissions for its usage.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#permissions ProjectTemplate#permissions}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#permissions ProjectTemplate#permissions}
   */
   readonly permissions?: ProjectTemplateRolesPermissions[] | cdktf.IResolvable;
   /**
   * The slug of the role
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#slug ProjectTemplate#slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#slug ProjectTemplate#slug}
   */
   readonly slug: string;
 }
@@ -616,9 +928,156 @@ export class ProjectTemplateRolesList extends cdktf.ComplexList {
     return new ProjectTemplateRolesOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
   }
 }
+export interface ProjectTemplateUsers {
+  /**
+  * The role slugs to assign to the user. Must reference roles defined in this template or predefined role slugs (admin, member, viewer, no-access).
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#roles ProjectTemplate#roles}
+  */
+  readonly roles: string[];
+  /**
+  * The username of the user.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#username ProjectTemplate#username}
+  */
+  readonly username: string;
+}
+
+export function projectTemplateUsersToTerraform(struct?: ProjectTemplateUsers | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  return {
+    roles: cdktf.listMapper(cdktf.stringToTerraform, false)(struct!.roles),
+    username: cdktf.stringToTerraform(struct!.username),
+  }
+}
+
+
+export function projectTemplateUsersToHclTerraform(struct?: ProjectTemplateUsers | cdktf.IResolvable): any {
+  if (!cdktf.canInspect(struct) || cdktf.Tokenization.isResolvable(struct)) { return struct; }
+  if (cdktf.isComplexElement(struct)) {
+    throw new Error("A complex element was used as configuration, this is not supported: https://cdk.tf/complex-object-as-configuration");
+  }
+  const attrs = {
+    roles: {
+      value: cdktf.listMapperHcl(cdktf.stringToHclTerraform, false)(struct!.roles),
+      isBlock: false,
+      type: "set",
+      storageClassType: "stringList",
+    },
+    username: {
+      value: cdktf.stringToHclTerraform(struct!.username),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "string",
+    },
+  };
+
+  // remove undefined attributes
+  return Object.fromEntries(Object.entries(attrs).filter(([_, value]) => value !== undefined && value.value !== undefined));
+}
+
+export class ProjectTemplateUsersOutputReference extends cdktf.ComplexObject {
+  private isEmptyObject = false;
+  private resolvableValue?: cdktf.IResolvable;
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param complexObjectIndex the index of this item in the list
+  * @param complexObjectIsFromSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  public constructor(terraformResource: cdktf.IInterpolatingParent, terraformAttribute: string, complexObjectIndex: number, complexObjectIsFromSet: boolean) {
+    super(terraformResource, terraformAttribute, complexObjectIsFromSet, complexObjectIndex);
+  }
+
+  public get internalValue(): ProjectTemplateUsers | cdktf.IResolvable | undefined {
+    if (this.resolvableValue) {
+      return this.resolvableValue;
+    }
+    let hasAnyValues = this.isEmptyObject;
+    const internalValueResult: any = {};
+    if (this._roles !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.roles = this._roles;
+    }
+    if (this._username !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.username = this._username;
+    }
+    return hasAnyValues ? internalValueResult : undefined;
+  }
+
+  public set internalValue(value: ProjectTemplateUsers | cdktf.IResolvable | undefined) {
+    if (value === undefined) {
+      this.isEmptyObject = false;
+      this.resolvableValue = undefined;
+      this._roles = undefined;
+      this._username = undefined;
+    }
+    else if (cdktf.Tokenization.isResolvable(value)) {
+      this.isEmptyObject = false;
+      this.resolvableValue = value;
+    }
+    else {
+      this.isEmptyObject = Object.keys(value).length === 0;
+      this.resolvableValue = undefined;
+      this._roles = value.roles;
+      this._username = value.username;
+    }
+  }
+
+  // roles - computed: false, optional: false, required: true
+  private _roles?: string[]; 
+  public get roles() {
+    return cdktf.Fn.tolist(this.getListAttribute('roles'));
+  }
+  public set roles(value: string[]) {
+    this._roles = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get rolesInput() {
+    return this._roles;
+  }
+
+  // username - computed: false, optional: false, required: true
+  private _username?: string; 
+  public get username() {
+    return this.getStringAttribute('username');
+  }
+  public set username(value: string) {
+    this._username = value;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get usernameInput() {
+    return this._username;
+  }
+}
+
+export class ProjectTemplateUsersList extends cdktf.ComplexList {
+  public internalValue? : ProjectTemplateUsers[] | cdktf.IResolvable
+
+  /**
+  * @param terraformResource The parent resource
+  * @param terraformAttribute The attribute on the parent resource this class is referencing
+  * @param wrapsSet whether the list is wrapping a set (will add tolist() to be able to access an item via an index)
+  */
+  constructor(protected terraformResource: cdktf.IInterpolatingParent, protected terraformAttribute: string, protected wrapsSet: boolean) {
+    super(terraformResource, terraformAttribute, wrapsSet)
+  }
+
+  /**
+  * @param index the index of the item to return
+  */
+  public get(index: number): ProjectTemplateUsersOutputReference {
+    return new ProjectTemplateUsersOutputReference(this.terraformResource, this.terraformAttribute, index, this.wrapsSet);
+  }
+}
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template infisical_project_template}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template infisical_project_template}
 */
 export class ProjectTemplate extends cdktf.TerraformResource {
 
@@ -634,7 +1093,7 @@ export class ProjectTemplate extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a ProjectTemplate resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the ProjectTemplate to import
-  * @param importFromId The id of the existing ProjectTemplate that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing ProjectTemplate that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the ProjectTemplate to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -646,7 +1105,7 @@ export class ProjectTemplate extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/project_template infisical_project_template} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/project_template infisical_project_template} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -657,7 +1116,7 @@ export class ProjectTemplate extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_project_template',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
@@ -669,9 +1128,12 @@ export class ProjectTemplate extends cdktf.TerraformResource {
     });
     this._description = config.description;
     this._environments.internalValue = config.environments;
+    this._groups.internalValue = config.groups;
+    this._identities.internalValue = config.identities;
     this._name = config.name;
     this._roles.internalValue = config.roles;
     this._type = config.type;
+    this._users.internalValue = config.users;
   }
 
   // ==========
@@ -710,9 +1172,41 @@ export class ProjectTemplate extends cdktf.TerraformResource {
     return this._environments.internalValue;
   }
 
+  // groups - computed: false, optional: true, required: false
+  private _groups = new ProjectTemplateGroupsList(this, "groups", true);
+  public get groups() {
+    return this._groups;
+  }
+  public putGroups(value: ProjectTemplateGroups[] | cdktf.IResolvable) {
+    this._groups.internalValue = value;
+  }
+  public resetGroups() {
+    this._groups.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get groupsInput() {
+    return this._groups.internalValue;
+  }
+
   // id - computed: true, optional: false, required: false
   public get id() {
     return this.getStringAttribute('id');
+  }
+
+  // identities - computed: false, optional: true, required: false
+  private _identities = new ProjectTemplateIdentitiesList(this, "identities", true);
+  public get identities() {
+    return this._identities;
+  }
+  public putIdentities(value: ProjectTemplateIdentities[] | cdktf.IResolvable) {
+    this._identities.internalValue = value;
+  }
+  public resetIdentities() {
+    this._identities.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get identitiesInput() {
+    return this._identities.internalValue;
   }
 
   // name - computed: false, optional: false, required: true
@@ -757,6 +1251,22 @@ export class ProjectTemplate extends cdktf.TerraformResource {
     return this._type;
   }
 
+  // users - computed: false, optional: true, required: false
+  private _users = new ProjectTemplateUsersList(this, "users", true);
+  public get users() {
+    return this._users;
+  }
+  public putUsers(value: ProjectTemplateUsers[] | cdktf.IResolvable) {
+    this._users.internalValue = value;
+  }
+  public resetUsers() {
+    this._users.internalValue = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get usersInput() {
+    return this._users.internalValue;
+  }
+
   // =========
   // SYNTHESIS
   // =========
@@ -765,9 +1275,12 @@ export class ProjectTemplate extends cdktf.TerraformResource {
     return {
       description: cdktf.stringToTerraform(this._description),
       environments: cdktf.listMapper(projectTemplateEnvironmentsToTerraform, false)(this._environments.internalValue),
+      groups: cdktf.listMapper(projectTemplateGroupsToTerraform, false)(this._groups.internalValue),
+      identities: cdktf.listMapper(projectTemplateIdentitiesToTerraform, false)(this._identities.internalValue),
       name: cdktf.stringToTerraform(this._name),
       roles: cdktf.listMapper(projectTemplateRolesToTerraform, false)(this._roles.internalValue),
       type: cdktf.stringToTerraform(this._type),
+      users: cdktf.listMapper(projectTemplateUsersToTerraform, false)(this._users.internalValue),
     };
   }
 
@@ -784,6 +1297,18 @@ export class ProjectTemplate extends cdktf.TerraformResource {
         isBlock: true,
         type: "list",
         storageClassType: "ProjectTemplateEnvironmentsList",
+      },
+      groups: {
+        value: cdktf.listMapperHcl(projectTemplateGroupsToHclTerraform, false)(this._groups.internalValue),
+        isBlock: true,
+        type: "set",
+        storageClassType: "ProjectTemplateGroupsList",
+      },
+      identities: {
+        value: cdktf.listMapperHcl(projectTemplateIdentitiesToHclTerraform, false)(this._identities.internalValue),
+        isBlock: true,
+        type: "set",
+        storageClassType: "ProjectTemplateIdentitiesList",
       },
       name: {
         value: cdktf.stringToHclTerraform(this._name),
@@ -802,6 +1327,12 @@ export class ProjectTemplate extends cdktf.TerraformResource {
         isBlock: false,
         type: "simple",
         storageClassType: "string",
+      },
+      users: {
+        value: cdktf.listMapperHcl(projectTemplateUsersToHclTerraform, false)(this._users.internalValue),
+        isBlock: true,
+        type: "set",
+        storageClassType: "ProjectTemplateUsersList",
       },
     };
 

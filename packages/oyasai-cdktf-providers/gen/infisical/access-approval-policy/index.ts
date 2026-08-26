@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy
+// https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -10,73 +10,73 @@ export interface AccessApprovalPolicyConfig extends cdktf.TerraformMetaArguments
   /**
   * Whether to allow approvers to approve their own requests
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#allow_self_approval AccessApprovalPolicy#allow_self_approval}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#allow_self_approval AccessApprovalPolicy#allow_self_approval}
   */
   readonly allowSelfApproval?: boolean | cdktf.IResolvable;
   /**
   * The required approvers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#approvers AccessApprovalPolicy#approvers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#approvers AccessApprovalPolicy#approvers}
   */
   readonly approvers: AccessApprovalPolicyApprovers[] | cdktf.IResolvable;
   /**
   * The bypassers who can bypass the approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#bypassers AccessApprovalPolicy#bypassers}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#bypassers AccessApprovalPolicy#bypassers}
   */
   readonly bypassers?: AccessApprovalPolicyBypassers[] | cdktf.IResolvable;
   /**
   * The enforcement level of the policy. This can either be hard or soft
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#enforcement_level AccessApprovalPolicy#enforcement_level}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#enforcement_level AccessApprovalPolicy#enforcement_level}
   */
   readonly enforcementLevel?: string;
   /**
   * (DEPRECATED, Use environment_slugs instead) The environment to apply the access approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#environment_slug AccessApprovalPolicy#environment_slug}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#environment_slug AccessApprovalPolicy#environment_slug}
   */
   readonly environmentSlug?: string;
   /**
   * The environments to apply the access approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#environment_slugs AccessApprovalPolicy#environment_slugs}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#environment_slugs AccessApprovalPolicy#environment_slugs}
   */
   readonly environmentSlugs?: string[];
   /**
   * The maximum time period for the access approval, specified as a duration string (e.g. '1h', '30m', '2d'). If omitted, the default behavior is 'permanent'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#max_time_period AccessApprovalPolicy#max_time_period}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#max_time_period AccessApprovalPolicy#max_time_period}
   */
   readonly maxTimePeriod?: string;
   /**
   * The name of the access approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#name AccessApprovalPolicy#name}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#name AccessApprovalPolicy#name}
   */
   readonly name?: string;
   /**
   * The ID of the project to add the access approval policy
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#project_id AccessApprovalPolicy#project_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#project_id AccessApprovalPolicy#project_id}
   */
   readonly projectId: string;
   /**
   * The time after which the access request expires, specified as a duration string (e.g. '1h', '3d', '72h'). Must be between 1 minute and 1 year. If omitted, the default behavior is 'never'.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#request_expiration_time AccessApprovalPolicy#request_expiration_time}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#request_expiration_time AccessApprovalPolicy#request_expiration_time}
   */
   readonly requestExpirationTime?: string;
   /**
   * The number of required approvers
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#required_approvals AccessApprovalPolicy#required_approvals}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#required_approvals AccessApprovalPolicy#required_approvals}
   */
   readonly requiredApprovals: number;
   /**
   * The secret path to apply the access approval policy to
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#secret_path AccessApprovalPolicy#secret_path}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#secret_path AccessApprovalPolicy#secret_path}
   */
   readonly secretPath: string;
 }
@@ -84,7 +84,7 @@ export interface AccessApprovalPolicyApprovers {
   /**
   * The ID of the approver
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#id AccessApprovalPolicy#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#id AccessApprovalPolicy#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -93,13 +93,13 @@ export interface AccessApprovalPolicyApprovers {
   /**
   * The type of approver. Either group or user
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#type AccessApprovalPolicy#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#type AccessApprovalPolicy#type}
   */
   readonly type: string;
   /**
   * The username of the approver. By default, this is the email
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#username AccessApprovalPolicy#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#username AccessApprovalPolicy#username}
   */
   readonly username?: string;
 }
@@ -272,7 +272,7 @@ export interface AccessApprovalPolicyBypassers {
   /**
   * The ID of the bypasser
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#id AccessApprovalPolicy#id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#id AccessApprovalPolicy#id}
   *
   * Please be aware that the id field is automatically added to all resources in Terraform providers using a Terraform provider SDK version below 2.
   * If you experience problems setting this value it might not be settable. Please take a look at the provider documentation to ensure it should be settable.
@@ -281,13 +281,13 @@ export interface AccessApprovalPolicyBypassers {
   /**
   * The type of bypasser. Either group or user
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#type AccessApprovalPolicy#type}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#type AccessApprovalPolicy#type}
   */
   readonly type: string;
   /**
   * The username of the bypasser. By default, this is the email
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#username AccessApprovalPolicy#username}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#username AccessApprovalPolicy#username}
   */
   readonly username?: string;
 }
@@ -458,7 +458,7 @@ export class AccessApprovalPolicyBypassersList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy infisical_access_approval_policy}
+* Represents a {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy infisical_access_approval_policy}
 */
 export class AccessApprovalPolicy extends cdktf.TerraformResource {
 
@@ -474,7 +474,7 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
   * Generates CDKTF code for importing a AccessApprovalPolicy resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the AccessApprovalPolicy to import
-  * @param importFromId The id of the existing AccessApprovalPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing AccessApprovalPolicy that should be imported. Refer to the {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the AccessApprovalPolicy to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -486,7 +486,7 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.6/docs/resources/access_approval_policy infisical_access_approval_policy} Resource
+  * Create a new {@link https://registry.terraform.io/providers/infisical/infisical/0.19.26/docs/resources/access_approval_policy infisical_access_approval_policy} Resource
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -497,7 +497,7 @@ export class AccessApprovalPolicy extends cdktf.TerraformResource {
       terraformResourceType: 'infisical_access_approval_policy',
       terraformGeneratorMetadata: {
         providerName: 'infisical',
-        providerVersion: '0.19.6'
+        providerVersion: '0.19.26'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,

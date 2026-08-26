@@ -1,4 +1,4 @@
-// https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_token
+// https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/api_token
 // generated from terraform resource schema
 
 import { Construct } from 'constructs';
@@ -8,13 +8,13 @@ import * as cdktf from 'cdktf';
 
 export interface DataCloudflareApiTokenConfig extends cdktf.TerraformMetaArguments {
   /**
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_token#filter DataCloudflareApiToken#filter}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/api_token#filter DataCloudflareApiToken#filter}
   */
   readonly filter?: DataCloudflareApiTokenFilter;
   /**
   * Token identifier tag.
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_token#token_id DataCloudflareApiToken#token_id}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/api_token#token_id DataCloudflareApiToken#token_id}
   */
   readonly tokenId?: string;
 }
@@ -137,9 +137,15 @@ export interface DataCloudflareApiTokenFilter {
   * Direction to order results.
   * Available values: "asc", "desc".
   *
-  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_token#direction DataCloudflareApiToken#direction}
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/api_token#direction DataCloudflareApiToken#direction}
   */
   readonly direction?: string;
+  /**
+  * When true, includes recently-expired tokens in the response.
+  *
+  * Docs at Terraform Registry: {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/api_token#include_expired DataCloudflareApiToken#include_expired}
+  */
+  readonly includeExpired?: boolean | cdktf.IResolvable;
 }
 
 export function dataCloudflareApiTokenFilterToTerraform(struct?: DataCloudflareApiTokenFilter | cdktf.IResolvable): any {
@@ -149,6 +155,7 @@ export function dataCloudflareApiTokenFilterToTerraform(struct?: DataCloudflareA
   }
   return {
     direction: cdktf.stringToTerraform(struct!.direction),
+    include_expired: cdktf.booleanToTerraform(struct!.includeExpired),
   }
 }
 
@@ -164,6 +171,12 @@ export function dataCloudflareApiTokenFilterToHclTerraform(struct?: DataCloudfla
       isBlock: false,
       type: "simple",
       storageClassType: "string",
+    },
+    include_expired: {
+      value: cdktf.booleanToHclTerraform(struct!.includeExpired),
+      isBlock: false,
+      type: "simple",
+      storageClassType: "boolean",
     },
   };
 
@@ -193,6 +206,10 @@ export class DataCloudflareApiTokenFilterOutputReference extends cdktf.ComplexOb
       hasAnyValues = true;
       internalValueResult.direction = this._direction;
     }
+    if (this._includeExpired !== undefined) {
+      hasAnyValues = true;
+      internalValueResult.includeExpired = this._includeExpired;
+    }
     return hasAnyValues ? internalValueResult : undefined;
   }
 
@@ -201,6 +218,7 @@ export class DataCloudflareApiTokenFilterOutputReference extends cdktf.ComplexOb
       this.isEmptyObject = false;
       this.resolvableValue = undefined;
       this._direction = undefined;
+      this._includeExpired = undefined;
     }
     else if (cdktf.Tokenization.isResolvable(value)) {
       this.isEmptyObject = false;
@@ -210,6 +228,7 @@ export class DataCloudflareApiTokenFilterOutputReference extends cdktf.ComplexOb
       this.isEmptyObject = Object.keys(value).length === 0;
       this.resolvableValue = undefined;
       this._direction = value.direction;
+      this._includeExpired = value.includeExpired;
     }
   }
 
@@ -227,6 +246,22 @@ export class DataCloudflareApiTokenFilterOutputReference extends cdktf.ComplexOb
   // Temporarily expose input value. Use with caution.
   public get directionInput() {
     return this._direction;
+  }
+
+  // include_expired - computed: true, optional: true, required: false
+  private _includeExpired?: boolean | cdktf.IResolvable; 
+  public get includeExpired() {
+    return this.getBooleanAttribute('include_expired');
+  }
+  public set includeExpired(value: boolean | cdktf.IResolvable) {
+    this._includeExpired = value;
+  }
+  public resetIncludeExpired() {
+    this._includeExpired = undefined;
+  }
+  // Temporarily expose input value. Use with caution.
+  public get includeExpiredInput() {
+    return this._includeExpired;
   }
 }
 export interface DataCloudflareApiTokenPoliciesPermissionGroupsMeta {
@@ -468,7 +503,7 @@ export class DataCloudflareApiTokenPoliciesList extends cdktf.ComplexList {
 }
 
 /**
-* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_token cloudflare_api_token}
+* Represents a {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/api_token cloudflare_api_token}
 */
 export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
 
@@ -484,7 +519,7 @@ export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
   * Generates CDKTF code for importing a DataCloudflareApiToken resource upon running "cdktf plan <stack-name>"
   * @param scope The scope in which to define this construct
   * @param importToId The construct id used in the generated config for the DataCloudflareApiToken to import
-  * @param importFromId The id of the existing DataCloudflareApiToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_token#import import section} in the documentation of this resource for the id to use
+  * @param importFromId The id of the existing DataCloudflareApiToken that should be imported. Refer to the {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/api_token#import import section} in the documentation of this resource for the id to use
   * @param provider? Optional instance of the provider where the DataCloudflareApiToken to import is found
   */
   public static generateConfigForImport(scope: Construct, importToId: string, importFromId: string, provider?: cdktf.TerraformProvider) {
@@ -496,7 +531,7 @@ export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
   // ===========
 
   /**
-  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.22.0/docs/data-sources/api_token cloudflare_api_token} Data Source
+  * Create a new {@link https://registry.terraform.io/providers/cloudflare/cloudflare/5.24.0/docs/data-sources/api_token cloudflare_api_token} Data Source
   *
   * @param scope The scope in which to define this construct
   * @param id The scoped construct ID. Must be unique amongst siblings in the same scope
@@ -507,7 +542,7 @@ export class DataCloudflareApiToken extends cdktf.TerraformDataSource {
       terraformResourceType: 'cloudflare_api_token',
       terraformGeneratorMetadata: {
         providerName: 'cloudflare',
-        providerVersion: '5.22.0'
+        providerVersion: '5.24.0'
       },
       provider: config.provider,
       dependsOn: config.dependsOn,
