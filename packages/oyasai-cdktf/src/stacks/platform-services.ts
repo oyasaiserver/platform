@@ -67,7 +67,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       ),
     } as const;
 
-    const imageIds = JSON.parse(mustEnv("OYASAI_IMAGE_ID"));
+    const imageIds = JSON.parse(mustEnv("OYASAI_IMAGE_IDS"));
     const images = {
       // keep-sorted start
       caddy: imageIds["caddy"],

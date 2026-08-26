@@ -2,6 +2,7 @@
   inputs,
   flake-parts-lib,
   config,
+  self,
   ...
 }:
 {
@@ -21,7 +22,16 @@
             inherit (config) constants;
           };
           availableOnSystem = lib.meta.availableOn { inherit system; };
-          packages = lib.filterAttrs (_: v: lib.isDerivation v && availableOnSystem v) oyasaiScope;
+          packages = (
+            lib.filterAttrs (_: v: lib.isDerivation v && availableOnSystem v) (
+              oyasaiScope
+              // {
+                oyasai-cdktf = oyasaiScope.oyasai-cdktf.override {
+                  oyasaiImageIds = self.packages.x86_64-linux.all-docker-tags.attrs;
+                };
+              }
+            )
+          );
         in
         {
           oyasai.scope = oyasaiScope;
