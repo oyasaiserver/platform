@@ -27,12 +27,14 @@ oyasaiVelocity {
     # Velocity tries to set default
     forced-hosts = { };
 
-    # TODO: set lobby as default server after experimentation.
     servers = {
       main = oyasai-minecraft-main.name;
       lobby = oyasai-minecraft-lobby.name;
       axiom = oyasai-minecraft-axiom.name;
-      try = [ "main" ];
+      try = [
+        "main"
+        "lobby"
+      ];
     };
   };
 }
