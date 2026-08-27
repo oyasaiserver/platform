@@ -42,9 +42,7 @@ internal class RecipientTextTransformerRegistry(
     checkMainThread("register")
     check(!closed) { "OyasaiChat text transform API is closed" }
     require(owner.isEnabled) { "Transformer owner '${owner.name}' is not enabled" }
-    require(
-        entries.none { it.owner === owner && it.descriptor.id == descriptor.id }
-    ) {
+    require(entries.none { it.owner === owner && it.descriptor.id == descriptor.id }) {
       "Transformer '${descriptor.id}' is already registered by ${owner.name}"
     }
     val entry =
@@ -127,5 +125,4 @@ internal class RecipientTextTransformerRegistry(
       publishActiveSurfaces()
     }
   }
-
 }

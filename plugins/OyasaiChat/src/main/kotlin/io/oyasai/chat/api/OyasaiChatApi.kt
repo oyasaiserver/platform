@@ -48,10 +48,7 @@ data class TextTransformerDescriptor(
 }
 
 fun interface RecipientTextTransformer {
-  /**
-   * メインスレッドで呼び出されるため、外部I/Oを待たずにStageを返す。
-   * `null` は要求を処理せず、次の変換器へ進む。null 以外のFutureは要求を処理する。
-   */
+  /** メインスレッドで呼び出されるため、外部I/Oを待たずにStageを返す。 `null` は要求を処理せず、次の変換器へ進む。null 以外のFutureは要求を処理する。 */
   fun transform(
       request: RecipientTextTransformRequest
   ): CompletionStage<RecipientTextTransformResult>?

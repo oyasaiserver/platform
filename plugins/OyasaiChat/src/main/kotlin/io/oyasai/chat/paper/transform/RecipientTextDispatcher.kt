@@ -75,18 +75,20 @@ internal constructor(
             ),
             isSender,
         ) ?: return CompletableFuture.completedFuture(original)
-    return claimed.handle { result, error ->
-      if (error != null) {
-        plugin.logger.warning(
-            "Text transformer failed for ${recipient.uniqueId}; using original text: ${error.message}"
-        )
-      }
-      when (result) {
-        is RecipientTextTransformResult.Replace -> result.component
-        RecipientTextTransformResult.PassThrough,
-        null -> original
-      }
-    }.toCompletableFuture()
+    return claimed
+        .handle { result, error ->
+          if (error != null) {
+            plugin.logger.warning(
+                "Text transformer failed for ${recipient.uniqueId}; using original text: ${error.message}"
+            )
+          }
+          when (result) {
+            is RecipientTextTransformResult.Replace -> result.component
+            RecipientTextTransformResult.PassThrough,
+            null -> original
+          }
+        }
+        .toCompletableFuture()
   }
 
   private fun sendWhenReady(

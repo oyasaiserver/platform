@@ -229,8 +229,7 @@ class ChatFormatter(
   private val urlRegex = Regex("https?://\\S+")
 
   private fun linkify(message: Component, authorized: Boolean): Component =
-      if (urlRegex.containsMatchIn(plain.serialize(message)))
-          transformLinks(message, authorized)
+      if (urlRegex.containsMatchIn(plain.serialize(message))) transformLinks(message, authorized)
       else message
 
   /** テキストノード内のURLだけリンク表示へ差し替え、それ以外のスタイルを保持する。 */
@@ -268,9 +267,7 @@ class ChatFormatter(
     val base = linkify(text, authorized)
     val builder = Component.text().append(base)
     attachments.forEach { attachment ->
-      builder
-          .append(Component.text(" "))
-          .append(linkComponent(attachment.url, true))
+      builder.append(Component.text(" ")).append(linkComponent(attachment.url, true))
     }
     return builder.build()
   }
@@ -293,7 +290,7 @@ class ChatFormatter(
     if (!authorized) return component
     val host = runCatching { URI(target).host?.lowercase() }.getOrNull()
     if (
-            host != null &&
+        host != null &&
             (!config.linkDomainFilter ||
                 config.linkDomains.any { host == it || host.endsWith(".$it") })
     )

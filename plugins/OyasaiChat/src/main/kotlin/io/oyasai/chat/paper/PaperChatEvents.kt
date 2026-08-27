@@ -131,7 +131,12 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
                       )
           is LocalChatPlan.Rejected -> emptySet<UUID>() to null
         }
-    configureChatDelivery(event, recipientIds, renderer, manualDelivery || plan is LocalChatPlan.Rejected)
+    configureChatDelivery(
+        event,
+        recipientIds,
+        renderer,
+        manualDelivery || plan is LocalChatPlan.Rejected,
+    )
   }
 
   private fun intersectWithEventViewers(

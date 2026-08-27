@@ -66,8 +66,7 @@ class ChatService(
     if (channel.id !in state.joinedChannels) {
       return LocalChatPlan.Rejected("You are not listening to ${channel.displayName}.")
     }
-    val recipientIds =
-        recipients(channel).map(Player::getUniqueId).toSet()
+    val recipientIds = recipients(channel).map(Player::getUniqueId).toSet()
     return LocalChatPlan.Public(channel, recipientIds, formatter.snapshot(player))
   }
 
