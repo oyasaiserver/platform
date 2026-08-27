@@ -1,5 +1,6 @@
 package io.oyasai.chat.paper
 
+import io.oyasai.chat.api.OyasaiChatApi
 import io.oyasai.chat.paper.chat.initialize
 import io.oyasai.chat.paper.chat.join
 import io.oyasai.chat.paper.command.OyasaiCommandExecutor
@@ -8,6 +9,7 @@ import io.oyasai.chat.paper.integration.NoopDiscordBridge
 import io.oyasai.chat.paper.network.NETWORK_CHANNEL
 import io.oyasai.chat.paper.runtime.PaperRuntime
 import io.oyasai.chat.paper.runtime.PaperRuntimeFactory
+import io.oyasai.chat.paper.transform.RecipientTextTransformerRegistry
 import java.util.UUID
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -17,8 +19,10 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
+import org.bukkit.event.server.PluginDisableEvent
 import org.bukkit.event.server.PluginEnableEvent
 import org.bukkit.event.server.ServerLoadEvent
+import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 
 // Paper側プラグインの起動・再読み込み・終了管理。
@@ -30,11 +34,22 @@ private data class LivePlayerChatState(
 
 class OyasaiChatPlugin : JavaPlugin(), Listener {
   private val primaryCommandNames =
-      listOf("ch", "join", "leave", "chwho", "chlist", "setchannel", "msg", "r", "oyasaichat")
+      listOf(
+          "ch",
+          "join",
+          "leave",
+          "chwho",
+          "chlist",
+          "setchannel",
+          "msg",
+          "r",
+          "oyasaichat",
+      )
   private val shortcutCommands = mutableMapOf<String, Command>()
   private val displacedCommands = mutableMapOf<String, Command>()
 
   internal lateinit var runtime: PaperRuntime
+  internal lateinit var textTransformers: RecipientTextTransformerRegistry
 
   internal val chatLifecycleLock = Any()
   @Volatile internal var reloadInProgress = false
@@ -42,8 +57,11 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
 
   override fun onEnable() {
     saveDefaultConfig()
+    textTransformers = RecipientTextTransformerRegistry(this)
     val runtime =
-        runCatching { PaperRuntimeFactory.create(this, PaperConfigLoader.load(config)) }
+        runCatching {
+              PaperRuntimeFactory.create(this, PaperConfigLoader.load(config), textTransformers)
+            }
             .getOrElse {
               logger.severe("Invalid OyasaiChat configuration: ${it.message}")
               server.pluginManager.disablePlugin(this)
@@ -56,6 +74,12 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     server.messenger.registerOutgoingPluginChannel(this, NETWORK_CHANNEL)
     server.messenger.registerIncomingPluginChannel(this, NETWORK_CHANNEL, runtime.bridge)
     server.pluginManager.registerEvents(PaperChatEvents(this), this)
+    server.servicesManager.register(
+        OyasaiChatApi::class.java,
+        textTransformers,
+        this,
+        ServicePriority.Normal,
+    )
     server.onlinePlayers.forEach {
       runtime.chat.initialize(it)
       runtime.privateMessages.onBackendJoin(it)
@@ -70,7 +94,11 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
     check(server.isPrimaryThread) { "OyasaiChat reload must run on the server thread" }
     val busy =
         synchronized(chatLifecycleLock) {
-          if (pendingChatCommits != 0 || !runtime.privateMessages.canReloadSafely()) {
+          if (
+              pendingChatCommits != 0 ||
+                  !runtime.privateMessages.canReloadSafely() ||
+                  !runtime.delivery.canReloadSafely()
+          ) {
             true
           } else {
             reloadInProgress = true
@@ -91,7 +119,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
           runCatching {
                 reloadConfig()
                 val candidateConfig = PaperConfigLoader.load(config)
-                PaperRuntimeFactory.create(this, candidateConfig)
+                PaperRuntimeFactory.create(this, candidateConfig, textTransformers)
               }
               .getOrElse {
                 logger.warning(
@@ -118,6 +146,7 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
 
       previousStates.flushAndShutdown()
       previousDiscord.disable()
+      runtime.delivery.close()
       server.messenger.unregisterIncomingPluginChannel(this, NETWORK_CHANNEL)
 
       runtime = candidate
@@ -147,10 +176,13 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
   }
 
   override fun onDisable() {
+    server.servicesManager.unregisterAll(this)
+    if (::textTransformers.isInitialized) textTransformers.close()
     if (!::runtime.isInitialized) return
     unregisterShortcutCommands()
     releaseClaimedCommands()
     runtime.discord.disable()
+    runtime.delivery.close()
     runtime.states.flushAndShutdown()
     server.messenger.unregisterIncomingPluginChannel(this, NETWORK_CHANNEL)
     server.messenger.unregisterOutgoingPluginChannel(this, NETWORK_CHANNEL)
@@ -169,6 +201,13 @@ class OyasaiChatPlugin : JavaPlugin(), Listener {
       }
     }
     claimCommandLabels()
+  }
+
+  @EventHandler
+  fun onPluginDisable(event: PluginDisableEvent) {
+    if (::textTransformers.isInitialized && event.plugin !== this) {
+      textTransformers.unregisterOwner(event.plugin)
+    }
   }
 
   @EventHandler(priority = EventPriority.MONITOR)

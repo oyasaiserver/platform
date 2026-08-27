@@ -12,6 +12,8 @@ import io.oyasai.chat.paper.network.PaperNetworkHandler
 import io.oyasai.chat.paper.network.PlayerPresenceCache
 import io.oyasai.chat.paper.pm.PrivateMessageService
 import io.oyasai.chat.paper.state.PlayerStateStore
+import io.oyasai.chat.paper.transform.RecipientTextDispatcher
+import io.oyasai.chat.paper.transform.RecipientTextTransformerRegistry
 
 // Paper側機能の組み立てと再読み込み用ランタイム。
 internal data class PaperRuntime(
@@ -23,14 +25,20 @@ internal data class PaperRuntime(
     val presence: PlayerPresenceCache,
     var discord: DiscordBridge,
     val privateMessages: PrivateMessageService,
+    val delivery: RecipientTextDispatcher,
 )
 
 internal object PaperRuntimeFactory {
-  fun create(plugin: OyasaiChatPlugin, model: ChatConfig): PaperRuntime {
+  fun create(
+      plugin: OyasaiChatPlugin,
+      model: ChatConfig,
+      transformers: RecipientTextTransformerRegistry,
+  ): PaperRuntime {
     validateShortcutCommands(plugin, model)
     val states = PlayerStateStore(plugin, model)
     val formatter = ChatFormatter(plugin, model)
-    val chat = ChatService(plugin, model, states, formatter)
+    val delivery = RecipientTextDispatcher(plugin, transformers)
+    val chat = ChatService(plugin, model, states, formatter, delivery)
     val bridge = PaperNetworkBridge(plugin, model, PaperNetworkHandler(plugin, chat))
     chat.bridge = bridge
     val presence = PlayerPresenceCache(plugin, chat)
@@ -45,6 +53,7 @@ internal object PaperRuntimeFactory {
         presence,
         createDiscordBridge(plugin, model),
         privateMessages,
+        delivery,
     )
   }
 
@@ -71,7 +80,17 @@ internal object PaperRuntimeFactory {
   // Validation処理はAI生成
   private fun validateShortcutCommands(plugin: OyasaiChatPlugin, model: ChatConfig) {
     val pluginLabels =
-        listOf("ch", "join", "leave", "chwho", "chlist", "setchannel", "msg", "r", "oyasaichat")
+        listOf(
+                "ch",
+                "join",
+                "leave",
+                "chwho",
+                "chlist",
+                "setchannel",
+                "msg",
+                "r",
+                "oyasaichat",
+            )
             .flatMap {
               plugin.getCommand(it)?.let { command -> listOf(command.name) + command.aliases }
                   ?: emptyList()

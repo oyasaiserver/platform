@@ -1,5 +1,6 @@
 package io.oyasai.chat.paper.chat
 
+import io.oyasai.chat.api.ChatTextSurface
 import io.oyasai.chat.common.model.ChannelDefinition
 import java.util.UUID
 
@@ -21,3 +22,12 @@ sealed interface LocalChatPlan {
 
   data class Rejected(val reason: String) : LocalChatPlan
 }
+
+internal fun LocalChatPlan.requiresManualDelivery(
+    hasTransformer: (ChatTextSurface) -> Boolean
+): Boolean =
+    when (this) {
+      is LocalChatPlan.Public -> hasTransformer(ChatTextSurface.PUBLIC_CHAT)
+      is LocalChatPlan.Private -> pending || hasTransformer(ChatTextSurface.PRIVATE_MESSAGE)
+      is LocalChatPlan.Rejected -> true
+    }

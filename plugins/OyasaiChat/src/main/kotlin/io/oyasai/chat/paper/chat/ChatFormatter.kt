@@ -103,15 +103,7 @@ class ChatFormatter(
                   )
               )
         }
-    val plainMessage = plain.serialize(message)
-    val renderedMessage =
-        if (urlRegex.containsMatchIn(plainMessage))
-            transformLinks(
-                message,
-                config.linkDomainFilter,
-                snapshot.canSendLinks || !config.linkDomainFilter,
-            )
-        else message
+    val renderedMessage = linkify(message, snapshot.canSendLinks || !config.linkDomainFilter)
     return render(
         snapshot.chatFormat,
         prefix,
@@ -173,6 +165,7 @@ class ChatFormatter(
       targetName: String,
       message: Component,
       presentation: ChatPresentationSnapshot?,
+      senderCanSendLinks: Boolean? = null,
   ): Component {
     val resolved =
         presentation
@@ -183,6 +176,8 @@ class ChatFormatter(
                 vaultPrefix = Component.empty(),
                 vaultSuffix = Component.empty(),
             )
+    val renderedMessage =
+        linkify(message, senderCanSendLinks ?: (resolved.canSendLinks || !config.linkDomainFilter))
     return mini.deserialize(
         config.privateMessageFormat.withPlayerName(resolved.playerName),
         TagResolver.resolver(
@@ -192,7 +187,7 @@ class ChatFormatter(
             Placeholder.component("player_name", Component.text(resolved.playerName)),
             Placeholder.component("vault_prefix", resolved.vaultPrefix),
             Placeholder.component("vault_suffix", resolved.vaultSuffix),
-            Placeholder.component("message", message),
+            Placeholder.component("message", renderedMessage),
         ),
     )
   }
@@ -201,7 +196,7 @@ class ChatFormatter(
   fun externalChat(
       channel: ChannelDefinition,
       senderName: String,
-      message: String,
+      message: Component,
       sender: ExternalSender?,
       attachments: List<ExternalAttachment> = emptyList(),
       authorized: Boolean = true,
@@ -225,7 +220,7 @@ class ChatFormatter(
             Placeholder.unparsed("user_id", resolved.id),
             Placeholder.component(
                 "message",
-                linkAwareMessage(message, attachments, config.linkDomainFilter, authorized),
+                linkAwareMessage(message, attachments, authorized),
             ),
         ),
     )
@@ -233,13 +228,17 @@ class ChatFormatter(
 
   private val urlRegex = Regex("https?://\\S+")
 
+  private fun linkify(message: Component, authorized: Boolean): Component =
+      if (urlRegex.containsMatchIn(plain.serialize(message)))
+          transformLinks(message, authorized)
+      else message
+
   /** テキストノード内のURLだけリンク表示へ差し替え、それ以外のスタイルを保持する。 */
   private fun transformLinks(
       component: Component,
-      domainFilterEnabled: Boolean,
       authorized: Boolean,
   ): Component {
-    val children = component.children().map { transformLinks(it, domainFilterEnabled, authorized) }
+    val children = component.children().map { transformLinks(it, authorized) }
     val self = component.children(emptyList())
     if (self !is TextComponent) return self.children(children)
     val content = self.content()
@@ -252,7 +251,7 @@ class ChatFormatter(
             Component.text(content.substring(cursor, match.range.first)).style(self.style())
         )
       }
-      builder.append(linkComponent(match.value, match.value, domainFilterEnabled, authorized))
+      builder.append(linkComponent(match.value, authorized))
       cursor = match.range.last + 1
     }
     if (cursor < content.length)
@@ -262,31 +261,16 @@ class ChatFormatter(
   }
 
   private fun linkAwareMessage(
-      text: String,
+      text: Component,
       attachments: List<ExternalAttachment>,
-      domainFilterEnabled: Boolean,
       authorized: Boolean,
   ): Component {
-    val builder = Component.text()
-    var cursor = 0
-    urlRegex.findAll(text).forEach { match ->
-      if (match.range.first > cursor)
-          builder.append(Component.text(text.substring(cursor, match.range.first)))
-      builder.append(linkComponent(match.value, match.value, domainFilterEnabled, authorized))
-      cursor = match.range.last + 1
-    }
-    if (cursor < text.length) builder.append(Component.text(text.substring(cursor)))
+    val base = linkify(text, authorized)
+    val builder = Component.text().append(base)
     attachments.forEach { attachment ->
       builder
           .append(Component.text(" "))
-          .append(
-              linkComponent(
-                  shortenUrlLabel(attachment.url),
-                  attachment.url,
-                  domainFilterEnabled,
-                  true,
-              )
-          )
+          .append(linkComponent(attachment.url, true))
     }
     return builder.build()
   }
@@ -302,20 +286,16 @@ class ChatFormatter(
           .getOrDefault(url)
 
   private fun linkComponent(
-      label: String,
       target: String,
-      domainFilterEnabled: Boolean,
       authorized: Boolean,
   ): Component {
-    if (!authorized) {
-      val host = runCatching { URI(target).host }.getOrNull() ?: target
-      return Component.text("[URL: $host]")
-    }
-    var component = Component.text(label, NamedTextColor.GRAY)
+    var component = Component.text(shortenUrlLabel(target), NamedTextColor.GRAY)
+    if (!authorized) return component
     val host = runCatching { URI(target).host?.lowercase() }.getOrNull()
     if (
-        host != null &&
-            (!domainFilterEnabled || config.linkDomains.any { host == it || host.endsWith(".$it") })
+            host != null &&
+            (!config.linkDomainFilter ||
+                config.linkDomains.any { host == it || host.endsWith(".$it") })
     )
         component = component.clickEvent(ClickEvent.openUrl(target))
     return component

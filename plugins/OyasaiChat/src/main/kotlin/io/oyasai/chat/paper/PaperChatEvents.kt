@@ -3,6 +3,7 @@ package io.oyasai.chat.paper
 import io.oyasai.chat.common.protocol.MAX_PAYLOAD_LENGTH
 import io.oyasai.chat.paper.chat.LocalChatPlan
 import io.oyasai.chat.paper.chat.initialize
+import io.oyasai.chat.paper.chat.requiresManualDelivery
 import io.papermc.paper.event.player.AsyncChatEvent
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -20,7 +21,15 @@ private data class ChatCommitSnapshot(
     val plan: LocalChatPlan,
     val text: String,
     val accepted: Boolean,
+    val manualDelivery: Boolean,
 )
+
+internal fun LocalChatPlan.intersectRecipients(viewerIds: Set<UUID>): LocalChatPlan =
+    when (this) {
+      is LocalChatPlan.Public -> copy(recipientIds = recipientIds.intersect(viewerIds))
+      is LocalChatPlan.Private -> copy(recipientIds = recipientIds.intersect(viewerIds))
+      is LocalChatPlan.Rejected -> this
+    }
 
 class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
   @EventHandler(priority = EventPriority.MONITOR)
@@ -40,7 +49,7 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
           }
         }
     val service = plugin.runtime.chat
-    val plan =
+    val planned =
         if (cancelled) {
           LocalChatPlan.Rejected("Chat event was cancelled.")
         } else if (!reserved) {
@@ -50,13 +59,22 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
         } else {
           planChatOnServerThread(playerId)
         }
-    if (!cancelled) configureVanillaDelivery(event, plan)
-    val commit = ChatCommitSnapshot(playerId, plan, text, !cancelled)
+    val plan = if (cancelled) planned else intersectWithEventViewers(event, planned)
+    val manualDelivery = plan.requiresManualDelivery(service::ownsTransformation)
+    if (!cancelled) configureVanillaDelivery(event, plan, manualDelivery)
+    val commit = ChatCommitSnapshot(playerId, plan, text, !cancelled, manualDelivery)
     plugin.server.scheduler.runTask(
         plugin,
         Runnable {
           try {
-            if (commit.accepted) service.commitLocalChat(commit.playerId, commit.plan, commit.text)
+            if (commit.accepted) {
+              service.commitLocalChat(
+                  commit.playerId,
+                  commit.plan,
+                  commit.text,
+                  commit.manualDelivery,
+              )
+            }
           } finally {
             if (reserved) synchronized(plugin.chatLifecycleLock) { plugin.pendingChatCommits-- }
           }
@@ -74,6 +92,7 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   fun onQuit(event: PlayerQuitEvent) {
     event.quitMessage(null)
+    plugin.runtime.delivery.clear(event.player.uniqueId)
     plugin.runtime.privateMessages.onQuit(event.player)
     plugin.runtime.states.remove(event.player)
   }
@@ -91,45 +110,50 @@ class PaperChatEvents(private val plugin: OyasaiChatPlugin) : Listener {
             LocalChatPlan.Rejected("Chat processing is temporarily unavailable.")
           }
 
-  private fun configureVanillaDelivery(event: AsyncChatEvent, plan: LocalChatPlan) {
-    when (plan) {
-      is LocalChatPlan.Public ->
-          configureChatDelivery(
-              event,
-              plan.recipientIds,
-              plugin.runtime.formatter.renderer(plan.channel, plan.presentation),
-          )
-      is LocalChatPlan.Private ->
-          if (plan.pending)
-              configureChatDelivery(
-                  event,
-                  plan.recipientIds,
-                  null,
-              )
-          else
-              configureChatDelivery(
-                  event,
-                  plan.recipientIds,
-                  plugin.runtime.formatter.privateRenderer(
-                      senderName = plan.senderPresentation.playerName,
-                      targetName = plan.targetName,
-                      senderPresentation = plan.senderPresentation,
-                  ),
-              )
-      is LocalChatPlan.Rejected -> configureChatDelivery(event, emptySet(), null)
-    }
+  private fun configureVanillaDelivery(
+      event: AsyncChatEvent,
+      plan: LocalChatPlan,
+      manualDelivery: Boolean,
+  ) {
+    val (recipientIds, renderer) =
+        when (plan) {
+          is LocalChatPlan.Public ->
+              plan.recipientIds to
+                  plugin.runtime.formatter.renderer(plan.channel, plan.presentation)
+          is LocalChatPlan.Private ->
+              plan.recipientIds to
+                  if (plan.pending) null
+                  else
+                      plugin.runtime.formatter.privateRenderer(
+                          senderName = plan.senderPresentation.playerName,
+                          targetName = plan.targetName,
+                          senderPresentation = plan.senderPresentation,
+                      )
+          is LocalChatPlan.Rejected -> emptySet<UUID>() to null
+        }
+    configureChatDelivery(event, recipientIds, renderer, manualDelivery || plan is LocalChatPlan.Rejected)
+  }
+
+  private fun intersectWithEventViewers(
+      event: AsyncChatEvent,
+      plan: LocalChatPlan,
+  ): LocalChatPlan {
+    val viewerIds =
+        event.viewers().asSequence().filterIsInstance<Player>().map(Player::getUniqueId).toSet()
+    return plan.intersectRecipients(viewerIds)
   }
 
   private fun configureChatDelivery(
       event: AsyncChatEvent,
       recipientIds: Set<UUID>,
       renderer: io.papermc.paper.chat.ChatRenderer?,
+      manualDelivery: Boolean,
   ) {
     val viewers = event.viewers()
     viewers
         .toList()
         .filterIsInstance<Player>()
-        .filter { it.uniqueId !in recipientIds }
+        .filter { manualDelivery || it.uniqueId !in recipientIds }
         .forEach(viewers::remove)
     renderer?.let { event.renderer(it) }
   }
