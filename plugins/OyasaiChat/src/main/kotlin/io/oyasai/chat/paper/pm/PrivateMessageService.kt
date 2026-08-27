@@ -1,5 +1,7 @@
 package io.oyasai.chat.paper.pm
 
+import io.oyasai.chat.api.ChatTextSender
+import io.oyasai.chat.api.ChatTextSurface
 import io.oyasai.chat.common.protocol.MAX_MESSAGE_AGE_MILLIS
 import io.oyasai.chat.common.protocol.MessageType
 import io.oyasai.chat.common.protocol.NetworkEnvelope
@@ -120,12 +122,13 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
     return sent
   }
 
-  /** AsyncChatEventがローカルの受信者へ配信した後の、会話モードPMの確定。 プレイヤーへの再表示は行わず、状態変更とネットワーク・外部連携だけを処理。 */
+  /** AsyncChatEventを受理した後の、会話モードPMの確定。受信者別の表示もここで行う。 */
   fun commitConversationMessage(
       source: Player,
       message: String,
       expectedPeer: UUID? = null,
       expectedName: String? = null,
+      deliverLocal: Boolean = true,
   ): Boolean {
     val state = chat.state(source)
     if (state.privateMessageModePeer == null && state.privateMessageModeName == null) {
@@ -150,7 +153,7 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       source.sendMessage(chat.formatter.error("Message must not be empty."))
       return true
     }
-    sendInternal(source, targetName, peer, message, deliverLocal = false)
+    sendInternal(source, targetName, peer, message, deliverLocal = deliverLocal)
     return true
   }
 
@@ -233,17 +236,46 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
       chat.states.save(source)
       chat.states.save(local)
       if (deliverLocal) {
-        val component =
-            chat.formatter.privateMessage(
-                senderName = source.name,
-                targetName = local.name,
-                message = Component.text(message),
-                presentation = chat.formatter.snapshot(source),
-            )
-        source.sendMessage(component)
-        local.sendMessage(component)
+        val presentation = chat.formatter.snapshot(source)
+        if (chat.ownsTransformation(ChatTextSurface.PRIVATE_MESSAGE)) {
+          chat.delivery.dispatch(
+              messageId = UUID.randomUUID(),
+              surface = ChatTextSurface.PRIVATE_MESSAGE,
+              sender =
+                  ChatTextSender(
+                      source.uniqueId,
+                      source.name,
+                      source.locale().toLanguageTag(),
+                  ),
+              originalText = message,
+              recipients = listOf(source, local),
+              render = { _, body ->
+                chat.formatter.privateMessage(
+                    senderName = source.name,
+                    targetName = local.name,
+                    message = body,
+                    presentation = presentation,
+                )
+              },
+              afterDelivery = { recipient ->
+                if (recipient.uniqueId == local.uniqueId) playReceiveSound(recipient)
+              },
+          )
+        } else {
+          val component =
+              chat.formatter.privateMessage(
+                  senderName = source.name,
+                  targetName = local.name,
+                  message = Component.text(message),
+                  presentation = presentation,
+              )
+          source.sendMessage(component)
+          local.sendMessage(component)
+          playReceiveSound(local)
+        }
+      } else {
+        playReceiveSound(local)
       }
-      playReceiveSound(local)
       chat.bridge.send(
           source,
           NetworkEnvelope.backend(
@@ -265,8 +297,11 @@ class PrivateMessageService(internal val plugin: OyasaiChatPlugin, internal val 
             originPlayerId = source.uniqueId,
             targetPlayerId = targetId,
             targetPlayerName = if (targetId == null) targetInput else null,
+            senderCanSendLinks =
+                source.hasPermission("oyasaichat.links.send") || !chat.config.linkDomainFilter,
             senderName = source.name,
             content = message,
+            senderLocale = source.locale().toLanguageTag(),
         )
     if (deliverLocal) {
       pendingOutbound[envelope.messageId] = PendingOutbound(source.uniqueId, targetInput, message)

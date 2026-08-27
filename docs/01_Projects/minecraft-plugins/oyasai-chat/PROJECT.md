@@ -12,7 +12,7 @@ related_paths:
 project_kind: plugin
 runtime_kind: paper-plugin
 minecraft_related: true
-last_validated: "2026-08-22"
+last_validated: "2026-08-25"
 agent_task: null
 ---
 
@@ -32,6 +32,7 @@ Paper用とVelocity用の実装を同一JARに同梱し、各実行環境が対�
 | Velocity入口 | `plugins/OyasaiChat/src/main/kotlin/io/oyasai/chat/velocity/OyasaiVelocityPlugin.kt` |
 | Paper設定 | `plugins/OyasaiChat/src/main/resources/config.yml` |
 | Velocity設定 | `plugins/OyasaiChat/src/main/resources/velocity-config.yml` |
+| テキスト変換API | [`TEXT_TRANSFORM_API.md`](TEXT_TRANSFORM_API.md) |
 | Paper descriptor | `plugins/OyasaiChat/src/main/resources/plugin.yml` |
 | パッケージ | `packages/oyasai-velocity.nix`, `packages/oyasai-plugin-registry/package.nix` |
 | CDKTF | `packages/oyasai-cdktf/src/stacks/platform-services.ts` |
@@ -166,5 +167,10 @@ PaperとVelocity間のPlugin Messageは、Gson JSONのEnvelopeで交換。
 | Vault | Chat APIからprefix・suffixを取得。未導入、またはprovider未登録時は空表示 |
 | PlaceholderAPI | チャット表示用formatのPlaceholderを展開。未導入時は連携なし |
 | DiscordSRV | MinecraftチャンネルとDiscordチャンネルの相互連携。設定でmappingを定義 |
+
+## テキスト変換API
+
+OyasaiChatはroutingとformatを維持したまま、外部Paperプラグインが配送前のplain textを書き換えたり、受信者ごとに本文Componentを非同期差し替えできるAPIを提供する。recipient transformerは設定により送信者本人も対象にできる。
+変換固有のprovider、cache、状態、看板処理はOyasaiChatへ実装しない。契約は[`TEXT_TRANSFORM_API.md`](TEXT_TRANSFORM_API.md)を正本とする。
 
 外部APIはcompileOnly依存。対象プラグインが未導入でもOyasaiChat全体は停止しない。Discordからの受信は`inbound-backend`に一致するbackendだけがMinecraftへ取り込む。

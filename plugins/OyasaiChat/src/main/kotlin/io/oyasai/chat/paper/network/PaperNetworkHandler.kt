@@ -1,5 +1,7 @@
 package io.oyasai.chat.paper.network
 
+import io.oyasai.chat.api.ChatTextSender
+import io.oyasai.chat.api.ChatTextSurface
 import io.oyasai.chat.common.protocol.MessageOrigin
 import io.oyasai.chat.common.protocol.MessageType
 import io.oyasai.chat.common.protocol.NetworkEnvelope
@@ -53,9 +55,14 @@ class PaperNetworkHandler(
         envelope.senderName,
         envelope.originPlayerId,
         envelope.content,
+        envelope.messageId,
         envelope.originBackendPrefix,
         envelope.originBackendSuffix,
         externalAuthorized = envelope.senderCanSendLinks,
+        senderLocale = envelope.senderLocale,
+        surface =
+            if (envelope.originPlayerId == null) ChatTextSurface.EXTERNAL_CHAT
+            else ChatTextSurface.PUBLIC_CHAT,
     )
   }
 
@@ -71,16 +78,64 @@ class PaperNetworkHandler(
     if (accepted) {
       targetState.lastPrivateMessagePeer = senderId
       chat.states.save(target)
-      val component =
-          chat.formatter.privateMessage(
-              senderName = envelope.senderName,
-              targetName = target.name,
-              message = Component.text(envelope.content),
-              presentation = null,
-          )
-      target.sendMessage(component)
-      chat.privateMessages.playReceiveSound(target)
+      if (chat.ownsTransformation(ChatTextSurface.PRIVATE_MESSAGE)) {
+        chat.delivery.dispatch(
+            messageId = envelope.messageId,
+            surface = ChatTextSurface.PRIVATE_MESSAGE,
+            sender = ChatTextSender(senderId, envelope.senderName, envelope.senderLocale),
+            originalText = envelope.content,
+            recipients = listOf(target),
+            render = { _, body ->
+              chat.formatter.privateMessage(
+                  senderName = envelope.senderName,
+                  targetName = target.name,
+                  message = body,
+                  presentation = null,
+                  senderCanSendLinks = envelope.senderCanSendLinks,
+              )
+            },
+            afterDelivery = { current ->
+              chat.privateMessages.playReceiveSound(current)
+              acknowledgePrivate(current, senderId, envelope, "DELIVERED")
+            },
+        )
+      } else {
+        val current = plugin.server.getPlayer(target.uniqueId)
+        if (current === target && current.isOnline) {
+          runCatching {
+                current.sendMessage(
+                    chat.formatter.privateMessage(
+                        senderName = envelope.senderName,
+                        targetName = current.name,
+                        message = Component.text(envelope.content),
+                        presentation = null,
+                        senderCanSendLinks = envelope.senderCanSendLinks,
+                    )
+                )
+                chat.privateMessages.playReceiveSound(current)
+                acknowledgePrivate(current, senderId, envelope, "DELIVERED")
+              }
+              .onFailure {
+                plugin.logger.warning(
+                    "Unable to deliver network private message ${envelope.messageId}: ${it.message}"
+                )
+              }
+        }
+      }
+    } else {
+      val current = plugin.server.getPlayer(target.uniqueId)
+      if (current === target && current.isOnline) {
+        acknowledgePrivate(current, senderId, envelope, "DISABLED")
+      }
     }
+  }
+
+  private fun acknowledgePrivate(
+      target: org.bukkit.entity.Player,
+      senderId: java.util.UUID,
+      envelope: NetworkEnvelope,
+      result: String,
+  ) {
     chat.bridge.send(
         target,
         NetworkEnvelope.backend(
@@ -90,7 +145,7 @@ class PaperNetworkHandler(
             originPlayerId = target.uniqueId,
             targetPlayerId = senderId,
             senderName = target.name,
-            content = if (accepted) "DELIVERED" else "DISABLED",
+            content = result,
         ),
     )
   }

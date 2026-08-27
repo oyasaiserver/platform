@@ -3,6 +3,7 @@ package io.oyasai.chat.common.protocol
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import java.util.Locale
 import java.util.UUID
 
 // PaperとVelocity間のメッセージ形式。
@@ -50,6 +51,7 @@ data class NetworkEnvelope(
     val targetPlayerId: UUID? = null,
     val targetPlayerName: String? = null,
     val senderCanSendLinks: Boolean = false,
+    val senderLocale: String? = null,
     val senderName: String,
     val content: String,
 ) {
@@ -71,6 +73,7 @@ data class NetworkEnvelope(
         targetPlayerId: UUID? = null,
         targetPlayerName: String? = null,
         senderCanSendLinks: Boolean = false,
+        senderLocale: String? = null,
         timestamp: Long = System.currentTimeMillis(),
     ): NetworkEnvelope =
         NetworkEnvelope(
@@ -86,6 +89,7 @@ data class NetworkEnvelope(
             targetPlayerId = targetPlayerId,
             targetPlayerName = targetPlayerName,
             senderCanSendLinks = senderCanSendLinks,
+            senderLocale = senderLocale,
             senderName = senderName,
             content = content,
         )
@@ -168,6 +172,11 @@ object EnvelopeCodec {
     requiredString(objectJson, "senderName")
     val content = requiredString(objectJson, "content")
     require(content.length <= MAX_PAYLOAD_LENGTH) { "Envelope content is too long." }
+    optionalString(objectJson, "senderLocale")?.let { value ->
+      require(value.length <= 35 && Locale.forLanguageTag(value).language.isNotBlank()) {
+        "Envelope senderLocale is invalid."
+      }
+    }
 
     validateOptionalUuid(objectJson, "messageId", required = true)
     validateOptionalUuid(objectJson, "replyToMessageId")
@@ -187,6 +196,15 @@ object EnvelopeCodec {
   private fun requiredString(json: JsonObject, name: String): String {
     val value = json.get(name)
     require(value != null && value.isJsonPrimitive && value.asJsonPrimitive.isString) {
+      "Envelope field '$name' must be a string."
+    }
+    return value.asString
+  }
+
+  private fun optionalString(json: JsonObject, name: String): String? {
+    val value = json.get(name)
+    if (value == null || value.isJsonNull) return null
+    require(value.isJsonPrimitive && value.asJsonPrimitive.isString) {
       "Envelope field '$name' must be a string."
     }
     return value.asString
