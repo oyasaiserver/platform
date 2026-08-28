@@ -117,8 +117,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.2/builds/1232/downloads/velocity",
-      "hash": "sha256-uA3DIGsmbhBXoLfIZ91UqhF3BlXwP1lTAzdWLPSNMpo="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.2/builds/1233/downloads/velocity",
+      "hash": "sha256-iy5KYOibJU0nLcJN0FLTBS9q/CxFn5B/3Seg132rGKA="
     }
   },
   "gsit": {
