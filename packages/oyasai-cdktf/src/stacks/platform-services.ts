@@ -77,6 +77,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       minecraftLobby: imageIds["oyasai-minecraft-lobby"],
       minecraftMain: imageIds["oyasai-minecraft-main"],
       mysqlBackup: imageIds["mysql-backup"],
+      oyasaiCron: imageIds["oyasai-cron"],
       oyasaiWeb: imageIds["oyasai-web"],
       velocity: imageIds["oyasai-velocity"],
       // keep-sorted end
@@ -349,6 +350,17 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           DB_DUMP_COMPRESSION: "gzip",
           DB_DUMP_RETENTION: "14d",
           DB_DEBUG: true,
+        }),
+      });
+
+      // Best-effort cron service
+      new Container(this, this.t("oyasai-cron-container"), {
+        image: images.oyasaiCron,
+        name: "oyasai-cron",
+        restart: "unless-stopped",
+        env: envs({
+          TWITTERAPIIO_API_KEY: secrets.get("TWITTERAPIIO_API_KEY"),
+          DISCORD_WEBHOOK_URL: secrets.get("DISCORD_X_CRON_WEBHOOK_URL"),
         }),
       });
     }

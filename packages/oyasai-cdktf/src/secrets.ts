@@ -14,8 +14,10 @@ const secretKeys = [
   "CLOUDFLARE_SECRET_ACCESS_KEY",
   "NIX_CACHE_SIGNING_KEY",
 
-  // Secrets required by plugins
+  // Runtime secrets
   "DISCORDSRV_TOKEN",
+  "DISCORD_X_CRON_WEBHOOK_URL",
+  "TWITTERAPIIO_API_KEY",
 
   // This is static, do not change.
   "RESTIC_PASSWORD",

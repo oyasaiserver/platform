@@ -38,6 +38,7 @@
         "${prettier-plugins}/node_modules/prettier-plugin-packagejson/lib/index.cjs"
       ];
     };
+    rustfmt.enable = true;
     shellcheck.enable = true;
     shfmt = {
       enable = true;
