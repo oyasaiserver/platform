@@ -13,6 +13,7 @@ oyasaiVelocity {
     # keep-sorted start
     floodgate
     geyser
+    luckperms
     oyasaichat
     oyasaimusic
     # keep-sorted end

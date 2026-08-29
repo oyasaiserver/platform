@@ -124,6 +124,10 @@
     "paper": {
       "slug": "luckperms",
       "type": "modrinth"
+    },
+    "velocity": {
+      "slug": "luckperms",
+      "type": "modrinth"
     }
   },
   "lunachat": {
