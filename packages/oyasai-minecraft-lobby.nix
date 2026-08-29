@@ -10,7 +10,13 @@ oyasaiPurpur rec {
     difficulty = "peaceful";
     enable-rcon = true;
     enforce-secure-profile = false;
-    level-type = "minecraft:the_void";
+    generator-settings = builtins.toJSON {
+      biome = "minecraft:the_void";
+      features = false;
+      lakes = false;
+      layers = [ ];
+    };
+    level-type = "minecraft:flat";
     max-players = 70;
     network-compression-threshold = 96;
     online-mode = false; # handled by velocity
