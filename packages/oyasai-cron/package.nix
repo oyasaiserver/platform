@@ -6,11 +6,13 @@
   cacert,
 }:
 let
-  final = rustPlatform.buildRustPackage {
+  final = rustPlatform.buildRustPackage (finalAttrs: {
     name = "oyasai-cron";
     src = ./.;
 
     cargoLock.lockFile = ./Cargo.lock;
+
+    meta.mainProgram = finalAttrs.name;
 
     passthru = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       docker = oyasaiDockerTools.buildLayeredImage {
@@ -22,6 +24,6 @@ let
         };
       };
     };
-  };
+  });
 in
 final
