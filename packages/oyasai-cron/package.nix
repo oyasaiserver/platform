@@ -3,6 +3,7 @@
   stdenv,
   oyasaiDockerTools,
   rustPlatform,
+  cacert,
 }:
 let
   final = rustPlatform.buildRustPackage {
@@ -17,6 +18,7 @@ let
         config = {
           Cmd = [ (lib.getExe final) ];
           WorkingDir = "/data";
+          Env = [ "SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt" ];
         };
       };
     };
