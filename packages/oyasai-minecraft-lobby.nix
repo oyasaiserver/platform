@@ -5,17 +5,18 @@ oyasaiPurpur rec {
   version = "1.21.11";
 
   properties = {
-    # keep-sorted start
     allow-flight = true;
     difficulty = "peaceful";
     enable-rcon = true;
     enforce-secure-profile = false;
-    generator-settings = builtins.toJSON {
-      biome = "minecraft:the_void";
-      features = false;
-      lakes = false;
-      layers = [ ];
-    };
+    generator-settings = (
+      builtins.toJSON {
+        biome = "minecraft:the_void";
+        features = false;
+        lakes = false;
+        layers = [ ];
+      }
+    );
     level-type = "minecraft:flat";
     max-players = 70;
     network-compression-threshold = 96;
@@ -27,7 +28,6 @@ oyasaiPurpur rec {
     spawn-npcs = false;
     spawn-protection = 0;
     view-distance = 16;
-    # keep-sorted end
   };
 
   paperConfig = {
