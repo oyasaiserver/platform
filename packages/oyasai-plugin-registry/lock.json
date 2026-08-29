@@ -159,6 +159,10 @@
         "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar",
         "hash": "sha256-Sc7LZvof0ioTMDmkkOnB5QlaI4581m650qFv5siXVQ0="
       }
+    },
+    "velocity": {
+      "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar",
+      "hash": "sha256-o6yS704p/Yek1wbckkRf2UbxyvHTNSbKGEIqYlVPoYo="
     }
   },
   "lunachat": {
@@ -372,8 +376,8 @@
   "viaversion": {
     "paper": {
       "1.21.11": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/JXTvHIIc/ViaVersion-5.12.0-SNAPSHOT.jar",
-        "hash": "sha256-cJxfgWClU6mn7mmr9LUDJZk/RiqKFbIpbODmE2E0s8E="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/GIsL7I4P/ViaVersion-5.12.0-SNAPSHOT.jar",
+        "hash": "sha256-/JbRkZwczJ7bcT5FOQ+QMsNTZSUvDBxMmjrz3OXe+3E="
       }
     }
   },
