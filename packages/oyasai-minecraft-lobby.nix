@@ -10,6 +10,7 @@ oyasaiPurpur rec {
     difficulty = "peaceful";
     enable-rcon = true;
     enforce-secure-profile = false;
+    level-type = "minecraft:the_void";
     max-players = 70;
     network-compression-threshold = 96;
     online-mode = false; # handled by velocity

@@ -7,7 +7,9 @@ mod response;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let interval = Duration::from_hours(15);
+    env_logger::init();
+
+    let interval = Duration::from_hours(1);
 
     let webhook_url = std::env::var("DISCORD_WEBHOOK_URL").unwrap();
 
@@ -15,8 +17,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let client = Client::new();
 
+    log::info!("Initialized with interval: {}m", interval.as_secs() / 60);
+
     loop {
         let now = SystemTime::now();
+
+        log::info!("Started new cron run");
 
         let since = &(now - interval)
             .duration_since(UNIX_EPOCH)
@@ -39,13 +45,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .json::<response::SearchResponse>()
             .await?;
 
+        log::info!("Found {} new tweets", resp.tweets.len());
+
         for tweet in resp.tweets {
             let payload = request::DiscordWebhookRequest {
                 content: tweet.url.unwrap(),
                 username: "oyasai-x-cron".to_string(),
             };
+            log::info!("Found tweet: {}", tweet.id);
             client.post(&webhook_url).json(&payload).send().await?;
         }
+
+        log::info!("Done. Sleeping...");
+
         std::thread::sleep(interval);
     }
 }
