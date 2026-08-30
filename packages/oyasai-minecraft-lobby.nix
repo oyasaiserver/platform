@@ -22,6 +22,7 @@ oyasaiPurpur rec {
     network-compression-threshold = 96;
     online-mode = false; # handled by velocity
     pvp = false;
+    respawn_radius = 0;
     simulation-distance = 8;
     spawn-animals = false;
     spawn-monsters = false;
