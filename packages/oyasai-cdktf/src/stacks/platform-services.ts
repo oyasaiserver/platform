@@ -338,18 +338,20 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         networksAdvanced: [network],
         command: ["dump"],
         env: envs({
+          // keep-sorted start
+          AWS_ACCESS_KEY_ID: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
+          AWS_ENDPOINT_URL: cloudflareBaseUrl,
+          AWS_REGION: "auto",
+          AWS_SECRET_ACCESS_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
+          DB_DEBUG: true,
+          DB_DUMP_COMPRESSION: "gzip",
+          DB_DUMP_FREQUENCY: 360,
+          DB_DUMP_RETENTION: "14d",
+          DB_DUMP_TARGET: `s3://${r2Bucket.name}/mariadb-backup`,
+          DB_PASS: secrets.get("MARIADB_PASSWORD"),
           DB_SERVER: "mariadb",
           DB_USER: "root",
-          DB_PASS: secrets.get("MARIADB_PASSWORD"),
-          DB_DUMP_FREQUENCY: 360,
-          DB_DUMP_TARGET: `s3://${r2Bucket.name}/mariadb-backup`,
-          AWS_ACCESS_KEY_ID: secrets.get("CLOUDFLARE_ACCESS_KEY_ID"),
-          AWS_SECRET_ACCESS_KEY: secrets.get("CLOUDFLARE_SECRET_ACCESS_KEY"),
-          AWS_REGION: "auto",
-          AWS_ENDPOINT_URL: cloudflareBaseUrl,
-          DB_DUMP_COMPRESSION: "gzip",
-          DB_DUMP_RETENTION: "14d",
-          DB_DEBUG: true,
+          // keep-sorted end
         }),
       });
 
@@ -359,8 +361,11 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         name: "oyasai-cron",
         restart: "unless-stopped",
         env: envs({
-          TWITTERAPIIO_API_KEY: secrets.get("TWITTERAPIIO_API_KEY"),
+          // keep-sorted start
           DISCORD_WEBHOOK_URL: secrets.get("DISCORD_X_CRON_WEBHOOK_URL"),
+          RUST_LOG: "info",
+          TWITTERAPIIO_API_KEY: secrets.get("TWITTERAPIIO_API_KEY"),
+          // keep-sorted end
         }),
       });
     }
