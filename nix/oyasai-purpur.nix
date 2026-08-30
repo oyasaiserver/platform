@@ -18,6 +18,7 @@
   icon ? null,
   properties ? { },
   paperConfig ? null,
+  purpurConfig ? null,
 }:
 
 let
@@ -30,6 +31,9 @@ let
 
   paperGlobalYml =
     if paperConfig != null then (formats.yaml { }).generate "paper-global.yml" paperConfig else null;
+
+  purpurYml =
+    if purpurConfig != null then (formats.yaml { }).generate "purpur.yml" purpurConfig else null;
 
   result = writeShellApplication {
     inherit name;
@@ -64,6 +68,10 @@ let
       ${lib.optionalString (paperConfig != null) ''
         mkdir -p config
         cp --no-preserve=ownership,mode ${paperGlobalYml} config/paper-global.yml
+      ''}
+
+      ${lib.optionalString (purpurConfig != null) ''
+        cp --no-preserve=ownership,mode ${purpurYml} purpur.yml
       ''}
 
       # Sighs. Doesn't take rcon password as a envvar.
