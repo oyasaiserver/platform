@@ -8,10 +8,15 @@ on:
       - synchronize
 
 jobs:
+  push-to-ghcr:
+    uses: ./.github/workflows/push-to-ghcr.yaml
+    secrets: inherit
+
   deploy:
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
     secrets: inherit
     uses: ./.github/workflows/deploy-platform.yaml
+    needs: push-to-ghcr
     with:
       environment: pr-${{ github.event.pull_request.number }}
       start-proxy: true

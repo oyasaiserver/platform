@@ -45,8 +45,15 @@ jobs:
         run: |
           count=$(nix run .#mc-monitor -- status -host oyasai.io -show-player-count | tee /dev/stderr)
           echo "count=$count" >>"$GITHUB_OUTPUT"
+
+  push-to-ghcr:
+    uses: ./.github/workflows/push-to-ghcr.yaml
+    secrets: inherit
+
   deploy:
-    needs: check-players
+    needs:
+      - check-players
+      - push-to-ghcr
     if: needs.check-players.outputs.count == '0'
     uses: ./.github/workflows/deploy-platform.yaml
     secrets: inherit
