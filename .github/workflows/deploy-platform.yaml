@@ -11,12 +11,7 @@ on:
         required: false
 
 jobs:
-  push-to-ghcr:
-    uses: ./.github/workflows/push-to-ghcr.yaml
-    secrets: inherit
-
   infra:
-    needs: push-to-ghcr
     uses: ./.github/workflows/modify-platform-stack.yaml
     secrets: inherit
     with:
