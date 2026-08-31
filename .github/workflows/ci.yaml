@@ -141,6 +141,8 @@ jobs:
     secrets: inherit
 
   deploy:
+    # TODO: enable merge deploy
+    if: github.event_name == 'pull_request'
     secrets: inherit
     needs: push-to-ghcr
     uses: ./.github/workflows/deploy-platform.yaml
