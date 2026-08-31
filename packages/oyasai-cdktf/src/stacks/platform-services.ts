@@ -187,7 +187,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         networksAdvanced: [network],
         env: envs({
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
-          MEMORY: "2G",
+          MEMORY: this.isMaster ? "2G" : "1G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
         }),
         volumes: [
@@ -214,7 +214,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         networksAdvanced: [network],
         env: envs({
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
-          MEMORY: "8G",
+          MEMORY: this.isMaster ? "8G" : "1G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
         }),
         volumes: [
@@ -238,7 +238,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       env: envs({
         FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
         VELOCITY_FORWARDING_SECRET: randoms.velocityForwardingSecret.result,
-        MEMORY: "2G",
+        MEMORY: this.isMaster ? "2G" : "1G",
       }),
       volumes: [
         {
