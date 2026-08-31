@@ -64,6 +64,12 @@ let
         cp --no-preserve=ownership,mode ${lib.concatStringsSep " " plugins} plugins
       ''}
 
+      # Floodgate key.pem is 16 raw bytes (AES-128), base64-encoded in the envvar.
+      if [[ -n "''${FLOODGATE_KEY_PEM_B64:-}" ]]; then
+        mkdir -p plugins/floodgate
+        <<<"''${FLOODGATE_KEY_PEM_B64}" base64 -d  >plugins/floodgate/key.pem
+      fi
+
       # Doesn't have cli flag
       ${lib.optionalString (paperConfig != null) ''
         mkdir -p config

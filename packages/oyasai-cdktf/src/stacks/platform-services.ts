@@ -2,6 +2,7 @@ import { Container } from "@oyasaiserver/cdktf-providers/docker/container";
 import { Network } from "@oyasaiserver/cdktf-providers/docker/network";
 import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
+import { Bytes } from "@oyasaiserver/cdktf-providers/random/bytes";
 import { Password } from "@oyasaiserver/cdktf-providers/random/password";
 import { RandomProvider } from "@oyasaiserver/cdktf-providers/random/provider";
 import { LocalBackend } from "cdktf";
@@ -65,6 +66,10 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           special: false,
         },
       ),
+      // Floodgate's key.pem is a 16-byte AES-128 key.
+      floodgateKey: new Bytes(this, this.t("floodgate-key"), {
+        length: 16,
+      }),
     } as const;
 
     const imageIds = JSON.parse(mustEnv("OYASAI_IMAGE_IDS"));
@@ -150,6 +155,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
           ...(this.isMaster && {
             DISCORDSRV_TOKEN: secrets.get("DISCORDSRV_TOKEN"),
           }),
+          FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
         }),
         volumes: [
@@ -180,6 +186,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         init: true,
         networksAdvanced: [network],
         env: envs({
+          FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
           MEMORY: "2G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
         }),
@@ -206,6 +213,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         init: true,
         networksAdvanced: [network],
         env: envs({
+          FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
           MEMORY: "8G",
           PAPER_VELOCITY_SECRET: randoms.velocityForwardingSecret.result,
         }),
@@ -228,6 +236,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         udp: [19132], // Bedrock
       }),
       env: envs({
+        FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
         VELOCITY_FORWARDING_SECRET: randoms.velocityForwardingSecret.result,
         MEMORY: "2G",
       }),
