@@ -40,7 +40,7 @@ jobs:
       - name: Run update
         working-directory: packages/oyasai-plugin-registry
         run: |
-          nix run .#oyasai-plugin-registry -- 1.21.11 >lock.json
+          nix run .#oyasai-plugin-registry -- 26.2 >lock.json
       - name: Create PR and enable auto-merge
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

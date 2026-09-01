@@ -23,12 +23,6 @@
       "type": "modrinth"
     }
   },
-  "coreprotect": {
-    "paper": {
-      "slug": "coreprotect",
-      "type": "modrinth"
-    }
-  },
   "crackshotguns": {
     "paper": {
       "id": 48301,
@@ -49,20 +43,20 @@
   },
   "essentialsx": {
     "paper": {
-      "slug": "essentialsx",
-      "type": "modrinth"
+      "type": "url",
+      "url": "https://repo.essentialsx.net/snapshots/net/essentialsx/EssentialsX/2.22.1-SNAPSHOT/EssentialsX-2.22.1-20260624.223341-11.jar"
     }
   },
   "essentialsx-chat": {
     "paper": {
-      "slug": "essentialsx-chat-module",
-      "type": "modrinth"
+      "type": "url",
+      "url": "https://repo.essentialsx.net/snapshots/net/essentialsx/EssentialsXChat/2.22.1-SNAPSHOT/EssentialsXChat-2.22.1-20260624.223341-11.jar"
     }
   },
   "essentialsx-spawn": {
     "paper": {
-      "slug": "essentialsx-spawn",
-      "type": "modrinth"
+      "type": "url",
+      "url": "https://repo.essentialsx.net/snapshots/net/essentialsx/EssentialsXSpawn/2.22.1-SNAPSHOT/EssentialsXSpawn-2.22.1-20260624.223341-11.jar"
     }
   },
   "fastasyncvoxelsniper": {
@@ -132,6 +126,7 @@
   },
   "lunachat": {
     "paper": {
+      "skipVersionCheck": true,
       "slug": "lunachat",
       "type": "modrinth"
     }

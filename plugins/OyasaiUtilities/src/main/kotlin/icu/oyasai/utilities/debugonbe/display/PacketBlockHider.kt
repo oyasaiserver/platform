@@ -201,7 +201,7 @@ class PacketBlockHider(private val plugin: org.bukkit.plugin.Plugin) {
                             footBlock.z + 0.5,
                             0f,
                             0f,
-                            net.minecraft.world.entity.EntityType.FALLING_BLOCK,
+                            net.minecraft.world.entity.EntityTypes.FALLING_BLOCK,
                             blockStateId,
                             net.minecraft.world.phys.Vec3.ZERO,
                             0.0,
@@ -340,7 +340,7 @@ class PacketBlockHider(private val plugin: org.bukkit.plugin.Plugin) {
             location.z,
             0f, // xRot (pitch)
             location.yaw, // yRot (yaw)
-            net.minecraft.world.entity.EntityType.ARMOR_STAND,
+            net.minecraft.world.entity.EntityTypes.ARMOR_STAND,
             0,
             net.minecraft.world.phys.Vec3.ZERO,
             location.yaw.toDouble(),
