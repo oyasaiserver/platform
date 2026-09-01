@@ -10,8 +10,8 @@
   "axiom-paper-plugin": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/Ow8CJ6pP/AxiomPaper-5.0.4-for-MC26.2.jar",
-        "hash": "sha256-PWA0Lb03g0M37MTcQ5MexwCSzxuGsEt7l4jfGIR55CI="
+        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/BbhoGfI8/AxiomPaperPlugin-6.0.0-for-MC26.2.jar",
+        "hash": "sha256-Pulq8DU4ZomIhGc7A9/+Ev3NUbbdv8hs9gdL3Lpe6OE="
       }
     }
   },
@@ -28,14 +28,6 @@
       "26.2": {
         "url": "https://cdn.modrinth.com/data/swbUV1cr/versions/K5U1ASjn/bluemap-5.23-paper.jar",
         "hash": "sha256-M5VU11ztqzVON2Z3z8cwjEmZUpFYSejimUcY5KFT1k4="
-      }
-    }
-  },
-  "coreprotect": {
-    "paper": {
-      "26.2": {
-        "url": "https://cdn.modrinth.com/data/Lu3KuzdV/versions/Kma0kBsY/CoreProtect-CE-24.0.jar",
-        "hash": "sha256-Zs02IIm7hDDloBjud+m0M78NyeZVkNXxoEOnjWBBVpY="
       }
     }
   },
@@ -117,8 +109,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.2/builds/1232/downloads/velocity",
-      "hash": "sha256-uA3DIGsmbhBXoLfIZ91UqhF3BlXwP1lTAzdWLPSNMpo="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.2/builds/1233/downloads/velocity",
+      "hash": "sha256-iy5KYOibJU0nLcJN0FLTBS9q/CxFn5B/3Seg132rGKA="
     }
   },
   "gsit": {
@@ -159,6 +151,10 @@
         "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar",
         "hash": "sha256-Sc7LZvof0ioTMDmkkOnB5QlaI4581m650qFv5siXVQ0="
       }
+    },
+    "velocity": {
+      "url": "https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar",
+      "hash": "sha256-o6yS704p/Yek1wbckkRf2UbxyvHTNSbKGEIqYlVPoYo="
     }
   },
   "lunachat": {
@@ -188,8 +184,8 @@
   "multiversecore": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/6a8asKk9/multiverse-core-5.8.1-pre.3.jar",
-        "hash": "sha256-RjYnA8oXXScsWgBj7UZkx7tbfNzW+ovGskc7Ek8bnO0="
+        "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/YZ2Ji4IS/multiverse-core-5.8.1.jar",
+        "hash": "sha256-vD804tdH/fAk9EhodHuwFrCPoR2YzLT/yslY8IMVGoM="
       }
     }
   },
@@ -372,8 +368,8 @@
   "viaversion": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/JXTvHIIc/ViaVersion-5.12.0-SNAPSHOT.jar",
-        "hash": "sha256-cJxfgWClU6mn7mmr9LUDJZk/RiqKFbIpbODmE2E0s8E="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/k63Gp33W/ViaVersion-5.12.0-SNAPSHOT.jar",
+        "hash": "sha256-nytoFtkxk4e2al25S9tlorsaDBCVJAbX49X3ORkq1Jw="
       }
     }
   },

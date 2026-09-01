@@ -23,13 +23,6 @@
       "type": "modrinth"
     }
   },
-  "coreprotect": {
-    "paper": {
-      "skipVersionCheck": true,
-      "slug": "coreprotect",
-      "type": "modrinth"
-    }
-  },
   "crackshotguns": {
     "paper": {
       "id": 48301,
