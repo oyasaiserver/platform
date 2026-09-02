@@ -23,8 +23,13 @@ class PlaybackSession(
   val recipients: MutableSet<UUID> = CopyOnWriteArraySet(initialRecipients.map { it.uniqueId })
   /** Recipients with a verified local buffer; vanilla pre-play and normal dispatch exclude them. */
   internal val bufferedRecipients: MutableSet<UUID> = CopyOnWriteArraySet()
+  /** START was sent, but local playback is not authoritative until its first dispatch ACK. */
+  internal val ackPendingRecipients: MutableSet<UUID> = CopyOnWriteArraySet()
+  /** Recipients that lost the local route and must receive future notes without look-ahead. */
+  internal val paperFallbackRecipients: MutableSet<UUID> = CopyOnWriteArraySet()
   /** Candidates remain vanilla until their exact hash-bound READY acknowledgement succeeds. */
   internal val bufferCandidates: MutableSet<UUID> = CopyOnWriteArraySet()
+  internal val ackDeadlinesMillis: MutableMap<UUID, Long> = java.util.concurrent.ConcurrentHashMap()
   internal val scheduledTasks: MutableList<ScheduledFuture<*>> = mutableListOf()
   internal val outboundTasks: MutableList<BukkitTask> = mutableListOf()
   private val cancelled = AtomicBoolean(false)
@@ -41,6 +46,8 @@ class PlaybackSession(
   internal var initialDelayMs: Long = 0
   internal var startDeadlineMillis: Long = System.currentTimeMillis()
   internal var routeDecisionDeadlineMillis: Long = System.currentTimeMillis()
+  internal var bufferedFirstNoteMs: Int = 0
+  internal var bufferedHash: ByteArray = ByteArray(0)
 
   internal fun startAfter(delayMs: Long, routeDecisionLeadMs: Long) {
     initialDelayMs = delayMs.coerceAtLeast(0)

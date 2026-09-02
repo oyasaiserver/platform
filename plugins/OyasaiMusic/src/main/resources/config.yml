@@ -45,3 +45,18 @@ bedrock:
   name-prefix: "."
   # 同一ミリ秒・同一楽器の同時発音数がこれ以上の場合、最高音・最低音のみ再生する
   chord-limit: 3
+
+# Players are never prompted by default; `/mm rp allow` is the opt-in entry point.
+# This remains optional and must not be duplicated as a forced server.properties pack.
+resource-pack:
+  enabled: true
+  id: "f0666054-e41c-40ef-affb-27bbf1bf79f9"
+  url: "https://download.mc-packs.net/pack/af57205743d4d573bcb2dea2f81b745d30eb6eb3.zip"
+  sha1: "af57205743d4d573bcb2dea2f81b745d30eb6eb3"
+  # SHA-256 of assets/oyasaimusic/ommt-bank-manifest.json in the uploaded pack.
+  # Playback uses the expanded bank only when the client reports this exact active manifest.
+  bank-manifest-sha256: "8aed26ff23119b34e91f78036c313e3b38f66a4589f11c8af8e58efff3c03d6a"
+  prompt: "おやさいサーバーの拡張音域リソースパックを読み込みますか？"
+  # The pack builder emits one event per instrument/F# anchor pair.
+  # Tokens: {instrument}=stable runtime id (0..19), {anchor}=m36, m12, p36 or p60.
+  instrument-bank-event-template: "oyasaimusic:bank/i/{instrument}/a/{anchor}"

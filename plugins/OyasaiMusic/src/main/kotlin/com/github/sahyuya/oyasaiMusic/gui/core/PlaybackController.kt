@@ -3,7 +3,9 @@ package com.github.sahyuya.oyasaiMusic.gui
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.audio.PlaybackMode
 import com.github.sahyuya.oyasaiMusic.audio.SongAudioFile
+import com.github.sahyuya.oyasaiMusic.audio.VanillaSoundCatalog
 import com.github.sahyuya.oyasaiMusic.interop.PlaybackBuffer
+import com.github.sahyuya.oyasaiMusic.model.NoteEvent
 import com.github.sahyuya.oyasaiMusic.model.Song
 import java.io.File
 import java.util.UUID
@@ -87,7 +89,35 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                     .runTask(plugin, Runnable { viewer.sendMessage("§7この楽曲には再生できる音符がありません。") })
                 return@Runnable
               }
-              val prepared = PlaybackBuffer.prepare(audio.notes)
+              val preparedV1 = PlaybackBuffer.prepare(audio.notes)
+              val customPattern: (NoteEvent) -> Int? = { note ->
+                note.customSound?.let { event ->
+                  note.customSoundSeed?.let { seed ->
+                    VanillaSoundCatalog.patternForSeed(event, seed)
+                  }
+                }
+              }
+              val preparedV2Fold =
+                  PlaybackMode.entries.associateWith { playbackMode ->
+                    PlaybackBuffer.prepareV2(
+                        notes = audio.notes,
+                        spatialMode = if (playbackMode == PlaybackMode.POSITIONAL) 1 else 0,
+                        customPattern = customPattern,
+                    )
+                  }
+              val configuredManifest = plugin.resourcePackService.configuredManifestHash()
+              val preparedV2Bank =
+                  configuredManifest?.let { manifest ->
+                    PlaybackMode.entries.associateWith { playbackMode ->
+                      PlaybackBuffer.prepareV2(
+                          notes = audio.notes,
+                          spatialMode = if (playbackMode == PlaybackMode.POSITIONAL) 1 else 0,
+                          bankPolicy = 1,
+                          manifestHash = manifest,
+                          customPattern = customPattern,
+                      )
+                    }
+                  }
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
@@ -95,6 +125,25 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                         val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
                         val startPlayback: (Boolean) -> Unit = startPlayback@{ useBufferedRoute ->
                           if (!viewer.isOnline) return@startPlayback
+                          val prepared =
+                              if (!useBufferedRoute) {
+                                null
+                              } else if (plugin.ommtPlaybackClientRegistry.supportsV2(viewer.uniqueId)) {
+                                val loadedManifest = plugin.resourcePackService.manifestHashFor(viewer.uniqueId)
+                                val bank = preparedV2Bank?.get(mode)
+                                if (
+                                    bank != null &&
+                                        loadedManifest != null &&
+                                        loadedManifest.contentEquals(bank.manifestHash) &&
+                                        plugin.ommtPlaybackClientRegistry.supportsBankManifest(viewer.uniqueId)
+                                ) {
+                                  bank
+                                } else {
+                                  preparedV2Fold[mode]
+                                }
+                              } else {
+                                preparedV1
+                              }
                           val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
                           // 既に再生中のセッションがあれば止める（多重再生防止）。
                           state.activeSession?.let { plugin.playbackEngine.stop(it) }
@@ -105,7 +154,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                                   notes = audio.notes,
                                   recipients = listOf(viewer),
                                   mode = mode,
-                                  prepared = prepared.takeIf { useBufferedRoute },
+                                  prepared = prepared,
                                   onListenThresholdReached = { player, s ->
                                     plugin.viewCountService.registerView(
                                         player,
@@ -137,10 +186,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                           menuManager.refreshCurrent(viewer.uniqueId)
                         }
                         if (mode == PlaybackMode.DEFAULT) {
-                          plugin.ommtPlaybackClientRegistry.resolveForPlayback(
-                              viewer,
-                              startPlayback,
-                          )
+                          plugin.ommtPlaybackClientRegistry.resolveForPlayback(viewer, startPlayback)
                         } else {
                           startPlayback(false)
                         }
@@ -360,6 +406,9 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     // the remainder through vanilla if the player returns before this server session finishes.
     session.bufferedRecipients.remove(event.player.uniqueId)
     session.bufferCandidates.remove(event.player.uniqueId)
+    session.ackPendingRecipients.remove(event.player.uniqueId)
+    session.paperFallbackRecipients.remove(event.player.uniqueId)
+    session.ackDeadlinesMillis.remove(event.player.uniqueId)
     plugin.ommtPlaybackClientRegistry.removeExpected(event.player.uniqueId, session.sessionId)
     hideNowPlayingBar(event.player)
   }

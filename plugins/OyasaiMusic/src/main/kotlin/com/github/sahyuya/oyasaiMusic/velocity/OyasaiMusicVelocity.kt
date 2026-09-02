@@ -21,7 +21,9 @@ import org.slf4j.Logger
 @Plugin(
     id = "oyasaimusic",
     name = "OyasaiMusic",
+    version = "1.0.0",
     description = "OyasaiMusic OMMT relay for main",
+    authors = ["sahyuya"],
 )
 class OyasaiMusicVelocity
 @Inject

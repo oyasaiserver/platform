@@ -5,19 +5,48 @@ Minecraft 内でノートブロックの演奏を録音し、楽曲として公�
 
 ## 動作環境
 
-| 項目 | 必要なもの | | --- | --- | | サーバー | Paper `1.21.11` | | Java | Java 21 | |
+| 項目 | 必要なもの | | --- | --- | | サーバー | Paper / Purpur `26.2` | | Java | Java 25 | |
 必須プラグイン | FastAsyncWorldEdit (FAWE) `2.15.2` 以降 | | 任意プラグイン | Vault
 と経済プラグイン、TokenManager、PlaceholderAPI、Essentials、Floodgate |
 
 FAWE は `/record we ...` でクリップボードを読むための必須依存です。Vault
 が無い場合、金銭報酬の送金は行われません。TokenManager へのポイント付与は、設定したコンソールコマンドで行います。
 
-## 導入
+### Paper / Velocity の同一JAR構成
 
-1. Paper と Java 21 を用意します。
-1. FAWE と `OyasaiMusic-1.0.0.jar` を `plugins` フォルダへ配置します。
-1. サーバーを起動します。
-1. `plugins/OyasaiMusic/config.yml` を必要に応じて編集し、`/oyasaimusic reload` を実行します。
+OyasaiMusicはOyasaiChatと同じく、Paper用とVelocity用の実装を同一JARへ同梱します。
+Paperは`plugin.yml`のエントリーポイント、Velocityは`velocity-plugin.json`のエントリーポイントだけを読み込みます。
+
+- ローカル試験: Paperの`plugins`へJARを配置します。Velocityは不要です。
+- 本番: 同じJARをmain PaperとVelocityの両方へ配置します。Velocityの論理サーバー名は`main`であり、Docker名・接続先名の`minecraft-main`とは別です。
+- Velocity側は`main`に現在接続しているプレイヤーのOMMTパケットだけを双方向転送します。
+- Velocity側は曲データを解析・再構成・ハッシュ計算・保存・ログ出力しません。DB、権限、インポート、再生判断はmain Paperだけが担当します。
+- `main`以外のbackendへ移動中のプレイヤーのOMMTパケットは転送しません。
+
+## OMMT通信
+
+OMMTの通常通信はMinecraftのPlugin Messageを使用します。チャットコマンドへBase64等を分割して流す方式ではありません。
+
+| チャンネル | 方向 | 用途 |
+| --- | --- | --- |
+| `oyasaimusic:upload_v1` | OMMT ↔ main | OYMC圧縮バイナリの下書きインポート |
+| `oyasaimusic:playback_v1` | main ↔ OMMT | 初回再生時の能力確認、事前バッファ、再生制御 |
+
+アップロードでは、OMMTがサーバーのチャンネル登録を確認できた場合だけ小さなREQUESTを送ります。Paperは接続中プレイヤーの
+`oyasaimusic.import`権限を確認してREADYを返し、その後にだけ圧縮済みバイナリ本体を受け入れます。チャンネルを提供しない他サーバーでは、
+OMMTはREQUESTも曲データも送信しないことがクライアント側の必須条件です。
+
+Paperは最大1MiB、最大100,000音、最大64チャンク、1チャンク20KiBとして、順序、宣言長、圧縮展開後長、SHA-256、OYMI形式を検証します。
+プレイヤーUUID、権限、所有者、完了結果はクライアントから受け取らず、実際の接続プレイヤーとPaper側データを正本にします。
+
+再生能力はログイン時には判定しません。参加後最初の対象再生だけmainからPROBEを送り、3秒以内の正しい応答を
+`MOD_PRESENT`、無応答を`VANILLA_ONLY`としてログアウトまで再利用します。MOD入りでバッファREADYまで完了した受信者はクライアント側で再生し、
+Paperの通常音声と`playback.lookahead-ms`のプレ再生対象から除外されます。無応答、破損、期限切れ、位置音響、統合版、任意SoundEventを含む曲は
+従来のPaper再生へ安全に戻ります。
+
+mainは参加直後とプラグインreload後にサウンド能力を`SERVER_CAPABILITIES`として通知し、初回PROBE前にも再通知します。維持対象の26.2サーバーでは、`trumpet`、`trumpet_exposed`、`trumpet_weathered`、`trumpet_oxidized`のラッパ系ノートブロック音を使用できます。この通知はMOD有無判定ではなく、クライアントからの応答も要求しません。
+
+旧コマンド/チャット通信はサポートせず、Plugin Messageのみを受け付けます。
 
 初回起動時に、データフォルダへ以下が作成されます。
 

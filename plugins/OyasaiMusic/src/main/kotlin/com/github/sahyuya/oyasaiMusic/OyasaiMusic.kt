@@ -21,6 +21,7 @@ import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository
 import com.github.sahyuya.oyasaiMusic.db.RankingCacheService
 import com.github.sahyuya.oyasaiMusic.db.RankingRepository
 import com.github.sahyuya.oyasaiMusic.db.RecordSaleRepository
+import com.github.sahyuya.oyasaiMusic.db.ResourcePackPreferenceRepository
 import com.github.sahyuya.oyasaiMusic.db.SocialRepository
 import com.github.sahyuya.oyasaiMusic.db.SongRepository
 import com.github.sahyuya.oyasaiMusic.db.UserRepository
@@ -31,12 +32,13 @@ import com.github.sahyuya.oyasaiMusic.gui.PlaybackController
 import com.github.sahyuya.oyasaiMusic.gui.PlayerControllerStateService
 import com.github.sahyuya.oyasaiMusic.gui.ToastNotificationService
 import com.github.sahyuya.oyasaiMusic.importing.OyasaiImportService
+import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.interop.OmmtPlaybackClientRegistry
 import com.github.sahyuya.oyasaiMusic.interop.OmmtUploadService
-import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.item.PhysicalMusicPlayerItem
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordListener
 import com.github.sahyuya.oyasaiMusic.model.Song
+import com.github.sahyuya.oyasaiMusic.resourcepack.OyasaiResourcePackService
 import java.io.File
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -126,6 +128,12 @@ class OyasaiMusic : JavaPlugin() {
   lateinit var pluginMessaging: OyasaiPluginMessaging
     private set
 
+  lateinit var resourcePackPreferenceRepository: ResourcePackPreferenceRepository
+    private set
+
+  lateinit var resourcePackService: OyasaiResourcePackService
+    private set
+
   override fun onEnable() {
     // --- FAWE必須依存チェック（plugin.ymlのdependでも保証されるが、明示的なメッセージを出すため二重チェック） ---
     if (server.pluginManager.getPlugin("FastAsyncWorldEdit") == null) {
@@ -136,6 +144,7 @@ class OyasaiMusic : JavaPlugin() {
 
     saveDefaultConfig()
     reloadConfig()
+    migrateBundledResourcePackConfig()
 
     audioDirectory =
         File(dataFolder, config.getString("storage.audio-directory", "audio") ?: "audio")
@@ -155,6 +164,8 @@ class OyasaiMusic : JavaPlugin() {
     socialRepository = SocialRepository(databaseManager)
     playlistRepository = PlaylistRepository(databaseManager)
     playbackPreferenceRepository = PlaybackPreferenceRepository(databaseManager)
+    resourcePackPreferenceRepository = ResourcePackPreferenceRepository(databaseManager)
+    resourcePackService = OyasaiResourcePackService(this, resourcePackPreferenceRepository)
     playbackModeService = PlaybackModeService(playbackPreferenceRepository)
     rankingRepository = RankingRepository(databaseManager)
     recordSaleRepository = RecordSaleRepository(databaseManager)
@@ -165,6 +176,7 @@ class OyasaiMusic : JavaPlugin() {
     pluginMessaging.enable()
     server.pluginManager.registerEvents(ommtUploadService, this)
     server.pluginManager.registerEvents(ommtPlaybackClientRegistry, this)
+    server.pluginManager.registerEvents(resourcePackService, this)
     Bukkit.getScheduler()
         .runTaskTimer(
             this,
@@ -259,6 +271,7 @@ class OyasaiMusic : JavaPlugin() {
     // Buffered sessions receive STOP while the outgoing channel is still registered.
     if (::playbackEngine.isInitialized) playbackEngine.shutdown()
     if (::ommtPlaybackClientRegistry.isInitialized) ommtPlaybackClientRegistry.clear()
+    if (::resourcePackService.isInitialized) resourcePackService.shutdown()
     if (::pluginMessaging.isInitialized) pluginMessaging.disable()
     if (::databaseManager.isInitialized) {
       if (uploadsDrained) databaseManager.close()
@@ -271,16 +284,53 @@ class OyasaiMusic : JavaPlugin() {
   fun reloadRuntimeConfiguration() {
     if (::ommtUploadService.isInitialized) ommtUploadService.reloadReset()
     reloadConfig()
+    if (::resourcePackService.isInitialized) resourcePackService.reload()
     val soundCatalogCount = VanillaSoundCatalog.reload(this)
     logger.info("サウンドカタログを再読み込みしました: $soundCatalogCount SoundEvent")
+    if (::pluginMessaging.isInitialized) pluginMessaging.broadcastServerCapabilities()
     configureRuntimeServices()
     if (::playbackEngine.isInitialized) {
       val previous = playbackEngine
       playbackEngine = createPlaybackEngine()
       previous.shutdown()
-      if (::ommtPlaybackClientRegistry.isInitialized)
-          ommtPlaybackClientRegistry.invalidateCapabilities()
+      if (::ommtPlaybackClientRegistry.isInitialized) ommtPlaybackClientRegistry.invalidateCapabilities()
     }
+  }
+
+  /**
+   * Upgrades only the old disabled placeholder. A configured operator URL is never overwritten,
+   * and disabling an already configured pack remains respected.
+   */
+  private fun migrateBundledResourcePackConfig() {
+    val prefix = "resource-pack."
+    val id = config.getString(prefix + "id").orEmpty()
+    val url = config.getString(prefix + "url").orEmpty()
+    val sha1 = config.getString(prefix + "sha1").orEmpty()
+    val manifest = config.getString(prefix + "bank-manifest-sha256").orEmpty()
+    val isPlaceholder =
+        (id.isBlank() || id == "00000000-0000-0000-0000-000000000000") &&
+            url.isBlank() &&
+            sha1.isBlank() &&
+            manifest.isBlank()
+    if (!isPlaceholder) return
+    config.set(prefix + "enabled", true)
+    config.set(prefix + "id", "f0666054-e41c-40ef-affb-27bbf1bf79f9")
+    config.set(
+        prefix + "url",
+        "https://download.mc-packs.net/pack/af57205743d4d573bcb2dea2f81b745d30eb6eb3.zip",
+    )
+    config.set(prefix + "sha1", "af57205743d4d573bcb2dea2f81b745d30eb6eb3")
+    config.set(
+        prefix + "bank-manifest-sha256",
+        "8aed26ff23119b34e91f78036c313e3b38f66a4589f11c8af8e58efff3c03d6a",
+    )
+    config.set(prefix + "prompt", "おやさいサーバーの拡張音域リソースパックを読み込みますか？")
+    config.set(
+        prefix + "instrument-bank-event-template",
+        "oyasaimusic:bank/i/{instrument}/a/{anchor}",
+    )
+    saveConfig()
+    logger.info("旧リソースパック設定をOyasaiMusic 26.2拡張音域パックへ更新しました。")
   }
 
   /** 楽曲設定の保存直後に、再生中表示と全プレイヤーの開いているGUIへ最新値を反映する。 */

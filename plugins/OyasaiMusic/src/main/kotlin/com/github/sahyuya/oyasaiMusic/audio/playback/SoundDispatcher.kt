@@ -1,6 +1,7 @@
 package com.github.sahyuya.oyasaiMusic.audio
 
 import com.github.sahyuya.oyasaiMusic.model.NoteEvent
+import com.github.sahyuya.oyasaiMusic.resourcepack.OyasaiResourcePackService.ExtendedPlayback
 import kotlin.math.cos
 import kotlin.math.sin
 import net.kyori.adventure.sound.Sound as AdventureSound
@@ -31,18 +32,23 @@ object SoundDispatcher {
       note: NoteEvent,
       mode: PlaybackMode,
       isBedrock: Boolean,
+      extended: ExtendedPlayback? = null,
   ) {
     when (mode) {
-      PlaybackMode.DEFAULT -> playDefault(recipient, note)
+      PlaybackMode.DEFAULT -> playDefault(recipient, note, extended)
       // 統合版(Bedrock)は設計書の制約によりPanを常に無効化(=正面固定)する
       PlaybackMode.POSITIONAL ->
-          playPositional(recipient, note, pan = if (isBedrock) 0 else note.pan)
+          playPositional(recipient, note, pan = if (isBedrock) 0 else note.pan, extended = extended)
     }
   }
 
-  private fun playDefault(recipient: Player, note: NoteEvent) {
-    val pitch = InstrumentMapper.pitchToPlaybackPitch(note.pitch)
+  private fun playDefault(recipient: Player, note: NoteEvent, extended: ExtendedPlayback?) {
+    val pitch = InstrumentMapper.pitchCentsToPlaybackPitch(note.pitchCents)
     val volume = volumeParam(note.volume)
+    if (extended != null) {
+      recipient.playSound(recipient, extended.soundEvent, SoundCategory.RECORDS, volume, extended.pitch)
+      return
+    }
     val customSound = note.customSound
     if (customSound != null) {
       val seed = note.customSoundSeed
@@ -59,10 +65,14 @@ object SoundDispatcher {
     recipient.playSound(adventureSound, AdventureSound.Emitter.self())
   }
 
-  private fun playPositional(recipient: Player, note: NoteEvent, pan: Int) {
-    val pitch = InstrumentMapper.pitchToPlaybackPitch(note.pitch)
+  private fun playPositional(recipient: Player, note: NoteEvent, pan: Int, extended: ExtendedPlayback?) {
+    val pitch = InstrumentMapper.pitchCentsToPlaybackPitch(note.pitchCents)
     val volume = volumeParam(note.volume)
     val location = virtualLocation(recipient, pan)
+    if (extended != null) {
+      recipient.playSound(location, extended.soundEvent, SoundCategory.RECORDS, volume, extended.pitch)
+      return
+    }
     val customSound = note.customSound
     if (customSound != null) {
       val seed = note.customSoundSeed

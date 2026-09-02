@@ -2,6 +2,10 @@ package com.github.sahyuya.oyasaiMusic.interop
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.HandlerList
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.messaging.PluginMessageListener
 
 /** Paper-side registration and bounded dispatch for OMMT plugin messages. */
@@ -9,7 +13,7 @@ class OyasaiPluginMessaging(
     private val plugin: OyasaiMusic,
     private val uploads: OmmtUploadService,
     private val clients: OmmtPlaybackClientRegistry,
-) : PluginMessageListener {
+) : PluginMessageListener, Listener {
   private var enabled = false
 
   fun enable() {
@@ -21,17 +25,41 @@ class OyasaiPluginMessaging(
     messenger.registerOutgoingPluginChannel(plugin, PlaybackBuffer.CHANNEL)
     messenger.registerIncomingPluginChannel(plugin, PlaybackBuffer.CHANNEL, this)
     uploads.bindPacketSender(::sendUpload)
+    plugin.server.pluginManager.registerEvents(this, plugin)
+    broadcastServerCapabilities()
   }
 
   fun disable() {
     if (!enabled) return
     enabled = false
     uploads.bindPacketSender(null)
+    HandlerList.unregisterAll(this)
     val messenger = plugin.server.messenger
     messenger.unregisterIncomingPluginChannel(plugin, UploadPacketCodec.CHANNEL, this)
     messenger.unregisterOutgoingPluginChannel(plugin, UploadPacketCodec.CHANNEL)
     messenger.unregisterIncomingPluginChannel(plugin, PlaybackBuffer.CHANNEL, this)
     messenger.unregisterOutgoingPluginChannel(plugin, PlaybackBuffer.CHANNEL)
+  }
+
+  @EventHandler
+  fun onJoin(event: PlayerJoinEvent) {
+    val player = event.player
+    plugin.server.scheduler.runTaskLater(plugin, Runnable { sendServerCapabilities(player) }, 1L)
+  }
+
+  fun broadcastServerCapabilities() {
+    if (!enabled) return
+    plugin.server.scheduler.runTask(plugin, Runnable {
+      plugin.server.onlinePlayers.forEach(::sendServerCapabilities)
+    })
+  }
+
+  private fun sendServerCapabilities(player: Player) {
+    if (!enabled || !player.isOnline) return
+    val bytes = PlaybackBuffer.serverCapabilitiesEnvelope(plugin.server.minecraftVersion)
+    if (bytes.size <= PlaybackWireCodec.MAX) {
+      player.sendPluginMessage(plugin, PlaybackBuffer.CHANNEL, bytes)
+    }
   }
 
   override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {

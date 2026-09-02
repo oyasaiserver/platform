@@ -46,12 +46,13 @@ object UploadV2Codec {
     val input = DataInputStream(ByteArrayInputStream(compact))
     require(input.readInt() == 0x4f594d43)
     val oymiVersion = input.readUnsignedByte()
-    require(oymiVersion in 1..3)
+    require(oymiVersion in 1..4)
     val metaLen = readVar(input)
     val notes = readVar(input)
     val duration = readVar(input)
     require(metaLen in 2..MAX_BYTES && notes in 1..MAX_NOTES && duration >= 0)
-    require(9L + metaLen.toLong() + notes.toLong() * 3L <= compact.size.toLong()) {
+    val compactRecordBytes = if (oymiVersion == 4) 5L else 3L
+    require(9L + metaLen.toLong() + notes.toLong() * compactRecordBytes <= compact.size.toLong()) {
       "OYMC record length is out of bounds"
     }
     val metadata = ByteArray(metaLen)
@@ -60,23 +61,35 @@ object UploadV2Codec {
     var time = 0
     repeat(notes) {
       time = Math.addExact(time, readVar(input))
-      val b0 = input.readUnsignedByte()
-      val b1 = input.readUnsignedByte()
-      val pan = input.readUnsignedByte()
-      val instrument = b0 ushr 4
-      val pitch = ((b0 and 15) shl 1) or (b1 ushr 7)
-      val volume = b1 and 127
+      val instrument: Int
+      val pitchCents: Int
+      val volume: Int
+      val pan: Int
+      if (oymiVersion == 4) {
+        instrument = input.readUnsignedByte()
+        pitchCents = input.readShort().toInt()
+        volume = input.readUnsignedByte()
+        pan = input.readUnsignedByte()
+      } else {
+        val b0 = input.readUnsignedByte()
+        val b1 = input.readUnsignedByte()
+        pan = input.readUnsignedByte()
+        instrument = b0 ushr 4
+        pitchCents = (((b0 and 15) shl 1) or (b1 ushr 7)) * 100
+        volume = b1 and 127
+      }
       require(
           time <= duration &&
-              instrument in 0..15 &&
-              pitch in 0..24 &&
+              instrument in 0..(if (oymiVersion == 4) 19 else 15) &&
+              pitchCents in -5400..7300 &&
               volume in 0..100 &&
               pan <= 200
       )
-      entries += intArrayOf(time, instrument, pitch, volume, pan - 100)
+      entries += intArrayOf(time, instrument, pitchCents, volume, pan - 100)
     }
     require(input.available() == 0)
-    val resultSize = 20L + metaLen.toLong() + notes.toLong() * 8L
+    val canonicalRecordBytes = if (oymiVersion == 4) 9L else 8L
+    val resultSize = 20L + metaLen.toLong() + notes.toLong() * canonicalRecordBytes
     require(resultSize <= MAX_BYTES) { "reconstructed OYMI is too large" }
     return ByteArrayOutputStream(resultSize.toInt()).use { bytes ->
       DataOutputStream(bytes).use { out ->
@@ -90,7 +103,7 @@ object UploadV2Codec {
         entries.forEach {
           out.writeInt(it[0])
           out.writeByte(it[1])
-          out.writeByte(it[2])
+          if (oymiVersion == 4) out.writeShort(it[2]) else out.writeByte(it[2] / 100)
           out.writeByte(it[3])
           out.writeByte(it[4])
         }

@@ -3,6 +3,7 @@ package com.github.sahyuya.oyasaiMusic.audio
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.io.File
+import java.security.MessageDigest
 import java.util.Random
 import java.util.concurrent.ConcurrentHashMap
 import org.bukkit.plugin.java.JavaPlugin
@@ -13,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin
 object VanillaSoundCatalog {
 
   private const val CATALOG_FILE_NAME = "sound-catalog.json"
+  private const val LEGACY_BUNDLED_SHA1 = "655f8be286cf6f2297bcc3c36f8f83a5a2cac3dc"
 
   private data class EventParts(val eventKey: String, val group: String, val tail: List<String>)
 
@@ -32,6 +34,16 @@ object VanillaSoundCatalog {
     fun selectionForPattern(pattern: Int): SoundSelection? {
       if (patterns.none { it.number == pattern }) return null
       return SoundSelection(eventKey, seedCache.computeIfAbsent(pattern) { seedForPattern(it) })
+    }
+
+    fun patternForSeed(seed: Long): Int? {
+      val totalWeight = patterns.sumOf { it.weight }.takeIf { it > 0 } ?: return null
+      var remaining = Random(seed).nextInt(totalWeight)
+      for (candidate in patterns) {
+        remaining -= candidate.weight
+        if (remaining < 0) return candidate.number
+      }
+      return null
     }
 
     private fun seedForPattern(pattern: Int): Long {
@@ -59,7 +71,12 @@ object VanillaSoundCatalog {
   /** 初回起動時にJAR内のJSON定義をデータフォルダへ展開し、そのファイルを読み込む。 */
   fun initialize(plugin: JavaPlugin): Int {
     val file = File(plugin.dataFolder, CATALOG_FILE_NAME)
-    if (!file.exists()) plugin.saveResource(CATALOG_FILE_NAME, false)
+    if (!file.exists()) {
+      plugin.saveResource(CATALOG_FILE_NAME, false)
+    } else if (sha1(file) == LEGACY_BUNDLED_SHA1) {
+      plugin.saveResource(CATALOG_FILE_NAME, true)
+      plugin.logger.info("sound-catalog.json を公式 Minecraft 26.2 カタログへ更新しました。")
+    }
     return reload(file)
   }
 
@@ -83,6 +100,8 @@ object VanillaSoundCatalog {
 
   fun find(eventKey: String): SoundDefinition? =
       byEvent[eventKey.removePrefix("minecraft:").lowercase()]
+
+  fun patternForSeed(eventKey: String, seed: Long): Int? = find(eventKey)?.patternForSeed(seed)
 
   fun resolveSignLine(line: String?): SoundSelection? {
     val parts = line?.trim()?.split(':', limit = 2) ?: return null
@@ -129,6 +148,15 @@ object VanillaSoundCatalog {
             }
           }
     }
+    // These families were deliberately absent from the historical automatic numbering. Give
+    // them an append-only supplemental range so enabling their fixed variants cannot renumber
+    // any existing sign ID.
+    mapOf(
+            "ui.button.click" to "8.0.1",
+            "weather.rain" to "9.1.1",
+            "weather.rain.above" to "9.1.2",
+        )
+        .forEach { (event, id) -> if (patternsByEvent.containsKey(event)) idByEvent.putIfAbsent(event, id) }
     return patternsByEvent.entries
         .sortedBy { it.key }
         .map { (eventKey, patterns) -> SoundDefinition(eventKey, idByEvent[eventKey], patterns) }
@@ -141,4 +169,9 @@ object VanillaSoundCatalog {
 
   private fun JsonObject.intOrNull(member: String): Int? =
       get(member)?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }?.asInt
+
+  private fun sha1(file: File): String =
+      MessageDigest.getInstance("SHA-1")
+          .digest(file.readBytes())
+          .joinToString("") { "%02x".format(it.toInt() and 0xff) }
 }
