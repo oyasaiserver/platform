@@ -28,8 +28,9 @@ import org.bukkit.scheduler.BukkitRunnable
 object Data {
 
   private val gson = Gson()
+  @Volatile private var activeReadSource = ReadSource.YAML
 
-  /** [SLData]をメモリ(キャッシュ)へ反映し、SQLite(正データ)への非同期保存とYamlへのバックアップを行う */
+  /** Persists to the selected primary store; the other store remains a best-effort mirror. */
   fun save(data: SLData, actorUuid: UUID? = null) {
     // 1. メモリ (キャッシュ) を先行更新
     if (data.deletedAt != null) {
@@ -39,14 +40,18 @@ object Data {
       SLRankUp.plusBuildTask(data.owner)
     }
 
-    // 2. SQLite へ非同期保存 (スナップショットをキューに積む)
-    SLDatabase.saveBuild(data) {
-      DirtyBuildManager.markDirty(data.id)
-      notifyPlayerFailure(actorUuid, "データの保存に失敗しました。")
+    if (activeReadSource == ReadSource.SQLITE) {
+      SLDatabase.saveBuild(data) {
+        DirtyBuildManager.markDirty(data.id)
+        notifyPlayerFailure(actorUuid, "データの保存に失敗しました。")
+      }
+      saveYamlAsync(data)
+    } else {
+      // Before the explicit offline migration, YAML is authoritative. SQLite failures must not
+      // reject a YAML-backed write; reconciliation records the shadow write for later repair.
+      saveYamlAsync(data)
+      SLDatabase.saveBuild(data) { DirtyBuildManager.markDirty(data.id) }
     }
-
-    // 3. YAML へ非同期・ベストエフォート保存
-    saveYamlAsync(data)
   }
 
   /** IDから[SLData]を取得する、ない場合nullを返す。呼び出し側は新IDを渡すこと。 */
@@ -160,10 +165,15 @@ object Data {
 
     SLRankUp.minusBuildTask(slData.owner)
 
-    // 2. SQLite 側を非同期ソフトデリート
-    SLDatabase.softDeleteBuild(slData.id, deletedBy, now) {
-      DirtyBuildManager.markDirty(slData.id)
-      notifyPlayerFailure(deletedBy, "データの削除に失敗しました。")
+    if (activeReadSource == ReadSource.SQLITE) {
+      SLDatabase.softDeleteBuild(slData.id, deletedBy, now) {
+        DirtyBuildManager.markDirty(slData.id)
+        notifyPlayerFailure(deletedBy, "データの削除に失敗しました。")
+      }
+    } else {
+      SLDatabase.softDeleteBuild(slData.id, deletedBy, now) {
+        DirtyBuildManager.markDirty(slData.id)
+      }
     }
 
     // イベントログを記録
@@ -254,6 +264,7 @@ object Data {
     slNearData.clear()
     // SocialLikes3/data/ココのディレクトリ全てのlist
     val readSource = getReadSource()
+    activeReadSource = readSource
     val dir = if (readSource == ReadSource.YAML) Tools.getFolderToFolder("data") ?: return else null
     Bukkit.getLogger().info("[SL3] ${readSource.logName} Loading...")
     Thread(
@@ -415,12 +426,30 @@ object Data {
   }
 
   private fun getReadSource(): ReadSource {
-    val value = Tools.plugin.config.getString("readSource", ReadSource.SQLITE.configValue)
-    return ReadSource.values().firstOrNull { it.configValue == value?.lowercase(Locale.ROOT) }
-        ?: run {
-          Tools.plugin.logger.warning("[SL3] Unknown readSource '$value'. Falling back to sqlite.")
-          ReadSource.SQLITE
+    val value = Tools.plugin.config.getString("readSource", ReadSource.YAML.configValue)
+    val requested =
+        ReadSource.values().firstOrNull { it.configValue == value?.lowercase(Locale.ROOT) }
+            ?: run {
+              Tools.plugin.logger.warning(
+                  "[SL3] Unknown readSource '$value'. Falling back to yaml."
+              )
+              ReadSource.YAML
+            }
+    if (requested != ReadSource.SQLITE) return requested
+
+    val readiness = SLDatabase.migrationReadiness()
+    if (readiness.sqlitePrimaryReady) return ReadSource.SQLITE
+
+    val detail =
+        if (readiness.negativeBuildCount > 0) {
+          "${readiness.negativeBuildCount} negative build IDs remain"
+        } else {
+          "the offline ID migration completion marker is absent"
         }
+    Tools.plugin.logger.warning(
+        "[SL3] readSource=sqlite was requested but $detail; using yaml until migration is completed."
+    )
+    return ReadSource.YAML
   }
 
   fun getDirName(id: Int): String {

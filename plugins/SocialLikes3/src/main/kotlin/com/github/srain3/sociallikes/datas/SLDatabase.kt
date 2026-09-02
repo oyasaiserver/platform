@@ -44,6 +44,7 @@ object SLDatabase {
   private const val MAX_WRITE_RETRIES = 5
   private const val INITIAL_BACKOFF_MS = 100L
   private const val BLOCKING_TIMEOUT_SECONDS = 30L
+  private const val SQLITE_PRIMARY_READY_KEY = "sqlite_primary_id_migration_complete"
 
   @Volatile private var database: Database? = null
   private var initLatch = CountDownLatch(1)
@@ -302,6 +303,15 @@ object SLDatabase {
     override val primaryKey = PrimaryKey(oldId)
   }
 
+  private object MigrationState : Table("migration_state") {
+    val key = varchar("key", 128)
+    val value = varchar("value", 128)
+
+    override val primaryKey = PrimaryKey(key)
+  }
+
+  data class MigrationReadiness(val sqlitePrimaryReady: Boolean, val negativeBuildCount: Int)
+
   private data class BuildSnapshot(
       val id: Int,
       val worldName: String,
@@ -375,6 +385,7 @@ object SLDatabase {
               Players,
               SlEventLog,
               IdMigrationMap,
+              MigrationState,
           )
         }
 
@@ -742,6 +753,37 @@ object SLDatabase {
     return submitBlocking("loadIdMigrationMap") {
       rawConnection()?.let { loadIdMigrationMapDirect(it) } ?: emptyMap()
     } ?: emptyMap()
+  }
+
+  /**
+   * The SQLite data is not selected as the startup source until the offline ID migration records
+   * this marker. This prevents an upgraded server from accidentally treating an incomplete shadow
+   * database as authoritative.
+   */
+  fun migrationReadiness(): MigrationReadiness {
+    return submitBlocking("migrationReadiness") {
+      val ready =
+          MigrationState.selectAll()
+              .where { MigrationState.key eq SQLITE_PRIMARY_READY_KEY }
+              .firstOrNull()
+              ?.get(MigrationState.value) == "true"
+      val negativeCount =
+          rawConnection()?.prepareStatement("SELECT COUNT(*) FROM builds WHERE id < 0")?.use {
+              statement ->
+            statement.executeQuery().use { results -> if (results.next()) results.getInt(1) else 0 }
+          } ?: 0
+      MigrationReadiness(ready, negativeCount)
+    } ?: MigrationReadiness(sqlitePrimaryReady = false, negativeBuildCount = 0)
+  }
+
+  fun markSqlitePrimaryReady(): Boolean {
+    return submitWriteBlocking("markSqlitePrimaryReady") {
+      MigrationState.upsert {
+        it[MigrationState.key] = SQLITE_PRIMARY_READY_KEY
+        it[MigrationState.value] = "true"
+      }
+      true
+    } ?: false
   }
 
   /**

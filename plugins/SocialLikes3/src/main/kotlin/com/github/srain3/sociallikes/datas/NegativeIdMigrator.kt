@@ -24,18 +24,7 @@ object NegativeIdMigrator {
       val errorMessage: String? = null,
   )
 
-  /**
-   * 起動時に config.yml のフラグを確認し、有効な場合に負IDの移行を実行する。 Data.loadFileToDataCache()
-   * によるデータロードよりも前にメインスレッドから同期的に呼び出される必要がある。
-   */
-  fun runIfConfigured(plugin: JavaPlugin) {
-    val enabled = plugin.config.getBoolean("migrateNegativeIdsOnStartup", false)
-    if (!enabled) return
-
-    val dryRun = plugin.config.getBoolean("migrateNegativeIdsDryRun", false)
-    executeMigration(plugin, dryRun)
-  }
-
+  /** Called only by the maintenance command; it is never invoked from plugin startup. */
   fun executeMigration(plugin: JavaPlugin, dryRun: Boolean): MigrationResultSummary {
     val logger = plugin.logger
     val tag = if (dryRun) "[DRY-RUN]" else "[EXECUTING]"
@@ -49,7 +38,9 @@ object NegativeIdMigrator {
         when (sqliteResult) {
           is SLDatabase.MigrationResult.NoTarget -> {
             logger.info("[SL3] ID Migration: No migration target found in database (count: 0).")
-            logger.info("[SL3] Please set 'migrateNegativeIdsOnStartup: false' in config.yml.")
+            logger.info(
+                "[SL3] No negative IDs found. SQLite primary mode remains disabled until a completed migration is recorded."
+            )
             logger.info(
                 "================================================================================"
             )
@@ -139,7 +130,7 @@ object NegativeIdMigrator {
           "[SL3] [DRY-RUN] No actual changes were saved to production SQLite or YAML files."
       )
       logger.info(
-          "[SL3] To perform the actual migration, set 'migrateNegativeIdsDryRun: false' and keep 'migrateNegativeIdsOnStartup: true', then restart."
+          "[SL3] To perform the actual migration, run /sldataop migrate apply from the console during maintenance."
       )
     } else {
       logger.info("[SL3] ID Migration: EXECUTION SUMMARY (Two-Block Scheme)")
@@ -156,16 +147,14 @@ object NegativeIdMigrator {
               if (failedYamlIds.isNotEmpty()) " (Failed IDs: $failedYamlIds)" else ""
       )
       logger.info("[SL3] - PublicityHistory entries updated: $pubUpdatedCount")
-      if (failedYamlIds.isEmpty()) {
+      if (failedYamlIds.isEmpty() && yamlMissingCount == 0 && SLDatabase.markSqlitePrimaryReady()) {
         logger.info("[SL3] Two-Block ID Migration COMPLETED SUCCESSFULLY.")
+        logger.info("[SL3] SQLite primary marker recorded. Set readSource: sqlite, then restart.")
       } else {
         logger.warning(
-            "[SL3] Two-Block ID Migration COMPLETED WITH ${failedYamlIds.size} YAML FAILURES. Check severe logs above."
+            "[SL3] ID migration did not enable SQLite primary mode: YAML failures=${failedYamlIds.size}, missing YAML=$yamlMissingCount. Check logs and restore or repair before retrying."
         )
       }
-      logger.info(
-          "[SL3] IMPORTANT: Please set 'migrateNegativeIdsOnStartup: false' in config.yml before the next server restart."
-      )
     }
     logger.info("================================================================================")
 
