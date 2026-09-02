@@ -1,5 +1,5 @@
 dependencies {
   compileOnly(libs.purpur.api)
-  compileOnly(files("libs/tokenmanager.jar"))
+  compileOnly(project(":plugins:OyasaiToken"))
   implementation(libs.kotlin.stdlib)
 }
