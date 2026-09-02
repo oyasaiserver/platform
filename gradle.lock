@@ -1393,15 +1393,15 @@
   },
   "io.papermc.codebook:codebook-cli:2.0.1-SNAPSHOT": {
     "codebook-cli-2.0.1-SNAPSHOT-all.jar": {
-      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20260721.145907-3-all.jar",
-      "hash": "sha256-eLVkBfauh6Xa/G9nxEtFab0gILf1BcO1bjVh2sjW6/U="
+      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20260901.175536-4-all.jar",
+      "hash": "sha256-10AswVuZNEb3cQ3qa7umCGwyqjTAvBYRZlsxAWoYrWI="
     },
     "codebook-cli-2.0.1-SNAPSHOT.module": {
-      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20260721.145907-3.module",
-      "hash": "sha256-R7OWhQ/JHIGDXo/7slRyHp2Kz9SgOvAHGI1KD3NJOos="
+      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20260901.175536-4.module",
+      "hash": "sha256-4fvsQj3cpmFeXORyI7rXQ6KqHaDwRN5fsO3F2KEGHU8="
     },
     "codebook-cli-2.0.1-SNAPSHOT.pom": {
-      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20260721.145907-3.pom",
+      "url": "https://maven.enginehub.org/repo/io/papermc/codebook/codebook-cli/2.0.1-SNAPSHOT/codebook-cli-2.0.1-20260901.175536-4.pom",
       "hash": "sha256-yUwD8yERBn0z3hvuKK5ABYHlM9ywbtd9XiyHk5DHDgQ="
     }
   },
