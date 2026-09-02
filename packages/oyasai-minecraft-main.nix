@@ -76,6 +76,8 @@ oyasaiPurpur rec {
     oyasaimenu
     oyasaimusic
     oyasaipets
+    # OyasaiToken keeps the legacy plugin name TokenManager for binary/API compatibility.
+    oyasaitoken
     oyasaiutilities
     oyasaivehicles
     painttools
@@ -95,7 +97,6 @@ oyasaiPurpur rec {
     socialvotes
     tab
     tntruneloaded
-    tokenmanager
     tpswitch
     vault
     veinminer
