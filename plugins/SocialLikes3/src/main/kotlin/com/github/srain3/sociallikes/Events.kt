@@ -85,17 +85,29 @@ object Events : Listener {
       return
     }
 
-    // 新規IDを取得
-    // val id = Data.lastID+1
-    // Data.lastID++
-    val id =
-        if (Data.emptyIDList.isEmpty()) {
-          Data.lastID += 1
-          Data.lastID
-        } else {
-          Data.emptyIDList.sort()
-          Data.emptyIDList.removeFirst()
-        }
+    // 新規IDを取得 (ID再利用なし、常に最大ID+1)
+    val id = Data.getNextID()
+
+    val signMaterial = e.block.type.name
+
+    // SLDataを作成&保存
+    val data =
+        SLData(
+            id = id,
+            loc = e.block.location,
+            time = LocalDateTime.now(),
+            owner = e.player.uniqueId,
+            title = title,
+            likes = mutableListOf(),
+            likesWithTimestamp = mutableMapOf(),
+            check = false,
+            comment = "No comment",
+            worldName = e.block.world.name,
+            discordTextID = 0,
+            signMaterial = signMaterial,
+        )
+
+    Data.save(data, e.player.uniqueId)
 
     // 看板の装飾
     e.setLine(0, Tools.socialLikesLOGO)
@@ -107,28 +119,27 @@ object Events : Listener {
     val block = e.block.state
     if (block is Sign) {
       block.isWaxed = true
-      block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
-      block.update()
+      markSignIdGeneration2(block, id)
     }
 
-    // SLDataを作成&保存
-    val data =
-        SLData(
-            id,
-            e.block.location,
-            LocalDateTime.now(),
-            e.player.uniqueId,
-            title,
-            mutableListOf(),
-            mutableMapOf(),
-            false,
-            "No comment",
-            e.block.world.name,
-            0,
-        )
-
-    Data.save(data)
     SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
+
+    // イベントログを記録
+    val afterJson =
+        com.google.gson
+            .Gson()
+            .toJson(
+                mapOf(
+                    "id" to id,
+                    "title" to title,
+                    "world" to e.block.world.name,
+                    "x" to e.block.location.x,
+                    "y" to e.block.location.y,
+                    "z" to e.block.location.z,
+                    "sign_material" to signMaterial,
+                )
+            )
+    SLDatabase.recordEvent(id, "created", e.player.uniqueId, null, afterJson)
 
     // GUIへ反映
     AllBuild.updateSLSignData(data)
@@ -167,7 +178,6 @@ object Events : Listener {
           // Discordへ通知
           val textID = SLDiscord.sendSLEmbedMsg(data)
           data.discordTextID = textID
-          Data.delID(data, true)
           Data.save(data)
         }
         .start()
@@ -178,6 +188,28 @@ object Events : Listener {
 
   /** 再取得したSL看板アイテムの復元用データKey */
   val slSignItemIdKey = NamespacedKey(plugin, "sociallikes_id")
+
+  /** ID移行後に新IDを持つことを明示する世代マーカー。 */
+  val idGenerationKey = NamespacedKey(plugin, "id_generation")
+  const val CURRENT_ID_GENERATION = 2
+
+  /** 世代2ならIDをそのまま返し、旧世代だけを移行表で一度だけ解決する。 */
+  fun readSignId(sign: Sign): Int? {
+    val rawId = sign.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: return null
+    val generation = sign.persistentDataContainer.get(idGenerationKey, PersistentDataType.INTEGER)
+    return if (generation == CURRENT_ID_GENERATION) rawId else SLDatabase.resolveMigratedId(rawId)
+  }
+
+  /** 看板のIDと世代マーカーを同時に更新する。 */
+  fun markSignIdGeneration2(sign: Sign, id: Int) {
+    sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
+    sign.persistentDataContainer.set(
+        idGenerationKey,
+        PersistentDataType.INTEGER,
+        CURRENT_ID_GENERATION,
+    )
+    sign.update(true)
+  }
 
   /** 運営チェックマーク */
   val checkMarkRegex = Regex("""✓""")
@@ -199,27 +231,26 @@ object Events : Listener {
         e.player.sendMessage(Tools.socialLikesLOGO + " &e現在ロード作業中です、しばらくお待ち下さい。".color())
         return
       }
-      val id = block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: return
+      val rawId = block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: return
+      val id = readSignId(block) ?: return
+      if (
+          id != rawId ||
+              block.persistentDataContainer.get(idGenerationKey, PersistentDataType.INTEGER) !=
+                  CURRENT_ID_GENERATION
+      )
+          markSignIdGeneration2(block, id)
       val data = Data.getSLData(id) ?: return
 
       // クリックされた看板の持っているIDのlocデータと一致しない場合
       // SLUpdateモードなら処理を行う、それ以外はreturn
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
-          updateSLSign(data, block)
+          updateSLSign(data, block, e.player.uniqueId)
           e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
           SLUpdate.switch[e.player.uniqueId] = false
         }
         return
       }
-
-      // Dataの検証用残骸
-      // e.player.sendMessage("id:${data.id}")
-      // e.player.sendMessage("loc:${data.loc}")
-      // e.player.sendMessage("time:${data.time}")
-      // e.player.sendMessage("owner:${data.owner}")
-      // e.player.sendMessage("title:${data.title}")
-      // e.player.sendMessage("likes:${data.likes}")
 
       if (e.player.isSneaking) {
         SLSignLikes.createGUI(block, data, (e.player.uniqueId == data.owner), e.player.isOp)
@@ -233,9 +264,19 @@ object Events : Listener {
         // データに記録・保存する
         data.likes.add(e.player.uniqueId)
         data.likesWithTimestamp[e.player.uniqueId] = System.currentTimeMillis()
-        Data.save(data)
+        Data.save(data, e.player.uniqueId)
         SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
         Data.changeUserLikesInt(data.owner, 1)
+
+        // イベントログを記録
+        SLDatabase.recordEvent(
+            data.id,
+            "liked",
+            e.player.uniqueId,
+            null,
+            com.google.gson.Gson().toJson(mapOf("player" to e.player.uniqueId.toString())),
+        )
+
         AllBuild.updateSLSignData(data)
         UserBuild.updateSLSignData(data)
 
@@ -253,10 +294,6 @@ object Events : Listener {
         // 制作者がオンラインの場合通知
         val ownerPlayer = Bukkit.getPlayer(data.owner)
         if (ownerPlayer?.isOnline == true) {
-          /*ownerPlayer.spigot().sendMessage(TextComponent(Tools.socialLikesLOGO + "&r「&a${data.title}&7(ID:${id})&r」が ${e.player.name}さんからイイねされました！".color()).apply {
-              this.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sociallikes3:sltp $id")
-              this.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("&nクリックでその建築へテレポート&rします".color()))
-          })*/
           Tools.displaySocialLikeToast(
               ownerPlayer,
               ItemStack(Material.OAK_SIGN),
@@ -282,16 +319,32 @@ object Events : Listener {
         block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
         if (e.player.isOp) {
           if (!data.check) {
+            val beforeCheck = data.check
             data.check = true
-            Data.save(data)
+            Data.save(data, e.player.uniqueId)
+            SLDatabase.recordEvent(
+                data.id,
+                "checked_changed",
+                e.player.uniqueId,
+                com.google.gson.Gson().toJson(mapOf("checked" to beforeCheck)),
+                com.google.gson.Gson().toJson(mapOf("checked" to true)),
+            )
           }
         }
       } else {
         if (e.player.isOp) {
           block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()} &e✓".color())
           if (!data.check) {
+            val beforeCheck = data.check
             data.check = true
-            Data.save(data)
+            Data.save(data, e.player.uniqueId)
+            SLDatabase.recordEvent(
+                data.id,
+                "checked_changed",
+                e.player.uniqueId,
+                com.google.gson.Gson().toJson(mapOf("checked" to beforeCheck)),
+                com.google.gson.Gson().toJson(mapOf("checked" to true)),
+            )
           }
         } else {
           block.getSide(Side.FRONT).setLine(3, "&7Likes&8: &6${data.likes.count()}".color())
@@ -318,13 +371,14 @@ object Events : Listener {
               ?.substring(1)
               ?.toIntOrNull(16) ?: return
       id = -id
-      val data = Data.getSLData(id) ?: return
+      val resolvedId = SLDatabase.resolveMigratedId(id)
+      val data = Data.getSLData(resolvedId) ?: return
 
       // クリックされた看板の持っているIDのlocデータと一致しない場合
       // SLUpdateモードなら処理を行う、それ以外はreturn
       if (data.loc != block.location) {
         if (SLUpdate.switch[e.player.uniqueId] == true) {
-          updateLegacySLSign(data, block)
+          updateLegacySLSign(data, block, e.player.uniqueId)
           e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
           SLUpdate.switch[e.player.uniqueId] = false
         } else {
@@ -349,8 +403,7 @@ object Events : Listener {
       )
 
       block.isWaxed = true
-      block.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
-      block.update()
+      markSignIdGeneration2(block, resolvedId)
 
       e.player.sendMessage(Tools.socialLikesLOGO + "&fアップデートしました！".color())
     }
@@ -445,7 +498,7 @@ object Events : Listener {
         e.isCancelled = true
         return
       }
-      val id = block.persistentDataContainer.get(idKey, PersistentDataType.INTEGER) ?: return
+      val id = readSignId(block) ?: return
       val data = Data.getSLData(id) ?: return
 
       // クリックされた看板の持っているIDのlocデータと一致しない場合return
@@ -471,11 +524,16 @@ object Events : Listener {
     val sourceSignId =
         sourceSign?.persistentDataContainer?.get(slSignItemIdKey, PersistentDataType.INTEGER)
             ?: sourceSign?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
-    val id =
+    val rawId =
         sourceSignId
             ?: meta.persistentDataContainer.get(slSignItemIdKey, PersistentDataType.INTEGER)
             ?: legacySLSignItemId(meta.asString)
             ?: return
+    val itemGeneration =
+        sourceSign?.persistentDataContainer?.get(idGenerationKey, PersistentDataType.INTEGER)
+            ?: meta.persistentDataContainer.get(idGenerationKey, PersistentDataType.INTEGER)
+    val id =
+        if (itemGeneration == CURRENT_ID_GENERATION) rawId else SLDatabase.resolveMigratedId(rawId)
     val slData = Data.getSLData(id) ?: return
     val sourceSignForRestore = sourceSign.takeIf { sourceSignId != null }
 
@@ -513,13 +571,9 @@ object Events : Listener {
       sign.isWaxed = true
     }
 
-    val id =
-        sourceSign?.persistentDataContainer?.get(slSignItemIdKey, PersistentDataType.INTEGER)
-            ?: sourceSign?.persistentDataContainer?.get(idKey, PersistentDataType.INTEGER)
-            ?: slData.id
-    sign.persistentDataContainer.set(idKey, PersistentDataType.INTEGER, id)
+    val id = slData.id
     sign.persistentDataContainer.set(slSignItemIdKey, PersistentDataType.INTEGER, id)
-    sign.update(true)
+    markSignIdGeneration2(sign, id)
   }
 
   private fun copySignSide(sourceSign: Sign, targetSign: Sign, side: Side) {

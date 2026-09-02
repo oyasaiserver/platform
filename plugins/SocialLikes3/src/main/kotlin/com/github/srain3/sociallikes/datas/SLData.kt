@@ -7,7 +7,7 @@ import org.bukkit.Location
 /** SocialLikesの看板データ */
 data class SLData(
     val id: Int,
-    val loc: Location,
+    var loc: Location,
     val time: LocalDateTime,
     val owner: UUID,
     var title: String,
@@ -15,6 +15,9 @@ data class SLData(
     val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf(),
     var check: Boolean,
     var comment: String,
-    val worldName: String,
+    var worldName: String,
     var discordTextID: Long,
+    var deletedAt: LocalDateTime? = null,
+    var deletedBy: UUID? = null,
+    var signMaterial: String? = null,
 )

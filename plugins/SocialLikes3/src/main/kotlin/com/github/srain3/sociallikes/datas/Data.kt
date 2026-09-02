@@ -7,10 +7,12 @@ import com.github.srain3.sociallikes.Tools.color
 import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.SLRankUp
 import com.github.srain3.sociallikes.gui.UserBuild
+import com.google.gson.Gson
 import java.io.File
 import java.lang.Exception
 import java.time.LocalDateTime
 import java.util.*
+import java.util.logging.Level
 import kotlin.math.floor
 import kotlin.math.max
 import org.bukkit.Bukkit
@@ -19,133 +21,207 @@ import org.bukkit.Material
 import org.bukkit.block.Biome
 import org.bukkit.block.BlockFace
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 
 object Data {
 
-  /** [SLData]からPluginフォルダ内へファイル保存を行いつつCacheに無ければ追加する */
-  fun save(data: SLData) {
-    // IDから50間隔で区切り、Yamlファイルを作成する
-    val dirName = getDirName(data.id)
-    val yml = CustomYaml("data/" + dirName + "/${data.id}.yml")
+  private val gson = Gson()
+  @Volatile private var activeReadSource = ReadSource.YAML
 
-    // UUIDListをそのままYamlに保存するといらない情報があるので
-    // 一度StringにしたListを作成する
-    val likesStr = mutableListOf<String>()
-    data.likes.forEach { likesStr.add(it.toString()) }
-
-    val likesWithTimestampStr = mutableMapOf<String, Long>()
-    data.likesWithTimestamp.forEach { (uuid, ts) -> likesWithTimestampStr[uuid.toString()] = ts }
-
-    // Yamlファイルへ値を入れ、ファイルを保存する
-    yml.apply {
-      set("id", data.id)
-      set("loc.world", data.loc.world?.name)
-      set("loc.x", data.loc.x)
-      set("loc.y", data.loc.y)
-      set("loc.z", data.loc.z)
-      set("time", data.time.toString())
-      set("owner", data.owner.toString())
-      set("title", data.title)
-      set("likes", likesStr)
-      set("likesWithTimestamp", likesWithTimestampStr)
-      set("check", data.check)
-      set("comment", data.comment)
-      set("DiscordTextID", data.discordTextID)
+  /** Persists to the selected primary store; the other store remains a best-effort mirror. */
+  fun save(data: SLData, actorUuid: UUID? = null) {
+    // 1. メモリ (キャッシュ) を先行更新
+    if (data.deletedAt != null) {
+      removeFromCache(data)
+    } else {
+      addToCacheInMemory(data)
+      SLRankUp.plusBuildTask(data.owner)
     }
-    yml.save()
 
-    SLDatabase.saveBuild(data)
-
-    // Cacheへ保存する(既にデータが有る場合は追加しない)
-    val list = dataMap[dirName] ?: mutableListOf()
-    if (list.none { it == data }) {
-      list.add(data)
+    if (activeReadSource == ReadSource.SQLITE) {
+      SLDatabase.saveBuild(data) {
+        DirtyBuildManager.markDirty(data.id)
+        notifyPlayerFailure(actorUuid, "データの保存に失敗しました。")
+      }
+      saveYamlAsync(data)
+    } else {
+      // Before the explicit offline migration, YAML is authoritative. SQLite failures must not
+      // reject a YAML-backed write; reconciliation records the shadow write for later repair.
+      saveYamlAsync(data)
+      SLDatabase.saveBuild(data) { DirtyBuildManager.markDirty(data.id) }
     }
-    dataMap[dirName] = list
-    // ここにslnear用
-    val nWorld =
-        slNearData[data.loc.world?.name]
-            ?: run {
-              val map = mutableMapOf<Int, MutableMap<Int, MutableList<SLData>>>()
-              slNearData[data.loc.world?.name ?: "null"] = map
-              map
-            }
-    val nChunkX =
-        nWorld[data.loc.chunk.x]
-            ?: run {
-              val map = mutableMapOf<Int, MutableList<SLData>>()
-              nWorld[data.loc.chunk.x] = map
-              map
-            }
-    val nChunkZ =
-        nChunkX[data.loc.chunk.z]
-            ?: run {
-              val set = mutableListOf<SLData>()
-              nChunkX[data.loc.chunk.z] = set
-              set
-            }
-    nChunkZ.add(data)
-
-    SLRankUp.plusBuildTask(data.owner)
   }
 
-  /** IDから[SLData]を取得する、ない場合nullを返す */
+  /** IDから[SLData]を取得する、ない場合nullを返す。呼び出し側は新IDを渡すこと。 */
   fun getSLData(id: Int): SLData? {
     val dirName = getDirName(id)
     val list = dataMap[dirName] ?: return null
-    return list.firstOrNull { it.id == id }
+    return list.firstOrNull { it.id == id && it.deletedAt == null }
   }
 
-  /** [SLData]を元にデータを消去する */
-  fun delID(slData: SLData, updateMode: Boolean = false) {
-    val dirName = getDirName(slData.id)
-    val list = dataMap[dirName] ?: return
+  /** IDからキャッシュ上の[SLData]を取得する (削除済みフラグにかかわらず取得)。 */
+  fun getSLDataDirect(id: Int): SLData? {
+    val dirName = getDirName(id)
+    return dataMap[dirName]?.firstOrNull { it.id == id }
+  }
 
-    if (!updateMode) {
-      AllBuild.deleteSLSignData(slData)
-      UserBuild.deleteSLSignData(slData)
+  /** YAMLファイルから指定IDの[SLData]を読み込む */
+  fun loadSLDataFromYaml(id: Int): SLData? {
+    val dirName = getDirName(id)
+    val file = File(Tools.plugin.dataFolder, "data/$dirName/$id.yml")
+    if (!file.exists() || !file.isFile) return null
+    val yml = CustomYamlFile(file)
+    return parseSLDataFromYaml(yml, id)
+  }
 
-      if (lastID == slData.id) {
-        lastID -= 1
-      } else {
-        if (slData.id > 0) {
-          emptyIDList.add(slData.id)
+  /** 最新の[SLData]を取得する (preferYamlがtrueならYAML優先、falseならメモリ優先) */
+  fun getLatestSLData(id: Int, preferYaml: Boolean = false): SLData? {
+    return if (preferYaml) {
+      loadSLDataFromYaml(id) ?: getSLDataDirect(id)
+    } else {
+      getSLDataDirect(id) ?: loadSLDataFromYaml(id)
+    }
+  }
+
+  /** リコンシリエーションで取得・復元した[SLData]をメモリキャッシュに反映する (メインスレッド専用) */
+  fun applyReconciledData(data: SLData) {
+    val dirName = getDirName(data.id)
+    val oldData = dataMap[dirName]?.firstOrNull { it.id == data.id }
+
+    if (data.deletedAt != null) {
+      removeFromCache(data)
+      try {
+        AllBuild.deleteSLSignData(data)
+        UserBuild.deleteSLSignData(data)
+      } catch (e: Exception) {
+        Tools.plugin.logger.warning(
+            "[SL3] Failed to delete sign GUI items during reconciliation: ${e.message}"
+        )
+      }
+      if (oldData != null && oldData.deletedAt == null) {
+        changeUserLikesInt(data.owner, -oldData.likes.size)
+        try {
+          SLRankUp.minusBuildTask(data.owner)
+        } catch (e: Exception) {
+          Tools.plugin.logger.warning(
+              "[SL3] Failed to update SLRankUp minus during reconciliation: ${e.message}"
+          )
         }
       }
-    }
-
-    list.remove(slData)
-    dataMap[dirName] = list
-    // ここにslnear用
-    val dW = slNearData[slData.worldName]
-    if (dW != null) {
-      val dX = dW[slData.loc.chunk.x]
-      if (dX != null) {
-        val dZ = dX[slData.loc.chunk.z]
-        if (dZ != null) {
-          dZ.remove(slData)
-          dX[slData.loc.chunk.z] = dZ
-          dW[slData.loc.chunk.x] = dX
-          slNearData[slData.worldName] = dW
+    } else {
+      addToCacheInMemory(data)
+      lastID = max(lastID, data.id)
+      val oldLikes = if (oldData != null && oldData.deletedAt == null) oldData.likes.size else 0
+      val diff = data.likes.size - oldLikes
+      if (diff != 0) {
+        changeUserLikesInt(data.owner, diff)
+      }
+      if (oldData == null || oldData.deletedAt != null) {
+        try {
+          SLRankUp.plusBuildTask(data.owner)
+        } catch (e: Exception) {
+          Tools.plugin.logger.warning(
+              "[SL3] Failed to update SLRankUp plus during reconciliation: ${e.message}"
+          )
         }
       }
+      try {
+        AllBuild.updateSLSignData(data)
+        UserBuild.updateSLSignData(data)
+      } catch (e: Exception) {
+        Tools.plugin.logger.warning(
+            "[SL3] Failed to update sign GUI items during reconciliation: ${e.message}"
+        )
+      }
     }
+  }
 
-    val yml = CustomYaml("data/" + dirName + "/${slData.id}.yml")
-    yml.delete()
+  /** [SLData]を元にデータをソフトデリートする */
+  fun delID(slData: SLData, deletedBy: UUID? = null) {
+    val now = LocalDateTime.now()
 
-    SLDatabase.deleteBuild(slData.id)
+    val beforeJson =
+        gson.toJson(
+            mapOf(
+                "id" to slData.id,
+                "title" to slData.title,
+                "world" to slData.worldName,
+                "x" to slData.loc.x,
+                "y" to slData.loc.y,
+                "z" to slData.loc.z,
+            )
+        )
+
+    // 1. メモリ (キャッシュ) を先行更新
+    slData.deletedAt = now
+    slData.deletedBy = deletedBy
+
+    AllBuild.deleteSLSignData(slData)
+    UserBuild.deleteSLSignData(slData)
+
+    removeFromCache(slData)
 
     SLRankUp.minusBuildTask(slData.owner)
+
+    if (activeReadSource == ReadSource.SQLITE) {
+      SLDatabase.softDeleteBuild(slData.id, deletedBy, now) {
+        DirtyBuildManager.markDirty(slData.id)
+        notifyPlayerFailure(deletedBy, "データの削除に失敗しました。")
+      }
+    } else {
+      SLDatabase.softDeleteBuild(slData.id, deletedBy, now) {
+        DirtyBuildManager.markDirty(slData.id)
+      }
+    }
+
+    // イベントログを記録
+    val afterJson =
+        gson.toJson(
+            mapOf(
+                "deleted_at" to now.toString(),
+                "deleted_by" to deletedBy?.toString(),
+            )
+        )
+    SLDatabase.recordEvent(slData.id, "deleted", deletedBy, beforeJson, afterJson, now)
+
+    // 3. YAML へ非同期反映 (削除フラグを立てて保存)
+    saveYamlAsync(slData)
+  }
+
+  private fun notifyPlayerFailure(playerUuid: UUID?, message: String) {
+    if (playerUuid == null) return
+    try {
+      Bukkit.getScheduler()
+          .runTask(
+              Tools.plugin,
+              Runnable {
+                val player = Bukkit.getPlayer(playerUuid) ?: return@Runnable
+                player.sendMessage(Tools.socialLikesLOGO + " &c$message".color())
+              },
+          )
+    } catch (e: Exception) {
+      Tools.plugin.logger.log(
+          Level.WARNING,
+          "[SL3] Failed to schedule failure notification to $playerUuid",
+          e,
+      )
+    }
   }
 
   /** [SLData]を50区切り別のフォルダ名と紐付けて保存しているCache */
   private val dataMap = mutableMapOf<String, MutableList<SLData>>()
 
-  /** SLDataをすべて返す */
+  /** SLDataをすべて返す (現役のみ) */
   fun getSLDataAll(): MutableSet<SLData> {
+    val set = mutableSetOf<SLData>()
+    dataMap.forEach { (_, list) -> set.addAll(list.filter { it.deletedAt == null }) }
+    return set
+  }
+
+  /** SLDataをすべて返す (ソフトデリート済みを含む) */
+  fun getSLDataAllIncludingDeleted(): MutableSet<SLData> {
     val set = mutableSetOf<SLData>()
     dataMap.forEach { (_, list) -> set.addAll(list) }
     return set
@@ -162,14 +238,20 @@ object Data {
   /** 建築総数を返す */
   fun getBuildingInt(): Int {
     var i = 0
-    dataMap.values.forEach { i += it.size }
+    dataMap.values.forEach { list -> i += list.count { it.deletedAt == null } }
     return i
   }
 
   /** ファイルで存在する一番大きいID */
   var lastID = 0
-  /** 空いてるIDリスト */
-  val emptyIDList = mutableListOf<Int>()
+
+  /** 次の新規IDを発行する (ID再利用は廃止、常に最大ID+1) */
+  fun getNextID(): Int {
+    synchronized(this) {
+      lastID += 1
+      return lastID
+    }
+  }
 
   /** ファイルのロードが終わっていたらtrue */
   var loading = true
@@ -179,10 +261,10 @@ object Data {
     dataMap.clear()
     userLikesInt.clear()
     lastID = 0
-    emptyIDList.clear()
     slNearData.clear()
     // SocialLikes3/data/ココのディレクトリ全てのlist
     val readSource = getReadSource()
+    activeReadSource = readSource
     val dir = if (readSource == ReadSource.YAML) Tools.getFolderToFolder("data") ?: return else null
     Bukkit.getLogger().info("[SL3] ${readSource.logName} Loading...")
     Thread(
@@ -197,56 +279,14 @@ object Data {
                     files.forEach file@{ file ->
                       // ID.ymlを読み込む
                       val yml = CustomYamlFile(file)
-                      // ファイルから値を取り出す
-                      val id = yml.getInt("id", -1)
-                      val worldStr = yml.getString("loc.world") ?: return@file
-                      val x = yml.getDouble("loc.x")
-                      val y = yml.getDouble("loc.y")
-                      val z = yml.getDouble("loc.z")
-                      val time = LocalDateTime.parse(yml.getString("time"))
-                      val owner = UUID.fromString(yml.getString("owner"))
-                      val title = yml.getString("title") ?: return@file
-                      val likesStr = yml.getStringList("likes")
-                      val check = yml.getBoolean("check", false)
-                      val comment = yml.getString("comment") ?: "No comment"
-                      val textID = yml.getLong("DiscordTextID", 0)
+                      val slData = parseSLDataFromYaml(yml) ?: return@file
 
-                      // locationへ変換
-                      val world =
-                          Bukkit.getServer().getWorld(worldStr)
-                              ?: run {
-                                Tools.plugin.logger.warning(
-                                    "ID:$id world $worldStr does not exist!"
-                                )
-                                // return@file
-                                null
-                              }
-                      val loc = Location(world, x, y, z)
+                      if (slData.id > 0) {
+                        lastID = max(lastID, slData.id)
+                        ids.add(slData.id)
+                      }
 
-                      // likesのStringListからUUIDListへ変換
-                      val likes: MutableList<UUID> = mutableListOf()
-                      likesStr.forEach { uuidStr -> likes.add(UUID.fromString(uuidStr)) }
-
-                      // likesWithTimestampのロード
-                      val likesWithTimestamp = loadLikesWithTimestamp(yml)
-
-                      addToCache(
-                          SLData(
-                              id,
-                              loc,
-                              time,
-                              owner,
-                              title,
-                              likes,
-                              likesWithTimestamp,
-                              check,
-                              comment,
-                              worldStr,
-                              textID,
-                          ),
-                          it.name,
-                          ids,
-                      )
+                      addToCache(slData, it.name, ids)
                     }
                   }
                 }
@@ -254,6 +294,7 @@ object Data {
                   SLDatabase.loadBuildsBlocking().forEach { slData ->
                     addToCache(slData, getDirName(slData.id), ids)
                   }
+                  SLDatabase.getMaxBuildIdBlocking()?.let { maxId -> lastID = max(lastID, maxId) }
                 }
               }
 
@@ -263,13 +304,7 @@ object Data {
                 Tools.plugin.logger.severe("AllBuild.createItemにエラー")
               }
 
-              if (lastID >= 1) {
-                for (i in 1..lastID) {
-                  if (!ids.contains(i)) {
-                    emptyIDList.add(i)
-                  }
-                }
-              } else if (lastID < 0) {
+              if (lastID < 0) {
                 lastID = 0
               }
 
@@ -287,10 +322,18 @@ object Data {
 
               if (readSource == ReadSource.YAML) {
                 try {
-                  SLDatabase.syncBuilds(getSLDataAll())
+                  SLDatabase.syncBuilds(getSLDataAllIncludingDeleted())
                 } catch (e: Exception) {
                   Tools.plugin.logger.warning("[SL3] SQLite shadow syncBuilds failed: ${e.message}")
                 }
+              }
+
+              try {
+                DirtyBuildManager.reconcile(preferYaml = true)
+              } catch (e: Exception) {
+                Tools.plugin.logger.warning(
+                    "[SL3] Startup dirty builds reconciliation failed: ${e.message}"
+                )
               }
 
               loading = true
@@ -304,6 +347,79 @@ object Data {
         .start()
   }
 
+  fun saveYamlAsync(data: SLData) {
+    Bukkit.getScheduler()
+        .runTaskAsynchronously(
+            Tools.plugin,
+            Runnable {
+              try {
+                val dirName = getDirName(data.id)
+                val yml = CustomYaml("data/" + dirName + "/${data.id}.yml")
+                val likesStr = data.likes.map { it.toString() }
+                val likesWithTimestampStr = mutableMapOf<String, Long>()
+                data.likesWithTimestamp.forEach { (uuid, ts) ->
+                  likesWithTimestampStr[uuid.toString()] = ts
+                }
+
+                yml.apply {
+                  set("id", data.id)
+                  set("loc.world", data.loc.world?.name ?: data.worldName)
+                  set("loc.x", data.loc.x)
+                  set("loc.y", data.loc.y)
+                  set("loc.z", data.loc.z)
+                  set("time", data.time.toString())
+                  set("owner", data.owner.toString())
+                  set("title", data.title)
+                  set("likes", likesStr)
+                  set("likesWithTimestamp", likesWithTimestampStr)
+                  set("check", data.check)
+                  set("comment", data.comment)
+                  set("DiscordTextID", data.discordTextID)
+                  set("deleted", data.deletedAt != null)
+                  set("deleted_at", data.deletedAt?.toString())
+                  set("deleted_by", data.deletedBy?.toString())
+                  set("sign_material", data.signMaterial)
+                }
+                yml.save()
+              } catch (e: Exception) {
+                Tools.plugin.logger.warning(
+                    "[SL3] YAML fallback save failed for ID ${data.id}: ${e.message}"
+                )
+              }
+            },
+        )
+  }
+
+  fun removeFromCache(data: SLData) {
+    val dirName = getDirName(data.id)
+    dataMap[dirName]?.removeIf { it.id == data.id }
+
+    val dW = slNearData[data.worldName]
+    dW?.get(data.loc.blockX shr 4)?.get(data.loc.blockZ shr 4)?.removeIf { it.id == data.id }
+  }
+
+  private fun addToCacheInMemory(data: SLData) {
+    val dirName = getDirName(data.id)
+    val list = dataMap.getOrPut(dirName) { mutableListOf() }
+    val existingIndex = list.indexOfFirst { it.id == data.id }
+    if (existingIndex >= 0) {
+      list[existingIndex] = data
+    } else {
+      list.add(data)
+    }
+
+    // slNearData を更新: 既存位置にあれば削除し、新位置に追加
+    slNearData.values.forEach { wMap ->
+      wMap.values.forEach { cMap ->
+        cMap.values.forEach { cList -> cList.removeIf { it.id == data.id } }
+      }
+    }
+    val nWorld = slNearData.getOrPut(data.loc.world?.name ?: data.worldName) { mutableMapOf() }
+    val nChunkX = nWorld.getOrPut(data.loc.blockX shr 4) { mutableMapOf() }
+    val nChunkZ = nChunkX.getOrPut(data.loc.blockZ shr 4) { mutableListOf() }
+    nChunkZ.add(data)
+  }
+
   private enum class ReadSource(val configValue: String, val logName: String) {
     YAML("yaml", "File"),
     SQLITE("sqlite", "SQLite"),
@@ -311,14 +427,32 @@ object Data {
 
   private fun getReadSource(): ReadSource {
     val value = Tools.plugin.config.getString("readSource", ReadSource.YAML.configValue)
-    return ReadSource.values().firstOrNull { it.configValue == value?.lowercase(Locale.ROOT) }
-        ?: run {
-          Tools.plugin.logger.warning("[SL3] Unknown readSource '$value'. Falling back to yaml.")
-          ReadSource.YAML
+    val requested =
+        ReadSource.values().firstOrNull { it.configValue == value?.lowercase(Locale.ROOT) }
+            ?: run {
+              Tools.plugin.logger.warning(
+                  "[SL3] Unknown readSource '$value'. Falling back to yaml."
+              )
+              ReadSource.YAML
+            }
+    if (requested != ReadSource.SQLITE) return requested
+
+    val readiness = SLDatabase.migrationReadiness()
+    if (readiness.sqlitePrimaryReady) return ReadSource.SQLITE
+
+    val detail =
+        if (readiness.negativeBuildCount > 0) {
+          "${readiness.negativeBuildCount} negative build IDs remain"
+        } else {
+          "the offline ID migration completion marker is absent"
         }
+    Tools.plugin.logger.warning(
+        "[SL3] readSource=sqlite was requested but $detail; using yaml until migration is completed."
+    )
+    return ReadSource.YAML
   }
 
-  private fun getDirName(id: Int): String {
+  fun getDirName(id: Int): String {
     val fPage = (id / 50.0).toInt()
     return if (id in -49..-1) {
       "-1--49"
@@ -329,6 +463,89 @@ object Data {
     }
   }
 
+  /** YAMLConfigurationから[SLData]をパースする */
+  fun parseSLDataFromYaml(yml: YamlConfiguration, fileId: Int? = null): SLData? {
+    val id = if (fileId != null && fileId > 0) fileId else yml.getInt("id", -1)
+    val worldStr = yml.getString("loc.world") ?: return null
+    val x = yml.getDouble("loc.x")
+    val y = yml.getDouble("loc.y")
+    val z = yml.getDouble("loc.z")
+    val timeStr = yml.getString("time") ?: return null
+    val time =
+        try {
+          LocalDateTime.parse(timeStr)
+        } catch (_: Exception) {
+          return null
+        }
+    val ownerStr = yml.getString("owner") ?: return null
+    val owner =
+        try {
+          UUID.fromString(ownerStr)
+        } catch (_: Exception) {
+          return null
+        }
+    val title = yml.getString("title") ?: return null
+    val likesStr = yml.getStringList("likes")
+    val check = yml.getBoolean("check", false)
+    val comment = yml.getString("comment") ?: "No comment"
+    val textID = yml.getLong("DiscordTextID", 0)
+
+    val deleted = yml.getBoolean("deleted", false)
+    val deletedAtStr = yml.getString("deleted_at")
+    val deletedAt =
+        deletedAtStr?.let { s ->
+          try {
+            LocalDateTime.parse(s)
+          } catch (_: Exception) {
+            null
+          }
+        } ?: if (deleted) time else null
+    val deletedByStr = yml.getString("deleted_by")
+    val deletedBy =
+        deletedByStr?.let { s ->
+          try {
+            UUID.fromString(s)
+          } catch (_: Exception) {
+            null
+          }
+        }
+    val signMaterial = yml.getString("sign_material")
+
+    val world =
+        Bukkit.getServer().getWorld(worldStr)
+            ?: run {
+              Tools.plugin.logger.warning("ID:$id world $worldStr does not exist!")
+              null
+            }
+    val loc = Location(world, x, y, z)
+
+    val likes: MutableList<UUID> = mutableListOf()
+    likesStr.forEach { uuidStr ->
+      try {
+        likes.add(UUID.fromString(uuidStr))
+      } catch (_: Exception) {}
+    }
+
+    val likesWithTimestamp = loadLikesWithTimestamp(yml)
+
+    return SLData(
+        id = id,
+        loc = loc,
+        time = time,
+        owner = owner,
+        title = title,
+        likes = likes,
+        likesWithTimestamp = likesWithTimestamp,
+        check = check,
+        comment = comment,
+        worldName = worldStr,
+        discordTextID = textID,
+        deletedAt = deletedAt,
+        deletedBy = deletedBy,
+        signMaterial = signMaterial,
+    )
+  }
+
   private fun addToCache(slData: SLData, dirName: String, ids: MutableSet<Int>) {
     lastID = max(lastID, slData.id)
     ids.add(slData.id)
@@ -337,10 +554,12 @@ object Data {
     list.add(slData)
     dataMap[dirName] = list
 
-    userLikesInt[slData.owner] = (userLikesInt[slData.owner] ?: 0) + slData.likes.count()
+    if (slData.deletedAt == null) {
+      userLikesInt[slData.owner] = (userLikesInt[slData.owner] ?: 0) + slData.likes.count()
+    }
   }
 
-  private fun loadLikesWithTimestamp(yml: CustomYamlFile): MutableMap<UUID, Long> {
+  private fun loadLikesWithTimestamp(yml: YamlConfiguration): MutableMap<UUID, Long> {
     val likesWithTimestamp: MutableMap<UUID, Long> = mutableMapOf()
     val section = yml.getConfigurationSection("likesWithTimestamp")
 

@@ -14,6 +14,7 @@ object PublicityHistory {
   fun loadYAML() {
     Thread(
             {
+              yaml.reload()
               yaml.getKeys(false).forEach { num ->
                 val timeStr = yaml.getString("${num}.TimeStamp") ?: return@forEach
                 val time = LocalDateTime.parse(timeStr) ?: return@forEach

@@ -208,7 +208,13 @@ object SLSignSetting {
                         mutableListOf("&7材質を${option.loreName}へ変えます"),
                     )
             ) {
-              changeSignType(sign, materialForCurrentShape(sign.type, option.woodName), slData.id)
+              val player = it.whoClicked as Player
+              changeSignType(
+                  sign,
+                  materialForCurrentShape(sign.type, option.woodName),
+                  slData,
+                  player,
+              )
               it.whoClicked.closeInventory()
             },
             option.x,
@@ -266,7 +272,7 @@ object SLSignSetting {
     return gui
   }
 
-  private fun changeSignType(sign: Sign, newMaterial: Material, id: Int) {
+  private fun changeSignType(sign: Sign, newMaterial: Material, slData: SLData, player: Player) {
     val fL = sign.getSide(Side.FRONT).lines.toList()
     val bL = sign.getSide(Side.BACK).lines.toList()
 
@@ -284,6 +290,7 @@ object SLSignSetting {
           null
         }
 
+    val beforeMaterial = slData.signMaterial ?: sign.type.name
     sign.type = newMaterial
     sign.update(true)
 
@@ -302,8 +309,21 @@ object SLSignSetting {
     sign.update(true)
 
     sign.isWaxed = true
-    sign.persistentDataContainer.set(Events.idKey, PersistentDataType.INTEGER, id)
+    sign.persistentDataContainer.set(Events.idKey, PersistentDataType.INTEGER, slData.id)
     sign.update(true)
+
+    slData.signMaterial = newMaterial.name
+    Data.save(slData, player.uniqueId)
+
+    val beforeJson = com.google.gson.Gson().toJson(mapOf("sign_material" to beforeMaterial))
+    val afterJson = com.google.gson.Gson().toJson(mapOf("sign_material" to newMaterial.name))
+    com.github.srain3.sociallikes.datas.SLDatabase.recordEvent(
+        slData.id,
+        "sign_material_changed",
+        player.uniqueId,
+        beforeJson,
+        afterJson,
+    )
   }
 
   private fun titleChangeAnvilInput(sign: Sign, slData: SLData, player: Player) {
@@ -319,10 +339,22 @@ object SLSignSetting {
         Tools.socialLikesLOGOShort + "&0title change".color(),
         item,
     ) { p, text ->
+      val beforeTitle = slData.title
       sign.getSide(Side.FRONT).setLine(1, "&a${text}".color())
       sign.update()
       slData.title = text
-      Data.save(slData)
+      Data.save(slData, p.uniqueId)
+
+      val beforeJson = com.google.gson.Gson().toJson(mapOf("title" to beforeTitle))
+      val afterJson = com.google.gson.Gson().toJson(mapOf("title" to text))
+      com.github.srain3.sociallikes.datas.SLDatabase.recordEvent(
+          slData.id,
+          "title_changed",
+          p.uniqueId,
+          beforeJson,
+          afterJson,
+      )
+
       // GUIへ反映
       AllBuild.updateSLSignData(slData)
       UserBuild.updateSLSignData(slData)

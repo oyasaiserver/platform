@@ -108,13 +108,15 @@ object AllBuild {
         Thread(
             {
               dataMap.values.forEach { list ->
-                list.forEach { slData ->
-                  try {
-                    createSignItem(slData)
-                  } catch (e: Exception) {
-                    Tools.plugin.logger.severe("createSignItemにエラー０００: ${slData.id}")
-                  }
-                }
+                list
+                    .filter { it.deletedAt == null }
+                    .forEach { slData ->
+                      try {
+                        createSignItem(slData)
+                      } catch (e: Exception) {
+                        Tools.plugin.logger.severe("createSignItemにエラー０００: ${slData.id}")
+                      }
+                    }
               }
               allBuildItem.toSortedMap()
               try {
