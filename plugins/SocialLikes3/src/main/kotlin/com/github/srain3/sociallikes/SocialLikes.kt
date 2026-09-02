@@ -3,6 +3,7 @@ package com.github.srain3.sociallikes
 import com.github.srain3.sociallikes.command.*
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.DirtyBuildManager
+import com.github.srain3.sociallikes.datas.NegativeIdMigrator
 import com.github.srain3.sociallikes.datas.PlaceHolder
 import com.github.srain3.sociallikes.datas.PublicityHistory
 import com.github.srain3.sociallikes.datas.SLDatabase
@@ -61,6 +62,8 @@ class SocialLikes : JavaPlugin() {
     if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
       PlaceHolder(this).register()
     }
+
+    NegativeIdMigrator.runIfConfigured(this)
 
     DirtyBuildManager.loadFromDisk()
     DirtyBuildManager.startPeriodicReconciliation(this)

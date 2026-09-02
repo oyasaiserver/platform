@@ -1,11 +1,15 @@
 # Data source used to initialize the in-memory SocialLikes build cache.
-# YAML is safe by default. sqlite is honoured only after /sldataop migrate apply records the
+# YAML is safe by default. sqlite is honoured only after the startup ID migration records the
 # completion marker; otherwise the plugin warns and continues from YAML.
 readSource: yaml
 
 # Interval in minutes for periodic dirty build reconciliation (SQLite retry).
 reconcileIntervalMinutes: 10
 
-# ID migration is never automatic at startup. With player access stopped, use the console:
-# /sldataop migrate dry-run
-# /sldataop migrate apply
+# Negative build ID migration settings (one-shot migration from negative to positive IDs).
+# Keep both false unless running the maintenance migration.
+# Procedure: stop player access, set migrateNegativeIdsOnStartup: true, choose dry-run or
+# execution with migrateNegativeIdsDryRun, start the server, confirm the backup and migration logs,
+# stop the server, then set migrateNegativeIdsOnStartup back to false before the next restart.
+migrateNegativeIdsOnStartup: false
+migrateNegativeIdsDryRun: false

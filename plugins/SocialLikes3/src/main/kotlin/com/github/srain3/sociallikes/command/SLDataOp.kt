@@ -2,14 +2,12 @@ package com.github.srain3.sociallikes.command
 
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
-import com.github.srain3.sociallikes.datas.NegativeIdMigrator
 import com.github.srain3.sociallikes.datas.SignPdcMigration
 import com.github.srain3.sociallikes.stats.SLDataLogger
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
@@ -72,36 +70,6 @@ object SLDataOp : CommandExecutor, TabCompleter {
             System.currentTimeMillis() - t0,
             true,
             "rewrite-sign-pdc started",
-        )
-      }
-      "migrate" -> {
-        if (sender !is ConsoleCommandSender) {
-          sender.sendMessage(Tools.socialLikesLOGO + " &c移行は停止中のメンテナンスでコンソールからだけ実行できます。".color())
-          return true
-        }
-        val mode = args.getOrNull(1)?.lowercase()
-        val dryRun = mode == "dry-run"
-        if (mode !in setOf("dry-run", "apply")) {
-          sender.sendMessage("Usage: /sldataop migrate <dry-run|apply>")
-          return true
-        }
-        if (!dryRun && Bukkit.getOnlinePlayers().isNotEmpty()) {
-          sender.sendMessage(
-              "Refusing migration: stop player access before /sldataop migrate apply."
-          )
-          return true
-        }
-        val result = NegativeIdMigrator.executeMigration(Tools.plugin, dryRun)
-        sender.sendMessage(
-            "ID migration ${if (dryRun) "preview" else "apply"}: targets=${result.targetNegativeCount}, sqlite=${result.sqliteMigratedCount}, yaml=${result.yamlMigratedCount}, missing=${result.yamlMissingCount}, failures=${result.failedYamlIds.size}, success=${result.isSuccess}"
-        )
-        SLDataLogger.log(
-            sender,
-            label,
-            args.toList(),
-            System.currentTimeMillis() - t0,
-            result.isSuccess,
-            "migration ${mode}",
         )
       }
       "stats",
@@ -298,7 +266,6 @@ object SLDataOp : CommandExecutor, TabCompleter {
                   "slots",
                   "display",
                   "rewrite-sign-pdc",
-                  "migrate",
               )
               .filter { it.startsWith(args[0], ignoreCase = true) }
               .toMutableList()
@@ -327,10 +294,6 @@ object SLDataOp : CommandExecutor, TabCompleter {
                 listOf("week", "month", "year")
                     .filter { it.startsWith(args[1], ignoreCase = true) }
                     .toMutableList()
-            "migrate" ->
-                listOf("dry-run", "apply")
-                    .filter { it.startsWith(args[1], ignoreCase = true) }
-                    .toMutableList()
             else -> mutableListOf()
           }
       else -> mutableListOf()
@@ -343,7 +306,6 @@ object SLDataOp : CommandExecutor, TabCompleter {
     sender.sendMessage("&7/sldataop dump <プレイヤー> &f- 統計集計データをテキストダンプ出力".color())
     sender.sendMessage("&7/sldataop reload &f- dialog.yml 等の設定を再読込".color())
     sender.sendMessage("&7/sldataop rewrite-sign-pdc &f- 登録済み看板のPDCを新ID・世代2へ一括書換".color())
-    sender.sendMessage("&7/sldataop migrate <dry-run|apply> &f- 停止中メンテナンスでID移行を実行（コンソール限定）".color())
     sender.sendMessage("&7/sldataop preview &f- YAML定義ダイアログをプレビュー".color())
     sender.sendMessage("&7/sldataop map [wall|remove|home] &f- 2x3壁掛けマップ設置/撤去".color())
     sender.sendMessage("&7/sldataop board [place|remove] &f- 2x2公共ボード設置/撤去".color())

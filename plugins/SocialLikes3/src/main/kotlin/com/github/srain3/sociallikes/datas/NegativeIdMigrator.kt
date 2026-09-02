@@ -24,7 +24,31 @@ object NegativeIdMigrator {
       val errorMessage: String? = null,
   )
 
-  /** Called only by the maintenance command; it is never invoked from plugin startup. */
+  /**
+   * 起動時に config.yml のフラグを確認し、有効な場合に負IDの移行を実行する。 Data.loadFileToDataCache()
+   * によるデータロードよりも前にメインスレッドから同期的に呼び出される必要がある。
+   */
+  fun runIfConfigured(plugin: JavaPlugin) {
+    val enabled = plugin.config.getBoolean("migrateNegativeIdsOnStartup", false)
+    if (!enabled) return
+
+    val dryRun = plugin.config.getBoolean("migrateNegativeIdsDryRun", false)
+    val readiness = SLDatabase.migrationReadiness()
+    if (readiness.sqlitePrimaryReady) {
+      if (!dryRun) {
+        plugin.logger.warning(
+            "[SL3] ID migration is already marked complete (sqlite_primary_id_migration_complete=true). Skipping startup execution. Please set 'migrateNegativeIdsOnStartup: false' in config.yml."
+        )
+        return
+      }
+      plugin.logger.info(
+          "[SL3] ID migration is already marked complete (sqlite_primary_id_migration_complete=true). Running dry-run only for verification."
+      )
+    }
+
+    executeMigration(plugin, dryRun)
+  }
+
   fun executeMigration(plugin: JavaPlugin, dryRun: Boolean): MigrationResultSummary {
     val logger = plugin.logger
     val tag = if (dryRun) "[DRY-RUN]" else "[EXECUTING]"
@@ -38,9 +62,14 @@ object NegativeIdMigrator {
         when (sqliteResult) {
           is SLDatabase.MigrationResult.NoTarget -> {
             logger.info("[SL3] ID Migration: No migration target found in database (count: 0).")
-            logger.info(
-                "[SL3] No negative IDs found. SQLite primary mode remains disabled until a completed migration is recorded."
-            )
+            if (SLDatabase.migrationReadiness().sqlitePrimaryReady) {
+              logger.info("[SL3] ID migration completion marker is already recorded.")
+              logger.info("[SL3] Please set 'migrateNegativeIdsOnStartup: false' in config.yml.")
+            } else {
+              logger.info(
+                  "[SL3] No negative IDs found. SQLite primary mode remains disabled until a completed migration is recorded."
+              )
+            }
             logger.info(
                 "================================================================================"
             )
@@ -130,7 +159,7 @@ object NegativeIdMigrator {
           "[SL3] [DRY-RUN] No actual changes were saved to production SQLite or YAML files."
       )
       logger.info(
-          "[SL3] To perform the actual migration, run /sldataop migrate apply from the console during maintenance."
+          "[SL3] To perform the actual migration, set 'migrateNegativeIdsDryRun: false' and keep 'migrateNegativeIdsOnStartup: true', then restart."
       )
     } else {
       logger.info("[SL3] ID Migration: EXECUTION SUMMARY (Two-Block Scheme)")
