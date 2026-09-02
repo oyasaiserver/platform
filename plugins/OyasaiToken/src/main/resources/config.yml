@@ -1,0 +1,22 @@
+# OyasaiToken is a SQLite-backed replacement for TokenManager.
+default-balance: 25
+
+database:
+  file: tokens.db
+  busy-timeout-ms: 5000
+
+persistence:
+  queue-size: 4096
+  shutdown-await-seconds: 10
+
+migration:
+  # Disabled by default: the production data.yml is historical and must be imported manually
+  # after the server has been stopped and its contents have been reviewed.
+  import-tokenmanager-data-yml: false
+  # Copy tokens.db (and WAL sidecars when present) before a data.yml import overwrites balances.
+  backup-before-import: true
+  backup-directory: migration-backups
+
+send-amount-limit:
+  min: 1
+  max: -1
