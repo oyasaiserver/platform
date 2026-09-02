@@ -9462,7 +9462,26 @@ class EconomySystem(private val logger: Logger) {
     }
 
     return try {
-      TMAPI.removeTokens(player.uniqueId, amount)
+      if (!TMAPI.removeTokens(player.uniqueId, amount)) {
+        val latestTokens =
+            try {
+              TMAPI.getTokens(player.uniqueId)
+            } catch (e: Exception) {
+              logger.warning("Failed to re-check tokens for ${player.name}: ${e.message}")
+              null
+            }
+        if (latestTokens != null && latestTokens < amount) {
+          player.sendMessage(
+              Component.text("ポイントが不足しています！ (必要: ${amount}pt, 所持: ${latestTokens}pt)", RED)
+          )
+        } else {
+          logger.warning(
+              "Token removal was rejected for ${player.name}; persistence queue may be full or migration may be running."
+          )
+          player.sendMessage(Component.text("ポイント処理を完了できなかったため中止しました。時間をおいて再度お試しください。", RED))
+        }
+        return false
+      }
       true
     } catch (e: Exception) {
       logger.warning("Failed to remove tokens from ${player.name}: ${e.message}")

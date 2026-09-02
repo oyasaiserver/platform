@@ -76,6 +76,7 @@ oyasaiPurpur rec {
     oyasaimenu
     oyasaimusic
     oyasaipets
+    oyasaitoken
     oyasaiutilities
     oyasaivehicles
     painttools
@@ -95,7 +96,6 @@ oyasaiPurpur rec {
     socialvotes
     tab
     tntruneloaded
-    tokenmanager
     tpswitch
     vault
     veinminer

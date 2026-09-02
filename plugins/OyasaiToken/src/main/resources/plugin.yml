@@ -1,0 +1,23 @@
+name: TokenManager
+main: io.oyasai.oyasaitoken.OyasaiTokenPlugin
+version: "0.1.0"
+api-version: "1.21.11"
+author: OyasaiServer
+description: SQLite-backed Oyasai token manager with TokenManager compatibility.
+commands:
+  token:
+    description: Token command
+    aliases: [tokens]
+  tm:
+    description: TokenManager-compatible admin command
+    aliases: [tokenmanager]
+permissions:
+  tokenmanager.admin:
+    description: Allows token administration commands
+    default: op
+  tokenmanager.use:
+    description: Allows token balance command
+    default: true
+  tokenmanager.use.send:
+    description: Allows sending tokens
+    default: true
