@@ -4,6 +4,7 @@ version: "0.1.0"
 api-version: "1.21.11"
 author: OyasaiServer
 description: SQLite-backed Oyasai token manager with TokenManager compatibility.
+softdepend: [TAB]
 commands:
   token:
     description: Token command

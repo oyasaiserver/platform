@@ -60,6 +60,7 @@ class OyasaiTokenPlugin :
   private lateinit var databaseFile: File
   private lateinit var persistenceExecutor: ThreadPoolExecutor
   private lateinit var ledger: TokenLedger
+  private var tabPlaceholderIntegration: TabPlaceholderIntegration? = null
 
   override fun onEnable() {
     registerCompatInstance()
@@ -102,6 +103,7 @@ class OyasaiTokenPlugin :
         ServicePriority.Normal,
     )
     server.pluginManager.registerEvents(this, this)
+    enableTabPlaceholderIntegration()
     getCommand("token")?.setExecutor(this)
     getCommand("token")?.tabCompleter = this
     getCommand("tm")?.setExecutor(this)
@@ -144,6 +146,8 @@ class OyasaiTokenPlugin :
       }
     }
     server.servicesManager.unregisterAll(this)
+    tabPlaceholderIntegration?.disable()
+    tabPlaceholderIntegration = null
     unregisterCompatInstance()
   }
 
@@ -849,6 +853,16 @@ class OyasaiTokenPlugin :
     } else {
       Bukkit.getScheduler().runTask(this, fire)
     }
+  }
+
+  private fun enableTabPlaceholderIntegration() {
+    if (!Bukkit.getPluginManager().isPluginEnabled("TAB")) return
+
+    tabPlaceholderIntegration =
+        TabPlaceholderIntegration(this).also { integration ->
+          server.pluginManager.registerEvents(integration, this)
+          integration.enable()
+        }
   }
 
   private fun importTokenManagerDataYml(force: Boolean): ImportResult {
