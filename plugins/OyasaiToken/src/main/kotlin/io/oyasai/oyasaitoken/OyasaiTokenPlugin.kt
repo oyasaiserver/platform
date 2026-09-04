@@ -498,9 +498,9 @@ class OyasaiTokenPlugin :
               addTokensInternal(player.uniqueId, player.name, amount) != null
             }
         if (added == onlinePlayers.size) {
-          sender.sendMessage("${added} 人に MP 付与しました")
+          sender.sendMessage("${added} 人に ${amount}P 付与しました")
         } else {
-          sender.sendMessage("${added} 人に MP 付与しました（${onlinePlayers.size - added} 人は付与失敗）")
+          sender.sendMessage("${added} 人に ${amount}P 付与しました（${onlinePlayers.size - added} 人は付与失敗）")
         }
       }
       "add",
