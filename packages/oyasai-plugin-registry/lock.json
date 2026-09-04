@@ -10,8 +10,8 @@
   "axiom-paper-plugin": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/BbhoGfI8/AxiomPaperPlugin-6.0.0-for-MC26.2.jar",
-        "hash": "sha256-Pulq8DU4ZomIhGc7A9/+Ev3NUbbdv8hs9gdL3Lpe6OE="
+        "url": "https://cdn.modrinth.com/data/evkiwA7V/versions/93qRRLuz/AxiomPaperPlugin-6.0.1-for-MC26.2.jar",
+        "hash": "sha256-BvOKOOBo5gCGY7QsAx30T4PLtN0Jf5RcI0pdXWS+ABg="
       }
     }
   },
@@ -109,8 +109,8 @@
   },
   "geyser": {
     "velocity": {
-      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.2/builds/1233/downloads/velocity",
-      "hash": "sha256-iy5KYOibJU0nLcJN0FLTBS9q/CxFn5B/3Seg132rGKA="
+      "url": "https://download.geysermc.org/v2/projects/geyser/versions/2.11.2/builds/1234/downloads/velocity",
+      "hash": "sha256-KNeW5ntGb9mDLrEtC0obcqUEbKrh+2xnCZ8qXRRCNXE="
     }
   },
   "gsit": {
