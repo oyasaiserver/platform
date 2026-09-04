@@ -364,7 +364,7 @@ class OyasaiTokenPlugin :
     val subcommands = buildList {
       if (sender.hasPermission(TOKEN_USE_PERMISSION)) addAll(listOf("balance", "send", "top"))
       if (sender.hasPermission(TOKEN_ADMIN_PERMISSION))
-          addAll(listOf("add", "remove", "set", "reload"))
+          addAll(listOf("add", "addall", "remove", "set", "reload"))
     }
     if (args.size == 1) {
       return subcommands.filter { it.startsWith(args[0], ignoreCase = true) }.toMutableList()
@@ -484,6 +484,25 @@ class OyasaiTokenPlugin :
     }
 
     when (args[0].lowercase()) {
+      "addall" -> {
+        if (!sender.hasPermission(TOKEN_ADMIN_PERMISSION)) return sender.permissionDenied()
+        if (args.size != 2) return sender.error("Usage: /token addall <amount>")
+        val amount = parseAmount(args[1]) ?: return sender.error("Usage: /token addall <amount>")
+        val onlinePlayers = Bukkit.getOnlinePlayers().toList()
+        if (onlinePlayers.isEmpty()) {
+          sender.sendMessage("対象なし")
+          return true
+        }
+        val added =
+            onlinePlayers.count { player ->
+              addTokensInternal(player.uniqueId, player.name, amount) != null
+            }
+        if (added == onlinePlayers.size) {
+          sender.sendMessage("${added} 人に MP 付与しました")
+        } else {
+          sender.sendMessage("${added} 人に MP 付与しました（${onlinePlayers.size - added} 人は付与失敗）")
+        }
+      }
       "add",
       "remove",
       "set" -> {
