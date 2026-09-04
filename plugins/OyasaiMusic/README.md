@@ -12,6 +12,13 @@ Minecraft 内でノートブロックの演奏を録音し、楽曲として公�
 FAWE は `/record we ...` でクリップボードを読むための必須依存です。Vault
 が無い場合、金銭報酬の送金は行われません。TokenManager へのポイント付与は、設定したコンソールコマンドで行います。
 
+## 導入
+
+1. Paper / Purpur 26.2 と Java 25 を用意します。
+1. FAWE と `OyasaiMusic-1.0.0.jar` を `plugins` フォルダへ配置します。
+1. サーバーを起動します。
+1. `plugins/OyasaiMusic/config.yml` を必要に応じて編集し、`/oyasaimusic reload` を実行します。
+
 ### Paper / Velocity の同一JAR構成
 
 OyasaiMusicはOyasaiChatと同じく、Paper用とVelocity用の実装を同一JARへ同梱します。
@@ -26,6 +33,8 @@ Paperは`plugin.yml`のエントリーポイント、Velocityは`velocity-plugin
 ## OMMT通信
 
 OMMTの通常通信はMinecraftのPlugin Messageを使用します。チャットコマンドへBase64等を分割して流す方式ではありません。
+バイト単位の固定仕様、制限、互換性表、移行・ロールバック条件は
+[`docs/OMMT_PLUGIN_MESSAGE_PROTOCOL_V1.md`](docs/OMMT_PLUGIN_MESSAGE_PROTOCOL_V1.md)に記載しています。
 
 | チャンネル | 方向 | 用途 |
 | --- | --- | --- |

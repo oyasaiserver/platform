@@ -38,6 +38,7 @@ import com.github.sahyuya.oyasaiMusic.interop.OmmtUploadService
 import com.github.sahyuya.oyasaiMusic.item.PhysicalMusicPlayerItem
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordListener
 import com.github.sahyuya.oyasaiMusic.model.Song
+import com.github.sahyuya.oyasaiMusic.resourcepack.BedrockTransferService
 import com.github.sahyuya.oyasaiMusic.resourcepack.OyasaiResourcePackService
 import java.io.File
 import org.bukkit.Bukkit
@@ -132,6 +133,7 @@ class OyasaiMusic : JavaPlugin() {
     private set
 
   lateinit var resourcePackService: OyasaiResourcePackService
+  lateinit var bedrockTransferService: BedrockTransferService
     private set
 
   override fun onEnable() {
@@ -166,6 +168,7 @@ class OyasaiMusic : JavaPlugin() {
     playbackPreferenceRepository = PlaybackPreferenceRepository(databaseManager)
     resourcePackPreferenceRepository = ResourcePackPreferenceRepository(databaseManager)
     resourcePackService = OyasaiResourcePackService(this, resourcePackPreferenceRepository)
+    bedrockTransferService = BedrockTransferService(this, resourcePackPreferenceRepository)
     playbackModeService = PlaybackModeService(playbackPreferenceRepository)
     rankingRepository = RankingRepository(databaseManager)
     recordSaleRepository = RecordSaleRepository(databaseManager)
@@ -177,6 +180,7 @@ class OyasaiMusic : JavaPlugin() {
     server.pluginManager.registerEvents(ommtUploadService, this)
     server.pluginManager.registerEvents(ommtPlaybackClientRegistry, this)
     server.pluginManager.registerEvents(resourcePackService, this)
+    server.pluginManager.registerEvents(bedrockTransferService, this)
     Bukkit.getScheduler()
         .runTaskTimer(
             this,
@@ -314,15 +318,15 @@ class OyasaiMusic : JavaPlugin() {
             manifest.isBlank()
     if (!isPlaceholder) return
     config.set(prefix + "enabled", true)
-    config.set(prefix + "id", "f0666054-e41c-40ef-affb-27bbf1bf79f9")
+    config.set(prefix + "id", "8be1eaab-ca07-4f47-9957-40d29505e320")
     config.set(
         prefix + "url",
-        "https://download.mc-packs.net/pack/af57205743d4d573bcb2dea2f81b745d30eb6eb3.zip",
+        "https://download.mc-packs.net/pack/73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d.zip",
     )
-    config.set(prefix + "sha1", "af57205743d4d573bcb2dea2f81b745d30eb6eb3")
+    config.set(prefix + "sha1", "73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d")
     config.set(
         prefix + "bank-manifest-sha256",
-        "8aed26ff23119b34e91f78036c313e3b38f66a4589f11c8af8e58efff3c03d6a",
+        "5aa68f33eea756ca43244751605924095dff18c5a01fd18767b3f1e51cd19506",
     )
     config.set(prefix + "prompt", "おやさいサーバーの拡張音域リソースパックを読み込みますか？")
     config.set(

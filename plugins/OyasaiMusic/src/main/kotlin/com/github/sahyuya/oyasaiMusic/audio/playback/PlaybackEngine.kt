@@ -354,8 +354,11 @@ class PlaybackEngine(
       bedrock: Boolean,
       allowExtended: Boolean,
   ) {
+    // Bedrock receives bank events too once its .mcpack is applied via Transfer.
+    // Slash event names (oyasaimusic:bank/...) must prove resolvable in-game; if not,
+    // extendedPlayback returns null per-note and vanilla fold applies as before.
     val extended =
-        if (allowExtended && !bedrock && plugin is OyasaiMusic) {
+        if (allowExtended && plugin is OyasaiMusic) {
           plugin.resourcePackService.extendedPlayback(player.uniqueId, note)
         } else {
           null

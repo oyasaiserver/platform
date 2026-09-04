@@ -24,6 +24,8 @@ class OyasaiPluginMessaging(
     messenger.registerIncomingPluginChannel(plugin, UploadPacketCodec.CHANNEL, this)
     messenger.registerOutgoingPluginChannel(plugin, PlaybackBuffer.CHANNEL)
     messenger.registerIncomingPluginChannel(plugin, PlaybackBuffer.CHANNEL, this)
+    // Bedrock transfer requests are Paper -> Velocity only (phase-2 consumer); outgoing registration suffices.
+    messenger.registerOutgoingPluginChannel(plugin, BedrockTransferCodec.CHANNEL)
     uploads.bindPacketSender(::sendUpload)
     plugin.server.pluginManager.registerEvents(this, plugin)
     broadcastServerCapabilities()
@@ -39,6 +41,7 @@ class OyasaiPluginMessaging(
     messenger.unregisterOutgoingPluginChannel(plugin, UploadPacketCodec.CHANNEL)
     messenger.unregisterIncomingPluginChannel(plugin, PlaybackBuffer.CHANNEL, this)
     messenger.unregisterOutgoingPluginChannel(plugin, PlaybackBuffer.CHANNEL)
+    messenger.unregisterOutgoingPluginChannel(plugin, BedrockTransferCodec.CHANNEL)
   }
 
   @EventHandler
@@ -68,6 +71,7 @@ class OyasaiPluginMessaging(
         when (channel) {
           UploadPacketCodec.CHANNEL -> UploadPacketCodec.MAX_PACKET_BYTES
           PlaybackBuffer.CHANNEL -> PlaybackWireCodec.MAX
+          BedrockTransferCodec.CHANNEL -> BedrockTransferCodec.MAX
           else -> return
         }
     if (!PluginMessageBounds.accepts(message.size) || message.size > maximum) return

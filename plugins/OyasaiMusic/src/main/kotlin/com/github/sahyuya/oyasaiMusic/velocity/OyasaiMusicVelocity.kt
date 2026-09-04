@@ -6,10 +6,12 @@ import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.PluginMessageEvent
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
 import com.velocitypowered.api.plugin.Plugin
+import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
 import com.velocitypowered.api.proxy.ServerConnection
 import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier
+import java.nio.file.Path
 import org.slf4j.Logger
 
 /**
@@ -21,16 +23,16 @@ import org.slf4j.Logger
 @Plugin(
     id = "oyasaimusic",
     name = "OyasaiMusic",
-    version = "1.0.0",
     description = "OyasaiMusic OMMT relay for main",
-    authors = ["sahyuya"],
 )
 class OyasaiMusicVelocity
 @Inject
 constructor(
     private val proxy: ProxyServer,
     private val logger: Logger,
+    @DataDirectory private val dataDirectory: Path,
 ) {
+  private val bedrockPacks = BedrockPackService(proxy, logger, dataDirectory)
   companion object {
     private const val MAIN_SERVER = "main"
     private val CHANNELS =
@@ -43,11 +45,18 @@ constructor(
   @Subscribe
   fun onProxyInitialization(event: ProxyInitializeEvent) {
     CHANNELS.forEach(proxy.channelRegistrar::register)
+    proxy.channelRegistrar.register(BedrockPackService.TRANSFER_CHANNEL)
+    bedrockPacks.load()
     logger.info("OyasaiMusic Velocity relay enabled for backend main.")
   }
 
   @Subscribe
   fun onPluginMessage(event: PluginMessageEvent) {
+    if (event.identifier == BedrockPackService.TRANSFER_CHANNEL) {
+      event.result = PluginMessageEvent.ForwardResult.handled()
+      bedrockPacks.handleTransferMessage(event)
+      return
+    }
     if (event.identifier !in CHANNELS) return
     event.result = PluginMessageEvent.ForwardResult.handled()
     // Velocity intentionally does not decode payloads, but it must still enforce the shared raw

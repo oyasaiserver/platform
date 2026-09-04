@@ -8,7 +8,9 @@ import java.util.UUID
  * リスナーごとの再生方式（デフォルト再生 / 立体音響再生）を解決するサービス（追加項目.txt準拠）。
  * - 楽曲に一度もPanの指定（看板による静的指定、または動的録音の自動算出）が無い場合 ([Song.supportsPositional] が
  *   false）は、立体音響再生を選択できず常にデフォルト再生になる。
- * - それ以外は、[PlaybackPreferenceRepository] に保存されたリスナー個人の選択を優先し、 未設定の場合はデフォルト再生にフォールバックする。
+ * - それ以外は、[PlaybackPreferenceRepository] に保存されたリスナー個人の選択を優先し、
+ *   未設定の場合は定位付き楽曲なら立体音響再生、そうでなければデフォルト再生になる。
+ *   明示的なDEFAULT保存（DB値0）は尊重される。
  *
  * 呼び出しは非同期スレッドから行うこと（内部のDBアクセスが同期的なため）。
  */
@@ -17,7 +19,8 @@ class PlaybackModeService(private val preferenceRepository: PlaybackPreferenceRe
   fun resolve(listenerUuid: UUID, song: Song): PlaybackMode {
     if (!song.supportsPositional) return PlaybackMode.DEFAULT
     val songId = song.id ?: return PlaybackMode.DEFAULT
-    return preferenceRepository.getMode(listenerUuid, songId) ?: PlaybackMode.DEFAULT
+    return preferenceRepository.getMode(listenerUuid, songId)
+        ?: if (song.supportsPositional) PlaybackMode.POSITIONAL else PlaybackMode.DEFAULT
   }
 
   /**

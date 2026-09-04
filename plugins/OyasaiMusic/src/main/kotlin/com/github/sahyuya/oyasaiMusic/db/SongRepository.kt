@@ -106,11 +106,11 @@ class SongRepository(private val db: DatabaseManager) {
   ): List<Song> =
       db.transaction { conn ->
         val where = StringBuilder("WHERE published = 1")
-        if (titleLike != null) where.append(" AND title LIKE ?")
+        if (titleLike != null) where.append(" AND title LIKE ? ESCAPE '\\'")
         val sql = "SELECT * FROM songs $where ORDER BY ${sort.orderBy} LIMIT ? OFFSET ?"
         conn.prepareStatement(sql).use { ps ->
           var idx = 1
-          if (titleLike != null) ps.setString(idx++, "%$titleLike%")
+          if (titleLike != null) ps.setString(idx++, "%${escapeLike(titleLike)}%")
           ps.setInt(idx++, limit)
           ps.setInt(idx, offset)
           ps.executeQuery().use { rs -> rs.toSongList() }
@@ -300,6 +300,10 @@ class SongRepository(private val db: DatabaseManager) {
     while (next()) list += toSong()
     return list
   }
+
+  /** LIKE検索用に`%`/`_`/`\`をエスケープする（`ESCAPE '\'`と対で使う）。 */
+  private fun escapeLike(raw: String): String =
+      raw.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 }
 
 /** 全楽曲一覧・検索等で使うソート順。UI/UX設計書 4章の「動的ソート順」に対応。 */

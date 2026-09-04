@@ -3,6 +3,7 @@ package com.github.sahyuya.oyasaiMusic.command
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.gui.MainMenuScreen
 import com.github.sahyuya.oyasaiMusic.gui.SongDetailScreen
+import com.github.sahyuya.oyasaiMusic.util.BedrockUtil
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -44,8 +45,16 @@ class MusicMenuCommand(private val plugin: OyasaiMusic) : CommandExecutor, TabCo
             plugin.playbackController.play(player, song)
           }
       "resourcepack", "rp" -> when (args.getOrNull(1)?.lowercase()) {
-        "allow" -> plugin.resourcePackService.allow(player)
-        "deny" -> plugin.resourcePackService.deny(player)
+        "allow" -> {
+          val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
+          if (BedrockUtil.isBedrock(player, prefix)) plugin.bedrockTransferService.allow(player)
+          else plugin.resourcePackService.allow(player)
+        }
+        "deny" -> {
+          val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
+          if (BedrockUtil.isBedrock(player, prefix)) plugin.bedrockTransferService.deny(player)
+          else plugin.resourcePackService.deny(player)
+        }
         else -> player.sendMessage("§e/mm resourcepack|rp <allow|deny>")
       }
       else -> player.sendMessage("§e/mm [play|open|resourcepack] <楽曲ID|allow|deny>")

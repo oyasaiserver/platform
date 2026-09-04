@@ -45,17 +45,25 @@ bedrock:
   name-prefix: "."
   # 同一ミリ秒・同一楽器の同時発音数がこれ以上の場合、最高音・最低音のみ再生する
   chord-limit: 3
+  # Phase-2 (Transfer/Geyser連携) 用のBedrock向け.mcpack設定。空欄の間は無効で、
+  # 統合版プレイヤーはallow保存のみ行い、再生は折り返しバニラになる。
+  mcpack-url: ""
+  mcpack-sha1: ""
+  pack-id: ""
+  # trueでBedrockのallow時に状態退避＋転送要求を送信する。Velocity側の受け手は
+  # Phase-2で実装のため、それまではfalseのままにすること。
+  transfer-enabled: false
 
 # Players are never prompted by default; `/mm rp allow` is the opt-in entry point.
 # This remains optional and must not be duplicated as a forced server.properties pack.
 resource-pack:
   enabled: true
-  id: "f0666054-e41c-40ef-affb-27bbf1bf79f9"
-  url: "https://download.mc-packs.net/pack/af57205743d4d573bcb2dea2f81b745d30eb6eb3.zip"
-  sha1: "af57205743d4d573bcb2dea2f81b745d30eb6eb3"
+  id: "8be1eaab-ca07-4f47-9957-40d29505e320"
+  url: "https://download.mc-packs.net/pack/73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d.zip"
+  sha1: "73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d"
   # SHA-256 of assets/oyasaimusic/ommt-bank-manifest.json in the uploaded pack.
   # Playback uses the expanded bank only when the client reports this exact active manifest.
-  bank-manifest-sha256: "8aed26ff23119b34e91f78036c313e3b38f66a4589f11c8af8e58efff3c03d6a"
+  bank-manifest-sha256: "5aa68f33eea756ca43244751605924095dff18c5a01fd18767b3f1e51cd19506"
   prompt: "おやさいサーバーの拡張音域リソースパックを読み込みますか？"
   # The pack builder emits one event per instrument/F# anchor pair.
   # Tokens: {instrument}=stable runtime id (0..19), {anchor}=m36, m12, p36 or p60.

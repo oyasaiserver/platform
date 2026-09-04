@@ -31,6 +31,7 @@ object PlaybackBuffer {
   const val TYPE_CLIENT_CAPABILITIES = 11
   const val TYPE_STARTED_ACK = 12
   const val TYPE_CLIENT_PLAYBACK_FAILED = 13
+  const val TYPE_BANK_CONSENT = 14
   const val CAP_BRASS_NOTE_BLOCK = 1
   const val CAP_OYPB_V2 = 1 shl 1
   const val CAP_BANK_MANIFEST_V1 = 1 shl 2
@@ -118,12 +119,16 @@ object PlaybackBuffer {
     }; bytes.toByteArray() }
     val compressed = deflate(raw); if (compressed.size !in 1..MAX_COMPRESSED) return null
     val chunks = compressed.asList().chunked(CHUNK_BYTES).map { it.toByteArray() }; if (chunks.size !in 1..MAX_CHUNKS) return null
+    // firstNoteMs is the first AUDIBLE note: the client skips volume-0 notes (display-only)
+    // and acknowledges the first dispatched note. Comparing against a silent head would
+    // force a spurious paper fallback (e.g. leading vol=0 at t=0 vs first audible at t=170).
+    val firstAudibleMs = sorted.firstOrNull { it.volume > 0 }?.timeMs ?: sorted.first().timeMs
     PreparedV2(
         compressed,
         chunks,
         MessageDigest.getInstance("SHA-256").digest(compressed),
         sorted.last().timeMs,
-        sorted.first().timeMs,
+        firstAudibleMs,
         spatialMode,
         bankPolicy,
         manifestHash.copyOf(),
@@ -169,7 +174,7 @@ object PlaybackBuffer {
                 chunks,
                 MessageDigest.getInstance("SHA-256").digest(compressed),
                 duration,
-                sorted.first().timeMs,
+                sorted.firstOrNull { it.volume > 0 }?.timeMs ?: sorted.first().timeMs,
             )
       } catch (_: Exception) {
         null
@@ -190,6 +195,15 @@ object PlaybackBuffer {
       envelope(TYPE_SERVER_CAPABILITIES, UUID(0L, 0L)) {
         writeInt(serverCapabilities(minecraftVersion))
       }
+
+  fun bankConsentEnvelope(allowed: Boolean, manifestHash: ByteArray): ByteArray {
+    require(manifestHash.size == 32)
+    require((!allowed && manifestHash.all { it == 0.toByte() }) || (allowed && manifestHash.any { it != 0.toByte() }))
+    return envelope(TYPE_BANK_CONSENT, UUID(0L, 0L)) {
+      writeByte(if (allowed) 1 else 0)
+      write(manifestHash)
+    }
+  }
 
   private fun varUInt(out: DataOutputStream, value: Int) {
     require(value >= 0)

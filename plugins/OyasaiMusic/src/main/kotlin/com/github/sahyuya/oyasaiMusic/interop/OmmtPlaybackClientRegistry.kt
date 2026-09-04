@@ -130,11 +130,21 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
     }
   }
 
+  fun isUnknown(playerId: UUID): Boolean = presence[playerId] == null && pending[playerId] == null
+  fun isVanillaOnly(playerId: UUID): Boolean = presence[playerId] == Presence.VANILLA_ONLY
   fun isCapable(playerId: UUID): Boolean = presence[playerId] == Presence.MOD_PRESENT && generations[playerId] != null
   fun supportsV2(playerId: UUID): Boolean = isCapable(playerId) && (clientCapabilities[playerId] ?: 0) and (PlaybackBuffer.CLIENT_CAP_OYPB_V2 or PlaybackBuffer.CLIENT_CAP_STARTED_ACK or PlaybackBuffer.CLIENT_CAP_FIXED_CUSTOM_PATTERN or PlaybackBuffer.CLIENT_CAP_POSITIONAL_PAN) == (PlaybackBuffer.CLIENT_CAP_OYPB_V2 or PlaybackBuffer.CLIENT_CAP_STARTED_ACK or PlaybackBuffer.CLIENT_CAP_FIXED_CUSTOM_PATTERN or PlaybackBuffer.CLIENT_CAP_POSITIONAL_PAN)
   fun supportsBankManifest(playerId: UUID): Boolean =
       supportsV2(playerId) &&
           (clientCapabilities[playerId] ?: 0) and PlaybackBuffer.CLIENT_CAP_BANK_MANIFEST_V1 != 0
+
+  /** Eager probe for join-time bank decision: sends SERVER_CAPABILITIES + PROBE without needing a playback. */
+  fun probeForBankDecision(player: Player) {
+    check(plugin.server.isPrimaryThread)
+    if (presence[player.uniqueId] != null || pending[player.uniqueId] != null) return
+    // Reuse resolveForPlayback logic but with a no-op callback that just sets presence
+    resolveForPlayback(player) { }
+  }
   fun expectReady(playerId: UUID, session: UUID, hash: ByteArray, deadlineMillis: Long) {
     sweep()
     val generation = generations[playerId] ?: return
@@ -179,6 +189,16 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
   }
   fun removeExpected(playerId: UUID, session: UUID) { expected[playerId]?.remove(session); ready[playerId]?.remove(session); started[playerId]?.remove(session); failed[playerId]?.remove(session) }
   fun removeExpected(session: UUID) { expected.keys.forEach { removeExpected(it, session) } }
+  fun refreshClientCapabilities(playerId: UUID) {
+    check(plugin.server.isPrimaryThread)
+    // Pack activation or client manifest reload may change BANK_MANIFEST_V1 support.
+    // Clear presence so the next playback re-probes and receives updated client bits.
+    pending.remove(playerId)?.timeoutTask?.cancel()
+    presence.remove(playerId)
+    generations.remove(playerId)
+    clientCapabilities.remove(playerId)
+    acceptedNonces.remove(playerId)
+  }
   fun invalidateCapabilities() {
     check(plugin.server.isPrimaryThread)
     val fallbacks = pending.values.toList()

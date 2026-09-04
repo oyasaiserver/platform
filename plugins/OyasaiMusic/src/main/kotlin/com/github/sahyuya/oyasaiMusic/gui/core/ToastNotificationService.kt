@@ -40,15 +40,21 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
 
   fun showLikeReceived(author: Player, songTitle: String, likerName: String) {
     if (!author.isOnline) return
-    display(
+    // 題名は素通しリテラルで埋め込み、`&`/`§`入りでも装飾化けしないようにする。
+    val title =
+        Component.literal(likerName).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE)
+            .append(Component.literal(" さんが ").withStyle(net.minecraft.ChatFormatting.WHITE))
+            .append(Component.literal("「$songTitle」").withStyle(net.minecraft.ChatFormatting.AQUA))
+            .append(Component.literal(" にいいねしました").withStyle(net.minecraft.ChatFormatting.WHITE))
+    displayComponent(
         player = author,
         icon = ItemStack(Material.HEART_OF_THE_SEA),
-        title = "§d$likerName §fさんが §b「$songTitle」 §fにいいねしました",
+        title = title,
     )
     plugin.soundEffectService.play(PluginSoundEffect.LIKE_RECEIVED, listOf(author))
   }
 
-  private fun display(player: Player, icon: ItemStack, title: String) {
+  private fun displayComponent(player: Player, icon: ItemStack, title: Component) {
     val serial = player.uniqueId.toString().replace("-", "") + "_${sequence.incrementAndGet()}"
     val rootId = Identifier.fromNamespaceAndPath(NAMESPACE, "toast_root_$serial")
     val toastId = Identifier.fromNamespaceAndPath(NAMESPACE, "toast_$serial")
@@ -76,7 +82,7 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
     val toastDisplay =
         DisplayInfo(
             nmsIcon(icon),
-            legacyComponent(title.ifBlank { "OyasaiMusic" }),
+            title,
             legacyComponent("\n§7いいねを受け取りました"),
             noBackground,
             AdvancementType.TASK,

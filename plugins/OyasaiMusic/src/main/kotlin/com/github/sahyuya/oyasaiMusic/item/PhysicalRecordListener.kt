@@ -79,6 +79,32 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
       }
       val trigger = PhysicalRecordItem.trigger(plugin, item)
       val loop = PhysicalRecordItem.loop(plugin, item)
+      // 入替: 既存レコードがある場合は旧盤を復元して返却する（上書き消失の防止）。
+      // 排出分岐と同一方針で、インベントリ満杯時は無変更で中止する。
+      val oldEntry = plugin.ambientPlaybackRegistry.entryAt(clickedBlock.location)
+      var toReturn: org.bukkit.inventory.ItemStack? = null
+      if (oldEntry != null) {
+        if (player.gameMode != oldEntry.insertedGameMode) {
+          player.sendMessage(
+              "§cこのジュークボックスのレコードは ${gameModeLabel(oldEntry.insertedGameMode)} で装填されています。" +
+                  "同じゲームモードで入れ替えてください。"
+          )
+          return
+        }
+        val oldId = oldEntry.song.id ?: return
+        val oldAuthor = org.bukkit.Bukkit.getOfflinePlayer(oldEntry.song.authorUuid).name ?: "不明"
+        val oldMaterial = Material.matchMaterial(oldEntry.song.recordMaterial) ?: Material.MUSIC_DISC_13
+        var rebuilt =
+            PhysicalRecordItem.create(plugin, oldMaterial, oldId, oldEntry.song.title, oldAuthor)
+        rebuilt = PhysicalRecordItem.withRange(plugin, rebuilt, oldEntry.range)
+        rebuilt = PhysicalRecordItem.withTrigger(plugin, rebuilt, oldEntry.trigger)
+        rebuilt = PhysicalRecordItem.withLoop(plugin, rebuilt, oldEntry.loop)
+        if (!canFit(player, rebuilt)) {
+          player.sendMessage("§cインベントリに空きがないため、レコードを交換できません。")
+          return
+        }
+        toReturn = rebuilt
+      }
       plugin.ambientPlaybackRegistry.register(
           clickedBlock.location,
           song,
@@ -87,9 +113,11 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
           loop,
           player.gameMode,
       )
+      toReturn?.let { player.inventory.addItem(it) }
       player.sendMessage(
           "§a環境BGMを設置しました: ${song.title} " +
-              "(範囲:${range.label} / トリガー:${trigger.label} / ループ:${if (loop) "ON" else "OFF"})",
+              "(範囲:${range.label} / トリガー:${trigger.label} / ループ:${if (loop) "ON" else "OFF"})" +
+              (toReturn?.let { "（旧レコードを返却しました）" } ?: ""),
       )
       // 独自レコードはバニラのジュークボックス内部には保存していないため、ゲームモードを
       // 問わず手元の実体を消費する。クリエイティブで残すと取り出し時に複製できてしまう。
