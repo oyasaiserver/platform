@@ -1103,16 +1103,16 @@
   },
   "com.velocitypowered:velocity-native:3.4.0-SNAPSHOT": {
     "velocity-native-3.4.0-SNAPSHOT.jar": {
-      "url": "https://repo.opencollab.dev/main/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20250617.204921-53.jar",
-      "hash": "sha256-/z3TYn0iDKQrGgErNuU9DHocfs/zQWTLjAJTRGQubBU="
+      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.jar",
+      "hash": "sha256-rN8CW1eC0lKoJwjZmPeFaxv522eodX8ubsXL97A3NjY="
     },
     "velocity-native-3.4.0-SNAPSHOT.module": {
-      "url": "https://repo.opencollab.dev/main/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20250617.204921-53.module",
-      "hash": "sha256-/Bhf31ZV7uv5bylo+EEEzgNXtpePHaRImTWtIg72L/s="
+      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.module",
+      "hash": "sha256-cmT9vwlhnjmg8KfOK5Hp5HoMVZ2bqcqC7FVu5AyzalA="
     },
     "velocity-native-3.4.0-SNAPSHOT.pom": {
-      "url": "https://repo.opencollab.dev/main/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20250617.204921-53.pom",
-      "hash": "sha256-E2fVVpkP21k1Pbe4loH9fFVl7X7pND2fNemXs/Sz7ks="
+      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.pom",
+      "hash": "sha256-LxSyizRhTF4tYhqIyd0oyZ/BGQPQEyfCFzAN0J2Zgwc="
     }
   },
   "com.zaxxer:SparseBitSet:1.3": {
