@@ -425,16 +425,18 @@ class OmmtUploadService(private val plugin: OyasaiMusic) : Listener {
   private fun validateOymi(bytes: ByteArray, declaredNotes: Int) {
     if (bytes.size !in 20..UploadPacketCodec.MAX_OYMI_BYTES) throw Protocol("MALFORMED")
     val input = ByteBuffer.wrap(bytes)
-    if (input.int != 0x4F594D49 || input.short.toInt() !in 1..3 || input.short.toInt() != 0)
-        throw Protocol("MALFORMED")
+    if (input.int != 0x4F594D49) throw Protocol("MALFORMED")
+    val version = input.short.toInt()
+    if (version !in 1..4 || input.short.toInt() != 0) throw Protocol("MALFORMED")
     val metadata = input.int
     val notes = input.int
     input.int
+    val recordBytes = if (version == 4) 9L else 8L
     if (
         metadata !in 2..(bytes.size - 20) ||
             notes !in 1..UploadPacketCodec.MAX_NOTES ||
             notes != declaredNotes ||
-            20L + metadata.toLong() + notes.toLong() * 8L != bytes.size.toLong()
+            20L + metadata.toLong() + notes.toLong() * recordBytes != bytes.size.toLong()
     )
         throw Protocol("MALFORMED")
   }

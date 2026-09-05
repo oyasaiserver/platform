@@ -1,7 +1,7 @@
 name: OyasaiMusic
 version: "${version}"
 main: com.github.sahyuya.oyasaiMusic.OyasaiMusic
-api-version: "1.21.11"
+api-version: "26.2"
 load: POSTWORLD
 depend: [FastAsyncWorldEdit]
 softdepend: [Vault, TokenManager, PlaceholderAPI, Essentials, Floodgate]
@@ -21,7 +21,7 @@ commands:
   musicmenu:
     description: 音楽メニューを開く、または楽曲を操作する
     aliases: [mm]
-    usage: /musicmenu [play|open] <ID>
+    usage: /musicmenu [play|open|resourcepack|rp] <ID|allow|deny>
     permission: oyasaimusic.use
   getmusicplayer:
     description: 物理アイテム「音楽プレイヤー」を取得する（GUIフェーズで追加）

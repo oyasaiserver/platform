@@ -15,7 +15,7 @@ import org.bukkit.Instrument
 object OyasaiMidiImportFile {
   private const val MAGIC = 0x4F594D49 // OYMI
   private const val MIN_VERSION = 1
-  private const val MAX_VERSION = 3
+  private const val MAX_VERSION = 4
   private const val HEADER_SIZE = 20L
   private const val NOTE_SIZE = 8L
   private const val MAX_METADATA_BYTES = 16 * 1024 * 1024
@@ -60,7 +60,8 @@ object OyasaiMidiImportFile {
       require(noteCount <= MAX_EXISTING_OYMB_NOTES) {
         "現在のOyasaiMusic音源で読み込めるノート数（$MAX_EXISTING_OYMB_NOTES）を超えています。"
       }
-      val expectedLength = HEADER_SIZE + metadataLength + noteCount * NOTE_SIZE
+      val expectedLength =
+          HEADER_SIZE + metadataLength + noteCount * if (version == 4) 9L else NOTE_SIZE
       require(sourceLength == expectedLength) { "データ長とヘッダー情報が一致しません。" }
 
       val metadataBytes = input.readNBytes(metadataLength.toInt())
@@ -93,12 +94,13 @@ object OyasaiMidiImportFile {
       repeat(noteCount.toInt()) { noteIndex ->
         val timeMs = input.readInt().toLong() and 0xFFFF_FFFFL
         val stableInstrumentId = input.readUnsignedByte()
-        val pitch = input.readUnsignedByte()
+        val pitchCents =
+            if (version == 4) input.readShort().toInt() else input.readUnsignedByte() * 100
         val volume = input.readUnsignedByte()
         val pan = input.readByte().toInt()
         require(timeMs <= Int.MAX_VALUE.toLong()) { "発音時刻がOyasaiMusicの上限を超えています。" }
         require(timeMs <= durationMs) { "総再生時間を超えるノートがあります。" }
-        require(pitch in 0..24) { "音階が0〜24の範囲外です。" }
+        require(pitchCents in -5400..7300) { "音階がサポート範囲外です。" }
         require(volume in 0..100) { "音量が0〜100の範囲外です。" }
         require(pan in -100..100) { "Panが-100〜100の範囲外です。" }
         val instrument = stableInstrument(stableInstrumentId)
@@ -106,11 +108,12 @@ object OyasaiMidiImportFile {
             NoteEvent(
                 timeMs = timeMs.toInt(),
                 instrument = InstrumentMapper.toId(instrument),
-                pitch = pitch.toByte(),
+                pitch = foldForVanilla(pitchCents).toByte(),
                 volume = volume,
                 pan = pan,
                 customSound = customSounds[noteIndex]?.eventKey,
                 customSoundSeed = customSounds[noteIndex]?.seed,
+                pitchCents = pitchCents,
             )
       }
       require(input.read() == -1) { "ファイル末尾に余分なデータがあります。" }
@@ -134,6 +137,7 @@ object OyasaiMidiImportFile {
       require(member == null) { "OYMI v1にcustomSoundsは指定できません。" }
       return emptyMap()
     }
+    if (version == 4 && member == null) return emptyMap()
     require(member != null && member.isJsonObject) { "OYMI v2/v3にcustomSoundsが必要です。" }
     val result = LinkedHashMap<Int, ResolvedSound>()
     var previousIndex = -1
@@ -169,7 +173,7 @@ object OyasaiMidiImportFile {
         "customSoundsのサウンドID形式が不正です。"
       }
       val resolvedSound = soundResolver(rawSound, pattern)
-      require(resolvedSound != null) { "この1.21.11サーバーでは未対応のサウンドまたはパターンです: $rawSound #$pattern" }
+      require(resolvedSound != null) { "この26.2サーバーでは未対応のサウンドまたはパターンです: $rawSound #$pattern" }
       result[index] = resolvedSound
       previousIndex = index
     }
@@ -214,6 +218,18 @@ object OyasaiMidiImportFile {
         13 -> Instrument.BIT
         14 -> Instrument.BANJO
         15 -> Instrument.PLING
+        16 -> Instrument.TRUMPET
+        17 -> Instrument.TRUMPET_EXPOSED
+        18 -> Instrument.TRUMPET_OXIDIZED
+        19 -> Instrument.TRUMPET_WEATHERED
         else -> throw IllegalArgumentException("未対応の安定楽器IDです: $id")
       }
+
+  /** Fold by octaves only; cents remain intact for clients with the optional resource pack. */
+  private fun foldForVanilla(centsInput: Int): Int {
+    var cents = centsInput
+    while (cents < 0) cents += 1200
+    while (cents > 2400) cents -= 1200
+    return Math.floorDiv(cents, 100).coerceIn(0, 24)
+  }
 }

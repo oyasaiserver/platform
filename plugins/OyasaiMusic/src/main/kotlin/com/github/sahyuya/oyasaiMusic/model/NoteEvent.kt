@@ -20,11 +20,14 @@ data class NoteEvent(
     val pan: Int,
     val customSound: String? = null,
     val customSoundSeed: Long? = null,
+    /** Absolute pitch relative to F#3. Legacy [pitch] stays intact for v1-v3 compatibility. */
+    val pitchCents: Int = pitch.toInt() * 100,
 ) {
   init {
     require(timeMs >= 0) { "timeMsは0以上である必要があります: $timeMs" }
     require(instrument in 0..255) { "instrumentは0〜255である必要があります: $instrument" }
     require(pitch in 0..24) { "pitchは0〜24である必要があります: $pitch" }
+    require(pitchCents in -5400..7300) { "pitchCentsは-5400〜7300である必要があります: $pitchCents" }
     require(volume in 0..100) { "volumeは0〜100である必要があります: $volume" }
     require(pan in -100..100) { "panは-100〜100である必要があります: $pan" }
     require(customSound == null || customSound.matches(Regex("[a-z0-9_./:-]{1,256}"))) {

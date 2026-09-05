@@ -242,6 +242,16 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
             """
                 .trimIndent()
         )
+        st.executeUpdate(
+            """
+            CREATE TABLE IF NOT EXISTS resource_pack_preferences (
+                player_uuid BLOB(16) PRIMARY KEY,
+                allowed INTEGER NOT NULL CHECK (allowed IN (0, 1)),
+                updated_at INTEGER NOT NULL
+            );
+            """
+                .trimIndent()
+        )
       }
     }
   }

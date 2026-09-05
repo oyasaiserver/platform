@@ -26,8 +26,9 @@ fun formattedLegacyText(
         .decoration(TextDecoration.ITALIC, false)
         .append(sectionLegacySerializer.deserialize(text.replace('&', '§')))
 
-/** 楽曲題名の書式を解釈し、色指定がない部分は白、イタリックは無効にする。 */
-fun formattedSongTitle(title: String): Component = formattedLegacyText(title)
+/** 楽曲題名は装飾コードとして解釈せず素通しで表示する。`&`/`§`を含む題名（`R&B`等）が 色・装飾化けや消失を起こさないようにする。色指定がない部分は白、イタリックは無効。 */
+fun formattedSongTitle(title: String): Component =
+    Component.text(title, NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false)
 
 /** 楽曲名の直後に通常プレイヤーにも見えるMusic IDを一貫して表示する。 */
 fun songTitle(song: Song): Component =

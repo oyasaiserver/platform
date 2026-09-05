@@ -21,6 +21,7 @@ import com.github.sahyuya.oyasaiMusic.db.PlaylistRepository
 import com.github.sahyuya.oyasaiMusic.db.RankingCacheService
 import com.github.sahyuya.oyasaiMusic.db.RankingRepository
 import com.github.sahyuya.oyasaiMusic.db.RecordSaleRepository
+import com.github.sahyuya.oyasaiMusic.db.ResourcePackPreferenceRepository
 import com.github.sahyuya.oyasaiMusic.db.SocialRepository
 import com.github.sahyuya.oyasaiMusic.db.SongRepository
 import com.github.sahyuya.oyasaiMusic.db.UserRepository
@@ -37,6 +38,8 @@ import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.item.PhysicalMusicPlayerItem
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordListener
 import com.github.sahyuya.oyasaiMusic.model.Song
+import com.github.sahyuya.oyasaiMusic.resourcepack.BedrockTransferService
+import com.github.sahyuya.oyasaiMusic.resourcepack.OyasaiResourcePackService
 import java.io.File
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -126,6 +129,13 @@ class OyasaiMusic : JavaPlugin() {
   lateinit var pluginMessaging: OyasaiPluginMessaging
     private set
 
+  lateinit var resourcePackPreferenceRepository: ResourcePackPreferenceRepository
+    private set
+
+  lateinit var resourcePackService: OyasaiResourcePackService
+  lateinit var bedrockTransferService: BedrockTransferService
+    private set
+
   override fun onEnable() {
     // --- FAWE必須依存チェック（plugin.ymlのdependでも保証されるが、明示的なメッセージを出すため二重チェック） ---
     if (server.pluginManager.getPlugin("FastAsyncWorldEdit") == null) {
@@ -136,6 +146,7 @@ class OyasaiMusic : JavaPlugin() {
 
     saveDefaultConfig()
     reloadConfig()
+    migrateBundledResourcePackConfig()
 
     audioDirectory =
         File(dataFolder, config.getString("storage.audio-directory", "audio") ?: "audio")
@@ -155,6 +166,9 @@ class OyasaiMusic : JavaPlugin() {
     socialRepository = SocialRepository(databaseManager)
     playlistRepository = PlaylistRepository(databaseManager)
     playbackPreferenceRepository = PlaybackPreferenceRepository(databaseManager)
+    resourcePackPreferenceRepository = ResourcePackPreferenceRepository(databaseManager)
+    resourcePackService = OyasaiResourcePackService(this, resourcePackPreferenceRepository)
+    bedrockTransferService = BedrockTransferService(this, resourcePackPreferenceRepository)
     playbackModeService = PlaybackModeService(playbackPreferenceRepository)
     rankingRepository = RankingRepository(databaseManager)
     recordSaleRepository = RecordSaleRepository(databaseManager)
@@ -165,6 +179,8 @@ class OyasaiMusic : JavaPlugin() {
     pluginMessaging.enable()
     server.pluginManager.registerEvents(ommtUploadService, this)
     server.pluginManager.registerEvents(ommtPlaybackClientRegistry, this)
+    server.pluginManager.registerEvents(resourcePackService, this)
+    server.pluginManager.registerEvents(bedrockTransferService, this)
     Bukkit.getScheduler()
         .runTaskTimer(
             this,
@@ -214,6 +230,7 @@ class OyasaiMusic : JavaPlugin() {
     } ?: logger.warning("recordコマンドの登録に失敗しました（plugin.ymlを確認してください）。")
 
     playbackEngine = createPlaybackEngine()
+    ommtPlaybackClientRegistry.bindFailureHandler(playbackEngine::handleClientPlaybackFailure)
     soundEffectService = SoundEffectService(this)
     soundEffectService.initialize()
     toastNotificationService = ToastNotificationService(this)
@@ -258,7 +275,11 @@ class OyasaiMusic : JavaPlugin() {
     if (::ambientPlaybackRegistry.isInitialized) ambientPlaybackRegistry.stopAll()
     // Buffered sessions receive STOP while the outgoing channel is still registered.
     if (::playbackEngine.isInitialized) playbackEngine.shutdown()
-    if (::ommtPlaybackClientRegistry.isInitialized) ommtPlaybackClientRegistry.clear()
+    if (::ommtPlaybackClientRegistry.isInitialized) {
+      ommtPlaybackClientRegistry.bindFailureHandler(null)
+      ommtPlaybackClientRegistry.clear()
+    }
+    if (::resourcePackService.isInitialized) resourcePackService.shutdown()
     if (::pluginMessaging.isInitialized) pluginMessaging.disable()
     if (::databaseManager.isInitialized) {
       if (uploadsDrained) databaseManager.close()
@@ -271,16 +292,59 @@ class OyasaiMusic : JavaPlugin() {
   fun reloadRuntimeConfiguration() {
     if (::ommtUploadService.isInitialized) ommtUploadService.reloadReset()
     reloadConfig()
+    if (::resourcePackService.isInitialized) resourcePackService.reload()
     val soundCatalogCount = VanillaSoundCatalog.reload(this)
     logger.info("サウンドカタログを再読み込みしました: $soundCatalogCount SoundEvent")
+    if (::pluginMessaging.isInitialized) pluginMessaging.broadcastServerCapabilities()
     configureRuntimeServices()
     if (::playbackEngine.isInitialized) {
       val previous = playbackEngine
       playbackEngine = createPlaybackEngine()
+      ommtPlaybackClientRegistry.bindFailureHandler(playbackEngine::handleClientPlaybackFailure)
       previous.shutdown()
       if (::ommtPlaybackClientRegistry.isInitialized)
           ommtPlaybackClientRegistry.invalidateCapabilities()
     }
+  }
+
+  /**
+   * Upgrades the old disabled placeholder and the known obsolete bundled pack. An operator's
+   * unrelated custom pack is never overwritten.
+   */
+  private fun migrateBundledResourcePackConfig() {
+    val prefix = "resource-pack."
+    val id = config.getString(prefix + "id").orEmpty()
+    val url = config.getString(prefix + "url").orEmpty()
+    val sha1 = config.getString(prefix + "sha1").orEmpty()
+    val manifest = config.getString(prefix + "bank-manifest-sha256").orEmpty()
+    val isPlaceholder =
+        (id.isBlank() || id == "00000000-0000-0000-0000-000000000000") &&
+            url.isBlank() &&
+            sha1.isBlank() &&
+            manifest.isBlank()
+    val obsoleteBundledSha1 = "af57205743d4d573bcb2dea2f81b745d30eb6eb3"
+    val isObsoleteBundledPack =
+        sha1.equals(obsoleteBundledSha1, ignoreCase = true) ||
+            url.contains(obsoleteBundledSha1, ignoreCase = true)
+    if (!isPlaceholder && !isObsoleteBundledPack) return
+    config.set(prefix + "enabled", true)
+    config.set(prefix + "id", "8be1eaab-ca07-4f47-9957-40d29505e320")
+    config.set(
+        prefix + "url",
+        "https://download.mc-packs.net/pack/73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d.zip",
+    )
+    config.set(prefix + "sha1", "73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d")
+    config.set(
+        prefix + "bank-manifest-sha256",
+        "5aa68f33eea756ca43244751605924095dff18c5a01fd18767b3f1e51cd19506",
+    )
+    config.set(prefix + "prompt", "おやさいサーバーの拡張音域リソースパックを読み込みますか？")
+    config.set(
+        prefix + "instrument-bank-event-template",
+        "oyasaimusic:bank/i/{instrument}/a/{anchor}",
+    )
+    saveConfig()
+    logger.info("旧リソースパック設定をOyasaiMusic 26.2拡張音域パックへ更新しました。")
   }
 
   /** 楽曲設定の保存直後に、再生中表示と全プレイヤーの開いているGUIへ最新値を反映する。 */

@@ -3,7 +3,9 @@ package com.github.sahyuya.oyasaiMusic.gui
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.audio.PlaybackMode
 import com.github.sahyuya.oyasaiMusic.audio.SongAudioFile
+import com.github.sahyuya.oyasaiMusic.audio.VanillaSoundCatalog
 import com.github.sahyuya.oyasaiMusic.interop.PlaybackBuffer
+import com.github.sahyuya.oyasaiMusic.model.NoteEvent
 import com.github.sahyuya.oyasaiMusic.model.Song
 import java.io.File
 import java.util.UUID
@@ -12,6 +14,7 @@ import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -31,7 +34,11 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
 
   companion object {
     private const val TRACK_TRANSITION_TICKS = 15L // 0.75秒
+    private const val PAUSE_AUTO_FINISH_TICKS = 400L // 20秒。一時停止のまま放置したら終了扱いにする。
   }
+
+  /** 一時停止の放置終了タイマー。キー=プレイヤー。発火・解除の全経路で除去する。 */
+  private val pauseAutoFinishTasks = ConcurrentHashMap<UUID, BukkitTask>()
 
   private val nowPlayingBars = ConcurrentHashMap<UUID, BossBar>()
   private val bossBarTasks = ConcurrentHashMap<UUID, BukkitTask>()
@@ -87,7 +94,35 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                     .runTask(plugin, Runnable { viewer.sendMessage("§7この楽曲には再生できる音符がありません。") })
                 return@Runnable
               }
-              val prepared = PlaybackBuffer.prepare(audio.notes)
+              val preparedV1 = PlaybackBuffer.prepare(audio.notes)
+              val customPattern: (NoteEvent) -> Int? = { note ->
+                note.customSound?.let { event ->
+                  note.customSoundSeed?.let { seed ->
+                    VanillaSoundCatalog.patternForSeed(event, seed)
+                  }
+                }
+              }
+              val preparedV2Fold =
+                  PlaybackMode.entries.associateWith { playbackMode ->
+                    PlaybackBuffer.prepareV2(
+                        notes = audio.notes,
+                        spatialMode = if (playbackMode == PlaybackMode.POSITIONAL) 1 else 0,
+                        customPattern = customPattern,
+                    )
+                  }
+              val configuredManifest = plugin.resourcePackService.configuredManifestHash()
+              val preparedV2Bank =
+                  configuredManifest?.let { manifest ->
+                    PlaybackMode.entries.associateWith { playbackMode ->
+                      PlaybackBuffer.prepareV2(
+                          notes = audio.notes,
+                          spatialMode = if (playbackMode == PlaybackMode.POSITIONAL) 1 else 0,
+                          bankPolicy = 1,
+                          manifestHash = manifest,
+                          customPattern = customPattern,
+                      )
+                    }
+                  }
               Bukkit.getScheduler()
                   .runTask(
                       plugin,
@@ -95,8 +130,48 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                         val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
                         val startPlayback: (Boolean) -> Unit = startPlayback@{ useBufferedRoute ->
                           if (!viewer.isOnline) return@startPlayback
+                          // Persisted ALLOW is not the same as a loaded pack. Resolve the current
+                          // connection first and defer until either OMMT's matching bank or the
+                          // external resource pack has actually been confirmed.
+                          if (plugin.resourcePackService.requestIfNeeded(viewer)) {
+                            plugin.resourcePackService.deferPlayback(
+                                viewer.uniqueId,
+                                song,
+                                onCompletion,
+                                rememberInHistory,
+                            )
+                            viewer.sendMessage("§e拡張音域を準備しています。完了後に再生を開始します。")
+                            return@startPlayback
+                          }
+                          val prepared =
+                              if (!useBufferedRoute) {
+                                null
+                              } else if (
+                                  plugin.ommtPlaybackClientRegistry.supportsV2(viewer.uniqueId)
+                              ) {
+                                val loadedManifest =
+                                    plugin.resourcePackService.manifestHashFor(viewer.uniqueId)
+                                val bank = preparedV2Bank?.get(mode)
+                                if (
+                                    bank != null &&
+                                        loadedManifest != null &&
+                                        loadedManifest.contentEquals(bank.manifestHash) &&
+                                        plugin.ommtPlaybackClientRegistry.supportsBankManifest(
+                                            viewer.uniqueId
+                                        )
+                                ) {
+                                  bank
+                                } else {
+                                  preparedV2Fold[mode]
+                                }
+                              } else {
+                                preparedV1
+                              }
+                          // A manual play supersedes any deferred download playback.
+                          plugin.resourcePackService.discardPendingPlayback(viewer.uniqueId)
                           val state = plugin.controllerStateService.stateFor(viewer.uniqueId)
                           // 既に再生中のセッションがあれば止める（多重再生防止）。
+                          cancelPauseAutoFinish(viewer.uniqueId)
                           state.activeSession?.let { plugin.playbackEngine.stop(it) }
                           hideNowPlayingBar(viewer)
                           val session =
@@ -105,7 +180,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                                   notes = audio.notes,
                                   recipients = listOf(viewer),
                                   mode = mode,
-                                  prepared = prepared.takeIf { useBufferedRoute },
+                                  prepared = prepared,
                                   onListenThresholdReached = { player, s ->
                                     plugin.viewCountService.registerView(
                                         player,
@@ -120,6 +195,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                                   onCompletion = { finishedSession ->
                                     val s2 = plugin.controllerStateService.stateFor(viewer.uniqueId)
                                     if (s2.activeSession?.sessionId == finishedSession.sessionId) {
+                                      cancelPauseAutoFinish(viewer.uniqueId)
                                       s2.isPlaying = false
                                       s2.activeSession = null
                                       nowPlayingDurations.remove(viewer.uniqueId)
@@ -136,14 +212,13 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                           if (rememberInHistory) rememberSong(state, song)
                           menuManager.refreshCurrent(viewer.uniqueId)
                         }
-                        if (mode == PlaybackMode.DEFAULT) {
-                          plugin.ommtPlaybackClientRegistry.resolveForPlayback(
-                              viewer,
-                              startPlayback,
-                          )
-                        } else {
-                          startPlayback(false)
-                        }
+                        // POSITIONAL also supports buffered OMMT playback with spatialMode=1 and
+                        // bank manifest.
+                        // Previously POSITIONAL was forced to Paper (startPlayback(false)), which
+                        // prevented
+                        // OMMT client-side bank rendering and manifested as "allow downloads but
+                        // not audible".
+                        plugin.ommtPlaybackClientRegistry.resolveForPlayback(viewer, startPlayback)
                       },
                   )
             },
@@ -170,12 +245,56 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       plugin.playbackEngine.pause(session)
       state.isPlaying = false
       GuiFeedback.info(viewer, "一時停止しました。", NamedTextColor.YELLOW)
+      schedulePauseAutoFinish(viewer, session)
     } else {
+      cancelPauseAutoFinish(viewer.uniqueId)
       plugin.playbackEngine.resume(session)
       state.isPlaying = true
       GuiFeedback.info(viewer, "再生を再開しました。", NamedTextColor.GREEN)
     }
     menuManager.refreshCurrent(viewer.uniqueId)
+  }
+
+  private fun cancelPauseAutoFinish(playerId: UUID) {
+    pauseAutoFinishTasks.remove(playerId)?.cancel()
+  }
+
+  /** 一時停止のまま20秒経過したら、その曲を再生終了扱いにする。ボスバーと再生進捗を 自然終了と同一にリセットする（`nowPlayingSong`/履歴は残し、再再生は可能）。 */
+  private fun schedulePauseAutoFinish(
+      viewer: Player,
+      session: com.github.sahyuya.oyasaiMusic.audio.PlaybackSession,
+  ) {
+    cancelPauseAutoFinish(viewer.uniqueId)
+    val playerId = viewer.uniqueId
+    val sessionId = session.sessionId
+    pauseAutoFinishTasks[playerId] =
+        Bukkit.getScheduler()
+            .runTaskLater(
+                plugin,
+                Runnable {
+                  pauseAutoFinishTasks.remove(playerId)
+                  val state = plugin.controllerStateService.stateFor(playerId)
+                  val current = state.activeSession
+                  if (current == null || current.sessionId != sessionId) return@Runnable
+                  if (current.isCancelled || !current.isPaused || state.isPlaying) return@Runnable
+                  plugin.playbackEngine.stop(current)
+                  state.isPlaying = false
+                  state.activeSession = null
+                  nowPlayingDurations.remove(playerId)
+                  Bukkit.getPlayer(playerId)
+                      ?.takeIf { it.isOnline }
+                      ?.let { online ->
+                        hideNowPlayingBar(online)
+                        menuManager.refreshCurrent(playerId)
+                        GuiFeedback.info(online, "20秒間一時停止のため再生を終了しました。", NamedTextColor.GRAY)
+                      }
+                      ?: run {
+                        bossBarTasks.remove(playerId)?.cancel()
+                        nowPlayingBars.remove(playerId)
+                      }
+                },
+                PAUSE_AUTO_FINISH_TICKS,
+            )
   }
 
   /** 下段「再生中の曲」ボタン。再生中の曲の楽曲詳細画面を開く。 */
@@ -354,12 +473,17 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
 
   @EventHandler
   fun onPlayerQuit(event: PlayerQuitEvent) {
+    // 切断時は放置終了タイマーを破棄する（再接続 semantics は維持し、壁時計での終了は行わない）。
+    cancelPauseAutoFinish(event.player.uniqueId)
     val session =
         plugin.controllerStateService.stateFor(event.player.uniqueId).activeSession ?: return
     // A reconnect creates a new client process/network generation with no buffered payload. Route
     // the remainder through vanilla if the player returns before this server session finishes.
     session.bufferedRecipients.remove(event.player.uniqueId)
     session.bufferCandidates.remove(event.player.uniqueId)
+    session.ackPendingRecipients.remove(event.player.uniqueId)
+    session.paperFallbackRecipients.remove(event.player.uniqueId)
+    session.ackDeadlinesMillis.remove(event.player.uniqueId)
     plugin.ommtPlaybackClientRegistry.removeExpected(event.player.uniqueId, session.sessionId)
     hideNowPlayingBar(event.player)
   }
@@ -370,7 +494,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
       defaultColor: TextColor,
   ): Component =
       Component.text("♪ ", defaultColor)
-          .append(formattedLegacyText(title, defaultColor))
+          .append(Component.text(title, defaultColor).decoration(TextDecoration.ITALIC, false))
           .append(Component.text(" - $authorName", defaultColor))
 
   private fun bossBarStyle(recordMaterial: String): RecordBossBarStyle =

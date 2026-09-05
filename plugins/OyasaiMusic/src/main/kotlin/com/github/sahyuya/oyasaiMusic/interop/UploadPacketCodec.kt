@@ -39,7 +39,9 @@ object UploadPacketCodec {
   const val CAP_COMPACT_ZLIB = 1
   const val CAP_CUSTOM_SOUND = 1 shl 1
   const val CAP_CUSTOM_SOUND_PATTERN = 1 shl 2
-  const val CAPABILITIES = CAP_COMPACT_ZLIB or CAP_CUSTOM_SOUND or CAP_CUSTOM_SOUND_PATTERN
+  const val CAP_OYMI_V4_PITCH_CENTS = 1 shl 3
+  const val CAPABILITIES =
+      CAP_COMPACT_ZLIB or CAP_CUSTOM_SOUND or CAP_CUSTOM_SOUND_PATTERN or CAP_OYMI_V4_PITCH_CENTS
 
   sealed interface ClientMessage {
     val id: UUID

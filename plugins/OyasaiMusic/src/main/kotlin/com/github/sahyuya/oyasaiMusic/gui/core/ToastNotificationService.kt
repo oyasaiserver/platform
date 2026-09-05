@@ -40,15 +40,22 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
 
   fun showLikeReceived(author: Player, songTitle: String, likerName: String) {
     if (!author.isOnline) return
-    display(
+    // 題名は素通しリテラルで埋め込み、`&`/`§`入りでも装飾化けしないようにする。
+    val title =
+        Component.literal(likerName)
+            .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE)
+            .append(Component.literal(" さんが ").withStyle(net.minecraft.ChatFormatting.WHITE))
+            .append(Component.literal("「$songTitle」").withStyle(net.minecraft.ChatFormatting.AQUA))
+            .append(Component.literal(" にいいねしました").withStyle(net.minecraft.ChatFormatting.WHITE))
+    displayComponent(
         player = author,
         icon = ItemStack(Material.HEART_OF_THE_SEA),
-        title = "§d$likerName §fさんが §b「$songTitle」 §fにいいねしました",
+        title = title,
     )
     plugin.soundEffectService.play(PluginSoundEffect.LIKE_RECEIVED, listOf(author))
   }
 
-  private fun display(player: Player, icon: ItemStack, title: String) {
+  private fun displayComponent(player: Player, icon: ItemStack, title: Component) {
     val serial = player.uniqueId.toString().replace("-", "") + "_${sequence.incrementAndGet()}"
     val rootId = Identifier.fromNamespaceAndPath(NAMESPACE, "toast_root_$serial")
     val toastId = Identifier.fromNamespaceAndPath(NAMESPACE, "toast_$serial")
@@ -61,9 +68,7 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
             advancement(
                 noParent,
                 DisplayInfo(
-                    ItemStackTemplate.fromNonEmptyStack(
-                        CraftItemStack.asNMSCopy(ItemStack(Material.GRASS_BLOCK))
-                    ),
+                    nmsIcon(ItemStack(Material.GRASS_BLOCK)),
                     Component.literal("OyasaiMusic"),
                     Component.literal("OyasaiMusic notification root."),
                     noBackground,
@@ -77,8 +82,8 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
         )
     val toastDisplay =
         DisplayInfo(
-            ItemStackTemplate.fromNonEmptyStack(nmsIcon(icon)),
-            legacyComponent(title.ifBlank { "OyasaiMusic" }),
+            nmsIcon(icon),
+            title,
             legacyComponent("\n§7いいねを受け取りました"),
             noBackground,
             AdvancementType.TASK,
@@ -140,11 +145,12 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
         it.grantProgress(criterion)
       }
 
-  private fun nmsIcon(icon: ItemStack): net.minecraft.world.item.ItemStack {
+  private fun nmsIcon(icon: ItemStack): ItemStackTemplate {
     val source = if (icon.type.isItem) icon else ItemStack(Material.OAK_SIGN)
     val nmsStack = CraftItemStack.asNMSCopy(source)
-    return if (nmsStack.isEmpty) CraftItemStack.asNMSCopy(ItemStack(Material.OAK_SIGN))
-    else nmsStack
+    val nonEmpty =
+        if (nmsStack.isEmpty) CraftItemStack.asNMSCopy(ItemStack(Material.OAK_SIGN)) else nmsStack
+    return ItemStackTemplate.fromNonEmptyStack(nonEmpty)
   }
 
   private fun legacyComponent(text: String): Component = CraftChatMessage.fromStringOrEmpty(text)
