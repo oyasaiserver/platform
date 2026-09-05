@@ -130,16 +130,13 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                         val mode = plugin.playbackModeService.resolve(viewer.uniqueId, song)
                         val startPlayback: (Boolean) -> Unit = startPlayback@{ useBufferedRoute ->
                           if (!viewer.isOnline) return@startPlayback
-                          // If vanilla/outdated with allow needs pack, download first and start
-                          // after SUCCESS (load screen only on first playback, not join).
-                          if (!useBufferedRoute && plugin.resourcePackService.isLoaded(viewer.uniqueId)) {
-                            val needsPack = plugin.ommtPlaybackClientRegistry.isVanillaOnly(viewer.uniqueId) ||
-                                (plugin.ommtPlaybackClientRegistry.isCapable(viewer.uniqueId) && !plugin.ommtPlaybackClientRegistry.supportsBankManifest(viewer.uniqueId))
-                            if (needsPack && plugin.resourcePackService.requestIfNeeded(viewer)) {
-                              plugin.resourcePackService.deferPlayback(viewer.uniqueId, song, onCompletion, rememberInHistory)
-                              viewer.sendMessage("§e拡張音域リソースパックをダウンロード中です。完了後に再生を開始します。")
-                              return@startPlayback
-                            }
+                          // Persisted ALLOW is not the same as a loaded pack. Resolve the current
+                          // connection first and defer until either OMMT's matching bank or the
+                          // external resource pack has actually been confirmed.
+                          if (plugin.resourcePackService.requestIfNeeded(viewer)) {
+                            plugin.resourcePackService.deferPlayback(viewer.uniqueId, song, onCompletion, rememberInHistory)
+                            viewer.sendMessage("§e拡張音域を準備しています。完了後に再生を開始します。")
+                            return@startPlayback
                           }
                           val prepared =
                               if (!useBufferedRoute) {
@@ -160,16 +157,6 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                               } else {
                                 preparedV1
                               }
-                          // If allow but got fold due to vanilla/outdated, trigger pack for next time
-                          if (prepared != null && prepared === preparedV2Fold[mode] && plugin.resourcePackService.isLoaded(viewer.uniqueId)) {
-                            val needsPack = plugin.ommtPlaybackClientRegistry.isVanillaOnly(viewer.uniqueId) ||
-                                (plugin.ommtPlaybackClientRegistry.isCapable(viewer.uniqueId) && !plugin.ommtPlaybackClientRegistry.supportsBankManifest(viewer.uniqueId))
-                            if (needsPack && plugin.resourcePackService.requestIfNeeded(viewer)) {
-                              plugin.resourcePackService.deferPlayback(viewer.uniqueId, song, onCompletion, rememberInHistory)
-                              viewer.sendMessage("§e拡張音域リソースパックをダウンロード中です。完了後に再生を開始します。")
-                              return@startPlayback
-                            }
-                          }
                           // A manual play supersedes any deferred download playback.
                           plugin.resourcePackService.discardPendingPlayback(viewer.uniqueId)
                           val state = plugin.controllerStateService.stateFor(viewer.uniqueId)

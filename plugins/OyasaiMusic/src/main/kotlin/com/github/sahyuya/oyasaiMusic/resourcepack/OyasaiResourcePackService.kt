@@ -29,7 +29,19 @@ class OyasaiResourcePackService(
     private val plugin: OyasaiMusic,
     private val preferences: ResourcePackPreferenceRepository,
 ) : Listener {
-  private enum class State { NOT_REQUESTED, REQUESTED, SUCCESS, DECLINED, FAILED, TIMED_OUT }
+  /**
+   * Per-connection state. Persisted ALLOW is deliberately distinct from SUCCESS: only an
+   * Adventure load callback or a current-generation OMMT bank capability may establish SUCCESS.
+   */
+  private enum class State {
+    PREFERENCE_PENDING,
+    ALLOWED,
+    REQUESTED,
+    SUCCESS,
+    DECLINED,
+    FAILED,
+    TIMED_OUT,
+  }
   private data class Config(
       val id: UUID,
       val url: URI,
@@ -53,7 +65,9 @@ class OyasaiResourcePackService(
   data class ExtendedPlayback(val soundEvent: String, val pitch: Float)
 
   private val generationSequence = AtomicLong()
+  private val preferenceSequence = AtomicLong()
   private val generations = ConcurrentHashMap<UUID, Long>()
+  private val preferenceRevisions = ConcurrentHashMap<UUID, Long>()
   private val states = ConcurrentHashMap<UUID, State>()
   private val requested = ConcurrentHashMap<UUID, RequestToken>()
   @Volatile private var config: Config? = loadConfig()
@@ -61,7 +75,7 @@ class OyasaiResourcePackService(
   fun reload() {
     val old = config
     config = loadConfig()
-    states.clear(); requested.clear()
+    states.clear(); requested.clear(); preferenceRevisions.clear()
     pendingPlays.keys.toList().forEach { id ->
       pendingPlays.remove(id)
       Bukkit.getPlayer(id)?.takeIf { it.isOnline }?.sendMessage("§e再読み込みのため保留中の再生を破棄しました。再度再生してください。")
@@ -72,7 +86,7 @@ class OyasaiResourcePackService(
     }
   }
 
-  fun shutdown() { states.clear(); requested.clear(); generations.clear(); pendingPlays.clear() }
+  fun shutdown() { states.clear(); requested.clear(); generations.clear(); preferenceRevisions.clear(); pendingPlays.clear() }
 
   /**
    * Defers a playback until the in-flight pack download for this connection resolves.
@@ -112,12 +126,15 @@ class OyasaiResourcePackService(
   fun markExternalSuccess(playerId: UUID) {
     states[playerId] = State.SUCCESS
     requested.remove(playerId)
+    Bukkit.getPlayer(playerId)?.takeIf { it.isOnline }?.let(::sendBankConsent)
   }
 
   /** Forget per-connection pack state (Bedrock deny path). */
   fun forget(playerId: UUID) {
-    states.remove(playerId)
+    states[playerId] = State.DECLINED
     requested.remove(playerId)
+    resolvePendingPlayback(playerId, false)
+    Bukkit.getPlayer(playerId)?.takeIf { it.isOnline }?.let(::sendBankConsent)
   }
   fun manifestHashFor(player: UUID): ByteArray? =
       config?.manifestHash?.takeIf { isLoaded(player) }?.copyOf()
@@ -168,32 +185,40 @@ class OyasaiResourcePackService(
   }
 
   fun allow(player: Player) {
-    val active = config ?: run { player.sendMessage("§c拡張音域リソースパックはサーバーで利用できません。"); return }
+    config ?: run { player.sendMessage("§c拡張音域リソースパックはサーバーで利用できません。"); return }
     val generation = generations.computeIfAbsent(player.uniqueId) { generationSequence.incrementAndGet() }
-    // Warm presence so request() can distinguish OMMT from vanilla. allow itself is an
-    // eligible interaction for probing (first playback would probe anyway).
-    plugin.ommtPlaybackClientRegistry.probeForBankDecision(player)
+    val preferenceRevision = preferenceSequence.incrementAndGet()
+    preferenceRevisions[player.uniqueId] = preferenceRevision
     Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
       runCatching { preferences.set(player.uniqueId, ResourcePackPreference.ALLOW) }
           .onSuccess { Bukkit.getScheduler().runTask(plugin, Runnable {
-            if (player.isOnline && generations[player.uniqueId] == generation) {
-              // If the bundled pack is outdated the user is told in requestIfNeeded; report here too
-              // when presence is already known to be outdated OMMT.
-              if (plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId) &&
-                  !plugin.ommtPlaybackClientRegistry.supportsBankManifest(player.uniqueId)) {
-                player.sendMessage("§eお使いのMOD内蔵リソースパックが古いため、サーバーパックを適用します。最新MODへの更新でロード画面なしで拡張音域になります。")
+            if (player.isOnline && generations[player.uniqueId] == generation &&
+                preferenceRevisions[player.uniqueId] == preferenceRevision) {
+              if (states[player.uniqueId] !in setOf(State.REQUESTED, State.SUCCESS)) {
+                states[player.uniqueId] = State.ALLOWED
               }
-              request(player, active, generation)
+              sendBankConsent(player)
+              // /mm rp allow is an explicit, eligible action. Resolve the client route once,
+              // then either trust a matching OMMT bank or request the external Java pack.
+              plugin.ommtPlaybackClientRegistry.resolveForPlayback(player) {
+                if (!player.isOnline || generations[player.uniqueId] != generation) return@resolveForPlayback
+                requestIfNeeded(player)
+              }
             }
           }) }
           .onFailure { Bukkit.getScheduler().runTask(plugin, Runnable {
-            if (player.isOnline && generations[player.uniqueId] == generation) player.sendMessage("§c設定の保存に失敗したため、許可状態は変更しませんでした。")
+            if (player.isOnline && generations[player.uniqueId] == generation &&
+                preferenceRevisions[player.uniqueId] == preferenceRevision) {
+              player.sendMessage("§c設定の保存に失敗したため、許可状態は変更しませんでした。")
+            }
           }) }
     })
   }
 
   fun deny(player: Player) {
     val generation = generations.computeIfAbsent(player.uniqueId) { generationSequence.incrementAndGet() }
+    val preferenceRevision = preferenceSequence.incrementAndGet()
+    preferenceRevisions[player.uniqueId] = preferenceRevision
     states[player.uniqueId] = State.DECLINED; requested.remove(player.uniqueId)
     // A pending download is moot: fall back to vanilla range immediately.
     resolvePendingPlayback(player.uniqueId, false)
@@ -206,7 +231,10 @@ class OyasaiResourcePackService(
     Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
       runCatching { preferences.set(player.uniqueId, ResourcePackPreference.DENY) }.onFailure {
         Bukkit.getScheduler().runTask(plugin, Runnable {
-          if (player.isOnline && generations[player.uniqueId] == generation) player.sendMessage("§c自動読み込みを停止しましたが、次回接続用設定の保存に失敗しました。")
+          if (player.isOnline && generations[player.uniqueId] == generation &&
+              preferenceRevisions[player.uniqueId] == preferenceRevision) {
+            player.sendMessage("§c自動読み込みを停止しましたが、次回接続用設定の保存に失敗しました。")
+          }
         })
       }
     })
@@ -215,74 +243,99 @@ class OyasaiResourcePackService(
   @EventHandler fun onJoin(event: PlayerJoinEvent) = beginConnection(event.player)
   @EventHandler fun onQuit(event: PlayerQuitEvent) {
     val id = event.player.uniqueId
-    states.remove(id); requested.remove(id); generations.remove(id); pendingPlays.remove(id)
+    states.remove(id); requested.remove(id); generations.remove(id); preferenceRevisions.remove(id); pendingPlays.remove(id)
   }
 
   private fun beginConnection(player: Player) {
-    val active = config ?: return
+    config ?: return
     val generation = generationSequence.incrementAndGet()
-    generations[player.uniqueId] = generation; states[player.uniqueId] = State.NOT_REQUESTED; requested.remove(player.uniqueId)
+    val preferenceRevision = preferenceSequence.incrementAndGet()
+    generations[player.uniqueId] = generation
+    preferenceRevisions[player.uniqueId] = preferenceRevision
+    states[player.uniqueId] = State.PREFERENCE_PENDING
+    requested.remove(player.uniqueId)
     Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
       val preference = runCatching { preferences.get(player.uniqueId) }.getOrDefault(ResourcePackPreference.DENY)
       Bukkit.getScheduler().runTask(plugin, Runnable {
-        if (!player.isOnline || generations[player.uniqueId] != generation) return@Runnable
-        // Join never sends a ResourcePackRequest — pack is delayed until first playback needs it.
-        // This guarantees no load screen on join/leave for bundled-MOD + allow users.
+        if (!player.isOnline || generations[player.uniqueId] != generation ||
+            preferenceRevisions[player.uniqueId] != preferenceRevision) return@Runnable
+        // A stored preference is not evidence that the pack is loaded for this connection.
+        // Keep it ALLOWED until the first eligible playback resolves OMMT-vs-vanilla.
         if (preference == ResourcePackPreference.ALLOW) {
-          states[player.uniqueId] = State.SUCCESS
+          if (states[player.uniqueId] !in setOf(State.REQUESTED, State.SUCCESS)) {
+            states[player.uniqueId] = State.ALLOWED
+          }
+        } else {
+          states[player.uniqueId] = State.DECLINED
+          requested.remove(player.uniqueId)
         }
         sendBankConsent(player)
+        if (pendingPlays.containsKey(player.uniqueId)) {
+          if (preference != ResourcePackPreference.ALLOW) {
+            resolvePendingPlayback(player.uniqueId, false)
+          } else if (!requestIfNeeded(player)) {
+            resolvePendingPlayback(player.uniqueId, isLoaded(player.uniqueId))
+          }
+        }
       })
     })
   }
 
   /**
-   * Called from first playback when vanilla/outdated is confirmed; sends pack with load screen only then.
-   * Returns true when a pack download was started (caller must defer playback until the
-   * SUCCESS callback restarts it). Never resends within one connection: an already
-   * delivered or in-flight pack for the same config short-circuits to false.
+   * Resolves the persisted ALLOW state for the current playback route.
+   *
+   * Returns true whenever playback must be deferred: preference I/O, an OMMT probe, or a
+   * pack request is still in flight. SUCCESS is reached only from a matching OMMT bank or
+   * the ResourcePackCallback for this connection generation.
    */
   fun requestIfNeeded(player: Player): Boolean {
     val active = config ?: return false
     val generation = generations[player.uniqueId] ?: return false
     if (!player.isOnline) return false
-    // DB preference not yet resolved (NOT_REQUESTED): warm presence via probe and re-evaluate
-    // after the probe timeout instead of silently folding. DENY-derived states stay untouched.
-    if (states[player.uniqueId] == State.NOT_REQUESTED) {
-      plugin.ommtPlaybackClientRegistry.probeForBankDecision(player)
-      Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-        if (player.isOnline && generations[player.uniqueId] == generation) requestIfNeeded(player)
-      }, 80L)
+    when (states[player.uniqueId]) {
+      State.PREFERENCE_PENDING -> return true
+      State.REQUESTED -> return true
+      State.SUCCESS, State.DECLINED, State.FAILED, State.TIMED_OUT, null -> return false
+      State.ALLOWED -> Unit
+    }
+
+    // Bedrock pack application is owned by BedrockTransferService and its transfer rejoin.
+    val bedrockPrefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
+    if (BedrockUtil.isBedrock(player, bedrockPrefix)) return false
+
+    // A current OMMT client that advertises the exact bank capability needs no Java pack
+    // request. The persisted ALLOW still gates this opt-in path.
+    if (plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId) &&
+        plugin.ommtPlaybackClientRegistry.supportsBankManifest(player.uniqueId)) {
+      states[player.uniqueId] = State.SUCCESS
+      requested.remove(player.uniqueId)
+      sendBankConsent(player)
       return false
     }
-    val token = RequestToken(generation, active.id, active.sha1)
-    // Already delivered or downloading on this connection: never resend. Without this,
-    // every vanilla playback would clear SUCCESS and show the load screen again.
-    if (requested[player.uniqueId] == token && states[player.uniqueId] in setOf(State.REQUESTED, State.SUCCESS)) return false
-    // Only vanilla or outdated OMMT with ALLOW need the server pack. Up-to-date OMMT keeps SUCCESS without pack.
-    val needsPack = when {
-      !isLoaded(player.uniqueId) -> false // deny or not yet optimistic SUCCESS
-      plugin.ommtPlaybackClientRegistry.isVanillaOnly(player.uniqueId) -> true
-      plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId) &&
-          !plugin.ommtPlaybackClientRegistry.supportsBankManifest(player.uniqueId) -> {
-        // Outdated bundled pack: report it so the user knows a MOD update (or server pack) is needed.
-        if (states[player.uniqueId] == State.SUCCESS) {
-          player.sendMessage("§eお使いのMOD内蔵リソースパックが古いため、通常音域で再生します。最新MODへの更新か、サーバーパックの適用（/mm rp allow）で拡張音域になります。")
+
+    // Route discovery normally completed before this method is called. Keep the edge case
+    // safe: wait for the probe rather than treating UNKNOWN as a loaded pack.
+    if (plugin.ommtPlaybackClientRegistry.isUnknown(player.uniqueId)) {
+      plugin.ommtPlaybackClientRegistry.resolveForPlayback(player) {
+        if (!player.isOnline || generations[player.uniqueId] != generation) return@resolveForPlayback
+        if (!requestIfNeeded(player)) {
+          resolvePendingPlayback(player.uniqueId, isLoaded(player.uniqueId))
         }
-        true
       }
-      else -> false
-    }
-    if (needsPack) {
-      request(player, active, generation)
       return true
     }
-    return false
+
+    val token = RequestToken(generation, active.id, active.sha1)
+    if (requested[player.uniqueId] == token && states[player.uniqueId] == State.REQUESTED) return true
+    if (plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId)) {
+      player.sendMessage("§eお使いのMOD内蔵音源が現在のサーバーパックと一致しないため、サーバーパックを適用します。")
+    }
+    request(player, active, generation)
+    return states[player.uniqueId] == State.REQUESTED
   }
 
   private fun request(player: Player, active: Config, generation: Long) {
-    // Phase-1 Bedrock: Java zip cannot be applied to Bedrock clients. Keep the persisted
-    // allow for phase-2 Transfer delivery, but never send the Java pack prompt here.
+    // A Java resource-pack request must never be sent to a Bedrock client.
     val bedrockPrefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
     if (BedrockUtil.isBedrock(player, bedrockPrefix)) {
       states[player.uniqueId] = State.FAILED
@@ -290,31 +343,8 @@ class OyasaiResourcePackService(
       sendBankConsent(player)
       return
     }
-    // UNKNOWN (probe not yet resolved) means "possibly OMMT": keep optimistic SUCCESS and
-    // never send a pack here. The first playback's probe resolves presence, and requestIfNeeded
-    // sends the pack only for confirmed vanilla/outdated. This avoids the load screen for
-    // up-to-date bundled-MOD users even when allow runs before the first probe.
-    if (plugin.ommtPlaybackClientRegistry.isUnknown(player.uniqueId)) {
-      states[player.uniqueId] = State.SUCCESS
-      requested.remove(player.uniqueId)
-      sendBankConsent(player)
-      return
-    }
-    // Fast path for up-to-date OMMT with bundled pack: avoid ResourcePackRequest and load screen.
-    val isOmmtWithBank = plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId) &&
-        plugin.ommtPlaybackClientRegistry.supportsBankManifest(player.uniqueId)
-    if (isOmmtWithBank) {
-      // Bundled pack is present and up-to-date (client advertised BANK). Directly mark SUCCESS.
-      states[player.uniqueId] = State.SUCCESS
-      requested.remove(player.uniqueId)
-      sendBankConsent(player)
-      // No load screen, no pack download needed.
-      return
-    }
     val token = RequestToken(generation, active.id, active.sha1)
-    if (requested[player.uniqueId] == token && states[player.uniqueId] in setOf(State.REQUESTED, State.SUCCESS)) {
-      player.sendMessage("§7拡張音域リソースパックは既に要求済みです。"); return
-    }
+    if (requested[player.uniqueId] == token && states[player.uniqueId] == State.REQUESTED) return
     requested[player.uniqueId] = token; states[player.uniqueId] = State.REQUESTED
     val info = ResourcePackInfo.resourcePackInfo(active.id, active.url, active.sha1)
     val request = ResourcePackRequest.resourcePackRequest().packs(info).required(false).replace(false)

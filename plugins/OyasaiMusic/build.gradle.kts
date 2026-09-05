@@ -1,7 +1,8 @@
 plugins { alias(libs.plugins.paperweight.userdev) }
 
 dependencies {
-  paperweightDevelopmentBundle(libs.purpur.dev.bundle)
+  // Pinned to the maintained Minecraft 26.2 server target for reproducible userdev mappings.
+  paperweightDevelopmentBundle("org.purpurmc.purpur:dev-bundle:26.2.build.2632-stable")
 
   implementation(libs.kotlin.stdlib)
   implementation(libs.sqlite.jdbc)
@@ -9,7 +10,9 @@ dependencies {
   compileOnly(libs.placeholderapi)
   compileOnly(libs.vault.api)
   compileOnly(libs.fawe.bukkit)
-  compileOnly(libs.velocity.api) { exclude(group = "net.kyori") }
+  // The same Java-25 JAR is loaded by Paper and Velocity; Velocity-only startup does not
+  // instantiate the Bukkit main class or its services.
+  compileOnly("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT") { exclude(group = "net.kyori") }
   // Bedrock Transfer/pack injection on Velocity only. Referenced solely from the velocity
   // package, so Paper-only installs never load these classes. Pin to the deployed Geyser.
   compileOnly("org.geysermc.geyser:api:2.11.2-SNAPSHOT")

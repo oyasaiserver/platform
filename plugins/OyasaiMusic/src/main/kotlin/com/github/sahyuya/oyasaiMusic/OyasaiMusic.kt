@@ -230,6 +230,7 @@ class OyasaiMusic : JavaPlugin() {
     } ?: logger.warning("recordコマンドの登録に失敗しました（plugin.ymlを確認してください）。")
 
     playbackEngine = createPlaybackEngine()
+    ommtPlaybackClientRegistry.bindFailureHandler(playbackEngine::handleClientPlaybackFailure)
     soundEffectService = SoundEffectService(this)
     soundEffectService.initialize()
     toastNotificationService = ToastNotificationService(this)
@@ -274,7 +275,10 @@ class OyasaiMusic : JavaPlugin() {
     if (::ambientPlaybackRegistry.isInitialized) ambientPlaybackRegistry.stopAll()
     // Buffered sessions receive STOP while the outgoing channel is still registered.
     if (::playbackEngine.isInitialized) playbackEngine.shutdown()
-    if (::ommtPlaybackClientRegistry.isInitialized) ommtPlaybackClientRegistry.clear()
+    if (::ommtPlaybackClientRegistry.isInitialized) {
+      ommtPlaybackClientRegistry.bindFailureHandler(null)
+      ommtPlaybackClientRegistry.clear()
+    }
     if (::resourcePackService.isInitialized) resourcePackService.shutdown()
     if (::pluginMessaging.isInitialized) pluginMessaging.disable()
     if (::databaseManager.isInitialized) {
@@ -296,14 +300,15 @@ class OyasaiMusic : JavaPlugin() {
     if (::playbackEngine.isInitialized) {
       val previous = playbackEngine
       playbackEngine = createPlaybackEngine()
+      ommtPlaybackClientRegistry.bindFailureHandler(playbackEngine::handleClientPlaybackFailure)
       previous.shutdown()
       if (::ommtPlaybackClientRegistry.isInitialized) ommtPlaybackClientRegistry.invalidateCapabilities()
     }
   }
 
   /**
-   * Upgrades only the old disabled placeholder. A configured operator URL is never overwritten,
-   * and disabling an already configured pack remains respected.
+   * Upgrades the old disabled placeholder and the known obsolete bundled pack. An operator's
+   * unrelated custom pack is never overwritten.
    */
   private fun migrateBundledResourcePackConfig() {
     val prefix = "resource-pack."
@@ -316,7 +321,11 @@ class OyasaiMusic : JavaPlugin() {
             url.isBlank() &&
             sha1.isBlank() &&
             manifest.isBlank()
-    if (!isPlaceholder) return
+    val obsoleteBundledSha1 = "af57205743d4d573bcb2dea2f81b745d30eb6eb3"
+    val isObsoleteBundledPack =
+        sha1.equals(obsoleteBundledSha1, ignoreCase = true) ||
+            url.contains(obsoleteBundledSha1, ignoreCase = true)
+    if (!isPlaceholder && !isObsoleteBundledPack) return
     config.set(prefix + "enabled", true)
     config.set(prefix + "id", "8be1eaab-ca07-4f47-9957-40d29505e320")
     config.set(

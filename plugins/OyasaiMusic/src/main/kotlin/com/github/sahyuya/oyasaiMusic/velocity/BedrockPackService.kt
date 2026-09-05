@@ -76,7 +76,7 @@ class BedrockPackService(
       if (Files.isRegularFile(file)) {
         logger.info("Bedrock pack configured: {} ({} bytes, sha1 {})", file.fileName, Files.size(file), sha1Hex(file))
       } else {
-        logger.warn("Bedrock pack missing: {}. Transfer requests will be accepted but pack injection skipped.", file)
+        logger.warn("Bedrock pack missing: {}. Transfer requests will be rejected until the pack is installed.", file)
       }
     } catch (error: Exception) {
       logger.warn("Failed to load bedrock pack config, pack injection disabled.", error)
@@ -88,17 +88,34 @@ class BedrockPackService(
     val source = event.source as? ServerConnection ?: return
     if (source.serverInfo.name != MAIN_SERVER) return
     val request = BedrockTransferCodec.decode(event.data) ?: return
+    // The backend message is bound to one player connection. Never let a payload select a
+    // different UUID, even though backend main is otherwise trusted.
+    if (request.playerId != source.player.uniqueId) {
+      logger.warn("Rejected Bedrock pack request with mismatched player UUID from backend main.")
+      return
+    }
     // Deny unloads at the next natural login: flag removal only, no forced reconnect.
     if (!request.allow) {
       packEnabled.remove(request.playerId)
       logger.info("Bedrock pack disabled for {} (packId {})", request.playerId, request.packId)
       return
     }
+    // Never force a reconnect unless the proxy can actually inject the pack on the next
+    // Geyser session. Otherwise Paper could mistake an ordinary transfer rejoin for proof
+    // that the external pack is usable.
+    if (packOrNull() == null || !ensureSubscribed()) {
+      packEnabled.remove(request.playerId)
+      logger.warn("Rejected Bedrock pack enable for {} because pack injection is unavailable.", request.playerId)
+      return
+    }
     packEnabled[request.playerId] = true
+    // Force a re-login so the pack takes effect immediately. Roll the flag back when no
+    // Geyser connection exists or Transfer itself fails.
+    if (!transfer(request.playerId)) {
+      packEnabled.remove(request.playerId)
+      return
+    }
     logger.info("Bedrock pack enabled for {} (packId {})", request.playerId, request.packId)
-    ensureSubscribed()
-    // Force a re-login so the pack takes effect immediately.
-    transfer(request.playerId)
   }
 
   fun onSessionLoadPacks(event: SessionLoadResourcePacksEvent) {
@@ -112,33 +129,37 @@ class BedrockPackService(
     }
   }
 
-  private fun ensureSubscribed() {
-    if (subscribed.get()) return
+  private fun ensureSubscribed(): Boolean {
+    if (subscribed.get()) return true
     val api = GeyserApi.api() ?: run {
       logger.warn("Geyser API unavailable; Bedrock pack injection deferred until Geyser enables.")
-      return
+      return false
     }
-    try {
+    return try {
       api.eventBus().subscribe(EventRegistrar.of(this), SessionLoadResourcePacksEvent::class.java, this::onSessionLoadPacks)
       subscribed.set(true)
+      true
     } catch (error: Exception) {
       logger.warn("Failed to subscribe SessionLoadResourcePacksEvent.", error)
+      false
     }
   }
 
-  private fun transfer(playerId: UUID) {
+  private fun transfer(playerId: UUID): Boolean {
     val api = GeyserApi.api() ?: run {
       logger.warn("Geyser API unavailable; cannot transfer {}.", playerId)
-      return
+      return false
     }
     val connection = api.connectionByUuid(playerId) ?: run {
       logger.info("No Geyser session for {}; skipping transfer.", playerId)
-      return
+      return false
     }
-    try {
+    return try {
       connection.transfer(transferHost, transferPort)
+      true
     } catch (error: Exception) {
       logger.warn("Transfer failed for {}.", playerId, error)
+      false
     }
   }
 

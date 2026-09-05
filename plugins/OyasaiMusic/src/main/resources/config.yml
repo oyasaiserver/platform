@@ -45,13 +45,13 @@ bedrock:
   name-prefix: "."
   # 同一ミリ秒・同一楽器の同時発音数がこれ以上の場合、最高音・最低音のみ再生する
   chord-limit: 3
-  # Phase-2 (Transfer/Geyser連携) 用のBedrock向け.mcpack設定。空欄の間は無効で、
+  # Transfer/Geyser連携用のBedrock向け.mcpack設定。空欄の間は無効で、
   # 統合版プレイヤーはallow保存のみ行い、再生は折り返しバニラになる。
   mcpack-url: ""
   mcpack-sha1: ""
   pack-id: ""
-  # trueでBedrockのallow時に状態退避＋転送要求を送信する。Velocity側の受け手は
-  # Phase-2で実装のため、それまではfalseのままにすること。
+  # trueでBedrockのallow時および保存済みALLOWの復元時に状態退避＋転送要求を送信する。
+  # Velocity側に対応.mcpackを配置してから有効化すること。
   transfer-enabled: false
 
 # Players are never prompted by default; `/mm rp allow` is the opt-in entry point.

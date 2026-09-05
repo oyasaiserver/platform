@@ -36,6 +36,13 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
   private val acceptedNonces = ConcurrentHashMap<UUID, Pair<Long, String>>()
   private val started = ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Started>>()
   private val failed = ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Failed>>()
+  /** Confirmed local sessions remain tracked after their first-note handshake is released. */
+  private val confirmed = ConcurrentHashMap<UUID, ConcurrentHashMap<UUID, Long>>()
+  @Volatile private var failureHandler: ((UUID, UUID) -> Unit)? = null
+
+  fun bindFailureHandler(handler: ((UUID, UUID) -> Unit)?) {
+    failureHandler = handler
+  }
 
   fun handlePacket(player: Player, message: PlaybackWireCodec.Message) {
     when (message.type) {
@@ -67,10 +74,17 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
         val value = runCatching { DataInputStream(ByteArrayInputStream(message.body)).use { input ->
           val reason = input.readUnsignedByte(); val pos = input.readInt(); require(reason in 1..6 && pos >= 0 && input.available() == 0); pos
         } }.getOrNull() ?: return
-        val wanted = expected[player.uniqueId]?.get(message.id) ?: return
-        if (wanted.generation == generations[player.uniqueId]) {
+        val generation = generations[player.uniqueId] ?: return
+        val acceptedGeneration =
+            expected[player.uniqueId]?.get(message.id)?.generation
+                ?: confirmed[player.uniqueId]?.get(message.id)
+                ?: return
+        if (acceptedGeneration == generation) {
           failed.computeIfAbsent(player.uniqueId) { ConcurrentHashMap() }[message.id] =
-              Failed(value, wanted.generation)
+              Failed(value, generation)
+          // Plugin messages are dispatched on the Paper primary thread by OyasaiPluginMessaging.
+          // The engine independently verifies that the session/player is still active.
+          failureHandler?.invoke(player.uniqueId, message.id)
         }
       }
     }
@@ -176,6 +190,13 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
     val value = started[playerId]?.remove(session) ?: return null
     return value.takeIf { it.generation == generations[playerId] && expectedValue.generation == value.generation && expectedValue.hash == Base64.getUrlEncoder().withoutPadding().encodeToString(hash) }
   }
+  fun markLocalConfirmed(playerId: UUID, session: UUID): Boolean {
+    val wanted = expected[playerId]?.get(session) ?: return false
+    val generation = generations[playerId] ?: return false
+    if (wanted.generation != generation || !isCapable(playerId)) return false
+    confirmed.computeIfAbsent(playerId) { ConcurrentHashMap() }[session] = generation
+    return true
+  }
   fun consumeFailure(playerId: UUID, session: UUID): Int? {
     val wanted = expected[playerId]?.get(session) ?: return null
     val value = failed[playerId]?.remove(session) ?: return null
@@ -188,7 +209,13 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
     if (wanted.expiresAt >= System.currentTimeMillis() && wanted.generation == generations[player.uniqueId] && wanted.hash == Base64.getUrlEncoder().withoutPadding().encodeToString(hash)) started.computeIfAbsent(player.uniqueId) { ConcurrentHashMap() }[session] = Started(first, wanted.generation)
   }
   fun removeExpected(playerId: UUID, session: UUID) { expected[playerId]?.remove(session); ready[playerId]?.remove(session); started[playerId]?.remove(session); failed[playerId]?.remove(session) }
-  fun removeExpected(session: UUID) { expected.keys.forEach { removeExpected(it, session) } }
+  fun releasePlayback(playerId: UUID, session: UUID) {
+    removeExpected(playerId, session)
+    confirmed[playerId]?.remove(session)
+  }
+  fun removeExpected(session: UUID) {
+    (expected.keys + confirmed.keys).forEach { releasePlayback(it, session) }
+  }
   fun refreshClientCapabilities(playerId: UUID) {
     check(plugin.server.isPrimaryThread)
     // Pack activation or client manifest reload may change BANK_MANIFEST_V1 support.
@@ -203,20 +230,20 @@ class OmmtPlaybackClientRegistry(private val plugin: Plugin) : Listener {
     check(plugin.server.isPrimaryThread)
     val fallbacks = pending.values.toList()
     fallbacks.forEach { it.timeoutTask?.cancel() }
-    pending.clear(); presence.clear(); generations.clear(); ready.clear(); expected.clear(); clientCapabilities.clear(); acceptedNonces.clear(); started.clear(); failed.clear()
+    pending.clear(); presence.clear(); generations.clear(); ready.clear(); expected.clear(); clientCapabilities.clear(); acceptedNonces.clear(); started.clear(); failed.clear(); confirmed.clear()
     // Runtime reload invalidates the probe generation, but an already requested playback must not
     // disappear with it. Resolve each pending start exactly once through the ordinary Paper route.
     fallbacks.forEach { it.callback(false) }
   }
   fun clear() {
     pending.values.forEach { it.timeoutTask?.cancel() }
-    pending.clear(); presence.clear(); generations.clear(); ready.clear(); expected.clear(); clientCapabilities.clear(); acceptedNonces.clear(); started.clear(); failed.clear()
+    pending.clear(); presence.clear(); generations.clear(); ready.clear(); expected.clear(); clientCapabilities.clear(); acceptedNonces.clear(); started.clear(); failed.clear(); confirmed.clear()
   }
   private fun sweep() { val now = System.currentTimeMillis(); expected.entries.removeIf { (_, values) -> values.entries.removeIf { it.value.expiresAt < now }; values.isEmpty() } }
   @EventHandler fun quit(event: PlayerQuitEvent) {
     val id = event.player.uniqueId
     pending.remove(id)?.timeoutTask?.cancel()
-    presence.remove(id); generations.remove(id); ready.remove(id); expected.remove(id); clientCapabilities.remove(id); acceptedNonces.remove(id); started.remove(id); failed.remove(id)
+    presence.remove(id); generations.remove(id); ready.remove(id); expected.remove(id); clientCapabilities.remove(id); acceptedNonces.remove(id); started.remove(id); failed.remove(id); confirmed.remove(id)
   }
 
   private companion object {

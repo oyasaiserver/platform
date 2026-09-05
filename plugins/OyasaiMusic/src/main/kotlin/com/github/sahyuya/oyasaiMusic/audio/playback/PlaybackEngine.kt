@@ -191,6 +191,17 @@ class PlaybackEngine(
     session.cancel()
   }
 
+  /**
+   * Switches a current-generation local recipient back to Paper after an authenticated
+   * CLIENT_PLAYBACK_FAILED message. The client-reported position is intentionally not trusted;
+   * already scheduled server groups continue from the server's monotonic session position.
+   */
+  fun handleClientPlaybackFailure(playerId: UUID, sessionId: UUID) {
+    check(Bukkit.isPrimaryThread())
+    val session = liveSessions[sessionId] ?: return
+    enterPaperFallback(session, playerId, plugin as? OyasaiMusic)
+  }
+
   fun shutdown() {
     // STOP is sent before the packet channel is unregistered.
     liveSessions.values.forEach { session ->
@@ -288,6 +299,7 @@ class PlaybackEngine(
               if (session.isCancelled || session.isPaused) return@Runnable
               contexts.remove(session.sessionId)
               liveSessions.remove(session.sessionId)
+              (plugin as? OyasaiMusic)?.ommtPlaybackClientRegistry?.removeExpected(session.sessionId)
               Bukkit.getScheduler().runTask(plugin, Runnable { ctx.onCompletion?.invoke(session) })
             },
             delay,
@@ -312,6 +324,7 @@ class PlaybackEngine(
         if (stillCapable) continue
         session.bufferedRecipients.remove(uuid)
         session.paperFallbackRecipients += uuid
+        (plugin as? OyasaiMusic)?.ommtPlaybackClientRegistry?.releasePlayback(uuid, session.sessionId)
       }
       val isBedrockPlayer = BedrockUtil.isBedrock(player, bedrockPrefix)
       if (isBedrockPlayer && !bedrock) continue // 和音間引きでこのプレイヤー種別からは間引かれた音
@@ -501,10 +514,14 @@ class PlaybackEngine(
                         when {
                           failed != null -> enterPaperFallback(session, playerId, server)
                           first != null && first.firstNoteMs == prepared.firstNoteMs -> {
-                            session.ackPendingRecipients.remove(playerId)
-                            session.ackDeadlinesMillis.remove(playerId)
-                            session.bufferedRecipients += playerId
-                            server.ommtPlaybackClientRegistry.removeExpected(playerId, session.sessionId)
+                            if (server.ommtPlaybackClientRegistry.markLocalConfirmed(playerId, session.sessionId)) {
+                              session.ackPendingRecipients.remove(playerId)
+                              session.ackDeadlinesMillis.remove(playerId)
+                              session.bufferedRecipients += playerId
+                              server.ommtPlaybackClientRegistry.removeExpected(playerId, session.sessionId)
+                            } else {
+                              enterPaperFallback(session, playerId, server)
+                            }
                           }
                           first != null ||
                               System.currentTimeMillis() >=
@@ -530,7 +547,9 @@ class PlaybackEngine(
       playerId: UUID,
       server: OyasaiMusic?,
   ) {
-    if (!session.ackPendingRecipients.remove(playerId)) return
+    val wasPending = session.ackPendingRecipients.remove(playerId)
+    val wasBuffered = session.bufferedRecipients.remove(playerId)
+    if (!wasPending && !wasBuffered) return
     session.ackDeadlinesMillis.remove(playerId)
     session.paperFallbackRecipients += playerId
     Bukkit.getPlayer(playerId)?.takeIf { it.isOnline }?.sendPluginMessage(
@@ -538,7 +557,10 @@ class PlaybackEngine(
         PlaybackBuffer.CHANNEL,
         PlaybackBuffer.envelope(PlaybackBuffer.TYPE_STOP, session.sessionId) { writeByte(1) },
     )
-    server?.ommtPlaybackClientRegistry?.removeExpected(playerId, session.sessionId)
+    server?.ommtPlaybackClientRegistry?.releasePlayback(playerId, session.sessionId)
+    server?.logger?.info(
+        "OMMT local playback failed for $playerId in ${session.sessionId}; continuing with Paper fallback",
+    )
   }
 
   private fun sendControl(

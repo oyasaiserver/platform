@@ -4,8 +4,10 @@ import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.db.ResourcePackPreferenceRepository
 import com.github.sahyuya.oyasaiMusic.interop.BedrockTransferCodec
 import com.github.sahyuya.oyasaiMusic.model.ResourcePackPreference
+import com.github.sahyuya.oyasaiMusic.util.BedrockUtil
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicLong
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Location
@@ -13,13 +15,13 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 
 /**
  * Bedrock (Geyser) pack application, Paper side.
- * Phase-1 covers: persisted allow/deny, pre-transfer state evac, transfer-request send,
- * and post-rejoin restore. The Velocity/Geyser consumer (Transfer execution + .mcpack
- * injection) lands in phase-2; until then [transferEnabled] stays false and Bedrock
- * players keep folded vanilla playback.
+ * Paper owns persisted allow/deny and restores the Velocity in-memory flag by issuing a
+ * transfer on the next ordinary Bedrock join. A transfer-driven rejoin consumes [evac],
+ * restores the player and only then marks the external pack available for playback.
  */
 class BedrockTransferService(
     private val plugin: OyasaiMusic,
@@ -36,6 +38,8 @@ class BedrockTransferService(
   private val evac = ConcurrentHashMap<UUID, Evac>()
   /** UUIDs whose latest quit was caused by our own transfer. External quit consumers (e.g. combat-log) consult this. */
   private val transferQuit = ConcurrentHashMap.newKeySet<UUID>()
+  private val intentSequence = AtomicLong()
+  private val intentRevisions = ConcurrentHashMap<UUID, Long>()
 
   companion object {
     /** Evac records older than this are dropped (failed/app-killed reconnects). Design: 60s TTL. */
@@ -52,56 +56,60 @@ class BedrockTransferService(
 
   fun allow(player: Player) {
     if (!transferEnabled()) {
-      // Phase-1 fallback: same behavior as before (persisted allow, Java pack untouched).
+      // Disabled deployments retain the preference without attempting Java-pack delivery.
       plugin.resourcePackService.allow(player)
       return
     }
+    val intentRevision = intentSequence.incrementAndGet()
+    intentRevisions[player.uniqueId] = intentRevision
     Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
       runCatching { preferences.set(player.uniqueId, ResourcePackPreference.ALLOW) }
           .onSuccess {
             Bukkit.getScheduler().runTask(plugin, Runnable {
-              if (!player.isOnline) return@Runnable
+              if (!player.isOnline || intentRevisions[player.uniqueId] != intentRevision) return@Runnable
               evacuate(player)
-              // The pack lands via Transfer re-login; mark loaded so Paper routes
-              // extended bank events once applied.
-              plugin.resourcePackService.markExternalSuccess(player.uniqueId)
               val packId = plugin.config.getString("bedrock.pack-id", "").orEmpty()
-              sendTransferRequest(player, packId)
+              sendTransferRequest(player, true, packId)
               player.sendMessage("§e拡張音域パック適用のため再接続します。そのままお待ちください。")
             })
           }
           .onFailure {
             Bukkit.getScheduler().runTask(plugin, Runnable {
-              if (player.isOnline) player.sendMessage("§c設定の保存に失敗したため、許可状態は変更しませんでした。")
+              if (player.isOnline && intentRevisions[player.uniqueId] == intentRevision) {
+                player.sendMessage("§c設定の保存に失敗したため、許可状態は変更しませんでした。")
+              }
             })
           }
     })
   }
 
   fun deny(player: Player) {
-    evac.remove(player.uniqueId)
-    transferQuit.remove(player.uniqueId)
-    // Deny unloads at the next natural login (no forced reconnect): forget pack state now.
-    plugin.resourcePackService.forget(player.uniqueId)
+    val intentRevision = intentSequence.incrementAndGet()
+    intentRevisions[player.uniqueId] = intentRevision
     Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
       val saved = runCatching { preferences.set(player.uniqueId, ResourcePackPreference.DENY) }.isSuccess
       Bukkit.getScheduler().runTask(plugin, Runnable {
-        if (!player.isOnline) return@Runnable
+        if (!player.isOnline || intentRevisions[player.uniqueId] != intentRevision) return@Runnable
         if (!saved) {
           player.sendMessage("§c設定の保存に失敗したため、停止状態は変更しませんでした。")
           return@Runnable
         }
+        evac.remove(player.uniqueId)
+        transferQuit.remove(player.uniqueId)
+        plugin.resourcePackService.forget(player.uniqueId)
+        val packId = plugin.config.getString("bedrock.pack-id", "").orEmpty()
+        sendTransferRequest(player, false, packId)
         player.sendMessage("§e統合版の拡張音域パックを停止しました。次回入室時から通常音域になります。")
       })
     })
   }
 
-  private fun sendTransferRequest(player: Player, packId: String) {
+  private fun sendTransferRequest(player: Player, allow: Boolean, packId: String) {
     runCatching {
       player.sendPluginMessage(
           plugin,
           BedrockTransferCodec.CHANNEL,
-          BedrockTransferCodec.encode(player.uniqueId, true, packId),
+          BedrockTransferCodec.encode(player.uniqueId, allow, packId),
       )
     }
   }
@@ -116,6 +124,15 @@ class BedrockTransferService(
             System.currentTimeMillis() + EVAC_TTL_MILLIS,
         )
     transferQuit.add(player.uniqueId)
+    // If Velocity cannot transfer the player, do not leave an ordinary later quit classified
+    // as transfer-driven for the full server lifetime.
+    Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+      val saved = evac[player.uniqueId] ?: return@Runnable
+      if (saved.expiresAtMillis <= System.currentTimeMillis() && player.isOnline) {
+        evac.remove(player.uniqueId, saved)
+        transferQuit.remove(player.uniqueId)
+      }
+    }, EVAC_TTL_MILLIS / 50L + 1L)
   }
 
   @EventHandler
@@ -123,6 +140,7 @@ class BedrockTransferService(
     val player = event.player
     val saved = evac.remove(player.uniqueId) ?: run {
       transferQuit.remove(player.uniqueId)
+      restorePersistedAllow(player)
       return
     }
     transferQuit.remove(player.uniqueId)
@@ -133,6 +151,34 @@ class BedrockTransferService(
       runCatching { player.gameMode = saved.gameMode }
       runCatching { player.allowFlight = saved.allowFlight }
       runCatching { if (saved.flying) player.isFlying = true }
+      plugin.resourcePackService.markExternalSuccess(player.uniqueId)
     }, RESTORE_DELAY_TICKS)
+  }
+
+  @EventHandler
+  fun onQuit(event: PlayerQuitEvent) {
+    intentRevisions.remove(event.player.uniqueId)
+  }
+
+  /** Rehydrates Velocity's intentionally in-memory flag after proxy/Paper restarts. */
+  private fun restorePersistedAllow(player: Player) {
+    if (!transferEnabled()) return
+    val bedrockPrefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
+    if (!BedrockUtil.isBedrock(player, bedrockPrefix)) return
+    val intentRevision = intentSequence.incrementAndGet()
+    intentRevisions[player.uniqueId] = intentRevision
+    Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+      val allowed =
+          runCatching { preferences.get(player.uniqueId) == ResourcePackPreference.ALLOW }
+              .getOrDefault(false)
+      Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+        if (!allowed || !player.isOnline || evac.containsKey(player.uniqueId) ||
+            intentRevisions[player.uniqueId] != intentRevision) return@Runnable
+        evacuate(player)
+        val packId = plugin.config.getString("bedrock.pack-id", "").orEmpty()
+        sendTransferRequest(player, true, packId)
+        player.sendMessage("§e拡張音域パックの状態を復元するため再接続します。そのままお待ちください。")
+      }, 20L)
+    })
   }
 }

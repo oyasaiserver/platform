@@ -24,7 +24,7 @@ class OyasaiPluginMessaging(
     messenger.registerIncomingPluginChannel(plugin, UploadPacketCodec.CHANNEL, this)
     messenger.registerOutgoingPluginChannel(plugin, PlaybackBuffer.CHANNEL)
     messenger.registerIncomingPluginChannel(plugin, PlaybackBuffer.CHANNEL, this)
-    // Bedrock transfer requests are Paper -> Velocity only (phase-2 consumer); outgoing registration suffices.
+    // Bedrock transfer requests are Paper -> Velocity only; outgoing registration suffices.
     messenger.registerOutgoingPluginChannel(plugin, BedrockTransferCodec.CHANNEL)
     uploads.bindPacketSender(::sendUpload)
     plugin.server.pluginManager.registerEvents(this, plugin)
