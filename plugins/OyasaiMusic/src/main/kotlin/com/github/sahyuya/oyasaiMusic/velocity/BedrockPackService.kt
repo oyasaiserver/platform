@@ -22,11 +22,10 @@ import org.slf4j.Logger
 /**
  * Minimal Bedrock pack service for Velocity.
  *
- * Paper owns all decisions and persisted state; this side only tracks the pack-enabled
- * set in memory, executes Transfer, and injects the locally hosted .mcpack at Bedrock
- * login. The pack file lives in this plugin's data `packs/` directory (never inside
- * Geyser's auto-apply packs directory) and is loaded lazily on first need so an idle
- * proxy keeps no pack bytes resident.
+ * Paper owns all decisions and persisted state; this side only tracks the pack-enabled set in
+ * memory, executes Transfer, and injects the locally hosted .mcpack at Bedrock login. The pack file
+ * lives in this plugin's data `packs/` directory (never inside Geyser's auto-apply packs directory)
+ * and is loaded lazily on first need so an idle proxy keeps no pack bytes resident.
  */
 class BedrockPackService(
     private val proxy: ProxyServer,
@@ -66,17 +65,35 @@ class BedrockPackService(
         )
         logger.info("Wrote default {}. Place the .mcpack under ./packs/.", CONFIG_FILE)
       }
-      Properties().apply { Files.newInputStream(configPath).use(::load) }.let { props ->
-        packFile = props.getProperty("pack-file", DEFAULT_PACK_FILE).trim().ifBlank { DEFAULT_PACK_FILE }
-        transferHost = props.getProperty("transfer-host", DEFAULT_HOST).trim().ifBlank { DEFAULT_HOST }
-        transferPort = props.getProperty("transfer-port", DEFAULT_PORT.toString()).trim().toIntOrNull()
-            ?.coerceIn(1, 65535) ?: DEFAULT_PORT
-      }
+      Properties()
+          .apply { Files.newInputStream(configPath).use(::load) }
+          .let { props ->
+            packFile =
+                props.getProperty("pack-file", DEFAULT_PACK_FILE).trim().ifBlank {
+                  DEFAULT_PACK_FILE
+                }
+            transferHost =
+                props.getProperty("transfer-host", DEFAULT_HOST).trim().ifBlank { DEFAULT_HOST }
+            transferPort =
+                props
+                    .getProperty("transfer-port", DEFAULT_PORT.toString())
+                    .trim()
+                    .toIntOrNull()
+                    ?.coerceIn(1, 65535) ?: DEFAULT_PORT
+          }
       val file = dataDirectory.resolve(PACKS_DIR).resolve(packFile)
       if (Files.isRegularFile(file)) {
-        logger.info("Bedrock pack configured: {} ({} bytes, sha1 {})", file.fileName, Files.size(file), sha1Hex(file))
+        logger.info(
+            "Bedrock pack configured: {} ({} bytes, sha1 {})",
+            file.fileName,
+            Files.size(file),
+            sha1Hex(file),
+        )
       } else {
-        logger.warn("Bedrock pack missing: {}. Transfer requests will be rejected until the pack is installed.", file)
+        logger.warn(
+            "Bedrock pack missing: {}. Transfer requests will be rejected until the pack is installed.",
+            file,
+        )
       }
     } catch (error: Exception) {
       logger.warn("Failed to load bedrock pack config, pack injection disabled.", error)
@@ -105,7 +122,10 @@ class BedrockPackService(
     // that the external pack is usable.
     if (packOrNull() == null || !ensureSubscribed()) {
       packEnabled.remove(request.playerId)
-      logger.warn("Rejected Bedrock pack enable for {} because pack injection is unavailable.", request.playerId)
+      logger.warn(
+          "Rejected Bedrock pack enable for {} because pack injection is unavailable.",
+          request.playerId,
+      )
       return
     }
     packEnabled[request.playerId] = true
@@ -131,12 +151,21 @@ class BedrockPackService(
 
   private fun ensureSubscribed(): Boolean {
     if (subscribed.get()) return true
-    val api = GeyserApi.api() ?: run {
-      logger.warn("Geyser API unavailable; Bedrock pack injection deferred until Geyser enables.")
-      return false
-    }
+    val api =
+        GeyserApi.api()
+            ?: run {
+              logger.warn(
+                  "Geyser API unavailable; Bedrock pack injection deferred until Geyser enables."
+              )
+              return false
+            }
     return try {
-      api.eventBus().subscribe(EventRegistrar.of(this), SessionLoadResourcePacksEvent::class.java, this::onSessionLoadPacks)
+      api.eventBus()
+          .subscribe(
+              EventRegistrar.of(this),
+              SessionLoadResourcePacksEvent::class.java,
+              this::onSessionLoadPacks,
+          )
       subscribed.set(true)
       true
     } catch (error: Exception) {
@@ -146,14 +175,18 @@ class BedrockPackService(
   }
 
   private fun transfer(playerId: UUID): Boolean {
-    val api = GeyserApi.api() ?: run {
-      logger.warn("Geyser API unavailable; cannot transfer {}.", playerId)
-      return false
-    }
-    val connection = api.connectionByUuid(playerId) ?: run {
-      logger.info("No Geyser session for {}; skipping transfer.", playerId)
-      return false
-    }
+    val api =
+        GeyserApi.api()
+            ?: run {
+              logger.warn("Geyser API unavailable; cannot transfer {}.", playerId)
+              return false
+            }
+    val connection =
+        api.connectionByUuid(playerId)
+            ?: run {
+              logger.info("No Geyser session for {}; skipping transfer.", playerId)
+              return false
+            }
     return try {
       connection.transfer(transferHost, transferPort)
       true
@@ -164,9 +197,13 @@ class BedrockPackService(
   }
 
   private fun packOrNull(): ResourcePack? {
-    cachedPack?.let { return it }
+    cachedPack?.let {
+      return it
+    }
     synchronized(this) {
-      cachedPack?.let { return it }
+      cachedPack?.let {
+        return it
+      }
       val file = dataDirectory.resolve(PACKS_DIR).resolve(packFile)
       if (!Files.isRegularFile(file)) {
         logger.warn("Bedrock pack missing: {}; skipping injection.", file)
@@ -186,15 +223,16 @@ class BedrockPackService(
 
   private fun sha1Hex(path: Path): String =
       runCatching {
-        val digest = MessageDigest.getInstance("SHA-1")
-        Files.newInputStream(path).use { input ->
-          val buffer = ByteArray(65536)
-          while (true) {
-            val read = input.read(buffer)
-            if (read <= 0) break
-            digest.update(buffer, 0, read)
+            val digest = MessageDigest.getInstance("SHA-1")
+            Files.newInputStream(path).use { input ->
+              val buffer = ByteArray(65536)
+              while (true) {
+                val read = input.read(buffer)
+                if (read <= 0) break
+                digest.update(buffer, 0, read)
+              }
+            }
+            digest.digest().joinToString("") { "%02x".format(it) }
           }
-        }
-        digest.digest().joinToString("") { "%02x".format(it) }
-      }.getOrDefault("unknown")
+          .getOrDefault("unknown")
 }

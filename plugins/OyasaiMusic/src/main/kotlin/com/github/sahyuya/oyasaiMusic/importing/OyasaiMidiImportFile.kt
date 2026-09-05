@@ -60,7 +60,8 @@ object OyasaiMidiImportFile {
       require(noteCount <= MAX_EXISTING_OYMB_NOTES) {
         "現在のOyasaiMusic音源で読み込めるノート数（$MAX_EXISTING_OYMB_NOTES）を超えています。"
       }
-      val expectedLength = HEADER_SIZE + metadataLength + noteCount * if (version == 4) 9L else NOTE_SIZE
+      val expectedLength =
+          HEADER_SIZE + metadataLength + noteCount * if (version == 4) 9L else NOTE_SIZE
       require(sourceLength == expectedLength) { "データ長とヘッダー情報が一致しません。" }
 
       val metadataBytes = input.readNBytes(metadataLength.toInt())
@@ -93,7 +94,8 @@ object OyasaiMidiImportFile {
       repeat(noteCount.toInt()) { noteIndex ->
         val timeMs = input.readInt().toLong() and 0xFFFF_FFFFL
         val stableInstrumentId = input.readUnsignedByte()
-        val pitchCents = if (version == 4) input.readShort().toInt() else input.readUnsignedByte() * 100
+        val pitchCents =
+            if (version == 4) input.readShort().toInt() else input.readUnsignedByte() * 100
         val volume = input.readUnsignedByte()
         val pan = input.readByte().toInt()
         require(timeMs <= Int.MAX_VALUE.toLong()) { "発音時刻がOyasaiMusicの上限を超えています。" }

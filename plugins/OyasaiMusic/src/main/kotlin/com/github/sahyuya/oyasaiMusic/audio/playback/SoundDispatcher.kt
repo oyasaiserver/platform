@@ -46,7 +46,13 @@ object SoundDispatcher {
     val pitch = InstrumentMapper.pitchCentsToPlaybackPitch(note.pitchCents)
     val volume = volumeParam(note.volume)
     if (extended != null) {
-      recipient.playSound(recipient, extended.soundEvent, SoundCategory.RECORDS, volume, extended.pitch)
+      recipient.playSound(
+          recipient,
+          extended.soundEvent,
+          SoundCategory.RECORDS,
+          volume,
+          extended.pitch,
+      )
       return
     }
     val customSound = note.customSound
@@ -65,12 +71,23 @@ object SoundDispatcher {
     recipient.playSound(adventureSound, AdventureSound.Emitter.self())
   }
 
-  private fun playPositional(recipient: Player, note: NoteEvent, pan: Int, extended: ExtendedPlayback?) {
+  private fun playPositional(
+      recipient: Player,
+      note: NoteEvent,
+      pan: Int,
+      extended: ExtendedPlayback?,
+  ) {
     val pitch = InstrumentMapper.pitchCentsToPlaybackPitch(note.pitchCents)
     val volume = volumeParam(note.volume)
     val location = virtualLocation(recipient, pan)
     if (extended != null) {
-      recipient.playSound(location, extended.soundEvent, SoundCategory.RECORDS, volume, extended.pitch)
+      recipient.playSound(
+          location,
+          extended.soundEvent,
+          SoundCategory.RECORDS,
+          volume,
+          extended.pitch,
+      )
       return
     }
     val customSound = note.customSound

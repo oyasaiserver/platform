@@ -33,6 +33,7 @@ constructor(
     @DataDirectory private val dataDirectory: Path,
 ) {
   private val bedrockPacks = BedrockPackService(proxy, logger, dataDirectory)
+
   companion object {
     private const val MAIN_SERVER = "main"
     private val CHANNELS =

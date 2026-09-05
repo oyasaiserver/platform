@@ -9,9 +9,9 @@ import java.util.UUID
 /**
  * Binary OMMT upload protocol carried by Minecraft plugin messages.
  *
- * The client may send only a small [Request] before Paper authorizes the transfer with READY.
- * Song bytes are compressed OYMC, never command text, Base64 or Unicode15. Every allocation is
- * bounded by manifest values validated here and again by the upload service.
+ * The client may send only a small [Request] before Paper authorizes the transfer with READY. Song
+ * bytes are compressed OYMC, never command text, Base64 or Unicode15. Every allocation is bounded
+ * by manifest values validated here and again by the upload service.
  */
 object UploadPacketCodec {
   const val CHANNEL = "oyasaimusic:upload_v1"
@@ -40,7 +40,8 @@ object UploadPacketCodec {
   const val CAP_CUSTOM_SOUND = 1 shl 1
   const val CAP_CUSTOM_SOUND_PATTERN = 1 shl 2
   const val CAP_OYMI_V4_PITCH_CENTS = 1 shl 3
-  const val CAPABILITIES = CAP_COMPACT_ZLIB or CAP_CUSTOM_SOUND or CAP_CUSTOM_SOUND_PATTERN or CAP_OYMI_V4_PITCH_CENTS
+  const val CAPABILITIES =
+      CAP_COMPACT_ZLIB or CAP_CUSTOM_SOUND or CAP_CUSTOM_SOUND_PATTERN or CAP_OYMI_V4_PITCH_CENTS
 
   sealed interface ClientMessage {
     val id: UUID

@@ -249,7 +249,8 @@ class DatabaseManager(private val plugin: Plugin, databaseFileName: String) {
                 allowed INTEGER NOT NULL CHECK (allowed IN (0, 1)),
                 updated_at INTEGER NOT NULL
             );
-            """.trimIndent()
+            """
+                .trimIndent()
         )
       }
     }

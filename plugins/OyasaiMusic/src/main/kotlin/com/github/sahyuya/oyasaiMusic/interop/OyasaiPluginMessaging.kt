@@ -52,9 +52,10 @@ class OyasaiPluginMessaging(
 
   fun broadcastServerCapabilities() {
     if (!enabled) return
-    plugin.server.scheduler.runTask(plugin, Runnable {
-      plugin.server.onlinePlayers.forEach(::sendServerCapabilities)
-    })
+    plugin.server.scheduler.runTask(
+        plugin,
+        Runnable { plugin.server.onlinePlayers.forEach(::sendServerCapabilities) },
+    )
   }
 
   private fun sendServerCapabilities(player: Player) {

@@ -42,7 +42,8 @@ class ToastNotificationService(private val plugin: OyasaiMusic) {
     if (!author.isOnline) return
     // 題名は素通しリテラルで埋め込み、`&`/`§`入りでも装飾化けしないようにする。
     val title =
-        Component.literal(likerName).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE)
+        Component.literal(likerName)
+            .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE)
             .append(Component.literal(" さんが ").withStyle(net.minecraft.ChatFormatting.WHITE))
             .append(Component.literal("「$songTitle」").withStyle(net.minecraft.ChatFormatting.AQUA))
             .append(Component.literal(" にいいねしました").withStyle(net.minecraft.ChatFormatting.WHITE))

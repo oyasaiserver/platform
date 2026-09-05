@@ -11,7 +11,6 @@ dependencies {
   compileOnly(libs.fawe.bukkit)
   compileOnly(libs.velocity.api) { exclude(group = "net.kyori") }
   compileOnly(libs.geyser.api)
-
 }
 
 tasks {

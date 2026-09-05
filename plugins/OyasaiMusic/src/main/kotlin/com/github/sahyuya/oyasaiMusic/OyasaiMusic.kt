@@ -32,9 +32,9 @@ import com.github.sahyuya.oyasaiMusic.gui.PlaybackController
 import com.github.sahyuya.oyasaiMusic.gui.PlayerControllerStateService
 import com.github.sahyuya.oyasaiMusic.gui.ToastNotificationService
 import com.github.sahyuya.oyasaiMusic.importing.OyasaiImportService
-import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.interop.OmmtPlaybackClientRegistry
 import com.github.sahyuya.oyasaiMusic.interop.OmmtUploadService
+import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.item.PhysicalMusicPlayerItem
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordListener
 import com.github.sahyuya.oyasaiMusic.model.Song
@@ -302,7 +302,8 @@ class OyasaiMusic : JavaPlugin() {
       playbackEngine = createPlaybackEngine()
       ommtPlaybackClientRegistry.bindFailureHandler(playbackEngine::handleClientPlaybackFailure)
       previous.shutdown()
-      if (::ommtPlaybackClientRegistry.isInitialized) ommtPlaybackClientRegistry.invalidateCapabilities()
+      if (::ommtPlaybackClientRegistry.isInitialized)
+          ommtPlaybackClientRegistry.invalidateCapabilities()
     }
   }
 

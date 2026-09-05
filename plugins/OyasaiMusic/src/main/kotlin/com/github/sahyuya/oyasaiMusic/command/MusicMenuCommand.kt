@@ -44,19 +44,21 @@ class MusicMenuCommand(private val plugin: OyasaiMusic) : CommandExecutor, TabCo
             )
             plugin.playbackController.play(player, song)
           }
-      "resourcepack", "rp" -> when (args.getOrNull(1)?.lowercase()) {
-        "allow" -> {
-          val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
-          if (BedrockUtil.isBedrock(player, prefix)) plugin.bedrockTransferService.allow(player)
-          else plugin.resourcePackService.allow(player)
-        }
-        "deny" -> {
-          val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
-          if (BedrockUtil.isBedrock(player, prefix)) plugin.bedrockTransferService.deny(player)
-          else plugin.resourcePackService.deny(player)
-        }
-        else -> player.sendMessage("§e/mm resourcepack|rp <allow|deny>")
-      }
+      "resourcepack",
+      "rp" ->
+          when (args.getOrNull(1)?.lowercase()) {
+            "allow" -> {
+              val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
+              if (BedrockUtil.isBedrock(player, prefix)) plugin.bedrockTransferService.allow(player)
+              else plugin.resourcePackService.allow(player)
+            }
+            "deny" -> {
+              val prefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
+              if (BedrockUtil.isBedrock(player, prefix)) plugin.bedrockTransferService.deny(player)
+              else plugin.resourcePackService.deny(player)
+            }
+            else -> player.sendMessage("§e/mm resourcepack|rp <allow|deny>")
+          }
       else -> player.sendMessage("§e/mm [play|open|resourcepack] <楽曲ID|allow|deny>")
     }
     return true
@@ -97,7 +99,10 @@ class MusicMenuCommand(private val plugin: OyasaiMusic) : CommandExecutor, TabCo
   ): List<String> =
       when (args.size) {
         1 -> listOf("play", "open", "resourcepack", "rp").filter { it.startsWith(args[0], true) }
-        2 -> if (args[0].equals("resourcepack", true) || args[0].equals("rp", true)) listOf("allow", "deny").filter { it.startsWith(args[1], true) } else emptyList()
+        2 ->
+            if (args[0].equals("resourcepack", true) || args[0].equals("rp", true))
+                listOf("allow", "deny").filter { it.startsWith(args[1], true) }
+            else emptyList()
         else -> emptyList()
       }
 }

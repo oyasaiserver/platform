@@ -89,7 +89,8 @@ object SongAudioFile {
       repeat(totalNotes) {
         val timeMs = input.readInt()
         val inst = input.readUnsignedByte()
-        val pitchCents = if (version == 4) input.readShort().toInt() else input.readUnsignedByte() * 100
+        val pitchCents =
+            if (version == 4) input.readShort().toInt() else input.readUnsignedByte() * 100
         val volume = input.readUnsignedByte()
         val pan = input.readByte().toInt() // 符号あり読み込み(-128..127)
         val customSound =

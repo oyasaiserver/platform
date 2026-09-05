@@ -134,21 +134,31 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                           // connection first and defer until either OMMT's matching bank or the
                           // external resource pack has actually been confirmed.
                           if (plugin.resourcePackService.requestIfNeeded(viewer)) {
-                            plugin.resourcePackService.deferPlayback(viewer.uniqueId, song, onCompletion, rememberInHistory)
+                            plugin.resourcePackService.deferPlayback(
+                                viewer.uniqueId,
+                                song,
+                                onCompletion,
+                                rememberInHistory,
+                            )
                             viewer.sendMessage("§e拡張音域を準備しています。完了後に再生を開始します。")
                             return@startPlayback
                           }
                           val prepared =
                               if (!useBufferedRoute) {
                                 null
-                              } else if (plugin.ommtPlaybackClientRegistry.supportsV2(viewer.uniqueId)) {
-                                val loadedManifest = plugin.resourcePackService.manifestHashFor(viewer.uniqueId)
+                              } else if (
+                                  plugin.ommtPlaybackClientRegistry.supportsV2(viewer.uniqueId)
+                              ) {
+                                val loadedManifest =
+                                    plugin.resourcePackService.manifestHashFor(viewer.uniqueId)
                                 val bank = preparedV2Bank?.get(mode)
                                 if (
                                     bank != null &&
                                         loadedManifest != null &&
                                         loadedManifest.contentEquals(bank.manifestHash) &&
-                                        plugin.ommtPlaybackClientRegistry.supportsBankManifest(viewer.uniqueId)
+                                        plugin.ommtPlaybackClientRegistry.supportsBankManifest(
+                                            viewer.uniqueId
+                                        )
                                 ) {
                                   bank
                                 } else {
@@ -183,17 +193,17 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                                     }
                                   },
                                   onCompletion = { finishedSession ->
-                                      val s2 = plugin.controllerStateService.stateFor(viewer.uniqueId)
-                                      if (s2.activeSession?.sessionId == finishedSession.sessionId) {
-                                        cancelPauseAutoFinish(viewer.uniqueId)
-                                        s2.isPlaying = false
-                                        s2.activeSession = null
-                                        nowPlayingDurations.remove(viewer.uniqueId)
-                                        hideNowPlayingBar(viewer)
-                                        menuManager.refreshCurrent(viewer.uniqueId)
-                                        onCompletion?.invoke()
-                                      }
-                                    },
+                                    val s2 = plugin.controllerStateService.stateFor(viewer.uniqueId)
+                                    if (s2.activeSession?.sessionId == finishedSession.sessionId) {
+                                      cancelPauseAutoFinish(viewer.uniqueId)
+                                      s2.isPlaying = false
+                                      s2.activeSession = null
+                                      nowPlayingDurations.remove(viewer.uniqueId)
+                                      hideNowPlayingBar(viewer)
+                                      menuManager.refreshCurrent(viewer.uniqueId)
+                                      onCompletion?.invoke()
+                                    }
+                                  },
                               )
                           state.isPlaying = true
                           state.nowPlayingSong = song
@@ -202,9 +212,12 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
                           if (rememberInHistory) rememberSong(state, song)
                           menuManager.refreshCurrent(viewer.uniqueId)
                         }
-                        // POSITIONAL also supports buffered OMMT playback with spatialMode=1 and bank manifest.
-                        // Previously POSITIONAL was forced to Paper (startPlayback(false)), which prevented
-                        // OMMT client-side bank rendering and manifested as "allow downloads but not audible".
+                        // POSITIONAL also supports buffered OMMT playback with spatialMode=1 and
+                        // bank manifest.
+                        // Previously POSITIONAL was forced to Paper (startPlayback(false)), which
+                        // prevented
+                        // OMMT client-side bank rendering and manifested as "allow downloads but
+                        // not audible".
                         plugin.ommtPlaybackClientRegistry.resolveForPlayback(viewer, startPlayback)
                       },
                   )
@@ -246,34 +259,42 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
     pauseAutoFinishTasks.remove(playerId)?.cancel()
   }
 
-  /**
-   * 一時停止のまま20秒経過したら、その曲を再生終了扱いにする。ボスバーと再生進捗を
-   * 自然終了と同一にリセットする（`nowPlayingSong`/履歴は残し、再再生は可能）。
-   */
-  private fun schedulePauseAutoFinish(viewer: Player, session: com.github.sahyuya.oyasaiMusic.audio.PlaybackSession) {
+  /** 一時停止のまま20秒経過したら、その曲を再生終了扱いにする。ボスバーと再生進捗を 自然終了と同一にリセットする（`nowPlayingSong`/履歴は残し、再再生は可能）。 */
+  private fun schedulePauseAutoFinish(
+      viewer: Player,
+      session: com.github.sahyuya.oyasaiMusic.audio.PlaybackSession,
+  ) {
     cancelPauseAutoFinish(viewer.uniqueId)
     val playerId = viewer.uniqueId
     val sessionId = session.sessionId
     pauseAutoFinishTasks[playerId] =
-        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-          pauseAutoFinishTasks.remove(playerId)
-          val state = plugin.controllerStateService.stateFor(playerId)
-          val current = state.activeSession
-          if (current == null || current.sessionId != sessionId) return@Runnable
-          if (current.isCancelled || !current.isPaused || state.isPlaying) return@Runnable
-          plugin.playbackEngine.stop(current)
-          state.isPlaying = false
-          state.activeSession = null
-          nowPlayingDurations.remove(playerId)
-          Bukkit.getPlayer(playerId)?.takeIf { it.isOnline }?.let { online ->
-            hideNowPlayingBar(online)
-            menuManager.refreshCurrent(playerId)
-            GuiFeedback.info(online, "20秒間一時停止のため再生を終了しました。", NamedTextColor.GRAY)
-          } ?: run {
-            bossBarTasks.remove(playerId)?.cancel()
-            nowPlayingBars.remove(playerId)
-          }
-        }, PAUSE_AUTO_FINISH_TICKS)
+        Bukkit.getScheduler()
+            .runTaskLater(
+                plugin,
+                Runnable {
+                  pauseAutoFinishTasks.remove(playerId)
+                  val state = plugin.controllerStateService.stateFor(playerId)
+                  val current = state.activeSession
+                  if (current == null || current.sessionId != sessionId) return@Runnable
+                  if (current.isCancelled || !current.isPaused || state.isPlaying) return@Runnable
+                  plugin.playbackEngine.stop(current)
+                  state.isPlaying = false
+                  state.activeSession = null
+                  nowPlayingDurations.remove(playerId)
+                  Bukkit.getPlayer(playerId)
+                      ?.takeIf { it.isOnline }
+                      ?.let { online ->
+                        hideNowPlayingBar(online)
+                        menuManager.refreshCurrent(playerId)
+                        GuiFeedback.info(online, "20秒間一時停止のため再生を終了しました。", NamedTextColor.GRAY)
+                      }
+                      ?: run {
+                        bossBarTasks.remove(playerId)?.cancel()
+                        nowPlayingBars.remove(playerId)
+                      }
+                },
+                PAUSE_AUTO_FINISH_TICKS,
+            )
   }
 
   /** 下段「再生中の曲」ボタン。再生中の曲の楽曲詳細画面を開く。 */

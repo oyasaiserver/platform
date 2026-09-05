@@ -36,9 +36,9 @@ OMMTの通常通信はMinecraftのPlugin Messageを使用します。チャッ�
 バイト単位の固定仕様、制限、互換性表、移行・ロールバック条件は
 [`docs/OMMT_PLUGIN_MESSAGE_PROTOCOL_V1.md`](docs/OMMT_PLUGIN_MESSAGE_PROTOCOL_V1.md)に記載しています。
 
-| チャンネル | 方向 | 用途 |
-| --- | --- | --- |
-| `oyasaimusic:upload_v1` | OMMT ↔ main | OYMC圧縮バイナリの下書きインポート |
+| チャンネル                | 方向        | 用途                                         |
+| ------------------------- | ----------- | -------------------------------------------- |
+| `oyasaimusic:upload_v1`   | OMMT ↔ main | OYMC圧縮バイナリの下書きインポート           |
 | `oyasaimusic:playback_v1` | main ↔ OMMT | 初回再生時の能力確認、事前バッファ、再生制御 |
 
 アップロードでは、OMMTがサーバーのチャンネル登録を確認できた場合だけ小さなREQUESTを送ります。Paperは接続中プレイヤーの

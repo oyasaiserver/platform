@@ -156,7 +156,9 @@ object VanillaSoundCatalog {
             "weather.rain" to "9.1.1",
             "weather.rain.above" to "9.1.2",
         )
-        .forEach { (event, id) -> if (patternsByEvent.containsKey(event)) idByEvent.putIfAbsent(event, id) }
+        .forEach { (event, id) ->
+          if (patternsByEvent.containsKey(event)) idByEvent.putIfAbsent(event, id)
+        }
     return patternsByEvent.entries
         .sortedBy { it.key }
         .map { (eventKey, patterns) -> SoundDefinition(eventKey, idByEvent[eventKey], patterns) }
@@ -171,7 +173,7 @@ object VanillaSoundCatalog {
       get(member)?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }?.asInt
 
   private fun sha1(file: File): String =
-      MessageDigest.getInstance("SHA-1")
-          .digest(file.readBytes())
-          .joinToString("") { "%02x".format(it.toInt() and 0xff) }
+      MessageDigest.getInstance("SHA-1").digest(file.readBytes()).joinToString("") {
+        "%02x".format(it.toInt() and 0xff)
+      }
 }

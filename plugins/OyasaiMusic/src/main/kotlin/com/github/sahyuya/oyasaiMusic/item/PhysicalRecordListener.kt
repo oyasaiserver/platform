@@ -93,7 +93,8 @@ class PhysicalRecordListener(private val plugin: OyasaiMusic) : Listener {
         }
         val oldId = oldEntry.song.id ?: return
         val oldAuthor = org.bukkit.Bukkit.getOfflinePlayer(oldEntry.song.authorUuid).name ?: "不明"
-        val oldMaterial = Material.matchMaterial(oldEntry.song.recordMaterial) ?: Material.MUSIC_DISC_13
+        val oldMaterial =
+            Material.matchMaterial(oldEntry.song.recordMaterial) ?: Material.MUSIC_DISC_13
         var rebuilt =
             PhysicalRecordItem.create(plugin, oldMaterial, oldId, oldEntry.song.title, oldAuthor)
         rebuilt = PhysicalRecordItem.withRange(plugin, rebuilt, oldEntry.range)
