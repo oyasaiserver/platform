@@ -5,6 +5,7 @@ discord-webhooks = {module = "club.minnced:discord-webhooks", version.ref = "dis
 discordsrv = {module = "com.discordsrv:discordsrv", version.ref = "discordsrv"}
 exposed-core = {module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed"}
 exposed-jdbc = {module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed"}
+geyser-api = {module = "org.geysermc.geyser:api", version.ref = "geyser-api"}
 gson = {module = "com.google.code.gson:gson", version.ref = "gson"}
 inventoryframework = {module = "com.github.stefvanschie.inventoryframework:IF", version.ref = "inventoryframework"}
 javacord = {module = "org.javacord:javacord", version.ref = "javacord"}
@@ -32,6 +33,7 @@ anvilgui = "1.10.11-SNAPSHOT"
 discord-webhooks = "0.8.4"
 discordsrv = "1.30.5"
 exposed = "1.4.0"
+geyser-api = "2.11.2-SNAPSHOT"
 gson = "2.14.0"
 inventoryframework = "0.12.0"
 javacord = "3.8.0"

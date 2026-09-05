@@ -1103,16 +1103,16 @@
   },
   "com.velocitypowered:velocity-native:3.4.0-SNAPSHOT": {
     "velocity-native-3.4.0-SNAPSHOT.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.jar",
-      "hash": "sha256-rN8CW1eC0lKoJwjZmPeFaxv522eodX8ubsXL97A3NjY="
+      "url": "https://repo.opencollab.dev/main/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20250617.204921-53.jar",
+      "hash": "sha256-/z3TYn0iDKQrGgErNuU9DHocfs/zQWTLjAJTRGQubBU="
     },
     "velocity-native-3.4.0-SNAPSHOT.module": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.module",
-      "hash": "sha256-cmT9vwlhnjmg8KfOK5Hp5HoMVZ2bqcqC7FVu5AyzalA="
+      "url": "https://repo.opencollab.dev/main/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20250617.204921-53.module",
+      "hash": "sha256-/Bhf31ZV7uv5bylo+EEEzgNXtpePHaRImTWtIg72L/s="
     },
     "velocity-native-3.4.0-SNAPSHOT.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20260121.190037-118.pom",
-      "hash": "sha256-LxSyizRhTF4tYhqIyd0oyZ/BGQPQEyfCFzAN0J2Zgwc="
+      "url": "https://repo.opencollab.dev/main/com/velocitypowered/velocity-native/3.4.0-SNAPSHOT/velocity-native-3.4.0-20250617.204921-53.pom",
+      "hash": "sha256-E2fVVpkP21k1Pbe4loH9fFVl7X7pND2fNemXs/Sz7ks="
     }
   },
   "com.zaxxer:SparseBitSet:1.3": {
@@ -2501,6 +2501,22 @@
       "hash": "sha256-kxO/U7Pv2KrKJm7qi5bjB5drZcCxZRDMbwIxn7rr7UM="
     }
   },
+  "org.cloudburstmc.math:immutable:2.0": {
+    "immutable-2.0.jar": {
+      "url": "https://repo.opencollab.dev/main/org/cloudburstmc/math/immutable/2.0/immutable-2.0.jar",
+      "hash": "sha256-atpQvgrGb0AStg7JsMfv6H8gHKmJ/T15Y0OKa7aYHr8="
+    },
+    "immutable-2.0.pom": {
+      "url": "https://repo.opencollab.dev/main/org/cloudburstmc/math/immutable/2.0/immutable-2.0.pom",
+      "hash": "sha256-bryMTuUHGDiWIcsxawHkeSnEOuC7gFCdIAjbMM5MoHI="
+    }
+  },
+  "org.cloudburstmc.math:math-parent:2.0": {
+    "math-parent-2.0.pom": {
+      "url": "https://repo.opencollab.dev/main/org/cloudburstmc/math/math-parent/2.0/math-parent-2.0.pom",
+      "hash": "sha256-6NJOWPaVSAHEQCct8+r1rguC7savGiK04rtt+WYSyJI="
+    }
+  },
   "org.codehaus.plexus:plexus:25": {
     "plexus-25.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus/25/plexus-25.pom",
@@ -2623,6 +2639,62 @@
       "hash": "sha256-djD0zU0WIAZ/qD4ddIsBLP+gZV5TgMwOSl4oPTtEH9s="
     }
   },
+  "org.geysermc.api:base-api:1.0.3": {
+    "base-api-1.0.3.jar": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/api/base-api/1.0.3/base-api-1.0.3.jar",
+      "hash": "sha256-gD1gWFCOmncEBpJ7Sve7hV51CqPXxf6JhkqslPnbmPg="
+    },
+    "base-api-1.0.3.module": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/api/base-api/1.0.3/base-api-1.0.3.module",
+      "hash": "sha256-4E78ZO2jgfMsXkxwgouvLrj/9/3ptzt+GudcH2RsG7A="
+    },
+    "base-api-1.0.3.pom": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/api/base-api/1.0.3/base-api-1.0.3.pom",
+      "hash": "sha256-XQI8OCxaD507nqVQ7/ci4bG9Je1H0LsFdPHTVf2MR/U="
+    }
+  },
+  "org.geysermc.cumulus:cumulus:1.1.2": {
+    "cumulus-1.1.2.jar": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/cumulus/cumulus/1.1.2/cumulus-1.1.2.jar",
+      "hash": "sha256-LC2AangqkqRJUmkkD4hXOkUtyvo3fq0yESMdOzYRo7U="
+    },
+    "cumulus-1.1.2.module": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/cumulus/cumulus/1.1.2/cumulus-1.1.2.module",
+      "hash": "sha256-CslogbMtWUWoKLzDobKcW0kRqcU0msbFWoDO6Jv24ic="
+    },
+    "cumulus-1.1.2.pom": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/cumulus/cumulus/1.1.2/cumulus-1.1.2.pom",
+      "hash": "sha256-F7rd35KiU677ETX9i/Ybzx0oodYpWo48Z4mqZh/xKxs="
+    }
+  },
+  "org.geysermc.event:events:1.1-SNAPSHOT": {
+    "events-1.1-SNAPSHOT.jar": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/event/events/1.1-SNAPSHOT/events-1.1-20230815.153219-4.jar",
+      "hash": "sha256-LTUw9A5kp1kObzEp6x7dK0FpeT05cmXBXZcJokjmAjE="
+    },
+    "events-1.1-SNAPSHOT.module": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/event/events/1.1-SNAPSHOT/events-1.1-20230815.153219-4.module",
+      "hash": "sha256-LoMUVclukCBqnGzDOEmpvYCjFA2YyleRrPyIt0qAWFA="
+    },
+    "events-1.1-SNAPSHOT.pom": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/event/events/1.1-SNAPSHOT/events-1.1-20230815.153219-4.pom",
+      "hash": "sha256-32+ZwWxsyuZINOP2mwWjKexCBPVEfNBy7SU5F4mMct4="
+    }
+  },
+  "org.geysermc.geyser:api:2.11.2-SNAPSHOT": {
+    "api-2.11.2-SNAPSHOT.jar": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260902.202549-8.jar",
+      "hash": "sha256-vxoOjMjW88D1PFXm6vhYTelpZIY3RTsLkBceewAL8BM="
+    },
+    "api-2.11.2-SNAPSHOT.module": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260902.202549-8.module",
+      "hash": "sha256-c/sGcJySPbQ7C9KqjRj+GoXyIi6fN6FUpv7TlkfCgto="
+    },
+    "api-2.11.2-SNAPSHOT.pom": {
+      "url": "https://repo.opencollab.dev/main/org/geysermc/geyser/api/2.11.2-SNAPSHOT/api-2.11.2-20260902.202549-8.pom",
+      "hash": "sha256-h9gDXZ36acfXmANoPttuwuGoKYhytfuttfkjhv4WC38="
+    }
+  },
   "org.javacord:javacord:3.8.0": {
     "javacord-3.8.0.module": {
       "url": "https://repo.maven.apache.org/maven2/org/javacord/javacord/3.8.0/javacord-3.8.0.module",
@@ -2689,6 +2761,12 @@
     "annotations-24.0.1.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/24.0.1/annotations-24.0.1.pom",
       "hash": "sha256-mb7eKcAzHBlS7uBL+ZeN5TWpDJfi3v/6XgCTNRcZJbA="
+    }
+  },
+  "org.jetbrains:annotations:24.0.0": {
+    "annotations-24.0.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/24.0.0/annotations-24.0.0.pom",
+      "hash": "sha256-q4eN2sP6teB48NqVHqvWf77d09KvFzn+t/lHFgJ1Xws="
     }
   },
   "org.jetbrains:annotations:23.0.0": {
