@@ -1,17 +1,19 @@
 package io.oyasai.oyasaitoken.internal
 
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 
 /**
  * In-memory balance view and the only place that may change it.
  *
  * The [persist] callback must enqueue all supplied writes as one FIFO persistence job. The callback
  * is invoked while this ledger's lock is held, so a successful enqueue and the matching memory
- * update have one ordering point for every mutation, including transfers.
+ * update have one ordering point for every mutation, including transfers. A non-null completion is
+ * completed by the persistence worker only after the job's transaction finishes.
  */
 internal class TokenLedger(
     private val defaultBalance: () -> Long,
-    private val persist: (List<BalanceWrite>) -> Boolean,
+    private val persist: (List<BalanceWrite>, CompletableFuture<Boolean>?) -> Boolean,
 ) {
   private val lock = Any()
   private val balances = mutableMapOf<UUID, BalanceRecord>()
@@ -39,7 +41,7 @@ internal class TokenLedger(
       val current = balances[uuid]
       if (current == null) {
         val created = BalanceRecord(name, defaultBalance())
-        if (persistIfMissing && persist(listOf(created.defaultWrite(uuid)))) {
+        if (persistIfMissing && persist(listOf(created.defaultWrite(uuid)), null)) {
           balances[uuid] = created
         }
         return created.balance
@@ -49,7 +51,7 @@ internal class TokenLedger(
           persistIfMissing &&
               !name.isNullOrBlank() &&
               current.name != name &&
-              persist(listOf(current.nameUpdate(uuid, name)))
+              persist(listOf(current.nameUpdate(uuid, name)), null)
       ) {
         balances[uuid] = current.copy(name = name)
       }
@@ -86,7 +88,30 @@ internal class TokenLedger(
   }
 
   fun add(uuid: UUID, name: String?, amount: Long): BalanceChange? {
-    if (amount < 0) return if (amount == Long.MIN_VALUE) null else remove(uuid, name, -amount)
+    return add(uuid, name, amount, completion = null)
+  }
+
+  fun addWithCommit(
+      uuid: UUID,
+      name: String?,
+      amount: Long,
+      completion: CompletableFuture<Boolean>,
+  ): BalanceChange? {
+    return add(uuid, name, amount, completion)
+  }
+
+  private fun add(
+      uuid: UUID,
+      name: String?,
+      amount: Long,
+      completion: CompletableFuture<Boolean>?,
+  ): BalanceChange? {
+    if (amount < 0) {
+      // This completion-bearing API is deliberately add-only: forwarding to remove would not
+      // carry the completion through the separate removal path.
+      completion?.complete(false)
+      return null
+    }
     return synchronized(lock) {
       val current = account(uuid, name)
       val next = current.record.balance.checkedAdd(amount) ?: return@synchronized null
@@ -101,6 +126,7 @@ internal class TokenLedger(
       commit(
           current.initialWrite?.let { listOf(it, write) } ?: listOf(write),
           mapOf(uuid to BalanceRecord(write.name, next)),
+          completion,
       ) {
         BalanceChange(
             uuid,
@@ -290,9 +316,10 @@ internal class TokenLedger(
   private inline fun <T> commit(
       writes: List<BalanceWrite>,
       updates: Map<UUID, BalanceRecord>,
+      completion: CompletableFuture<Boolean>? = null,
       accepted: () -> T,
   ): T? {
-    if (!persist(writes)) return null
+    if (!persist(writes, completion)) return null
     balances.putAll(updates)
     return accepted()
   }

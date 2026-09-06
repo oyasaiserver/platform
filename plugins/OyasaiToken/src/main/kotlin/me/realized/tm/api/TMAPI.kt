@@ -3,7 +3,9 @@
 package me.realized.tm.api
 
 import io.oyasai.oyasaitoken.api.OyasaiTokenApi
+import io.oyasai.oyasaitoken.api.OyasaiTokenCommitApi
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 import me.realized.tokenmanager.api.TokenManager
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -20,6 +22,13 @@ open class TMAPI {
       oyasaiToken()?.addTokens(uuid, amount.toLong())
           ?: tokenManager()
               ?.addTokens(Bukkit.getOfflinePlayer(uuid).name ?: uuid.toString(), amount.toLong())
+    }
+
+    /** Completes after OyasaiToken commits this add operation, or false when it is unavailable. */
+    @JvmStatic
+    fun addTokensWithCommit(uuid: UUID, amount: Int): CompletableFuture<Boolean> {
+      return oyasaiTokenCommit()?.addTokensWithCommit(uuid, amount.toLong())
+          ?: CompletableFuture.completedFuture(false)
     }
 
     @JvmStatic
@@ -74,6 +83,13 @@ open class TMAPI {
           .servicesManager
           .getRegistration(OyasaiTokenApi::class.java)
           ?.provider ?: Bukkit.getPluginManager().getPlugin("TokenManager") as? OyasaiTokenApi
+    }
+
+    private fun oyasaiTokenCommit(): OyasaiTokenCommitApi? {
+      return Bukkit.getServer()
+          .servicesManager
+          .getRegistration(OyasaiTokenCommitApi::class.java)
+          ?.provider ?: Bukkit.getPluginManager().getPlugin("TokenManager") as? OyasaiTokenCommitApi
     }
   }
 }
