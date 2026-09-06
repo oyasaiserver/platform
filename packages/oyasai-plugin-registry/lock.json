@@ -324,8 +324,8 @@
   "tab": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/Za7G9fdJ/TAB%20v6.1.2.jar",
-        "hash": "sha256-/ZljMoDSNnvijgAJSAQHwqh/qQLr6QSEZTtsChfq1ww="
+        "url": "https://cdn.modrinth.com/data/gG7VFbG0/versions/8gvFF92Z/TAB%20v6.1.3.jar",
+        "hash": "sha256-+jZBRyvIIKbhZ1HLvlA+VyMGzJl60Ftg4jC42HgSyxk="
       }
     }
   },
@@ -368,8 +368,8 @@
   "viaversion": {
     "paper": {
       "26.2": {
-        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/k63Gp33W/ViaVersion-5.12.0-SNAPSHOT.jar",
-        "hash": "sha256-nytoFtkxk4e2al25S9tlorsaDBCVJAbX49X3ORkq1Jw="
+        "url": "https://cdn.modrinth.com/data/P1OZGk5p/versions/I7EtZ7sn/ViaVersion-5.12.0-SNAPSHOT.jar",
+        "hash": "sha256-zCOkFLK97YCnJkal/kPMayupffUWFHo2MPQC2WlelFs="
       }
     }
   },
