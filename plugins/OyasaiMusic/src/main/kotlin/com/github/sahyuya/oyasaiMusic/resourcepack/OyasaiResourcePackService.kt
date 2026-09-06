@@ -204,12 +204,15 @@ class OyasaiResourcePackService(
     return ExtendedPlayback(event, 2.0.pow(residualCents / 1200.0).toFloat())
   }
 
-  fun allow(player: Player) {
+  fun allow(player: Player, acknowledge: Boolean = true) {
     config
         ?: run {
           player.sendMessage("§c拡張音域リソースパックはサーバーで利用できません。")
           return
         }
+    if (acknowledge) {
+      player.sendMessage("§a拡張音域リソースパックの有効化を受け付けました。必要な場合はダウンロード確認が表示されます。")
+    }
     val generation =
         generations.computeIfAbsent(player.uniqueId) { generationSequence.incrementAndGet() }
     val preferenceRevision = preferenceSequence.incrementAndGet()

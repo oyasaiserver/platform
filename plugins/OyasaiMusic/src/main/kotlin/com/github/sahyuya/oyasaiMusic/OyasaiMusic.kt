@@ -177,6 +177,7 @@ class OyasaiMusic : JavaPlugin() {
     ommtPlaybackClientRegistry = OmmtPlaybackClientRegistry(this)
     pluginMessaging = OyasaiPluginMessaging(this, ommtUploadService, ommtPlaybackClientRegistry)
     pluginMessaging.enable()
+    bedrockTransferService.logConfiguration()
     server.pluginManager.registerEvents(ommtUploadService, this)
     server.pluginManager.registerEvents(ommtPlaybackClientRegistry, this)
     server.pluginManager.registerEvents(resourcePackService, this)
@@ -293,6 +294,7 @@ class OyasaiMusic : JavaPlugin() {
     if (::ommtUploadService.isInitialized) ommtUploadService.reloadReset()
     reloadConfig()
     if (::resourcePackService.isInitialized) resourcePackService.reload()
+    if (::bedrockTransferService.isInitialized) bedrockTransferService.logConfiguration()
     val soundCatalogCount = VanillaSoundCatalog.reload(this)
     logger.info("サウンドカタログを再読み込みしました: $soundCatalogCount SoundEvent")
     if (::pluginMessaging.isInitialized) pluginMessaging.broadcastServerCapabilities()
@@ -326,25 +328,38 @@ class OyasaiMusic : JavaPlugin() {
     val isObsoleteBundledPack =
         sha1.equals(obsoleteBundledSha1, ignoreCase = true) ||
             url.contains(obsoleteBundledSha1, ignoreCase = true)
-    if (!isPlaceholder && !isObsoleteBundledPack) return
-    config.set(prefix + "enabled", true)
-    config.set(prefix + "id", "8be1eaab-ca07-4f47-9957-40d29505e320")
-    config.set(
-        prefix + "url",
-        "https://download.mc-packs.net/pack/73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d.zip",
-    )
-    config.set(prefix + "sha1", "73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d")
-    config.set(
-        prefix + "bank-manifest-sha256",
-        "5aa68f33eea756ca43244751605924095dff18c5a01fd18767b3f1e51cd19506",
-    )
-    config.set(prefix + "prompt", "おやさいサーバーの拡張音域リソースパックを読み込みますか？")
-    config.set(
-        prefix + "instrument-bank-event-template",
-        "oyasaimusic:bank/i/{instrument}/a/{anchor}",
-    )
+    val bundledPackId = "8be1eaab-ca07-4f47-9957-40d29505e320"
+    var changed = false
+    if (isPlaceholder || isObsoleteBundledPack) {
+      config.set(prefix + "enabled", true)
+      config.set(prefix + "id", bundledPackId)
+      config.set(
+          prefix + "url",
+          "https://download.mc-packs.net/pack/73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d.zip",
+      )
+      config.set(prefix + "sha1", "73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d")
+      config.set(
+          prefix + "bank-manifest-sha256",
+          "5aa68f33eea756ca43244751605924095dff18c5a01fd18767b3f1e51cd19506",
+      )
+      config.set(prefix + "prompt", "おやさいサーバーの拡張音域リソースパックを読み込みますか？")
+      config.set(
+          prefix + "instrument-bank-event-template",
+          "oyasaimusic:bank/i/{instrument}/a/{anchor}",
+      )
+      changed = true
+    }
+    // Older generated configs left this blank, which silently disabled the Bedrock ALLOW path
+    // even when the correct .mcpack had been installed on Velocity.
+    if (config.getString("bedrock.pack-id", "").orEmpty().isBlank()) {
+      val resourcePackId =
+          config.getString(prefix + "id", bundledPackId).orEmpty().ifBlank { bundledPackId }
+      config.set("bedrock.pack-id", resourcePackId)
+      changed = true
+    }
+    if (!changed) return
     saveConfig()
-    logger.info("旧リソースパック設定をOyasaiMusic 26.2拡張音域パックへ更新しました。")
+    logger.info("リソースパック設定を現在のOyasaiMusic 26.2構成へ更新しました。")
   }
 
   /** 楽曲設定の保存直後に、再生中表示と全プレイヤーの開いているGUIへ最新値を反映する。 */

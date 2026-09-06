@@ -51,18 +51,51 @@ class BedrockTransferService(
     const val RESTORE_DELAY_TICKS = 10L
   }
 
+  private fun configuredPackId(): String =
+      plugin.config.getString("bedrock.pack-id", "").orEmpty().trim().ifBlank {
+        plugin.config.getString("resource-pack.id", "").orEmpty().trim()
+      }
+
   fun transferEnabled(): Boolean =
-      plugin.config.getBoolean("bedrock.transfer-enabled", false) &&
-          plugin.config.getString("bedrock.pack-id", "").orEmpty().isNotBlank()
+      plugin.config.getBoolean("bedrock.transfer-enabled", false) && configuredPackId().isNotBlank()
+
+  /**
+   * Emits one startup/reload line so a disabled production route is not mistaken for a pack error.
+   */
+  fun logConfiguration() {
+    val enabledFlag = plugin.config.getBoolean("bedrock.transfer-enabled", false)
+    val packId = configuredPackId()
+    if (enabledFlag && packId.isNotBlank()) {
+      plugin.logger.info(
+          "Bedrock resource-pack transfer enabled (packId=$packId, channel=${BedrockTransferCodec.CHANNEL})."
+      )
+    } else {
+      val reason =
+          when {
+            !enabledFlag -> "bedrock.transfer-enabled=false"
+            else -> "bedrock.pack-id and resource-pack.id are blank"
+          }
+      plugin.logger.warning(
+          "Bedrock resource-pack transfer disabled: $reason. /mm rp allow will only save the preference."
+      )
+    }
+  }
 
   fun isTransferQuit(playerId: UUID): Boolean = transferQuit.contains(playerId)
 
   fun allow(player: Player) {
     if (!transferEnabled()) {
       // Disabled deployments retain the preference without attempting Java-pack delivery.
-      plugin.resourcePackService.allow(player)
+      val enabledFlag = plugin.config.getBoolean("bedrock.transfer-enabled", false)
+      val reason = if (!enabledFlag) "bedrock.transfer-enabled=false" else "pack-idが空です"
+      plugin.logger.warning(
+          "Bedrock pack allow was not transferred for ${player.uniqueId}: $reason"
+      )
+      player.sendMessage("§c統合版の拡張音域転送はサーバー設定で無効です。設定は保存しますが、現在は通常音域で再生します。")
+      plugin.resourcePackService.allow(player, acknowledge = false)
       return
     }
+    player.sendMessage("§a統合版用拡張音域パックの有効化を受け付けました。適用時に再接続する場合があります。")
     val intentRevision = intentSequence.incrementAndGet()
     intentRevisions[player.uniqueId] = intentRevision
     Bukkit.getScheduler()
@@ -81,8 +114,13 @@ class BedrockTransferService(
                               )
                                   return@Runnable
                               evacuate(player)
-                              val packId = plugin.config.getString("bedrock.pack-id", "").orEmpty()
-                              sendTransferRequest(player, true, packId)
+                              val packId = configuredPackId()
+                              if (!sendTransferRequest(player, true, packId)) {
+                                evac.remove(player.uniqueId)
+                                transferQuit.remove(player.uniqueId)
+                                player.sendMessage("§c統合版の拡張音域転送要求を送信できませんでした。通常音域で再生します。")
+                                return@Runnable
+                              }
                               player.sendMessage("§e拡張音域パック適用のため再接続します。そのままお待ちください。")
                             },
                         )
@@ -128,7 +166,7 @@ class BedrockTransferService(
                         evac.remove(player.uniqueId)
                         transferQuit.remove(player.uniqueId)
                         plugin.resourcePackService.forget(player.uniqueId)
-                        val packId = plugin.config.getString("bedrock.pack-id", "").orEmpty()
+                        val packId = configuredPackId()
                         sendTransferRequest(player, false, packId)
                         player.sendMessage("§e統合版の拡張音域パックを停止しました。次回入室時から通常音域になります。")
                       },
@@ -137,15 +175,28 @@ class BedrockTransferService(
         )
   }
 
-  private fun sendTransferRequest(player: Player, allow: Boolean, packId: String) {
-    runCatching {
-      player.sendPluginMessage(
-          plugin,
-          BedrockTransferCodec.CHANNEL,
-          BedrockTransferCodec.encode(player.uniqueId, allow, packId),
-      )
-    }
-  }
+  private fun sendTransferRequest(player: Player, allow: Boolean, packId: String): Boolean =
+      runCatching {
+            player.sendPluginMessage(
+                plugin,
+                BedrockTransferCodec.CHANNEL,
+                BedrockTransferCodec.encode(player.uniqueId, allow, packId),
+            )
+          }
+          .fold(
+              onSuccess = {
+                plugin.logger.info(
+                    "Sent Bedrock pack ${if (allow) "ALLOW" else "DENY"} request for ${player.uniqueId} (packId=$packId).",
+                )
+                true
+              },
+              onFailure = { error ->
+                plugin.logger.warning(
+                    "Failed to send Bedrock pack ${if (allow) "ALLOW" else "DENY"} request for ${player.uniqueId}: ${error.message}",
+                )
+                false
+              },
+          )
 
   private fun evacuate(player: Player) {
     evac[player.uniqueId] =
@@ -231,8 +282,12 @@ class BedrockTransferService(
                         )
                             return@Runnable
                         evacuate(player)
-                        val packId = plugin.config.getString("bedrock.pack-id", "").orEmpty()
-                        sendTransferRequest(player, true, packId)
+                        val packId = configuredPackId()
+                        if (!sendTransferRequest(player, true, packId)) {
+                          evac.remove(player.uniqueId)
+                          transferQuit.remove(player.uniqueId)
+                          return@Runnable
+                        }
                         player.sendMessage("§e拡張音域パックの状態を復元するため再接続します。そのままお待ちください。")
                       },
                       20L,

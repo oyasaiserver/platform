@@ -143,8 +143,14 @@ class BedrockPackService(
     if (packEnabled[uuid] != true) return
     val pack = packOrNull() ?: return
     try {
-      event.register(pack)
+      if (event.register(pack)) {
+        logger.info("Registered Bedrock pack for {} during Geyser session load.", uuid)
+      } else {
+        packEnabled.remove(uuid)
+        logger.warn("Geyser rejected Bedrock pack registration for {}.", uuid)
+      }
     } catch (error: Exception) {
+      packEnabled.remove(uuid)
       logger.warn("Failed to register Bedrock pack for {}", uuid, error)
     }
   }
