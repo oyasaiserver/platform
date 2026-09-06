@@ -3,6 +3,7 @@
 package io.oyasai.oyasaitoken
 
 import io.oyasai.oyasaitoken.api.OyasaiTokenApi
+import io.oyasai.oyasaitoken.api.OyasaiTokenCommitApi
 import io.oyasai.oyasaitoken.internal.BalanceChange
 import io.oyasai.oyasaitoken.internal.BalanceRecord
 import io.oyasai.oyasaitoken.internal.BalanceWrite
@@ -16,6 +17,7 @@ import java.sql.ResultSet
 import java.util.OptionalLong
 import java.util.UUID
 import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -40,7 +42,12 @@ import org.bukkit.plugin.ServicePriority
 import org.yaml.snakeyaml.Yaml
 
 class OyasaiTokenPlugin :
-    TokenManagerPlugin(), OyasaiTokenApi, CommandExecutor, TabCompleter, Listener {
+    TokenManagerPlugin(),
+    OyasaiTokenApi,
+    OyasaiTokenCommitApi,
+    CommandExecutor,
+    TabCompleter,
+    Listener {
   /**
    * Serializes migration state transitions with every ledger operation that can enqueue
    * persistence. Never perform YAML, SQLite import, or event dispatch while holding this gate.
@@ -78,6 +85,12 @@ class OyasaiTokenPlugin :
 
     server.servicesManager.register(
         OyasaiTokenApi::class.java,
+        this,
+        this,
+        ServicePriority.Normal,
+    )
+    server.servicesManager.register(
+        OyasaiTokenCommitApi::class.java,
         this,
         this,
         ServicePriority.Normal,
@@ -150,6 +163,21 @@ class OyasaiTokenPlugin :
 
   override fun addTokens(uuid: UUID, amount: Long): Boolean {
     return addTokensInternal(uuid, null, amount)
+  }
+
+  override fun addTokensWithCommit(uuid: UUID, amount: Long): CompletableFuture<Boolean> {
+    val completion = CompletableFuture<Boolean>()
+    val change =
+        synchronized(mutationGate) {
+          if (migrationInProgress.get()) null
+          else ledger.addWithCommit(uuid, null, amount, completion)
+        }
+    if (change == null) {
+      completion.complete(false)
+    } else {
+      dispatchBalanceChange(change)
+    }
+    return completion
   }
 
   override fun removeTokens(uuid: UUID, amount: Long): Boolean {
@@ -691,11 +719,15 @@ class OyasaiTokenPlugin :
    * Enqueues one logical ledger operation. A transfer therefore cannot be interleaved with other
    * jobs.
    */
-  private fun enqueuePersistence(writes: List<BalanceWrite>): Boolean {
+  private fun enqueuePersistence(
+      writes: List<BalanceWrite>,
+      completion: CompletableFuture<Boolean>? = null,
+  ): Boolean {
     if (writes.isEmpty() || !::persistenceExecutor.isInitialized) return false
     val job =
         PersistenceJob(
-            writes.map { write -> PersistedBalance(nextTransactionId.getAndIncrement(), write) }
+            writes.map { write -> PersistedBalance(nextTransactionId.getAndIncrement(), write) },
+            completion,
         )
     return try {
       persistenceExecutor.execute { persistBalanceJob(job) }
@@ -737,27 +769,31 @@ class OyasaiTokenPlugin :
   }
 
   private fun persistBalanceJob(job: PersistenceJob) {
-    runCatching {
-          withTransaction {
-            val existing = job.entries.filter { transactionExists(it.txId) }
-            if (existing.size == job.entries.size) {
-              logger.warning(
-                  "Skipping duplicate token persistence job ${job.entries.first().txId}-${job.entries.last().txId}."
+    val committed =
+        runCatching {
+              withTransaction {
+                val existing = job.entries.filter { transactionExists(it.txId) }
+                if (existing.size == job.entries.size) {
+                  logger.warning(
+                      "Skipping duplicate token persistence job ${job.entries.first().txId}-${job.entries.last().txId}."
+                  )
+                  return@withTransaction
+                }
+                check(existing.isEmpty()) {
+                  "Refusing partially duplicated token persistence job ${job.entries.first().txId}-${job.entries.last().txId}."
+                }
+                job.entries.forEach(::writeBalanceRows)
+                setMetaRows(LAST_APPLIED_TX_ID_KEY, job.entries.maxOf { it.txId }.toString())
+              }
+              true
+            }
+            .onFailure { throwable ->
+              logger.severe(
+                  "Failed to persist token job ${job.entries.first().txId}-${job.entries.last().txId}: ${throwable.message}"
               )
-              return@withTransaction
             }
-            check(existing.isEmpty()) {
-              "Refusing partially duplicated token persistence job ${job.entries.first().txId}-${job.entries.last().txId}."
-            }
-            job.entries.forEach(::writeBalanceRows)
-            setMetaRows(LAST_APPLIED_TX_ID_KEY, job.entries.maxOf { it.txId }.toString())
-          }
-        }
-        .onFailure { throwable ->
-          logger.severe(
-              "Failed to persist token job ${job.entries.first().txId}-${job.entries.last().txId}: ${throwable.message}"
-          )
-        }
+            .isSuccess
+    job.completion?.complete(committed)
   }
 
   private fun transactionExists(txId: Long): Boolean {
@@ -1148,7 +1184,10 @@ class OyasaiTokenPlugin :
     return if (wasNull()) null else value
   }
 
-  private data class PersistenceJob(val entries: List<PersistedBalance>) {
+  private data class PersistenceJob(
+      val entries: List<PersistedBalance>,
+      val completion: CompletableFuture<Boolean>? = null,
+  ) {
     init {
       require(entries.isNotEmpty()) { "persistence jobs require at least one balance write" }
     }

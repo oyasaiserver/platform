@@ -411,6 +411,8 @@ object Events : Listener {
 
   /** オフラインの時イイねされたPointを貯めておく */
   private val offlineLikesPoint = mutableMapOf<UUID, Int>()
+  private val offlineLikesPointLock = Any()
+  private const val OFFLINE_LIKE_COMMIT_TIMEOUT_MILLIS = 750L
 
   private fun sendLikeRewardMessage(player: Player, amount: Long, offline: Boolean = false) {
     val message =
@@ -423,22 +425,41 @@ object Events : Listener {
   }
 
   private fun addOfflineLikePoints(uuid: UUID, points: Int) {
-    offlineLikesPoint[uuid] = (offlineLikesPoint[uuid] ?: 0) + points
-    persistOfflineLikePoints()
+    synchronized(offlineLikesPointLock) {
+      offlineLikesPoint[uuid] = (offlineLikesPoint[uuid] ?: 0) + points
+      persistOfflineLikePointsLocked()
+    }
   }
 
-  private fun removeOfflineLikePoints(uuid: UUID) {
-    offlineLikesPoint.remove(uuid)
-    persistOfflineLikePoints()
+  /**
+   * Removes precisely the reward that was committed. If persistence fails, restores the in-memory
+   * pending amount so a later save cannot silently discard recovery state.
+   */
+  private fun removeOfflineLikePoints(uuid: UUID, expectedPoints: Int): Boolean {
+    synchronized(offlineLikesPointLock) {
+      val currentPoints = offlineLikesPoint[uuid] ?: return false
+      if (currentPoints != expectedPoints) return false
+
+      offlineLikesPoint.remove(uuid)
+      if (persistOfflineLikePointsLocked()) return true
+
+      offlineLikesPoint[uuid] = currentPoints
+      return false
+    }
   }
 
   private fun persistOfflineLikePoints() {
-    runCatching { OfflineLikePointStore(plugin.dataFolder.toPath()).save(offlineLikesPoint) }
+    synchronized(offlineLikesPointLock) { persistOfflineLikePointsLocked() }
+  }
+
+  private fun persistOfflineLikePointsLocked(): Boolean {
+    return runCatching { OfflineLikePointStore(plugin.dataFolder.toPath()).save(offlineLikesPoint) }
         .onFailure { exception ->
           plugin.logger.severe(
               "Failed to atomically save pending offline-like rewards: ${exception.message}"
           )
         }
+        .isSuccess
   }
 
   /** オフライン時のいいねPointをプラグイン無効化時ファイルへ保存 */
@@ -448,22 +469,71 @@ object Events : Listener {
 
   /** オフライン時のいいねPointをロード */
   fun offlineLikePointLoad() {
-    offlineLikesPoint.clear()
-    offlineLikesPoint.putAll(OfflineLikePointStore(plugin.dataFolder.toPath()).load())
+    synchronized(offlineLikesPointLock) {
+      offlineLikesPoint.clear()
+      offlineLikesPoint.putAll(OfflineLikePointStore(plugin.dataFolder.toPath()).load())
+    }
   }
 
   @EventHandler
   fun joinEvent(e: PlayerJoinEvent) {
     SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
-    val pointInt = offlineLikesPoint[e.player.uniqueId] ?: return
+    val pointInt =
+        synchronized(offlineLikesPointLock) { offlineLikesPoint[e.player.uniqueId] } ?: return
     val player = e.player
+    val playerUuid = player.uniqueId
     object : BukkitRunnable() {
           override fun run() {
             if (!player.isOnline) return
-            if (Tools.addTokens(player, pointInt.toLong())) {
-              removeOfflineLikePoints(player.uniqueId)
-              sendLikeRewardMessage(player, pointInt.toLong(), offline = true)
+            val tokenManager = Tools.getTokenManager()
+            val tokenCommitAdd = tokenManager?.let(Tools::findAddTokensWithCommit)
+            if (tokenCommitAdd == null) {
+              Tools.warnTokenCommitFallback()
+              if (
+                  Tools.addTokens(player, pointInt.toLong()) &&
+                      removeOfflineLikePoints(player.uniqueId, pointInt)
+              ) {
+                sendLikeRewardMessage(player, pointInt.toLong(), offline = true)
+              }
+              return
             }
+
+            Bukkit.getScheduler()
+                .runTaskAsynchronously(
+                    plugin,
+                    Runnable {
+                      val committed =
+                          Tools.awaitTokenCommit(
+                              tokenCommitAdd,
+                              playerUuid,
+                              pointInt.toLong(),
+                              OFFLINE_LIKE_COMMIT_TIMEOUT_MILLIS,
+                          )
+                      // A timeout is intentionally treated as an indeterminate outcome: retaining
+                      // the durable pending entry favors recovery over silently losing a reward.
+                      // The writer API normally settles immediately after its own transaction;
+                      // avoiding recurring timeouts is essential because a later retry may follow
+                      // an operation whose final SQLite result was not observed by this task.
+                      if (!committed) return@Runnable
+
+                      if (!removeOfflineLikePoints(playerUuid, pointInt)) {
+                        plugin.logger.warning(
+                            "Committed offline-like reward ${pointInt} for $playerUuid, but could not atomically clear its pending entry; not notifying."
+                        )
+                        return@Runnable
+                      }
+
+                      Bukkit.getScheduler()
+                          .runTask(
+                              plugin,
+                              Runnable {
+                                Bukkit.getPlayer(playerUuid)?.takeIf(Player::isOnline)?.let {
+                                  sendLikeRewardMessage(it, pointInt.toLong(), offline = true)
+                                }
+                              },
+                          )
+                    },
+                )
           }
         }
         .runTaskLater(plugin, 20L)

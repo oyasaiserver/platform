@@ -5,7 +5,13 @@ import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.discord.SLDiscord
 import java.io.File
+import java.lang.reflect.Method
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.set
 import me.realized.tokenmanager.api.TokenManager
 import net.luckperms.api.LuckPermsProvider
@@ -21,6 +27,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin.getPlugin
 
 object Tools {
+  private val warnedTokenCommitFallback = AtomicBoolean(false)
   /** JavaPluginクラス(Main) */
   val plugin by lazy { getPlugin(SocialLikes::class.java) }
   /** (SocialLikes)←これの判定用 */
@@ -49,6 +56,76 @@ object Tools {
     }
     return tokenManager.addTokens(player, amount)
   }
+
+  /**
+   * Looks up the additive API without linking SocialLikes3 against OyasaiToken. This keeps a
+   * third-party TokenManager binary-compatible and lets the caller preserve the legacy path.
+   */
+  fun findAddTokensWithCommit(tokenManager: TokenManager): TokenCommitAdd? {
+    val method =
+        runCatching {
+              tokenManager.javaClass.getMethod(
+                  "addTokensWithCommit",
+                  UUID::class.java,
+                  java.lang.Long.TYPE,
+              )
+            }
+            .getOrNull() ?: return null
+    if (!CompletableFuture::class.java.isAssignableFrom(method.returnType)) return null
+    return TokenCommitAdd(tokenManager, method)
+  }
+
+  fun warnTokenCommitFallback() {
+    if (warnedTokenCommitFallback.compareAndSet(false, true)) {
+      plugin.logger.warning(
+          "TokenManager does not provide addTokensWithCommit(UUID, long); falling back to queue acceptance before clearing offline-like rewards."
+      )
+    }
+  }
+
+  fun awaitTokenCommit(
+      tokenCommitAdd: TokenCommitAdd,
+      uuid: UUID,
+      amount: Long,
+      timeoutMillis: Long,
+  ): Boolean {
+    return try {
+      val completion = tokenCommitAdd.method.invoke(tokenCommitAdd.tokenManager, uuid, amount)
+      (completion as? CompletableFuture<*>)?.get(timeoutMillis, TimeUnit.MILLISECONDS) == true
+    } catch (exception: TimeoutException) {
+      plugin.logger.warning(
+          "Timed out after ${timeoutMillis}ms waiting to commit offline-like reward $amount for $uuid; leaving it pending."
+      )
+      false
+    } catch (exception: InterruptedException) {
+      Thread.currentThread().interrupt()
+      plugin.logger.warning(
+          "Interrupted while waiting to commit offline-like reward $amount for $uuid."
+      )
+      false
+    } catch (exception: ExecutionException) {
+      plugin.logger.warning(
+          "Failed to commit offline-like reward $amount for $uuid: ${exception.cause?.message ?: exception.message}"
+      )
+      false
+    } catch (exception: ReflectiveOperationException) {
+      plugin.logger.warning(
+          "Could not invoke TokenManager addTokensWithCommit for offline-like reward $amount for $uuid: ${exception.message}"
+      )
+      false
+    } catch (exception: IllegalArgumentException) {
+      plugin.logger.warning(
+          "TokenManager addTokensWithCommit rejected offline-like reward $amount for $uuid: ${exception.message}"
+      )
+      false
+    }
+  }
+
+  class TokenCommitAdd
+  internal constructor(
+      internal val tokenManager: TokenManager,
+      internal val method: Method,
+  )
 
   fun canUseCreative(player: Player): Boolean {
     val nodes =
