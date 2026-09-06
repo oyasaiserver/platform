@@ -159,5 +159,12 @@ debug-stick:
   apply-physics: false
   memory-persist: true
 
+hud:
+  default-mode: off
+  # サイドバー1行あたりの値の最大文字数（超過分は … で省略）。各自 /.hud width で上書き可
+  max-value-length: 40
+  # 選択範囲(pos1/pos2/範囲)の行を出すか。各自 /.hud sel on|off で上書き可
+  show-selection: true
+
 prefix: "<gray>[<gold>CitiesSkyMine</gold>]</gray> "
 debug: false

@@ -2,6 +2,7 @@ package icu.oyasai.citiesskymine.config
 
 import icu.oyasai.citiesskymine.Main
 import icu.oyasai.citiesskymine.access.CsmAccessController.CommandKey
+import icu.oyasai.citiesskymine.hud.HudMode
 import icu.oyasai.citiesskymine.util.MessageUtil
 import kotlin.math.roundToInt
 import net.kyori.adventure.text.Component
@@ -85,6 +86,15 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
     inv.setItem(12, item(Material.WHITE_STAINED_GLASS, "Window", "窓生成の個人設定"))
     inv.setItem(14, item(Material.MAP, "Intersection", "交差点生成の個人設定"))
     inv.setItem(16, item(Material.CHEST, "Payload", "CSM payload の個人設定"))
+    inv.setItem(
+        20,
+        item(
+            Material.COMPASS,
+            "WorldEdit HUD",
+            "現在: ${plugin.worldEditHud.mode(player).id}",
+            "クリックで切替",
+        ),
+    )
     inv.setItem(22, item(Material.BARRIER, "Close", "閉じる"))
     player.openInventory(inv)
   }
@@ -95,6 +105,7 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       12 -> openWindow(player)
       14 -> openIntersection(player)
       16 -> openPayload(player)
+      20 -> plugin.worldEditHud.setMode(player, nextHudMode(plugin.worldEditHud.mode(player)))
       22 -> player.closeInventory()
     }
   }
@@ -396,6 +407,12 @@ class ConfigGuiCommand(private val plugin: Main) : CommandExecutor, TabCompleter
       (plugin.playerDataStore.getInt(player, "payload.rotation")
               ?: plugin.config.getInt("csm.default-rotation", 0))
           .floorMod(4)
+
+  private fun nextHudMode(mode: HudMode): HudMode =
+      when (mode) {
+        HudMode.ON -> HudMode.OFF
+        HudMode.OFF -> HudMode.ON
+      }
 
   private fun Int.floorMod(mod: Int): Int = Math.floorMod(this, mod)
 
