@@ -9,6 +9,7 @@ depend:
 softdepend:
   - LuckPerms
   - PlaceholderAPI
+  - TAB
 
 commands:
   csm:
@@ -77,6 +78,9 @@ commands:
   ".sc":
     description: "スキマティック貼り付けショートカット"
     usage: "/.sc <name|list|reload> [-a]"
+  ".hud":
+    description: "WorldEdit 状態HUDを切り替えるショートカット"
+    usage: "/.hud [on|off] | /.hud sel <on|off> | /.hud width <数値|reset>"
 
 permissions:
   citiesskymine.*:
@@ -104,6 +108,10 @@ permissions:
       citiesskymine.debugstick: true
       citiesskymine.preset: true
       citiesskymine.schematic: true
+      citiesskymine.hud: true
+  citiesskymine.hud:
+    description: "WorldEdit 状態HUDの自己表示"
+    default: true
   citiesskymine.role.admin:
     description: "CSM アドミンロール"
     default: op

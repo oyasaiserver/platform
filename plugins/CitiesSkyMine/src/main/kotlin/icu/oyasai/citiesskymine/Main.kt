@@ -13,6 +13,9 @@ import icu.oyasai.citiesskymine.crowd.CrowdCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickCommand
 import icu.oyasai.citiesskymine.debugstick.DebugStickMemoryStore
 import icu.oyasai.citiesskymine.facade.HaussmannCommand
+import icu.oyasai.citiesskymine.hud.WorldEditHudCommand
+import icu.oyasai.citiesskymine.hud.WorldEditHudListener
+import icu.oyasai.citiesskymine.hud.WorldEditHudService
 import icu.oyasai.citiesskymine.payload.PayloadCommand
 import icu.oyasai.citiesskymine.preset.BrushPresetCommand
 import icu.oyasai.citiesskymine.road.IntersectionCommand
@@ -44,6 +47,9 @@ class Main : JavaPlugin() {
   lateinit var access: CsmAccessController
     private set
 
+  lateinit var worldEditHud: WorldEditHudService
+    private set
+
   private val sessions = HashMap<UUID, RoadSession>()
   private val intersectionSessions = HashMap<UUID, IntersectionSession>()
   private val bezierSessions = HashMap<UUID, BezierSession>()
@@ -67,6 +73,7 @@ class Main : JavaPlugin() {
 
     playerDataStore = PlayerDataStore(this)
     access = CsmAccessController(this)
+    worldEditHud = WorldEditHudService(this)
     debugStickMemoryStore = DebugStickMemoryStore(this).also { it.load() }
 
     val rcHandler = RoadCurveCommand(this)
@@ -109,6 +116,7 @@ class Main : JavaPlugin() {
         DebugStickCommand(this, debugStickMemoryStore ?: DebugStickMemoryStore(this))
     val brushPresetHandler = BrushPresetCommand(this)
     val schematicHandler = SchematicCommand(this)
+    val hudHandler = WorldEditHudCommand(this)
     val csmHandler =
         CitiesSkyMineCommand(
             this,
@@ -181,6 +189,10 @@ class Main : JavaPlugin() {
     val dotSchematicCmd = getCommand(".sc")
     dotSchematicCmd?.setExecutor(schematicHandler)
     dotSchematicCmd?.tabCompleter = schematicHandler
+    getCommand(".hud")?.setExecutor(hudHandler)
+    getCommand(".hud")?.tabCompleter = hudHandler
+    server.pluginManager.registerEvents(WorldEditHudListener(this), this)
+    worldEditHud.start()
 
     logger.info("CitiesSkyMine enabled")
   }
@@ -192,6 +204,9 @@ class Main : JavaPlugin() {
     }
     if (::cloudHandler.isInitialized) {
       cloudHandler.cancelAll()
+    }
+    if (::worldEditHud.isInitialized) {
+      worldEditHud.stop()
     }
     sessions.values.forEach { it.previewTask?.cancel() }
     intersectionSessions.values.forEach { it.previewTask?.cancel() }
