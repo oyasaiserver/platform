@@ -307,7 +307,7 @@ object Events : Listener {
             }
           }
         } else {
-          offlineLikesPoint[data.owner] = (offlineLikesPoint[data.owner] ?: 0) + 2
+          addOfflineLikePoints(data.owner, 2)
         }
       } else {
         // すでにいいねをしている
@@ -410,7 +410,7 @@ object Events : Listener {
   }
 
   /** オフラインの時イイねされたPointを貯めておく */
-  val offlineLikesPoint = mutableMapOf<UUID, Int>()
+  private val offlineLikesPoint = mutableMapOf<UUID, Int>()
 
   private fun sendLikeRewardMessage(player: Player, amount: Long, offline: Boolean = false) {
     val message =
@@ -422,23 +422,34 @@ object Events : Listener {
     player.sendMessage(Tools.socialLikesLOGO + " " + message.color())
   }
 
+  private fun addOfflineLikePoints(uuid: UUID, points: Int) {
+    offlineLikesPoint[uuid] = (offlineLikesPoint[uuid] ?: 0) + points
+    persistOfflineLikePoints()
+  }
+
+  private fun removeOfflineLikePoints(uuid: UUID) {
+    offlineLikesPoint.remove(uuid)
+    persistOfflineLikePoints()
+  }
+
+  private fun persistOfflineLikePoints() {
+    runCatching { OfflineLikePointStore(plugin.dataFolder.toPath()).save(offlineLikesPoint) }
+        .onFailure { exception ->
+          plugin.logger.severe(
+              "Failed to atomically save pending offline-like rewards: ${exception.message}"
+          )
+        }
+  }
+
   /** オフライン時のいいねPointをプラグイン無効化時ファイルへ保存 */
   fun offlineLikePointSave() {
-    val oldYml = CustomYaml("offlineLikePoint.yml")
-    oldYml.delete()
-    val yml = CustomYaml("offlineLikePoint.yml")
-    offlineLikesPoint.forEach { (uuid, int) -> yml.set(uuid.toString(), int) }
-    yml.save()
+    persistOfflineLikePoints()
   }
 
   /** オフライン時のいいねPointをロード */
   fun offlineLikePointLoad() {
-    val yml = CustomYaml("offlineLikePoint.yml")
-    yml.getKeys(false).forEach { uuidStr ->
-      val pointInt = yml.getInt(uuidStr, 0)
-      val uuid = UUID.fromString(uuidStr)
-      offlineLikesPoint[uuid] = pointInt
-    }
+    offlineLikesPoint.clear()
+    offlineLikesPoint.putAll(OfflineLikePointStore(plugin.dataFolder.toPath()).load())
   }
 
   @EventHandler
@@ -450,8 +461,8 @@ object Events : Listener {
           override fun run() {
             if (!player.isOnline) return
             if (Tools.addTokens(player, pointInt.toLong())) {
+              removeOfflineLikePoints(player.uniqueId)
               sendLikeRewardMessage(player, pointInt.toLong(), offline = true)
-              offlineLikesPoint.remove(player.uniqueId)
             }
           }
         }
