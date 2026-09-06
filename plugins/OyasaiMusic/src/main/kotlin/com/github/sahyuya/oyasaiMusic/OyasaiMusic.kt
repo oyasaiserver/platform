@@ -32,9 +32,9 @@ import com.github.sahyuya.oyasaiMusic.gui.PlaybackController
 import com.github.sahyuya.oyasaiMusic.gui.PlayerControllerStateService
 import com.github.sahyuya.oyasaiMusic.gui.ToastNotificationService
 import com.github.sahyuya.oyasaiMusic.importing.OyasaiImportService
+import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.interop.OmmtPlaybackClientRegistry
 import com.github.sahyuya.oyasaiMusic.interop.OmmtUploadService
-import com.github.sahyuya.oyasaiMusic.interop.OyasaiPluginMessaging
 import com.github.sahyuya.oyasaiMusic.item.PhysicalMusicPlayerItem
 import com.github.sahyuya.oyasaiMusic.item.PhysicalRecordListener
 import com.github.sahyuya.oyasaiMusic.model.Song
@@ -149,17 +149,17 @@ class OyasaiMusic : JavaPlugin() {
     migrateBundledResourcePackConfig()
 
     audioDirectory =
-        File(dataFolder, config.getString("storage.audio-directory", "audio") ?: "audio")
+      File(dataFolder, config.getString("storage.audio-directory", "audio") ?: "audio")
     audioDirectory.mkdirs()
     val soundCatalogCount = VanillaSoundCatalog.initialize(this)
     logger.info("サウンドカタログを読み込みました: $soundCatalogCount SoundEvent")
 
     // --- DB初期化 ---
     databaseManager =
-        DatabaseManager(
-            this,
-            config.getString("storage.database-file", "database.db") ?: "database.db",
-        )
+      DatabaseManager(
+        this,
+        config.getString("storage.database-file", "database.db") ?: "database.db",
+      )
     databaseManager.connect()
     songRepository = SongRepository(databaseManager)
     userRepository = UserRepository(databaseManager)
@@ -183,12 +183,12 @@ class OyasaiMusic : JavaPlugin() {
     server.pluginManager.registerEvents(resourcePackService, this)
     server.pluginManager.registerEvents(bedrockTransferService, this)
     Bukkit.getScheduler()
-        .runTaskTimer(
-            this,
-            Runnable { ommtUploadService.expire() },
-            20L * 15,
-            20L * 15,
-        )
+      .runTaskTimer(
+        this,
+        Runnable { ommtUploadService.expire() },
+        20L * 15,
+        20L * 15,
+      )
 
     // --- サービス層 ---
     configureRuntimeServices()
@@ -207,25 +207,25 @@ class OyasaiMusic : JavaPlugin() {
     // --- 録音システム ---
     recordingSessionManager = RecordingSessionManager()
     server.pluginManager.registerEvents(
-        NotePlayListener(
-            sessionManager = recordingSessionManager,
-        ),
-        this,
+      NotePlayListener(
+        sessionManager = recordingSessionManager,
+      ),
+      this,
     )
 
     getCommand("record")?.let { cmd ->
       val executor =
-          RecordCommand(
-              plugin = this,
-              songRepository = songRepository,
-              sessionManager = recordingSessionManager,
-              audioDirectory = audioDirectory,
-              defaultRecordMaterial =
-                  config.getString("recording.default-record-material", "MUSIC_DISC_13")
-                      ?: "MUSIC_DISC_13",
-              defaultPrice = config.getInt("recording.default-price", 1000),
-              menuManager = menuManager,
-          )
+        RecordCommand(
+          plugin = this,
+          songRepository = songRepository,
+          sessionManager = recordingSessionManager,
+          audioDirectory = audioDirectory,
+          defaultRecordMaterial =
+            config.getString("recording.default-record-material", "MUSIC_DISC_13")
+              ?: "MUSIC_DISC_13",
+          defaultPrice = config.getInt("recording.default-price", 1000),
+          menuManager = menuManager,
+        )
       cmd.setExecutor(executor)
       cmd.tabCompleter = executor
     } ?: logger.warning("recordコマンドの登録に失敗しました（plugin.ymlを確認してください）。")
@@ -304,8 +304,7 @@ class OyasaiMusic : JavaPlugin() {
       playbackEngine = createPlaybackEngine()
       ommtPlaybackClientRegistry.bindFailureHandler(playbackEngine::handleClientPlaybackFailure)
       previous.shutdown()
-      if (::ommtPlaybackClientRegistry.isInitialized)
-          ommtPlaybackClientRegistry.invalidateCapabilities()
+      if (::ommtPlaybackClientRegistry.isInitialized) ommtPlaybackClientRegistry.invalidateCapabilities()
     }
   }
 
@@ -320,40 +319,39 @@ class OyasaiMusic : JavaPlugin() {
     val sha1 = config.getString(prefix + "sha1").orEmpty()
     val manifest = config.getString(prefix + "bank-manifest-sha256").orEmpty()
     val isPlaceholder =
-        (id.isBlank() || id == "00000000-0000-0000-0000-000000000000") &&
-            url.isBlank() &&
-            sha1.isBlank() &&
-            manifest.isBlank()
+      (id.isBlank() || id == "00000000-0000-0000-0000-000000000000") &&
+        url.isBlank() &&
+        sha1.isBlank() &&
+        manifest.isBlank()
     val obsoleteBundledSha1 = "af57205743d4d573bcb2dea2f81b745d30eb6eb3"
     val isObsoleteBundledPack =
-        sha1.equals(obsoleteBundledSha1, ignoreCase = true) ||
-            url.contains(obsoleteBundledSha1, ignoreCase = true)
+      sha1.equals(obsoleteBundledSha1, ignoreCase = true) ||
+        url.contains(obsoleteBundledSha1, ignoreCase = true)
     val bundledPackId = "8be1eaab-ca07-4f47-9957-40d29505e320"
     var changed = false
     if (isPlaceholder || isObsoleteBundledPack) {
       config.set(prefix + "enabled", true)
       config.set(prefix + "id", bundledPackId)
       config.set(
-          prefix + "url",
-          "https://download.mc-packs.net/pack/73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d.zip",
+        prefix + "url",
+        "https://download.mc-packs.net/pack/73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d.zip",
       )
       config.set(prefix + "sha1", "73e0fc6020a2b160eb8d5f5b27b9e5579a773d9d")
       config.set(
-          prefix + "bank-manifest-sha256",
-          "5aa68f33eea756ca43244751605924095dff18c5a01fd18767b3f1e51cd19506",
+        prefix + "bank-manifest-sha256",
+        "5aa68f33eea756ca43244751605924095dff18c5a01fd18767b3f1e51cd19506",
       )
       config.set(prefix + "prompt", "おやさいサーバーの拡張音域リソースパックを読み込みますか？")
       config.set(
-          prefix + "instrument-bank-event-template",
-          "oyasaimusic:bank/i/{instrument}/a/{anchor}",
+        prefix + "instrument-bank-event-template",
+        "oyasaimusic:bank/i/{instrument}/a/{anchor}",
       )
       changed = true
     }
     // Older generated configs left this blank, which silently disabled the Bedrock ALLOW path
     // even when the correct .mcpack had been installed on Velocity.
     if (config.getString("bedrock.pack-id", "").orEmpty().isBlank()) {
-      val resourcePackId =
-          config.getString(prefix + "id", bundledPackId).orEmpty().ifBlank { bundledPackId }
+      val resourcePackId = config.getString(prefix + "id", bundledPackId).orEmpty().ifBlank { bundledPackId }
       config.set("bedrock.pack-id", resourcePackId)
       changed = true
     }
@@ -370,39 +368,39 @@ class OyasaiMusic : JavaPlugin() {
 
   private fun configureRuntimeServices() {
     likeService =
-        LikeService(
-            socialRepository = socialRepository,
-            likeRewardMoney = config.getLong("economy.like-reward-money", 1000),
-            likeRewardPoints = config.getLong("economy.like-reward-points", 2),
-        )
+      LikeService(
+        socialRepository = socialRepository,
+        likeRewardMoney = config.getLong("economy.like-reward-money", 1000),
+        likeRewardPoints = config.getLong("economy.like-reward-points", 2),
+      )
     viewCountService =
-        ViewCountService(
-            plugin = this,
-            socialRepository = socialRepository,
-            hourLimit = config.getInt("playback.view-limit-per-hour", 3),
-            dayLimit = config.getInt("playback.view-limit-per-day", 10),
-            viewsPerPoint = config.getInt("playback.views-per-point", 10),
-        )
+      ViewCountService(
+        plugin = this,
+        socialRepository = socialRepository,
+        hourLimit = config.getInt("playback.view-limit-per-hour", 3),
+        dayLimit = config.getInt("playback.view-limit-per-day", 10),
+        viewsPerPoint = config.getInt("playback.views-per-point", 10),
+      )
     // 既存のconfig.ymlが空欄のままでも、標準のTokenManagerコマンドでポイントを付与する。
     val pointCommand =
-        config.getString("economy.points-command", "").orEmpty().ifBlank {
-          "tokenmanager add %player% %points%"
-        }
+      config.getString("economy.points-command", "").orEmpty().ifBlank {
+        "tokenmanager add %player% %points%"
+      }
     economyService = EconomyService(this, pointCommand)
   }
 
   private fun createPlaybackEngine(): PlaybackEngine {
     val defaultMode =
-        when (config.getString("playback.default-mode", "default")?.lowercase()) {
-          "positional" -> PlaybackMode.POSITIONAL
-          else -> PlaybackMode.DEFAULT
-        }
+      when (config.getString("playback.default-mode", "default")?.lowercase()) {
+        "positional" -> PlaybackMode.POSITIONAL
+        else -> PlaybackMode.DEFAULT
+      }
     return PlaybackEngine(
-        plugin = this,
-        bedrockPrefix = config.getString("bedrock.name-prefix", ".") ?: ".",
-        chordLimit = config.getInt("bedrock.chord-limit", 3),
-        lookaheadMs = config.getLong("playback.lookahead-ms", 35L).coerceIn(0L, 50L),
-        defaultMode = defaultMode,
+      plugin = this,
+      bedrockPrefix = config.getString("bedrock.name-prefix", ".") ?: ".",
+      chordLimit = config.getInt("bedrock.chord-limit", 3),
+      lookaheadMs = config.getLong("playback.lookahead-ms", 35L).coerceIn(0L, 50L),
+      defaultMode = defaultMode,
     )
   }
 }

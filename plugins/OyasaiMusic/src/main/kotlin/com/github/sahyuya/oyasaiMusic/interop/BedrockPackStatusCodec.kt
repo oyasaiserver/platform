@@ -8,18 +8,18 @@ import java.nio.charset.CodingErrorAction
 import java.util.UUID
 
 /**
- * Paper -> Velocity transfer request for Bedrock pack application.
- * Wire: u8 version=1, UUID playerId (16), u8 allow, u8 packIdLen, packId UTF-8 (<=64B).
+ * Velocity -> Paper confirmation for the pack attached to the current Geyser session.
+ * Wire: u8 version=1, UUID playerId (16), u8 loaded, u8 packIdLen, packId UTF-8 (<=64B).
  */
-object BedrockTransferCodec {
-  const val CHANNEL = "oyasaimusic:bedrock_transfer"
+object BedrockPackStatusCodec {
+  const val CHANNEL = "oyasaimusic:bedrock_pack_status"
   const val VERSION = 1
-  const val MAX_PACK_ID_BYTES = 64
+  const val MAX_PACK_ID_BYTES = BedrockTransferCodec.MAX_PACK_ID_BYTES
   const val MAX = 1 + 16 + 1 + 1 + MAX_PACK_ID_BYTES
 
-  data class Request(val playerId: UUID, val allow: Boolean, val packId: String)
+  data class Status(val playerId: UUID, val loaded: Boolean, val packId: String)
 
-  fun encode(playerId: UUID, allow: Boolean, packId: String): ByteArray {
+  fun encode(playerId: UUID, loaded: Boolean, packId: String): ByteArray {
     val idBytes = packId.toByteArray(Charsets.UTF_8)
     require(idBytes.size <= MAX_PACK_ID_BYTES) { "bedrock pack id too long" }
     return ByteArrayOutputStream().use { bytes ->
@@ -27,30 +27,30 @@ object BedrockTransferCodec {
         out.writeByte(VERSION)
         out.writeLong(playerId.mostSignificantBits)
         out.writeLong(playerId.leastSignificantBits)
-        out.writeByte(if (allow) 1 else 0)
+        out.writeByte(if (loaded) 1 else 0)
         out.writeByte(idBytes.size)
         out.write(idBytes)
       }
-      bytes.toByteArray().also { require(it.size in 19..MAX) { "bedrock transfer packet size" } }
+      bytes.toByteArray().also { require(it.size in 19..MAX) { "bedrock pack status size" } }
     }
   }
 
-  fun decode(bytes: ByteArray): Request? = runCatching {
+  fun decode(bytes: ByteArray): Status? = runCatching {
     require(bytes.size in 19..MAX) { "size" }
     DataInputStream(bytes.inputStream()).use { input ->
       require(input.readUnsignedByte() == VERSION) { "version" }
-      val id = UUID(input.readLong(), input.readLong())
-      val allow =
+      val playerId = UUID(input.readLong(), input.readLong())
+      val loaded =
         when (input.readUnsignedByte()) {
           1 -> true
           0 -> false
-          else -> throw IllegalArgumentException("allow")
+          else -> throw IllegalArgumentException("loaded")
         }
-      val len = input.readUnsignedByte()
-      require(len <= MAX_PACK_ID_BYTES) { "pack id length" }
-      val idBytes = input.readNBytes(len)
-      require(idBytes.size == len && input.available() == 0) { "eof" }
-      Request(id, allow, decodeUtf8(idBytes))
+      val length = input.readUnsignedByte()
+      require(length <= MAX_PACK_ID_BYTES) { "pack id length" }
+      val idBytes = input.readNBytes(length)
+      require(idBytes.size == length && input.available() == 0) { "eof" }
+      Status(playerId, loaded, decodeUtf8(idBytes))
     }
   }.getOrNull()
 
