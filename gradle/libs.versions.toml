@@ -17,6 +17,7 @@ placeholderapi = {module = "me.clip:placeholderapi", version.ref = "placeholdera
 purpur-api = {module = "org.purpurmc.purpur:purpur-api", version.ref = "purpur-api"}
 shadow-plugin = {module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow"}
 spotless-plugin = {module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless"}
+tab-api = {module = "com.github.NEZNAMY:TAB-API", version.ref = "tab-api"}
 purpur-dev-bundle = {module = "org.purpurmc.purpur:dev-bundle", version.ref = "purpur-api"}
 tokenmanager = {module = "com.github.Realizedd:TokenManager", version.ref = "tokenmanager"}
 vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
@@ -45,6 +46,7 @@ purpur-api = "26.2.build.2622-stable"
 shadow = "9.6.1"
 spotless = "8.5.1" # Ktfmt version must match that of Nixpkgs
 paperweight = "2.0.0-beta.22"
+tab-api = "6.1.2"
 tokenmanager = "3.2.4"
 vault = "1.7.1"
 worldborder = "2.1.4"
