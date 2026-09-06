@@ -395,6 +395,16 @@
       "hash": "sha256-KH29TYszwFDiP14h/eCSybGqY/iPO6uqFkpgrCgL8sw="
     }
   },
+  "com.github.NEZNAMY:TAB-API:6.1.2": {
+    "TAB-API-6.1.2.jar": {
+      "url": "https://repo.purpurmc.org/snapshots/com/github/NEZNAMY/TAB-API/6.1.2/TAB-API-6.1.2.jar",
+      "hash": "sha256-qTaLn8iq6Qw79SE40njDXs7qhyFJeIqTjrVF6xaZNbs="
+    },
+    "TAB-API-6.1.2.pom": {
+      "url": "https://repo.purpurmc.org/snapshots/com/github/NEZNAMY/TAB-API/6.1.2/TAB-API-6.1.2.pom",
+      "hash": "sha256-cHShMW2bJyTqx5rmEZt/cDTzIrrk2O+FZ4jXWIEGurc="
+    }
+  },
   "com.github.NuVotifier:NuVotifier:2.7.2": {
     "NuVotifier-2.7.2.jar": {
       "url": "https://repo.purpurmc.org/snapshots/com/github/NuVotifier/NuVotifier/2.7.2/NuVotifier-2.7.2.jar",
@@ -2755,6 +2765,12 @@
     "annotations-26.1.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/26.1.0/annotations-26.1.0.pom",
       "hash": "sha256-+NxQzzqsS87HQKkJVfKADkElHpxANjC3W3UtO271vuI="
+    }
+  },
+  "org.jetbrains:annotations:24.1.0": {
+    "annotations-24.1.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/24.1.0/annotations-24.1.0.pom",
+      "hash": "sha256-Ljf9cCCkNkueXZ93xbZ0Kjvqkn3VYMoeOQ3IFcnFCCA="
     }
   },
   "org.jetbrains:annotations:24.0.1": {
