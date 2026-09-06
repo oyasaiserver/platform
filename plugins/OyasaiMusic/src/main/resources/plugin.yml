@@ -32,7 +32,7 @@ commands:
     permission: oyasaimusic.use
   oyasaimusic:
     description: OyasaiMusic管理コマンド
-    usage: /oyasaimusic <reload|update>
+    usage: /oyasaimusic <reload|update|rp set|unset|list|check>
     permission: oyasaimusic.admin
   demosound:
     description: バニラSoundEventの指定パターンを自分だけに試聴する

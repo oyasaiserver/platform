@@ -2,9 +2,12 @@ package com.github.sahyuya.oyasaiMusic.velocity
 
 import com.github.sahyuya.oyasaiMusic.interop.PluginMessageBounds
 import com.google.inject.Inject
+import com.velocitypowered.api.event.PostOrder
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.event.connection.PluginMessageEvent
+import com.velocitypowered.api.event.player.ServerPostConnectEvent
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent
 import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.Player
@@ -32,7 +35,7 @@ constructor(
     private val logger: Logger,
     @DataDirectory private val dataDirectory: Path,
 ) {
-  private val bedrockPacks = BedrockPackService(proxy, logger, dataDirectory)
+  private val bedrockPacks = BedrockPackService(this, proxy, logger, dataDirectory)
 
   companion object {
     private const val MAIN_SERVER = "main"
@@ -43,16 +46,32 @@ constructor(
         )
   }
 
-  @Subscribe
+  @Subscribe(order = PostOrder.LAST)
   fun onProxyInitialization(event: ProxyInitializeEvent) {
     CHANNELS.forEach(proxy.channelRegistrar::register)
     proxy.channelRegistrar.register(BedrockPackService.TRANSFER_CHANNEL)
+    proxy.channelRegistrar.register(BedrockPackService.STATUS_CHANNEL)
     bedrockPacks.load()
     logger.info("OyasaiMusic Velocity relay enabled for backend main.")
   }
 
   @Subscribe
+  fun onServerPostConnect(event: ServerPostConnectEvent) {
+    bedrockPacks.onBackendConnected(event.player)
+  }
+
+  @Subscribe
+  fun onProxyShutdown(event: ProxyShutdownEvent) {
+    bedrockPacks.shutdown()
+  }
+
+  @Subscribe
   fun onPluginMessage(event: PluginMessageEvent) {
+    // Status is proxy-originated only. Consume any client/backend attempt to spoof it.
+    if (event.identifier == BedrockPackService.STATUS_CHANNEL) {
+      event.result = PluginMessageEvent.ForwardResult.handled()
+      return
+    }
     if (event.identifier == BedrockPackService.TRANSFER_CHANNEL) {
       event.result = PluginMessageEvent.ForwardResult.handled()
       bedrockPacks.handleTransferMessage(event)

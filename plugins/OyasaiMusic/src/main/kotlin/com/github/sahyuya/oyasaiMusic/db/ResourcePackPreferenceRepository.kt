@@ -5,6 +5,10 @@ import com.github.sahyuya.oyasaiMusic.util.UuidUtil
 import java.util.UUID
 
 class ResourcePackPreferenceRepository(private val db: DatabaseManager) {
+  data class AllowedEntry(val playerId: UUID, val updatedAtMillis: Long)
+
+  data class AllowedPage(val total: Int, val entries: List<AllowedEntry>)
+
   fun get(player: UUID): ResourcePackPreference =
       db.transaction { conn ->
         conn
@@ -31,4 +35,34 @@ class ResourcePackPreferenceRepository(private val db: DatabaseManager) {
               statement.executeUpdate()
             }
       }
+
+  /** Returns one bounded, deterministic page without performing any player-profile lookup. */
+  fun listAllowed(offset: Int, limit: Int): AllowedPage {
+    require(offset in 0..1_000_000) { "offset out of range" }
+    require(limit in 1..100) { "limit out of range" }
+    return db.transaction { conn ->
+      val total =
+          conn
+              .prepareStatement("SELECT COUNT(*) FROM resource_pack_preferences WHERE allowed = 1")
+              .use { statement ->
+                statement.executeQuery().use { rows -> if (rows.next()) rows.getInt(1) else 0 }
+              }
+      val entries = mutableListOf<AllowedEntry>()
+      conn
+          .prepareStatement(
+              "SELECT player_uuid, updated_at FROM resource_pack_preferences " +
+                  "WHERE allowed = 1 ORDER BY updated_at DESC, hex(player_uuid) ASC LIMIT ? OFFSET ?",
+          )
+          .use { statement ->
+            statement.setInt(1, limit)
+            statement.setInt(2, offset)
+            statement.executeQuery().use { rows ->
+              while (rows.next()) {
+                entries += AllowedEntry(UuidUtil.fromBytes(rows.getBytes(1)), rows.getLong(2))
+              }
+            }
+          }
+      AllowedPage(total, entries)
+    }
+  }
 }

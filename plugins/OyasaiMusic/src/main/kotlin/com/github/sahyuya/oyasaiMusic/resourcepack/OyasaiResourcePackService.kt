@@ -33,7 +33,7 @@ class OyasaiResourcePackService(
    * Per-connection state. Persisted ALLOW is deliberately distinct from SUCCESS: only an Adventure
    * load callback or a current-generation OMMT bank capability may establish SUCCESS.
    */
-  private enum class State {
+  enum class ConnectionState {
     PREFERENCE_PENDING,
     ALLOWED,
     REQUESTED,
@@ -70,7 +70,7 @@ class OyasaiResourcePackService(
   private val preferenceSequence = AtomicLong()
   private val generations = ConcurrentHashMap<UUID, Long>()
   private val preferenceRevisions = ConcurrentHashMap<UUID, Long>()
-  private val states = ConcurrentHashMap<UUID, State>()
+  private val states = ConcurrentHashMap<UUID, ConnectionState>()
   private val requested = ConcurrentHashMap<UUID, RequestToken>()
   @Volatile private var config: Config? = loadConfig()
 
@@ -130,21 +130,23 @@ class OyasaiResourcePackService(
     plugin.playbackController.play(online, pending.song, pending.onCompletion, pending.remember)
   }
 
-  fun isLoaded(player: UUID): Boolean = states[player] == State.SUCCESS
+  fun isLoaded(player: UUID): Boolean = states[player] == ConnectionState.SUCCESS
+
+  fun connectionState(player: UUID): ConnectionState? = states[player]
 
   /**
    * Bedrock/.mcpack applied externally (Transfer + Geyser injection): treat as loaded without the
    * Java pack flow. No load screen, no download tracking.
    */
   fun markExternalSuccess(playerId: UUID) {
-    states[playerId] = State.SUCCESS
+    states[playerId] = ConnectionState.SUCCESS
     requested.remove(playerId)
     Bukkit.getPlayer(playerId)?.takeIf { it.isOnline }?.let(::sendBankConsent)
   }
 
   /** Forget per-connection pack state (Bedrock deny path). */
   fun forget(playerId: UUID) {
-    states[playerId] = State.DECLINED
+    states[playerId] = ConnectionState.DECLINED
     requested.remove(playerId)
     resolvePendingPlayback(playerId, false)
     Bukkit.getPlayer(playerId)?.takeIf { it.isOnline }?.let(::sendBankConsent)
@@ -204,10 +206,16 @@ class OyasaiResourcePackService(
     return ExtendedPlayback(event, 2.0.pow(residualCents / 1200.0).toFloat())
   }
 
-  fun allow(player: Player, acknowledge: Boolean = true) {
+  /** Completion is always invoked on the Paper main thread and reports persistence success. */
+  fun allow(
+      player: Player,
+      acknowledge: Boolean = true,
+      completion: ((Boolean) -> Unit)? = null,
+  ) {
     config
         ?: run {
           player.sendMessage("§c拡張音域リソースパックはサーバーで利用できません。")
+          completion?.invoke(false)
           return
         }
     if (acknowledge) {
@@ -234,11 +242,12 @@ class OyasaiResourcePackService(
                               ) {
                                 if (
                                     states[player.uniqueId] !in
-                                        setOf(State.REQUESTED, State.SUCCESS)
+                                        setOf(ConnectionState.REQUESTED, ConnectionState.SUCCESS)
                                 ) {
-                                  states[player.uniqueId] = State.ALLOWED
+                                  states[player.uniqueId] = ConnectionState.ALLOWED
                                 }
                                 sendBankConsent(player)
+                                completion?.invoke(true)
                                 // /mm rp allow is an explicit, eligible action. Resolve the client
                                 // route once,
                                 // then either trust a matching OMMT bank or request the external
@@ -250,6 +259,8 @@ class OyasaiResourcePackService(
                                       return@resolveForPlayback
                                   requestIfNeeded(player)
                                 }
+                              } else {
+                                completion?.invoke(false)
                               }
                             },
                         )
@@ -266,6 +277,7 @@ class OyasaiResourcePackService(
                               ) {
                                 player.sendMessage("§c設定の保存に失敗したため、許可状態は変更しませんでした。")
                               }
+                              completion?.invoke(false)
                             },
                         )
                   }
@@ -273,12 +285,13 @@ class OyasaiResourcePackService(
         )
   }
 
-  fun deny(player: Player) {
+  /** Completion is always invoked on the Paper main thread and reports persistence success. */
+  fun deny(player: Player, completion: ((Boolean) -> Unit)? = null) {
     val generation =
         generations.computeIfAbsent(player.uniqueId) { generationSequence.incrementAndGet() }
     val preferenceRevision = preferenceSequence.incrementAndGet()
     preferenceRevisions[player.uniqueId] = preferenceRevision
-    states[player.uniqueId] = State.DECLINED
+    states[player.uniqueId] = ConnectionState.DECLINED
     requested.remove(player.uniqueId)
     // A pending download is moot: fall back to vanilla range immediately.
     resolvePendingPlayback(player.uniqueId, false)
@@ -292,22 +305,24 @@ class OyasaiResourcePackService(
         .runTaskAsynchronously(
             plugin,
             Runnable {
-              runCatching { preferences.set(player.uniqueId, ResourcePackPreference.DENY) }
-                  .onFailure {
-                    Bukkit.getScheduler()
-                        .runTask(
-                            plugin,
-                            Runnable {
-                              if (
-                                  player.isOnline &&
-                                      generations[player.uniqueId] == generation &&
-                                      preferenceRevisions[player.uniqueId] == preferenceRevision
-                              ) {
-                                player.sendMessage("§c自動読み込みを停止しましたが、次回接続用設定の保存に失敗しました。")
-                              }
-                            },
-                        )
-                  }
+              val saved =
+                  runCatching { preferences.set(player.uniqueId, ResourcePackPreference.DENY) }
+                      .isSuccess
+              Bukkit.getScheduler()
+                  .runTask(
+                      plugin,
+                      Runnable {
+                        if (
+                            !saved &&
+                                player.isOnline &&
+                                generations[player.uniqueId] == generation &&
+                                preferenceRevisions[player.uniqueId] == preferenceRevision
+                        ) {
+                          player.sendMessage("§c自動読み込みを停止しましたが、次回接続用設定の保存に失敗しました。")
+                        }
+                        completion?.invoke(saved)
+                      },
+                  )
             },
         )
   }
@@ -330,7 +345,7 @@ class OyasaiResourcePackService(
     val preferenceRevision = preferenceSequence.incrementAndGet()
     generations[player.uniqueId] = generation
     preferenceRevisions[player.uniqueId] = preferenceRevision
-    states[player.uniqueId] = State.PREFERENCE_PENDING
+    states[player.uniqueId] = ConnectionState.PREFERENCE_PENDING
     requested.remove(player.uniqueId)
     Bukkit.getScheduler()
         .runTaskAsynchronously(
@@ -354,11 +369,14 @@ class OyasaiResourcePackService(
                         // Keep it ALLOWED until the first eligible playback resolves
                         // OMMT-vs-vanilla.
                         if (preference == ResourcePackPreference.ALLOW) {
-                          if (states[player.uniqueId] !in setOf(State.REQUESTED, State.SUCCESS)) {
-                            states[player.uniqueId] = State.ALLOWED
+                          if (
+                              states[player.uniqueId] !in
+                                  setOf(ConnectionState.REQUESTED, ConnectionState.SUCCESS)
+                          ) {
+                            states[player.uniqueId] = ConnectionState.ALLOWED
                           }
                         } else {
-                          states[player.uniqueId] = State.DECLINED
+                          states[player.uniqueId] = ConnectionState.DECLINED
                           requested.remove(player.uniqueId)
                         }
                         sendBankConsent(player)
@@ -387,14 +405,14 @@ class OyasaiResourcePackService(
     val generation = generations[player.uniqueId] ?: return false
     if (!player.isOnline) return false
     when (states[player.uniqueId]) {
-      State.PREFERENCE_PENDING -> return true
-      State.REQUESTED -> return true
-      State.SUCCESS,
-      State.DECLINED,
-      State.FAILED,
-      State.TIMED_OUT,
+      ConnectionState.PREFERENCE_PENDING -> return true
+      ConnectionState.REQUESTED -> return true
+      ConnectionState.SUCCESS,
+      ConnectionState.DECLINED,
+      ConnectionState.FAILED,
+      ConnectionState.TIMED_OUT,
       null -> return false
-      State.ALLOWED -> Unit
+      ConnectionState.ALLOWED -> Unit
     }
 
     // Bedrock pack application is owned by BedrockTransferService and its transfer rejoin.
@@ -407,7 +425,7 @@ class OyasaiResourcePackService(
         plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId) &&
             plugin.ommtPlaybackClientRegistry.supportsBankManifest(player.uniqueId)
     ) {
-      states[player.uniqueId] = State.SUCCESS
+      states[player.uniqueId] = ConnectionState.SUCCESS
       requested.remove(player.uniqueId)
       sendBankConsent(player)
       return false
@@ -427,28 +445,29 @@ class OyasaiResourcePackService(
     }
 
     val token = RequestToken(generation, active.id, active.sha1)
-    if (requested[player.uniqueId] == token && states[player.uniqueId] == State.REQUESTED)
+    if (requested[player.uniqueId] == token && states[player.uniqueId] == ConnectionState.REQUESTED)
         return true
     if (plugin.ommtPlaybackClientRegistry.isCapable(player.uniqueId)) {
       player.sendMessage("§eお使いのMOD内蔵音源が現在のサーバーパックと一致しないため、サーバーパックを適用します。")
     }
     request(player, active, generation)
-    return states[player.uniqueId] == State.REQUESTED
+    return states[player.uniqueId] == ConnectionState.REQUESTED
   }
 
   private fun request(player: Player, active: Config, generation: Long) {
     // A Java resource-pack request must never be sent to a Bedrock client.
     val bedrockPrefix = plugin.config.getString("bedrock.name-prefix", ".") ?: "."
     if (BedrockUtil.isBedrock(player, bedrockPrefix)) {
-      states[player.uniqueId] = State.FAILED
+      states[player.uniqueId] = ConnectionState.FAILED
       player.sendMessage("§e統合版へのリソースパック適用は現在準備中です。再生は通常音域になります。")
       sendBankConsent(player)
       return
     }
     val token = RequestToken(generation, active.id, active.sha1)
-    if (requested[player.uniqueId] == token && states[player.uniqueId] == State.REQUESTED) return
+    if (requested[player.uniqueId] == token && states[player.uniqueId] == ConnectionState.REQUESTED)
+        return
     requested[player.uniqueId] = token
-    states[player.uniqueId] = State.REQUESTED
+    states[player.uniqueId] = ConnectionState.REQUESTED
     val info = ResourcePackInfo.resourcePackInfo(active.id, active.url, active.sha1)
     val request =
         ResourcePackRequest.resourcePackRequest()
@@ -466,7 +485,8 @@ class OyasaiResourcePackService(
                   )
                       return@ResourcePackCallback
                   val success = status == ResourcePackStatus.SUCCESSFULLY_LOADED
-                  states[player.uniqueId] = if (success) State.SUCCESS else State.FAILED
+                  states[player.uniqueId] =
+                      if (success) ConnectionState.SUCCESS else ConnectionState.FAILED
                   plugin.logger.info(
                       "Resource pack ${status.name} for ${player.name} (${player.uniqueId})"
                   )
@@ -505,9 +525,9 @@ class OyasaiResourcePackService(
               if (
                   requested[player.uniqueId] == token &&
                       generations[player.uniqueId] == generation &&
-                      states[player.uniqueId] == State.REQUESTED
+                      states[player.uniqueId] == ConnectionState.REQUESTED
               ) {
-                states[player.uniqueId] = State.TIMED_OUT
+                states[player.uniqueId] = ConnectionState.TIMED_OUT
                 plugin.logger.info(
                     "Resource pack TIMED_OUT for ${player.name} (${player.uniqueId})"
                 )

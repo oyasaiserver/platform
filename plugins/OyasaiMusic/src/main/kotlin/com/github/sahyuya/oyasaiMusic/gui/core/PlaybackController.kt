@@ -520,6 +520,7 @@ class PlaybackController(private val plugin: OyasaiMusic, private val menuManage
         "MUSIC_DISC_PRECIPICE" -> recordBossBarStyle("DE8368", BossBar.Color.GREEN)
         "MUSIC_DISC_TEARS" -> recordBossBarStyle("9DC1C1", BossBar.Color.WHITE)
         "MUSIC_DISC_LAVA_CHICKEN" -> recordBossBarStyle("FCFCF6", BossBar.Color.RED)
+        "MUSIC_DISC_BOUNCE" -> recordBossBarStyle("656563", BossBar.Color.WHITE)
         else -> recordBossBarStyle("FCFCFC", BossBar.Color.YELLOW)
       }
 
