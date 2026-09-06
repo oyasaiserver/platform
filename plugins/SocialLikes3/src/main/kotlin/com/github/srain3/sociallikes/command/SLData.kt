@@ -4564,9 +4564,14 @@ object SLData : CommandExecutor, TabCompleter, Listener {
       )
 
   private fun dialogPlayerName(uuidText: String, playerNames: Map<String, String>): String {
-    val onlineName = parseUuid(uuidText)?.let { Bukkit.getPlayer(it)?.name }
+    val uuid = parseUuid(uuidText)
+    val resolvedName =
+        uuid?.let { Bukkit.getPlayer(it)?.name }
+            ?: playerNames[uuidText]
+            ?: uuid?.let { runCatching { Bukkit.getOfflinePlayer(it).name }.getOrNull() }
+            ?: uuidText.take(8)
     return compactDialogText(
-        (onlineName ?: playerNames[uuidText] ?: uuidText.take(8)).removePrefix("."),
+        resolvedName.removePrefix("."),
         18,
     )
   }
