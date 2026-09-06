@@ -8,8 +8,8 @@ import java.nio.charset.CodingErrorAction
 import java.util.UUID
 
 /**
- * Velocity -> Paper confirmation for the pack attached to the current Geyser session.
- * Wire: u8 version=1, UUID playerId (16), u8 loaded, u8 packIdLen, packId UTF-8 (<=64B).
+ * Velocity -> Paper confirmation for the pack attached to the current Geyser session. Wire: u8
+ * version=1, UUID playerId (16), u8 loaded, u8 packIdLen, packId UTF-8 (<=64B).
  */
 object BedrockPackStatusCodec {
   const val CHANNEL = "oyasaimusic:bedrock_pack_status"
@@ -35,29 +35,31 @@ object BedrockPackStatusCodec {
     }
   }
 
-  fun decode(bytes: ByteArray): Status? = runCatching {
-    require(bytes.size in 19..MAX) { "size" }
-    DataInputStream(bytes.inputStream()).use { input ->
-      require(input.readUnsignedByte() == VERSION) { "version" }
-      val playerId = UUID(input.readLong(), input.readLong())
-      val loaded =
-        when (input.readUnsignedByte()) {
-          1 -> true
-          0 -> false
-          else -> throw IllegalArgumentException("loaded")
-        }
-      val length = input.readUnsignedByte()
-      require(length <= MAX_PACK_ID_BYTES) { "pack id length" }
-      val idBytes = input.readNBytes(length)
-      require(idBytes.size == length && input.available() == 0) { "eof" }
-      Status(playerId, loaded, decodeUtf8(idBytes))
-    }
-  }.getOrNull()
+  fun decode(bytes: ByteArray): Status? =
+      runCatching {
+            require(bytes.size in 19..MAX) { "size" }
+            DataInputStream(bytes.inputStream()).use { input ->
+              require(input.readUnsignedByte() == VERSION) { "version" }
+              val playerId = UUID(input.readLong(), input.readLong())
+              val loaded =
+                  when (input.readUnsignedByte()) {
+                    1 -> true
+                    0 -> false
+                    else -> throw IllegalArgumentException("loaded")
+                  }
+              val length = input.readUnsignedByte()
+              require(length <= MAX_PACK_ID_BYTES) { "pack id length" }
+              val idBytes = input.readNBytes(length)
+              require(idBytes.size == length && input.available() == 0) { "eof" }
+              Status(playerId, loaded, decodeUtf8(idBytes))
+            }
+          }
+          .getOrNull()
 
   private fun decodeUtf8(bytes: ByteArray): String =
-    Charsets.UTF_8.newDecoder()
-      .onMalformedInput(CodingErrorAction.REPORT)
-      .onUnmappableCharacter(CodingErrorAction.REPORT)
-      .decode(ByteBuffer.wrap(bytes))
-      .toString()
+      Charsets.UTF_8.newDecoder()
+          .onMalformedInput(CodingErrorAction.REPORT)
+          .onUnmappableCharacter(CodingErrorAction.REPORT)
+          .decode(ByteBuffer.wrap(bytes))
+          .toString()
 }

@@ -32,21 +32,21 @@ import org.slf4j.Logger
 /**
  * Bedrock pack service for Velocity.
  *
- * Song traffic remains a stateless relay. This service is the deliberately narrow
- * exception: it persists only opted-in Bedrock XUIDs so the pack can be attached during
- * Geyser's initial resource-pack event, before the player reaches backend `main`.
+ * Song traffic remains a stateless relay. This service is the deliberately narrow exception: it
+ * persists only opted-in Bedrock XUIDs so the pack can be attached during Geyser's initial
+ * resource-pack event, before the player reaches backend `main`.
  */
 class BedrockPackService(
-  private val owner: Any,
-  private val proxy: ProxyServer,
-  private val logger: Logger,
-  private val dataDirectory: Path,
+    private val owner: Any,
+    private val proxy: ProxyServer,
+    private val logger: Logger,
+    private val dataDirectory: Path,
 ) {
   companion object {
     val TRANSFER_CHANNEL: MinecraftChannelIdentifier =
-      MinecraftChannelIdentifier.from(BedrockTransferCodec.CHANNEL)
+        MinecraftChannelIdentifier.from(BedrockTransferCodec.CHANNEL)
     val STATUS_CHANNEL: MinecraftChannelIdentifier =
-      MinecraftChannelIdentifier.from(BedrockPackStatusCodec.CHANNEL)
+        MinecraftChannelIdentifier.from(BedrockPackStatusCodec.CHANNEL)
     private const val MAIN_SERVER = "main"
     private const val PACKS_DIR = "packs"
     private const val CONFIG_FILE = "bedrock-pack.properties"
@@ -81,21 +81,21 @@ class BedrockPackService(
       val configPath = dataDirectory.resolve(CONFIG_FILE)
       if (!Files.isRegularFile(configPath)) {
         Files.writeString(
-          configPath,
-          "# Bedrock pack for OyasaiMusic (Velocity side).\n" +
-            "# Place the .mcpack (see tools/ommt-pack-builder/Build-OmmtMcpack.ps1) under ./packs/.\n" +
-            "# Geyser must use force-resource-packs: false so a declined download does not block joining.\n" +
-            "pack-file=${BedrockPackSettingsParser.DEFAULT_PACK_FILE}\n" +
-            "# Public Geyser address used only when /mm rp allow requests one reconnect.\n" +
-            "return-host=${BedrockPackSettingsParser.DEFAULT_RETURN_HOST}\n" +
-            "return-port=${BedrockPackSettingsParser.DEFAULT_RETURN_PORT}\n",
+            configPath,
+            "# Bedrock pack for OyasaiMusic (Velocity side).\n" +
+                "# Place the .mcpack (see tools/ommt-pack-builder/Build-OmmtMcpack.ps1) under ./packs/.\n" +
+                "# Geyser must use force-resource-packs: false so a declined download does not block joining.\n" +
+                "pack-file=${BedrockPackSettingsParser.DEFAULT_PACK_FILE}\n" +
+                "# Public Geyser address used only when /mm rp allow requests one reconnect.\n" +
+                "return-host=${BedrockPackSettingsParser.DEFAULT_RETURN_HOST}\n" +
+                "return-port=${BedrockPackSettingsParser.DEFAULT_RETURN_PORT}\n",
         )
         logger.info("Wrote default {}. Place the .mcpack under ./packs/.", CONFIG_FILE)
       }
       val settings =
-        BedrockPackSettingsParser.parse(
-          Properties().apply { Files.newInputStream(configPath).use(::load) },
-        )
+          BedrockPackSettingsParser.parse(
+              Properties().apply { Files.newInputStream(configPath).use(::load) },
+          )
       packFile = settings.packFile
       returnHost = settings.returnHost
       returnPort = settings.returnPort
@@ -110,27 +110,27 @@ class BedrockPackService(
       }
       if (settings.usedLegacyHost || settings.usedLegacyPort) {
         logger.warn(
-          "Legacy transfer-host/transfer-port keys are still accepted; migrate {} to return-host/return-port.",
-          CONFIG_FILE,
+            "Legacy transfer-host/transfer-port keys are still accepted; migrate {} to return-host/return-port.",
+            CONFIG_FILE,
         )
       }
       logger.info("Bedrock Transfer return target: {}:{}.", returnHost, returnPort)
       logger.info(
-        "Bedrock pack declines require Geyser force-resource-packs=false; OyasaiMusic cannot override this global Geyser setting.",
+          "Bedrock pack declines require Geyser force-resource-packs=false; OyasaiMusic cannot override this global Geyser setting.",
       )
       loadAllowedXuids()
       val file = dataDirectory.resolve(PACKS_DIR).resolve(packFile)
       if (Files.isRegularFile(file)) {
         logger.info(
-          "Bedrock pack configured: {} ({} bytes, sha1 {})",
-          file.fileName,
-          Files.size(file),
-          sha1Hex(file),
+            "Bedrock pack configured: {} ({} bytes, sha1 {})",
+            file.fileName,
+            Files.size(file),
+            sha1Hex(file),
         )
       } else {
         logger.warn(
-          "Bedrock pack missing: {}. Pack registration will remain unavailable until the file is installed.",
-          file,
+            "Bedrock pack missing: {}. Pack registration will remain unavailable until the file is installed.",
+            file,
         )
       }
     } catch (error: Exception) {
@@ -138,7 +138,9 @@ class BedrockPackService(
     }
 
     if (!ensureSubscribed()) {
-      logger.warn("Geyser API is not ready; OyasaiMusic will retry its pre-login pack subscription.")
+      logger.warn(
+          "Geyser API is not ready; OyasaiMusic will retry its pre-login pack subscription."
+      )
       scheduleSubscriptionRetry()
     }
   }
@@ -148,16 +150,17 @@ class BedrockPackService(
       shuttingDown = true
       registration?.let { (api, registrar) ->
         runCatching { api.eventBus().unregisterAll(registrar) }
-          .onFailure { logger.warn("Failed to unregister Geyser resource-pack events.", it) }
+            .onFailure { logger.warn("Failed to unregister Geyser resource-pack events.", it) }
       }
       registration = null
       subscribed.set(false)
     }
     if (persistedRevision.get() != allowListRevision.get()) {
       runCatching {
-        writeAllowedXuids()
-        persistedRevision.set(allowListRevision.get())
-      }.onFailure { logger.warn("Failed to flush Bedrock pack allow-list during shutdown.", it) }
+            writeAllowedXuids()
+            persistedRevision.set(allowListRevision.get())
+          }
+          .onFailure { logger.warn("Failed to flush Bedrock pack allow-list during shutdown.", it) }
     }
     registeredSessions.clear()
   }
@@ -173,20 +176,30 @@ class BedrockPackService(
       logger.warn("Rejected Bedrock pack request with mismatched player UUID from backend main.")
       return
     }
-    val connection = geyserConnection(request.playerId) ?: run {
-      logger.warn("Rejected Bedrock pack request because no matching Geyser session exists.")
-      return
-    }
-    val xuid = normalizeXuid(connection.xuid()) ?: run {
-      logger.warn("Rejected Bedrock pack request because Geyser returned an invalid XUID.")
-      return
-    }
+    val connection =
+        geyserConnection(request.playerId)
+            ?: run {
+              logger.warn(
+                  "Rejected Bedrock pack request because no matching Geyser session exists."
+              )
+              return
+            }
+    val xuid =
+        normalizeXuid(connection.xuid())
+            ?: run {
+              logger.warn("Rejected Bedrock pack request because Geyser returned an invalid XUID.")
+              return
+            }
 
     if (!request.allow) {
       removeAllowedXuid(xuid)
       registeredSessions.remove(xuid, connection)
       sendStatus(player, loaded = false, packId = request.packId)
-      logger.info("Bedrock pack disabled for session {} (packId {}).", xuidLabel(xuid), request.packId)
+      logger.info(
+          "Bedrock pack disabled for session {} (packId {}).",
+          xuidLabel(xuid),
+          request.packId,
+      )
       return
     }
 
@@ -195,10 +208,10 @@ class BedrockPackService(
     if (pack == null || !actualPackId.equals(request.packId, ignoreCase = true)) {
       sendStatus(player, loaded = false, packId = request.packId)
       logger.warn(
-        "Rejected Bedrock pack enable for session {} because configured pack UUID {} does not match request {}.",
-        xuidLabel(xuid),
-        actualPackId.ifBlank { "unavailable" },
-        request.packId,
+          "Rejected Bedrock pack enable for session {} because configured pack UUID {} does not match request {}.",
+          xuidLabel(xuid),
+          actualPackId.ifBlank { "unavailable" },
+          request.packId,
       )
       return
     }
@@ -224,15 +237,15 @@ class BedrockPackService(
 
     if (transfer(connection)) {
       logger.info(
-        "Bedrock pack allow stored for session {}; transferring once for initial application.",
-        xuidLabel(xuid),
+          "Bedrock pack allow stored for session {}; transferring once for initial application.",
+          xuidLabel(xuid),
       )
     } else {
       // Keep the persisted opt-in so the next natural login can still receive the pack.
       sendStatus(player, loaded = false, packId = actualPackId)
       logger.warn(
-        "Bedrock transfer was rejected for session {}; opt-in remains stored for next login.",
-        xuidLabel(xuid),
+          "Bedrock transfer was rejected for session {}; opt-in remains stored for next login.",
+          xuidLabel(xuid),
       )
     }
   }
@@ -251,19 +264,24 @@ class BedrockPackService(
   fun onSessionLoadPacks(event: SessionLoadResourcePacksEvent) {
     val xuid = normalizeXuid(runCatching { event.connection().xuid() }.getOrNull()) ?: return
     if (!allowedXuids.contains(xuid)) return
-    val pack = packOrNull() ?: run {
-      registeredSessions.remove(xuid, event.connection())
-      logger.warn("Could not register the Bedrock pack for allowed session {}: pack unavailable.", xuidLabel(xuid))
-      return
-    }
+    val pack =
+        packOrNull()
+            ?: run {
+              registeredSessions.remove(xuid, event.connection())
+              logger.warn(
+                  "Could not register the Bedrock pack for allowed session {}: pack unavailable.",
+                  xuidLabel(xuid),
+              )
+              return
+            }
     try {
       val alreadyPresent = event.resourcePacks().any { it.uuid() == pack.uuid() }
       if (!alreadyPresent) event.register(pack, *emptyArray<ResourcePackOption<*>>())
       registeredSessions[xuid] = event.connection()
       logger.info(
-        "Registered Bedrock pack {} for session {} during initial Geyser connection.",
-        pack.uuid(),
-        xuidLabel(xuid),
+          "Registered Bedrock pack {} for session {} during initial Geyser connection.",
+          pack.uuid(),
+          xuidLabel(xuid),
       )
     } catch (error: Exception) {
       registeredSessions.remove(xuid, event.connection())
@@ -272,8 +290,9 @@ class BedrockPackService(
   }
 
   fun onSessionDisconnect(event: SessionDisconnectEvent) {
-    normalizeXuid(runCatching { event.connection().xuid() }.getOrNull())
-      ?.let { registeredSessions.remove(it, event.connection()) }
+    normalizeXuid(runCatching { event.connection().xuid() }.getOrNull())?.let {
+      registeredSessions.remove(it, event.connection())
+    }
   }
 
   private fun ensureSubscribed(): Boolean {
@@ -285,8 +304,14 @@ class BedrockPackService(
       // A failed attempt leaves no registrar behind and can be retried by the existing task.
       val registrar = runCatching { EventRegistrar.of(this) }.getOrNull() ?: return false
       return try {
-        api.eventBus().subscribe(registrar, SessionLoadResourcePacksEvent::class.java, this::onSessionLoadPacks)
-        api.eventBus().subscribe(registrar, SessionDisconnectEvent::class.java, this::onSessionDisconnect)
+        api.eventBus()
+            .subscribe(
+                registrar,
+                SessionLoadResourcePacksEvent::class.java,
+                this::onSessionLoadPacks,
+            )
+        api.eventBus()
+            .subscribe(registrar, SessionDisconnectEvent::class.java, this::onSessionDisconnect)
         registration = api to registrar
         subscribed.set(true)
         logger.info("Subscribed Geyser pre-login pack and disconnect events.")
@@ -303,15 +328,15 @@ class BedrockPackService(
     if (shuttingDown || subscribed.get() || !retryScheduled.compareAndSet(false, true)) return
     try {
       proxy.scheduler
-        .buildTask(owner) { task ->
-          if (shuttingDown || subscribed.get() || ensureSubscribed()) {
-            retryScheduled.set(false)
-            task.cancel()
+          .buildTask(owner) { task ->
+            if (shuttingDown || subscribed.get() || ensureSubscribed()) {
+              retryScheduled.set(false)
+              task.cancel()
+            }
           }
-        }
-        .delay(1L, TimeUnit.SECONDS)
-        .repeat(2L, TimeUnit.SECONDS)
-        .schedule()
+          .delay(1L, TimeUnit.SECONDS)
+          .repeat(2L, TimeUnit.SECONDS)
+          .schedule()
     } catch (error: Exception) {
       retryScheduled.set(false)
       logger.warn("Failed to schedule Geyser subscription retry.", error)
@@ -321,25 +346,28 @@ class BedrockPackService(
   private fun geyserConnection(playerId: UUID): GeyserConnection? {
     val api = runCatching { GeyserApi.api() }.getOrNull() ?: return null
     return api.connectionByUuid(playerId)
-      ?: api.onlineConnections().firstOrNull { runCatching { it.javaUuid() == playerId }.getOrDefault(false) }
+        ?: api.onlineConnections().firstOrNull {
+          runCatching { it.javaUuid() == playerId }.getOrDefault(false)
+        }
   }
 
   private fun transfer(connection: GeyserConnection): Boolean =
-    try {
-      connection.transfer(returnHost, returnPort)
-    } catch (error: Exception) {
-      logger.warn("Geyser Transfer call failed.", error)
-      false
-    }
+      try {
+        connection.transfer(returnHost, returnPort)
+      } catch (error: Exception) {
+        logger.warn("Geyser Transfer call failed.", error)
+        false
+      }
 
   private fun sendStatus(player: Player, loaded: Boolean, packId: String) {
     val connection = player.currentServer.orElse(null) ?: return
     if (connection.serverInfo.name != MAIN_SERVER) return
-    val bytes = runCatching { BedrockPackStatusCodec.encode(player.uniqueId, loaded, packId) }
-      .getOrElse {
-        logger.warn("Could not encode Bedrock pack status.", it)
-        return
-      }
+    val bytes =
+        runCatching { BedrockPackStatusCodec.encode(player.uniqueId, loaded, packId) }
+            .getOrElse {
+              logger.warn("Could not encode Bedrock pack status.", it)
+              return
+            }
     if (!connection.sendPluginMessage(STATUS_CHANNEL, bytes)) {
       logger.warn("Backend main did not accept the Bedrock pack status plugin message.")
     }
@@ -358,9 +386,10 @@ class BedrockPackService(
   }
 
   private fun removeAllowedXuid(xuid: String) {
-    val changed = synchronized(allowListMutationLock) {
-      allowedXuids.remove(xuid).also { if (it) allowListRevision.incrementAndGet() }
-    }
+    val changed =
+        synchronized(allowListMutationLock) {
+          allowedXuids.remove(xuid).also { if (it) allowListRevision.incrementAndGet() }
+        }
     if (changed) scheduleAllowListWrite()
   }
 
@@ -378,7 +407,8 @@ class BedrockPackService(
     Files.newBufferedReader(path, StandardCharsets.UTF_8).useLines { lines ->
       lines.take(MAX_ALLOWED_XUIDS + 1).forEach { line ->
         val xuid = normalizeXuid(line)
-        if (xuid == null) invalid++ else if (allowedXuids.size < MAX_ALLOWED_XUIDS) allowedXuids.add(xuid)
+        if (xuid == null) invalid++
+        else if (allowedXuids.size < MAX_ALLOWED_XUIDS) allowedXuids.add(xuid)
       }
     }
     if (invalid > 0) logger.warn("Ignored {} invalid entries in Bedrock pack allow-list.", invalid)
@@ -388,22 +418,28 @@ class BedrockPackService(
   private fun scheduleAllowListWrite() {
     if (shuttingDown || !persistScheduled.compareAndSet(false, true)) return
     try {
-      proxy.scheduler.buildTask(owner, Runnable {
-        var lastWritten = persistedRevision.get()
-        try {
-          do {
-            val target = allowListRevision.get()
-            writeAllowedXuids()
-            persistedRevision.set(target)
-            lastWritten = target
-          } while (!shuttingDown && lastWritten != allowListRevision.get())
-        } catch (error: Exception) {
-          logger.warn("Failed to persist Bedrock pack allow-list.", error)
-        } finally {
-          persistScheduled.set(false)
-          if (!shuttingDown && lastWritten != allowListRevision.get()) scheduleAllowListWrite()
-        }
-      }).schedule()
+      proxy.scheduler
+          .buildTask(
+              owner,
+              Runnable {
+                var lastWritten = persistedRevision.get()
+                try {
+                  do {
+                    val target = allowListRevision.get()
+                    writeAllowedXuids()
+                    persistedRevision.set(target)
+                    lastWritten = target
+                  } while (!shuttingDown && lastWritten != allowListRevision.get())
+                } catch (error: Exception) {
+                  logger.warn("Failed to persist Bedrock pack allow-list.", error)
+                } finally {
+                  persistScheduled.set(false)
+                  if (!shuttingDown && lastWritten != allowListRevision.get())
+                      scheduleAllowListWrite()
+                }
+              },
+          )
+          .schedule()
     } catch (error: Exception) {
       persistScheduled.set(false)
       logger.warn("Failed to schedule Bedrock pack allow-list persistence.", error)
@@ -420,10 +456,10 @@ class BedrockPackService(
       Files.writeString(temporary, content, StandardCharsets.UTF_8)
       try {
         Files.move(
-          temporary,
-          path,
-          StandardCopyOption.ATOMIC_MOVE,
-          StandardCopyOption.REPLACE_EXISTING,
+            temporary,
+            path,
+            StandardCopyOption.ATOMIC_MOVE,
+            StandardCopyOption.REPLACE_EXISTING,
         )
       } catch (_: AtomicMoveNotSupportedException) {
         Files.move(temporary, path, StandardCopyOption.REPLACE_EXISTING)
@@ -432,9 +468,13 @@ class BedrockPackService(
   }
 
   private fun packOrNull(): ResourcePack? {
-    cachedPack?.let { return it }
+    cachedPack?.let {
+      return it
+    }
     synchronized(this) {
-      cachedPack?.let { return it }
+      cachedPack?.let {
+        return it
+      }
       val file = dataDirectory.resolve(PACKS_DIR).resolve(packFile)
       if (!Files.isRegularFile(file)) {
         logger.warn("Bedrock pack missing: {}; skipping injection.", file)
@@ -444,10 +484,10 @@ class BedrockPackService(
         ResourcePack.create(PackCodec.path(file)).also {
           cachedPack = it
           logger.info(
-            "Bedrock pack cached: {} ({} bytes, uuid {}).",
-            file.fileName,
-            Files.size(file),
-            it.uuid(),
+              "Bedrock pack cached: {} ({} bytes, uuid {}).",
+              file.fileName,
+              Files.size(file),
+              it.uuid(),
           )
         }
       } catch (error: Exception) {
@@ -462,16 +502,17 @@ class BedrockPackService(
   private fun xuidLabel(xuid: String): String = "xuid-…${xuid.takeLast(4)}"
 
   private fun sha1Hex(path: Path): String =
-    runCatching {
-      val digest = MessageDigest.getInstance("SHA-1")
-      Files.newInputStream(path).use { input ->
-        val buffer = ByteArray(65536)
-        while (true) {
-          val read = input.read(buffer)
-          if (read <= 0) break
-          digest.update(buffer, 0, read)
-        }
-      }
-      digest.digest().joinToString("") { "%02x".format(it) }
-    }.getOrDefault("unknown")
+      runCatching {
+            val digest = MessageDigest.getInstance("SHA-1")
+            Files.newInputStream(path).use { input ->
+              val buffer = ByteArray(65536)
+              while (true) {
+                val read = input.read(buffer)
+                if (read <= 0) break
+                digest.update(buffer, 0, read)
+              }
+            }
+            digest.digest().joinToString("") { "%02x".format(it) }
+          }
+          .getOrDefault("unknown")
 }

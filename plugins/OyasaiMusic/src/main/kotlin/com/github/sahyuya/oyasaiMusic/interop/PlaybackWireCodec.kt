@@ -14,17 +14,17 @@ object PlaybackWireCodec {
   data class Message(val type: Int, val id: UUID, val body: ByteArray)
 
   fun encode(type: Int, id: UUID, body: DataOutputStream.() -> Unit = {}): ByteArray =
-    ByteArrayOutputStream().use { b ->
-      DataOutputStream(b).use { o ->
-        o.writeByte(VERSION)
-        o.writeByte(type)
-        o.writeLong(id.mostSignificantBits)
-        o.writeLong(id.leastSignificantBits)
-        o.body()
+      ByteArrayOutputStream().use { b ->
+        DataOutputStream(b).use { o ->
+          o.writeByte(VERSION)
+          o.writeByte(type)
+          o.writeLong(id.mostSignificantBits)
+          o.writeLong(id.leastSignificantBits)
+          o.body()
+        }
+        require(b.size() <= MAX)
+        b.toByteArray()
       }
-      require(b.size() <= MAX)
-      b.toByteArray()
-    }
 
   fun decode(bytes: ByteArray): Message {
     require(bytes.size in 18..MAX) { "playback packet size is out of bounds" }

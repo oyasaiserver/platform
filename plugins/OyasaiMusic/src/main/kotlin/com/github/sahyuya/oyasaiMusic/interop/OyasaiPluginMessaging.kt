@@ -10,9 +10,9 @@ import org.bukkit.plugin.messaging.PluginMessageListener
 
 /** Paper-side registration and bounded dispatch for OMMT plugin messages. */
 class OyasaiPluginMessaging(
-  private val plugin: OyasaiMusic,
-  private val uploads: OmmtUploadService,
-  private val clients: OmmtPlaybackClientRegistry,
+    private val plugin: OyasaiMusic,
+    private val uploads: OmmtUploadService,
+    private val clients: OmmtPlaybackClientRegistry,
 ) : PluginMessageListener, Listener {
   private var enabled = false
 
@@ -55,9 +55,10 @@ class OyasaiPluginMessaging(
 
   fun broadcastServerCapabilities() {
     if (!enabled) return
-    plugin.server.scheduler.runTask(plugin, Runnable {
-      plugin.server.onlinePlayers.forEach(::sendServerCapabilities)
-    })
+    plugin.server.scheduler.runTask(
+        plugin,
+        Runnable { plugin.server.onlinePlayers.forEach(::sendServerCapabilities) },
+    )
   }
 
   private fun sendServerCapabilities(player: Player) {
@@ -71,13 +72,13 @@ class OyasaiPluginMessaging(
   override fun onPluginMessageReceived(channel: String, player: Player, message: ByteArray) {
     if (!enabled || !player.isOnline) return
     val maximum =
-      when (channel) {
-        UploadPacketCodec.CHANNEL -> UploadPacketCodec.MAX_PACKET_BYTES
-        PlaybackBuffer.CHANNEL -> PlaybackWireCodec.MAX
-        BedrockTransferCodec.CHANNEL -> BedrockTransferCodec.MAX
-        BedrockPackStatusCodec.CHANNEL -> BedrockPackStatusCodec.MAX
-        else -> return
-      }
+        when (channel) {
+          UploadPacketCodec.CHANNEL -> UploadPacketCodec.MAX_PACKET_BYTES
+          PlaybackBuffer.CHANNEL -> PlaybackWireCodec.MAX
+          BedrockTransferCodec.CHANNEL -> BedrockTransferCodec.MAX
+          BedrockPackStatusCodec.CHANNEL -> BedrockPackStatusCodec.MAX
+          else -> return
+        }
     if (!PluginMessageBounds.accepts(message.size) || message.size > maximum) return
     val copy = message.copyOf()
     val action = Runnable { dispatch(channel, player, copy) }

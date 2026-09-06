@@ -8,8 +8,8 @@ import java.nio.charset.CodingErrorAction
 import java.util.UUID
 
 /**
- * Paper -> Velocity transfer request for Bedrock pack application.
- * Wire: u8 version=1, UUID playerId (16), u8 allow, u8 packIdLen, packId UTF-8 (<=64B).
+ * Paper -> Velocity transfer request for Bedrock pack application. Wire: u8 version=1, UUID
+ * playerId (16), u8 allow, u8 packIdLen, packId UTF-8 (<=64B).
  */
 object BedrockTransferCodec {
   const val CHANNEL = "oyasaimusic:bedrock_transfer"
@@ -35,29 +35,31 @@ object BedrockTransferCodec {
     }
   }
 
-  fun decode(bytes: ByteArray): Request? = runCatching {
-    require(bytes.size in 19..MAX) { "size" }
-    DataInputStream(bytes.inputStream()).use { input ->
-      require(input.readUnsignedByte() == VERSION) { "version" }
-      val id = UUID(input.readLong(), input.readLong())
-      val allow =
-        when (input.readUnsignedByte()) {
-          1 -> true
-          0 -> false
-          else -> throw IllegalArgumentException("allow")
-        }
-      val len = input.readUnsignedByte()
-      require(len <= MAX_PACK_ID_BYTES) { "pack id length" }
-      val idBytes = input.readNBytes(len)
-      require(idBytes.size == len && input.available() == 0) { "eof" }
-      Request(id, allow, decodeUtf8(idBytes))
-    }
-  }.getOrNull()
+  fun decode(bytes: ByteArray): Request? =
+      runCatching {
+            require(bytes.size in 19..MAX) { "size" }
+            DataInputStream(bytes.inputStream()).use { input ->
+              require(input.readUnsignedByte() == VERSION) { "version" }
+              val id = UUID(input.readLong(), input.readLong())
+              val allow =
+                  when (input.readUnsignedByte()) {
+                    1 -> true
+                    0 -> false
+                    else -> throw IllegalArgumentException("allow")
+                  }
+              val len = input.readUnsignedByte()
+              require(len <= MAX_PACK_ID_BYTES) { "pack id length" }
+              val idBytes = input.readNBytes(len)
+              require(idBytes.size == len && input.available() == 0) { "eof" }
+              Request(id, allow, decodeUtf8(idBytes))
+            }
+          }
+          .getOrNull()
 
   private fun decodeUtf8(bytes: ByteArray): String =
-    Charsets.UTF_8.newDecoder()
-      .onMalformedInput(CodingErrorAction.REPORT)
-      .onUnmappableCharacter(CodingErrorAction.REPORT)
-      .decode(ByteBuffer.wrap(bytes))
-      .toString()
+      Charsets.UTF_8.newDecoder()
+          .onMalformedInput(CodingErrorAction.REPORT)
+          .onUnmappableCharacter(CodingErrorAction.REPORT)
+          .decode(ByteBuffer.wrap(bytes))
+          .toString()
 }
