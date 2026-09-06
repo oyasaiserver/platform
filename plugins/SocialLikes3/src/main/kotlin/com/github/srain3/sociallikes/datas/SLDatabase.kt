@@ -593,12 +593,18 @@ object SLDatabase {
 
   /** Records a name observed while the player is online, without blocking the server thread. */
   fun upsertPlayer(uuid: UUID, name: String) {
-    val lastKnownName = name.trim()
-    if (lastKnownName.isEmpty()) return
-    val uuidText = uuid.toString()
+    upsertPlayerNames("upsertPlayer", listOf(uuid to name))
+  }
+
+  private fun upsertPlayerNames(taskName: String, entries: Collection<Pair<UUID, String>>) {
+    val normalizedEntries =
+        entries.mapNotNull { (uuid, name) ->
+          name.trim().takeIf { it.isNotEmpty() }?.let { uuid to it }
+        }
+    if (normalizedEntries.isEmpty()) return
     val seenAt = System.currentTimeMillis()
 
-    submit("upsertPlayer") {
+    submit(taskName) {
       rawConnection()
           ?.prepareStatement(
               """
@@ -611,10 +617,13 @@ object SLDatabase {
                   .trimIndent()
           )
           ?.use { statement ->
-            statement.setString(1, uuidText)
-            statement.setString(2, lastKnownName)
-            statement.setLong(3, seenAt)
-            statement.executeUpdate()
+            normalizedEntries.forEach { (uuid, name) ->
+              statement.setString(1, uuid.toString())
+              statement.setString(2, name)
+              statement.setLong(3, seenAt)
+              statement.addBatch()
+            }
+            statement.executeBatch()
           }
     }
   }
@@ -1254,8 +1263,7 @@ object SLDatabase {
   private val playerNameCache = java.util.concurrent.ConcurrentHashMap<String, String>()
 
   /**
-   * Resolves the supplied UUIDs with one query. This is intentionally limited to the /sldata
-   * statistics cache; it does not fall back to Bukkit's offline-player lookup.
+   * Resolves the supplied UUIDs with one query, then falls back to Bukkit's offline-player cache.
    */
   fun loadPlayerNamesBlocking(uuids: List<String>): Map<String, String> {
     val normalizedUuids = uuids.filter { it.isNotBlank() }.distinct()
@@ -1276,13 +1284,28 @@ object SLDatabase {
                   while (results.next()) {
                     val u = results.getString("uuid")
                     val n = results.getString("last_known_name")
-                    if (u != null && n != null) {
+                    if (u != null && !n.isNullOrBlank()) {
                       playerNameCache[u] = n
                     }
                   }
                 }
               }
         }
+
+        val resolvedFromOfflineCache =
+            uncached.mapNotNull { uuidText ->
+              if (playerNameCache.containsKey(uuidText)) return@mapNotNull null
+              val uuid =
+                  runCatching { UUID.fromString(uuidText) }.getOrNull() ?: return@mapNotNull null
+              val name =
+                  runCatching { Bukkit.getPlayer(uuid)?.name ?: Bukkit.getOfflinePlayer(uuid).name }
+                      .getOrNull()
+                      ?.trim()
+                      ?.takeIf { it.isNotEmpty() } ?: return@mapNotNull null
+              playerNameCache[uuidText] = name
+              uuid to name
+            }
+        upsertPlayerNames("backfillPlayerNames", resolvedFromOfflineCache)
       }
     }
     return normalizedUuids.mapNotNull { u -> playerNameCache[u]?.let { n -> u to n } }.toMap()

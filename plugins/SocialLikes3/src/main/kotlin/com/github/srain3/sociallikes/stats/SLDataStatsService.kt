@@ -1013,10 +1013,8 @@ object SLDataStatsService {
             allReceivedLikeEvents + allGivenLikeEvents,
             playerUuid,
         )
-    val globalPublicityReactions =
-        calculatePublicityReactionsFromMemory(allPublicity, emptyList(), null)
     val publicity = calculatePublicityStats(ownPublicityReactions, normalizedLimit)
-    val serverPublicity = calculatePublicityStats(globalPublicityReactions, normalizedLimit)
+    val serverPublicity = calculateServerPublicityStats(allBuilds, normalizedLimit)
     val likeDna = calculateLikeDna(activityRhythm, likeDiversity)
 
     val likeTimestampCoverage =
@@ -1171,43 +1169,44 @@ object SLDataStatsService {
 
   /** Public data only: the server dialog deliberately aggregates this across every build. */
   fun loadServerPublicityStats(limit: Int = 5): PublicityStats {
-    val allBuilds = Data.getSLDataAll()
-    val allEvents = loadAllMemoryBuildLikeEvents(allBuilds)
-    val reactions =
-        calculatePublicityReactionsFromMemory(PublicityHistory.getData().values, allEvents, null)
-    return calculatePublicityStats(reactions, limit.coerceIn(1, 10))
+    return calculateServerPublicityStats(Data.getSLDataAll(), limit.coerceIn(1, 10))
   }
 
-  private fun loadAllMemoryBuildLikeEvents(
-      allBuilds: Collection<SLData>
-  ): List<SLDatabase.BuildLikeEvent> {
-    val list = ArrayList<SLDatabase.BuildLikeEvent>()
-    allBuilds.forEach { build ->
-      val ownerStr = build.owner.toString()
-      val loc = build.loc
-      val chunkX = loc.blockX shr 4
-      val chunkZ = loc.blockZ shr 4
-      val worldName = build.worldName
-      val time = build.time
-      val title = build.title
-      val id = build.id
-      build.likesWithTimestamp.forEach { (likerUuid, timestamp) ->
-        list.add(
-            SLDatabase.BuildLikeEvent(
-                buildId = id,
-                title = title,
-                ownerUuid = ownerStr,
-                worldName = worldName,
-                chunkX = chunkX,
-                chunkZ = chunkZ,
-                playerUuid = likerUuid.toString(),
-                createdAt = time,
-                likedAt = timestamp,
-            )
-        )
-      }
-    }
-    return list
+  private fun calculateServerPublicityStats(
+      allBuilds: Collection<SLData>,
+      limit: Int,
+  ): PublicityStats {
+    val buildsById = allBuilds.associateBy { it.id }
+    val dayMillis = 24 * 60 * 60 * 1000L
+    val reactions =
+        PublicityHistory.getData().values.mapNotNull { publicity ->
+          val build = buildsById[publicity.slid] ?: return@mapNotNull null
+          if (build.likes.size != build.likesWithTimestamp.size) return@mapNotNull null
+
+          val promotedAt = publicity.timeStamp.atZone(analysisZoneId).toInstant().toEpochMilli()
+          val ownerUuid = build.owner.toString()
+          var beforeLikes = 0
+          var afterLikes = 0
+          build.likesWithTimestamp.forEach { (likerUuid, likedAt) ->
+            if (likerUuid.toString() == ownerUuid) return@forEach
+            if (likedAt in (promotedAt - dayMillis) until promotedAt) {
+              beforeLikes++
+            } else if (likedAt in (promotedAt + 1)..(promotedAt + dayMillis)) {
+              afterLikes++
+            }
+          }
+
+          SLDatabase.PublicityEventReaction(
+              buildId = build.id,
+              title = build.title,
+              ownerUuid = ownerUuid,
+              promotedAt = promotedAt,
+              likesBefore24Hours = beforeLikes,
+              likesAfter24Hours = afterLikes,
+              intervalSincePreviousHours = null,
+          )
+        }
+    return calculatePublicityStats(reactions, limit)
   }
 
   private fun calculateWorldReactionsFromMemory(
