@@ -307,7 +307,7 @@ object Events : Listener {
             }
           }
         } else {
-          offlineLikesPoint[data.owner] = (offlineLikesPoint[data.owner] ?: 0) + 2
+          addOfflineLikePoints(data.owner, 2)
         }
       } else {
         // すでにいいねをしている
@@ -410,7 +410,9 @@ object Events : Listener {
   }
 
   /** オフラインの時イイねされたPointを貯めておく */
-  val offlineLikesPoint = mutableMapOf<UUID, Int>()
+  private val offlineLikesPoint = mutableMapOf<UUID, Int>()
+  private val offlineLikesPointLock = Any()
+  private const val OFFLINE_LIKE_COMMIT_TIMEOUT_MILLIS = 750L
 
   private fun sendLikeRewardMessage(player: Player, amount: Long, offline: Boolean = false) {
     val message =
@@ -422,37 +424,116 @@ object Events : Listener {
     player.sendMessage(Tools.socialLikesLOGO + " " + message.color())
   }
 
+  private fun addOfflineLikePoints(uuid: UUID, points: Int) {
+    synchronized(offlineLikesPointLock) {
+      offlineLikesPoint[uuid] = (offlineLikesPoint[uuid] ?: 0) + points
+      persistOfflineLikePointsLocked()
+    }
+  }
+
+  /**
+   * Removes precisely the reward that was committed. If persistence fails, restores the in-memory
+   * pending amount so a later save cannot silently discard recovery state.
+   */
+  private fun removeOfflineLikePoints(uuid: UUID, expectedPoints: Int): Boolean {
+    synchronized(offlineLikesPointLock) {
+      val currentPoints = offlineLikesPoint[uuid] ?: return false
+      if (currentPoints != expectedPoints) return false
+
+      offlineLikesPoint.remove(uuid)
+      if (persistOfflineLikePointsLocked()) return true
+
+      offlineLikesPoint[uuid] = currentPoints
+      return false
+    }
+  }
+
+  private fun persistOfflineLikePoints() {
+    synchronized(offlineLikesPointLock) { persistOfflineLikePointsLocked() }
+  }
+
+  private fun persistOfflineLikePointsLocked(): Boolean {
+    return runCatching { OfflineLikePointStore(plugin.dataFolder.toPath()).save(offlineLikesPoint) }
+        .onFailure { exception ->
+          plugin.logger.severe(
+              "Failed to atomically save pending offline-like rewards: ${exception.message}"
+          )
+        }
+        .isSuccess
+  }
+
   /** オフライン時のいいねPointをプラグイン無効化時ファイルへ保存 */
   fun offlineLikePointSave() {
-    val oldYml = CustomYaml("offlineLikePoint.yml")
-    oldYml.delete()
-    val yml = CustomYaml("offlineLikePoint.yml")
-    offlineLikesPoint.forEach { (uuid, int) -> yml.set(uuid.toString(), int) }
-    yml.save()
+    persistOfflineLikePoints()
   }
 
   /** オフライン時のいいねPointをロード */
   fun offlineLikePointLoad() {
-    val yml = CustomYaml("offlineLikePoint.yml")
-    yml.getKeys(false).forEach { uuidStr ->
-      val pointInt = yml.getInt(uuidStr, 0)
-      val uuid = UUID.fromString(uuidStr)
-      offlineLikesPoint[uuid] = pointInt
+    synchronized(offlineLikesPointLock) {
+      offlineLikesPoint.clear()
+      offlineLikesPoint.putAll(OfflineLikePointStore(plugin.dataFolder.toPath()).load())
     }
   }
 
   @EventHandler
   fun joinEvent(e: PlayerJoinEvent) {
     SLDatabase.upsertPlayer(e.player.uniqueId, e.player.name)
-    val pointInt = offlineLikesPoint[e.player.uniqueId] ?: return
+    val pointInt =
+        synchronized(offlineLikesPointLock) { offlineLikesPoint[e.player.uniqueId] } ?: return
     val player = e.player
+    val playerUuid = player.uniqueId
     object : BukkitRunnable() {
           override fun run() {
             if (!player.isOnline) return
-            if (Tools.addTokens(player, pointInt.toLong())) {
-              sendLikeRewardMessage(player, pointInt.toLong(), offline = true)
-              offlineLikesPoint.remove(player.uniqueId)
+            val tokenManager = Tools.getTokenManager()
+            val tokenCommitAdd = tokenManager?.let(Tools::findAddTokensWithCommit)
+            if (tokenCommitAdd == null) {
+              Tools.warnTokenCommitFallback()
+              if (
+                  Tools.addTokens(player, pointInt.toLong()) &&
+                      removeOfflineLikePoints(player.uniqueId, pointInt)
+              ) {
+                sendLikeRewardMessage(player, pointInt.toLong(), offline = true)
+              }
+              return
             }
+
+            Bukkit.getScheduler()
+                .runTaskAsynchronously(
+                    plugin,
+                    Runnable {
+                      val committed =
+                          Tools.awaitTokenCommit(
+                              tokenCommitAdd,
+                              playerUuid,
+                              pointInt.toLong(),
+                              OFFLINE_LIKE_COMMIT_TIMEOUT_MILLIS,
+                          )
+                      // A timeout is intentionally treated as an indeterminate outcome: retaining
+                      // the durable pending entry favors recovery over silently losing a reward.
+                      // The writer API normally settles immediately after its own transaction;
+                      // avoiding recurring timeouts is essential because a later retry may follow
+                      // an operation whose final SQLite result was not observed by this task.
+                      if (!committed) return@Runnable
+
+                      if (!removeOfflineLikePoints(playerUuid, pointInt)) {
+                        plugin.logger.warning(
+                            "Committed offline-like reward ${pointInt} for $playerUuid, but could not atomically clear its pending entry; not notifying."
+                        )
+                        return@Runnable
+                      }
+
+                      Bukkit.getScheduler()
+                          .runTask(
+                              plugin,
+                              Runnable {
+                                Bukkit.getPlayer(playerUuid)?.takeIf(Player::isOnline)?.let {
+                                  sendLikeRewardMessage(it, pointInt.toLong(), offline = true)
+                                }
+                              },
+                          )
+                    },
+                )
           }
         }
         .runTaskLater(plugin, 20L)
