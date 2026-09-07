@@ -1,6 +1,7 @@
 package com.github.srain3.sociallikes.stats
 
 import com.github.srain3.sociallikes.Tools
+import com.github.srain3.sociallikes.datas.BuildTimestamps
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.PublicityData
 import com.github.srain3.sociallikes.datas.PublicityHistory
@@ -24,7 +25,7 @@ import kotlin.math.pow
 object SLDataStatsService {
   const val DEFAULT_BUCKETS = 9
   private val zoneId: ZoneId
-    get() = ZoneId.of("UTC")
+    get() = BuildTimestamps.ZONE_JST
 
   private val analysisZoneId: ZoneId
     get() = ZoneId.of("Asia/Tokyo")
@@ -1376,7 +1377,7 @@ object SLDataStatsService {
   }
 
   private fun createdAtInstant(createdAt: LocalDateTime): Instant =
-      createdAt.atZone(zoneId).toInstant()
+      createdAt.atZone(BuildTimestamps.ZONE_JST).toInstant()
 
   private fun calculateInitialLikeSpeed(
       events: List<SLDatabase.BuildLikeEvent>,

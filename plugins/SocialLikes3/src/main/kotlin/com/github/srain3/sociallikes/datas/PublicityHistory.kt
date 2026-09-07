@@ -17,7 +17,7 @@ object PublicityHistory {
               yaml.reload()
               yaml.getKeys(false).forEach { num ->
                 val timeStr = yaml.getString("${num}.TimeStamp") ?: return@forEach
-                val time = LocalDateTime.parse(timeStr) ?: return@forEach
+                val time = BuildTimestamps.parseStored(timeStr) ?: return@forEach
                 val userStr = yaml.getString("${num}.User") ?: return@forEach
                 val user = UUID.fromString(userStr) ?: return@forEach
                 val id = yaml.getInt("${num}.SLID", -999999)
@@ -36,13 +36,13 @@ object PublicityHistory {
   }
 
   fun addData(user: UUID, slid: Int) {
-    val time = LocalDateTime.now()
+    val time = LocalDateTime.now(BuildTimestamps.ZONE_JST)
     val dataID = lastID + 1
     lastID++
 
     val pData = PublicityData(dataID, time, user, slid)
     data[dataID] = pData
-    yaml.set("${dataID}.TimeStamp", time.toString())
+    yaml.set("${dataID}.TimeStamp", BuildTimestamps.toStored(time))
     yaml.set("${dataID}.User", user.toString())
     yaml.set("${dataID}.SLID", slid)
     yaml.save()

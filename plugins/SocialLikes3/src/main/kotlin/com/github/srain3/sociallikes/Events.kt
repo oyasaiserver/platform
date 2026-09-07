@@ -11,6 +11,7 @@ import com.github.srain3.sociallikes.Tools.updateLegacySLSign
 import com.github.srain3.sociallikes.Tools.updateSLSign
 import com.github.srain3.sociallikes.api.LikeEvent
 import com.github.srain3.sociallikes.command.SLUpdate
+import com.github.srain3.sociallikes.datas.BuildTimestamps
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.datas.SLData
 import com.github.srain3.sociallikes.datas.SLDatabase
@@ -95,7 +96,7 @@ object Events : Listener {
         SLData(
             id = id,
             loc = e.block.location,
-            time = LocalDateTime.now(),
+            time = LocalDateTime.now(BuildTimestamps.ZONE_JST),
             owner = e.player.uniqueId,
             title = title,
             likes = mutableListOf(),
