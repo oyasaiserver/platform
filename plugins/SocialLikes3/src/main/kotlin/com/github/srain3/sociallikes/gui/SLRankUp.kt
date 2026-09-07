@@ -101,7 +101,7 @@ object SLRankUp {
 
   private fun headItems(rankFilter: List<String>, lastOnlineDay: Int): MutableList<ItemStack> {
     val list = mutableListOf<ItemStack>()
-    val beforeTime = LocalDateTime.now().minusDays(lastOnlineDay.toLong())
+    val beforeTime = LocalDateTime.now(ZoneOffset.UTC).minusDays(lastOnlineDay.toLong())
     data
         .toList()
         .sortedWith(

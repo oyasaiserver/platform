@@ -3,6 +3,7 @@ package com.github.srain3.sociallikes.command
 import com.github.srain3.sociallikes.CustomYaml
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
+import com.github.srain3.sociallikes.datas.BuildTimestamps
 import com.github.srain3.sociallikes.datas.Data
 import com.github.srain3.sociallikes.gui.AllBuild
 import com.github.srain3.sociallikes.gui.UserBuild
@@ -207,7 +208,9 @@ object SLtp : CommandExecutor {
   /** ユーザーごとの最後のsltp対象の時間をファイルへ保存 */
   fun userLastSLTPTimeSave() {
     val yml = CustomYaml("lastSLTP-Time.yml")
-    userLastTimeStamp.forEach { (uuid, time) -> yml.set(uuid.toString(), time.toString()) }
+    userLastTimeStamp.forEach { (uuid, time) ->
+      yml.set(uuid.toString(), BuildTimestamps.toStored(time))
+    }
     yml.save()
   }
 
@@ -216,7 +219,8 @@ object SLtp : CommandExecutor {
     val yml = CustomYaml("lastSLTP-Time.yml")
     yml.getKeys(false).forEach { uuidStr ->
       val uuid = UUID.fromString(uuidStr)
-      val time = LocalDateTime.parse(yml.getString(uuidStr))
+      val raw = yml.getString(uuidStr) ?: return@forEach
+      val time = BuildTimestamps.parseStored(raw) ?: return@forEach
       userLastTimeStamp[uuid] = time
     }
   }

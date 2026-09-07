@@ -140,7 +140,7 @@ object Data {
 
   /** [SLData]を元にデータをソフトデリートする */
   fun delID(slData: SLData, deletedBy: UUID? = null) {
-    val now = LocalDateTime.now()
+    val now = LocalDateTime.now(BuildTimestamps.ZONE_JST)
 
     val beforeJson =
         gson.toJson(
@@ -180,7 +180,7 @@ object Data {
     val afterJson =
         gson.toJson(
             mapOf(
-                "deleted_at" to now.toString(),
+                "deleted_at" to BuildTimestamps.toStored(now),
                 "deleted_by" to deletedBy?.toString(),
             )
         )
@@ -367,7 +367,9 @@ object Data {
                   set("loc.x", data.loc.x)
                   set("loc.y", data.loc.y)
                   set("loc.z", data.loc.z)
-                  set("time", data.time.toString())
+                  // Build creation time is immutable. Keep a legacy value intact when an existing
+                  // YAML record is saved for another reason; only new records start as epoch ms.
+                  set("time", yml.getString("time") ?: BuildTimestamps.toStored(data.time))
                   set("owner", data.owner.toString())
                   set("title", data.title)
                   set("likes", likesStr)
@@ -376,7 +378,7 @@ object Data {
                   set("comment", data.comment)
                   set("DiscordTextID", data.discordTextID)
                   set("deleted", data.deletedAt != null)
-                  set("deleted_at", data.deletedAt?.toString())
+                  set("deleted_at", data.deletedAt?.let(BuildTimestamps::toStored))
                   set("deleted_by", data.deletedBy?.toString())
                   set("sign_material", data.signMaterial)
                 }
@@ -473,7 +475,7 @@ object Data {
     val timeStr = yml.getString("time") ?: return null
     val time =
         try {
-          LocalDateTime.parse(timeStr)
+          BuildTimestamps.parseStored(timeStr) ?: return null
         } catch (_: Exception) {
           return null
         }
@@ -492,14 +494,7 @@ object Data {
 
     val deleted = yml.getBoolean("deleted", false)
     val deletedAtStr = yml.getString("deleted_at")
-    val deletedAt =
-        deletedAtStr?.let { s ->
-          try {
-            LocalDateTime.parse(s)
-          } catch (_: Exception) {
-            null
-          }
-        } ?: if (deleted) time else null
+    val deletedAt = deletedAtStr?.let(BuildTimestamps::parseStored) ?: if (deleted) time else null
     val deletedByStr = yml.getString("deleted_by")
     val deletedBy =
         deletedByStr?.let { s ->

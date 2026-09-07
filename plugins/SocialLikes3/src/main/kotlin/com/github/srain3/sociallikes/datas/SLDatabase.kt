@@ -47,6 +47,7 @@ object SLDatabase {
   private const val SQLITE_PRIMARY_READY_KEY = "sqlite_primary_id_migration_complete"
 
   @Volatile private var database: Database? = null
+  @Volatile private var initializationFailure: Throwable? = null
   private var initLatch = CountDownLatch(1)
   private var writeExecutor: ExecutorService? = null
   private var readExecutor: ExecutorService? = null
@@ -355,6 +356,7 @@ object SLDatabase {
     plugin.dataFolder.mkdirs()
 
     initLatch = CountDownLatch(1)
+    initializationFailure = null
 
     writeExecutor =
         Executors.newSingleThreadExecutor { runnable ->
@@ -393,6 +395,7 @@ object SLDatabase {
           rawConnection()?.let { conn ->
             migrateBuildsColumns(conn)
             migrateIdMigrationMapColumns(conn)
+            TimestampEpochMigration.initializeEmptyDatabaseOrRequireMigration(conn)
             createViews(conn)
           }
         }
@@ -411,6 +414,7 @@ object SLDatabase {
           }
         }
       } catch (e: Exception) {
+        initializationFailure = e
         val message = e.message ?: e.javaClass.simpleName
         Tools.plugin.logger.log(
             Level.SEVERE,
@@ -422,6 +426,23 @@ object SLDatabase {
       }
     }
   }
+
+  /**
+   * Blocks plugin enable until SQLite is initialized and the offline timestamp migration is ready.
+   */
+  fun requireReady() {
+    check(awaitInit()) { "Timed out while initializing the SocialLikes3 SQLite database" }
+    initializationFailure?.let { failure ->
+      throw IllegalStateException(
+          "SocialLikes3 SQLite initialization failed: ${failure.message ?: failure.javaClass.simpleName}",
+          failure,
+      )
+    }
+    check(database != null) { "SocialLikes3 SQLite database is unavailable" }
+  }
+
+  fun timestampHealthBlocking(): TimestampEpochMigration.Report? =
+      submitBlocking("timestampHealth") { rawConnection()?.let(TimestampEpochMigration::verify) }
 
   private fun migrateBuildsColumns(conn: Connection) {
     val existingColumns = mutableSetOf<String>()
@@ -588,6 +609,7 @@ object SLDatabase {
       writeExecutor = null
       readExecutor = null
       database = null
+      initializationFailure = null
     }
   }
 
@@ -645,7 +667,7 @@ object SLDatabase {
       deletedAt: LocalDateTime,
       onFinalFailure: ((Exception) -> Unit)? = null,
   ) {
-    val deletedAtStr = deletedAt.toString()
+    val deletedAtStr = BuildTimestamps.toStored(deletedAt)
     val deletedByStr = deletedBy?.toString()
     submitWrite(
         "softDeleteBuild[$id]",
@@ -660,7 +682,7 @@ object SLDatabase {
   }
 
   fun deleteBuild(id: Int) {
-    softDeleteBuild(id, null, LocalDateTime.now())
+    softDeleteBuild(id, null, LocalDateTime.now(BuildTimestamps.ZONE_JST))
   }
 
   fun syncBuilds(dataList: Collection<SLData>) {
@@ -696,7 +718,7 @@ object SLDatabase {
           Builds.selectAll()
               .where { Builds.deletedAt.isNull() }
               .orderBy(Builds.id)
-              .map { row ->
+              .mapNotNull { row ->
                 BuildSnapshot(
                         id = row[Builds.id],
                         worldName = row[Builds.worldName],
@@ -728,9 +750,9 @@ object SLDatabase {
       actorUuid: UUID?,
       beforeJson: String?,
       afterJson: String?,
-      occurredAt: LocalDateTime = LocalDateTime.now(),
+      occurredAt: LocalDateTime = LocalDateTime.now(BuildTimestamps.ZONE_JST),
   ) {
-    val occurredAtStr = occurredAt.toString()
+    val occurredAtStr = BuildTimestamps.toStored(occurredAt)
     val actorStr = actorUuid?.toString()
     submit("recordEvent") {
       SlEventLog.insert {
@@ -1370,7 +1392,7 @@ object SLDatabase {
 
   fun loadReliableTimestampPopulationBlocking(cutoff: LocalDateTime): ReliableTimestampPopulation =
       submitBlocking("loadReliableTimestampPopulation") {
-        val cutoffText = cutoff.toString()
+        val cutoffText = BuildTimestamps.toStored(cutoff)
         val postCutoffBuildCount =
             countQuery(
                 """
@@ -1438,7 +1460,7 @@ object SLDatabase {
                 .trimIndent()
         ) { statement ->
           statement.setString(1, ownerUuid)
-          statement.setString(2, since.toString())
+          statement.setString(2, BuildTimestamps.toStored(since))
         }
       } ?: 0
 
@@ -2136,7 +2158,7 @@ object SLDatabase {
                       AND bl.player_uuid <> ?
                       $createdSinceClause
                       AND bl.liked_at IS NOT NULL
-                      AND bl.liked_at >= CAST(strftime('%s', b.created_at) AS INTEGER) * 1000
+                      AND bl.liked_at >= CAST(b.created_at AS INTEGER)
                     GROUP BY b.id
                   )
                   SELECT bl.player_uuid, COUNT(DISTINCT first_likes.build_id) AS first_support_count
@@ -2155,7 +2177,7 @@ object SLDatabase {
                 statement.setString(2, ownerUuid)
                 var parameterIndex = 3
                 if (createdSince != null) {
-                  statement.setString(parameterIndex, createdSince.toString())
+                  statement.setString(parameterIndex, BuildTimestamps.toStored(createdSince))
                   parameterIndex++
                 }
                 statement.setString(parameterIndex, ownerUuid)
@@ -2395,7 +2417,8 @@ object SLDatabase {
                         BuildHistoryEntry(
                             results.getInt("id"),
                             results.getString("title"),
-                            LocalDateTime.parse(results.getString("created_at")),
+                            BuildTimestamps.parseStored(results.getString("created_at"))
+                                ?: continue,
                             results.getInt("likes_received"),
                         )
                   }
@@ -2664,7 +2687,6 @@ object SLDatabase {
    * total for the effect of a repost.
    */
   fun loadPublicityReactionsBlocking(ownerUuid: String? = null): List<PublicityEventReaction> {
-    val zoneId = ZoneId.of("Asia/Tokyo")
     return submitBlocking("loadPublicityReactions") {
           data class RawEvent(
               val buildId: Int,
@@ -2703,8 +2725,8 @@ object SLDatabase {
                   while (results.next()) {
                     val promotedAt =
                         try {
-                          LocalDateTime.parse(results.getString("timestamp"))
-                              .atZone(zoneId)
+                          (BuildTimestamps.parseStored(results.getString("timestamp")) ?: continue)
+                              .atZone(BuildTimestamps.ZONE_JST)
                               .toInstant()
                               .toEpochMilli()
                         } catch (_: Exception) {
@@ -2770,11 +2792,8 @@ object SLDatabase {
       sinceMillis: Long,
       untilMillis: Long,
   ): PeriodSummary {
-    val zoneId = ZoneId.of("UTC")
-    val sinceTimestamp =
-        Instant.ofEpochMilli(sinceMillis).atZone(zoneId).toLocalDateTime().toString()
-    val untilTimestamp =
-        Instant.ofEpochMilli(untilMillis).atZone(zoneId).toLocalDateTime().toString()
+    val sinceTimestamp = Instant.ofEpochMilli(sinceMillis).toEpochMilli().toString()
+    val untilTimestamp = Instant.ofEpochMilli(untilMillis).toEpochMilli().toString()
 
     return submitBlocking("loadPeriodSummary") {
       val buildsCreated =
@@ -2877,7 +2896,10 @@ object SLDatabase {
               ?.use { statement ->
                 var parameterIndex = 1
                 if (reliablePublishedSince != null) {
-                  statement.setString(parameterIndex, reliablePublishedSince.toString())
+                  statement.setString(
+                      parameterIndex,
+                      BuildTimestamps.toStored(reliablePublishedSince),
+                  )
                   parameterIndex++
                 }
                 statement.setString(parameterIndex, uuid)
@@ -2892,7 +2914,9 @@ object SLDatabase {
                             worldName = results.getString("world_name"),
                             chunkX = results.getInt("chunk_x"),
                             chunkZ = results.getInt("chunk_z"),
-                            createdAt = LocalDateTime.parse(results.getString("created_at")),
+                            createdAt =
+                                BuildTimestamps.parseStored(results.getString("created_at"))
+                                    ?: continue,
                             likedAt = results.getLong("liked_at"),
                         )
                   }
@@ -3185,31 +3209,39 @@ object SLDatabase {
       }
 
   private fun upsertBuild(snapshot: BuildSnapshot) {
+    // A Phase 1 mirror sync must not turn a pre-existing legacy value into epoch milliseconds.
+    // Creation time is immutable, so preserve the row's stored value when it already exists.
+    val toPersist =
+        Builds.selectAll()
+            .where { Builds.id eq snapshot.id }
+            .firstOrNull()
+            ?.get(Builds.createdAt)
+            ?.let { snapshot.copy(createdAt = it) } ?: snapshot
     Builds.upsert {
-      it[id] = snapshot.id
-      it[worldName] = snapshot.worldName
-      it[locX] = snapshot.locX
-      it[locY] = snapshot.locY
-      it[locZ] = snapshot.locZ
-      it[chunkX] = snapshot.chunkX
-      it[chunkZ] = snapshot.chunkZ
-      it[createdAt] = snapshot.createdAt
-      it[ownerUuid] = snapshot.ownerUuid
-      it[title] = snapshot.title
-      it[checked] = snapshot.checked
-      it[comment] = snapshot.comment
-      it[discordTextId] = snapshot.discordTextId
-      it[deletedAt] = snapshot.deletedAt
-      it[deletedBy] = snapshot.deletedBy
-      it[signMaterial] = snapshot.signMaterial
+      it[id] = toPersist.id
+      it[worldName] = toPersist.worldName
+      it[locX] = toPersist.locX
+      it[locY] = toPersist.locY
+      it[locZ] = toPersist.locZ
+      it[chunkX] = toPersist.chunkX
+      it[chunkZ] = toPersist.chunkZ
+      it[createdAt] = toPersist.createdAt
+      it[ownerUuid] = toPersist.ownerUuid
+      it[title] = toPersist.title
+      it[checked] = toPersist.checked
+      it[comment] = toPersist.comment
+      it[discordTextId] = toPersist.discordTextId
+      it[deletedAt] = toPersist.deletedAt
+      it[deletedBy] = toPersist.deletedBy
+      it[signMaterial] = toPersist.signMaterial
     }
 
-    BuildLikes.deleteWhere { buildId eq snapshot.id }
-    snapshot.likes
+    BuildLikes.deleteWhere { buildId eq toPersist.id }
+    toPersist.likes
         .distinctBy { it.playerUuid }
         .forEach { like ->
           BuildLikes.insert {
-            it[buildId] = snapshot.id
+            it[buildId] = toPersist.id
             it[playerUuid] = like.playerUuid
             it[likedAt] = like.likedAt
           }
@@ -3217,11 +3249,18 @@ object SLDatabase {
   }
 
   private fun upsertPublicityHistory(snapshot: PublicityHistorySnapshot) {
+    // As with builds, syncs may update metadata but must not rewrite legacy promotion timestamps.
+    val toPersist =
+        PublicityHistoryRows.selectAll()
+            .where { PublicityHistoryRows.id eq snapshot.id }
+            .firstOrNull()
+            ?.get(PublicityHistoryRows.timestamp)
+            ?.let { snapshot.copy(timestamp = it) } ?: snapshot
     PublicityHistoryRows.upsert {
-      it[id] = snapshot.id
-      it[timestamp] = snapshot.timestamp
-      it[userUuid] = snapshot.userUuid
-      it[slId] = snapshot.slId
+      it[id] = toPersist.id
+      it[timestamp] = toPersist.timestamp
+      it[userUuid] = toPersist.userUuid
+      it[slId] = toPersist.slId
     }
   }
 
@@ -3234,13 +3273,13 @@ object SLDatabase {
         locZ = loc.z,
         chunkX = loc.blockX shr 4,
         chunkZ = loc.blockZ shr 4,
-        createdAt = time.toString(),
+        createdAt = BuildTimestamps.toStored(time),
         ownerUuid = owner.toString(),
         title = title,
         checked = check,
         comment = comment,
         discordTextId = discordTextID,
-        deletedAt = deletedAt?.toString(),
+        deletedAt = deletedAt?.let(BuildTimestamps::toStored),
         deletedBy = deletedBy?.toString(),
         signMaterial = signMaterial,
         likes =
@@ -3250,7 +3289,7 @@ object SLDatabase {
     )
   }
 
-  private fun BuildSnapshot.toSLData(): SLData {
+  private fun BuildSnapshot.toSLData(): SLData? {
     val world =
         Bukkit.getServer().getWorld(worldName)
             ?: run {
@@ -3267,7 +3306,7 @@ object SLDatabase {
     return SLData(
         id = id,
         loc = Location(world, locX, locY, locZ),
-        time = LocalDateTime.parse(createdAt),
+        time = BuildTimestamps.parseStored(createdAt) ?: return null,
         owner = UUID.fromString(ownerUuid),
         title = title,
         likes = likeUuids,
@@ -3276,7 +3315,7 @@ object SLDatabase {
         comment = comment,
         worldName = worldName,
         discordTextID = discordTextId,
-        deletedAt = deletedAt?.let { LocalDateTime.parse(it) },
+        deletedAt = deletedAt?.let(BuildTimestamps::parseStored),
         deletedBy = deletedBy?.let { UUID.fromString(it) },
         signMaterial = signMaterial,
     )
@@ -3285,7 +3324,7 @@ object SLDatabase {
   private fun PublicityData.toPublicityHistorySnapshot(): PublicityHistorySnapshot {
     return PublicityHistorySnapshot(
         id = dataID,
-        timestamp = timeStamp.toString(),
+        timestamp = BuildTimestamps.toStored(timeStamp),
         userUuid = user.toString(),
         slId = slid,
     )
