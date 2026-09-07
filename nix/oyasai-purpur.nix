@@ -15,6 +15,7 @@
   name,
   version,
   plugins ? [ ],
+  extraTools ? [ ],
   icon ? null,
   properties ? { },
   paperConfig ? null,
@@ -122,7 +123,8 @@ let
             StartPeriod = 60 * 1000000000;
             Retries = 20;
           };
-        };
+        }
+        // lib.optionalAttrs (extraTools != [ ]) { Env = [ "PATH=${lib.makeBinPath extraTools}" ]; };
       };
     };
   };

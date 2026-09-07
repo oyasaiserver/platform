@@ -180,7 +180,7 @@ object Data {
     val afterJson =
         gson.toJson(
             mapOf(
-                "deleted_at" to now.toString(),
+                "deleted_at" to BuildTimestamps.toStored(now),
                 "deleted_by" to deletedBy?.toString(),
             )
         )
@@ -378,7 +378,7 @@ object Data {
                   set("comment", data.comment)
                   set("DiscordTextID", data.discordTextID)
                   set("deleted", data.deletedAt != null)
-                  set("deleted_at", data.deletedAt?.toString())
+                  set("deleted_at", data.deletedAt?.let(BuildTimestamps::toStored))
                   set("deleted_by", data.deletedBy?.toString())
                   set("sign_material", data.signMaterial)
                 }
@@ -494,14 +494,7 @@ object Data {
 
     val deleted = yml.getBoolean("deleted", false)
     val deletedAtStr = yml.getString("deleted_at")
-    val deletedAt =
-        deletedAtStr?.let { s ->
-          try {
-            LocalDateTime.parse(s)
-          } catch (_: Exception) {
-            null
-          }
-        } ?: if (deleted) time else null
+    val deletedAt = deletedAtStr?.let(BuildTimestamps::parseStored) ?: if (deleted) time else null
     val deletedByStr = yml.getString("deleted_by")
     val deletedBy =
         deletedByStr?.let { s ->

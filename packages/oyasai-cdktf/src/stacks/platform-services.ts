@@ -80,7 +80,9 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
       minecraftBackup: imageIds["mc-backup"],
       minecraftLobby: imageIds["oyasai-minecraft-lobby"],
-      minecraftMain: imageIds["oyasai-minecraft-main"],
+      minecraftMain:
+        process.env.OYASAI_MINECRAFT_MAIN_IMAGE_OVERRIDE ??
+        imageIds["oyasai-minecraft-main"],
       mysqlBackup: imageIds["mysql-backup"],
       oyasaiCron: imageIds["oyasai-cron"],
       oyasaiWeb: imageIds["oyasai-web"],

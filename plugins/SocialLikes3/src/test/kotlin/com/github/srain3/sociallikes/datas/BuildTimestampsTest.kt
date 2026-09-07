@@ -56,6 +56,8 @@ class BuildTimestampsTest {
     val parsed = assertNotNull(BuildTimestamps.parseStored("2022-06-15T14:00:00"))
     val stored = BuildTimestamps.toStored(parsed)
     assertTrue(stored.all(Char::isDigit))
+    assertTrue(BuildTimestamps.isEpochMillis(stored))
+    assertEquals(stored, BuildTimestamps.normalizeStored("2022-06-15T14:00:00"))
     assertEquals(parsed, BuildTimestamps.parseStored(stored))
   }
 }

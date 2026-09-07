@@ -47,6 +47,7 @@ object SLDatabase {
   private const val SQLITE_PRIMARY_READY_KEY = "sqlite_primary_id_migration_complete"
 
   @Volatile private var database: Database? = null
+  @Volatile private var initializationFailure: Throwable? = null
   private var initLatch = CountDownLatch(1)
   private var writeExecutor: ExecutorService? = null
   private var readExecutor: ExecutorService? = null
@@ -355,6 +356,7 @@ object SLDatabase {
     plugin.dataFolder.mkdirs()
 
     initLatch = CountDownLatch(1)
+    initializationFailure = null
 
     writeExecutor =
         Executors.newSingleThreadExecutor { runnable ->
@@ -393,6 +395,7 @@ object SLDatabase {
           rawConnection()?.let { conn ->
             migrateBuildsColumns(conn)
             migrateIdMigrationMapColumns(conn)
+            TimestampEpochMigration.initializeEmptyDatabaseOrRequireMigration(conn)
             createViews(conn)
           }
         }
@@ -411,6 +414,7 @@ object SLDatabase {
           }
         }
       } catch (e: Exception) {
+        initializationFailure = e
         val message = e.message ?: e.javaClass.simpleName
         Tools.plugin.logger.log(
             Level.SEVERE,
@@ -422,6 +426,23 @@ object SLDatabase {
       }
     }
   }
+
+  /**
+   * Blocks plugin enable until SQLite is initialized and the offline timestamp migration is ready.
+   */
+  fun requireReady() {
+    check(awaitInit()) { "Timed out while initializing the SocialLikes3 SQLite database" }
+    initializationFailure?.let { failure ->
+      throw IllegalStateException(
+          "SocialLikes3 SQLite initialization failed: ${failure.message ?: failure.javaClass.simpleName}",
+          failure,
+      )
+    }
+    check(database != null) { "SocialLikes3 SQLite database is unavailable" }
+  }
+
+  fun timestampHealthBlocking(): TimestampEpochMigration.Report? =
+      submitBlocking("timestampHealth") { rawConnection()?.let(TimestampEpochMigration::verify) }
 
   private fun migrateBuildsColumns(conn: Connection) {
     val existingColumns = mutableSetOf<String>()
@@ -588,6 +609,7 @@ object SLDatabase {
       writeExecutor = null
       readExecutor = null
       database = null
+      initializationFailure = null
     }
   }
 
@@ -645,7 +667,7 @@ object SLDatabase {
       deletedAt: LocalDateTime,
       onFinalFailure: ((Exception) -> Unit)? = null,
   ) {
-    val deletedAtStr = deletedAt.toString()
+    val deletedAtStr = BuildTimestamps.toStored(deletedAt)
     val deletedByStr = deletedBy?.toString()
     submitWrite(
         "softDeleteBuild[$id]",
@@ -730,7 +752,7 @@ object SLDatabase {
       afterJson: String?,
       occurredAt: LocalDateTime = LocalDateTime.now(BuildTimestamps.ZONE_JST),
   ) {
-    val occurredAtStr = occurredAt.toString()
+    val occurredAtStr = BuildTimestamps.toStored(occurredAt)
     val actorStr = actorUuid?.toString()
     submit("recordEvent") {
       SlEventLog.insert {
@@ -3257,7 +3279,7 @@ object SLDatabase {
         checked = check,
         comment = comment,
         discordTextId = discordTextID,
-        deletedAt = deletedAt?.toString(),
+        deletedAt = deletedAt?.let(BuildTimestamps::toStored),
         deletedBy = deletedBy?.toString(),
         signMaterial = signMaterial,
         likes =
@@ -3293,7 +3315,7 @@ object SLDatabase {
         comment = comment,
         worldName = worldName,
         discordTextID = discordTextId,
-        deletedAt = deletedAt?.let { LocalDateTime.parse(it) },
+        deletedAt = deletedAt?.let(BuildTimestamps::parseStored),
         deletedBy = deletedBy?.let { UUID.fromString(it) },
         signMaterial = signMaterial,
     )

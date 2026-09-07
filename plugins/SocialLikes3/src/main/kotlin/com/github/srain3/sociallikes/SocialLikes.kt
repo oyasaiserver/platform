@@ -27,6 +27,7 @@ class SocialLikes : JavaPlugin() {
     saveDefaultConfig()
 
     SLDatabase.init(this)
+    SLDatabase.requireReady()
 
     server.pluginManager.registerEvents(Events, this)
     server.pluginManager.registerEvents(FollowBuild, this)

@@ -2,6 +2,7 @@ package com.github.srain3.sociallikes.command
 
 import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.color
+import com.github.srain3.sociallikes.datas.SLDatabase
 import com.github.srain3.sociallikes.datas.SignPdcMigration
 import com.github.srain3.sociallikes.stats.SLDataLogger
 import org.bukkit.Bukkit
@@ -70,6 +71,22 @@ object SLDataOp : CommandExecutor, TabCompleter {
             System.currentTimeMillis() - t0,
             true,
             "rewrite-sign-pdc started",
+        )
+      }
+      "timestamp-health" -> {
+        val report = SLDatabase.timestampHealthBlocking()
+        if (report == null) {
+          sender.sendMessage("SL3_TIMESTAMP_HEALTH status=error reason=database-unavailable")
+        } else {
+          sender.sendMessage("SL3_TIMESTAMP_HEALTH status=ok ${report.summary()}")
+        }
+        SLDataLogger.log(
+            sender,
+            label,
+            args.toList(),
+            System.currentTimeMillis() - t0,
+            report != null,
+            "timestamp-health",
         )
       }
       "stats",
@@ -266,6 +283,7 @@ object SLDataOp : CommandExecutor, TabCompleter {
                   "slots",
                   "display",
                   "rewrite-sign-pdc",
+                  "timestamp-health",
               )
               .filter { it.startsWith(args[0], ignoreCase = true) }
               .toMutableList()
@@ -306,6 +324,7 @@ object SLDataOp : CommandExecutor, TabCompleter {
     sender.sendMessage("&7/sldataop dump <プレイヤー> &f- 統計集計データをテキストダンプ出力".color())
     sender.sendMessage("&7/sldataop reload &f- dialog.yml 等の設定を再読込".color())
     sender.sendMessage("&7/sldataop rewrite-sign-pdc &f- 登録済み看板のPDCを新ID・世代2へ一括書換".color())
+    sender.sendMessage("&7/sldataop timestamp-health &f- 時刻DB移行とスキーマ状態を確認".color())
     sender.sendMessage("&7/sldataop preview &f- YAML定義ダイアログをプレビュー".color())
     sender.sendMessage("&7/sldataop map [wall|remove|home] &f- 2x3壁掛けマップ設置/撤去".color())
     sender.sendMessage("&7/sldataop board [place|remove] &f- 2x2公共ボード設置/撤去".color())

@@ -7,7 +7,7 @@ import java.time.ZoneId
 import java.util.logging.Logger
 
 /**
- * The single codec for build and publicity timestamps.
+ * The single codec for persisted SocialLikes timestamps.
  *
  * Stored numeric values are epoch milliseconds. Older ISO local timestamps are interpreted using
  * the zone that was in use when that wall-clock value was written.
@@ -20,6 +20,10 @@ object BuildTimestamps {
   private val lastJstDate: LocalDate = LocalDate.of(2025, 7, 22)
   private val logger: Logger = Logger.getLogger(BuildTimestamps::class.java.name)
   private val epochMillis = Regex("\\d{10,}")
+
+  fun isEpochMillis(raw: String): Boolean = raw.length == 13 && raw.all(Char::isDigit)
+
+  fun normalizeStored(raw: String): String? = parseStored(raw)?.let(::toStored)
 
   /** Returns a JST local time, or null after logging malformed persisted input. */
   fun parseStored(raw: String): LocalDateTime? =

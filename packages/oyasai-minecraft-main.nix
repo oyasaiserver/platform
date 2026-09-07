@@ -1,5 +1,25 @@
-{ oyasaiPurpur, oyasai-plugin-registry }:
+{
+  coreutils,
+  jre,
+  oyasaiPurpur,
+  oyasai-plugin-registry,
+  writeShellApplication,
+}:
 
+let
+  pluginSet = oyasai-plugin-registry.forPlatform "paper" "26.2";
+  sociallikes3TimestampRelease = writeShellApplication {
+    name = "sociallikes3-timestamp-release";
+    runtimeInputs = [
+      coreutils
+      jre
+    ];
+    text = ''
+      export SL3_MIGRATOR_JAR=${pluginSet.sociallikes3}
+      ${builtins.readFile ../plugins/SocialLikes3/tools/release-timestamps.sh}
+    '';
+  };
+in
 oyasaiPurpur rec {
   name = "oyasai-minecraft-main";
   version = "26.2";
@@ -37,7 +57,7 @@ oyasaiPurpur rec {
     };
   };
 
-  plugins = with oyasai-plugin-registry.forPlatform "paper" version; [
+  plugins = with pluginSet; [
     # keep-sorted start
     advancedban
     arceon
@@ -107,4 +127,6 @@ oyasaiPurpur rec {
     zvoteparty
     # keep-sorted end
   ];
+
+  extraTools = [ sociallikes3TimestampRelease ];
 }

@@ -5,6 +5,7 @@ import com.github.srain3.sociallikes.Tools
 import com.github.srain3.sociallikes.Tools.addText
 import com.github.srain3.sociallikes.Tools.allFlag
 import com.github.srain3.sociallikes.Tools.color
+import com.github.srain3.sociallikes.datas.BuildTimestamps
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.PaginatedPane
@@ -44,7 +45,9 @@ object FollowBuild : Listener {
     userList.forEach { uuid -> itemListALL0.putAll(UserBuild.getUserBuildItem(uuid)) }
     val iListTimeSort = itemListALL0.asIterable().sortedByDescending { it.key }
     val itemListNewIte =
-        iListTimeSort.filter { it.key > (logoutTimeList[playerUUID] ?: LocalDateTime.now()) }
+        iListTimeSort.filter {
+          it.key > (logoutTimeList[playerUUID] ?: LocalDateTime.now(BuildTimestamps.ZONE_JST))
+        }
     val itemListNew = mutableListOf<ItemStack>()
     itemListNewIte.forEach { itemListNew.add(it.value) }
     val itemListALL = itemListALL0.toSortedMap(reverseOrder()).values.toList()
@@ -185,8 +188,9 @@ object FollowBuild : Listener {
   @EventHandler
   fun joinEvent(e: PlayerJoinEvent) {
     val yml = CustomYaml("UserFollowData/${e.player.uniqueId}.yml")
-    val timeStr = yml.getString("Logout") ?: LocalDateTime.now().toString()
-    val ldt = LocalDateTime.parse(timeStr)
+    val timeStr = yml.getString("Logout")
+    val ldt =
+        timeStr?.let(BuildTimestamps::parseStored) ?: LocalDateTime.now(BuildTimestamps.ZONE_JST)
     logoutTimeList[e.player.uniqueId] = ldt
 
     val uuidStrList = yml.getStringList("FollowList")
@@ -198,8 +202,9 @@ object FollowBuild : Listener {
   fun reloadJoinFix(onlinePlayer: Collection<Player>) {
     onlinePlayer.forEach { player ->
       val yml = CustomYaml("UserFollowData/${player.uniqueId}.yml")
-      val timeStr = yml.getString("Logout") ?: LocalDateTime.now().toString()
-      val ldt = LocalDateTime.parse(timeStr)
+      val timeStr = yml.getString("Logout")
+      val ldt =
+          timeStr?.let(BuildTimestamps::parseStored) ?: LocalDateTime.now(BuildTimestamps.ZONE_JST)
       logoutTimeList[player.uniqueId] = ldt
 
       val uuidStrList = yml.getStringList("FollowList")
@@ -212,7 +217,10 @@ object FollowBuild : Listener {
   @EventHandler
   fun quitEvent(e: PlayerQuitEvent) {
     val yml = CustomYaml("UserFollowData/${e.player.uniqueId}.yml")
-    yml.set("Logout", LocalDateTime.now().toString())
+    yml.set(
+        "Logout",
+        BuildTimestamps.toStored(LocalDateTime.now(BuildTimestamps.ZONE_JST)),
+    )
     yml.save()
 
     followBuilderUUIDList.remove(e.player.uniqueId)
