@@ -7,6 +7,8 @@ import io.oyasai.oyasaitoken.api.OyasaiTokenCommitApi
 import io.oyasai.oyasaitoken.internal.BalanceChange
 import io.oyasai.oyasaitoken.internal.BalanceRecord
 import io.oyasai.oyasaitoken.internal.BalanceWrite
+import io.oyasai.oyasaitoken.internal.MutationContext
+import io.oyasai.oyasaitoken.internal.NotificationType
 import io.oyasai.oyasaitoken.internal.TokenLedger
 import java.io.File
 import java.nio.file.Files
@@ -21,9 +23,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
-import java.util.concurrent.atomic.AtomicReference
 import java.util.logging.Level
 import me.realized.tokenmanager.TokenManagerPlugin
 import me.realized.tokenmanager.api.TokenManager
@@ -48,24 +48,21 @@ class OyasaiTokenPlugin :
     CommandExecutor,
     TabCompleter,
     Listener {
-  /**
-   * Serializes migration state transitions with every ledger operation that can enqueue
-   * persistence. Never perform YAML, SQLite import, or event dispatch while holding this gate.
-   */
-  private val mutationGate = Any()
   private val dbLock = Any()
-  private val migrationInProgress = AtomicBoolean(false)
   private val nextTransactionId = AtomicLong(1L)
   private lateinit var connection: Connection
   private lateinit var databaseFile: File
   private lateinit var persistenceExecutor: ThreadPoolExecutor
   private lateinit var ledger: TokenLedger
+  @Volatile private var notificationSettings = NotificationSettings.disabled()
   private var tabPlaceholderIntegration: TabPlaceholderIntegration? = null
 
   override fun onEnable() {
     registerCompatInstance()
     saveDefaultConfig()
     dataFolder.mkdirs()
+    saveNotificationDefaults()
+    loadNotificationSettings(retainPrevious = false)
 
     Class.forName("org.sqlite.JDBC")
     databaseFile = File(dataFolder, config.getString("database.file", "tokens.db") ?: "tokens.db")
@@ -81,7 +78,7 @@ class OyasaiTokenPlugin :
         )
     ledger.replaceAll(loadBalances())
     initializeTransactionCounter()
-    importTokenManagerDataYml(force = false)
+    importTokenManagerDataYml()
     startPersistenceWorker()
 
     server.servicesManager.register(
@@ -106,8 +103,6 @@ class OyasaiTokenPlugin :
     enableTabPlaceholderIntegration()
     getCommand("token")?.setExecutor(this)
     getCommand("token")?.tabCompleter = this
-    getCommand("tm")?.setExecutor(this)
-    getCommand("tm")?.tabCompleter = this
 
     logger.info("OyasaiToken SQLite backend enabled. Loaded ${ledger.size()} balances.")
   }
@@ -154,6 +149,8 @@ class OyasaiTokenPlugin :
   @EventHandler
   fun onJoin(event: PlayerJoinEvent) {
     readOrInitializeBalance(event.player.uniqueId, event.player.name)
+    Bukkit.getScheduler()
+        .runTaskLater(this, Runnable { fetchPendingNotifications(event.player.uniqueId) }, 20L)
   }
 
   override fun getBalance(uuid: UUID): Long {
@@ -162,20 +159,16 @@ class OyasaiTokenPlugin :
 
   override fun setTokens(uuid: UUID, amount: Long) {
     require(amount >= 0) { "amount must be non-negative" }
-    if (!setTokensInternal(uuid, null, amount)) logRejectedSetTokens(uuid)
+    if (setTokensInternal(uuid, null, amount) == null) logRejectedSetTokens(uuid)
   }
 
   override fun addTokens(uuid: UUID, amount: Long): Boolean {
-    return addTokensInternal(uuid, null, amount)
+    return addTokensInternal(uuid, null, amount) != null
   }
 
   override fun addTokensWithCommit(uuid: UUID, amount: Long): CompletableFuture<Boolean> {
     val completion = CompletableFuture<Boolean>()
-    val change =
-        synchronized(mutationGate) {
-          if (migrationInProgress.get()) null
-          else ledger.addWithCommit(uuid, null, amount, completion)
-        }
+    val change = ledger.addWithCommit(uuid, null, amount, completion)
     if (change == null) {
       completion.complete(false)
     } else {
@@ -185,7 +178,7 @@ class OyasaiTokenPlugin :
   }
 
   override fun removeTokens(uuid: UUID, amount: Long): Boolean {
-    return removeTokensInternal(uuid, null, amount)
+    return removeTokensInternal(uuid, null, amount) != null
   }
 
   override fun getTokens(player: Player): OptionalLong {
@@ -194,28 +187,33 @@ class OyasaiTokenPlugin :
 
   override fun setTokens(player: Player, tokens: Long) {
     require(tokens >= 0) { "tokens must be non-negative" }
-    if (!setTokensInternal(player.uniqueId, player.name, tokens))
+    if (setTokensInternal(player.uniqueId, player.name, tokens) == null)
         logRejectedSetTokens(player.uniqueId)
   }
 
   override fun addTokens(player: Player, tokens: Long): Boolean {
-    return addTokensInternal(player.uniqueId, player.name, tokens)
+    return addTokensInternal(player.uniqueId, player.name, tokens) != null
   }
 
   override fun removeTokens(player: Player, tokens: Long): Boolean {
-    return removeTokensInternal(player.uniqueId, player.name, tokens)
+    return removeTokensInternal(player.uniqueId, player.name, tokens) != null
   }
 
   override fun setTokens(playerName: String, tokens: Long) {
     val target = resolveTarget(playerName)
-    if (!setTokensInternal(target.uuid, target.name, tokens.coerceAtLeast(0))) {
+    if (setTokensInternal(target.uuid, target.name, tokens.coerceAtLeast(0)) == null) {
       logRejectedSetTokens(target.uuid)
     }
   }
 
   override fun addTokens(playerName: String, tokens: Long, silent: Boolean) {
     val target = resolveTarget(playerName)
-    addTokensInternal(target.uuid, target.name, tokens)
+    addTokensInternal(
+        target.uuid,
+        target.name,
+        tokens,
+        notificationContext(NotificationType.ADD, silent),
+    )
   }
 
   override fun addTokens(playerName: String, tokens: Long) {
@@ -224,7 +222,12 @@ class OyasaiTokenPlugin :
 
   override fun removeTokens(playerName: String, tokens: Long, silent: Boolean) {
     val target = resolveTarget(playerName)
-    removeTokensInternal(target.uuid, target.name, tokens)
+    removeTokensInternal(
+        target.uuid,
+        target.name,
+        tokens,
+        notificationContext(NotificationType.REMOVE, silent),
+    )
   }
 
   override fun removeTokens(playerName: String, tokens: Long) {
@@ -233,7 +236,7 @@ class OyasaiTokenPlugin :
 
   override fun reload(): Boolean {
     reloadConfig()
-    return true
+    return loadNotificationSettings(retainPrevious = true)
   }
 
   override fun onCommand(
@@ -242,11 +245,7 @@ class OyasaiTokenPlugin :
       label: String,
       args: Array<out String>,
   ): Boolean {
-    return when (command.name.lowercase()) {
-      "token" -> handleToken(sender, args)
-      "tm" -> handleAdmin(sender, args)
-      else -> false
-    }
+    return if (command.name.equals("token", ignoreCase = true)) handleToken(sender, args) else false
   }
 
   override fun onTabComplete(
@@ -255,37 +254,62 @@ class OyasaiTokenPlugin :
       alias: String,
       args: Array<out String>,
   ): MutableList<String> {
-    val subcommands =
-        if (command.name.equals("tm", ignoreCase = true)) {
-          listOf("add", "remove", "set", "balance", "top", "transfer", "reload")
-        } else {
-          listOf("balance", "send", "top")
-        }
+    if (!command.name.equals("token", ignoreCase = true)) return mutableListOf()
+    val subcommands = buildList {
+      if (sender.hasPermission(TOKEN_USE_PERMISSION)) addAll(listOf("balance", "send", "top"))
+      if (sender.hasPermission(TOKEN_ADMIN_PERMISSION))
+          addAll(listOf("add", "remove", "set", "reload"))
+    }
     if (args.size == 1) {
       return subcommands.filter { it.startsWith(args[0], ignoreCase = true) }.toMutableList()
     }
-    if (args.size == 2 && args[0].equals("send", ignoreCase = true)) {
+    if (
+        args.size == 2 &&
+            when (args[0].lowercase()) {
+              "send" -> sender.hasPermission(TOKEN_USE_PERMISSION)
+              "balance",
+              "add",
+              "remove",
+              "set" -> sender.hasPermission(TOKEN_ADMIN_PERMISSION)
+              else -> false
+            }
+    ) {
       return Bukkit.getOnlinePlayers()
           .map { it.name }
           .filter { it.startsWith(args[1], true) }
           .toMutableList()
     }
     if (
-        args.size == 2 &&
-            command.name.equals("tm", ignoreCase = true) &&
-            args[0].equals("transfer", ignoreCase = true)
+        args.size == 4 &&
+            args[0].lowercase() in listOf("add", "remove", "set") &&
+            sender.hasPermission(TOKEN_ADMIN_PERMISSION)
     ) {
-      return listOf("confirm").filter { it.startsWith(args[1], ignoreCase = true) }.toMutableList()
+      return listOf("-s").filter { it.startsWith(args[3], true) }.toMutableList()
     }
     return mutableListOf()
   }
 
   private fun handleToken(sender: CommandSender, args: Array<out String>): Boolean {
-    if (args.isEmpty() || args[0].equals("balance", ignoreCase = true)) {
+    if (args.isEmpty()) {
+      if (!sender.hasPermission(TOKEN_USE_PERMISSION)) return sender.permissionDenied()
+      val player =
+          sender as? Player
+              ?: run {
+                sender.sendMessage("Usage: /token balance <player>")
+                return true
+              }
+      sender.sendMessage("${player.name}: ${getBalance(player.uniqueId)} tokens")
+      return true
+    }
+
+    if (args[0].equals("balance", ignoreCase = true)) {
+      if (args.size > 2) return sender.error("Usage: /token balance [player]")
       val target =
-          if (args.size >= 2) {
+          if (args.size == 2) {
+            if (!sender.hasPermission(TOKEN_ADMIN_PERMISSION)) return sender.permissionDenied()
             resolveTarget(args[1])
           } else {
+            if (!sender.hasPermission(TOKEN_USE_PERMISSION)) return sender.permissionDenied()
             val player =
                 sender as? Player
                     ?: run {
@@ -299,16 +323,13 @@ class OyasaiTokenPlugin :
     }
 
     if (args[0].equals("send", ignoreCase = true)) {
+      if (!sender.hasPermission(TOKEN_USE_PERMISSION)) return sender.permissionDenied()
       val player =
           sender as? Player
               ?: run {
                 sender.sendMessage("This command is player-only.")
                 return true
               }
-      if (!sender.hasPermission("tokenmanager.use.send")) {
-        sender.sendMessage("You do not have permission.")
-        return true
-      }
       if (args.size != 3) {
         sender.sendMessage("Usage: /token send <player> <amount>")
         return true
@@ -322,34 +343,37 @@ class OyasaiTokenPlugin :
         server.pluginManager.callEvent(sendEvent)
         if (sendEvent.isCancelled) return sender.error("Token send was cancelled.")
       }
-      val transfer = transferTokens(player, target, amount)
+      val completion = CompletableFuture<Boolean>()
+      val transfer = transferTokens(player, target, amount, completion)
       if (transfer == null) {
+        completion.complete(false)
         return sender.error("Not enough tokens.")
       }
       dispatchBalanceChange(transfer.debit)
       dispatchBalanceChange(transfer.credit)
-      sender.sendMessage("Sent $amount tokens to ${target.name ?: target.uuid}.")
-      Bukkit.getPlayer(target.uuid)?.sendMessage("${player.name} sent you $amount tokens.")
+      completion.whenComplete { committed, throwable ->
+        runOnMainThread {
+          if (throwable != null || committed != true) {
+            sender.sendMessage("Token persistence failed; no send notifications were delivered.")
+            return@runOnMainThread
+          }
+          if (player.uniqueId == target.uuid) {
+            if (player.isOnline) player.sendMessage("Sent $amount tokens to yourself.")
+            return@runOnMainThread
+          }
+          if (player.isOnline) {
+            player.sendMessage("Sent $amount tokens to ${target.name ?: target.uuid}.")
+          }
+          Bukkit.getPlayer(target.uuid)?.sendMessage("${player.name} sent you $amount tokens.")
+        }
+      }
       return true
     }
 
     if (args[0].equals("top", ignoreCase = true)) {
+      if (!sender.hasPermission(TOKEN_USE_PERMISSION)) return sender.permissionDenied()
+      if (args.size > 2) return sender.error("Usage: /token top [n]")
       sendTop(sender, args.getOrNull(1)?.toIntOrNull() ?: 10)
-      return true
-    }
-
-    sender.sendMessage("Usage: /token [balance|send|top]")
-    return true
-  }
-
-  private fun handleAdmin(sender: CommandSender, args: Array<out String>): Boolean {
-    if (args.isEmpty()) {
-      sender.sendMessage("Usage: /tm <add|remove|set|balance|top|transfer|reload>")
-      return true
-    }
-
-    if (!sender.hasPermission("tokenmanager.admin")) {
-      sender.sendMessage("You do not have permission.")
       return true
     }
 
@@ -357,159 +381,49 @@ class OyasaiTokenPlugin :
       "add",
       "remove",
       "set" -> {
-        if (args.size != 3) return sender.error("Usage: /tm ${args[0]} <player> <amount>")
+        if (!sender.hasPermission(TOKEN_ADMIN_PERMISSION)) return sender.permissionDenied()
+        val silent = args.size == 4 && args[3].equals("-s", ignoreCase = true)
+        if (args.size !in 3..4 || (args.size == 4 && !silent)) {
+          return sender.error("Usage: /token ${args[0]} <player> <amount> [-s]")
+        }
         val target = resolveTarget(args[1])
         val action = args[0].lowercase()
         val amount =
-            if (action == "set") {
-              parseNonNegativeAmount(args[2]) ?: return sender.error("Amount must be non-negative.")
-            } else {
-              parseAmount(args[2]) ?: return sender.error("Amount must be positive.")
+            parseNonNegativeAmount(args[2]) ?: return sender.error("Amount must be non-negative.")
+        val notificationType = NotificationType.valueOf(action.uppercase())
+        val context = notificationContext(notificationType, silent, (sender as? Player)?.uniqueId)
+        val completion = CompletableFuture<Boolean>()
+        val change =
+            when (action) {
+              "add" -> addTokensInternal(target.uuid, target.name, amount, context, completion)
+              "remove" ->
+                  removeTokensInternal(target.uuid, target.name, amount, context, completion)
+              else -> setTokensInternal(target.uuid, target.name, amount, context, completion)
             }
-        when (action) {
-          "add" -> {
-            if (!addTokensInternal(target.uuid, target.name, amount)) {
-              return sender.error("Token persistence queue is full.")
-            }
-          }
-          "remove" -> {
-            if (!removeTokensInternal(target.uuid, target.name, amount)) {
-              return sender.error("Not enough tokens or token persistence queue is full.")
-            }
-          }
-          "set" -> {
-            if (!setTokensInternal(target.uuid, target.name, amount)) {
-              return sender.error("Token persistence queue is full.")
-            }
+        if (change == null) {
+          completion.complete(false)
+          return if (action == "remove") {
+            sender.error("Not enough tokens or token persistence queue is full.")
+          } else {
+            sender.error("Token persistence queue is full.")
           }
         }
-        sender.sendMessage("${target.name ?: target.uuid}: ${getBalance(target.uuid)} tokens")
-      }
-      "balance" -> {
-        if (args.size != 2) return sender.error("Usage: /tm balance <player>")
-        val target = resolveTarget(args[1])
-        sender.sendMessage("${target.name ?: target.uuid}: ${getBalance(target.uuid)} tokens")
-      }
-      "top" -> sendTop(sender, args.getOrNull(1)?.toIntOrNull() ?: 10)
-      "transfer" -> {
-        val force = args.getOrNull(1).equals("confirm", ignoreCase = true)
-        if (!force) {
-          sender.sendMessage(
-              "Usage: /tm transfer confirm - imports data.yml into SQLite and overwrites matching balances."
-          )
-          return true
-        }
-        if (!beginMigration()) {
-          return sender.error("TokenManager data.yml import is already running.")
-        }
-        val rawPreparation = AtomicReference<RawMigrationPreparation?>(null)
-        val completion = AtomicReference<MigrationImportCompletion?>(null)
-        val importStarted = AtomicBoolean(false)
-        val dataFile = File(dataFolder, "data.yml")
-        val completionTask = AtomicReference<org.bukkit.scheduler.BukkitTask?>(null)
-        completionTask.set(
-            Bukkit.getScheduler()
-                .runTaskTimer(
-                    this,
-                    Runnable {
-                      val completed = completion.getAndSet(null)
-                      if (completed != null) {
-                        synchronized(mutationGate) {
-                          completed.loadedBalances?.let(ledger::replaceAll)
-                          migrationInProgress.set(false)
-                        }
-                        sender.sendMessage(completed.result.message)
-                        completionTask.get()?.cancel()
-                        return@Runnable
-                      }
-
-                      if (importStarted.get()) return@Runnable
-                      val raw = rawPreparation.getAndSet(null) ?: return@Runnable
-                      // Phase (b): only this main-thread phase may resolve Bukkit player
-                      // identities.
-                      val preparation =
-                          runCatching { prepareTokenManagerDataYmlImport(force = true, raw) }
-                              .getOrElse { throwable ->
-                                logger.severe(
-                                    "TokenManager data.yml identity resolution failed: ${throwable.message}"
-                                )
-                                completion.set(
-                                    MigrationImportCompletion(
-                                        ImportResult(
-                                            0,
-                                            "TokenManager data.yml import failed: ${throwable.message}",
-                                        )
-                                    )
-                                )
-                                return@Runnable
-                              }
-                      if (preparation is MigrationPreparation.Skipped) {
-                        completion.set(MigrationImportCompletion(preparation.result))
-                        return@Runnable
-                      }
-                      if (!importStarted.compareAndSet(false, true)) return@Runnable
-                      // Phase (c): the worker receives immutable entries and does SQLite work only.
-                      Bukkit.getScheduler()
-                          .runTaskAsynchronously(
-                              this,
-                              Runnable {
-                                val imported =
-                                    runCatching {
-                                          executePreparedTokenManagerDataYmlImport(
-                                              preparation,
-                                              awaitPendingWrites = true,
-                                          )
-                                        }
-                                        .getOrElse { throwable ->
-                                          logger.severe(
-                                              "TokenManager data.yml import failed: ${throwable.message}"
-                                          )
-                                          MigrationImportCompletion(
-                                              ImportResult(
-                                                  0,
-                                                  "TokenManager data.yml import failed: ${throwable.message}",
-                                              )
-                                          )
-                                        }
-                                completion.set(imported)
-                              },
-                          )
-                    },
-                    1L,
-                    1L,
-                )
-        )
-        sender.sendMessage(
-            "Started TokenManager data.yml import. Token writes will fail fast until it completes."
-        )
-        Bukkit.getScheduler()
-            .runTaskAsynchronously(
-                this,
-                Runnable {
-                  // Phase (a): filesystem/YAML parsing only; it must not call Bukkit APIs.
-                  rawPreparation.set(
-                      runCatching { parseTokenManagerDataYml(dataFile) }
-                          .getOrElse { throwable ->
-                            logger.severe(
-                                "TokenManager data.yml parse failed: ${throwable.message}"
-                            )
-                            RawMigrationPreparation.Skipped(
-                                ImportResult(
-                                    0,
-                                    "TokenManager data.yml import failed: ${throwable.message}",
-                                )
-                            )
-                          }
-                  )
-                },
-            )
+        handleAdminMutationCompletion(sender, target, change, context, completion)
+        return true
       }
       "reload" -> {
-        reload()
-        sender.sendMessage("OyasaiToken config reloaded.")
+        if (!sender.hasPermission(TOKEN_ADMIN_PERMISSION)) return sender.permissionDenied()
+        if (args.size != 1) return sender.error("Usage: /token reload")
+        if (reload()) {
+          sender.sendMessage("OyasaiToken config reloaded.")
+        } else {
+          sender.sendMessage("notifications.yml is invalid; previous notification settings kept.")
+        }
+        return true
       }
-      else -> sender.sendMessage("Usage: /tm <add|remove|set|balance|top|transfer|reload>")
     }
+
+    sender.sendMessage("Usage: /token [balance|send|top|add|remove|set|reload]")
     return true
   }
 
@@ -526,9 +440,72 @@ class OyasaiTokenPlugin :
   }
 
   private fun logRejectedSetTokens(uuid: UUID) {
-    logger.warning(
-        "Rejected setTokens for $uuid because token persistence is unavailable or migration is running."
-    )
+    logger.warning("Rejected setTokens for $uuid because token persistence is unavailable.")
+  }
+
+  private fun notificationContext(
+      type: NotificationType,
+      silent: Boolean,
+      actorUuid: UUID? = null,
+  ): MutationContext =
+      MutationContext(
+          actorUuid = actorUuid,
+          notificationType = type.takeIf { !silent && notificationSettings.enabled },
+      )
+
+  private fun handleAdminMutationCompletion(
+      sender: CommandSender,
+      target: Target,
+      change: BalanceChange,
+      context: MutationContext,
+      completion: CompletableFuture<Boolean>,
+  ) {
+    completion.whenComplete { committed, throwable ->
+      runOnMainThread {
+        if (throwable != null || committed != true) {
+          sender.sendMessage("Token persistence failed; no target notification was delivered.")
+          return@runOnMainThread
+        }
+        val targetReceivesUnifiedMessage =
+            sender is Player &&
+                sender.uniqueId == target.uuid &&
+                context.notificationType != null &&
+                change.delta != 0L
+        if (!targetReceivesUnifiedMessage) {
+          sender.sendMessage("${target.name ?: target.uuid}: ${change.newBalance} tokens")
+        }
+      }
+    }
+  }
+
+  private fun saveNotificationDefaults() {
+    val file = File(dataFolder, NOTIFICATIONS_FILE)
+    if (!file.exists()) saveResource(NOTIFICATIONS_FILE, false)
+  }
+
+  private fun loadNotificationSettings(retainPrevious: Boolean): Boolean {
+    val file = File(dataFolder, NOTIFICATIONS_FILE)
+    return runCatching { NotificationSettings.load(file) }
+        .fold(
+            onSuccess = { loaded ->
+              notificationSettings = loaded
+              logger.info("Token notifications loaded (enabled=${loaded.enabled}).")
+              true
+            },
+            onFailure = { throwable ->
+              if (!retainPrevious) notificationSettings = NotificationSettings.disabled()
+              logger.log(
+                  Level.SEVERE,
+                  if (retainPrevious) {
+                    "Failed to reload notifications.yml; keeping the previous valid settings."
+                  } else {
+                    "Failed to load notifications.yml; token notifications remain disabled."
+                  },
+                  throwable,
+              )
+              false
+            },
+        )
   }
 
   private fun configureConnection() {
@@ -576,6 +553,29 @@ class OyasaiTokenPlugin :
       )
       statement.execute(
           """
+          CREATE TABLE IF NOT EXISTS token_notification_outbox (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            transaction_id INTEGER NOT NULL UNIQUE,
+            target_uuid TEXT NOT NULL,
+            notification_type TEXT NOT NULL,
+            delta INTEGER NOT NULL,
+            balance_after INTEGER NOT NULL,
+            created_at INTEGER NOT NULL,
+            delivered_at INTEGER,
+            FOREIGN KEY (transaction_id) REFERENCES token_transactions(id)
+          )
+          """
+              .trimIndent()
+      )
+      statement.execute(
+          """
+          CREATE INDEX IF NOT EXISTS idx_token_notification_outbox_pending
+          ON token_notification_outbox(target_uuid, delivered_at, id)
+          """
+              .trimIndent()
+      )
+      statement.execute(
+          """
           CREATE TABLE IF NOT EXISTS token_legacy_ids (
             source TEXT NOT NULL,
             identifier_type TEXT NOT NULL,
@@ -616,50 +616,57 @@ class OyasaiTokenPlugin :
   }
 
   private fun readOrInitializeBalance(uuid: UUID, name: String?): Long {
-    return synchronized(mutationGate) {
-      ledger.balance(uuid, name, persistIfMissing = !migrationInProgress.get())
-    }
+    return ledger.balance(uuid, name, persistIfMissing = true)
   }
 
-  private fun setTokensInternal(uuid: UUID, name: String?, amount: Long): Boolean {
+  private fun setTokensInternal(
+      uuid: UUID,
+      name: String?,
+      amount: Long,
+      context: MutationContext = MutationContext.SILENT,
+      completion: CompletableFuture<Boolean>? = null,
+  ): BalanceChange? {
     require(amount >= 0) { "amount must be non-negative" }
-    val change =
-        synchronized(mutationGate) {
-          if (migrationInProgress.get()) null else ledger.set(uuid, name, amount)
-        }
+    val change = ledger.set(uuid, name, amount, context, completion)
     change?.let { dispatchBalanceChange(it) }
-    return change != null
+    return change
   }
 
-  private fun addTokensInternal(uuid: UUID, name: String?, amount: Long): Boolean {
+  private fun addTokensInternal(
+      uuid: UUID,
+      name: String?,
+      amount: Long,
+      context: MutationContext = MutationContext.SILENT,
+      completion: CompletableFuture<Boolean>? = null,
+  ): BalanceChange? {
     val change =
-        synchronized(mutationGate) {
-          if (migrationInProgress.get()) null else ledger.add(uuid, name, amount)
-        }
-    change?.let { dispatchBalanceChange(it) }
-    return change != null
-  }
-
-  private fun removeTokensInternal(uuid: UUID, name: String?, amount: Long): Boolean {
-    val change =
-        synchronized(mutationGate) {
-          if (migrationInProgress.get()) null else ledger.remove(uuid, name, amount)
-        }
-    change?.let { dispatchBalanceChange(it) }
-    return change != null
-  }
-
-  private fun transferTokens(player: Player, target: Target, amount: Long) =
-      synchronized(mutationGate) {
-        if (migrationInProgress.get()) {
-          null
+        if (completion == null) {
+          ledger.add(uuid, name, amount, context)
         } else {
-          ledger.transfer(player.uniqueId, player.name, target.uuid, target.name, amount)
+          ledger.add(uuid, name, amount, context, completion)
         }
-      }
+    change?.let { dispatchBalanceChange(it) }
+    return change
+  }
 
-  private fun beginMigration(): Boolean =
-      synchronized(mutationGate) { migrationInProgress.compareAndSet(false, true) }
+  private fun removeTokensInternal(
+      uuid: UUID,
+      name: String?,
+      amount: Long,
+      context: MutationContext = MutationContext.SILENT,
+      completion: CompletableFuture<Boolean>? = null,
+  ): BalanceChange? {
+    val change = ledger.remove(uuid, name, amount, context, completion)
+    change?.let { dispatchBalanceChange(it) }
+    return change
+  }
+
+  private fun transferTokens(
+      player: Player,
+      target: Target,
+      amount: Long,
+      completion: CompletableFuture<Boolean>,
+  ) = ledger.transfer(player.uniqueId, player.name, target.uuid, target.name, amount, completion)
 
   private fun writeBalanceRows(entry: PersistedBalance) {
     val write = entry.write
@@ -703,6 +710,26 @@ class OyasaiTokenPlugin :
           statement.setLong(7, now)
           statement.executeUpdate()
         }
+    write.notificationType?.let { type ->
+      connection
+          .prepareStatement(
+              """
+              INSERT INTO token_notification_outbox
+                (transaction_id, target_uuid, notification_type, delta, balance_after, created_at)
+              VALUES (?, ?, ?, ?, ?, ?)
+              """
+                  .trimIndent()
+          )
+          .use { statement ->
+            statement.setLong(1, entry.txId)
+            statement.setString(2, write.uuid.toString())
+            statement.setString(3, type.name)
+            statement.setLong(4, write.delta)
+            statement.setLong(5, write.balance)
+            statement.setLong(6, now)
+            statement.executeUpdate()
+          }
+    }
   }
 
   private fun startPersistenceWorker() {
@@ -773,31 +800,182 @@ class OyasaiTokenPlugin :
   }
 
   private fun persistBalanceJob(job: PersistenceJob) {
-    val committed =
+    val result =
         runCatching {
-              withTransaction {
+              withTransaction<List<PendingNotification>> {
                 val existing = job.entries.filter { transactionExists(it.txId) }
                 if (existing.size == job.entries.size) {
                   logger.warning(
                       "Skipping duplicate token persistence job ${job.entries.first().txId}-${job.entries.last().txId}."
                   )
-                  return@withTransaction
+                  return@withTransaction emptyList()
                 }
                 check(existing.isEmpty()) {
                   "Refusing partially duplicated token persistence job ${job.entries.first().txId}-${job.entries.last().txId}."
                 }
                 job.entries.forEach(::writeBalanceRows)
                 setMetaRows(LAST_APPLIED_TX_ID_KEY, job.entries.maxOf { it.txId }.toString())
+                job.entries.mapNotNull { entry ->
+                  entry.write.notificationType?.let { type ->
+                    PendingNotification(
+                        entry.txId,
+                        entry.write.uuid,
+                        type,
+                        entry.write.delta,
+                        entry.write.balance,
+                    )
+                  }
+                }
               }
-              true
             }
             .onFailure { throwable ->
-              logger.severe(
-                  "Failed to persist token job ${job.entries.first().txId}-${job.entries.last().txId}: ${throwable.message}"
+              logger.log(
+                  Level.SEVERE,
+                  "Failed to persist token job ${job.entries.first().txId}-${job.entries.last().txId}.",
+                  throwable,
               )
             }
-            .isSuccess
-    job.completion?.complete(committed)
+    result.getOrNull()?.takeIf { it.isNotEmpty() }?.let(::deliverCommittedNotifications)
+    job.completion?.complete(result.isSuccess)
+  }
+
+  private fun deliverCommittedNotifications(notifications: List<PendingNotification>) {
+    runOnMainThread {
+      if (!notificationSettings.enabled) return@runOnMainThread
+      notifications.groupBy(PendingNotification::targetUuid).forEach { (uuid, pending) ->
+        val player = Bukkit.getPlayer(uuid)?.takeIf(Player::isOnline) ?: return@forEach
+        val delivered = mutableListOf<Long>()
+        pending.forEach { notification ->
+          runCatching { player.sendMessage(notificationSettings.render(notification)) }
+              .onSuccess { delivered += notification.transactionId }
+              .onFailure { throwable ->
+                logger.log(
+                    Level.WARNING,
+                    "Failed to deliver token notification to $uuid",
+                    throwable,
+                )
+              }
+        }
+        if (delivered.isNotEmpty()) markNotificationsDelivered(delivered)
+      }
+    }
+  }
+
+  private fun fetchPendingNotifications(uuid: UUID) {
+    if (!notificationSettings.enabled) return
+    submitDatabaseTask("fetch pending notifications for $uuid") {
+      val pending = loadPendingNotifications(uuid)
+      if (pending.isEmpty()) return@submitDatabaseTask
+      runOnMainThread { deliverJoinedPlayerNotifications(uuid, pending) }
+    }
+  }
+
+  private fun loadPendingNotifications(uuid: UUID): List<PendingNotification> {
+    synchronized(dbLock) {
+      return connection
+          .prepareStatement(
+              """
+              SELECT transaction_id, target_uuid, notification_type, delta, balance_after
+              FROM token_notification_outbox
+              WHERE target_uuid = ? AND delivered_at IS NULL
+              ORDER BY id ASC
+              """
+                  .trimIndent()
+          )
+          .use { statement ->
+            statement.setString(1, uuid.toString())
+            statement.executeQuery().use { result ->
+              buildList {
+                while (result.next()) {
+                  val rawType = result.getString("notification_type")
+                  val type = runCatching { NotificationType.valueOf(rawType) }.getOrNull()
+                  if (type == null) {
+                    logger.warning("Ignoring invalid token notification type '$rawType' in outbox.")
+                    continue
+                  }
+                  add(
+                      PendingNotification(
+                          result.getLong("transaction_id"),
+                          UUID.fromString(result.getString("target_uuid")),
+                          type,
+                          result.getLong("delta"),
+                          result.getLong("balance_after"),
+                      )
+                  )
+                }
+              }
+            }
+          }
+    }
+  }
+
+  private fun deliverJoinedPlayerNotifications(
+      uuid: UUID,
+      pending: List<PendingNotification>,
+  ) {
+    if (!notificationSettings.enabled) return
+    val player = Bukkit.getPlayer(uuid)?.takeIf(Player::isOnline) ?: return
+    val message =
+        if (pending.size == 1) {
+          notificationSettings.render(pending.single())
+        } else {
+          notificationSettings.renderSummary(pending)
+        }
+    runCatching { player.sendMessage(message) }
+        .onSuccess { markNotificationsDelivered(pending.map(PendingNotification::transactionId)) }
+        .onFailure { throwable ->
+          logger.log(
+              Level.WARNING,
+              "Failed to deliver pending token notifications to $uuid",
+              throwable,
+          )
+        }
+  }
+
+  private fun markNotificationsDelivered(transactionIds: List<Long>) {
+    transactionIds.chunked(MAX_SQL_PARAMETERS).forEach { chunk ->
+      submitDatabaseTask("mark ${chunk.size} token notifications delivered") {
+        val placeholders = chunk.joinToString(",") { "?" }
+        synchronized(dbLock) {
+          connection
+              .prepareStatement(
+                  """
+                  UPDATE token_notification_outbox
+                  SET delivered_at = ?
+                  WHERE delivered_at IS NULL AND transaction_id IN ($placeholders)
+                  """
+                      .trimIndent()
+              )
+              .use { statement ->
+                statement.setLong(1, System.currentTimeMillis())
+                chunk.forEachIndexed { index, txId -> statement.setLong(index + 2, txId) }
+                statement.executeUpdate()
+              }
+        }
+      }
+    }
+  }
+
+  private fun submitDatabaseTask(description: String, task: () -> Unit) {
+    if (!::persistenceExecutor.isInitialized || persistenceExecutor.isShutdown) return
+    try {
+      persistenceExecutor.execute {
+        runCatching(task).onFailure { throwable ->
+          logger.log(Level.WARNING, "Failed to $description", throwable)
+        }
+      }
+    } catch (rejected: RejectedExecutionException) {
+      logger.warning("Token persistence queue is full; could not $description.")
+    }
+  }
+
+  private fun runOnMainThread(task: () -> Unit) {
+    if (!isEnabled) return
+    if (Bukkit.isPrimaryThread()) {
+      task()
+    } else {
+      Bukkit.getScheduler().runTask(this, Runnable(task))
+    }
   }
 
   private fun transactionExists(txId: Long): Boolean {
@@ -865,17 +1043,15 @@ class OyasaiTokenPlugin :
         }
   }
 
-  private fun importTokenManagerDataYml(force: Boolean): ImportResult {
-    migrationImportPreflight(force)?.let {
+  private fun importTokenManagerDataYml(): ImportResult {
+    migrationImportPreflight()?.let {
       return it
     }
     val imported =
         executePreparedTokenManagerDataYmlImport(
             prepareTokenManagerDataYmlImport(
-                force,
                 parseTokenManagerDataYml(File(dataFolder, "data.yml")),
-            ),
-            awaitPendingWrites = force,
+            )
         )
     imported.loadedBalances?.let(ledger::replaceAll)
     return imported.result
@@ -886,13 +1062,12 @@ class OyasaiTokenPlugin :
    * values are immutable and are safe to pass to the SQLite import worker.
    */
   private fun prepareTokenManagerDataYmlImport(
-      force: Boolean,
       raw: RawMigrationPreparation,
   ): MigrationPreparation {
     check(Bukkit.isPrimaryThread()) {
       "TokenManager data.yml identities must be resolved on the Bukkit primary thread."
     }
-    migrationImportPreflight(force)?.let {
+    migrationImportPreflight()?.let {
       return MigrationPreparation.Skipped(it)
     }
     if (raw is RawMigrationPreparation.Skipped) {
@@ -911,8 +1086,7 @@ class OyasaiTokenPlugin :
     return MigrationPreparation.Ready(entries.toList(), migrationExecutionOptions())
   }
 
-  private fun migrationImportPreflight(force: Boolean): ImportResult? {
-    if (force) return null
+  private fun migrationImportPreflight(): ImportResult? {
     if (!config.getBoolean("migration.import-tokenmanager-data-yml", true)) {
       return ImportResult(0, "TokenManager data.yml import is disabled in config.yml.")
     }
@@ -920,13 +1094,13 @@ class OyasaiTokenPlugin :
     if (alreadyImportedAt != null) {
       return ImportResult(
           0,
-          "TokenManager data.yml was already imported at $alreadyImportedAt. Use /tm transfer confirm to re-import.",
+          "TokenManager data.yml was already imported at $alreadyImportedAt.",
       )
     }
     if (ledger.isNotEmpty()) {
       return ImportResult(
           0,
-          "Skipped automatic data.yml import because tokens.db already contains balances. Use /tm transfer confirm after reviewing local backups.",
+          "Skipped automatic data.yml import because tokens.db already contains balances.",
       )
     }
     return null
@@ -934,7 +1108,6 @@ class OyasaiTokenPlugin :
 
   private fun migrationExecutionOptions(): MigrationExecutionOptions =
       MigrationExecutionOptions(
-          config.getLong("persistence.shutdown-await-seconds", 10L).coerceAtLeast(1L) * 1000L,
           config.getBoolean("migration.backup-before-import", true),
           File(
               dataFolder,
@@ -977,24 +1150,11 @@ class OyasaiTokenPlugin :
   /** Phase (c): performs only queue draining and SQLite I/O. */
   private fun executePreparedTokenManagerDataYmlImport(
       preparation: MigrationPreparation,
-      awaitPendingWrites: Boolean,
   ): MigrationImportCompletion {
     if (preparation is MigrationPreparation.Skipped) {
       return MigrationImportCompletion(preparation.result)
     }
     val ready = preparation as MigrationPreparation.Ready
-    if (
-        awaitPendingWrites &&
-            ::persistenceExecutor.isInitialized &&
-            !awaitPersistenceIdle(ready.options.shutdownAwaitMillis)
-    ) {
-      return MigrationImportCompletion(
-          ImportResult(
-              0,
-              "Timed out waiting for pending token writes. Try /tm transfer confirm again after the queue drains.",
-          )
-      )
-    }
     val entries = ready.entries
     val backup = backupDatabaseBeforeImport(ready.options)
     val now = System.currentTimeMillis()
@@ -1051,20 +1211,6 @@ class OyasaiTokenPlugin :
         ),
         loadedBalances,
     )
-  }
-
-  private fun awaitPersistenceIdle(timeoutMillis: Long): Boolean {
-    val deadline = System.currentTimeMillis() + timeoutMillis
-    while (persistenceExecutor.queue.isNotEmpty() || persistenceExecutor.activeCount > 0) {
-      if (System.currentTimeMillis() >= deadline) return false
-      try {
-        Thread.sleep(25L)
-      } catch (interrupted: InterruptedException) {
-        Thread.currentThread().interrupt()
-        return false
-      }
-    }
-    return true
   }
 
   private fun getMeta(key: String): String? {
@@ -1183,6 +1329,8 @@ class OyasaiTokenPlugin :
     return true
   }
 
+  private fun CommandSender.permissionDenied(): Boolean = error("You do not have permission.")
+
   private fun String.toUuidOrNull(): UUID? {
     return runCatching { UUID.fromString(this) }.getOrNull()
   }
@@ -1229,7 +1377,6 @@ class OyasaiTokenPlugin :
   )
 
   private data class MigrationExecutionOptions(
-      val shutdownAwaitMillis: Long,
       val backupBeforeImport: Boolean,
       val backupDirectory: File,
   )
@@ -1259,5 +1406,9 @@ class OyasaiTokenPlugin :
      * reached SQLite before a hard crash.
      */
     private const val LAST_APPLIED_TX_ID_KEY = "last_applied_tx_id"
+    private const val TOKEN_USE_PERMISSION = "token.use"
+    private const val TOKEN_ADMIN_PERMISSION = "token.admin"
+    private const val NOTIFICATIONS_FILE = "notifications.yml"
+    private const val MAX_SQL_PARAMETERS = 900
   }
 }

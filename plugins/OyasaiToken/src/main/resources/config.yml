@@ -10,10 +10,10 @@ persistence:
   shutdown-await-seconds: 10
 
 migration:
-  # Disabled by default: the production data.yml is historical and must be imported manually
-  # after the server has been stopped and its contents have been reviewed.
+  # Disabled by default: the production data.yml is historical. Enable only for the guarded
+  # one-time startup import after the server has been stopped and its contents have been reviewed.
   import-tokenmanager-data-yml: false
-  # Copy tokens.db (and WAL sidecars when present) before a data.yml import overwrites balances.
+  # Copy tokens.db (and WAL sidecars when present) before the startup import writes balances.
   backup-before-import: true
   backup-directory: migration-backups
 
