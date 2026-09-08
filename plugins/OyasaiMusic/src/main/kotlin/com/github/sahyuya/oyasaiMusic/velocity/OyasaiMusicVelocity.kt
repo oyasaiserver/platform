@@ -24,26 +24,25 @@ import org.slf4j.Logger
  * by default and forwarded only between a player and that player's current `main` connection.
  */
 @Plugin(
-    id = "oyasaimusic",
-    name = "OyasaiMusic",
-    description = "OyasaiMusic OMMT relay for main",
+  id = "oyasaimusic",
+  name = "OyasaiMusic",
+  description = "OyasaiMusic OMMT relay for main",
 )
 class OyasaiMusicVelocity
 @Inject
 constructor(
-    private val proxy: ProxyServer,
-    private val logger: Logger,
-    @DataDirectory private val dataDirectory: Path,
+  private val proxy: ProxyServer,
+  private val logger: Logger,
+  @DataDirectory private val dataDirectory: Path,
 ) {
   private val bedrockPacks = BedrockPackService(this, proxy, logger, dataDirectory)
-
   companion object {
     private const val MAIN_SERVER = "main"
     private val CHANNELS =
-        setOf(
-            MinecraftChannelIdentifier.from("oyasaimusic:upload_v1"),
-            MinecraftChannelIdentifier.from("oyasaimusic:playback_v1"),
-        )
+      setOf(
+        MinecraftChannelIdentifier.from("oyasaimusic:upload_v1"),
+        MinecraftChannelIdentifier.from("oyasaimusic:playback_v1"),
+      )
   }
 
   @Subscribe(order = PostOrder.LAST)
@@ -51,6 +50,7 @@ constructor(
     CHANNELS.forEach(proxy.channelRegistrar::register)
     proxy.channelRegistrar.register(BedrockPackService.TRANSFER_CHANNEL)
     proxy.channelRegistrar.register(BedrockPackService.STATUS_CHANNEL)
+    proxy.channelRegistrar.register(BedrockPackService.CONTROL_CHANNEL)
     bedrockPacks.load()
     logger.info("OyasaiMusic Velocity relay enabled for backend main.")
   }
@@ -67,6 +67,11 @@ constructor(
 
   @Subscribe
   fun onPluginMessage(event: PluginMessageEvent) {
+    if (event.identifier == BedrockPackService.CONTROL_CHANNEL) {
+      event.result = PluginMessageEvent.ForwardResult.handled()
+      bedrockPacks.handleControlMessage(event)
+      return
+    }
     // Status is proxy-originated only. Consume any client/backend attempt to spoof it.
     if (event.identifier == BedrockPackService.STATUS_CHANNEL) {
       event.result = PluginMessageEvent.ForwardResult.handled()
@@ -84,19 +89,19 @@ constructor(
     // message allowance from becoming an allocation/amplification path to backend main.
     if (!PluginMessageBounds.accepts(event.data.size)) return
     val allowed =
-        when {
-          event.source is ServerConnection && event.target is Player ->
-              isCurrentMain(event.target as Player, event.source as ServerConnection)
-          event.source is Player && event.target is ServerConnection ->
-              isCurrentMain(event.source as Player, event.target as ServerConnection)
-          else -> false
-        }
+      when {
+        event.source is ServerConnection && event.target is Player ->
+          isCurrentMain(event.target as Player, event.source as ServerConnection)
+        event.source is Player && event.target is ServerConnection ->
+          isCurrentMain(event.source as Player, event.target as ServerConnection)
+        else -> false
+      }
     if (allowed) event.result = PluginMessageEvent.ForwardResult.forward()
   }
 
   private fun isCurrentMain(player: Player, connection: ServerConnection): Boolean =
-      connection.serverInfo.name == MAIN_SERVER &&
-          player.currentServer
-              .map { current -> current.serverInfo == connection.serverInfo }
-              .orElse(false)
+    connection.serverInfo.name == MAIN_SERVER &&
+      player.currentServer
+        .map { current -> current.serverInfo == connection.serverInfo }
+        .orElse(false)
 }
