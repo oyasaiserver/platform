@@ -4,6 +4,7 @@ import com.github.sahyuya.oyasaiMusic.OyasaiMusic
 import com.github.sahyuya.oyasaiMusic.db.ResourcePackPreferenceRepository
 import com.github.sahyuya.oyasaiMusic.interop.BedrockPackStatusCodec
 import com.github.sahyuya.oyasaiMusic.interop.BedrockTransferCodec
+import com.github.sahyuya.oyasaiMusic.interop.PackControlCodec
 import com.github.sahyuya.oyasaiMusic.model.ResourcePackPreference
 import com.github.sahyuya.oyasaiMusic.util.BedrockUtil
 import java.util.UUID
@@ -45,6 +46,51 @@ class BedrockTransferService(
   private val intentSequence = AtomicLong()
   private val intentRevisions = ConcurrentHashMap<UUID, Long>()
 
+  private data class Pending(val carrier: Player, val target: UUID, val done: (Int) -> Unit)
+
+  private val pending = mutableMapOf<UUID, Pending>() // Paper main thread only
+
+  fun requestControl(carrier: Player, target: UUID, operation: Int, done: (Int) -> Unit) {
+    if (pending.size >= 256 || pending.values.any { it.target == target }) {
+      done(PackControlCodec.FAILED)
+      return
+    }
+    val id = UUID.randomUUID()
+    pending[id] = Pending(carrier, target, done)
+    val sent =
+        runCatching {
+              carrier.sendPluginMessage(
+                  plugin,
+                  PackControlCodec.CHANNEL,
+                  PackControlCodec.encode(PackControlCodec.Message(operation, id, target)),
+              )
+            }
+            .isSuccess
+    if (!sent) {
+      pending.remove(id)?.done?.invoke(PackControlCodec.FAILED)
+      return
+    }
+    Bukkit.getScheduler()
+        .runTaskLater(
+            plugin,
+            Runnable { pending.remove(id)?.done?.invoke(PackControlCodec.FAILED) },
+            if (operation == PackControlCodec.CONFIRM) 2400L else 200L,
+        )
+  }
+
+  fun handleControl(carrier: Player, message: PackControlCodec.Message) {
+    if (message.operation !in PackControlCodec.OK..PackControlCodec.FAILED) return
+    val saved = pending[message.requestId] ?: return
+    if (
+        saved.carrier !== carrier ||
+            saved.target != message.targetId ||
+            Bukkit.getPlayer(carrier.uniqueId) !== carrier
+    )
+        return
+    pending.remove(message.requestId)
+    saved.done(message.operation)
+  }
+
   companion object {
     /** Evac records older than this are dropped (failed/app-killed reconnects). Design: 60s TTL. */
     const val EVAC_TTL_MILLIS = 60_000L
@@ -77,7 +123,7 @@ class BedrockTransferService(
             else -> "bedrock.pack-id and resource-pack.id are blank"
           }
       plugin.logger.warning(
-          "Bedrock resource-pack transfer disabled: $reason. /mm rp allow will only save the preference."
+          "Bedrock resource-pack transfer disabled: $reason. /mm rp allow will not change the preference."
       )
     }
   }
@@ -87,18 +133,29 @@ class BedrockTransferService(
   /** Completion is always invoked on the Paper main thread and reports preference persistence. */
   fun allow(player: Player, completion: ((Boolean) -> Unit)? = null) {
     if (!transferEnabled()) {
-      // Disabled deployments retain the preference without attempting Java-pack delivery.
-      val enabledFlag = plugin.config.getBoolean("bedrock.transfer-enabled", false)
-      val reason = if (!enabledFlag) "bedrock.transfer-enabled=false" else "pack-idが空です"
-      plugin.logger.warning(
-          "Bedrock pack allow was not transferred for ${player.uniqueId}: $reason"
-      )
-      player.sendMessage("§c統合版の拡張音域転送はサーバー設定で無効です。設定は保存しますが、現在は通常音域で再生します。")
-      plugin.resourcePackService.allow(player, acknowledge = false, completion = completion)
+      player.sendMessage("§c統合版の拡張音域パックは現在利用できません。許可状態は変更しません。")
+      completion?.invoke(false)
       return
     }
-    player.sendMessage("§a統合版用拡張音域パックの有効化を受け付けました。適用時に再接続する場合があります。")
-    player.sendMessage("§7ダウンロードは任意です。キャンセルした場合も参加でき、参加後に /mm rp deny で次回以降の表示を停止できます。")
+    val revision = intentSequence.incrementAndGet()
+    intentRevisions[player.uniqueId] = revision
+    player.sendMessage("§e最終確認画面を開いています。内容を確認して選択してください。")
+    requestControl(player, player.uniqueId, PackControlCodec.CONFIRM) { result ->
+      if (!player.isOnline || intentRevisions[player.uniqueId] != revision) {
+        completion?.invoke(false)
+      } else if (result == PackControlCodec.OK) {
+        allowConfirmed(player, completion)
+      } else {
+        player.sendMessage(
+            if (result == PackControlCodec.CANCEL) "§eダウンロードをキャンセルしました。許可状態は変更していません。"
+            else "§c確認画面を完了できませんでした。許可状態は変更していません。"
+        )
+        completion?.invoke(false)
+      }
+    }
+  }
+
+  private fun allowConfirmed(player: Player, completion: ((Boolean) -> Unit)?) {
     val intentRevision = intentSequence.incrementAndGet()
     intentRevisions[player.uniqueId] = intentRevision
     Bukkit.getScheduler()
@@ -289,7 +346,7 @@ class BedrockTransferService(
                             if (hadPendingTransfer) {
                               player.sendMessage("§a統合版用拡張音域パックをGeyserへ登録しました。")
                               player.sendMessage(
-                                  "§7端末側でダウンロードをキャンセルした場合は /mm rp deny を実行すると通常音域へ戻せます。"
+                                  "§7停止は /mm rp deny。参加できなくなった場合はおやさい公式Discordで適用状態の解除を申請してください。"
                               )
                             }
                             plugin.logger.info(
@@ -345,5 +402,7 @@ class BedrockTransferService(
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
     intentRevisions.remove(event.player.uniqueId)
+    val abandoned = pending.filterValues { it.carrier === event.player }.keys.toList()
+    abandoned.forEach { pending.remove(it)?.done?.invoke(PackControlCodec.FAILED) }
   }
 }

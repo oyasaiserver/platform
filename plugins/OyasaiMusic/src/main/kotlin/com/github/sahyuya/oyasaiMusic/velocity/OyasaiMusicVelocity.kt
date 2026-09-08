@@ -51,6 +51,7 @@ constructor(
     CHANNELS.forEach(proxy.channelRegistrar::register)
     proxy.channelRegistrar.register(BedrockPackService.TRANSFER_CHANNEL)
     proxy.channelRegistrar.register(BedrockPackService.STATUS_CHANNEL)
+    proxy.channelRegistrar.register(BedrockPackService.CONTROL_CHANNEL)
     bedrockPacks.load()
     logger.info("OyasaiMusic Velocity relay enabled for backend main.")
   }
@@ -67,6 +68,11 @@ constructor(
 
   @Subscribe
   fun onPluginMessage(event: PluginMessageEvent) {
+    if (event.identifier == BedrockPackService.CONTROL_CHANNEL) {
+      event.result = PluginMessageEvent.ForwardResult.handled()
+      bedrockPacks.handleControlMessage(event)
+      return
+    }
     // Status is proxy-originated only. Consume any client/backend attempt to spoof it.
     if (event.identifier == BedrockPackService.STATUS_CHANNEL) {
       event.result = PluginMessageEvent.ForwardResult.handled()

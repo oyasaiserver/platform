@@ -104,7 +104,7 @@ object SongAudioFile {
         val rawCustomSoundSeed = if (version >= 3) input.readLong() else 0L
         if (version == 4) {
           require(timeMs in previousTime..totalDuration) { "v4音符の時刻が不正です: $timeMs" }
-          require(inst in 0..15) { "v4音符の楽器IDが不正です: $inst" }
+          require(inst in 0..19) { "v4音符の楽器IDが不正です: $inst" }
           require(pitchCents in -5400..7300) { "v4音符の音高が不正です: $pitchCents" }
           require(volume in 0..100) { "v4音符の音量が不正です: $volume" }
           require(pan in -100..100) { "v4音符の定位が不正です: $pan" }

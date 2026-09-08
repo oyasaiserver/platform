@@ -2,6 +2,7 @@ package com.github.sahyuya.oyasaiMusic.economy
 
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 
@@ -17,11 +18,10 @@ class EconomyService(private val plugin: Plugin, private val pointCommandTemplat
       Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
 
   fun withdraw(player: Player, amount: Long): PayoutResult {
-    if (amount <= 0) return PayoutResult.Success
+    if (amount < 0) return PayoutResult.Failed("価格が不正です")
+    if (amount == 0L) return PayoutResult.Success
     val provider = economy() ?: return PayoutResult.Unavailable("Vault の経済サービスが見つかりません")
-    val response = provider.withdrawPlayer(player, amount.toDouble())
-    return if (response.transactionSuccess()) PayoutResult.Success
-    else PayoutResult.Failed(response.errorMessage.ifBlank { "残高が不足しているか、引き落としに失敗しました" })
+    return withdrawWithinBalance(provider, player, amount)
   }
 
   fun deposit(player: Player, amount: Long): PayoutResult {
@@ -47,6 +47,28 @@ class EconomyService(private val plugin: Plugin, private val pointCommandTemplat
     return if (Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)) PayoutResult.Success
     else PayoutResult.Failed("ポイント付与コマンドの実行に失敗しました")
   }
+}
+
+/**
+ * Called synchronously by the purchase handler: never yield between check and withdrawal. Some
+ * Vault providers permit overdrafts, so withdrawal success alone is insufficient.
+ */
+internal fun withdrawWithinBalance(
+    provider: Economy,
+    player: OfflinePlayer,
+    amount: Long,
+): PayoutResult {
+  if (amount < 0) return PayoutResult.Failed("価格が不正です")
+  if (amount == 0L) return PayoutResult.Success
+  val price = amount.toDouble()
+  val balance = provider.getBalance(player)
+  if (!balance.isFinite()) return PayoutResult.Failed("所持金を確認できませんでした")
+  if (balance < price || !provider.has(player, price)) {
+    return PayoutResult.Failed("所持金が不足しています（価格: ${amount}円）")
+  }
+  val response = provider.withdrawPlayer(player, price)
+  return if (response.transactionSuccess()) PayoutResult.Success
+  else PayoutResult.Failed(response.errorMessage.orEmpty().ifBlank { "引き落としに失敗しました" })
 }
 
 sealed interface PayoutResult {

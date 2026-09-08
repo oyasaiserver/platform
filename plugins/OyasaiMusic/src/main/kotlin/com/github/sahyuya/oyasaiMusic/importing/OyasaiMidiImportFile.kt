@@ -1,6 +1,5 @@
 package com.github.sahyuya.oyasaiMusic.importing
 
-import com.github.sahyuya.oyasaiMusic.audio.InstrumentMapper
 import com.github.sahyuya.oyasaiMusic.audio.VanillaSoundCatalog
 import com.github.sahyuya.oyasaiMusic.model.NoteEvent
 import com.google.gson.JsonParser
@@ -9,7 +8,6 @@ import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.File
 import java.io.InputStream
-import org.bukkit.Instrument
 
 /** OMMTが生成する、バージョンに依存しない楽器IDを持つ`.oyasai`ファイルを読み込む。 */
 object OyasaiMidiImportFile {
@@ -103,11 +101,11 @@ object OyasaiMidiImportFile {
         require(pitchCents in -5400..7300) { "音階がサポート範囲外です。" }
         require(volume in 0..100) { "音量が0〜100の範囲外です。" }
         require(pan in -100..100) { "Panが-100〜100の範囲外です。" }
-        val instrument = stableInstrument(stableInstrumentId)
+        val instrument = stableToRuntimeInstrument(stableInstrumentId)
         notes +=
             NoteEvent(
                 timeMs = timeMs.toInt(),
-                instrument = InstrumentMapper.toId(instrument),
+                instrument = instrument,
                 pitch = foldForVanilla(pitchCents).toByte(),
                 volume = volume,
                 pan = pan,
@@ -200,28 +198,15 @@ object OyasaiMidiImportFile {
         ResolvedSound("minecraft:${it.eventKey}", it.seed)
       }
 
-  private fun stableInstrument(id: Int): Instrument =
+  /** Pure explicit conversion; importing bytes must not initialize Bukkit sound registries. */
+  private fun stableToRuntimeInstrument(id: Int): Int =
       when (id) {
-        0 -> Instrument.PIANO
-        1 -> Instrument.BASS_GUITAR
-        2 -> Instrument.BASS_DRUM
-        3 -> Instrument.SNARE_DRUM
-        4 -> Instrument.STICKS
-        5 -> Instrument.FLUTE
-        6 -> Instrument.BELL
-        7 -> Instrument.GUITAR
-        8 -> Instrument.CHIME
-        9 -> Instrument.XYLOPHONE
-        10 -> Instrument.IRON_XYLOPHONE
-        11 -> Instrument.COW_BELL
-        12 -> Instrument.DIDGERIDOO
-        13 -> Instrument.BIT
-        14 -> Instrument.BANJO
-        15 -> Instrument.PLING
-        16 -> Instrument.TRUMPET
-        17 -> Instrument.TRUMPET_EXPOSED
-        18 -> Instrument.TRUMPET_OXIDIZED
-        19 -> Instrument.TRUMPET_WEATHERED
+        0 -> 0 // piano / harp
+        1 -> 4 // bass guitar
+        2 -> 1 // bass drum
+        3 -> 2 // snare
+        4 -> 3 // sticks / hat
+        in 5..19 -> id // includes all four 26.2 brass variants
         else -> throw IllegalArgumentException("未対応の安定楽器IDです: $id")
       }
 

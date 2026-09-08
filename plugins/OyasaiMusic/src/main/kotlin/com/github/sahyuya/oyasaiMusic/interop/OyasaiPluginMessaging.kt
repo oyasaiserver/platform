@@ -27,6 +27,8 @@ class OyasaiPluginMessaging(
     // Bedrock transfer requests go Paper -> Velocity. Current-session pack status returns
     // Velocity -> Paper on a separate bounded channel.
     messenger.registerOutgoingPluginChannel(plugin, BedrockTransferCodec.CHANNEL)
+    messenger.registerOutgoingPluginChannel(plugin, PackControlCodec.CHANNEL)
+    messenger.registerIncomingPluginChannel(plugin, PackControlCodec.CHANNEL, this)
     messenger.registerIncomingPluginChannel(plugin, BedrockPackStatusCodec.CHANNEL, this)
     uploads.bindPacketSender(::sendUpload)
     plugin.server.pluginManager.registerEvents(this, plugin)
@@ -44,6 +46,8 @@ class OyasaiPluginMessaging(
     messenger.unregisterIncomingPluginChannel(plugin, PlaybackBuffer.CHANNEL, this)
     messenger.unregisterOutgoingPluginChannel(plugin, PlaybackBuffer.CHANNEL)
     messenger.unregisterOutgoingPluginChannel(plugin, BedrockTransferCodec.CHANNEL)
+    messenger.unregisterOutgoingPluginChannel(plugin, PackControlCodec.CHANNEL)
+    messenger.unregisterIncomingPluginChannel(plugin, PackControlCodec.CHANNEL, this)
     messenger.unregisterIncomingPluginChannel(plugin, BedrockPackStatusCodec.CHANNEL, this)
   }
 
@@ -77,6 +81,7 @@ class OyasaiPluginMessaging(
           PlaybackBuffer.CHANNEL -> PlaybackWireCodec.MAX
           BedrockTransferCodec.CHANNEL -> BedrockTransferCodec.MAX
           BedrockPackStatusCodec.CHANNEL -> BedrockPackStatusCodec.MAX
+          PackControlCodec.CHANNEL -> PackControlCodec.SIZE
           else -> return
         }
     if (!PluginMessageBounds.accepts(message.size) || message.size > maximum) return
@@ -89,6 +94,10 @@ class OyasaiPluginMessaging(
   private fun dispatch(channel: String, player: Player, message: ByteArray) {
     if (!enabled || !player.isOnline) return
     when (channel) {
+      PackControlCodec.CHANNEL -> {
+        val decoded = PackControlCodec.decode(message) ?: return
+        plugin.bedrockTransferService.handleControl(player, decoded)
+      }
       UploadPacketCodec.CHANNEL -> {
         val decoded = runCatching { UploadPacketCodec.decodeClient(message) }.getOrNull() ?: return
         uploads.handlePacket(player, decoded)

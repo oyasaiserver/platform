@@ -2,6 +2,7 @@ package com.github.sahyuya.oyasaiMusic.velocity
 
 import com.github.sahyuya.oyasaiMusic.interop.BedrockPackStatusCodec
 import com.github.sahyuya.oyasaiMusic.interop.BedrockTransferCodec
+import com.github.sahyuya.oyasaiMusic.interop.PackControlCodec
 import com.velocitypowered.api.event.connection.PluginMessageEvent
 import com.velocitypowered.api.proxy.Player
 import com.velocitypowered.api.proxy.ProxyServer
@@ -47,6 +48,8 @@ class BedrockPackService(
         MinecraftChannelIdentifier.from(BedrockTransferCodec.CHANNEL)
     val STATUS_CHANNEL: MinecraftChannelIdentifier =
         MinecraftChannelIdentifier.from(BedrockPackStatusCodec.CHANNEL)
+    val CONTROL_CHANNEL: MinecraftChannelIdentifier =
+        MinecraftChannelIdentifier.from(PackControlCodec.CHANNEL)
     private const val MAIN_SERVER = "main"
     private const val PACKS_DIR = "packs"
     private const val CONFIG_FILE = "bedrock-pack.properties"
@@ -60,6 +63,8 @@ class BedrockPackService(
   // Access this pair only under subscriptionLock and retain the API that owns the registration.
   private var registration: Pair<GeyserApi, EventRegistrar>? = null
   private val allowedXuids = ConcurrentHashMap.newKeySet<String>()
+  private val identities = ConcurrentHashMap<UUID, String>()
+  private val confirmations = ConcurrentHashMap<UUID, UUID>()
   private val registeredSessions = ConcurrentHashMap<String, GeyserConnection>()
   private val subscriptionLock = Any()
   private val allowListMutationLock = Any()
@@ -119,6 +124,19 @@ class BedrockPackService(
           "Bedrock pack declines require Geyser force-resource-packs=false; OyasaiMusic cannot override this global Geyser setting.",
       )
       loadAllowedXuids()
+      val identityFile = dataDirectory.resolve("bedrock-pack-identities.tsv")
+      if (Files.isRegularFile(identityFile) && Files.size(identityFile) <= 8L * 1024 * 1024) {
+        Files.newBufferedReader(identityFile).useLines { lines ->
+          lines.take(MAX_ALLOWED_XUIDS).forEach { line ->
+            val fields = line.split('\t')
+            if (fields.size == 2) {
+              val id = runCatching { UUID.fromString(fields[0]) }.getOrNull()
+              val xuid = normalizeXuid(fields[1])
+              if (id != null && xuid != null) identities[id] = xuid
+            }
+          }
+        }
+      }
       val file = dataDirectory.resolve(PACKS_DIR).resolve(packFile)
       if (Files.isRegularFile(file)) {
         logger.info(
@@ -163,6 +181,145 @@ class BedrockPackService(
           .onFailure { logger.warn("Failed to flush Bedrock pack allow-list during shutdown.", it) }
     }
     registeredSessions.clear()
+    confirmations.clear()
+  }
+
+  /** Separate trusted-main control route; clients cannot request changes to any target. */
+  fun handleControlMessage(event: PluginMessageEvent) {
+    val source = event.source as? ServerConnection ?: return
+    if (
+        source.serverInfo.name != MAIN_SERVER || source.player.currentServer.orElse(null) !== source
+    )
+        return
+    val request = PackControlCodec.decode(event.data) ?: return
+    fun reply(result: Int) {
+      if (!shuttingDown && source.player.currentServer.orElse(null) === source) {
+        source.sendPluginMessage(
+            CONTROL_CHANNEL,
+            PackControlCodec.encode(request.copy(operation = result)),
+        )
+      }
+    }
+    when (request.operation) {
+      PackControlCodec.CONFIRM -> {
+        if (request.targetId != source.player.uniqueId) return
+        val connection = geyserConnection(request.targetId) ?: return reply(PackControlCodec.FAILED)
+        if (confirmations.putIfAbsent(request.targetId, request.requestId) != null)
+            return reply(PackControlCodec.FAILED)
+        fun finish(result: Int) {
+          if (
+              confirmations.remove(request.targetId, request.requestId) &&
+                  geyserConnection(request.targetId) === connection
+          )
+              reply(result)
+        }
+        proxy.scheduler
+            .buildTask(owner, Runnable { finish(PackControlCodec.CANCEL) })
+            .delay(120, TimeUnit.SECONDS)
+            .schedule()
+        proxy.scheduler
+            .buildTask(
+                owner,
+                Runnable {
+                  try {
+                    val pack = packOrNull() ?: return@Runnable finish(PackControlCodec.FAILED)
+                    val size = Files.size(dataDirectory.resolve(PACKS_DIR).resolve(packFile))
+                    if (
+                        confirmations[request.targetId] != request.requestId ||
+                            geyserConnection(request.targetId) !== connection
+                    )
+                        return@Runnable
+                    val content =
+                        "ダウンロード容量：約 %.1f MiB（%,d bytes）\n\n"
+                            .format(java.util.Locale.ROOT, size / 1048576.0, size) +
+                            "同意すると再接続する場合があります。パックをダウンロードしないとサーバーに参加できなくなります。\n\n" +
+                            "容量不足などでダウンロードできない場合は、おやさいの公式Discordサーバーからリソースパック適用状態の解除を申請してください。\n\n" +
+                            "今キャンセルすれば設定は変更しません。ダウンロードしますか？"
+                    if (
+                        !GeyserConsentForm.send(connection, content) { accepted ->
+                          finish(
+                              if (accepted == true) PackControlCodec.OK else PackControlCodec.CANCEL
+                          )
+                        }
+                    )
+                        finish(PackControlCodec.FAILED)
+                  } catch (error: LinkageError) {
+                    logger.warn(
+                        "Incompatible Geyser/Cumulus API while showing Bedrock pack consent form.",
+                        error,
+                    )
+                    finish(PackControlCodec.FAILED)
+                  } catch (error: Exception) {
+                    logger.warn("Could not show Bedrock pack consent form.", error)
+                    finish(PackControlCodec.FAILED)
+                  }
+                },
+            )
+            .schedule()
+      }
+      PackControlCodec.SET,
+      PackControlCodec.UNSET -> {
+        confirmations.remove(request.targetId)
+        // Administrative mutations are serialized with disk persistence. No target session needed.
+        proxy.scheduler
+            .buildTask(
+                owner,
+                Runnable {
+                  synchronized(allowListIoLock) {
+                    try {
+                      val xuid =
+                          identities[request.targetId]
+                              ?: run {
+                                // Legacy non-linked Floodgate UUID encodes the XUID in its low 64
+                                // bits.
+                                val legacy =
+                                    java.lang.Long.toUnsignedString(
+                                        request.targetId.leastSignificantBits
+                                    )
+                                legacy.takeIf {
+                                  request.targetId.mostSignificantBits == 0L &&
+                                      request.targetId.leastSignificantBits != 0L
+                                }
+                              }
+                      if (xuid == null) return@synchronized reply(PackControlCodec.UNKNOWN)
+                      if (
+                          identities.size >= MAX_ALLOWED_XUIDS &&
+                              !identities.containsKey(request.targetId)
+                      )
+                          return@synchronized reply(PackControlCodec.FAILED)
+                      if (request.operation == PackControlCodec.SET && packOrNull() == null)
+                          return@synchronized reply(PackControlCodec.FAILED)
+                      identities[request.targetId] = xuid
+                      if (request.operation == PackControlCodec.SET) {
+                        if (!addAllowedXuid(xuid))
+                            return@synchronized reply(PackControlCodec.FAILED)
+                      } else {
+                        removeAllowedXuid(xuid)
+                        registeredSessions.remove(xuid)
+                      }
+                      writeAllowedXuids()
+                      reply(PackControlCodec.OK)
+                    } catch (error: Exception) {
+                      logger.warn(
+                          "Could not persist administrative Bedrock pack preference.",
+                          error,
+                      )
+                      reply(PackControlCodec.FAILED)
+                    }
+                  }
+                },
+            )
+            .schedule()
+      }
+    }
+  }
+
+  private fun rememberIdentity(playerId: UUID, xuid: String) {
+    if (identities.size >= MAX_ALLOWED_XUIDS && !identities.containsKey(playerId)) return
+    if (identities.put(playerId, xuid) != xuid) {
+      allowListRevision.incrementAndGet()
+      scheduleAllowListWrite()
+    }
   }
 
   fun handleTransferMessage(event: PluginMessageEvent) {
@@ -192,6 +349,7 @@ class BedrockPackService(
             }
 
     if (!request.allow) {
+      confirmations.remove(request.playerId)
       removeAllowedXuid(xuid)
       registeredSessions.remove(xuid, connection)
       sendStatus(player, loaded = false, packId = request.packId)
@@ -226,6 +384,7 @@ class BedrockPackService(
       logger.warn("Rejected Bedrock pack enable because the XUID allow-list reached its limit.")
       return
     }
+    rememberIdentity(request.playerId, xuid)
 
     // An ALLOW repeated after a successful pre-login injection is idempotent. Reporting
     // current status lets Paper clear a speculative evacuation without another transfer.
@@ -256,6 +415,7 @@ class BedrockPackService(
     if (current.serverInfo.name != MAIN_SERVER) return
     val connection = geyserConnection(player.uniqueId) ?: return
     val xuid = normalizeXuid(connection.xuid()) ?: return
+    rememberIdentity(player.uniqueId, xuid)
     if (!allowedXuids.contains(xuid)) return
     val packId = cachedPack?.uuid()?.toString() ?: packOrNull()?.uuid()?.toString().orEmpty()
     sendStatus(player, loaded = registeredSessions[xuid] === connection, packId = packId)
@@ -290,6 +450,7 @@ class BedrockPackService(
   }
 
   fun onSessionDisconnect(event: SessionDisconnectEvent) {
+    runCatching { event.connection().javaUuid() }.getOrNull()?.let(confirmations::remove)
     normalizeXuid(runCatching { event.connection().xuid() }.getOrNull())?.let {
       registeredSessions.remove(it, event.connection())
     }
@@ -463,6 +624,25 @@ class BedrockPackService(
         )
       } catch (_: AtomicMoveNotSupportedException) {
         Files.move(temporary, path, StandardCopyOption.REPLACE_EXISTING)
+      }
+      val identityPath = dataDirectory.resolve("bedrock-pack-identities.tsv")
+      val identityTemporary = dataDirectory.resolve("bedrock-pack-identities.tsv.tmp")
+      Files.writeString(
+          identityTemporary,
+          identities.entries
+              .sortedBy { it.key.toString() }
+              .joinToString("\n", postfix = "\n") { "${it.key}\t${it.value}" },
+          StandardCharsets.UTF_8,
+      )
+      try {
+        Files.move(
+            identityTemporary,
+            identityPath,
+            StandardCopyOption.ATOMIC_MOVE,
+            StandardCopyOption.REPLACE_EXISTING,
+        )
+      } catch (_: AtomicMoveNotSupportedException) {
+        Files.move(identityTemporary, identityPath, StandardCopyOption.REPLACE_EXISTING)
       }
     }
   }

@@ -30,16 +30,69 @@ Paperは`plugin.yml`のエントリーポイント、Velocityは`velocity-plugin
 - Velocity側は曲データを解析・再構成・ハッシュ計算・保存・ログ出力しません。DB、権限、インポート、再生判断はmain Paperだけが担当します。
 - `main`以外のbackendへ移動中のプレイヤーのOMMTパケットは転送しません。
 
+### 統合版の拡張音域パック
+
+統合版ではJava版ZIPを送らず、VelocityのOyasaiMusicデータディレクトリに置いた
+`packs/OyasaiMusic-26.2-extended.mcpack`をGeyserへ登録します。ファイルを置くだけでは有効になりません。
+main Paper側の`plugins/OyasaiMusic/config.yml`で次を明示的に設定してください。
+
+```yaml
+bedrock:
+  pack-id: "8be1eaab-ca07-4f47-9957-40d29505e320"
+  transfer-enabled: true
+```
+
+Velocity側の`plugins/oyasaimusic/bedrock-pack.properties`では、`pack-file`と、統合版クライアントから到達できる
+Geyserの公開`return-host` / `return-port`を指定します。従来の`transfer-host` / `transfer-port`も読み取りますが、
+新しいキーが優先されます。`return-host`は統合版を戻すGeyserの公開IPアドレスまたはホスト名で、backendの`main`や
+Docker名`minecraft-main`ではありません。
+
+```properties
+pack-file=OyasaiMusic-26.2-extended.mcpack
+return-host=oyasai.io
+return-port=19132
+```
+
+`bedrock-pack.properties`の変更後はVelocityを再起動してください。起動ログの
+`Bedrock Transfer return target: <host>:<port>`で実際に使われる戻り先を確認できます。
+
+ダウンロードをキャンセルした統合版プレイヤーもサーバーへ参加できるよう、Geyserの`config.yml`では次を設定してください。
+
+```yaml
+force-resource-packs: false
+```
+
+これはGeyser全体の参加可否設定であり、OyasaiMusicのAPIから上書きできません。起動時またはreload時にPaperログへ
+`Bedrock resource-pack transfer enabled`が出ることを確認してから、統合版で`/mm rp allow`を実行してください。
+
+Velocity側ではプラグインの生成中にGeyser APIへアクセスせず、初期化イベント以降にパックイベントを登録します。
+Geyserの準備が遅れた場合は最初に1秒待ち、その後2秒ごとに再試行します。
+`Subscribed Geyser pre-login pack and disconnect events.`が登録完了のログです。
+このログはイベント登録の確認であり、実機でのパック適用や音声再生の成功を意味しません。
+
+最初の`/mm rp allow`は、接続中のGeyserセッションへパックを追加するため一度だけ再接続する場合があります。Velocityは
+許可された統合版XUIDだけを`plugins/oyasaimusic/bedrock-pack-allowlist.txt`へ保存し、次回以降はGeyserの初期接続中に
+パックを登録します。そのため、保存済みプレイヤーはmainへ一度参加した後に退出・再参加する工程を行いません。
+旧版でPaper側にだけALLOWが保存されているプレイヤーは、この方式へ移行後に一度だけ`/mm rp allow`を再実行してください。
+統合版では`/mm rp allow`実行後にCumulusの最終確認画面が開きます。実際のmcpackの容量、
+ダウンロードしないと参加できなくなること、容量不足などの際はおやさい公式Discordから適用状態の解除を申請することを表示します。
+「キャンセル」・画面を閉じる・120秒経過では許可状態を変更しません。「同意してダウンロード」で初めてALLOWを保存します。
+その後の端末側ダウンロード画面でキャンセルしても参加できることは保証しません。参加できる場合は`/mm rp deny`を実行してください。
+許可を削除し、現在の接続を切断せず、通常音域へ戻して次回以降のパック表示を止めます。管理者は
+`/oyasaimusic rp unset <player>`でも同じ状態へ変更できます。
+
 ## OMMT通信
 
 OMMTの通常通信はMinecraftのPlugin Messageを使用します。チャットコマンドへBase64等を分割して流す方式ではありません。
 バイト単位の固定仕様、制限、互換性表、移行・ロールバック条件は
 [`docs/OMMT_PLUGIN_MESSAGE_PROTOCOL_V1.md`](docs/OMMT_PLUGIN_MESSAGE_PROTOCOL_V1.md)に記載しています。
 
-| チャンネル                | 方向        | 用途                                         |
-| ------------------------- | ----------- | -------------------------------------------- |
-| `oyasaimusic:upload_v1`   | OMMT ↔ main | OYMC圧縮バイナリの下書きインポート           |
-| `oyasaimusic:playback_v1` | main ↔ OMMT | 初回再生時の能力確認、事前バッファ、再生制御 |
+| チャンネル                        | 方向            | 用途                                         |
+| --------------------------------- | --------------- | -------------------------------------------- |
+| `oyasaimusic:upload_v1`           | OMMT ↔ main     | OYMC圧縮バイナリの下書きインポート           |
+| `oyasaimusic:playback_v1`         | main ↔ OMMT     | 初回再生時の能力確認、事前バッファ、再生制御 |
+| `oyasaimusic:bedrock_transfer`    | main → Velocity | 統合版パックの許可／停止要求                 |
+| `oyasaimusic:bedrock_pack_status` | Velocity → main | 現在のGeyser接続へのパック登録結果           |
 
 アップロードでは、OMMTがサーバーのチャンネル登録を確認できた場合だけ小さなREQUESTを送ります。Paperは接続中プレイヤーの
 `oyasaimusic.import`権限を確認してREADYを返し、その後にだけ圧縮済みバイナリ本体を受け入れます。チャンネルを提供しない他サーバーでは、
@@ -50,8 +103,8 @@ Paperは最大1MiB、最大100,000音、最大64チャンク、1チャンク20Ki
 
 再生能力はログイン時には判定しません。参加後最初の対象再生だけmainからPROBEを送り、3秒以内の正しい応答を
 `MOD_PRESENT`、無応答を`VANILLA_ONLY`としてログアウトまで再利用します。MOD入りでバッファREADYまで完了した受信者はクライアント側で再生し、
-Paperの通常音声と`playback.lookahead-ms`のプレ再生対象から除外されます。無応答、破損、期限切れ、位置音響、統合版、任意SoundEventを含む曲は
-従来のPaper再生へ安全に戻ります。
+Paperの通常音声と`playback.lookahead-ms`のプレ再生対象から除外されます。現行のOYPB v2対応クライアントでは定位、固定パターンの任意SoundEvent、
+拡張音域にも対応します。無応答、破損、期限切れ、能力不足、動的な再生方式、統合版は従来のPaper再生へ安全に戻ります。
 
 mainは参加直後とプラグインreload後にサウンド能力を`SERVER_CAPABILITIES`として通知し、初回PROBE前にも再通知します。維持対象の26.2サーバーでは、`trumpet`、`trumpet_exposed`、`trumpet_weathered`、`trumpet_oxidized`のラッパ系ノートブロック音を使用できます。この通知はMOD有無判定ではなく、クライアントからの応答も要求しません。
 
@@ -91,7 +144,20 @@ plugins/OyasaiMusic/
 `/demosound <SoundEvent> <パターン> [ピッチ]` | 看板用のバニラ音源を実行者だけに試聴する |
 `oyasaimusic.demosound` | | `/oyasaimusic reload` | `config.yml`、SoundEvent
 カタログ、ランキングキャッシュを読み込み直す | `oyasaimusic.admin` | | `/oyasaimusic update` |
-日間・週間ランキングをただちに更新する | `oyasaimusic.admin` |
+日間・週間ランキングをただちに更新する | `oyasaimusic.admin` | | `/oyasaimusic rp set <player\|uuid>` |
+記録済みのプレイヤーをALLOWにする。オンラインの場合はパック要求（統合版は最終確認）、オフラインの場合は次回参加時に反映 |
+`oyasaimusic.admin` | | `/oyasaimusic rp unset <player\|uuid>` | オフラインも含め指定プレイヤーをDENYにして通常音域へ戻す |
+`oyasaimusic.admin` | | `/oyasaimusic rp check <player\|uuid>` | 保存済み設定と現在接続の適用状態を確認する |
+`oyasaimusic.admin` | | `/oyasaimusic rp list [page]` | ALLOW状態を10人ずつ表示する |
+`oyasaimusic.admin` |
+
+`set`と`unset`は記録済みのオフライン名またはUUIDにも対応します。統合版はVelocityの許可リストも更新するため、
+対象者本人でなくて構いませんがmainに誰か1人の接続が必要です。成功表示はVelocityの保存確認後にPaperを保存してから出ます。
+応答や保存に失敗した場合は同じコマンドで再試行してください。プロキシ側だけ変更された場合もあります。
+VelocityはGeyserで確認したUUID/XUID対応を`bedrock-pack-identities.tsv`へ保存します。
+旧版の通常Floodgate UUIDもSET/UNSETできますが、未記録のアカウント連携UUIDは自動解決できません。
+その場合は管理者がVelocityの許可リストを確認してください。Java版のオフライン設定変更はPaperの保存値を変更します。
+`check`は保存設定と接続状態を分けて表示します。統合版の「Geyser登録済み」は端末側で受諾完了した証明ではありません。
 
 `/demosound` のピッチはノートブロックと同じ `0`〜`24` です。TAB 補完ではカタログに登録済みの
 SoundEvent、存在するパターン、ピッチ候補だけが表示されます。実行後の `ID x.x.x:n` はクリックでコピーできます。

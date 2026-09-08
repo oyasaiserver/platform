@@ -1,6 +1,8 @@
 package com.github.sahyuya.oyasaiMusic.command
 
 import com.github.sahyuya.oyasaiMusic.OyasaiMusic
+import com.github.sahyuya.oyasaiMusic.interop.PackControlCodec
+import com.github.sahyuya.oyasaiMusic.model.ResourcePackPreference
 import com.github.sahyuya.oyasaiMusic.resourcepack.OyasaiResourcePackService.ConnectionState
 import com.github.sahyuya.oyasaiMusic.util.BedrockUtil
 import java.util.UUID
@@ -54,12 +56,14 @@ class OyasaiMusicCommand(private val plugin: OyasaiMusic) : CommandExecutor, Tab
 
   private fun changeOnlinePreference(sender: CommandSender, args: List<String>, allow: Boolean) {
     if (args.size != 2) {
-      sender.sendMessage("§e/oyasaimusic rp ${if (allow) "set" else "unset"} <online-player>")
+      sender.sendMessage("§e/oyasaimusic rp ${if (allow) "set" else "unset"} <player|uuid>")
       return
     }
     val target = resolveOnline(args[1])
     if (target == null) {
-      sender.sendMessage("§cオンライン中のプレイヤーを完全一致の名前またはUUIDで指定してください。")
+      val known = resolveKnown(args[1])
+      if (known == null) sender.sendMessage("§c記録済みの名前またはUUIDで指定してください。")
+      else changeOfflinePreference(sender, known, allow)
       return
     }
     val bedrock = isBedrock(target)
@@ -81,6 +85,72 @@ class OyasaiMusicCommand(private val plugin: OyasaiMusic) : CommandExecutor, Tab
     } else {
       if (allow) plugin.resourcePackService.allow(target, completion = completion)
       else plugin.resourcePackService.deny(target, completion)
+    }
+  }
+
+  private fun changeOfflinePreference(sender: CommandSender, target: KnownTarget, allow: Boolean) {
+    val prefix = plugin.config.getString("bedrock.name-prefix", ".").orEmpty()
+    val bedrock =
+        target.playerId.mostSignificantBits == 0L ||
+            (prefix.isNotEmpty() && target.displayName.startsWith(prefix))
+    fun save() {
+      Bukkit.getScheduler()
+          .runTaskAsynchronously(
+              plugin,
+              Runnable {
+                val saved =
+                    runCatching {
+                          plugin.resourcePackPreferenceRepository.set(
+                              target.playerId,
+                              if (allow) ResourcePackPreference.ALLOW
+                              else ResourcePackPreference.DENY,
+                          )
+                        }
+                        .isSuccess
+                Bukkit.getScheduler()
+                    .runTask(
+                        plugin,
+                        Runnable {
+                          sender.sendMessage(
+                              if (saved)
+                                  "§a${target.displayName} の保存設定を ${if (allow) "ALLOW" else "DENY"} に変更しました。次回参加時に反映されます。"
+                              else
+                                  "§cPaperの保存に失敗しました。統合版の場合はVelocity側だけ変更された可能性があります。同じコマンドで再試行してください。"
+                          )
+                          if (saved) plugin.resourcePackService.forget(target.playerId)
+                        },
+                    )
+              },
+          )
+    }
+    if (!bedrock && !plugin.bedrockTransferService.transferEnabled()) {
+      save()
+      return
+    }
+    val carrier = Bukkit.getOnlinePlayers().firstOrNull()
+    if (carrier == null) {
+      if (!bedrock) {
+        save()
+        return
+      }
+      sender.sendMessage("§cVelocityへの連絡にはmainに誰か1人の接続が必要です。対象者本人はオフラインで構いません。設定は変更していません。")
+      return
+    }
+    plugin.bedrockTransferService.requestControl(
+        carrier,
+        target.playerId,
+        if (allow) PackControlCodec.SET else PackControlCodec.UNSET,
+    ) { result ->
+      when (result) {
+        PackControlCodec.OK -> save()
+        PackControlCodec.UNKNOWN ->
+            if (!bedrock) save()
+            else
+                sender.sendMessage(
+                    "§cVelocityに対象者の統合版ID記録がありません。UUIDを確認してください。旧連携アカウントは管理者による許可リストの確認が必要です。"
+                )
+        else -> sender.sendMessage("§cVelocity側の更新を確認できませんでした。Paperの設定は未変更です。同じコマンドで再試行してください。")
+      }
     }
   }
 
@@ -242,8 +312,8 @@ class OyasaiMusicCommand(private val plugin: OyasaiMusic) : CommandExecutor, Tab
   }
 
   private fun sendResourcePackUsage(sender: CommandSender) {
-    sender.sendMessage("§e/oyasaimusic rp set <online-player>")
-    sender.sendMessage("§e/oyasaimusic rp unset <online-player>")
+    sender.sendMessage("§e/oyasaimusic rp set <player|uuid>")
+    sender.sendMessage("§e/oyasaimusic rp unset <player|uuid>")
     sender.sendMessage("§e/oyasaimusic rp check <player|uuid>")
     sender.sendMessage("§e/oyasaimusic rp list [page]")
   }
