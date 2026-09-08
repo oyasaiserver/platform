@@ -15,7 +15,7 @@ import org.bukkit.plugin.Plugin
 class EconomyService(private val plugin: Plugin, private val pointCommandTemplate: String) {
 
   private fun economy(): Economy? =
-    Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
+      Bukkit.getServicesManager().getRegistration(Economy::class.java)?.provider
 
   fun withdraw(player: Player, amount: Long): PayoutResult {
     if (amount < 0) return PayoutResult.Failed("価格が不正です")
@@ -39,20 +39,25 @@ class EconomyService(private val plugin: Plugin, private val pointCommandTemplat
       return PayoutResult.Unavailable("ポイント付与コマンドが未設定です")
     }
     val command =
-      pointCommandTemplate
-        .replace("%player%", player.name)
-        .replace("%points%", amount.toString())
-        .replace("%amount%", amount.toString())
-        .removePrefix("/")
+        pointCommandTemplate
+            .replace("%player%", player.name)
+            .replace("%points%", amount.toString())
+            .replace("%amount%", amount.toString())
+            .removePrefix("/")
     return if (Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command)) PayoutResult.Success
     else PayoutResult.Failed("ポイント付与コマンドの実行に失敗しました")
   }
 }
 
-/** Called synchronously by the purchase handler: never yield between check and withdrawal.
- * Some Vault providers permit overdrafts, so withdrawal success alone is insufficient.
+/**
+ * Called synchronously by the purchase handler: never yield between check and withdrawal. Some
+ * Vault providers permit overdrafts, so withdrawal success alone is insufficient.
  */
-internal fun withdrawWithinBalance(provider: Economy, player: OfflinePlayer, amount: Long): PayoutResult {
+internal fun withdrawWithinBalance(
+    provider: Economy,
+    player: OfflinePlayer,
+    amount: Long,
+): PayoutResult {
   if (amount < 0) return PayoutResult.Failed("価格が不正です")
   if (amount == 0L) return PayoutResult.Success
   val price = amount.toDouble()

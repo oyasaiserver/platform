@@ -20,10 +20,10 @@ object OyasaiMidiImportFile {
   private const val MAX_EXISTING_OYMB_NOTES = 1_000_000L
 
   data class ImportedSong(
-    val title: String,
-    val bpm: Int,
-    val durationMs: Long,
-    val notes: List<NoteEvent>,
+      val title: String,
+      val bpm: Int,
+      val durationMs: Long,
+      val notes: List<NoteEvent>,
   )
 
   internal data class ResolvedSound(val eventKey: String, val seed: Long)
@@ -40,9 +40,9 @@ object OyasaiMidiImportFile {
   }
 
   private fun read(
-    source: InputStream,
-    sourceLength: Long,
-    soundResolver: (String, Int) -> ResolvedSound?,
+      source: InputStream,
+      sourceLength: Long,
+      soundResolver: (String, Int) -> ResolvedSound?,
   ): ImportedSong {
     DataInputStream(BufferedInputStream(source)).use { input ->
       require(input.readInt() == MAGIC) { "OMMTの.oyasaiファイルではありません。" }
@@ -58,18 +58,19 @@ object OyasaiMidiImportFile {
       require(noteCount <= MAX_EXISTING_OYMB_NOTES) {
         "現在のOyasaiMusic音源で読み込めるノート数（$MAX_EXISTING_OYMB_NOTES）を超えています。"
       }
-      val expectedLength = HEADER_SIZE + metadataLength + noteCount * if (version == 4) 9L else NOTE_SIZE
+      val expectedLength =
+          HEADER_SIZE + metadataLength + noteCount * if (version == 4) 9L else NOTE_SIZE
       require(sourceLength == expectedLength) { "データ長とヘッダー情報が一致しません。" }
 
       val metadataBytes = input.readNBytes(metadataLength.toInt())
       require(metadataBytes.size == metadataLength.toInt()) { "メタデータが途中で切れています。" }
       val metadata = metadataBytes.toString(Charsets.UTF_8)
       val metadataRoot =
-        try {
-          JsonParser.parseString(metadata).asJsonObject
-        } catch (error: Exception) {
-          throw IllegalArgumentException("メタデータJSONが不正です。", error)
-        }
+          try {
+            JsonParser.parseString(metadata).asJsonObject
+          } catch (error: Exception) {
+            throw IllegalArgumentException("メタデータJSONが不正です。", error)
+          }
       require(metadataRoot.get("format")?.asString == "oyasai-midi-import") {
         "インポート形式の識別情報がありません。"
       }
@@ -77,21 +78,22 @@ object OyasaiMidiImportFile {
       val customSounds = readCustomSounds(metadataRoot, version, noteCount.toInt(), soundResolver)
       val songMetadata = metadataRoot.getAsJsonObject("song")
       val title =
-        runCatching { songMetadata?.get("title")?.asString }
-          .getOrNull()
-          ?.trim()
-          ?.take(120)
-          .orEmpty()
-          .ifBlank { "無題の楽曲" }
+          runCatching { songMetadata?.get("title")?.asString }
+              .getOrNull()
+              ?.trim()
+              ?.take(120)
+              .orEmpty()
+              .ifBlank { "無題の楽曲" }
       val bpm =
-        runCatching { songMetadata?.get("displayBpm")?.asInt }.getOrNull()?.coerceIn(1, 60_000)
-          ?: 120
+          runCatching { songMetadata?.get("displayBpm")?.asInt }.getOrNull()?.coerceIn(1, 60_000)
+              ?: 120
 
       val notes = ArrayList<NoteEvent>(noteCount.toInt())
       repeat(noteCount.toInt()) { noteIndex ->
         val timeMs = input.readInt().toLong() and 0xFFFF_FFFFL
         val stableInstrumentId = input.readUnsignedByte()
-        val pitchCents = if (version == 4) input.readShort().toInt() else input.readUnsignedByte() * 100
+        val pitchCents =
+            if (version == 4) input.readShort().toInt() else input.readUnsignedByte() * 100
         val volume = input.readUnsignedByte()
         val pan = input.readByte().toInt()
         require(timeMs <= Int.MAX_VALUE.toLong()) { "発音時刻がOyasaiMusicの上限を超えています。" }
@@ -101,16 +103,16 @@ object OyasaiMidiImportFile {
         require(pan in -100..100) { "Panが-100〜100の範囲外です。" }
         val instrument = stableToRuntimeInstrument(stableInstrumentId)
         notes +=
-          NoteEvent(
-            timeMs = timeMs.toInt(),
-            instrument = instrument,
-            pitch = foldForVanilla(pitchCents).toByte(),
-            volume = volume,
-            pan = pan,
-            customSound = customSounds[noteIndex]?.eventKey,
-            customSoundSeed = customSounds[noteIndex]?.seed,
-            pitchCents = pitchCents,
-          )
+            NoteEvent(
+                timeMs = timeMs.toInt(),
+                instrument = instrument,
+                pitch = foldForVanilla(pitchCents).toByte(),
+                volume = volume,
+                pan = pan,
+                customSound = customSounds[noteIndex]?.eventKey,
+                customSoundSeed = customSounds[noteIndex]?.seed,
+                pitchCents = pitchCents,
+            )
       }
       require(input.read() == -1) { "ファイル末尾に余分なデータがあります。" }
       return ImportedSong(title, bpm, durationMs, notes)
@@ -123,10 +125,10 @@ object OyasaiMidiImportFile {
    * requires an explicit one-based pattern. The formal server catalog remains authoritative.
    */
   private fun readCustomSounds(
-    metadataRoot: com.google.gson.JsonObject,
-    version: Int,
-    noteCount: Int,
-    soundResolver: (String, Int) -> ResolvedSound?,
+      metadataRoot: com.google.gson.JsonObject,
+      version: Int,
+      noteCount: Int,
+      soundResolver: (String, Int) -> ResolvedSound?,
   ): Map<Int, ResolvedSound> {
     val member = metadataRoot.get("customSounds")
     if (version == 1) {
@@ -158,11 +160,11 @@ object OyasaiMidiImportFile {
           "OYMI v3 customSoundsにはeventとpatternだけを指定してください。"
         }
         rawSound =
-          runCatching { objectValue.get("event").asString.lowercase() }
-            .getOrElse { throw IllegalArgumentException("customSoundsのeventが不正です。") }
+            runCatching { objectValue.get("event").asString.lowercase() }
+                .getOrElse { throw IllegalArgumentException("customSoundsのeventが不正です。") }
         pattern =
-          runCatching { objectValue.get("pattern").asInt }
-            .getOrElse { throw IllegalArgumentException("customSoundsのpatternが不正です。") }
+            runCatching { objectValue.get("pattern").asInt }
+                .getOrElse { throw IllegalArgumentException("customSoundsのpatternが不正です。") }
         require(pattern in 1..65_535) { "customSoundsのpatternが範囲外です。" }
       }
       require(rawSound.matches(Regex("minecraft:[a-z0-9_./-]{1,246}"))) {
@@ -179,34 +181,34 @@ object OyasaiMidiImportFile {
 
   /** Pure metadata-validation seam; avoids bootstrapping Bukkit registries in codec tests. */
   internal fun readCustomSoundsForTesting(
-    metadata: String,
-    version: Int,
-    noteCount: Int,
-    soundResolver: (String, Int) -> ResolvedSound?,
+      metadata: String,
+      version: Int,
+      noteCount: Int,
+      soundResolver: (String, Int) -> ResolvedSound?,
   ): Map<Int, ResolvedSound> =
-    readCustomSounds(
-      JsonParser.parseString(metadata).asJsonObject,
-      version,
-      noteCount,
-      soundResolver,
-    )
+      readCustomSounds(
+          JsonParser.parseString(metadata).asJsonObject,
+          version,
+          noteCount,
+          soundResolver,
+      )
 
   private fun resolveCatalogSound(rawSound: String, pattern: Int): ResolvedSound? =
-    VanillaSoundCatalog.find(rawSound)?.selectionForPattern(pattern)?.let {
-      ResolvedSound("minecraft:${it.eventKey}", it.seed)
-    }
+      VanillaSoundCatalog.find(rawSound)?.selectionForPattern(pattern)?.let {
+        ResolvedSound("minecraft:${it.eventKey}", it.seed)
+      }
 
   /** Pure explicit conversion; importing bytes must not initialize Bukkit sound registries. */
   private fun stableToRuntimeInstrument(id: Int): Int =
-    when (id) {
-      0 -> 0 // piano / harp
-      1 -> 4 // bass guitar
-      2 -> 1 // bass drum
-      3 -> 2 // snare
-      4 -> 3 // sticks / hat
-      in 5..19 -> id // includes all four 26.2 brass variants
-      else -> throw IllegalArgumentException("未対応の安定楽器IDです: $id")
-    }
+      when (id) {
+        0 -> 0 // piano / harp
+        1 -> 4 // bass guitar
+        2 -> 1 // bass drum
+        3 -> 2 // snare
+        4 -> 3 // sticks / hat
+        in 5..19 -> id // includes all four 26.2 brass variants
+        else -> throw IllegalArgumentException("未対応の安定楽器IDです: $id")
+      }
 
   /** Fold by octaves only; cents remain intact for clients with the optional resource pack. */
   private fun foldForVanilla(centsInput: Int): Int {

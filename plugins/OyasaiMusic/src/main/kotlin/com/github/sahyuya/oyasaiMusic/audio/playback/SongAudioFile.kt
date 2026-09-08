@@ -28,9 +28,9 @@ object SongAudioFile {
   private const val MAX_NOTES = 1_000_000
 
   data class SongAudio(
-    val version: Int,
-    val totalDurationMs: Int,
-    val notes: List<NoteEvent>,
+      val version: Int,
+      val totalDurationMs: Int,
+      val notes: List<NoteEvent>,
   )
 
   /** 音符リストを .bin ファイルへ書き出す。 再生時のスケジューリングを単純化するため、書き出し前に時刻昇順へソートする。 */
@@ -89,17 +89,18 @@ object SongAudioFile {
       repeat(totalNotes) {
         val timeMs = input.readInt()
         val inst = input.readUnsignedByte()
-        val pitchCents = if (version == 4) input.readShort().toInt() else input.readUnsignedByte() * 100
+        val pitchCents =
+            if (version == 4) input.readShort().toInt() else input.readUnsignedByte() * 100
         val volume = input.readUnsignedByte()
         val pan = input.readByte().toInt() // 符号あり読み込み(-128..127)
         val customSound =
-          if (version >= 2) {
-            val length = input.readUnsignedShort()
-            require(length <= 256) { "カスタム音源IDが長すぎます: ${file.name}" }
-            val bytes = input.readNBytes(length)
-            require(bytes.size == length) { "音源ファイルが途中で切れています: ${file.name}" }
-            bytes.toString(Charsets.UTF_8).ifBlank { null }
-          } else null
+            if (version >= 2) {
+              val length = input.readUnsignedShort()
+              require(length <= 256) { "カスタム音源IDが長すぎます: ${file.name}" }
+              val bytes = input.readNBytes(length)
+              require(bytes.size == length) { "音源ファイルが途中で切れています: ${file.name}" }
+              bytes.toString(Charsets.UTF_8).ifBlank { null }
+            } else null
         val rawCustomSoundSeed = if (version >= 3) input.readLong() else 0L
         if (version == 4) {
           require(timeMs in previousTime..totalDuration) { "v4音符の時刻が不正です: $timeMs" }
@@ -112,16 +113,16 @@ object SongAudioFile {
         previousTime = timeMs
         val customSoundSeed = rawCustomSoundSeed.takeIf { version >= 3 && customSound != null }
         notes +=
-          NoteEvent(
-            timeMs = timeMs,
-            instrument = inst,
-            pitch = foldForVanilla(pitchCents).toByte(),
-            volume = if (version == 4) volume else volume.coerceIn(0, 100),
-            pan = if (version == 4) pan else pan.coerceIn(-100, 100),
-            customSound = customSound,
-            customSoundSeed = customSoundSeed,
-            pitchCents = if (version == 4) pitchCents else pitchCents.coerceIn(-5400, 7300),
-          )
+            NoteEvent(
+                timeMs = timeMs,
+                instrument = inst,
+                pitch = foldForVanilla(pitchCents).toByte(),
+                volume = if (version == 4) volume else volume.coerceIn(0, 100),
+                pan = if (version == 4) pan else pan.coerceIn(-100, 100),
+                customSound = customSound,
+                customSoundSeed = customSoundSeed,
+                pitchCents = if (version == 4) pitchCents else pitchCents.coerceIn(-5400, 7300),
+            )
       }
 
       require(input.read() == -1) { "音源ファイルに余分なデータがあります: ${file.name}" }
