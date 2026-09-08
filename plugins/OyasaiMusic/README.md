@@ -87,12 +87,12 @@ OMMTの通常通信はMinecraftのPlugin Messageを使用します。チャッ�
 バイト単位の固定仕様、制限、互換性表、移行・ロールバック条件は
 [`docs/OMMT_PLUGIN_MESSAGE_PROTOCOL_V1.md`](docs/OMMT_PLUGIN_MESSAGE_PROTOCOL_V1.md)に記載しています。
 
-| チャンネル | 方向 | 用途 |
-| --- | --- | --- |
-| `oyasaimusic:upload_v1` | OMMT ↔ main | OYMC圧縮バイナリの下書きインポート |
-| `oyasaimusic:playback_v1` | main ↔ OMMT | 初回再生時の能力確認、事前バッファ、再生制御 |
-| `oyasaimusic:bedrock_transfer` | main → Velocity | 統合版パックの許可／停止要求 |
-| `oyasaimusic:bedrock_pack_status` | Velocity → main | 現在のGeyser接続へのパック登録結果 |
+| チャンネル                        | 方向            | 用途                                         |
+| --------------------------------- | --------------- | -------------------------------------------- |
+| `oyasaimusic:upload_v1`           | OMMT ↔ main     | OYMC圧縮バイナリの下書きインポート           |
+| `oyasaimusic:playback_v1`         | main ↔ OMMT     | 初回再生時の能力確認、事前バッファ、再生制御 |
+| `oyasaimusic:bedrock_transfer`    | main → Velocity | 統合版パックの許可／停止要求                 |
+| `oyasaimusic:bedrock_pack_status` | Velocity → main | 現在のGeyser接続へのパック登録結果           |
 
 アップロードでは、OMMTがサーバーのチャンネル登録を確認できた場合だけ小さなREQUESTを送ります。Paperは接続中プレイヤーの
 `oyasaimusic.import`権限を確認してREADYを返し、その後にだけ圧縮済みバイナリ本体を受け入れます。チャンネルを提供しない他サーバーでは、
