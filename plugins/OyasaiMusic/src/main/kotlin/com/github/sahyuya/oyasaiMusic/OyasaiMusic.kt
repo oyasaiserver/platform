@@ -386,7 +386,7 @@ class OyasaiMusic : JavaPlugin() {
     // 既存のconfig.ymlが空欄のままでも、標準のTokenManagerコマンドでポイントを付与する。
     val pointCommand =
         config.getString("economy.points-command", "").orEmpty().ifBlank {
-          "tokenmanager add %player% %points%"
+          "token add %player% %points% -s"
         }
     economyService = EconomyService(this, pointCommand)
   }

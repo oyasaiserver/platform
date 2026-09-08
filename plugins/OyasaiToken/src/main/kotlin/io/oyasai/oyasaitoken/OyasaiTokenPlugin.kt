@@ -21,9 +21,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
-import java.util.concurrent.atomic.AtomicReference
 import java.util.logging.Level
 import me.realized.tokenmanager.TokenManagerPlugin
 import me.realized.tokenmanager.api.TokenManager
@@ -48,13 +46,7 @@ class OyasaiTokenPlugin :
     CommandExecutor,
     TabCompleter,
     Listener {
-  /**
-   * Serializes migration state transitions with every ledger operation that can enqueue
-   * persistence. Never perform YAML, SQLite import, or event dispatch while holding this gate.
-   */
-  private val mutationGate = Any()
   private val dbLock = Any()
-  private val migrationInProgress = AtomicBoolean(false)
   private val nextTransactionId = AtomicLong(1L)
   private lateinit var connection: Connection
   private lateinit var databaseFile: File
@@ -81,7 +73,7 @@ class OyasaiTokenPlugin :
         )
     ledger.replaceAll(loadBalances())
     initializeTransactionCounter()
-    importTokenManagerDataYml(force = false)
+    importTokenManagerDataYml()
     startPersistenceWorker()
 
     server.servicesManager.register(
@@ -106,8 +98,6 @@ class OyasaiTokenPlugin :
     enableTabPlaceholderIntegration()
     getCommand("token")?.setExecutor(this)
     getCommand("token")?.tabCompleter = this
-    getCommand("tm")?.setExecutor(this)
-    getCommand("tm")?.tabCompleter = this
 
     logger.info("OyasaiToken SQLite backend enabled. Loaded ${ledger.size()} balances.")
   }
@@ -171,11 +161,7 @@ class OyasaiTokenPlugin :
 
   override fun addTokensWithCommit(uuid: UUID, amount: Long): CompletableFuture<Boolean> {
     val completion = CompletableFuture<Boolean>()
-    val change =
-        synchronized(mutationGate) {
-          if (migrationInProgress.get()) null
-          else ledger.addWithCommit(uuid, null, amount, completion)
-        }
+    val change = ledger.addWithCommit(uuid, null, amount, completion)
     if (change == null) {
       completion.complete(false)
     } else {
@@ -242,11 +228,7 @@ class OyasaiTokenPlugin :
       label: String,
       args: Array<out String>,
   ): Boolean {
-    return when (command.name.lowercase()) {
-      "token" -> handleToken(sender, args)
-      "tm" -> handleAdmin(sender, args)
-      else -> false
-    }
+    return if (command.name.equals("token", ignoreCase = true)) handleToken(sender, args) else false
   }
 
   override fun onTabComplete(
@@ -255,37 +237,55 @@ class OyasaiTokenPlugin :
       alias: String,
       args: Array<out String>,
   ): MutableList<String> {
-    val subcommands =
-        if (command.name.equals("tm", ignoreCase = true)) {
-          listOf("add", "remove", "set", "balance", "top", "transfer", "reload")
-        } else {
-          listOf("balance", "send", "top")
-        }
+    if (!command.name.equals("token", ignoreCase = true)) return mutableListOf()
+    val subcommands = buildList {
+      if (sender.hasPermission(TOKEN_USE_PERMISSION)) addAll(listOf("balance", "send", "top"))
+      if (sender.hasPermission(TOKEN_ADMIN_PERMISSION))
+          addAll(listOf("add", "remove", "set", "reload"))
+    }
     if (args.size == 1) {
       return subcommands.filter { it.startsWith(args[0], ignoreCase = true) }.toMutableList()
     }
-    if (args.size == 2 && args[0].equals("send", ignoreCase = true)) {
+    if (
+        args.size == 2 &&
+            when (args[0].lowercase()) {
+              "send" -> sender.hasPermission(TOKEN_USE_PERMISSION)
+              "balance",
+              "add",
+              "remove",
+              "set" -> sender.hasPermission(TOKEN_ADMIN_PERMISSION)
+              else -> false
+            }
+    ) {
       return Bukkit.getOnlinePlayers()
           .map { it.name }
           .filter { it.startsWith(args[1], true) }
           .toMutableList()
     }
-    if (
-        args.size == 2 &&
-            command.name.equals("tm", ignoreCase = true) &&
-            args[0].equals("transfer", ignoreCase = true)
-    ) {
-      return listOf("confirm").filter { it.startsWith(args[1], ignoreCase = true) }.toMutableList()
-    }
     return mutableListOf()
   }
 
   private fun handleToken(sender: CommandSender, args: Array<out String>): Boolean {
-    if (args.isEmpty() || args[0].equals("balance", ignoreCase = true)) {
+    if (args.isEmpty()) {
+      if (!sender.hasPermission(TOKEN_USE_PERMISSION)) return sender.permissionDenied()
+      val player =
+          sender as? Player
+              ?: run {
+                sender.sendMessage("Usage: /token balance <player>")
+                return true
+              }
+      sender.sendMessage("${player.name}: ${getBalance(player.uniqueId)} tokens")
+      return true
+    }
+
+    if (args[0].equals("balance", ignoreCase = true)) {
+      if (args.size > 2) return sender.error("Usage: /token balance [player]")
       val target =
-          if (args.size >= 2) {
+          if (args.size == 2) {
+            if (!sender.hasPermission(TOKEN_ADMIN_PERMISSION)) return sender.permissionDenied()
             resolveTarget(args[1])
           } else {
+            if (!sender.hasPermission(TOKEN_USE_PERMISSION)) return sender.permissionDenied()
             val player =
                 sender as? Player
                     ?: run {
@@ -299,16 +299,13 @@ class OyasaiTokenPlugin :
     }
 
     if (args[0].equals("send", ignoreCase = true)) {
+      if (!sender.hasPermission(TOKEN_USE_PERMISSION)) return sender.permissionDenied()
       val player =
           sender as? Player
               ?: run {
                 sender.sendMessage("This command is player-only.")
                 return true
               }
-      if (!sender.hasPermission("tokenmanager.use.send")) {
-        sender.sendMessage("You do not have permission.")
-        return true
-      }
       if (args.size != 3) {
         sender.sendMessage("Usage: /token send <player> <amount>")
         return true
@@ -334,22 +331,9 @@ class OyasaiTokenPlugin :
     }
 
     if (args[0].equals("top", ignoreCase = true)) {
+      if (!sender.hasPermission(TOKEN_USE_PERMISSION)) return sender.permissionDenied()
+      if (args.size > 2) return sender.error("Usage: /token top [n]")
       sendTop(sender, args.getOrNull(1)?.toIntOrNull() ?: 10)
-      return true
-    }
-
-    sender.sendMessage("Usage: /token [balance|send|top]")
-    return true
-  }
-
-  private fun handleAdmin(sender: CommandSender, args: Array<out String>): Boolean {
-    if (args.isEmpty()) {
-      sender.sendMessage("Usage: /tm <add|remove|set|balance|top|transfer|reload>")
-      return true
-    }
-
-    if (!sender.hasPermission("tokenmanager.admin")) {
-      sender.sendMessage("You do not have permission.")
       return true
     }
 
@@ -357,7 +341,8 @@ class OyasaiTokenPlugin :
       "add",
       "remove",
       "set" -> {
-        if (args.size != 3) return sender.error("Usage: /tm ${args[0]} <player> <amount>")
+        if (!sender.hasPermission(TOKEN_ADMIN_PERMISSION)) return sender.permissionDenied()
+        if (args.size != 3) return sender.error("Usage: /token ${args[0]} <player> <amount>")
         val target = resolveTarget(args[1])
         val action = args[0].lowercase()
         val amount =
@@ -384,132 +369,18 @@ class OyasaiTokenPlugin :
           }
         }
         sender.sendMessage("${target.name ?: target.uuid}: ${getBalance(target.uuid)} tokens")
-      }
-      "balance" -> {
-        if (args.size != 2) return sender.error("Usage: /tm balance <player>")
-        val target = resolveTarget(args[1])
-        sender.sendMessage("${target.name ?: target.uuid}: ${getBalance(target.uuid)} tokens")
-      }
-      "top" -> sendTop(sender, args.getOrNull(1)?.toIntOrNull() ?: 10)
-      "transfer" -> {
-        val force = args.getOrNull(1).equals("confirm", ignoreCase = true)
-        if (!force) {
-          sender.sendMessage(
-              "Usage: /tm transfer confirm - imports data.yml into SQLite and overwrites matching balances."
-          )
-          return true
-        }
-        if (!beginMigration()) {
-          return sender.error("TokenManager data.yml import is already running.")
-        }
-        val rawPreparation = AtomicReference<RawMigrationPreparation?>(null)
-        val completion = AtomicReference<MigrationImportCompletion?>(null)
-        val importStarted = AtomicBoolean(false)
-        val dataFile = File(dataFolder, "data.yml")
-        val completionTask = AtomicReference<org.bukkit.scheduler.BukkitTask?>(null)
-        completionTask.set(
-            Bukkit.getScheduler()
-                .runTaskTimer(
-                    this,
-                    Runnable {
-                      val completed = completion.getAndSet(null)
-                      if (completed != null) {
-                        synchronized(mutationGate) {
-                          completed.loadedBalances?.let(ledger::replaceAll)
-                          migrationInProgress.set(false)
-                        }
-                        sender.sendMessage(completed.result.message)
-                        completionTask.get()?.cancel()
-                        return@Runnable
-                      }
-
-                      if (importStarted.get()) return@Runnable
-                      val raw = rawPreparation.getAndSet(null) ?: return@Runnable
-                      // Phase (b): only this main-thread phase may resolve Bukkit player
-                      // identities.
-                      val preparation =
-                          runCatching { prepareTokenManagerDataYmlImport(force = true, raw) }
-                              .getOrElse { throwable ->
-                                logger.severe(
-                                    "TokenManager data.yml identity resolution failed: ${throwable.message}"
-                                )
-                                completion.set(
-                                    MigrationImportCompletion(
-                                        ImportResult(
-                                            0,
-                                            "TokenManager data.yml import failed: ${throwable.message}",
-                                        )
-                                    )
-                                )
-                                return@Runnable
-                              }
-                      if (preparation is MigrationPreparation.Skipped) {
-                        completion.set(MigrationImportCompletion(preparation.result))
-                        return@Runnable
-                      }
-                      if (!importStarted.compareAndSet(false, true)) return@Runnable
-                      // Phase (c): the worker receives immutable entries and does SQLite work only.
-                      Bukkit.getScheduler()
-                          .runTaskAsynchronously(
-                              this,
-                              Runnable {
-                                val imported =
-                                    runCatching {
-                                          executePreparedTokenManagerDataYmlImport(
-                                              preparation,
-                                              awaitPendingWrites = true,
-                                          )
-                                        }
-                                        .getOrElse { throwable ->
-                                          logger.severe(
-                                              "TokenManager data.yml import failed: ${throwable.message}"
-                                          )
-                                          MigrationImportCompletion(
-                                              ImportResult(
-                                                  0,
-                                                  "TokenManager data.yml import failed: ${throwable.message}",
-                                              )
-                                          )
-                                        }
-                                completion.set(imported)
-                              },
-                          )
-                    },
-                    1L,
-                    1L,
-                )
-        )
-        sender.sendMessage(
-            "Started TokenManager data.yml import. Token writes will fail fast until it completes."
-        )
-        Bukkit.getScheduler()
-            .runTaskAsynchronously(
-                this,
-                Runnable {
-                  // Phase (a): filesystem/YAML parsing only; it must not call Bukkit APIs.
-                  rawPreparation.set(
-                      runCatching { parseTokenManagerDataYml(dataFile) }
-                          .getOrElse { throwable ->
-                            logger.severe(
-                                "TokenManager data.yml parse failed: ${throwable.message}"
-                            )
-                            RawMigrationPreparation.Skipped(
-                                ImportResult(
-                                    0,
-                                    "TokenManager data.yml import failed: ${throwable.message}",
-                                )
-                            )
-                          }
-                  )
-                },
-            )
+        return true
       }
       "reload" -> {
+        if (!sender.hasPermission(TOKEN_ADMIN_PERMISSION)) return sender.permissionDenied()
+        if (args.size != 1) return sender.error("Usage: /token reload")
         reload()
         sender.sendMessage("OyasaiToken config reloaded.")
+        return true
       }
-      else -> sender.sendMessage("Usage: /tm <add|remove|set|balance|top|transfer|reload>")
     }
+
+    sender.sendMessage("Usage: /token [balance|send|top|add|remove|set|reload]")
     return true
   }
 
@@ -526,9 +397,7 @@ class OyasaiTokenPlugin :
   }
 
   private fun logRejectedSetTokens(uuid: UUID) {
-    logger.warning(
-        "Rejected setTokens for $uuid because token persistence is unavailable or migration is running."
-    )
+    logger.warning("Rejected setTokens for $uuid because token persistence is unavailable.")
   }
 
   private fun configureConnection() {
@@ -616,50 +485,30 @@ class OyasaiTokenPlugin :
   }
 
   private fun readOrInitializeBalance(uuid: UUID, name: String?): Long {
-    return synchronized(mutationGate) {
-      ledger.balance(uuid, name, persistIfMissing = !migrationInProgress.get())
-    }
+    return ledger.balance(uuid, name, persistIfMissing = true)
   }
 
   private fun setTokensInternal(uuid: UUID, name: String?, amount: Long): Boolean {
     require(amount >= 0) { "amount must be non-negative" }
-    val change =
-        synchronized(mutationGate) {
-          if (migrationInProgress.get()) null else ledger.set(uuid, name, amount)
-        }
+    val change = ledger.set(uuid, name, amount)
     change?.let { dispatchBalanceChange(it) }
     return change != null
   }
 
   private fun addTokensInternal(uuid: UUID, name: String?, amount: Long): Boolean {
-    val change =
-        synchronized(mutationGate) {
-          if (migrationInProgress.get()) null else ledger.add(uuid, name, amount)
-        }
+    val change = ledger.add(uuid, name, amount)
     change?.let { dispatchBalanceChange(it) }
     return change != null
   }
 
   private fun removeTokensInternal(uuid: UUID, name: String?, amount: Long): Boolean {
-    val change =
-        synchronized(mutationGate) {
-          if (migrationInProgress.get()) null else ledger.remove(uuid, name, amount)
-        }
+    val change = ledger.remove(uuid, name, amount)
     change?.let { dispatchBalanceChange(it) }
     return change != null
   }
 
   private fun transferTokens(player: Player, target: Target, amount: Long) =
-      synchronized(mutationGate) {
-        if (migrationInProgress.get()) {
-          null
-        } else {
-          ledger.transfer(player.uniqueId, player.name, target.uuid, target.name, amount)
-        }
-      }
-
-  private fun beginMigration(): Boolean =
-      synchronized(mutationGate) { migrationInProgress.compareAndSet(false, true) }
+      ledger.transfer(player.uniqueId, player.name, target.uuid, target.name, amount)
 
   private fun writeBalanceRows(entry: PersistedBalance) {
     val write = entry.write
@@ -865,17 +714,15 @@ class OyasaiTokenPlugin :
         }
   }
 
-  private fun importTokenManagerDataYml(force: Boolean): ImportResult {
-    migrationImportPreflight(force)?.let {
+  private fun importTokenManagerDataYml(): ImportResult {
+    migrationImportPreflight()?.let {
       return it
     }
     val imported =
         executePreparedTokenManagerDataYmlImport(
             prepareTokenManagerDataYmlImport(
-                force,
                 parseTokenManagerDataYml(File(dataFolder, "data.yml")),
-            ),
-            awaitPendingWrites = force,
+            )
         )
     imported.loadedBalances?.let(ledger::replaceAll)
     return imported.result
@@ -886,13 +733,12 @@ class OyasaiTokenPlugin :
    * values are immutable and are safe to pass to the SQLite import worker.
    */
   private fun prepareTokenManagerDataYmlImport(
-      force: Boolean,
       raw: RawMigrationPreparation,
   ): MigrationPreparation {
     check(Bukkit.isPrimaryThread()) {
       "TokenManager data.yml identities must be resolved on the Bukkit primary thread."
     }
-    migrationImportPreflight(force)?.let {
+    migrationImportPreflight()?.let {
       return MigrationPreparation.Skipped(it)
     }
     if (raw is RawMigrationPreparation.Skipped) {
@@ -911,8 +757,7 @@ class OyasaiTokenPlugin :
     return MigrationPreparation.Ready(entries.toList(), migrationExecutionOptions())
   }
 
-  private fun migrationImportPreflight(force: Boolean): ImportResult? {
-    if (force) return null
+  private fun migrationImportPreflight(): ImportResult? {
     if (!config.getBoolean("migration.import-tokenmanager-data-yml", true)) {
       return ImportResult(0, "TokenManager data.yml import is disabled in config.yml.")
     }
@@ -920,13 +765,13 @@ class OyasaiTokenPlugin :
     if (alreadyImportedAt != null) {
       return ImportResult(
           0,
-          "TokenManager data.yml was already imported at $alreadyImportedAt. Use /tm transfer confirm to re-import.",
+          "TokenManager data.yml was already imported at $alreadyImportedAt.",
       )
     }
     if (ledger.isNotEmpty()) {
       return ImportResult(
           0,
-          "Skipped automatic data.yml import because tokens.db already contains balances. Use /tm transfer confirm after reviewing local backups.",
+          "Skipped automatic data.yml import because tokens.db already contains balances.",
       )
     }
     return null
@@ -934,7 +779,6 @@ class OyasaiTokenPlugin :
 
   private fun migrationExecutionOptions(): MigrationExecutionOptions =
       MigrationExecutionOptions(
-          config.getLong("persistence.shutdown-await-seconds", 10L).coerceAtLeast(1L) * 1000L,
           config.getBoolean("migration.backup-before-import", true),
           File(
               dataFolder,
@@ -977,24 +821,11 @@ class OyasaiTokenPlugin :
   /** Phase (c): performs only queue draining and SQLite I/O. */
   private fun executePreparedTokenManagerDataYmlImport(
       preparation: MigrationPreparation,
-      awaitPendingWrites: Boolean,
   ): MigrationImportCompletion {
     if (preparation is MigrationPreparation.Skipped) {
       return MigrationImportCompletion(preparation.result)
     }
     val ready = preparation as MigrationPreparation.Ready
-    if (
-        awaitPendingWrites &&
-            ::persistenceExecutor.isInitialized &&
-            !awaitPersistenceIdle(ready.options.shutdownAwaitMillis)
-    ) {
-      return MigrationImportCompletion(
-          ImportResult(
-              0,
-              "Timed out waiting for pending token writes. Try /tm transfer confirm again after the queue drains.",
-          )
-      )
-    }
     val entries = ready.entries
     val backup = backupDatabaseBeforeImport(ready.options)
     val now = System.currentTimeMillis()
@@ -1051,20 +882,6 @@ class OyasaiTokenPlugin :
         ),
         loadedBalances,
     )
-  }
-
-  private fun awaitPersistenceIdle(timeoutMillis: Long): Boolean {
-    val deadline = System.currentTimeMillis() + timeoutMillis
-    while (persistenceExecutor.queue.isNotEmpty() || persistenceExecutor.activeCount > 0) {
-      if (System.currentTimeMillis() >= deadline) return false
-      try {
-        Thread.sleep(25L)
-      } catch (interrupted: InterruptedException) {
-        Thread.currentThread().interrupt()
-        return false
-      }
-    }
-    return true
   }
 
   private fun getMeta(key: String): String? {
@@ -1183,6 +1000,8 @@ class OyasaiTokenPlugin :
     return true
   }
 
+  private fun CommandSender.permissionDenied(): Boolean = error("You do not have permission.")
+
   private fun String.toUuidOrNull(): UUID? {
     return runCatching { UUID.fromString(this) }.getOrNull()
   }
@@ -1229,7 +1048,6 @@ class OyasaiTokenPlugin :
   )
 
   private data class MigrationExecutionOptions(
-      val shutdownAwaitMillis: Long,
       val backupBeforeImport: Boolean,
       val backupDirectory: File,
   )
@@ -1259,5 +1077,7 @@ class OyasaiTokenPlugin :
      * reached SQLite before a hard crash.
      */
     private const val LAST_APPLIED_TX_ID_KEY = "last_applied_tx_id"
+    private const val TOKEN_USE_PERMISSION = "token.use"
+    private const val TOKEN_ADMIN_PERMISSION = "token.admin"
   }
 }
