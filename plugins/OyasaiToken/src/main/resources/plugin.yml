@@ -8,7 +8,7 @@ softdepend: [TAB]
 commands:
   token:
     description: Token command
-    usage: /token [balance [player]|send <player> <amount>|top [n]|add|remove|set <player> <amount>|reload]
+    usage: /token [balance [player]|send <player> <amount>|top [n]|add|remove|set <player> <amount> [-s]|reload]
 permissions:
   token.use:
     description: Allows personal balance, send, and top commands
