@@ -121,14 +121,6 @@
       }
     }
   },
-  "imageonmap": {
-    "paper": {
-      "26.2": {
-        "url": "https://github.com/okocraft/ImageOnMap/releases/download/5.1.1/ImageOnMap-5.1.1.jar",
-        "hash": "sha256-uRacoOUtqrd5I4/yStqdv6h6h5TuOBYMpfC+K8Jf9vk="
-      }
-    }
-  },
   "inventoryshop": {
     "paper": {
       "26.2": {

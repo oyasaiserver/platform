@@ -93,15 +93,6 @@
       "type": "modrinth"
     }
   },
-  "imageonmap": {
-    "paper": {
-      "name": "ImageOnMap-5.1.1.jar",
-      "owner": "okocraft",
-      "repo": "ImageOnMap",
-      "tag": "5.1.1",
-      "type": "github"
-    }
-  },
   "inventoryshop": {
     "paper": {
       "id": 47694,
