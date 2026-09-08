@@ -59,7 +59,13 @@ internal class TokenLedger(
     }
   }
 
-  fun set(uuid: UUID, name: String?, amount: Long): BalanceChange? {
+  fun set(
+      uuid: UUID,
+      name: String?,
+      amount: Long,
+      context: MutationContext = MutationContext.SILENT,
+      completion: CompletableFuture<Boolean>? = null,
+  ): BalanceChange? {
     require(amount >= 0) { "amount must be non-negative" }
     return synchronized(lock) {
       val current = account(uuid, name)
@@ -70,10 +76,14 @@ internal class TokenLedger(
               balance = amount,
               delta = amount - current.record.balance,
               reason = "set",
+              actorUuid = context.actorUuid,
+              notificationType =
+                  context.notificationType.takeIf { amount != current.record.balance },
           )
       commit(
           current.initialWrite?.let { listOf(it, write) } ?: listOf(write),
           mapOf(uuid to BalanceRecord(write.name, amount)),
+          completion,
       ) {
         BalanceChange(
             uuid,
@@ -87,8 +97,13 @@ internal class TokenLedger(
     }
   }
 
-  fun add(uuid: UUID, name: String?, amount: Long): BalanceChange? {
-    return add(uuid, name, amount, completion = null)
+  fun add(
+      uuid: UUID,
+      name: String?,
+      amount: Long,
+      context: MutationContext = MutationContext.SILENT,
+  ): BalanceChange? {
+    return add(uuid, name, amount, context, completion = null)
   }
 
   fun addWithCommit(
@@ -97,13 +112,14 @@ internal class TokenLedger(
       amount: Long,
       completion: CompletableFuture<Boolean>,
   ): BalanceChange? {
-    return add(uuid, name, amount, completion)
+    return add(uuid, name, amount, MutationContext.SILENT, completion)
   }
 
-  private fun add(
+  fun add(
       uuid: UUID,
       name: String?,
       amount: Long,
+      context: MutationContext,
       completion: CompletableFuture<Boolean>?,
   ): BalanceChange? {
     if (amount < 0) {
@@ -122,6 +138,8 @@ internal class TokenLedger(
               balance = next,
               delta = amount,
               reason = "add",
+              actorUuid = context.actorUuid,
+              notificationType = context.notificationType.takeIf { amount != 0L },
           )
       commit(
           current.initialWrite?.let { listOf(it, write) } ?: listOf(write),
@@ -140,8 +158,21 @@ internal class TokenLedger(
     }
   }
 
-  fun remove(uuid: UUID, name: String?, amount: Long): BalanceChange? {
-    if (amount < 0) return if (amount == Long.MIN_VALUE) null else add(uuid, name, -amount)
+  fun remove(
+      uuid: UUID,
+      name: String?,
+      amount: Long,
+      context: MutationContext = MutationContext.SILENT,
+      completion: CompletableFuture<Boolean>? = null,
+  ): BalanceChange? {
+    if (amount < 0) {
+      if (amount == Long.MIN_VALUE) return null
+      val addContext =
+          context.copy(
+              notificationType = context.notificationType?.let { NotificationType.ADD },
+          )
+      return add(uuid, name, -amount, addContext, completion)
+    }
     return synchronized(lock) {
       val current = account(uuid, name)
       if (current.record.balance < amount) return@synchronized null
@@ -153,10 +184,13 @@ internal class TokenLedger(
               balance = next,
               delta = -amount,
               reason = "remove",
+              actorUuid = context.actorUuid,
+              notificationType = context.notificationType.takeIf { amount != 0L },
           )
       commit(
           current.initialWrite?.let { listOf(it, write) } ?: listOf(write),
           mapOf(uuid to BalanceRecord(write.name, next)),
+          completion,
       ) {
         BalanceChange(
             uuid,
@@ -180,6 +214,7 @@ internal class TokenLedger(
       targetUuid: UUID,
       targetName: String?,
       amount: Long,
+      completion: CompletableFuture<Boolean>? = null,
   ): Transfer? {
     require(amount > 0) { "amount must be positive" }
     return synchronized(lock) {
@@ -187,7 +222,7 @@ internal class TokenLedger(
       if (source.record.balance < amount) return@synchronized null
 
       if (sourceUuid == targetUuid) {
-        return@synchronized transferToSelf(source, sourceName, targetName, amount)
+        return@synchronized transferToSelf(source, sourceName, targetName, amount, completion)
       }
 
       val target = account(targetUuid, targetName)
@@ -221,6 +256,7 @@ internal class TokenLedger(
               sourceUuid to BalanceRecord(sourceWrite.name, sourceNext),
               targetUuid to BalanceRecord(targetWrite.name, targetNext),
           ),
+          completion,
       ) {
         Transfer(
             BalanceChange(
@@ -258,6 +294,7 @@ internal class TokenLedger(
       sourceName: String?,
       targetName: String?,
       amount: Long,
+      completion: CompletableFuture<Boolean>?,
   ): Transfer? {
     val debited = source.record.balance - amount
     val sourceWrite =
@@ -284,6 +321,7 @@ internal class TokenLedger(
     return commit(
         writes,
         mapOf(source.uuid to BalanceRecord(targetWrite.name, source.record.balance)),
+        completion,
     ) {
       Transfer(
           BalanceChange(
@@ -349,7 +387,23 @@ internal data class BalanceWrite(
     val delta: Long,
     val reason: String,
     val actorUuid: UUID? = null,
+    val notificationType: NotificationType? = null,
 )
+
+internal data class MutationContext(
+    val actorUuid: UUID? = null,
+    val notificationType: NotificationType? = null,
+) {
+  companion object {
+    val SILENT = MutationContext()
+  }
+}
+
+internal enum class NotificationType {
+  ADD,
+  REMOVE,
+  SET,
+}
 
 internal data class BalanceChange(
     val uuid: UUID,

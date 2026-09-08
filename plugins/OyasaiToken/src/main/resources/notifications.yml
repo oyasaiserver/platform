@@ -1,0 +1,9 @@
+# OyasaiToken notification settings. This file contains no credentials or connection details.
+schema-version: 1
+enabled: false
+
+messages:
+  add: "{amount}トークンを受け取りました。現在の残高は{balance}トークンです。"
+  remove: "{amount}トークンが差し引かれました。現在の残高は{balance}トークンです。"
+  set: "トークン残高が{balance}トークンに変更されました（増減: {delta}）。"
+  summary: "ログアウト中に{count}件のトークン変更があり、合計{delta}トークンでした。現在の残高は{balance}トークンです。"

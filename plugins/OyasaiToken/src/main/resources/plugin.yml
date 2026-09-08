@@ -8,17 +8,26 @@ softdepend: [TAB]
 commands:
   token:
     description: Token command
-    aliases: [tokens]
-  tm:
-    description: TokenManager-compatible admin command
-    aliases: [tokenmanager]
+    usage: /token [balance [player]|send <player> <amount>|top [n]|add|remove|set <player> <amount> [-s]|reload]
 permissions:
-  tokenmanager.admin:
+  token.use:
+    description: Allows personal balance, send, and top commands
+    default: true
+  token.admin:
     description: Allows token administration commands
     default: op
+  tokenmanager.admin:
+    description: Legacy alias for token.admin
+    default: op
+    children:
+      token.admin: true
   tokenmanager.use:
-    description: Allows token balance command
+    description: Legacy alias for token.use
     default: true
+    children:
+      token.use: true
   tokenmanager.use.send:
-    description: Allows sending tokens
+    description: Legacy alias for token.use
     default: true
+    children:
+      token.use: true

@@ -322,7 +322,7 @@ BPM、回路型・生演奏・現地回路録音は基準 120 BPM です。
 
 報酬は即時に失われず未受取残高へ蓄積され、トップメニューの「未受け取り報酬を受け取る」から受け取れます。金銭はVault経済へ、ポイントは
 `economy.points-command`（既定値:
-`tokenmanager add %player% %points%`）で付与します。報酬額・回数制限・視聴完了率は `config.yml`
+`token add %player% %points% -s`）で付与します。報酬額・回数制限・視聴完了率は `config.yml`
 から変更できます。
 
 作者の未受取報酬は報酬受取バンドルに、今回の受取額・ポイント・総収入とともに表示されます。ランキングは日間・週間・総合の楽曲／作者を表示し、管理者は
@@ -345,7 +345,7 @@ TokenManager を使う場合の既定値は以下です。
 
 ```yaml
 economy:
-  points-command: "tokenmanager add %player% %points%"
+  points-command: "token add %player% %points% -s"
 ```
 
 `%player%` は受取プレイヤー名、`%points%` と `%amount%` はポイント値に展開されます。設定を変えた後は
