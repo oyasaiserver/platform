@@ -76,7 +76,6 @@ oyasaiPurpur rec {
     oyasaiutilities
     oyasaivehicles
     painttools
-    particlehats
     placeholderapi
     plugmanx
     protocollib

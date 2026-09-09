@@ -11,12 +11,6 @@
       "type": "modrinth"
     }
   },
-  "bkcommonlib": {
-    "paper": {
-      "slug": "bkcommonlib",
-      "type": "modrinth"
-    }
-  },
   "bluemap": {
     "paper": {
       "slug": "bluemap",
@@ -45,12 +39,6 @@
     "paper": {
       "type": "url",
       "url": "https://repo.essentialsx.net/snapshots/net/essentialsx/EssentialsX/2.22.1-SNAPSHOT/EssentialsX-2.22.1-20260624.223341-11.jar"
-    }
-  },
-  "essentialsx-chat": {
-    "paper": {
-      "type": "url",
-      "url": "https://repo.essentialsx.net/snapshots/net/essentialsx/EssentialsXChat/2.22.1-SNAPSHOT/EssentialsXChat-2.22.1-20260624.223341-11.jar"
     }
   },
   "essentialsx-spawn": {
@@ -91,12 +79,6 @@
     "paper": {
       "slug": "gsit",
       "type": "modrinth"
-    }
-  },
-  "inventoryshop": {
-    "paper": {
-      "id": 47694,
-      "type": "spiget"
     }
   },
   "joincommands": {
@@ -146,12 +128,6 @@
       "type": "modrinth"
     }
   },
-  "mycommand": {
-    "paper": {
-      "id": 22272,
-      "type": "spiget"
-    }
-  },
   "nuvotifier": {
     "paper": {
       "name": "nuvotifier.jar",
@@ -159,18 +135,6 @@
       "repo": "NuVotifier",
       "tag": "v2.7.3",
       "type": "github"
-    }
-  },
-  "openinv": {
-    "paper": {
-      "slug": "jikoo/openinv",
-      "type": "hangar"
-    }
-  },
-  "particlehats": {
-    "paper": {
-      "id": 1007,
-      "type": "spiget"
     }
   },
   "placeholderapi": {
@@ -266,16 +230,6 @@
     "paper": {
       "slug": "veinminer",
       "type": "modrinth"
-    }
-  },
-  "venturechat": {
-    "paper": {
-      "id": 771,
-      "type": "spiget"
-    },
-    "velocity": {
-      "id": 771,
-      "type": "spiget"
     }
   },
   "viaversion": {
