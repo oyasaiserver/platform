@@ -1,0 +1,47 @@
+name: DirectState
+version: "${version}"
+
+main: io.oyasai.directstate.DirectState
+api-version: "26.2"
+softdepend: [CoreProtect, WorldGuard]
+
+libraries:
+  - org.xerial:sqlite-jdbc:3.53.2.1
+
+authors: [takucan]
+contributors: [u6if]
+
+commands:
+  directstate:
+    aliases: ["ds", "dsh", "dsr", "dsu"]
+    description: ブロック形状編集と周辺更新抑止
+    usage: /ds [help|toggle|tgl|stick|sstick|hstick|hand|update|replace]
+permissions:
+  directstate.ds:
+    description: DirectStateの全機能
+    default: op
+    children:
+      directstate.dsh: true
+      directstate.dsr: true
+      directstate.dsu: true
+      directstate.stick: true
+      directstate.sstick: true
+      directstate.hstick: true
+  directstate.dsh:
+    description: Handの設定と使用
+    default: false
+  directstate.dsr:
+    description: Replaceの設定と使用
+    default: false
+  directstate.dsu:
+    description: Updateの設定と使用
+    default: false
+  directstate.stick:
+    description: Hand編集棒の取得と使用
+    default: false
+  directstate.sstick:
+    description: シンプル棒の取得と使用
+    default: false
+  directstate.hstick:
+    description: ホールド棒の取得と使用
+    default: false
