@@ -46,6 +46,7 @@ oyasaiPurpur rec {
     coreprotect
     crackshotguns
     decentholograms
+    directstate
     discordsrv
     dynamicprofile
     entitypose
