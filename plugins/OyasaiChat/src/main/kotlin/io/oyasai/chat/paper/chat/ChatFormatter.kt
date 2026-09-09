@@ -118,6 +118,9 @@ class ChatFormatter(
   fun renderer(channel: ChannelDefinition, snapshot: ChatPresentationSnapshot): ChatRenderer =
       ChatRenderer.viewerUnaware { _, _, message -> chat(channel, snapshot, message) }
 
+  fun remoteOrigin(format: String, backendId: String): Component =
+      mini.deserialize(format, Placeholder.unparsed("backend", backendId))
+
   /**
    * AsyncChatEventから届いたPMモード入力用のRenderer。
    *

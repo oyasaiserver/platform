@@ -267,9 +267,12 @@ class ChatService(
       externalAuthorized: Boolean = true,
       senderLocale: String? = null,
       surface: ChatTextSurface = ChatTextSurface.PUBLIC_CHAT,
+      originBackend: String? = null,
   ) {
     val prefix =
-        originBackendPrefix?.takeIf { it.isNotBlank() }?.let(formatter::parse) ?: Component.empty()
+        originBackendPrefix
+            ?.takeIf { it.isNotBlank() }
+            ?.let { formatter.remoteOrigin(it, originBackend.orEmpty()) } ?: Component.empty()
     val suffix =
         originBackendSuffix?.takeIf { it.isNotBlank() }?.let(formatter::parse) ?: Component.empty()
     val prefixText = formatter.plain(prefix)

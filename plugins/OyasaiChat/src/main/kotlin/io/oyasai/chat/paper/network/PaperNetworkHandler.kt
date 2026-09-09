@@ -63,6 +63,7 @@ class PaperNetworkHandler(
         surface =
             if (envelope.originPlayerId == null) ChatTextSurface.EXTERNAL_CHAT
             else ChatTextSurface.PUBLIC_CHAT,
+        originBackend = envelope.originBackend,
     )
   }
 
