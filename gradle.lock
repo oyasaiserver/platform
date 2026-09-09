@@ -843,6 +843,12 @@
       "hash": "sha256-Pe8rKa9KGa2AXLFTBWklqJqQP5L77hre4S7S/BTETug="
     }
   },
+  "com.intellectualsites.bom:bom-newest:1.44": {
+    "bom-newest-1.44.pom": {
+      "url": "https://repo.maven.apache.org/maven2/com/intellectualsites/bom/bom-newest/1.44/bom-newest-1.44.pom",
+      "hash": "sha256-2x+B4XbqlfPpHdYTz72ZZTji0CyhHnIkpa8JhQxPoYo="
+    }
+  },
   "com.lmax:disruptor:3.4.4": {
     "disruptor-3.4.4.jar": {
       "url": "https://repo.maven.apache.org/maven2/com/lmax/disruptor/3.4.4/disruptor-3.4.4.jar",
@@ -957,6 +963,34 @@
     "nv-websocket-client-2.14.pom": {
       "url": "https://repo.maven.apache.org/maven2/com/neovisionaries/nv-websocket-client/2.14/nv-websocket-client-2.14.pom",
       "hash": "sha256-VxtLgWkSEK9H00tX7Uw/LfB5fkL15KVteQNfR1lw0Ak="
+    }
+  },
+  "com.sk89q.worldguard:worldguard-bukkit:7.0.13": {
+    "worldguard-bukkit-7.0.13.jar": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-bukkit/7.0.13/worldguard-bukkit-7.0.13.jar",
+      "hash": "sha256-cVrI7REjQV4AokV8Df2d989af5czYIo4xeYurja4UoM="
+    },
+    "worldguard-bukkit-7.0.13.module": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-bukkit/7.0.13/worldguard-bukkit-7.0.13.module",
+      "hash": "sha256-jOlqBQLWBYl1ssSTnsCofpbECmBSf3SV3WItDesEiqQ="
+    },
+    "worldguard-bukkit-7.0.13.pom": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-bukkit/7.0.13/worldguard-bukkit-7.0.13.pom",
+      "hash": "sha256-mjwPlepJdsDbPzCrth0ZEqOlDp63aLJdAiv2qMHVz2s="
+    }
+  },
+  "com.sk89q.worldguard:worldguard-core:7.0.13": {
+    "worldguard-core-7.0.13.jar": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-core/7.0.13/worldguard-core-7.0.13.jar",
+      "hash": "sha256-XqcdKZTfvUrV5buJjgn0wBPDAClUWqJm4kAaTG5UPzA="
+    },
+    "worldguard-core-7.0.13.module": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-core/7.0.13/worldguard-core-7.0.13.module",
+      "hash": "sha256-+jfx4on3073TbEPiM2d95MnEc8z5ehOln/xt0dxfG1U="
+    },
+    "worldguard-core-7.0.13.pom": {
+      "url": "https://maven.enginehub.org/repo/com/sk89q/worldguard/worldguard-core/7.0.13/worldguard-core-7.0.13.pom",
+      "hash": "sha256-KA16gP2p9dKdua2illULQ9MTQrchRlJ0wyphmAx1cfs="
     }
   },
   "com.squareup.okhttp3:logging-interceptor:4.9.3": {
@@ -1555,6 +1589,16 @@
       "hash": "sha256-6x08ULeuCn/+sChX05rsFW25y7JpweiTd9EnY9ixtBg="
     }
   },
+  "net.coreprotect:coreprotect:22.4": {
+    "coreprotect-22.4.jar": {
+      "url": "https://maven.playpro.com/net/coreprotect/coreprotect/22.4/coreprotect-22.4.jar",
+      "hash": "sha256-vtFgr6tNO5M5tAEPcmkZHCn36EMohoSPo0YANq0acNg="
+    },
+    "coreprotect-22.4.pom": {
+      "url": "https://maven.playpro.com/net/coreprotect/coreprotect/22.4/coreprotect-22.4.pom",
+      "hash": "sha256-gqaI/7s/SrhTp/rtJwe5VoKRf2gsLn/SJU1cZ+QBKHY="
+    }
+  },
   "net.fabricmc:tiny-remapper:0.12.0": {
     "tiny-remapper-0.12.0-fat.jar": {
       "url": "https://repo.purpurmc.org/snapshots/net/fabricmc/tiny-remapper/0.12.0/tiny-remapper-0.12.0-fat.jar",
@@ -1929,6 +1973,12 @@
       "hash": "sha256-6il9zRFBNui46LYwIw1Sp2wvxp9sXbJdZysYVwAHKLg="
     }
   },
+  "org.apache:apache:33": {
+    "apache-33.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/apache/33/apache-33.pom",
+      "hash": "sha256-14vYUkxfg4ChkKZSVoZimpXf5RLfIRETg6bYwJI6RBU="
+    }
+  },
   "org.apache:apache:31": {
     "apache-31.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/apache/apache/31/apache-31.pom",
@@ -2095,6 +2145,12 @@
       "hash": "sha256-PLrYSbNdrP5s7DGtraLGI8AmwyYRQbDSbux+OZxs1/o="
     }
   },
+  "org.apache.logging:logging-parent:11.3.0": {
+    "logging-parent-11.3.0.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/logging-parent/11.3.0/logging-parent-11.3.0.pom",
+      "hash": "sha256-pcmFtW/hxYQzOTtQkabznlufeFGN2PySE0aQWZtk19A="
+    }
+  },
   "org.apache.logging:logging-parent:5": {
     "logging-parent-5.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/apache/logging/logging-parent/5/logging-parent-5.pom",
@@ -2173,6 +2229,12 @@
     "log4j-bom-2.26.0.pom": {
       "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-bom/2.26.0/log4j-bom-2.26.0.pom",
       "hash": "sha256-1K8Y0C3O/GV/Wkl/M5wUuf3lVGhsfIHF+Acr4WXbdXg="
+    }
+  },
+  "org.apache.logging.log4j:log4j-bom:2.24.1": {
+    "log4j-bom-2.24.1.pom": {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-bom/2.24.1/log4j-bom-2.24.1.pom",
+      "hash": "sha256-vGPPsrS5bbS9cwyWLoJPtpKMuEkCwUFuR3q1y3KwsNM="
     }
   },
   "org.apache.logging.log4j:log4j-bom:2.17.1": {
