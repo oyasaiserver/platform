@@ -2,8 +2,12 @@
 
 package io.oyasai.oyasaitoken
 
+import io.oyasai.oyasaitoken.api.Delivery
 import io.oyasai.oyasaitoken.api.OyasaiTokenApi
 import io.oyasai.oyasaitoken.api.OyasaiTokenCommitApi
+import io.oyasai.oyasaitoken.api.OyasaiTokenService
+import io.oyasai.oyasaitoken.api.TokenRequest
+import io.oyasai.oyasaitoken.api.TokenResult
 import io.oyasai.oyasaitoken.internal.BalanceChange
 import io.oyasai.oyasaitoken.internal.BalanceRecord
 import io.oyasai.oyasaitoken.internal.BalanceWrite
@@ -45,6 +49,7 @@ class OyasaiTokenPlugin :
     TokenManagerPlugin(),
     OyasaiTokenApi,
     OyasaiTokenCommitApi,
+    OyasaiTokenService,
     CommandExecutor,
     TabCompleter,
     Listener {
@@ -89,6 +94,12 @@ class OyasaiTokenPlugin :
     )
     server.servicesManager.register(
         OyasaiTokenCommitApi::class.java,
+        this,
+        this,
+        ServicePriority.Normal,
+    )
+    server.servicesManager.register(
+        OyasaiTokenService::class.java,
         this,
         this,
         ServicePriority.Normal,
@@ -180,6 +191,101 @@ class OyasaiTokenPlugin :
   override fun removeTokens(uuid: UUID, amount: Long): Boolean {
     return removeTokensInternal(uuid, null, amount) != null
   }
+
+  // --- OyasaiTokenService: commit-confirmed API -------------------------------------------------
+
+  override fun balanceOf(uuid: UUID): Long = readOrInitializeBalance(uuid, null)
+
+  override fun charge(request: TokenRequest): CompletableFuture<TokenResult> {
+    rejectNegative(request)?.let {
+      return it
+    }
+    if (request.amount == 0L) {
+      return CompletableFuture.completedFuture(
+          TokenResult.Success(balanceOf(request.uuid), 0L),
+      )
+    }
+    val completion = CompletableFuture<Boolean>()
+    val change =
+        ledger.remove(
+            request.uuid,
+            request.playerName,
+            request.amount,
+            deliveryContext(request.delivery, NotificationType.REMOVE),
+            completion,
+        )
+    if (change == null) {
+      // remove() returns null before handing the future to persist(), so complete it here.
+      completion.complete(false)
+      val balance = readOrInitializeBalance(request.uuid, request.playerName)
+      return CompletableFuture.completedFuture(
+          if (balance < request.amount) {
+            TokenResult.InsufficientFunds(balance, request.amount)
+          } else {
+            TokenResult.Failed("token write was rejected")
+          },
+      )
+    }
+    dispatchBalanceChange(change)
+    return completion.thenApply { committed ->
+      if (committed) {
+        TokenResult.Success(change.newBalance, -request.amount)
+      } else {
+        TokenResult.Failed("token write did not commit")
+      }
+    }
+  }
+
+  override fun grant(request: TokenRequest): CompletableFuture<TokenResult> {
+    rejectNegative(request)?.let {
+      return it
+    }
+    if (request.amount == 0L) {
+      return CompletableFuture.completedFuture(
+          TokenResult.Success(balanceOf(request.uuid), 0L),
+      )
+    }
+    val completion = CompletableFuture<Boolean>()
+    val change =
+        ledger.add(
+            request.uuid,
+            request.playerName,
+            request.amount,
+            deliveryContext(request.delivery, NotificationType.ADD),
+            completion,
+        )
+    if (change == null) {
+      completion.complete(false)
+      return CompletableFuture.completedFuture(
+          TokenResult.Failed("token write was rejected"),
+      )
+    }
+    dispatchBalanceChange(change)
+    return completion.thenApply { committed ->
+      if (committed) {
+        TokenResult.Success(change.newBalance, request.amount)
+      } else {
+        TokenResult.Failed("token write did not commit")
+      }
+    }
+  }
+
+  private fun rejectNegative(request: TokenRequest): CompletableFuture<TokenResult>? =
+      if (request.amount < 0) {
+        CompletableFuture.completedFuture(TokenResult.Failed("amount must be non-negative"))
+      } else {
+        null
+      }
+
+  /**
+   * [Delivery.Silent] keeps `notificationType` null, which is what stops the outbox row from being
+   * written and therefore keeps OyasaiToken quiet.
+   */
+  private fun deliveryContext(delivery: Delivery, type: NotificationType): MutationContext =
+      when (delivery) {
+        Delivery.Silent -> MutationContext.SILENT
+        Delivery.Default -> MutationContext(notificationType = type)
+      }
 
   override fun getTokens(player: Player): OptionalLong {
     return OptionalLong.of(readOrInitializeBalance(player.uniqueId, player.name))
