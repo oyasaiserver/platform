@@ -11,7 +11,7 @@ dependencies {
   compileOnly(libs.placeholderapi)
   compileOnly(libs.discordsrv)
   compileOnly(libs.luckperms.api)
-  compileOnly(libs.tokenmanager) { isTransitive = false }
+  compileOnly(project(":plugins:OyasaiToken"))
   // Paper provides Adventure at runtime. FAWE's compile-time Adventure 5.x must not override
   // Paper's 4.x API, otherwise builder return types are linked against incompatible descriptors.
   compileOnly(libs.fawe.bukkit) { exclude(group = "net.kyori") }

@@ -475,16 +475,6 @@
       "hash": "sha256-ryEHDALxm/FT5KMNeZFrULpl0nENKc3hnrypxYBx9Hc="
     }
   },
-  "com.github.Realizedd:TokenManager:3.2.4": {
-    "TokenManager-3.2.4.jar": {
-      "url": "https://repo.purpurmc.org/snapshots/com/github/Realizedd/TokenManager/3.2.4/TokenManager-3.2.4.jar",
-      "hash": "sha256-2lZ74p30wk97pSquVDFxGF2vE79AlaCIaenC2qaQ0Tk="
-    },
-    "TokenManager-3.2.4.pom": {
-      "url": "https://repo.purpurmc.org/snapshots/com/github/Realizedd/TokenManager/3.2.4/TokenManager-3.2.4.pom",
-      "hash": "sha256-P967LiIP36cCY3aNav9rjnM1VtK8hM0FIR03DrYTTxE="
-    }
-  },
   "com.github.ben-manes.caffeine:caffeine:3.2.4": {
     "caffeine-3.2.4.jar": {
       "url": "https://repo.maven.apache.org/maven2/com/github/ben-manes/caffeine/caffeine/3.2.4/caffeine-3.2.4.jar",
