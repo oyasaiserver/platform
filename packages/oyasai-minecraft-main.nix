@@ -47,6 +47,7 @@ oyasaiPurpur rec {
     crackshotguns
     decentholograms
     discordsrv
+    directstate
     dynamicprofile
     entitypose
     essentialsx
