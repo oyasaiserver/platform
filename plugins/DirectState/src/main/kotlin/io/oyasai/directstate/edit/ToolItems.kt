@@ -39,6 +39,10 @@ internal class ToolItems(plugin: JavaPlugin) {
         }
       }
 
+  /** 手持ちアイテムへ編集棒の種類だけを付与する。 */
+  fun mark(item: ItemStack, kind: Kind) =
+      item.editMeta { it.persistentDataContainer.set(toolKey, PersistentDataType.BYTE, kind.id) }
+
   /** DirectStateが発行した編集棒かを調べる。 */
   fun isTool(item: ItemStack?) = typeOf(item) != null
 

@@ -24,6 +24,7 @@ permissions:
       directstate.dsh: true
       directstate.dsr: true
       directstate.dsu: true
+      directstate.gettool: true
       directstate.stick: true
       directstate.sstick: true
       directstate.hstick: true
@@ -36,12 +37,15 @@ permissions:
   directstate.dsu:
     description: Updateの設定と使用
     default: false
+  directstate.gettool:
+    description: DS棒の取得
+    default: false
   directstate.stick:
-    description: Hand編集棒の取得と使用
+    description: Hand編集棒の使用
     default: false
   directstate.sstick:
-    description: シンプル棒の取得と使用
+    description: シンプル棒の使用
     default: false
   directstate.hstick:
-    description: ホールド棒の取得と使用
+    description: ホールド棒の使用
     default: false
