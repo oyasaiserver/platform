@@ -41,7 +41,6 @@ oyasaiPurpur rec {
     # keep-sorted start
     advancedban
     arceon
-    bkcommonlib
     bluemap
     citiesskymine
     coreprotect
@@ -60,7 +59,6 @@ oyasaiPurpur rec {
     gsit
     headhuntplugin
     imageonmap
-    inventoryshop
     joincommands
     luckperms
     lunachat
@@ -68,9 +66,7 @@ oyasaiPurpur rec {
     minepacks
     multiversecore
     multiverseportals
-    mycommand
     nuvotifier
-    openinv
     oyasaiadmintools
     oyasaichat
     oyasaimenu
