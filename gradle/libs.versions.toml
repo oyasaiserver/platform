@@ -1,5 +1,6 @@
 [libraries]
 sqlite-jdbc = {module = "org.xerial:sqlite-jdbc", version.ref = "sqlite-jdbc"}
+coreprotect-api = {module = "net.coreprotect:coreprotect", version.ref = "coreprotect"}
 anvilgui = {module = "net.wesjd:anvilgui", version.ref = "anvilgui"}
 discord-webhooks = {module = "club.minnced:discord-webhooks", version.ref = "discord-webhooks"}
 discordsrv = {module = "com.discordsrv:discordsrv", version.ref = "discordsrv"}
@@ -19,17 +20,19 @@ shadow-plugin = {module = "com.gradleup.shadow:shadow-gradle-plugin", version.re
 spotless-plugin = {module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless"}
 tab-api = {module = "com.github.NEZNAMY:TAB-API", version.ref = "tab-api"}
 purpur-dev-bundle = {module = "org.purpurmc.purpur:dev-bundle", version.ref = "purpur-api"}
-tokenmanager = {module = "com.github.Realizedd:TokenManager", version.ref = "tokenmanager"}
 vault-api = {module = "com.github.MilkBowl:VaultAPI", version.ref = "vault"}
 worldborder = {module = "com.github.PryPurity:WorldBorder", version.ref = "worldborder"}
 fawe-bukkit = {module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe"}
 velocity-api = {module = "com.velocitypowered:velocity-api", version.ref = "velocity-api"}
+worldguard-bukkit = {module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard"}
+worldguard-core = {module = "com.sk89q.worldguard:worldguard-core", version.ref = "worldguard"}
 
 [plugins]
 paperweight-userdev = {id = "io.papermc.paperweight.userdev", version.ref = "paperweight"}
 
 [versions]
 sqlite-jdbc = "3.53.2.1"
+coreprotect = "22.4"
 anvilgui = "1.10.11-SNAPSHOT"
 discord-webhooks = "0.8.4"
 discordsrv = "1.30.5"
@@ -47,8 +50,8 @@ shadow = "9.6.1"
 spotless = "8.5.1" # Ktfmt version must match that of Nixpkgs
 paperweight = "2.0.0-beta.22"
 tab-api = "6.1.2"
-tokenmanager = "3.2.4"
 vault = "1.7.1"
 worldborder = "2.1.4"
 fawe = "2.15.3"
 velocity-api = "4.1.0-SNAPSHOT"
+worldguard = "7.0.13"
