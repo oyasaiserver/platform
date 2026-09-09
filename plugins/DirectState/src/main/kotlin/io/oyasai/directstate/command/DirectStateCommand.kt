@@ -20,6 +20,7 @@ internal class DirectStateCommand(
     private val playerSettings: PlayerSettingsStore,
     private val updateMode: UpdateMode,
     private val createTool: (ToolItems.Kind) -> ItemStack,
+    private val markTool: (ItemStack, ToolItems.Kind) -> Unit,
 ) : TabExecutor {
   private val menu =
       SettingsMenu({ playerSettings.get(it.uniqueId) }) { player, slot ->
@@ -70,9 +71,9 @@ internal class DirectStateCommand(
           "hand" -> Permissions.HAND
           "replace" -> Permissions.REPLACE
           "update" -> Permissions.UPDATE
-          "stick" -> Permissions.STICK
-          "sstick" -> Permissions.SIMPLE_STICK
-          "hstick" -> Permissions.HOLD_STICK
+          "stick",
+          "sstick",
+          "hstick" -> Permissions.GET_TOOL
           else -> Permissions.ALL
         }
     if (sender !is Player || !Permissions.has(sender, permission)) {
@@ -101,9 +102,9 @@ internal class DirectStateCommand(
                 setTypeReplacementMode(sender, commandArgs.getOrNull(1), argumentCount)
             else -> setReplacementMode(sender, commandArgs.firstOrNull(), argumentCount)
           }
-      "stick" -> giveTool(sender, ToolItems.Kind.HAND)
-      "sstick" -> giveTool(sender, ToolItems.Kind.SIMPLE)
-      "hstick" -> giveTool(sender, ToolItems.Kind.HOLD)
+      "stick" -> handleTool(sender, commandArgs, ToolItems.Kind.HAND)
+      "sstick" -> handleTool(sender, commandArgs, ToolItems.Kind.SIMPLE)
+      "hstick" -> handleTool(sender, commandArgs, ToolItems.Kind.HOLD)
       else -> sender.sendMessage("/ds help でコマンド一覧を表示します。")
     }
     return true
@@ -117,6 +118,21 @@ internal class DirectStateCommand(
     }
     player.inventory.addItem(createTool(kind))
     player.sendMessage("${kind.displayName}: ${kind.description}")
+  }
+
+  private fun handleTool(player: Player, args: List<String>, kind: ToolItems.Kind) {
+    if (args.firstOrNull().equals("set", true)) {
+      val item = player.inventory.itemInMainHand
+      if (item.type.isAir) {
+        player.sendMessage("手にアイテムを持ってください。")
+        return
+      }
+      markTool(item, kind)
+      player.inventory.setItemInMainHand(item)
+      player.sendMessage("${kind.displayName}を付与しました。")
+    } else {
+      giveTool(player, kind)
+    }
   }
 
   /** 使用中の別名と引数位置に合わせて、入力候補を絞り込む。 */

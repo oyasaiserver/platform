@@ -78,7 +78,7 @@ class DirectState : JavaPlugin() {
     // 同じ優先度のUpdate Modeより先に、通常の編集イベントを処理する。
     server.pluginManager.registerEvents(interactions, this)
     server.pluginManager.registerEvents(updateMode, this)
-    DirectStateCommand(this, playerSettings, updateMode, tools::create).register()
+    DirectStateCommand(this, playerSettings, updateMode, tools::create, tools::mark).register()
 
     server.scheduler.runTaskTimer(
         this,

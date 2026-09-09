@@ -8,6 +8,7 @@ internal object Permissions {
   const val HAND = "directstate.dsh"
   const val REPLACE = "directstate.dsr"
   const val UPDATE = "directstate.dsu"
+  const val GET_TOOL = "directstate.gettool"
   const val STICK = "directstate.stick"
   const val SIMPLE_STICK = "directstate.sstick"
   const val HOLD_STICK = "directstate.hstick"
