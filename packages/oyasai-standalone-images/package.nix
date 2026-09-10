@@ -7,6 +7,7 @@
 let
   inherit (callPackage ./_sources/generated.nix { })
     # keep-sorted start
+    alloy
     caddy
     mariadb
     mc-backup
@@ -18,6 +19,13 @@ runCommandLocal "oyasai-standalone-images"
   {
     passthru = {
       # keep-sorted start block=yes
+      alloy = oyasaiDockerTools.buildImage {
+        name = alloy.pname;
+        fromImage = alloy.src;
+        config = {
+          Entrypoint = [ "/bin/alloy" ];
+        };
+      };
       caddy = oyasaiDockerTools.buildImage {
         name = caddy.pname;
         fromImage = caddy.src;

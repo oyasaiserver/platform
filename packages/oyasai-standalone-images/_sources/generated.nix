@@ -6,6 +6,18 @@
   dockerTools,
 }:
 {
+  alloy = {
+    pname = "alloy";
+    version = "v1.19.2";
+    src = dockerTools.pullImage {
+      imageName = "grafana/alloy";
+      imageDigest = "sha256:b8ec653c44235fbe910879145dac3597d66b0aaecf60bcbbe82580767771a839";
+      sha256 = "sha256-4H7bR6t4jSPuV4LNLBOwA8XCPMr2x281caZLbFnMJRI=";
+      finalImageTag = "v1.19.2";
+      os = "linux";
+      arch = "amd64";
+    };
+  };
   caddy = {
     pname = "caddy";
     version = "2.11.3";
@@ -32,12 +44,12 @@
   };
   mc-backup = {
     pname = "mc-backup";
-    version = "2026.6.2";
+    version = "2026.9.1";
     src = dockerTools.pullImage {
       imageName = "itzg/mc-backup";
-      imageDigest = "sha256:324971bd9b77867c5ee8ca510d071e63b96402995c0fb027b270e72f893140db";
-      sha256 = "sha256-nd3L8u1LVXVjq6iPQqKrrtgPoCg8zI4DzvgP03uBjMk=";
-      finalImageTag = "2026.6.2";
+      imageDigest = "sha256:0b6a10703723e8b2c03cf19e237aaebef91deeeafceb376968a659b32c11b66f";
+      sha256 = "sha256-rDZr1d7hniLTfnaqt4svTIn9mGqlDjsittXswyi6Q+4=";
+      finalImageTag = "2026.9.1";
       os = "linux";
       arch = "amd64";
     };

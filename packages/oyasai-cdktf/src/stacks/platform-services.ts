@@ -1,4 +1,7 @@
-import { Container } from "@oyasaiserver/cdktf-providers/docker/container";
+import {
+  Container,
+  type ContainerLabels,
+} from "@oyasaiserver/cdktf-providers/docker/container";
 import { Network } from "@oyasaiserver/cdktf-providers/docker/network";
 import { DockerProvider } from "@oyasaiserver/cdktf-providers/docker/provider";
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
@@ -20,6 +23,14 @@ type Props = Readonly<{
 }>;
 
 export class PlatformServices extends OyasaiPlatformTerraformStack {
+  private grafanaLogLabels(serviceName: string): ContainerLabels[] {
+    return [
+      { label: "logging", value: "true" },
+      { label: "service_name", value: serviceName },
+      { label: "environment", value: this.environment },
+    ];
+  }
+
   constructor(
     scope: Construct,
     id: string,
@@ -75,6 +86,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
     const imageIds = JSON.parse(mustEnv("OYASAI_IMAGE_IDS"));
     const images = {
       // keep-sorted start
+      alloy: imageIds["alloy"],
       caddy: imageIds["caddy"],
       mariadb: imageIds.mariadb,
       minecraftAxiom: imageIds["oyasai-minecraft-axiom"],
@@ -104,10 +116,75 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       name: "network",
     });
 
+    const alloyConfig = `discovery.docker "platform" {
+  host = "unix:///var/run/docker.sock"
+}
+
+discovery.relabel "platform" {
+  targets = discovery.docker.platform.targets
+  rule {
+    source_labels = ["__meta_docker_container_label_logging"]
+    regex = "true"
+    action = "keep"
+  }
+}
+
+loki.write "default" {
+  endpoint {
+    url = env("GRAFANA_LOKI_URL")
+    basic_auth {
+      username = env("GRAFANA_LOKI_USERNAME")
+      password = env("GRAFANA_CLOUD_API_KEY")
+    }
+  }
+}
+
+loki.source.docker "platform" {
+  targets    = discovery.relabel.platform.output
+  forward_to = [loki.write.default.receiver]
+}
+`;
+
+    new Container(this, this.t("alloy-container"), {
+      name: "alloy",
+      image: images.alloy,
+      restart: "unless-stopped",
+      command: [
+        "run",
+        "/etc/alloy/config.alloy",
+        "--server.http.listen-addr=0.0.0.0:12345",
+        "--storage.path=/var/lib/alloy/data",
+      ],
+      env: envs({
+        GRAFANA_LOKI_URL: commonInfra.platformCloudGrafanaStack.logsUrl,
+        GRAFANA_LOKI_USERNAME: commonInfra.platformCloudGrafanaStack.logsUserId,
+        GRAFANA_CLOUD_API_KEY: commonInfra.platformAllServicesToken.token,
+      }),
+      upload: [
+        {
+          content: alloyConfig,
+          file: "/etc/alloy/config.alloy",
+        },
+      ],
+      volumes: [
+        {
+          containerPath: "/var/run/docker.sock",
+          hostPath: "/var/run/docker.sock",
+          readOnly: true,
+        },
+      ],
+      ports: ports({
+        tcp: [12345],
+      }),
+      networksAdvanced: [network],
+      labels: this.grafanaLogLabels("alloy"),
+    });
+
     const mariadbContainer = new Container(this, this.t("mariadb-container"), {
       image: images.mariadb,
       name: "mariadb",
       restart: "unless-stopped",
+      labels: this.grafanaLogLabels("mariadb"),
       env: envs({
         MARIADB_ROOT_PASSWORD: secrets.get("MARIADB_PASSWORD"),
       }),
@@ -136,6 +213,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
         init: true,
+        labels: this.grafanaLogLabels("oyasai-minecraft-main"),
         networksAdvanced: [network],
         ports: ports({
           tcp: [
@@ -184,6 +262,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
         init: true,
+        labels: this.grafanaLogLabels("oyasai-minecraft-lobby"),
         networksAdvanced: [network],
         env: envs({
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
@@ -211,6 +290,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         stdinOpen: true,
         destroyGraceSeconds: 2 * 60,
         init: true,
+        labels: this.grafanaLogLabels("oyasai-minecraft-axiom"),
         networksAdvanced: [network],
         env: envs({
           FLOODGATE_KEY_PEM_B64: randoms.floodgateKey.base64,
@@ -230,6 +310,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       image: images.velocity,
       name: "oyasai-velocity",
       restart: "unless-stopped",
+      labels: this.grafanaLogLabels("oyasai-velocity"),
       networksAdvanced: [network],
       ports: ports({
         tcp: [25565], // Java
@@ -255,6 +336,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
         image: images.oyasaiWeb,
         name: "oyasai-web",
         restart: "unless-stopped",
+        labels: this.grafanaLogLabels("oyasai-web"),
         networksAdvanced: [network],
         env: envs({
           OYASAI_LISTEN_PORT: 80,
@@ -266,6 +348,7 @@ export class PlatformServices extends OyasaiPlatformTerraformStack {
       image: images.caddy,
       name: "caddy",
       restart: "unless-stopped",
+      labels: this.grafanaLogLabels("caddy"),
       networksAdvanced: [network],
       ports: ports({
         tcp: [

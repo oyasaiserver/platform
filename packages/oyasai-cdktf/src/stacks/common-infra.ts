@@ -9,6 +9,14 @@ import { ProjectIdentity } from "@oyasaiserver/cdktf-providers/infisical/project
 import { InfisicalProvider } from "@oyasaiserver/cdktf-providers/infisical/provider";
 import type { Construct } from "constructs";
 import { OyasaiTerraformStack } from "./oyasai-terraform-stack.ts";
+import { GrafanaProvider } from "@oyasaiserver/cdktf-providers/grafana/provider";
+import { CloudStack } from "@oyasaiserver/cdktf-providers/grafana/cloud-stack";
+import { CloudStackServiceAccount } from "@oyasaiserver/cdktf-providers/grafana/cloud-stack-service-account";
+import { CloudStackServiceAccountToken } from "@oyasaiserver/cdktf-providers/grafana/cloud-stack-service-account-token";
+import { CloudAccessPolicy } from "@oyasaiserver/cdktf-providers/grafana/cloud-access-policy";
+import { CloudAccessPolicyToken } from "@oyasaiserver/cdktf-providers/grafana/cloud-access-policy-token";
+import { Dashboard } from "@oyasaiserver/cdktf-providers/grafana/dashboard";
+import { mustEnv } from "../helpers.ts";
 
 export class CommonInfra extends OyasaiTerraformStack {
   private readonly infisicalOrgId = "a8e8e008-81e0-4a4f-81a9-8441c6820e7e";
@@ -20,6 +28,9 @@ export class CommonInfra extends OyasaiTerraformStack {
 
   readonly platformInfisicalProject: Project;
   readonly platformInfisicalProjectEnvironment: ProjectEnvironment;
+
+  readonly platformCloudGrafanaStack: CloudStack;
+  readonly platformAllServicesToken: CloudAccessPolicyToken;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -97,6 +108,106 @@ export class CommonInfra extends OyasaiTerraformStack {
       },
       name: this.oyasaiIoRegistrarDomain.domainName,
       type: "full",
+    });
+
+    const grafanaCloudProvider = new GrafanaProvider(
+      this,
+      "grafana-cloud-provider",
+      {
+        alias: "cloud",
+        cloudAccessPolicyToken: mustEnv("GRAFANA_CLOUD_ACCESS_POLICY_TOKEN"),
+      },
+    );
+
+    this.platformCloudGrafanaStack = new CloudStack(
+      this,
+      "platform-cloud-stack",
+      {
+        provider: grafanaCloudProvider,
+        // Platform was taken, must be globally unique - ueda 2026-09
+        name: "oyasaiplatform",
+        slug: "oyasaiplatform",
+        regionSlug: "prod-ap-northeast-0", // Japan
+        // Some stuffs require the whole stack to be recreated. Everything is
+        // managed via TF anyways.
+        deleteProtection: false,
+      },
+    );
+
+    const cloudServiceAccount = new CloudStackServiceAccount(
+      this,
+      "cloud-stack-service-account",
+      {
+        provider: grafanaCloudProvider,
+        stackSlug: this.platformCloudGrafanaStack.slug,
+        name: "terraform-sa",
+        role: "Admin",
+      },
+    );
+
+    const saToken = new CloudStackServiceAccountToken(
+      this,
+      "cloud-stack-service-account-token",
+      {
+        provider: grafanaCloudProvider,
+        stackSlug: this.platformCloudGrafanaStack.slug,
+        name: "terraform-sa-token",
+        serviceAccountId: cloudServiceAccount.id,
+      },
+    );
+
+    const allServicesPolicy = new CloudAccessPolicy(
+      this,
+      "cloud-access-policy-all-services",
+      {
+        provider: grafanaCloudProvider,
+        name: "terraform-all-services",
+        region: this.platformCloudGrafanaStack.regionSlug,
+        scopes: ["logs:write"],
+        realm: [
+          {
+            type: "stack",
+            identifier: this.platformCloudGrafanaStack.id,
+          },
+        ],
+      },
+    );
+
+    this.platformAllServicesToken = new CloudAccessPolicyToken(
+      this,
+      "cloud-access-policy-token-all-services",
+      {
+        provider: grafanaCloudProvider,
+        name: "terraform-all-services-token",
+        region: allServicesPolicy.region,
+        accessPolicyId: allServicesPolicy.policyId,
+      },
+    );
+
+    new GrafanaProvider(this, "grafana-provider", {
+      url: this.platformCloudGrafanaStack.url,
+      auth: saToken.key,
+    });
+
+    new Dashboard(this, "platform-dashboard", {
+      overwrite: true,
+      configJson: JSON.stringify({
+        title: "Oyasai Platform",
+        uid: "oyasai-platform",
+        panels: [
+          {
+            title: "All Logs",
+            type: "logs",
+            gridPos: { h: 10, w: 24, x: 0, y: 0 },
+            targets: [
+              {
+                expr: '{environment=~".+"}',
+                datasource: { type: "loki", uid: "grafanacloud-logs" },
+              },
+            ],
+          },
+        ],
+      }),
     });
   }
 }
