@@ -8,3 +8,4 @@ worlds:
     gamemode: adventure
     allow-flight: true
 self-test: true
+clear-force-loaded-chunks: false

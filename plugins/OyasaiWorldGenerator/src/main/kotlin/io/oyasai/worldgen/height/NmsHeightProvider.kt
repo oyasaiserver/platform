@@ -22,7 +22,7 @@ import org.bukkit.craftbukkit.CraftWorld
 import sun.misc.Unsafe
 
 class NmsHeightProvider(private val logger: Logger) : HeightProvider {
-  override val name: String = "NMS/Purpur-26.2"
+  override val name: String = "NMS/Purpur-26.2-build.2622"
 
   private val declarations = ConcurrentHashMap<String, HeightSpec>()
   private val unsafe: Unsafe by lazy { resolveUnsafe() }
@@ -38,17 +38,26 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     val spec = declarations[world.name] ?: return false
     if (!isSupportedServer()) {
       logger.severe(
-          "[OWG][height] Refusing to patch ${world.name}: expected Purpur 26.2, got ${Bukkit.getName()} ${Bukkit.getMinecraftVersion()}"
+          "[OWG][height] Refusing to patch ${world.name}: expected Purpur 26.2 build 2622, got ${runtimeVersion()}"
       )
       return false
     }
 
+    var registration: DimensionRegistration? = null
+    var levelSnapshot: LevelSnapshot? = null
+    var starlightSnapshot: StarlightSnapshot? = null
+    var levelMutationStarted = false
+    var starlightMutationStarted = false
     return try {
       logger.info("[OWG][height] APPLY BEGIN world=${world.name} provider=$name")
       val serverLevel = (world as CraftWorld).handle
-      val holder = createOrReadDimensionType(world.name, spec)
-      patchLevel(serverLevel, holder, spec)
-      patchStarlight(serverLevel, spec)
+      registration = createOrReadDimensionType(world.name, spec)
+      levelSnapshot = captureLevel(serverLevel)
+      starlightSnapshot = captureStarlight(serverLevel)
+      levelMutationStarted = true
+      patchLevel(serverLevel, registration.holder, spec, levelSnapshot)
+      starlightMutationStarted = true
+      patchStarlight(serverLevel, spec, starlightSnapshot)
       check(verify(world, spec)) {
         "final verification failed: actual min=${world.minHeight} max=${world.maxHeight}"
       }
@@ -58,6 +67,25 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
       true
     } catch (throwable: Throwable) {
       logger.log(Level.SEVERE, "[OWG][height] APPLY FAILED world=${world.name}", throwable)
+      var rollbackFailure: Throwable? = null
+      if (starlightMutationStarted) {
+        rollbackFailure = rollback("Starlight", rollbackFailure) { starlightSnapshot!!.restore() }
+      }
+      if (levelMutationStarted) {
+        rollbackFailure = rollback("ServerLevel", rollbackFailure) { levelSnapshot!!.restore() }
+      }
+      registration?.rollback?.let { restore ->
+        rollbackFailure = rollback("DimensionType registry", rollbackFailure, restore)
+      }
+      if (rollbackFailure == null) {
+        logger.info("[OWG][height] ROLLBACK PASS world=${world.name}")
+      } else {
+        logger.log(
+            Level.SEVERE,
+            "[OWG][height] ROLLBACK FAILED world=${world.name}; world must be unloaded without saving",
+            rollbackFailure,
+        )
+      }
       false
     }
   }
@@ -100,13 +128,38 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
   }
 
   fun isSupportedServer(): Boolean =
-      Bukkit.getMinecraftVersion() == "26.2" &&
-          Bukkit.getName().contains("Purpur", ignoreCase = true)
+      Bukkit.getMinecraftVersion() == SUPPORTED_MINECRAFT_VERSION &&
+          Bukkit.getName().contains("Purpur", ignoreCase = true) &&
+          serverBuild() in SUPPORTED_PURPUR_BUILDS
+
+  fun appliedVersion(): String =
+      "minecraft=${Bukkit.getMinecraftVersion()} purpur-build=${serverBuild() ?: "unknown"}"
+
+  fun runtimeVersion(): String =
+      "name=${Bukkit.getName()} minecraft=${Bukkit.getMinecraftVersion()} " +
+          "bukkit=${Bukkit.getBukkitVersion()} server=${Bukkit.getVersion()}"
+
+  private fun serverBuild(): String? {
+    val values = listOf(Bukkit.getBukkitVersion(), Bukkit.getVersion())
+    val patterns =
+        listOf(
+            Regex("""26\.2\.build\.(\d+)"""),
+            Regex("""26\.2-(\d+)-"""),
+        )
+    for (value in values) {
+      for (pattern in patterns) {
+        pattern.find(value)?.groupValues?.get(1)?.let {
+          return it
+        }
+      }
+    }
+    return null
+  }
 
   private fun createOrReadDimensionType(
       worldName: String,
       spec: HeightSpec,
-  ): Holder.Reference<DimensionType> {
+  ): DimensionRegistration {
     val registry =
         MinecraftServer.getServer().registryAccess().lookup(Registries.DIMENSION_TYPE).orElseThrow()
             as? MappedRegistry<DimensionType>
@@ -120,7 +173,7 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     registry.get(key).orElse(null)?.let { existing ->
       checkDimension(existing.value(), spec, "existing registry entry")
       logger.info("[OWG][height] Registry entry reused and verified: ${key.identifier()}")
-      return existing
+      return DimensionRegistration(existing, null)
     }
 
     val base = registry.getOrThrow(BuiltinDimensionTypes.END).value()
@@ -148,6 +201,7 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
 
     val frozenField = resolveRegistryFrozenField(registry)
     val intrusiveField = resolveRegistryIntrusiveField(registry, frozenField)
+    val registrySnapshot = captureRegistry(registry)
     val originalFrozen = frozenField.getBoolean(registry)
     val originalIntrusive = intrusiveField.get(registry)
     var registered: Holder.Reference<DimensionType>? = null
@@ -186,16 +240,25 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
         operationFailure?.addSuppressed(restoreFailure) ?: run { operationFailure = restoreFailure }
       }
     }
-    operationFailure?.let { throw it }
-    return checkNotNull(registered) { "DimensionType registration produced no holder" }
+    if (operationFailure != null) {
+      try {
+        registrySnapshot.restore()
+      } catch (restoreFailure: Throwable) {
+        operationFailure.addSuppressed(restoreFailure)
+        logger.log(
+            Level.SEVERE,
+            "[OWG][height] DimensionType registration rollback failed for ${key.identifier()}",
+            restoreFailure,
+        )
+      }
+      throw operationFailure
+    }
+    val holder = checkNotNull(registered) { "DimensionType registration produced no holder" }
+    return DimensionRegistration(holder) { registrySnapshot.restore() }
   }
 
-  private fun patchLevel(
-      level: ServerLevel,
-      holder: Holder.Reference<DimensionType>,
-      spec: HeightSpec,
-  ) {
-    val oldValues =
+  private fun captureLevel(level: ServerLevel): LevelSnapshot {
+    val values =
         intArrayOf(
             level.minY,
             level.height,
@@ -204,8 +267,23 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
             level.maxSectionY,
             level.sectionsCount,
         )
-    val fields = resolveLevelHeightFields(level, oldValues)
-    val holderField = resolveDimensionHolderField(level)
+    return LevelSnapshot(
+        level,
+        resolveDimensionHolderField(level),
+        level.dimensionTypeRegistration(),
+        resolveLevelHeightFields(level, values),
+        values,
+    )
+  }
+
+  private fun patchLevel(
+      level: ServerLevel,
+      holder: Holder.Reference<DimensionType>,
+      spec: HeightSpec,
+      snapshot: LevelSnapshot,
+  ) {
+    val fields = snapshot.fields
+    val holderField = snapshot.holderField
     val minSection = spec.minY shr 4
     val maxSection = (spec.maxHeight - 1) shr 4
     val values =
@@ -237,17 +315,25 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     )
   }
 
-  private fun patchStarlight(level: ServerLevel, spec: HeightSpec) {
+  private fun captureStarlight(level: ServerLevel): StarlightSnapshot {
     val light = level.lightEngine.`starlight$getLightEngine`()
-    val oldMinSection = levelHeightBeforePatch(light, "minSection")
-    val oldValues =
+    val values =
         intArrayOf(
-            oldMinSection,
+            levelHeightBeforePatch(light, "minSection"),
             levelHeightBeforePatch(light, "maxSection"),
             levelHeightBeforePatch(light, "minLightSection"),
             levelHeightBeforePatch(light, "maxLightSection"),
         )
-    val fields = resolveStarlightFields(light, oldValues)
+    return StarlightSnapshot(light, resolveStarlightFields(light, values), values)
+  }
+
+  private fun patchStarlight(
+      level: ServerLevel,
+      spec: HeightSpec,
+      snapshot: StarlightSnapshot,
+  ) {
+    val light = level.lightEngine.`starlight$getLightEngine`()
+    val fields = snapshot.fields
     val minSection = spec.minY shr 4
     val maxSection = (spec.maxHeight - 1) shr 4
     val values = intArrayOf(minSection, maxSection, minSection - 1, maxSection + 1)
@@ -327,9 +413,13 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
     val fields = registry.javaClass.declaredFields.toList()
     val frozenIndex = fields.indexOf(frozenField)
     val matches = fields.drop(frozenIndex + 1).filter { Map::class.java.isAssignableFrom(it.type) }
-    check(matches.isNotEmpty()) { "Could not resolve intrusive holder map after frozen field" }
-    logger.warning("[OWG][height] Registry intrusive map name changed; using type/order fallback")
-    return matches.first().also { it.isAccessible = true }
+    check(matches.size == 1) {
+      "Could not uniquely resolve intrusive holder map after frozen field; matches=${matches.size}"
+    }
+    logger.warning(
+        "[OWG][height] Registry intrusive map name changed; using unique type/order fallback"
+    )
+    return matches.single().also { it.isAccessible = true }
   }
 
   private fun resolveStarlightFields(light: StarLightInterface, current: IntArray): List<Field> {
@@ -392,6 +482,60 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
 
   private fun levelHeightBeforePatch(target: Any, name: String): Int = readInt(target, name)
 
+  private fun captureRegistry(registry: MappedRegistry<DimensionType>): RegistrySnapshot {
+    val byIdField = findField(registry.javaClass, "byId", List::class.java)
+    val toIdField = findField(registry.javaClass, "toId", Map::class.java)
+    val byLocationField = findField(registry.javaClass, "byLocation", Map::class.java)
+    val byKeyField = findField(registry.javaClass, "byKey", Map::class.java)
+    val byValueField = findField(registry.javaClass, "byValue", Map::class.java)
+    val registrationInfosField = findField(registry.javaClass, "registrationInfos", Map::class.java)
+    val lifecycleField = findField(registry.javaClass, "registryLifecycle", Any::class.java)
+    val temporaryField = findField(registry.javaClass, "temporaryUnfrozenMap", Map::class.java)
+    return RegistrySnapshot(
+        registry,
+        byIdField,
+        mutableList(byIdField, registry).toList(),
+        toIdField,
+        mutableMap(toIdField, registry).toMap(),
+        byLocationField,
+        mutableMap(byLocationField, registry).toMap(),
+        byKeyField,
+        mutableMap(byKeyField, registry).toMap(),
+        byValueField,
+        mutableMap(byValueField, registry).toMap(),
+        registrationInfosField,
+        mutableMap(registrationInfosField, registry).toMap(),
+        lifecycleField,
+        lifecycleField.get(registry),
+        temporaryField,
+        mutableMap(temporaryField, registry).toMap(),
+    )
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  private fun mutableList(field: Field, target: Any): MutableList<Any?> =
+      field.get(target) as MutableList<Any?>
+
+  @Suppress("UNCHECKED_CAST")
+  private fun mutableMap(field: Field, target: Any): MutableMap<Any?, Any?> =
+      field.get(target) as MutableMap<Any?, Any?>
+
+  private fun rollback(
+      label: String,
+      previousFailure: Throwable?,
+      restore: () -> Unit,
+  ): Throwable? {
+    return try {
+      restore()
+      logger.info("[OWG][height] $label rollback restored and verified")
+      previousFailure
+    } catch (restoreFailure: Throwable) {
+      logger.log(Level.SEVERE, "[OWG][height] $label rollback failed", restoreFailure)
+      if (previousFailure == null) restoreFailure
+      else previousFailure.apply { addSuppressed(restoreFailure) }
+    }
+  }
+
   @Suppress("DEPRECATION")
   private fun writeInt(target: Any, field: Field, value: Int) {
     unsafe.putInt(target, unsafe.objectFieldOffset(field), value)
@@ -416,5 +560,109 @@ class NmsHeightProvider(private val logger: Logger) : HeightProvider {
   private fun dimensionPath(worldName: String, spec: HeightSpec): String {
     val safeName = worldName.lowercase().replace(Regex("[^a-z0-9/._-]"), "_")
     return "the_end_${safeName}_${spec.minY}_${spec.height}_${spec.logicalHeight}"
+  }
+
+  private data class DimensionRegistration(
+      val holder: Holder.Reference<DimensionType>,
+      val rollback: (() -> Unit)?,
+  )
+
+  private inner class LevelSnapshot(
+      private val level: ServerLevel,
+      val holderField: Field,
+      private val holder: Holder<DimensionType>,
+      val fields: List<Field>,
+      private val values: IntArray,
+  ) {
+    fun restore() {
+      fields.indices.reversed().forEach { writeInt(level, fields[it], values[it]) }
+      writeObject(level, holderField, holder)
+      check(holderField.get(level) === holder) { "dimension holder rollback readback mismatch" }
+      fields.indices.forEach { index ->
+        check(fields[index].getInt(level) == values[index]) {
+          "${fields[index].name} rollback readback mismatch"
+        }
+      }
+      check(level.minY == values[0] && level.height == values[1] && level.maxY == values[2]) {
+        "ServerLevel public rollback readback mismatch"
+      }
+      check(level.dimensionTypeRegistration() === holder) {
+        "ServerLevel dimension holder rollback mismatch"
+      }
+    }
+  }
+
+  private inner class StarlightSnapshot(
+      private val light: StarLightInterface,
+      val fields: List<Field>,
+      private val values: IntArray,
+  ) {
+    fun restore() {
+      fields.indices.reversed().forEach { writeInt(light, fields[it], values[it]) }
+      fields.indices.forEach { index ->
+        check(fields[index].getInt(light) == values[index]) {
+          "Starlight ${fields[index].name} rollback readback mismatch"
+        }
+      }
+    }
+  }
+
+  private inner class RegistrySnapshot(
+      private val registry: MappedRegistry<DimensionType>,
+      private val byIdField: Field,
+      private val byId: List<Any?>,
+      private val toIdField: Field,
+      private val toId: Map<Any?, Any?>,
+      private val byLocationField: Field,
+      private val byLocation: Map<Any?, Any?>,
+      private val byKeyField: Field,
+      private val byKey: Map<Any?, Any?>,
+      private val byValueField: Field,
+      private val byValue: Map<Any?, Any?>,
+      private val registrationInfosField: Field,
+      private val registrationInfos: Map<Any?, Any?>,
+      private val lifecycleField: Field,
+      private val lifecycle: Any?,
+      private val temporaryField: Field,
+      private val temporary: Map<Any?, Any?>,
+  ) {
+    fun restore() {
+      restoreMap(temporaryField, temporary)
+      writeObject(registry, lifecycleField, lifecycle)
+      restoreMap(registrationInfosField, registrationInfos)
+      restoreMap(byValueField, byValue)
+      restoreMap(byKeyField, byKey)
+      restoreMap(byLocationField, byLocation)
+      restoreMap(toIdField, toId)
+      val currentById = mutableList(byIdField, registry)
+      currentById.clear()
+      currentById.addAll(byId)
+
+      check(currentById.toList() == byId) { "registry byId rollback readback mismatch" }
+      check(mutableMap(toIdField, registry) == toId) { "registry toId rollback mismatch" }
+      check(mutableMap(byLocationField, registry) == byLocation) {
+        "registry byLocation rollback mismatch"
+      }
+      check(mutableMap(byKeyField, registry) == byKey) { "registry byKey rollback mismatch" }
+      check(mutableMap(byValueField, registry) == byValue) { "registry byValue rollback mismatch" }
+      check(mutableMap(registrationInfosField, registry) == registrationInfos) {
+        "registry registrationInfos rollback mismatch"
+      }
+      check(lifecycleField.get(registry) === lifecycle) { "registry lifecycle rollback mismatch" }
+      check(mutableMap(temporaryField, registry) == temporary) {
+        "registry temporary map rollback mismatch"
+      }
+    }
+
+    private fun restoreMap(field: Field, snapshot: Map<Any?, Any?>) {
+      val current = mutableMap(field, registry)
+      current.clear()
+      current.putAll(snapshot)
+    }
+  }
+
+  companion object {
+    private const val SUPPORTED_MINECRAFT_VERSION = "26.2"
+    private val SUPPORTED_PURPUR_BUILDS = setOf("2622")
   }
 }

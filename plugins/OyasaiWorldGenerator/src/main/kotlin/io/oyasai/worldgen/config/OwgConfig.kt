@@ -15,29 +15,49 @@ data class OwgWorldConfig(
     val allowFlight: Boolean,
 )
 
-data class OwgConfig(val worlds: Map<String, OwgWorldConfig>, val selfTest: Boolean) {
+data class OwgConfig(
+    val worlds: Map<String, OwgWorldConfig>,
+    val selfTest: Boolean,
+    val clearForceLoadedChunks: Boolean,
+    val configuredWorldNames: Set<String>,
+    val validationErrors: List<String>,
+) {
   companion object {
     private val SAFE_WORLD_NAME = Regex("[A-Za-z0-9_.-]+")
 
-    fun empty(): OwgConfig = OwgConfig(emptyMap(), true)
+    fun empty(): OwgConfig = OwgConfig(emptyMap(), true, false, emptySet(), emptyList())
 
     fun load(config: FileConfiguration, logger: Logger): OwgConfig {
       val worldsSection = config.getConfigurationSection("worlds")
       if (worldsSection == null) {
-        logger.warning("[OWG][config] 'worlds' section is missing; no worlds will be loaded")
-        return OwgConfig(emptyMap(), config.getBoolean("self-test", true))
+        val error = "'worlds' section is missing"
+        logger.warning("[OWG][config] $error; no worlds will be loaded")
+        return OwgConfig(
+            emptyMap(),
+            config.getBoolean("self-test", true),
+            config.getBoolean("clear-force-loaded-chunks", false),
+            emptySet(),
+            listOf(error),
+        )
       }
 
       val parsed = linkedMapOf<String, OwgWorldConfig>()
+      val configuredNames = linkedSetOf<String>()
+      val errors = mutableListOf<String>()
       for (worldName in worldsSection.getKeys(false).sorted()) {
+        configuredNames += worldName
         val path = "worlds.$worldName"
         val section = config.getConfigurationSection(path)
         if (section == null) {
-          logger.warning("[OWG][config] Ignoring $worldName: expected a configuration section")
+          val error = "$worldName: expected a configuration section"
+          errors += error
+          logger.warning("[OWG][config] Ignoring $error")
           continue
         }
         if (!SAFE_WORLD_NAME.matches(worldName)) {
-          logger.warning("[OWG][config] Ignoring $worldName: unsafe world name")
+          val error = "$worldName: unsafe world name"
+          errors += error
+          logger.warning("[OWG][config] Ignoring $error")
           continue
         }
 
@@ -47,6 +67,7 @@ data class OwgConfig(val worlds: Map<String, OwgWorldConfig>, val selfTest: Bool
           val reason =
               if (generatorFamily == "flat") "flat generator is reserved but not implemented"
               else "unsupported generator '$generator'"
+          errors += "$worldName: $reason"
           logger.warning("[OWG][config] Ignoring $worldName: $reason")
           continue
         }
@@ -68,12 +89,14 @@ data class OwgConfig(val worlds: Map<String, OwgWorldConfig>, val selfTest: Bool
               else -> null
             }
         if (invalidReason != null) {
+          errors += "$worldName: $invalidReason"
           logger.warning("[OWG][config] Ignoring $worldName: $invalidReason")
           continue
         }
 
         val spawnY = section.getInt("spawn-y", minY)
         if (spawnY !in minY until maxHeight.toInt()) {
+          errors += "$worldName: spawn-y $spawnY is outside [$minY, $maxHeight)"
           logger.warning(
               "[OWG][config] Ignoring $worldName: spawn-y $spawnY is outside [$minY, $maxHeight)"
           )
@@ -83,6 +106,7 @@ data class OwgConfig(val worlds: Map<String, OwgWorldConfig>, val selfTest: Bool
         val gameModeName = section.getString("gamemode", "adventure")!!.uppercase(Locale.ROOT)
         val gameMode = runCatching { GameMode.valueOf(gameModeName) }.getOrNull()
         if (gameMode == null) {
+          errors += "$worldName: unknown gamemode '$gameModeName'"
           logger.warning("[OWG][config] Ignoring $worldName: unknown gamemode '$gameModeName'")
           continue
         }
@@ -99,9 +123,17 @@ data class OwgConfig(val worlds: Map<String, OwgWorldConfig>, val selfTest: Bool
       }
 
       logger.info(
-          "[OWG][config] Loaded ${parsed.size} valid world(s); self-test=${config.getBoolean("self-test", true)}"
+          "[OWG][config] Loaded ${parsed.size} valid world(s); errors=${errors.size}; " +
+              "self-test=${config.getBoolean("self-test", true)}; " +
+              "clear-force-loaded-chunks=${config.getBoolean("clear-force-loaded-chunks", false)}"
       )
-      return OwgConfig(parsed, config.getBoolean("self-test", true))
+      return OwgConfig(
+          parsed,
+          config.getBoolean("self-test", true),
+          config.getBoolean("clear-force-loaded-chunks", false),
+          configuredNames,
+          errors,
+      )
     }
   }
 }
