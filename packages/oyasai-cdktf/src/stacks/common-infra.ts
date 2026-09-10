@@ -16,7 +16,8 @@ import { CloudStackServiceAccountToken } from "@oyasaiserver/cdktf-providers/gra
 import { CloudAccessPolicy } from "@oyasaiserver/cdktf-providers/grafana/cloud-access-policy";
 import { CloudAccessPolicyToken } from "@oyasaiserver/cdktf-providers/grafana/cloud-access-policy-token";
 import { Dashboard } from "@oyasaiserver/cdktf-providers/grafana/dashboard";
-import { mustEnv } from "../helpers.ts";
+import { DataSource } from "@oyasaiserver/cdktf-providers/grafana/data-source";
+import { mustEnv, pick } from "../helpers.ts";
 
 export class CommonInfra extends OyasaiTerraformStack {
   private readonly infisicalOrgId = "a8e8e008-81e0-4a4f-81a9-8441c6820e7e";
@@ -163,7 +164,7 @@ export class CommonInfra extends OyasaiTerraformStack {
         provider: grafanaCloudProvider,
         name: "terraform-all-services",
         region: this.platformCloudGrafanaStack.regionSlug,
-        scopes: ["logs:write"],
+        scopes: ["logs:read", "logs:write"],
         realm: [
           {
             type: "stack",
@@ -189,6 +190,21 @@ export class CommonInfra extends OyasaiTerraformStack {
       auth: saToken.key,
     });
 
+    const lokiDatasource = new DataSource(this, "loki-datasource", {
+      uid: "loki",
+      name: "Loki",
+      type: "loki",
+      url: this.platformCloudGrafanaStack.logsUrl,
+      accessMode: "proxy",
+      basicAuthEnabled: true,
+      basicAuthUsername: `${this.platformCloudGrafanaStack.logsUserId}`,
+      secureJsonDataEncoded: JSON.stringify({
+        basicAuthPassword: this.platformAllServicesToken.token,
+      }),
+    });
+
+    const lokiDataSourceJson = pick(lokiDatasource, "type", "uid");
+
     new Dashboard(this, "platform-dashboard", {
       overwrite: true,
       configJson: JSON.stringify({
@@ -196,15 +212,46 @@ export class CommonInfra extends OyasaiTerraformStack {
         uid: "oyasai-platform",
         panels: [
           {
-            title: "All Logs",
-            type: "logs",
-            gridPos: { h: 10, w: 24, x: 0, y: 0 },
+            title: "Log Volume by Service",
+            type: "barchart",
+            gridPos: { h: 6, w: 24, x: 0, y: 0 },
+            datasource: lokiDataSourceJson,
             targets: [
               {
-                expr: '{environment=~".+"}',
-                datasource: { type: "loki", uid: "grafanacloud-logs" },
+                expr: 'sum by(service_name) (count_over_time({service_name=~".+"} [$__interval]))',
+                datasource: lokiDataSourceJson,
+                legendFormat: "{{service_name}}",
               },
             ],
+            fieldConfig: {
+              defaults: {
+                unit: "short",
+                custom: { axisCenteredZero: false, axisColorMode: "text" },
+              },
+              overrides: [],
+            },
+          },
+          {
+            title: "All Logs",
+            type: "logs",
+            gridPos: { h: 18, w: 24, x: 0, y: 6 },
+            datasource: lokiDataSourceJson,
+            targets: [
+              {
+                expr: '{service_name=~".+"}',
+                datasource: lokiDataSourceJson,
+              },
+            ],
+            options: {
+              showTime: true,
+              showLabels: false,
+              showCommonLabels: false,
+              wrapLogMessage: false,
+              prettifyLogMessage: true,
+              enableLogDetails: true,
+              sortOrder: "Descending",
+              dedupStrategy: "none",
+            },
           },
         ],
       }),

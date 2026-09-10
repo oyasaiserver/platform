@@ -1,7 +1,4 @@
-import type {
-  ContainerLabels,
-  ContainerPorts,
-} from "@oyasaiserver/cdktf-providers/docker/container";
+import type { ContainerPorts } from "@oyasaiserver/cdktf-providers/docker/container";
 import { ok } from "node:assert";
 import { env } from "node:process";
 
@@ -25,13 +22,6 @@ export function ports(
   );
 }
 
-export function labels(record: Record<string, Primitive>): ContainerLabels[] {
-  return Object.entries(record).map(([label, value]) => ({
-    label,
-    value: value.toString(),
-  }));
-}
-
 export function arrayToObject<K extends string, V>(
   arr: readonly K[],
   predicate: (key: K) => V,
@@ -49,4 +39,15 @@ export function mustEnv(name: string): string {
   const value = env[name];
   ok(value, `Required envvar ${name} missing`);
   return value;
+}
+
+export function pick<T, K extends readonly (keyof T)[]>(
+  obj: T,
+  ...keys: K
+): { [P in K[number]]: T[P] } {
+  const result = {} as any;
+  for (const k of keys) {
+    result[k] = obj[k];
+  }
+  return result;
 }
