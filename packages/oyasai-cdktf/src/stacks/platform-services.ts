@@ -11,7 +11,7 @@ import { RandomProvider } from "@oyasaiserver/cdktf-providers/random/provider";
 import { LocalBackend } from "cdktf";
 import { Construct } from "constructs";
 import { join } from "node:path";
-import { envs, mustEnv, ports } from "../helpers.ts";
+import { envs, labels, mustEnv, ports } from "../helpers.ts";
 import { createSecrets } from "../secrets.ts";
 import type { CommonInfra } from "./common-infra.ts";
 import { OyasaiPlatformTerraformStack } from "./oyasai-terraform-stack.ts";
@@ -24,11 +24,11 @@ type Props = Readonly<{
 
 export class PlatformServices extends OyasaiPlatformTerraformStack {
   private grafanaLogLabels(serviceName: string): ContainerLabels[] {
-    return [
-      { label: "logging", value: "true" },
-      { label: "service_name", value: serviceName },
-      { label: "environment", value: this.environment },
-    ];
+    return labels({
+      logging: true,
+      service_name: serviceName,
+      environment: this.environment,
+    });
   }
 
   constructor(
@@ -140,6 +140,7 @@ loki.write "default" {
 }
 
 loki.source.docker "platform" {
+  host        = "unix:///var/run/docker.sock"
   targets    = discovery.relabel.platform.output
   forward_to = [loki.write.default.receiver]
 }

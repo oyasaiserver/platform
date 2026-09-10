@@ -1,12 +1,15 @@
-import type { ContainerPorts } from "@oyasaiserver/cdktf-providers/docker/container";
+import type {
+  ContainerLabels,
+  ContainerPorts,
+} from "@oyasaiserver/cdktf-providers/docker/container";
 import { ok } from "node:assert";
 import { env } from "node:process";
 
 export const DAY_IN_SECONDS = 24 * 60 * 60;
 
-export function envs(
-  object: Readonly<Record<string, string | number | boolean>>,
-): string[] {
+export type Primitive = string | number | boolean;
+
+export function envs(object: Readonly<Record<string, Primitive>>): string[] {
   return Object.entries(object).map(([key, value]) => [key, value].join("="));
 }
 
@@ -20,6 +23,13 @@ export function ports(
       protocol,
     })),
   );
+}
+
+export function labels(record: Record<string, Primitive>): ContainerLabels[] {
+  return Object.entries(record).map(([label, value]) => ({
+    label,
+    value: value.toString(),
+  }));
 }
 
 export function arrayToObject<K extends string, V>(
