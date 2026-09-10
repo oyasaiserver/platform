@@ -31,61 +31,66 @@ internal class SettingsMenu(
     holder.menu = menu
     val configured = settings(player)
     val itemlessDisabled = configured.itemlessModesDisabled
-    if (canUse(player, 10)) menu.setItem(
-        10,
-        settingItem(
-            Material.PLAYER_HEAD,
-            "素手デバッグ棒",
-            if (configured.handEnabled) "ON" else "OFF",
-            "素手が直感的なデバッグ棒として機能します。",
-            "/dsh",
-        ),
-    )
-    if (canUse(player, 12)) menu.setItem(
-        12,
-        settingItem(
-            Material.REDSTONE_TORCH,
-            "更新抑制",
-            if (configured.updateEnabled) "ON" else "OFF",
-            "ブロックアップデートを抑制します。",
-            "/dsu",
-        ),
-    )
-    if (canUse(player, 14)) menu.setItem(
-        14,
-        settingItem(
-            Material.GRASS_BLOCK,
-            "置換モード",
-            if (configured.replacementEnabled) "ON" else "OFF",
-            "ブロックを置換できます。",
-            "/dsr",
-        ),
-    )
+    if (canUse(player, 10))
+        menu.setItem(
+            10,
+            settingItem(
+                Material.PLAYER_HEAD,
+                "素手デバッグ棒",
+                if (configured.handEnabled) "ON" else "OFF",
+                "素手が直感的なデバッグ棒として機能します。",
+                "/dsh",
+            ),
+        )
+    if (canUse(player, 12))
+        menu.setItem(
+            12,
+            settingItem(
+                Material.REDSTONE_TORCH,
+                "更新抑制",
+                if (configured.updateEnabled) "ON" else "OFF",
+                "ブロックアップデートを抑制します。",
+                "/dsu",
+            ),
+        )
+    if (canUse(player, 14))
+        menu.setItem(
+            14,
+            settingItem(
+                Material.GRASS_BLOCK,
+                "置換モード",
+                if (configured.replacementEnabled) "ON" else "OFF",
+                "ブロックを置換できます。",
+                "/dsr",
+            ),
+        )
     val type = configured.typeReplacementMode
-    if (canUse(player, 16)) menu.setItem(
-        16,
-        settingItem(
-            Material.COMPARATOR,
-            "タイプ置換",
-            type.name,
-            when {
-              itemlessDisabled -> "一括停止中"
-              configured.replacementEnabled -> "素材のみを置換します。"
-              else -> "置換モードがOFFです。"
-            },
-            "/dsr type",
-        ),
-    )
-    if (canUse(player, 22)) menu.setItem(
-        22,
-        settingItem(
-            Material.LEVER,
-            "一括停止",
-            if (itemlessDisabled) "ON" else "OFF",
-            "Hand / Update / Replaceを一時停止",
-            "/ds tgl",
-        ),
-    )
+    if (canUse(player, 16))
+        menu.setItem(
+            16,
+            settingItem(
+                Material.COMPARATOR,
+                "タイプ置換",
+                type.name,
+                when {
+                  itemlessDisabled -> "一括停止中"
+                  configured.replacementEnabled -> "素材のみを置換します。"
+                  else -> "置換モードがOFFです。"
+                },
+                "/dsr type",
+            ),
+        )
+    if (canUse(player, 22))
+        menu.setItem(
+            22,
+            settingItem(
+                Material.LEVER,
+                "一括停止",
+                if (itemlessDisabled) "ON" else "OFF",
+                "Hand / Update / Replaceを一時停止",
+                "/ds tgl",
+            ),
+        )
     player.openInventory(menu)
   }
 
