@@ -113,6 +113,7 @@ object RedBullFeature : Listener {
       }
       ActivationResult.INSUFFICIENT_TOKENS -> Unit
       ActivationResult.TOKEN_MANAGER_UNAVAILABLE -> Unit
+      ActivationResult.PERMISSIONS_UNAVAILABLE -> Unit
     }
   }
 
@@ -147,7 +148,8 @@ object RedBullFeature : Listener {
 
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) {
-    // 権限の期限は Player PDC に保存済みのため、ログアウト時の追加処理は不要。
+    // 再ログイン時に新しい Player へ付け直す。期限付き LuckPerms 権限は保持する。
+    activeTickets.remove(event.player.uniqueId)?.remove()
   }
 
   @EventHandler
@@ -164,6 +166,7 @@ object RedBullFeature : Listener {
     val player = event.player
     if (hasActiveTicket(player) || hasPermanentFly(player)) {
       event.isCancelled = true
+      if (hasActiveTicket(player) && !attachTicket(player)) return
       enableFlight(player)
       refreshItems(player)
       player.sendMessage("§bfly を有効にしました。Red Bull は消費されません。")
@@ -177,6 +180,7 @@ object RedBullFeature : Listener {
         player.sendMessage("§6Red Bull を飲み、24時間の fly 権限を取得しました！")
       }
       ActivationResult.INSUFFICIENT_TOKENS,
+      ActivationResult.PERMISSIONS_UNAVAILABLE,
       ActivationResult.TOKEN_MANAGER_UNAVAILABLE -> {
         // 権限を取得できなかった場合は、飲み終えたアイテムを失わせない。
         event.isCancelled = true
@@ -186,9 +190,14 @@ object RedBullFeature : Listener {
 
   private fun activateTicket(player: Player): ActivationResult {
     if (hasActiveTicket(player) || hasPermanentFly(player)) {
+      if (hasActiveTicket(player) && !attachTicket(player)) {
+        return ActivationResult.PERMISSIONS_UNAVAILABLE
+      }
       enableFlight(player)
       return ActivationResult.ACTIVATED
     }
+    // 課金する前に LuckPerms とオンラインユーザーのロード状態を確認する。
+    if (!permissionsAvailable(player)) return ActivationResult.PERMISSIONS_UNAVAILABLE
     val tokenManager =
         tokenManager()
             ?: run {
@@ -205,7 +214,7 @@ object RedBullFeature : Listener {
       return ActivationResult.INSUFFICIENT_TOKENS
     }
 
-    val expiry = Instant.now().plus(Duration.ofDays(1))
+    val expiry = Instant.ofEpochSecond(Instant.now().plus(Duration.ofDays(1)).epochSecond)
     player.persistentDataContainer.set(
         ticketExpiryKey,
         PersistentDataType.LONG,
@@ -218,16 +227,30 @@ object RedBullFeature : Listener {
 
   private fun restoreTicket(player: Player) {
     if (hasActiveTicket(player)) {
-      attachTicket(player)
-      enableFlight(player)
+      if (attachTicket(player)) enableFlight(player)
     } else {
       expireIfNeeded(player)
     }
   }
 
-  private fun attachTicket(player: Player) {
-    if (activeTickets.containsKey(player.uniqueId)) return
-    activeTickets[player.uniqueId] = player.addAttachment(plugin, FLY_PERMISSION, true)
+  private fun permissionsAvailable(player: Player): Boolean {
+    if (
+        Bukkit.getPluginManager().isPluginEnabled("LuckPerms") &&
+            RedBullPermissions.isAvailable(player.uniqueId)
+    )
+        return true
+    player.sendMessage("§cLuckPerms の権限データを取得できません。時間をおいて再度お試しください。")
+    return false
+  }
+
+  private fun attachTicket(player: Player): Boolean {
+    val expiry = activeExpiry(player) ?: return false
+    if (!permissionsAvailable(player)) return false
+    RedBullPermissions.grant(player.uniqueId, FLY_PERMISSION, expiry)
+    if (!activeTickets.containsKey(player.uniqueId)) {
+      activeTickets[player.uniqueId] = player.addAttachment(plugin, FLY_PERMISSION, true)
+    }
+    return true
   }
 
   private fun expireIfNeeded(player: Player) {
@@ -346,5 +369,6 @@ object RedBullFeature : Listener {
     ACTIVATED,
     INSUFFICIENT_TOKENS,
     TOKEN_MANAGER_UNAVAILABLE,
+    PERMISSIONS_UNAVAILABLE,
   }
 }

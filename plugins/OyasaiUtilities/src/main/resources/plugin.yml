@@ -5,7 +5,7 @@ website: "https://github.com/OyasaiServer"
 main: icu.oyasai.utilities.Main
 api-version: "1.21"
 version: "0.1.0"
-softdepend: [Veinminer, Vault, TokenManager]
+softdepend: [Veinminer, Vault, TokenManager, LuckPerms]
 commands:
   redbull:
     description: "20ポイントで一日 fly 権限を有効にする"
