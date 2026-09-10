@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack
 /** プレイヤー設定の表示とクリック受付。 */
 internal class SettingsMenu(
     private val settings: (Player) -> PlayerSettings,
+    private val canUse: (Player, Int) -> Boolean,
     private val toggle: (Player, Int) -> Unit,
 ) : Listener {
   /** このプラグインが開いた設定画面だけを、クリックイベントで識別する印。 */
@@ -30,7 +31,7 @@ internal class SettingsMenu(
     holder.menu = menu
     val configured = settings(player)
     val itemlessDisabled = configured.itemlessModesDisabled
-    menu.setItem(
+    if (canUse(player, 10)) menu.setItem(
         10,
         settingItem(
             Material.PLAYER_HEAD,
@@ -40,7 +41,7 @@ internal class SettingsMenu(
             "/dsh",
         ),
     )
-    menu.setItem(
+    if (canUse(player, 12)) menu.setItem(
         12,
         settingItem(
             Material.REDSTONE_TORCH,
@@ -50,7 +51,7 @@ internal class SettingsMenu(
             "/dsu",
         ),
     )
-    menu.setItem(
+    if (canUse(player, 14)) menu.setItem(
         14,
         settingItem(
             Material.GRASS_BLOCK,
@@ -61,7 +62,7 @@ internal class SettingsMenu(
         ),
     )
     val type = configured.typeReplacementMode
-    menu.setItem(
+    if (canUse(player, 16)) menu.setItem(
         16,
         settingItem(
             Material.COMPARATOR,
@@ -75,7 +76,7 @@ internal class SettingsMenu(
             "/dsr type",
         ),
     )
-    menu.setItem(
+    if (canUse(player, 22)) menu.setItem(
         22,
         settingItem(
             Material.LEVER,
@@ -108,7 +109,7 @@ internal class SettingsMenu(
     if (event.view.topInventory.holder !is SettingsHolder) return
     event.isCancelled = true
     val player = event.whoClicked as? Player ?: return
-    if (event.rawSlot !in setOf(10, 12, 14, 16, 22)) return
+    if (event.rawSlot !in setOf(10, 12, 14, 16, 22) || !canUse(player, event.rawSlot)) return
     toggle(player, event.rawSlot)
     open(player)
   }
